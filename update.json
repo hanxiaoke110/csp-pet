@@ -1,0 +1,10 @@
+{
+  "version": "0.1.0",
+  "notes": "CSP 学习助手初始版本",
+  "pub_date": "2025-05-28T00:00:00Z",
+  "platforms": {
+    "darwin-aarch64":  { "signature": "", "url": "" },
+    "darwin-x86_64":   { "signature": "", "url": "" },
+    "windows-x86_64":  { "signature": "", "url": "" }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "ducky",
+  "frameWidth": 200,
+  "frameHeight": 200,
+  "maxFrames": 16,
+  "anims": {
+    "idle": 16,
+    "walk": 16,
+    "celebrate": 16
+  },
+  "animOrder": [
+    "idle",
+    "walk",
+    "sleep",
+    "celebrate",
+    "think",
+    "eat",
+    "unhappy"
+  ]
+}

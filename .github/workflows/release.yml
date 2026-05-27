@@ -1,0 +1,188 @@
+name: Build & Release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+env:
+  TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_UPDATER_PRIVKEY }}
+  TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ''
+
+jobs:
+  # ── macOS (Apple Silicon) ──
+  macos-aarch64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - uses: taiki-e/install-action@v2
+        with: { tool: cargo-tauri }
+      - run: npx tauri build --target aarch64-apple-darwin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-aarch64
+          path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg
+
+  # ── macOS (Intel) ──
+  macos-x86_64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: rustup target add x86_64-apple-darwin
+      - uses: taiki-e/install-action@v2
+        with: { tool: cargo-tauri }
+      - run: npx tauri build --target x86_64-apple-darwin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-x86_64
+          path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/*.dmg
+
+  # ── Windows ──
+  windows-x86_64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - uses: taiki-e/install-action@v2
+        with: { tool: cargo-tauri }
+      - run: npx tauri build --target x86_64-pc-windows-msvc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-x86_64
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+
+  # ── Release to Gitee + update update.json ──
+  release:
+    needs: [macos-aarch64, macos-x86_64, windows-x86_64]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITEE_PAT || secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v4
+        with: { name: macos-aarch64, path: dist/macos-aarch64 }
+      - uses: actions/download-artifact@v4
+        with: { name: macos-x86_64, path: dist/macos-x86_64 }
+      - uses: actions/download-artifact@v4
+        with: { name: windows-x86_64, path: dist/windows-x86_64 }
+
+      - name: Sign packages & generate update.json
+        id: gen
+        env:
+          PRIVKEY: ${{ secrets.TAURI_UPDATER_PRIVKEY }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          set -e
+          VERSION="${GITHUB_REF#refs/tags/}"
+          VERSION_NUM="${VERSION#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          pkg() { find "dist/$1" \( -name "*.dmg" -o -name "*.msi" -o -name "*.msi.zip" \) -type f | head -1; }
+
+          MAC_ARM=$(pkg macos-aarch64)
+          MAC_INTEL=$(pkg macos-x86_64)
+          WIN_MSI=$(pkg windows-x86_64)
+
+          # Write privkey
+          echo "$PRIVKEY" > /tmp/privkey
+
+          # Sign each package (Tauri CLI)
+          sign_file() {
+            local f="$1"
+            if [ -n "$f" ] && [ -f "$f" ]; then
+              npx @tauri-apps/cli signer sign --private-key /tmp/privkey --password "" "$f" 2>/dev/null || true
+              # Read .sig file
+              local sigfile="${f}.sig"
+              if [ -f "$sigfile" ]; then
+                cat "$sigfile"
+              else
+                echo ""
+              fi
+            else
+              echo ""
+            fi
+          }
+
+          SIG_MAC_ARM=$(sign_file "$MAC_ARM")
+          SIG_MAC_INTEL=$(sign_file "$MAC_INTEL")
+          SIG_WIN=$(sign_file "$WIN_MSI")
+
+          # Create Gitee release
+          GITEE_API="https://gitee.com/api/v5/repos/hanliuliu110/csp-pet"
+          BODY="Release ${VERSION} - auto built by CI"
+          RELEASE_ID=$(curl -s -X POST "$GITEE_API/releases" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token $GITEE_TOKEN" \
+            -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"$BODY\",\"prerelease\":false}" | jq -r '.id // empty')
+
+          if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
+            echo "WARNING: Failed to create Gitee release, falling back to local-only update.json"
+            RELEASE_ID=""
+          fi
+
+          upload_file() {
+            local f="$1" label="$2"
+            if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then return; fi
+            if [ -z "$f" ] || [ ! -f "$f" ]; then return; fi
+            local resp=$(curl -s -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
+              -H "Authorization: token $GITEE_TOKEN" \
+              -F "file=@$f")
+            local url=$(echo "$resp" | jq -r '.browser_download_url // .download_url // empty')
+            echo "$url"
+          }
+
+          URL_MAC_ARM=$(upload_file "$MAC_ARM" "macOS Apple Silicon")
+          URL_MAC_INTEL=$(upload_file "$MAC_INTEL" "macOS Intel")
+          URL_WIN=$(upload_file "$WIN_MSI" "Windows x64")
+
+          # Fallback URLs if Gitee upload fails — point to GitHub release
+          GH_RELEASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
+          URL_MAC_ARM="${URL_MAC_ARM:-$GH_RELEASE/$(basename "$MAC_ARM")}"
+          URL_MAC_INTEL="${URL_MAC_INTEL:-$GH_RELEASE/$(basename "$MAC_INTEL")}"
+          URL_WIN="${URL_WIN:-$GH_RELEASE/$(basename "$WIN_MSI")}"
+
+          # Generate update.json
+          cat > dist/update.json << JSONEOF
+          {
+            "version": "$VERSION_NUM",
+            "notes": "Release $VERSION - 详见 Gitee Releases",
+            "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "platforms": {
+              "darwin-aarch64":  { "signature": "$SIG_MAC_ARM",   "url": "$URL_MAC_ARM"   },
+              "darwin-x86_64":   { "signature": "$SIG_MAC_INTEL", "url": "$URL_MAC_INTEL" },
+              "windows-x86_64":  { "signature": "$SIG_WIN",       "url": "$URL_WIN"       }
+            }
+          }
+          JSONEOF
+
+          echo "=== update.json ==="
+          cat dist/update.json
+
+      - name: Commit update.json to repo
+        run: |
+          cp dist/update.json update.json
+          git config user.name "ci-bot"
+          git config user.email "ci@csp-pet.local"
+          git add update.json
+          git commit -m "chore: update update.json for ${{ steps.gen.outputs.version }}" || true
+          git push origin HEAD:main || echo "Push to main failed (may need PAT), continuing..."
+
+      - name: GitHub Release (backup)
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/macos-aarch64/*
+            dist/macos-x86_64/*
+            dist/windows-x86_64/*
+            dist/update.json
+          generate_release_notes: true

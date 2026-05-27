@@ -1,0 +1,22 @@
+{
+  "name": "teddy",
+  "frameWidth": 200,
+  "frameHeight": 200,
+  "maxFrames": 16,
+  "anims": {
+    "idle": 16,
+    "walk": 16,
+    "sleep": 10,
+    "celebrate": 16,
+    "unhappy": 16
+  },
+  "animOrder": [
+    "idle",
+    "walk",
+    "sleep",
+    "celebrate",
+    "think",
+    "eat",
+    "unhappy"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "redgirl",
+  "frameWidth": 200,
+  "frameHeight": 200,
+  "maxFrames": 16,
+  "anims": {
+    "idle": 2,
+    "walk": 3
+  },
+  "animOrder": [
+    "idle",
+    "walk",
+    "sleep",
+    "celebrate",
+    "think",
+    "eat",
+    "unhappy"
+  ]
+}

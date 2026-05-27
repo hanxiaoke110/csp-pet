@@ -1,0 +1,22 @@
+{
+  "name": "zombie",
+  "frameWidth": 200,
+  "frameHeight": 200,
+  "maxFrames": 16,
+  "anims": {
+    "idle": 12,
+    "walk": 12,
+    "sleep": 16,
+    "celebrate": 8,
+    "unhappy": 6
+  },
+  "animOrder": [
+    "idle",
+    "walk",
+    "sleep",
+    "celebrate",
+    "think",
+    "eat",
+    "unhappy"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "char60",
+  "frameWidth": 200,
+  "frameHeight": 200,
+  "maxFrames": 16,
+  "anims": {
+    "idle": 12,
+    "walk": 8,
+    "celebrate": 5,
+    "think": 16
+  },
+  "animOrder": [
+    "idle",
+    "walk",
+    "sleep",
+    "celebrate",
+    "think",
+    "eat",
+    "unhappy"
+  ]
+}
