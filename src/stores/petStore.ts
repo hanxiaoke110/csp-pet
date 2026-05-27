@@ -56,12 +56,26 @@ export const FOODS: Record<string, { name: string; price: number; hunger: number
   deluxe:  { name: '豪华食物', price: 150, hunger: 100, icon: '🍖' },
 };
 
-// Level milestones — cosmetic only (size + particles)
+// Level milestones
 export function getLevelMilestone(level: number): { size: number; glow: boolean; particles: boolean; title: string } {
-  if (level >= 15) return { size: 1.5, glow: true,  particles: true,  title: '传说' };
-  if (level >= 10) return { size: 1.25, glow: true,  particles: false, title: '精英' };
-  if (level >= 5)  return { size: 1.1, glow: false, particles: true,  title: '成长' };
-  return { size: 1.0, glow: false, particles: false, title: '新手' };
+  if (level >= 15) return { size: 1.5, glow: true,  particles: true,  title: '化神' };
+  if (level >= 10) return { size: 1.25, glow: true,  particles: false, title: '元婴' };
+  if (level >= 5)  return { size: 1.1, glow: false, particles: true,  title: '金丹' };
+  return { size: 1.0, glow: false, particles: false, title: '筑基' };
+}
+
+// Display name with milestone prefix: [金丹] 小企鹅
+export function formatPetDisplayName(name: string, level: number): string {
+  const title = getLevelMilestone(level).title;
+  return `[${title}] ${name}`;
+}
+
+// Level badge color by tier
+export function getLevelBadgeColor(level: number): string {
+  if (level >= 15) return '#f59e0b'; // gold
+  if (level >= 10) return '#3b82f6'; // blue
+  if (level >= 5)  return '#22c55e'; // green
+  return '#94a3b8'; // gray
 }
 
 export const usePetStore = create<PetState>((set, get) => ({

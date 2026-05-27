@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
-import { usePetStore, FOODS, getLevelMilestone } from '../../stores/petStore';
+import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
 import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig } from '../../types/pet';
 import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
@@ -170,8 +170,18 @@ export default function PetPanel() {
           </div>
           {/* Pet preview */}
           {displayPet && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12, position: 'relative' }}>
               <PetSprite key={displayPet.modelPath} renderType={displayPet.renderType} modelPath={displayPet.modelPath} />
+              {displayPet.level >= 1 && (
+                <div style={{
+                  position: 'absolute', top: 0, right: 0,
+                  fontSize: 10, fontWeight: 700, color: getLevelBadgeColor(displayPet.level),
+                  background: `${getLevelBadgeColor(displayPet.level)}22`, borderRadius: '0 12px 0 8px',
+                  padding: '2px 8px', lineHeight: 1.4,
+                }}>
+                  {getLevelMilestone(displayPet.level).title}
+                </div>
+              )}
             </div>
           )}
           {/* Pet selector — grouped by rarity */}
@@ -206,8 +216,8 @@ export default function PetPanel() {
                               onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
                             {isActive && <div className="pet-mini-badge">伙伴</div>}
                           </div>
-                          <div className="pet-mini-name">{p.petName}</div>
-                          <div className="pet-mini-level">{p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : '🔵'} Lv.{p.level}</div>
+                          <div className="pet-mini-name">{formatPetDisplayName(p.petName, p.level)}</div>
+                          <div className="pet-mini-level" style={{ color: getLevelBadgeColor(p.level) }}>{p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : '🔵'} Lv.{p.level}</div>
                         </div>
                       );
                     })}
@@ -229,7 +239,7 @@ export default function PetPanel() {
           {/* Switch button — shown when viewing a non-active pet */}
           {viewingPet && viewingPet.petId !== activePetId && (
             <div className="switch-prompt">
-              <span>正在查看：{viewingPet.petName} {viewingPet.element === 'earth' ? '🟫地' : viewingPet.element === 'fire' ? '🔴火' : viewingPet.element === 'wind' ? '🟢风' : '🔵水'} Lv.{viewingPet.level}</span>
+              <span>正在查看：{formatPetDisplayName(viewingPet.petName, viewingPet.level)} {viewingPet.element === 'earth' ? '🟫地' : viewingPet.element === 'fire' ? '🔴火' : viewingPet.element === 'wind' ? '🟢风' : '🔵水'} <span style={{ color: getLevelBadgeColor(viewingPet.level), fontWeight: 600 }}>Lv.{viewingPet.level}</span></span>
               <button className="switch-btn" onClick={() => setSwitchTarget(viewingPet)}>
                 🔄 切换智子伙伴
               </button>
@@ -250,9 +260,9 @@ export default function PetPanel() {
                       onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
                   </div>
                   <div className="buy-confirm-info">
-                    <div className="buy-confirm-name">{switchTarget.petName}</div>
+                    <div className="buy-confirm-name">{formatPetDisplayName(switchTarget.petName, switchTarget.level)}</div>
                     <div style={{ fontSize: 13, color: '#64748b', marginTop: 2 }}>
-                      {switchTarget.element === 'earth' ? '🟫 地' : switchTarget.element === 'fire' ? '🔴 火' : switchTarget.element === 'wind' ? '🟢 风' : '🔵 水'} · Lv.{switchTarget.level}
+                      {switchTarget.element === 'earth' ? '🟫 地' : switchTarget.element === 'fire' ? '🔴 火' : switchTarget.element === 'wind' ? '🟢 风' : '🔵 水'} · <span style={{ color: getLevelBadgeColor(switchTarget.level), fontWeight: 600 }}>Lv.{switchTarget.level}</span>
                     </div>
                   </div>
                 </div>
@@ -277,7 +287,7 @@ export default function PetPanel() {
               <div className="pet-stats">
                 <div className="pet-stat-row">
                   <span className="stat-name">等级</span>
-                  <span className="stat-value">Lv.{displayPet.level}</span>
+                  <span className="stat-value" style={{ color: getLevelBadgeColor(displayPet.level), fontWeight: 700 }}>Lv.{displayPet.level}</span>
                   <div className="stat-bar"><div className="stat-fill exp" style={{ width: `${(displayPet.exp / displayPet.expToNext) * 100}%` }} /></div>
                   <span className="stat-num">{displayPet.exp}/{displayPet.expToNext}</span>
                 </div>
@@ -329,8 +339,8 @@ export default function PetPanel() {
               {activePet && (() => {
                 const ms = getLevelMilestone(activePet.level);
                 return (
-                  <div className="pet-evolve">
-                    <h4>⭐ {ms.title}伙伴</h4>
+                  <div className="pet-evolve" style={{ borderColor: getLevelBadgeColor(activePet.level) }}>
+                    <h4 style={{ color: getLevelBadgeColor(activePet.level) }}>⭐ {ms.title}伙伴</h4>
                     <p>Lv.{activePet.level} · {ms.particles ? '粒子特效已激活' : ''} {ms.glow ? '光环已激活' : ''}</p>
                     <p className="evolve-hint">继续学习提升等级解锁更多效果！</p>
                   </div>
@@ -355,7 +365,7 @@ export default function PetPanel() {
             </div>
             <div className="buy-confirm-body">
               <div className="buy-confirm-info">
-                <div className="buy-confirm-name">{displayPet.petName}</div>
+                <div className="buy-confirm-name">{formatPetDisplayName(displayPet.petName, displayPet.level)}</div>
                 <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>当前名字</div>
               </div>
               <div className="buy-confirm-name-row">
