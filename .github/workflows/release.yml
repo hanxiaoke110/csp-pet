@@ -17,9 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - run: npm ci
-      - uses: taiki-e/install-action@v2
-        with: { tool: cargo-tauri }
-      - run: npx tauri build --target aarch64-apple-darwin
+      - run: cargo install tauri-cli --version "^2"
+      - run: cargo tauri build --target aarch64-apple-darwin
       - uses: actions/upload-artifact@v4
         with:
           name: macos-aarch64
@@ -34,9 +33,8 @@ jobs:
         with: { node-version: '20' }
       - run: npm ci
       - run: rustup target add x86_64-apple-darwin
-      - uses: taiki-e/install-action@v2
-        with: { tool: cargo-tauri }
-      - run: npx tauri build --target x86_64-apple-darwin
+      - run: cargo install tauri-cli --version "^2"
+      - run: cargo tauri build --target x86_64-apple-darwin
       - uses: actions/upload-artifact@v4
         with:
           name: macos-x86_64
@@ -50,9 +48,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - run: npm ci
-      - uses: taiki-e/install-action@v2
-        with: { tool: cargo-tauri }
-      - run: npx tauri build --target x86_64-pc-windows-msvc
+      - run: cargo install tauri-cli --version "^2"
+      - run: cargo tauri build --target x86_64-pc-windows-msvc
       - uses: actions/upload-artifact@v4
         with:
           name: windows-x86_64
@@ -96,12 +93,11 @@ jobs:
           # Write privkey
           echo "$PRIVKEY" > /tmp/privkey
 
-          # Sign each package (Tauri CLI)
+          # Sign each package
           sign_file() {
             local f="$1"
             if [ -n "$f" ] && [ -f "$f" ]; then
               npx @tauri-apps/cli signer sign --private-key /tmp/privkey --password "" "$f" 2>/dev/null || true
-              # Read .sig file
               local sigfile="${f}.sig"
               if [ -f "$sigfile" ]; then
                 cat "$sigfile"
@@ -145,7 +141,7 @@ jobs:
           URL_MAC_INTEL=$(upload_file "$MAC_INTEL" "macOS Intel")
           URL_WIN=$(upload_file "$WIN_MSI" "Windows x64")
 
-          # Fallback URLs if Gitee upload fails — point to GitHub release
+          # Fallback URLs
           GH_RELEASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
           URL_MAC_ARM="${URL_MAC_ARM:-$GH_RELEASE/$(basename "$MAC_ARM")}"
           URL_MAC_INTEL="${URL_MAC_INTEL:-$GH_RELEASE/$(basename "$MAC_INTEL")}"
@@ -174,18 +170,14 @@ jobs:
         run: |
           VERSION="${GITHUB_REF#refs/tags/}"
 
-          # Update update.json in Gitee repo (raw file for updater endpoint)
           GITEE_API="https://gitee.com/api/v5/repos/hanliuliu110/csp-pet"
 
-          # Get current file SHA
           FILE_INFO=$(curl -s "$GITEE_API/contents/update.json" \
             -H "Authorization: token $GITEE_TOKEN")
           SHA=$(echo "$FILE_INFO" | jq -r '.sha // empty')
 
-          # Encode new update.json content
           ENCODED=$(base64 -w0 dist/update.json)
 
-          # Create or update file
           if [ -n "$SHA" ] && [ "$SHA" != "null" ]; then
             curl -s -X PUT "$GITEE_API/contents/update.json" \
               -H "Content-Type: application/json" \
