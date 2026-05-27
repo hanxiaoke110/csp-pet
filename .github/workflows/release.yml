@@ -198,7 +198,7 @@ jobs:
               -d "{\"content\":\"$ENCODED\",\"message\":\"release: $VERSION\"}" | head -5
           fi
 
-          echo "Update endpoint: https://gitee.com/hanliuliu110/csp-pet/raw/main/update.json"
+          echo "Update endpoint: https://gitee.com/hanliuliu110/csp-pet/raw/master/update.json"
 
       - name: GitHub Release (backup)
         uses: softprops/action-gh-release@v2

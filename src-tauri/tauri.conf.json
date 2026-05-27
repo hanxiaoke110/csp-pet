@@ -54,7 +54,7 @@
   "plugins": {
     "updater": {
       "endpoints": [
-        "https://gitee.com/hanliuliu110/csp-pet/raw/main/update.json"
+        "https://gitee.com/hanliuliu110/csp-pet/raw/master/update.json"
       ],
       "pubkey": "Bk1hlRjVhpYJnlC0bwzL3nA1R5jEWIrp68EHlwRceSw=",
       "windows": {
