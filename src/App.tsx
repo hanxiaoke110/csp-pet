@@ -180,28 +180,43 @@ function App() {
 
   async function loadCourseData() {
     try {
-      const [stagesResp, lessonsResp] = await Promise.all([
-        fetch('/course-data/stages.json'),
-        fetch('/course-data/lessons.json'),
-      ]);
+      let stages: Stage[] = [];
+      let lessons: Lesson[] = [];
 
-      if (!stagesResp.ok || !lessonsResp.ok) {
-        throw new Error('课程数据加载失败');
+      // Check for user-imported course data first
+      const imported = localStorage.getItem('csp_imported_lessons');
+      if (imported) {
+        try {
+          const parsed = JSON.parse(imported);
+          if (parsed.stages && parsed.lessons) {
+            stages = parsed.stages;
+            lessons = parsed.lessons;
+          }
+        } catch { /* fall through to bundled */ }
       }
 
-      const stages: Stage[] = await stagesResp.json();
-      const lessonsData: Lesson[] | LessonsData = await lessonsResp.json();
+      if (lessons.length === 0) {
+        const [stagesResp, lessonsResp] = await Promise.all([
+          fetch('/course-data/stages.json'),
+          fetch('/course-data/lessons.json'),
+        ]);
 
-      let lessons: Lesson[];
-      if (Array.isArray(lessonsData)) {
-        lessons = lessonsData;
-      } else if (lessonsData.lessons) {
-        lessons = lessonsData.lessons;
-      } else {
-        lessons = [];
-        for (const stage of (lessonsData.stages || [])) {
-          for (const l of (stage.lessons || [])) {
-            lessons.push(l);
+        if (!stagesResp.ok || !lessonsResp.ok) {
+          throw new Error('课程数据加载失败');
+        }
+
+        stages = await stagesResp.json();
+        const lessonsData: Lesson[] | LessonsData = await lessonsResp.json();
+
+        if (Array.isArray(lessonsData)) {
+          lessons = lessonsData;
+        } else if (lessonsData.lessons) {
+          lessons = lessonsData.lessons;
+        } else {
+          for (const stage of (lessonsData.stages || [])) {
+            for (const l of (stage.lessons || [])) {
+              lessons.push(l);
+            }
           }
         }
       }
