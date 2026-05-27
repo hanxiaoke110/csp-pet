@@ -66,7 +66,7 @@ export function getLevelMilestone(level: number): { size: number; glow: boolean;
 export const usePetStore = create<PetState>((set, get) => ({
   activePetId: null,
   ownedPets: [],
-  coins: 100000, // TODO: reset to 200 for production
+  coins: 200,
   foods: { basic: 3 },
   pendingExp: 0,
   pendingCoins: 0,
@@ -341,7 +341,7 @@ export const usePetStore = create<PetState>((set, get) => ({
         set({
           ownedPets: migrated,
           activePetId: data.activePetId || null,
-          coins: data.coins || 100000, // TODO: reset to 200 for production
+          coins: data.coins || 200,
           foods: data.foods || { basic: 3 },
           pendingExp: data.pendingExp || 0,
           pendingCoins: data.pendingCoins || 0,
