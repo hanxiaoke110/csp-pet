@@ -168,14 +168,37 @@ jobs:
           echo "=== update.json ==="
           cat dist/update.json
 
-      - name: Commit update.json to repo
+      - name: Update update.json on Gitee
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
-          cp dist/update.json update.json
-          git config user.name "ci-bot"
-          git config user.email "ci@csp-pet.local"
-          git add update.json
-          git commit -m "chore: update update.json for ${{ steps.gen.outputs.version }}" || true
-          git push origin HEAD:main || echo "Push to main failed (may need PAT), continuing..."
+          VERSION="${GITHUB_REF#refs/tags/}"
+
+          # Update update.json in Gitee repo (raw file for updater endpoint)
+          GITEE_API="https://gitee.com/api/v5/repos/hanliuliu110/csp-pet"
+
+          # Get current file SHA
+          FILE_INFO=$(curl -s "$GITEE_API/contents/update.json" \
+            -H "Authorization: token $GITEE_TOKEN")
+          SHA=$(echo "$FILE_INFO" | jq -r '.sha // empty')
+
+          # Encode new update.json content
+          ENCODED=$(base64 -w0 dist/update.json)
+
+          # Create or update file
+          if [ -n "$SHA" ] && [ "$SHA" != "null" ]; then
+            curl -s -X PUT "$GITEE_API/contents/update.json" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: token $GITEE_TOKEN" \
+              -d "{\"content\":\"$ENCODED\",\"sha\":\"$SHA\",\"message\":\"release: $VERSION\"}" | head -5
+          else
+            curl -s -X POST "$GITEE_API/contents/update.json" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: token $GITEE_TOKEN" \
+              -d "{\"content\":\"$ENCODED\",\"message\":\"release: $VERSION\"}" | head -5
+          fi
+
+          echo "Update endpoint: https://gitee.com/hanliuliu110/csp-pet/raw/main/update.json"
 
       - name: GitHub Release (backup)
         uses: softprops/action-gh-release@v2
