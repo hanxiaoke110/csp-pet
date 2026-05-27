@@ -4,56 +4,9 @@ import { invoke } from '@tauri-apps/api/core';
 import { usePetStore, FOODS, getLevelMilestone } from '../../stores/petStore';
 import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig } from '../../types/pet';
 import type { OwnedPet } from '../../types/pet';
+import { validatePetName } from '../../utils/validateName';
 import CeremonyModal from './CeremonyModal';
 import PetSprite from './PetSprite';
-
-// Name validation
-function validateName(name: string, existingNames?: string[]): string | null {
-  if (!name.trim()) return '请输入名字';
-  if (name.length < 2) return '名字至少 2 个字';
-  if (name.length > 8) return '名字最多 8 个字';
-  if (!/^[一-龥a-zA-Z0-9]+$/.test(name)) return '只能使用中文、英文和数字';
-  const banned = [
-    '管理员', 'admin', 'root', '测试', 'test', '老师',
-    // 政治人物及敏感
-    '习近平', '毛泽东', '邓小平', '江泽民', '胡锦涛', '温家宝', '李克强',
-    '反动', '颠覆', '煽动', '分裂', '叛乱',
-    // 种族/地域/民族歧视
-    'nigger', 'spic', 'kike', 'chink', 'paki', 'negro',
-    'fag', 'faggot', 'dyke', 'queer',
-    '回回', '靴子', '高丽棒子', '老毛子', '黑鬼', '杂种', '东亚病夫', '蛮夷',
-    '洋鬼子', '小日本', '大汉族主义', '印度阿三', '乡巴佬',
-    '大男人', '小女人', '男尊女卑', '重男轻女', '血统',
-    // 性别歧视
-    '臭婆娘', '死老娘们儿', '娘娘腔', '伪娘',
-    // 英文粗口
-    'fuck', 'shit', 'bitch', 'cunt', 'piss', 'asshole', 'cock', 'dick', 'tits', 'balls', 'ass',
-    'damn', 'hell', 'bastard', 'jerk', 'moron', 'idiot', 'retard', 'motherfucker',
-    // 中文粗口/网络脏话
-    'sb', '傻逼', '操', '他妈', '你妈', '你妹', '日了狗', '日你妈', '草泥马', '特么的', '妈蛋',
-    '装逼', '撕逼', '呆逼', '逗比', '傻逼',
-    '玛拉戈壁', '爆菊', 'JB', '本屌', '齐B短裙', '法克鱿', '丢你老母', '达菲鸡',
-    '装13', '逼格', '蛋疼', '绿茶婊', '表砸', '屌爆了', '买了个婊', '已撸', '吉跋猫',
-    '碧莲', '碧池', '然并卵', '屁民', '吃翔', 'XX狗', '淫家', '浮尸国', '滚粗', '我靠',
-    // 粗俗侮辱
-    '笨蛋', '傻瓜', '废物', '垃圾', '脑残', '神经病', '变态',
-    '王八蛋', '龟儿子', '狗东西', '猪头', '驴脸',
-    '去死吧', '见鬼去', '滚开',
-    // 暴力血腥
-    '杀人', '放火', '爆炸', '自残', '虐待',
-    // 色情低俗
-    '性交', '做爱', '勃起', '乳房', '阴道',
-    // 毒品赌博
-    '吸毒', '贩毒', '赌博', '赌场', '博彩',
-    // 宗教亵渎
-    '亵渎神灵', '侮辱佛祖', '诋毁耶稣', '邪教组织',
-  ];
-  for (const w of banned) {
-    if (name.toLowerCase().includes(w.toLowerCase())) return '名字包含敏感词';
-  }
-  if (existingNames && existingNames.includes(name.trim())) return '名字已被其他智子使用';
-  return null;
-}
 
 export default function PetPanel() {
   const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins } = usePetStore();
@@ -152,7 +105,7 @@ export default function PetPanel() {
               setNameInput(v);
             }}
           />
-          <button className="mode-btn" disabled={!!validateName(nameInput)}
+          <button className="mode-btn" disabled={!!validatePetName(nameInput)}
             onClick={() => {
               const species = STARTER_PETS.find(s => s.speciesId === selectedSpecies);
               setCeremony({
@@ -163,8 +116,8 @@ export default function PetPanel() {
             就决定是你了！
           </button>
         </div>
-        {nameInput && validateName(nameInput) && (
-          <p className="name-error">{validateName(nameInput)}</p>
+        {nameInput && validatePetName(nameInput) && (
+          <p className="name-error">{validatePetName(nameInput)}</p>
         )}
 
         {ceremony && (
@@ -621,14 +574,14 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
                 />
               </div>
               {(() => {
-                const err = validateName(buyNameInput, ownedPets.map(p => p.petName));
+                const err = validatePetName(buyNameInput, ownedPets.map(p => p.petName));
                 return err ? <p className="name-error">{err}</p> : null;
               })()}
             </div>
             <div className="buy-confirm-actions">
               <button className="mode-btn mode-btn-back" onClick={() => setBuyConfirm(null)}>取消</button>
               <button className="mode-btn"
-                disabled={!!validateName(buyNameInput, ownedPets.map(p => p.petName))}
+                disabled={!!validatePetName(buyNameInput, ownedPets.map(p => p.petName))}
                 onClick={() => {
                   const name = buyNameInput.trim();
                   if (!name) return;
