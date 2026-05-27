@@ -103,7 +103,6 @@ export default function OJTraining() {
         const order = ['基础语法','枚举算法','模拟算法','字符串','排序算法','查找','递归','贪心算法','搜索','动态规划','栈','数学'];
         return order.indexOf(a) - order.indexOf(b);
       }).map(([kp, plist]) => {
-        const kpDone = plist.filter(p => statusMap[p.id] === 'done' || statusMap[p.id] === 'passed').length;
         const kpPassed = plist.filter(p => statusMap[p.id] === 'passed').length;
         const isOpen = expandedGroups.has(kp);
         return (
