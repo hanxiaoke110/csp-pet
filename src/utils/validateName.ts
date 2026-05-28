@@ -26,7 +26,7 @@ const BANNED_WORDS = [
 
 export function validatePetName(name: string, existingNames?: string[]): string | null {
   if (!name.trim()) return '请输入名字';
-  if (name.length < 2) return '名字至少 2 个字';
+  if (name.length < 1) return '请输入名字';
   if (name.length > 8) return '名字最多 8 个字';
   if (!/^[一-龥a-zA-Z0-9]+$/.test(name)) return '只能使用中文、英文和数字';
   for (const w of BANNED_WORDS) {

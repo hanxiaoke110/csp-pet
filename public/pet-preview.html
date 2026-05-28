@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>16 Petdex 宠物预览</title>
+<style>
+  body { font-family: system-ui; background: #1a1a2e; color: #eee; margin: 0; padding: 20px; }
+  h2 { text-align: center; color: #fde68a; }
+  .grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+  .card { background: #16213e; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s; }
+  .card:hover { transform: scale(1.03); }
+  .card canvas { border-radius: 8px; image-rendering: pixelated; }
+  .name { font-weight: 700; font-size: 14px; margin-top: 6px; }
+  .state { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+  .controls { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; justify-content: center; }
+  .controls button { font-size: 10px; padding: 2px 6px; border: 1px solid #334155; border-radius: 4px;
+                     background: #1e293b; color: #cbd5e1; cursor: pointer; }
+  .controls button:hover { background: #334155; color: #fde68a; }
+  .controls button.active { background: #f59e0b; color: #1a1a2e; border-color: #f59e0b; }
+</style>
+</head>
+<body>
+<h2>16 Petdex 宠物预览 (200×200)</h2>
+<p style="text-align:center;color:#94a3b8;font-size:13px">点击下方按钮切换动画状态</p>
+<div class="grid" id="grid"></div>
+
+<script>
+const CSP_ORDER = ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhappy'];
+const STATE_NAMES = { idle:'待机', walk:'走路', sleep:'睡觉', celebrate:'庆祝', think:'思考', eat:'吃饭', unhappy:'不开心' };
+const SIZE = 200;
+const FPS = 8;
+
+const PETS = [
+  'peach','boba','eve','bubu-2','pixel-panda','harry-poptart','sky-dragon',
+  'glitch-bot','dino-bubu','miga','capi','rio-2','brassprout','buswatch',
+  'rx-78-2-gundam-2','byte-bunny'
+];
+
+async function loadSprite(slug) {
+  const meta = await fetch(`/pet-sprites/2d/${slug}.json`).then(r => r.json());
+  const img = new Image();
+  img.src = `/pet-sprites/2d/${slug}.png`;
+  await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; });
+  return { img, meta };
+}
+
+function renderLoop(ctx, sprite, meta, getState, getFrame) {
+  const fw = meta.frameWidth, fh = meta.frameHeight;
+  let lastTime = 0;
+  function loop(time) {
+    if (time - lastTime >= 1000 / FPS) {
+      lastTime = time;
+      const state = getState();
+      const rowIdx = CSP_ORDER.indexOf(state);
+      const count = meta.anims[state];
+      if (rowIdx >= 0) {
+        const frame = getFrame() % count;
+        ctx.clearRect(0, 0, SIZE, SIZE);
+        ctx.drawImage(sprite, frame * fw, rowIdx * fh, fw, fh, 0, 0, SIZE, SIZE);
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+
+async function init() {
+  const grid = document.getElementById('grid');
+  for (const slug of PETS) {
+    try {
+      const { img, meta } = await loadSprite(slug);
+      const card = document.createElement('div'); card.className = 'card';
+      const canvas = document.createElement('canvas');
+      canvas.width = SIZE; canvas.height = SIZE;
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+
+      let currentState = 'idle';
+      let frame = 0;
+      const stateEl = document.createElement('div'); stateEl.className = 'state';
+      stateEl.textContent = STATE_NAMES[currentState];
+
+      renderLoop(ctx, img, meta, () => currentState, () => frame);
+      setInterval(() => { frame++; }, 1000 / FPS);
+
+      const nameEl = document.createElement('div'); nameEl.className = 'name';
+      nameEl.textContent = slug;
+
+      const controls = document.createElement('div'); controls.className = 'controls';
+      CSP_ORDER.forEach(s => {
+        const btn = document.createElement('button');
+        btn.textContent = STATE_NAMES[s];
+        if (s === 'idle') btn.classList.add('active');
+        btn.onclick = () => {
+          currentState = s;
+          controls.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          stateEl.textContent = STATE_NAMES[s];
+        };
+        controls.appendChild(btn);
+      });
+
+      card.appendChild(canvas);
+      card.appendChild(nameEl);
+      card.appendChild(stateEl);
+      card.appendChild(controls);
+      grid.appendChild(card);
+    } catch(e) {
+      console.error(slug, e);
+    }
+  }
+}
+
+init();
+</script>
+</body>
+</html>

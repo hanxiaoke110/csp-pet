@@ -6,18 +6,22 @@ import type { PetAnimState } from './PetStateMachine';
 import type { OwnedPet } from '../../types/pet';
 
 const CLICK_LINES = [
-  '别点啦，好痒~', '我在认真看你学习呢！', '今天学了什么新知识？', '要不要做几道选择题？',
+  '别点啦，好痒~', '我在认真看你学习呢！', '今天学了什么新知识？', '今天的每周任务做完了吗？',
   '记得喂我吃东西哦~', '你今天的签到别忘了！', '加油，你是最棒的！', '这道题需要我帮你分析吗？',
-  '休息一下，劳逸结合~', 'C++ 真的很有趣！', '要不要来一发抽卡？', '今天还没去看 OJ 题目呢',
-  '我饿了... 快喂我！', '你怎么又摸鱼了 😏', '好好学习，天天向上！', '今天的选择题做完了吗？',
-  '我陪你一起学 C++！', '有什么不懂的可以问 AI 教练', '你的灵犀智子会一直陪着你',
+  '休息一下，劳逸结合~', 'C++ 真的很有趣！', '要不要去商店抽个新智子？', '今天还没去 OJ 刷题呢！',
+  '好好学习，天天向上！', '我陪你一起学 C++！', '有什么不懂的可以问 AI 教练', '你的灵犀智子会一直陪着你',
   '冲冲冲！🏆', '这个 bug 一定能找到的！', '你好厉害，已经学了好多题了', '码代码的样子最帅了 ✨',
   '想不想抽个传说智子？', '快去商店看看新伙伴吧', '要不要给我起个新名字？',
-  '看看你的成就解锁了多少？', '该复习错题了！', 'CSP 获奖在向你招手', '今天的运势很不错哦 🍀',
+  '看看你的成就解锁了多少？', 'CSP 获奖在向你招手', '今天的运势很不错哦 🍀',
+  '今天的课程验证做完了吗？📚', '去刷刷编程猫的题单吧！🐱',
+  '敢不敢挑战超级模式？5连击！⚡', '洛谷 AC 的感觉太爽了！', '你已经收集了多少只智子伙伴了？',
+  '递归、贪心、DP... 今天练了哪个？', '算法虐我千百遍，我待算法如初恋~', '代码写累了就摸摸我放松一下！',
+  '你怎么又摸鱼了 😏', '错题本等着你呢，该复习啦！',
 ];
-const HUNGRY_LINES = ['好饿啊... 求投喂 😿', '再不喂我就要饿扁了', '我想吃豪华食物！', '饿得没力气陪你学习了...'];
-const MORNING_LINES = ['早上好！新的一天开始啦 ☀️', '今天也要元气满满地学 C++！', '早起的鸟儿有虫吃~'];
-const NIGHT_LINES = ['夜深了，早点休息吧 🌙', '不要熬夜太晚哦，明天再学！', '晚安~ 明天见！'];
+const HUNGRY_LINES = ['好饿啊... 求投喂 😿', '再不喂我就要饿扁了', '我想吃豪华食物！', '饿得没力气陪你学习了...', '快去看看背包里有什么好吃的！'];
+const MOOD_LOW_LINES = ['心情不太好... 陪我玩会儿吧 😢', '你不理我了吗？', '好无聊啊，来刷一道题吧！', '是不是遇到让你头疼的题了？'];
+const MORNING_LINES = ['早上好！新的一天开始啦 ☀️', '今天也要元气满满地学 C++！', '早起的鸟儿有虫吃~', '今天打算刷几道题？先定个小目标！'];
+const NIGHT_LINES = ['夜深了，早点休息吧 🌙', '不要熬夜太晚哦，明天再学！', '晚安~ 明天见！', '回顾一下今天学到的知识再睡吧~'];
 function pickRandom(arr: string[]): string { return arr[Math.floor(Math.random() * arr.length)]; }
 
 type QuickAction = 'window' | 'challenge' | 'care' | 'shop' | 'checkin';
@@ -34,7 +38,6 @@ function ringPos(i: number, total: number, r: number) {
 }
 
 export default function PetWindow() {
-  const [animOverride, setAnimOverride] = useState<PetAnimState | undefined>();
   const [bubble, setBubble] = useState('');
   const [clickCount, setClickCount] = useState(0);
   const [activePet, setActivePet] = useState<OwnedPet | null>(null);
@@ -80,8 +83,7 @@ export default function PetWindow() {
 
     listen('pet-anim', (e: any) => {
       const p = e.payload as { anim: PetAnimState; duration?: number };
-      setAnimOverride(p.anim);
-      setTimeout(() => setAnimOverride(undefined), p.duration || 3000);
+      window.__petTrigger__?.(p.anim, p.duration);
     }).then(fn => c.push(fn));
     listen('pet-bubble', (e: any) => {
       setBubble(e.payload.text);
@@ -108,6 +110,7 @@ export default function PetWindow() {
       const h = new Date().getHours();
       let l: string;
       if (activePet.hunger <= 20) l = pickRandom(HUNGRY_LINES);
+      else if (activePet.mood <= 20) l = pickRandom(MOOD_LOW_LINES);
       else if (h >= 6 && h <= 9) l = Math.random() < 0.3 ? pickRandom(MORNING_LINES) : pickRandom(CLICK_LINES);
       else if (h >= 22 || h <= 1) l = Math.random() < 0.4 ? pickRandom(NIGHT_LINES) : pickRandom(CLICK_LINES);
       else l = pickRandom(CLICK_LINES);
@@ -141,6 +144,7 @@ export default function PetWindow() {
     const c = clickCount + 1; setClickCount(c);
     let l: string;
     if (activePet?.hunger && activePet.hunger <= 20) l = pickRandom(HUNGRY_LINES);
+    else if (activePet?.mood && activePet.mood <= 20) l = pickRandom(MOOD_LOW_LINES);
     else if (c % 10 === 0) l = `你戳了我 ${c} 次了！🤪`;
     else if (c % 5 === 0) l = pickRandom(['好痒好痒~', '哈哈哈别戳了', '再戳我要生气了 😤', '你是戳戳怪吗']);
     else l = pickRandom(CLICK_LINES);
@@ -155,7 +159,7 @@ export default function PetWindow() {
   return (
     <div style={{ width: 220, height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className="pet-interact" style={{ width: 200, height: 200, position: 'relative' }} onClick={handleClick}>
-        <PetSprite key={activePet.modelPath || 'empty'} animOverride={animOverride}
+        <PetSprite key={activePet.modelPath || 'empty'}
           renderType={activePet.renderType} modelPath={activePet.modelPath} />
       </div>
       {bubble && (

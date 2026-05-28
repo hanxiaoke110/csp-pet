@@ -83,7 +83,7 @@ export default function CeremonyModal({ type, petName, petElement, petIcon, oldN
 
         {/* Pet display */}
         <div className={`ceremony-pet ${showPet ? 'revealed' : ''}`}>
-          <div className="ceremony-pet-icon">{petIcon}</div>
+          <div className="ceremony-pet-icon"><img src={`/pet-sprites/previews/${petIcon}.png`} alt={petName} style={{width:64,height:64,imageRendering:'pixelated'}} onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} /></div>
           {type === 'evolve' && oldName && newName && (
             <div className="evolve-names">
               <span className="old-name">{oldName}</span>

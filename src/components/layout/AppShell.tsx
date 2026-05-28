@@ -17,6 +17,13 @@ const TIPS = [
   { do: '整理错题笔记', avoid: '拖延到明天', lucky: '⭐ 稀有智子' },
 ];
 
+function getWeekKey() {
+  const d = new Date();
+  const jan1 = new Date(d.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((d.getTime() - jan1.getTime()) / 86400000);
+  return `${d.getFullYear()}-W${Math.ceil((dayOfYear + jan1.getDay() + 1) / 7)}`;
+}
+
 function DailyCheckin() {
   const [checked, setChecked] = useState(false);
   const [streak, setStreak] = useState(0);
@@ -26,35 +33,41 @@ function DailyCheckin() {
   useEffect(() => {
     try {
       const data = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-      const today = new Date().toISOString().slice(0, 10);
-      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-      if (data.date === today) {
+      const thisWeek = getWeekKey();
+      if (data.week === thisWeek) {
         setChecked(true);
         setStreak(data.streak || 0);
         setTip(data.tip || TIPS[new Date().getDate() % TIPS.length]);
-      } else {
-        setStreak(data.date === yesterday ? (data.streak || 0) : 0);
       }
     } catch {}
   }, []);
 
   const doCheckin = () => {
-    const today = new Date().toISOString().slice(0, 10);
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const thisWeek = getWeekKey();
     let newStreak = streak + 1;
     try {
       const data = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-      if (data.date !== yesterday) newStreak = 1;
+      if (!data.week) { newStreak = 1; }
     } catch {}
 
-    const bonus = newStreak % 30 === 0 ? 100 : newStreak % 7 === 0 ? 20 : 10;
-    const dayTip = TIPS[new Date().getDate() % TIPS.length];
+    let bonus = 50;
+    let bonusMsg = '';
+    if (newStreak % 8 === 0) {
+      bonus = 200;
+      bonusMsg = ' + 改名卡 ×1';
+      // Award rename card by faking a purchase — simpler: just increment
+      usePetStore.setState(s => ({ renameCards: s.renameCards + 1 }));
+    } else if (newStreak % 4 === 0) {
+      bonus = 100;
+    }
+
     addCoins(bonus);
-    setChecked(true); setStreak(newStreak); setTip(dayTip);
-    localStorage.setItem('csp_checkin', JSON.stringify({ date: today, streak: newStreak, tip: dayTip }));
+    const nextTip = TIPS[new Date().getDate() % TIPS.length];
+    setChecked(true); setStreak(newStreak); setTip(nextTip);
+    localStorage.setItem('csp_checkin', JSON.stringify({ week: thisWeek, streak: newStreak, tip: nextTip }));
 
     const toast = document.createElement('div');
-    toast.textContent = `🔥 连续 ${newStreak} 天！+${bonus}g`;
+    toast.textContent = `🔥 连续 ${newStreak} 周！+${bonus}g${bonusMsg}`;
     toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#f59e0b;color:#fff;padding:8px 20px;border-radius:20px;font-weight:700;z-index:9999;animation:toastIn .3s ease';
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
@@ -64,7 +77,7 @@ function DailyCheckin() {
     <div className="checkin-bar">
       {checked ? (
         <div className="checkin-card">
-          <div className="checkin-streak">🔥 连续 {streak} 天</div>
+          <div className="checkin-streak">🔥 连续 {streak} 周</div>
           <div className="checkin-tips">
             <div className="checkin-tip do">✅ 宜：{tip.do}</div>
             <div className="checkin-tip avoid">⚠️ 忌：{tip.avoid}</div>
@@ -72,7 +85,7 @@ function DailyCheckin() {
           </div>
         </div>
       ) : (
-        <button className="checkin-btn" onClick={doCheckin}>🎁 今日签到 +10g</button>
+        <button className="checkin-btn" onClick={doCheckin}>🎁 本周签到 +50g</button>
       )}
     </div>
   );

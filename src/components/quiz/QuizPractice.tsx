@@ -138,7 +138,8 @@ export default function QuizPractice() {
       if (mode !== 'super' && reward.exp > 0) {
         const activePetId = usePetStore.getState().activePetId;
         if (activePetId) addExp(activePetId, reward.exp);
-        addCoins(reward.coins);
+        const mult = usePetStore.getState().getRewardMultiplier();
+        addCoins(Math.floor(reward.coins * mult));
       }
 
       // In review mode, remove from errors
@@ -175,7 +176,7 @@ export default function QuizPractice() {
         usePetStore.getState().claimPendingRewards();
       }
       if (mode === 'extra') quizStore.completeExtraChallenge();
-      if (mode === 'review') quizStore.completeMonthlyReview();
+      if (mode === 'review') quizStore.completeMonthlyReview(finalResults.correct, finalResults.total);
       if (mode === 'super') {
         quizStore.completeSuperChallenge(finalResults.correct);
         // Apply tiered super reward
@@ -183,7 +184,8 @@ export default function QuizPractice() {
         if (sr.exp > 0) {
           const activePetId = usePetStore.getState().activePetId;
           if (activePetId) addExp(activePetId, sr.exp);
-          addCoins(sr.coins);
+          const mult = usePetStore.getState().getRewardMultiplier();
+          addCoins(Math.floor(sr.coins * mult));
         }
       }
     } else {

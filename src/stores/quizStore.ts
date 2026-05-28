@@ -29,8 +29,11 @@ export interface QuizState {
   weeklyCompletions: number;
   weeklyPerfects: number;
   extraChallengeDone: boolean;
+  extraChallengeCount: number;
   // Monthly review
   lastReviewDate: string;
+  lastReviewCorrect: number;
+  lastReviewTotal: number;
   lastSuperDate: string;
   superCompletions: number;
   superBestScore: number;
@@ -45,7 +48,7 @@ export interface QuizState {
   getWeakPoints: (limit?: number) => { kp: string; rate: number; total: number }[];
   completeWeeklyTask: (perfect: boolean) => void;
   completeExtraChallenge: () => void;
-  completeMonthlyReview: () => void;
+  completeMonthlyReview: (correct?: number, total?: number) => void;
   completeSuperChallenge: (correct: number) => void;
   canDoSuperChallenge: () => boolean;
   superDaysLeft: () => number;
@@ -102,7 +105,10 @@ export const useQuizStore = create<QuizState>((set, get) => {
     weeklyCompletions: initial.weeklyCompletions || 0,
     weeklyPerfects: initial.weeklyPerfects || 0,
     extraChallengeDone: false,
+    extraChallengeCount: initial.extraChallengeCount || 0,
     lastReviewDate: initial.lastReviewDate || '',
+    lastReviewCorrect: initial.lastReviewCorrect || 0,
+    lastReviewTotal: initial.lastReviewTotal || 0,
     lastSuperDate: initial.lastSuperDate || '',
     superCompletions: initial.superCompletions || 0,
     superBestScore: initial.superBestScore || 0,
@@ -167,11 +173,17 @@ export const useQuizStore = create<QuizState>((set, get) => {
     },
 
     completeExtraChallenge: () => {
-      set({ extraChallengeDone: true });
+      set(s => ({ extraChallengeDone: true, extraChallengeCount: (s.extraChallengeCount || 0) + 1 }));
+      get().save();
     },
 
-    completeMonthlyReview: () => {
-      set({ lastReviewDate: getMonthKey(), kpStats: {} });
+    completeMonthlyReview: (correct?: number, total?: number) => {
+      set(s => ({
+        lastReviewDate: getMonthKey(),
+        kpStats: {},
+        lastReviewCorrect: correct ?? s.lastReviewCorrect,
+        lastReviewTotal: total ?? s.lastReviewTotal,
+      }));
       get().save();
     },
 
@@ -237,7 +249,10 @@ export const useQuizStore = create<QuizState>((set, get) => {
       set({
         errors: data.errors || [],
         kpStats: data.kpStats || {},
+        extraChallengeCount: data.extraChallengeCount || 0,
         lastReviewDate: data.lastReviewDate || '',
+        lastReviewCorrect: data.lastReviewCorrect || 0,
+        lastReviewTotal: data.lastReviewTotal || 0,
         lastSuperDate: data.lastSuperDate || '',
         superCompletions: data.superCompletions || 0,
         superBestScore: data.superBestScore || 0,
@@ -256,7 +271,10 @@ export const useQuizStore = create<QuizState>((set, get) => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         errors: s.errors,
         kpStats: s.kpStats,
+        extraChallengeCount: s.extraChallengeCount,
         lastReviewDate: s.lastReviewDate,
+        lastReviewCorrect: s.lastReviewCorrect,
+        lastReviewTotal: s.lastReviewTotal,
         lastSuperDate: s.lastSuperDate,
         superCompletions: s.superCompletions,
         superBestScore: s.superBestScore,

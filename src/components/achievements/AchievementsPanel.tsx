@@ -22,14 +22,10 @@ export default function AchievementsPanel() {
   // Read super challenge stats from localStorage
   let superCompletions = 0;
   let superBestScore = 0;
-  let hasTripleDay = false;
   try {
     const qs = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
     superCompletions = qs.superCompletions || 0;
     superBestScore = qs.superBestScore || 0;
-    // Triple day: weekly + super + extra all completed on same day
-    const today = new Date().toISOString().slice(0, 10);
-    hasTripleDay = qs.weeklyDate === today && qs.superDate === today && qs.extraDate === today;
   } catch {}
 
   const achievements = useMemo(() => {
@@ -45,9 +41,8 @@ export default function AchievementsPanel() {
       hasAllElements,
       superCompletions,
       superBestScore,
-      hasTripleDay,
     );
-  }, [ownedPets, activePet, coins, feedCount, superCompletions, superBestScore, hasTripleDay]);
+  }, [ownedPets, activePet, coins, feedCount, superCompletions, superBestScore]);
 
   // Group by category
   const grouped = useMemo(() => {
@@ -62,12 +57,16 @@ export default function AchievementsPanel() {
   const unlockedCount = achievements.filter(a => a.check().unlocked).length;
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [newUnlock, setNewUnlock] = useState<Achievement | null>(null);
-  const prevUnlocked = useRef<Set<string>>(new Set());
+  const prevUnlocked = useRef<Set<string> | null>(null);
 
-  // Detect new unlocks and show notification
+  // Detect new unlocks and show notification (skip initial mount)
   useEffect(() => {
     const nowUnlocked = new Set(achievements.filter(a => a.check().unlocked).map(a => a.id));
-    const newlyUnlocked = achievements.find(a => a.check().unlocked && !prevUnlocked.current.has(a.id));
+    if (!prevUnlocked.current) {
+      prevUnlocked.current = nowUnlocked;
+      return;
+    }
+    const newlyUnlocked = achievements.find(a => a.check().unlocked && !prevUnlocked.current!.has(a.id));
     if (newlyUnlocked) {
       setNewUnlock(newlyUnlocked);
       setTimeout(() => setNewUnlock(null), 4000);

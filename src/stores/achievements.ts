@@ -49,7 +49,6 @@ export function createAchievements(
   hasAllElements: boolean,
   superCompletions: number,
   superBestScore: number,
-  hasTripleDay: boolean,
 ): Achievement[] {
   return [
     // === 📚 学海无涯 ===
@@ -63,14 +62,14 @@ export function createAchievements(
       check: () => ({ unlocked: getCompletedCount() >= 60, progress: Math.min(getCompletedCount(), 60), total: 60 }) },
     { id: 'course-100', name: '百炼成钢', description: '完成 100 道课程验证', category: 'course', icon: '🏆',
       check: () => ({ unlocked: getCompletedCount() >= 100, progress: Math.min(getCompletedCount(), 100), total: 100 }) },
-    { id: 'stage-c1', name: 'C1 毕业', description: 'C1 阶段全部作业通过', category: 'course', icon: '🎓',
-      check: () => ({ unlocked: false }) },  // Needs lesson data at runtime
-    { id: 'stage-c2', name: 'C2 毕业', description: 'C2 阶段全部作业通过', category: 'course', icon: '🎓',
-      check: () => ({ unlocked: false }) },
-    { id: 'stage-c3', name: 'C3 毕业', description: 'C3 阶段全部作业通过', category: 'course', icon: '🎓',
-      check: () => ({ unlocked: false }) },
-    { id: 'stage-c4', name: 'C4 毕业', description: 'C4 阶段全部作业通过', category: 'course', icon: '🎓',
-      check: () => ({ unlocked: false }) },
+    { id: 'stage-c1', name: 'C1 毕业', description: '完成 10 道课程验证', category: 'course', icon: '🎓',
+      check: () => ({ unlocked: getCompletedCount() >= 10, progress: Math.min(getCompletedCount(), 10), total: 10 }) },
+    { id: 'stage-c2', name: 'C2 毕业', description: '完成 30 道课程验证', category: 'course', icon: '🎓',
+      check: () => ({ unlocked: getCompletedCount() >= 30, progress: Math.min(getCompletedCount(), 30), total: 30 }) },
+    { id: 'stage-c3', name: 'C3 毕业', description: '完成 60 道课程验证', category: 'course', icon: '🎓',
+      check: () => ({ unlocked: getCompletedCount() >= 60, progress: Math.min(getCompletedCount(), 60), total: 60 }) },
+    { id: 'stage-c4', name: 'C4 毕业', description: '完成 100 道课程验证', category: 'course', icon: '🎓',
+      check: () => ({ unlocked: getCompletedCount() >= 100, progress: Math.min(getCompletedCount(), 100), total: 100 }) },
 
     // === 🧠 头脑风暴 ===
     { id: 'quiz-weekly-1', name: '周常首胜', description: '完成 1 次每周任务', category: 'quiz', icon: '📋',
@@ -86,7 +85,13 @@ export function createAchievements(
     { id: 'quiz-streak', name: '学霸时刻', description: '自由练习连续答对 10 题', category: 'quiz', icon: '🔥',
       check: () => ({ unlocked: getFreeStreak() >= 10, progress: Math.min(getFreeStreak(), 10), total: 10 }) },
     { id: 'quiz-extra-10', name: '额外加练', description: '完成额外挑战 10 次', category: 'quiz', icon: '💪',
-      check: () => ({ unlocked: false }) },
+      check: () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
+          const count = saved.extraChallengeCount || 0;
+          return { unlocked: count >= 10, progress: Math.min(count, 10), total: 10 };
+        } catch { return { unlocked: false }; }
+      }},
     { id: 'quiz-total-100', name: '选题如流', description: '累计答对 100 道选择题', category: 'quiz', icon: '🧠',
       check: () => {
         try {
@@ -103,7 +108,14 @@ export function createAchievements(
         } catch { return { unlocked: false }; }
       }},
     { id: 'quiz-review-80', name: '查漏补缺', description: '月度复盘答对 80% 以上', category: 'quiz', icon: '🎯',
-      check: () => ({ unlocked: false }) },
+      check: () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
+          const correct = saved.lastReviewCorrect || 0;
+          const total = saved.lastReviewTotal || 1;
+          return { unlocked: total > 0 && correct / total >= 0.8, progress: correct, total };
+        } catch { return { unlocked: false }; }
+      }},
 
     // === ⚡ 极限挑战 ===
     { id: 'super-1', name: '首闯极限', description: '完成 1 次超级挑战', category: 'super', icon: '⚡',
@@ -176,24 +188,30 @@ export function createAchievements(
             progress: Math.min(Object.values(s).filter(v => v === 'passed').length, 50), total: 50 };
         } catch { return { unlocked: false }; }
       }},
-    { id: 'checkin-7', name: '周周不落', description: '连续签到 7 天', category: 'pet', icon: '🔥',
+    { id: 'checkin-7', name: '周周不落', description: '连续签到 7 周', category: 'pet', icon: '🔥',
       check: () => {
         try {
           const d = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
           return { unlocked: (d.streak || 0) >= 7, progress: Math.min(d.streak || 0, 7), total: 7 };
         } catch { return { unlocked: false }; }
       }},
-    { id: 'checkin-30', name: '月月坚持', description: '连续签到 30 天', category: 'pet', icon: '🌟',
+    { id: 'checkin-12', name: '坚持不懈', description: '连续签到 12 周', category: 'pet', icon: '🌟',
       check: () => {
         try {
           const d = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-          return { unlocked: (d.streak || 0) >= 30, progress: Math.min(d.streak || 0, 30), total: 30 };
+          return { unlocked: (d.streak || 0) >= 12, progress: Math.min(d.streak || 0, 12), total: 12 };
         } catch { return { unlocked: false }; }
       }},
 
     // === 🌟 隐藏成就 ===
     { id: 'hidden-triple', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
-      check: () => ({ unlocked: hasTripleDay }) },
+      check: () => {
+        try {
+          const qs = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
+          const ci = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
+          return { unlocked: (ci.streak || 0) >= 1 && (qs.superCompletions || 0) >= 1 && (qs.extraChallengeCount || 0) >= 1 };
+        } catch { return { unlocked: false }; }
+      }},
     { id: 'hidden-name', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
       check: () => {
         try {
@@ -220,6 +238,13 @@ export function createAchievements(
         } catch { return { unlocked: false }; }
       }},
     { id: 'hidden-perfect-review', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
-      check: () => ({ unlocked: false }) },
+      check: () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
+          const correct = saved.lastReviewCorrect || 0;
+          const total = saved.lastReviewTotal || 0;
+          return { unlocked: total > 0 && correct === total };
+        } catch { return { unlocked: false }; }
+      }},
   ];
 }

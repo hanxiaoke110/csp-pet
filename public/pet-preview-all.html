@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>灵犀智子稀有度投票 - 69只</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a2e; color: #eee; font-family: -apple-system, sans-serif; padding: 20px; padding-bottom: 60px; }
+  h1 { text-align: center; margin-bottom: 4px; font-size: 24px; }
+  .subtitle { text-align: center; color: #94a3b8; margin-bottom: 16px; font-size: 13px; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: #0f172a; border: 1px solid #334155; border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .topbar .stats { display: flex; gap: 16px; font-size: 13px; }
+  .topbar .stats span { font-weight: 700; }
+  .topbar .stat-l { color: #f59e0b; }
+  .topbar .stat-r { color: #818cf8; }
+  .topbar .stat-c { color: #94a3b8; }
+  .topbar button {
+    padding: 5px 14px; border-radius: 8px; border: 1px solid #334155;
+    background: #1e293b; color: #cbd5e1; cursor: pointer; font-size: 12px; font-weight: 600;
+  }
+  .topbar button:hover { background: #334155; }
+  .topbar .btn-export { background: #166534; border-color: #22c55e; color: #bbf7d0; }
+  .topbar .btn-import { background: #1e3a5f; border-color: #3b82f6; color: #bfdbfe; }
+  .topbar .btn-reset { background: #7f1d1d; border-color: #ef4444; color: #fecaca; }
+  .topbar .teacher-name { display: flex; align-items: center; gap: 6px; }
+  .topbar .teacher-name input {
+    width: 100px; padding: 4px 8px; border-radius: 6px; border: 1px solid #475569;
+    background: #1e293b; color: #e2e8f0; font-size: 12px;
+  }
+
+  .controls { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .controls button {
+    padding: 6px 16px; border-radius: 8px; border: 1px solid #334155;
+    background: #1e293b; color: #cbd5e1; cursor: pointer; font-size: 13px;
+  }
+  .controls button:hover { background: #334155; }
+  .controls button.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+
+  .card {
+    background: #1e293b; border-radius: 12px; overflow: hidden;
+    border: 2px solid #334155; display: flex; flex-direction: column; align-items: center;
+    padding: 10px 8px 8px; transition: border-color .2s;
+  }
+  .card.voted-legendary { border-color: #f59e0b; box-shadow: 0 0 12px rgba(245,158,11,.2); }
+  .card.voted-rare { border-color: #818cf8; box-shadow: 0 0 8px rgba(129,140,248,.15); }
+  .card.voted-common { border-color: #64748b; }
+  .card.default-legendary { border-color: #f59e0b55; }
+  .card.default-rare { border-color: #818cf855; }
+
+  .preview { width: 96px; height: 104px; image-rendering: pixelated; object-fit: contain; }
+  .name { font-weight: 700; font-size: 14px; margin: 4px 0 2px; }
+  .slug { font-size: 10px; color: #64748b; margin-bottom: 4px; }
+  .meta { font-size: 11px; display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .element { padding: 1px 6px; border-radius: 4px; font-size: 10px; }
+  .elem-earth { background: #713f12; color: #fef3c7; }
+  .elem-fire { background: #991b1b; color: #fecaca; }
+  .elem-wind { background: #166534; color: #bbf7d0; }
+  .elem-water { background: #1e3a5f; color: #bfdbfe; }
+  .elem-light { background: #854d0e; color: #fef9c3; }
+
+  .vote-btns { display: flex; gap: 4px; width: 100%; }
+  .vote-btn {
+    flex: 1; padding: 4px 2px; border-radius: 6px; border: 1px solid #475569;
+    background: #0f172a; color: #94a3b8; cursor: pointer; font-size: 10px; font-weight: 600;
+    transition: all .15s;
+  }
+  .vote-btn:hover { background: #1e293b; color: #e2e8f0; }
+  .vote-btn.v-l { border-color: #78350f; }
+  .vote-btn.v-l.selected { background: #78350f; color: #fde68a; border-color: #f59e0b; }
+  .vote-btn.v-r { border-color: #312e81; }
+  .vote-btn.v-r.selected { background: #312e81; color: #c7d2fe; border-color: #818cf8; }
+  .vote-btn.v-c { border-color: #334155; }
+  .vote-btn.v-c.selected { background: #334155; color: #e2e8f0; border-color: #94a3b8; }
+
+  .default-hint { font-size: 9px; color: #475569; margin-top: 3px; }
+
+  #toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: #22c55e; color: #000; padding: 8px 24px; border-radius: 10px;
+    font-weight: 700; font-size: 14px; z-index: 999; opacity: 0; transition: opacity .3s;
+  }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<h1>🐾 灵犀智子稀有度投票</h1>
+<p class="subtitle">请为每只宠物选择稀有度 · 您的投票将保存到浏览器</p>
+
+<div class="topbar" id="topbar">
+  <div class="teacher-name">
+    <span>老师：</span>
+    <input id="teacherName" placeholder="输入姓名" onchange="saveVotes()" />
+  </div>
+  <div class="stats">
+    <span class="stat-l">👑 <span id="cntL">0</span></span>
+    <span class="stat-r">✨ <span id="cntR">0</span></span>
+    <span class="stat-c">⭐ <span id="cntC">0</span></span>
+    <span style="color:#64748b">/ <span id="cntTotal">69</span></span>
+  </div>
+  <button class="btn-export" onclick="exportVotes()">📥 导出投票</button>
+  <button class="btn-import" onclick="document.getElementById('importFile').click()">📤 导入投票</button>
+  <button class="btn-reset" onclick="resetVotes()">🗑 清空</button>
+  <input type="file" id="importFile" accept=".json" style="display:none" onchange="importVotes(event)" />
+</div>
+
+<div class="controls">
+  <button class="active" onclick="filter('all')">全部</button>
+  <button onclick="filter('legendary')">👑 传说</button>
+  <button onclick="filter('rare')">✨ 稀有</button>
+  <button onclick="filter('common')">⭐ 普通</button>
+  <button onclick="filter('unvoted')">❓ 未投票</button>
+</div>
+
+<div class="grid" id="grid"></div>
+<div id="toast"></div>
+
+<script>
+  // Final tier results (4-teacher vote, L>=2.0 R>=1.5)
+  const DEFAULT_TIERS = {
+    'poncho-chick':'legendary','kunkunball':'legendary','kunkun-pixel':'legendary',
+    'zhoukeke':'legendary','wode-daodun-3d':'legendary','little-blue-star':'legendary',
+    'baobao':'legendary','wukong':'legendary',
+    'round-maodie':'rare','anon':'rare','anya':'rare','backpack-forest-spirit':'rare',
+    'itachi':'rare','nyanko-v2':'rare','nezukocoder':'rare','gugugaga':'rare',
+    'forest-spirit-yahaha':'rare','cow-meme-pet':'rare','wall-e':'rare',
+    'dino-bubu':'rare','rio-2':'rare','rx-78-2-gundam-2':'rare','currypet':'rare',
+    'einstein':'rare','blue-qilin':'rare','emilia':'rare','sukuna':'rare',
+    'godzilla-fire':'rare','kyojuro-rengoku':'rare','sasuke':'rare','paimo':'rare','ziling':'rare',
+  };
+const PETS = [
+  {id:'peach',name:'桃桃',el:'earth'},{id:'boba',name:'波霸',el:'water'},
+  {id:'eve',name:'伊芙',el:'wind'},{id:'bubu-2',name:'小布布',el:'fire'},
+  {id:'pixel-panda',name:'像素熊猫',el:'earth'},{id:'harry-poptart',name:'哈利泡芙',el:'fire'},
+  {id:'sky-dragon',name:'天空龙',el:'wind'},{id:'glitch-bot',name:'故障机器人',el:'water'},
+  {id:'dino-bubu',name:'恐龙布布',el:'earth'},{id:'miga',name:'米伽',el:'wind'},
+  {id:'capi',name:'卡皮',el:'earth'},{id:'rio-2',name:'里奥',el:'water'},
+  {id:'brassprout',name:'铜芽',el:'earth'},{id:'buswatch',name:'巴士守望',el:'fire'},
+  {id:'rx-78-2-gundam-2',name:'高达RX78',el:'fire'},{id:'byte-bunny',name:'字节兔',el:'wind'},
+  {id:'currypet',name:'CurryPet',el:'fire'},{id:'round-maodie',name:'圆头耄耋',el:'earth'},
+  {id:'gardevoir',name:'沙奈朵',el:'wind'},{id:'capvolt',name:'皮卡丘',el:'fire'},
+  {id:'anon',name:'小粉龙',el:'earth'},{id:'anya',name:'阿尼亚',el:'wind'},
+  {id:'cloudy',name:'云朵熊猫',el:'wind'},{id:'samo',name:'萨摩耶',el:'earth'},
+  {id:'broom-witch',name:'扫帚女巫',el:'wind'},{id:'einstein',name:'小爱因斯坦',el:'wind'},
+  {id:'takagi',name:'高木同学',el:'fire'},{id:'dimo',name:'迪莫',el:'water'},
+  {id:'weilong',name:'威龙机甲',el:'fire'},{id:'liebao',name:'猎宝',el:'earth'},
+  {id:'blue-qilin',name:'蓝麒麟',el:'water'},{id:'poncho-chick',name:'雨衣小鸡',el:'earth'},
+  {id:'wode-daodun-3d',name:'刀盾守卫',el:'fire'},{id:'puffel',name:'泡芙犬',el:'water'},
+  {id:'xiaobai',name:'小白',el:'earth'},{id:'little-blue-star',name:'小蓝星',el:'water'},
+  {id:'astra',name:'阿斯特拉',el:'wind'},{id:'sillycat',name:'呆猫',el:'earth'},
+  {id:'backpack-forest-spirit',name:'背包森灵',el:'earth'},{id:'emilia',name:'艾米莉亚',el:'wind'},
+  {id:'boolet',name:'子弹君',el:'fire'},{id:'itachi',name:'鼬',el:'fire'},
+  {id:'nyanko-v2',name:'喵子V2',el:'water'},{id:'yuanshi-tianzun',name:'元始天尊',el:'light'},
+  {id:'baobao',name:'宝宝',el:'earth'},{id:'sukuna',name:'宿傩',el:'fire'},
+  {id:'nezukocoder',name:'祢豆子',el:'fire'},{id:'gugugaga',name:'咕咕嘎嘎',el:'water'},
+  {id:'godzilla-fire',name:'火焰哥斯拉',el:'fire'},{id:'kyojuro-rengoku',name:'炼狱杏寿郎',el:'fire'},
+  {id:'forest-spirit-yahaha',name:'呀哈哈',el:'wind'},{id:'kunkunball',name:'坤坤球',el:'earth'},
+  {id:'nibble',name:'小咬',el:'earth'},{id:'wukong',name:'悟空',el:'fire'},
+  {id:'cow-meme-pet',name:'奶牛表情包',el:'earth'},{id:'boo',name:'小幽灵',el:'wind'},
+  {id:'sasuke',name:'佐助',el:'fire'},{id:'paimo',name:'派蒙',el:'wind'},
+  {id:'kunkun-pixel',name:'像素坤坤',el:'earth'},{id:'wall-e',name:'瓦力',el:'earth'},
+  {id:'hanli',name:'韩立',el:'wind'},{id:'mallow',name:'毛毛',el:'earth'},
+  {id:'ayaka',name:'神里绫华',el:'water'},{id:'ziling',name:'紫灵',el:'wind'},
+  {id:'werllyt',name:'薇尔莉特',el:'wind'},{id:'zhoukeke',name:'周可可',el:'earth'},
+];
+
+const ELEM_CLASS = {earth:'elem-earth',fire:'elem-fire',wind:'elem-wind',water:'elem-water',light:'elem-light'};
+const ELEM_ICON = {earth:'🟫',fire:'🔴',wind:'🟢',water:'🔵',light:'🟡'};
+const TIER_ORDER = ['legendary','rare','common'];
+
+// Load votes and teacher name from localStorage
+function loadVotes() {
+  try { return JSON.parse(localStorage.getItem('pet_tier_votes') || '{}'); }
+  catch { return {}; }
+}
+function saveVotes() {
+  localStorage.setItem('pet_tier_votes', JSON.stringify(votes));
+  const name = document.getElementById('teacherName').value.trim();
+  if (name) localStorage.setItem('pet_tier_teacher', name);
+  else localStorage.removeItem('pet_tier_teacher');
+  updateStats();
+}
+let votes = loadVotes();
+const teacherName = localStorage.getItem('pet_tier_teacher') || '';
+let currentFilter = 'all';
+
+function getTier(id) {
+  return votes[id] || DEFAULT_TIERS[id] || null;
+}
+function isVoted(id) { return id in votes; }
+
+function updateStats() {
+  let l=0,r=0,c=0,u=0;
+  PETS.forEach(p => {
+    const t = votes[p.id];
+    if (t==='legendary') l++;
+    else if (t==='rare') r++;
+    else if (t==='common') c++;
+    else u++;
+  });
+  document.getElementById('cntL').textContent = l;
+  document.getElementById('cntR').textContent = r;
+  document.getElementById('cntC').textContent = c;
+  document.getElementById('cntTotal').textContent = l+r+c+u;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function vote(id, tier) {
+  if (votes[id] === tier) {
+    delete votes[id]; // toggle off
+  } else {
+    votes[id] = tier;
+  }
+  saveVotes();
+  render(currentFilter);
+}
+
+function render(filterTier) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  PETS.forEach(p => {
+    const tier = getTier(p.id);
+    if (filterTier === 'legendary' && tier !== 'legendary') return;
+    if (filterTier === 'rare' && tier !== 'rare') return;
+    if (filterTier === 'common' && tier !== 'common') return;
+    if (filterTier === 'unvoted' && isVoted(p.id)) return;
+
+    const voted = votes[p.id];
+    const defaultTier = DEFAULT_TIERS[p.id];
+
+    const card = document.createElement('div');
+    let cls = 'card';
+    if (voted === 'legendary') cls += ' voted-legendary';
+    else if (voted === 'rare') cls += ' voted-rare';
+    else if (voted === 'common') cls += ' voted-common';
+    else if (defaultTier === 'legendary') cls += ' default-legendary';
+    else if (defaultTier === 'rare') cls += ' default-rare';
+    card.className = cls;
+
+    card.innerHTML = `
+      <img class="preview" src="pet-sprites/previews/${p.id}.png" onerror="this.style.display='none'" alt="${p.name}">
+      <div class="name">${p.name}</div>
+      <div class="slug">${p.id}</div>
+      <div class="meta">
+        <span class="element ${ELEM_CLASS[p.el]}">${ELEM_ICON[p.el]} ${p.el}</span>
+        ${voted ? `<span style="color:#a78bfa;font-size:10px">✓ 已投</span>` : `<span style="color:#64748b;font-size:10px">未投票</span>`}
+      </div>
+      <div class="vote-btns">
+        <button class="vote-btn v-l ${voted==='legendary'?'selected':''}" onclick="event.stopPropagation();vote('${p.id}','legendary')">👑 传说</button>
+        <button class="vote-btn v-r ${voted==='rare'?'selected':''}" onclick="event.stopPropagation();vote('${p.id}','rare')">✨ 稀有</button>
+        <button class="vote-btn v-c ${voted==='common'?'selected':''}" onclick="event.stopPropagation();vote('${p.id}','common')">⭐ 普通</button>
+      </div>
+      ${!voted && defaultTier ? `<div class="default-hint">建议：${defaultTier==='legendary'?'传说':defaultTier==='rare'?'稀有':'普通'}</div>` : ''}
+    `;
+    grid.appendChild(card);
+  });
+  updateStats();
+}
+
+function filter(t) {
+  currentFilter = t;
+  const btns = document.querySelectorAll('.controls button');
+  btns.forEach(b => b.classList.remove('active'));
+  const idx = t==='all'?0:t==='legendary'?1:t==='rare'?2:t==='common'?3:4;
+  btns[idx].classList.add('active');
+  render(t);
+}
+
+function exportVotes() {
+  const name = document.getElementById('teacherName').value.trim() || 'unknown';
+  const data = { teacher: name, exportedAt: new Date().toISOString(), votes };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `pet-votes-${name}.json`; a.click();
+  URL.revokeObjectURL(url);
+  toast('投票数据已导出！');
+}
+
+function importVotes(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.votes || typeof data.votes !== 'object') { toast('❌ 无效的投票文件'); return; }
+      let merged = 0;
+      for (const [id, tier] of Object.entries(data.votes)) {
+        if (!TIER_ORDER.includes(tier)) continue;
+        if (!PETS.some(p => p.id === id)) continue;
+        if (votes[id] && votes[id] !== tier) {
+          // Conflict: newer timestamp wins (or skip if same)
+        }
+        votes[id] = tier;
+        merged++;
+      }
+      saveVotes();
+      if (data.teacher) {
+        document.getElementById('teacherName').value = data.teacher;
+        localStorage.setItem('pet_tier_teacher', data.teacher);
+      }
+      render(currentFilter);
+      toast(`✅ 已导入 ${data.teacher || 'unknown'} 的 ${merged} 条投票`);
+    } catch { toast('❌ 文件解析失败'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function resetVotes() {
+  if (confirm('确定要清空所有投票吗？此操作不可恢复。')) {
+    votes = {};
+    saveVotes();
+    render(currentFilter);
+    toast('投票已清空');
+  }
+}
+
+// Init
+document.getElementById('teacherName').value = teacherName;
+render('all');
+</script>
+</body>
+</html>

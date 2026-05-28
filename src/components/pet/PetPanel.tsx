@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
-import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig } from '../../types/pet';
+import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig, PET_TIERS } from '../../types/pet';
 import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
 import CeremonyModal from './CeremonyModal';
 import PetSprite from './PetSprite';
+import RaisingGuide from './RaisingGuide';
 
 export default function PetPanel() {
   const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins } = usePetStore();
@@ -20,7 +21,7 @@ export default function PetPanel() {
   const save = usePetStore(s => s.save);
 
   const [nameInput, setNameInput] = useState('');
-  const [selectedSpecies, setSelectedSpecies] = useState('xuanzai');
+  const [selectedSpecies, setSelectedSpecies] = useState('capi');
   const [ceremony, setCeremony] = useState<{
     type: 'summon' | 'hatch' | 'evolve';
     petName: string;
@@ -30,7 +31,7 @@ export default function PetPanel() {
     newName?: string;
   } | null>(null);
   const [searchParams] = useSearchParams();
-  const [tab, setTab] = useState<'status' | 'shop'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
+  const [tab, setTab] = useState<'status' | 'shop' | 'guide'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
 
   // Keep tab in sync with URL param
   useEffect(() => {
@@ -87,19 +88,19 @@ export default function PetPanel() {
               className={`starter-card ${selectedSpecies === s.speciesId ? 'selected' : ''}`}
               onClick={() => setSelectedSpecies(s.speciesId)}
             >
-              <div className="starter-icon">{s.speciesId === 'xuanzai' ? '🦊' : s.speciesId === 'zhuque' ? '🐉' : s.speciesId === 'qingluan' ? '🦆' : '🐧'}</div>
+              <div className="starter-icon"><img src={`/pet-sprites/previews/${s.speciesId}.png`} alt={s.name} style={{width:48,height:48,imageRendering:'pixelated'}} onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} /></div>
               <div className="starter-name">{s.name}</div>
               <div className="starter-elem">
                 {s.element === 'earth' ? '🟫 地' : s.element === 'fire' ? '🔴 火' : s.element === 'wind' ? '🟢 风' : '🔵 水'}
               </div>
-              <div className="starter-style">{s.renderType === '3d' ? '3D' : '2D'}</div>
+              <div className="starter-style">2D 像素</div>
               <div className="starter-desc">{s.description}</div>
             </div>
           ))}
         </div>
         <div className="starter-form">
           <input
-            className="pw-input" placeholder="给你的灵犀智子起个名字（2-8字）..." value={nameInput}
+            className="pw-input" placeholder="给你的灵犀智子起个名字（1-8字）..." value={nameInput}
             onChange={e => {
               const v = e.target.value.slice(0, 8);
               setNameInput(v);
@@ -110,7 +111,7 @@ export default function PetPanel() {
               const species = STARTER_PETS.find(s => s.speciesId === selectedSpecies);
               setCeremony({
                 type: 'summon', petName: nameInput.trim(), element: species?.element || 'fire',
-                icon: selectedSpecies === 'xuanzai' ? '🦊' : selectedSpecies === 'zhuque' ? '🐉' : selectedSpecies === 'qingluan' ? '🦆' : '🐧',
+                icon: selectedSpecies,
               });
             }}>
             就决定是你了！
@@ -146,6 +147,7 @@ export default function PetPanel() {
       <div className="pet-tabs">
         <button className={`pet-tab ${tab === 'status' ? 'active' : ''}`} onClick={() => setTab('status')}>🐾 智子</button>
         <button className={`pet-tab ${tab === 'shop' ? 'active' : ''}`} onClick={() => setTab('shop')}>🛒 商城</button>
+        <button className={`pet-tab ${tab === 'guide' ? 'active' : ''}`} onClick={() => setTab('guide')}>📖 指南</button>
       </div>
 
       {tab === 'status' && (
@@ -187,9 +189,9 @@ export default function PetPanel() {
           {/* Pet selector — grouped by rarity */}
           <div className="pet-collection">
             {[
-              { label: '👑 传说', pets: ownedPets.filter(p => (ALL_SHOP_ITEMS.find(i => i.speciesId === p.speciesId)?.price || 0) > 300 || ['xuanzai','zhuque','qingluan','kunbao'].includes(p.speciesId)) },
-              { label: '✨ 稀有', pets: ownedPets.filter(p => { const pr = ALL_SHOP_ITEMS.find(i => i.speciesId === p.speciesId)?.price || 0; return pr > 100 && pr <= 300; }) },
-              { label: '⭐ 普通', pets: ownedPets.filter(p => { const pr = ALL_SHOP_ITEMS.find(i => i.speciesId === p.speciesId)?.price || 0; return pr <= 100 && !['xuanzai','zhuque','qingluan','kunbao'].includes(p.speciesId); }) },
+              { label: '👑 传说', pets: ownedPets.filter(p => PET_TIERS[p.speciesId] === 'legendary') },
+              { label: '✨ 稀有', pets: ownedPets.filter(p => PET_TIERS[p.speciesId] === 'rare') },
+              { label: '⭐ 普通', pets: ownedPets.filter(p => (PET_TIERS[p.speciesId] || 'common') === 'common') },
             ].filter(g => g.pets.length > 0).map(g => {
               const isOpen = openGroups.has(g.label);
               return (
@@ -341,7 +343,7 @@ export default function PetPanel() {
                 return (
                   <div className="pet-evolve" style={{ borderColor: getLevelBadgeColor(activePet.level) }}>
                     <h4 style={{ color: getLevelBadgeColor(activePet.level) }}>⭐ {ms.title}伙伴</h4>
-                    <p>Lv.{activePet.level} · {ms.particles ? '粒子特效已激活' : ''} {ms.glow ? '光环已激活' : ''}</p>
+                    <p>Lv.{activePet.level} · {ms.dailyPassiveCoins > 0 ? `每周 +${ms.dailyPassiveCoins * 4}g` : ''} {ms.pityThreshold < 100 ? '· 保底 50 抽' : ''}</p>
                     <p className="evolve-hint">继续学习提升等级解锁更多效果！</p>
                   </div>
                 );
@@ -354,6 +356,8 @@ export default function PetPanel() {
       {tab === 'shop' && (
         <ShopPanel coins={coins} ownedPets={ownedPets} buyPet={buyPet} spendCoins={spendCoins} />
       )}
+
+      {tab === 'guide' && <RaisingGuide />}
 
       {/* Rename modal */}
       {renameModal && displayPet && (
@@ -369,7 +373,7 @@ export default function PetPanel() {
                 <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>当前名字</div>
               </div>
               <div className="buy-confirm-name-row">
-                <label className="buy-confirm-label">新名字（2-8字，中文/英文/数字）：</label>
+                <label className="buy-confirm-label">新名字（1-8字，中文/英文/数字）：</label>
                 <input className="pw-input" value={renameInput}
                   onChange={e => setRenameInput(e.target.value.slice(0, 8))}
                   onKeyDown={e => { if (e.key === 'Enter') {
@@ -381,7 +385,7 @@ export default function PetPanel() {
               {(() => {
                 const v = renameInput.trim();
                 if (!v) return <p className="name-error">请输入新名字</p>;
-                if (v.length < 2) return <p className="name-error">名字至少 2 个字</p>;
+                if (v.length < 1) return <p className="name-error">请输入名字</p>;
                 if (v.length > 8) return <p className="name-error">名字最多 8 个字</p>;
                 if (!/^[一-龥a-zA-Z0-9]+$/.test(v)) return <p className="name-error">只能使用中文、英文和数字</p>;
                 return null;
@@ -434,9 +438,9 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
   const isOwned = usePetStore(s => s.isOwned);
 
   const allPets = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet');
-  const commons = allPets.filter(i => i.price <= 100);
-  const rares = allPets.filter(i => i.price > 100 && i.price <= 300);
-  const legends = allPets.filter(i => i.price > 300);
+  const commons = allPets.filter(i => (PET_TIERS[i.speciesId!] || 'common') === 'common');
+  const rares = allPets.filter(i => PET_TIERS[i.speciesId!] === 'rare');
+  const legends = allPets.filter(i => PET_TIERS[i.speciesId!] === 'legendary');
 
   const currentPets = shopTab === 'common' ? commons : shopTab === 'rare' ? rares : shopTab === 'legend' ? legends : [];
 
@@ -532,9 +536,9 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
             <h4>灵犀抽卡</h4>
             <p>随机获得一只宠物<br />每 100 抽必出稀有+</p>
             <div className="special-stock">今日剩余：{5 - gachaPulls} 次</div>
-            <button className="shop-card-buy" disabled={coins < 100 || gachaPulls >= 5}
-              onClick={() => setActionConfirm({ type: 'gacha', title: '灵犀抽卡', desc: '随机获得一只灵犀智子\n每 100 抽必出稀有+', price: 100 })}>
-              🎯 单抽 100g
+            <button className="shop-card-buy" disabled={coins < 200 || gachaPulls >= 5}
+              onClick={() => setActionConfirm({ type: 'gacha', title: '灵犀抽卡', desc: '随机获得一只灵犀智子\n每 100 抽必出稀有+', price: 200 })}>
+              🎯 单抽 200g
             </button>
           </div>
 
@@ -569,12 +573,12 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
                   className="pw-input"
                   value={buyNameInput}
                   onChange={e => setBuyNameInput(e.target.value.slice(0, 8))}
-                  placeholder="2-8个字"
+                  placeholder="1-8个字"
                   autoFocus
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
                       const name = buyNameInput.trim();
-                      if (!name || name.length < 2) { showShopToast('名字至少 2 个字'); return; }
+                      if (!name || name.length < 1) { showShopToast('请输入名字'); return; }
                       if (name.length > 8) { showShopToast('名字最多 8 个字'); return; }
                       const ok = buyPet(buyConfirm.speciesId, name);
                       showShopToast(ok ? `成功领养「${name}」！` : '购买失败，请检查金币或是否已拥有。');

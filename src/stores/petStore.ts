@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import type { OwnedPet } from '../types/pet';
-import { STARTER_PETS, getPetConfig, ALL_SHOP_ITEMS } from '../types/pet';
+import { STARTER_PETS, getPetConfig, ALL_SHOP_ITEMS, PET_TIERS } from '../types/pet';
 import type { ShopItem } from '../types/pet';
 import { validatePetName } from '../utils/validateName';
 
@@ -11,6 +11,7 @@ interface PetState {
   ownedPets: OwnedPet[];
   coins: number;
   foods: Record<string, number>;
+  expPool: number;
 
   // Pet management
   selectStarter: (speciesId: string, petName: string) => void;
@@ -45,6 +46,20 @@ interface PetState {
   addPendingRewards: (exp: number, coins: number) => void;
   claimPendingRewards: () => void;
 
+  // Training camp
+  trainingCampActive: boolean;
+  trainingCampEndDate: string;
+  activateTrainingCamp: (password: string) => boolean;
+  getRewardMultiplier: () => number;
+  claimTrainingCampFoods: () => boolean;
+  trainingCampFoodsClaimed: string[];
+
+  // Experience pool
+  allocateExpFromPool: (petId: string, amount: number) => void;
+
+  // Collection rewards
+  checkCollectionRewards: () => void;
+
   // Persistence
   save: () => void;
   load: () => void;
@@ -57,11 +72,11 @@ export const FOODS: Record<string, { name: string; price: number; hunger: number
 };
 
 // Level milestones
-export function getLevelMilestone(level: number): { size: number; glow: boolean; particles: boolean; title: string } {
-  if (level >= 15) return { size: 1.5, glow: true,  particles: true,  title: '化神' };
-  if (level >= 10) return { size: 1.25, glow: true,  particles: false, title: '元婴' };
-  if (level >= 5)  return { size: 1.1, glow: false, particles: true,  title: '金丹' };
-  return { size: 1.0, glow: false, particles: false, title: '筑基' };
+export function getLevelMilestone(level: number): { title: string; pityThreshold: number; dailyPassiveCoins: number } {
+  if (level >= 15) return { title: '化神', pityThreshold: 50, dailyPassiveCoins: 5 };
+  if (level >= 10) return { title: '元婴', pityThreshold: 100, dailyPassiveCoins: 5 };
+  if (level >= 5)  return { title: '金丹', pityThreshold: 100, dailyPassiveCoins: 0 };
+  return { title: '筑基', pityThreshold: 100, dailyPassiveCoins: 0 };
 }
 
 // Display name with milestone prefix: [金丹] 小企鹅
@@ -85,10 +100,14 @@ export const usePetStore = create<PetState>((set, get) => ({
   foods: { basic: 3 },
   pendingExp: 0,
   pendingCoins: 0,
+  expPool: 0,
   renameCards: 0,
   gachaDailyPulls: 0,
   gachaDate: '',
   gachaPity: 0,
+  trainingCampActive: false,
+  trainingCampEndDate: '',
+  trainingCampFoodsClaimed: [],
 
   selectStarter: (speciesId, petName) => {
     const species = STARTER_PETS.find(s => s.speciesId === speciesId);
@@ -143,23 +162,39 @@ export const usePetStore = create<PetState>((set, get) => ({
     };
     set(s => ({ ownedPets: [...s.ownedPets, pet], coins: s.coins - shopItem.price }));
     get().save();
+    get().checkCollectionRewards();
     return true;
   },
 
   addExp: (petId, amount) => {
-    set(s => ({
-      ownedPets: s.ownedPets.map(p => {
+    const mult = get().getRewardMultiplier();
+    const total = Math.floor(amount * mult);
+    const petShare = Math.floor(total * 0.3);
+    const poolShare = total - petShare;
+    // Check mood multiplier for active pet
+    const pet = get().ownedPets.find(p => p.petId === petId);
+    const moodMult = pet && pet.mood >= 80 ? 1.2 : pet && pet.mood <= 20 ? 0.8 : 1.0;
+    const effectiveExp = Math.floor(petShare * moodMult);
+    set(s => {
+      const updated = s.ownedPets.map(p => {
         if (p.petId !== petId) return p;
         let { exp, expToNext, level } = p;
-        exp += amount;
+        exp += effectiveExp;
         while (exp >= expToNext) {
           exp -= expToNext;
           level++;
           expToNext = Math.floor(expToNext * 1.3);
+          // Milestone bubble
+          const ms = getLevelMilestone(level);
+          if (level === 5 || level === 10 || level === 15) {
+            const tips: Record<number, string> = { 5: '🎉 突破金丹！抽卡功能已解锁，快去试试手气吧！', 10: '🎉 突破元婴！每周自动获得 20g，躺着也能赚钱~', 15: '🎉 突破化神！抽卡保底减半，传说不再是梦！' };
+            emit('pet-bubble', { text: tips[level] || `突破 ${ms.title}！` }).catch(() => {});
+          }
         }
         return { ...p, exp, expToNext, level, mood: Math.min(100, p.mood + 3), updatedAt: new Date().toISOString() };
-      }),
-    }));
+      });
+      return { ownedPets: updated, expPool: s.expPool + poolShare };
+    });
     get().save();
   },
 
@@ -232,7 +267,8 @@ export const usePetStore = create<PetState>((set, get) => ({
     const { pendingExp, pendingCoins, activePetId } = get();
     if (pendingExp === 0 && pendingCoins === 0) return;
     if (activePetId) get().addExp(activePetId, pendingExp);
-    get().addCoins(pendingCoins);
+    const mult = get().getRewardMultiplier();
+    get().addCoins(Math.floor(pendingCoins * mult));
     set({ pendingExp: 0, pendingCoins: 0 });
     get().save();
   },
@@ -266,19 +302,22 @@ export const usePetStore = create<PetState>((set, get) => ({
     let { gachaDailyPulls, gachaDate, gachaPity } = s;
     if (gachaDate !== today) { gachaDailyPulls = 0; gachaDate = today; }
     if (gachaDailyPulls >= 5) return null;
-    if (s.coins < 100) return null;
+    if (s.coins < 200) return null;
     gachaDailyPulls++; gachaPity++;
+
+    const activePet = s.ownedPets.find(p => p.petId === s.activePetId);
+    const pityThreshold = activePet ? getLevelMilestone(activePet.level).pityThreshold : 100;
 
     let rarity: string;
     const roll = Math.random() * 100;
-    if (gachaPity >= 100 || roll < 1) { rarity = 'legendary'; gachaPity = 0; }
+    if (gachaPity >= pityThreshold || roll < 1) { rarity = 'legendary'; gachaPity = 0; }
     else if (roll < 11) { rarity = 'rare'; }
     else { rarity = 'common'; }
 
     const allPets = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet');
-    const commons = allPets.filter(i => i.price === 100);
-    const rares = allPets.filter(i => i.price >= 200 && i.price <= 300);
-    const legends = allPets.filter(i => i.price > 300);
+    const commons = allPets.filter(i => (PET_TIERS[i.speciesId!] || 'common') === 'common');
+    const rares = allPets.filter(i => PET_TIERS[i.speciesId!] === 'rare');
+    const legends = allPets.filter(i => PET_TIERS[i.speciesId!] === 'legendary');
     const pool = rarity === 'legendary' ? legends.length ? legends : rares :
                  rarity === 'rare' ? rares.length ? rares : commons : commons;
 
@@ -297,14 +336,139 @@ export const usePetStore = create<PetState>((set, get) => ({
     const autoName = item.name + (ownedNames.includes(item.name) ? Math.floor(Math.random()*100).toString() : '');
     if (!get().buyPet(item.speciesId!, autoName)) return null;
 
-    set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 100 });
+    set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 200 });
     get().save();
     return { item, rarity, pityBreak: gachaPity === 0 && rarity !== 'common' };
   },
 
+  // ─── Training camp ───
+  activateTrainingCamp: (password: string) => {
+    // Master password (legacy)
+    if (password === 'SUMMER2025') {
+      const end = new Date(Date.now() + 12 * 86400000).toISOString().slice(0, 10);
+      set({ trainingCampActive: true, trainingCampEndDate: end, trainingCampFoodsClaimed: [] });
+      get().save();
+      return true;
+    }
+    // CAMP-{date}-{check} format
+    const match = password.match(/^CAMP-(\d{8})-([A-Z0-9]{4})$/);
+    if (match) {
+      const [, date, check] = match;
+      // Validate hash
+      const SECRET = 'csp-camp-2025';
+      const s = `${date}-${SECRET}`;
+      let h = 0;
+      for (let i = 0; i < s.length; i++) {
+        h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+      }
+      const chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+      let expected = '';
+      let v = Math.abs(h);
+      for (let i = 0; i < 4; i++) {
+        expected = chars[v % chars.length] + expected;
+        v = Math.floor(v / chars.length);
+      }
+      if (expected !== check) return false;
+      const end = new Date(Date.now() + 12 * 86400000).toISOString().slice(0, 10);
+      set({ trainingCampActive: true, trainingCampEndDate: end, trainingCampFoodsClaimed: [] });
+      get().save();
+      return true;
+    }
+    return false;
+  },
+
+  getRewardMultiplier: () => {
+    const { trainingCampActive, trainingCampEndDate } = get();
+    if (!trainingCampActive) return 1.0;
+    const today = new Date().toISOString().slice(0, 10);
+    if (today <= trainingCampEndDate) return 1.5;
+    // Camp expired
+    set({ trainingCampActive: false });
+    get().save();
+    return 1.0;
+  },
+
+  claimTrainingCampFoods: () => {
+    const { trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
+    if (!trainingCampActive) return false;
+    const today = new Date().toISOString().slice(0, 10);
+    if (today > trainingCampEndDate) return false;
+    if (trainingCampFoodsClaimed.includes(today)) return false;
+    set(s => ({
+      foods: { ...s.foods, basic: (s.foods.basic || 0) + 3 },
+      trainingCampFoodsClaimed: [...s.trainingCampFoodsClaimed, today],
+    }));
+    get().save();
+    return true;
+  },
+
+  // ─── Experience pool ───
+  allocateExpFromPool: (petId: string, amount: number) => {
+    const s = get();
+    if (s.expPool < amount) return;
+    const clamped = Math.min(amount, s.expPool);
+    set(s2 => ({ expPool: s2.expPool - clamped }));
+    // Allocate exp without adding to pool again (use original addExp logic without split)
+    set(s2 => ({
+      ownedPets: s2.ownedPets.map(p => {
+        if (p.petId !== petId) return p;
+        let { exp, expToNext, level } = p;
+        exp += clamped;
+        while (exp >= expToNext) {
+          exp -= expToNext;
+          level++;
+          expToNext = Math.floor(expToNext * 1.3);
+          const ms = getLevelMilestone(level);
+          if (level === 5 || level === 10 || level === 15) {
+            const tips: Record<number, string> = { 5: '🎉 突破金丹！抽卡功能已解锁！', 10: '🎉 突破元婴！每周自动获得 20g~', 15: '🎉 突破化神！保底减半至 50 抽！' };
+            emit('pet-bubble', { text: tips[level] || `突破 ${ms.title}！` }).catch(() => {});
+          }
+        }
+        return { ...p, exp, expToNext, level, updatedAt: new Date().toISOString() };
+      }),
+    }));
+    get().save();
+  },
+
+  // ─── Collection rewards ───
+  checkCollectionRewards: () => {
+    const { ownedPets } = get();
+    const speciesIds = ownedPets.map(p => p.speciesId);
+    const elements = new Set(ownedPets.map(p => p.element));
+    const legendaries = speciesIds.filter(id => PET_TIERS[id] === 'legendary').length;
+    const commons = speciesIds.filter(id => (PET_TIERS[id] || 'common') === 'common').length;
+
+    const claimed: string[] = JSON.parse(localStorage.getItem('csp_collection_claimed') || '[]');
+    let bonus = 0;
+    const msgs: string[] = [];
+
+    if (!claimed.includes('elements4') && elements.has('earth') && elements.has('fire') && elements.has('wind') && elements.has('water')) {
+      bonus += 200;
+      get().renameCards += 1;
+      claimed.push('elements4');
+      msgs.push('🌈 集齐四系！+200g + 改名卡');
+    }
+    if (!claimed.includes('common10') && commons >= 10) {
+      bonus += 150;
+      claimed.push('common10');
+      msgs.push('⭐ 收集 10 只！+150g');
+    }
+    if (!claimed.includes('firstLegendary') && legendaries >= 1) {
+      bonus += 100;
+      claimed.push('firstLegendary');
+      msgs.push('👑 首只传说！+100g');
+    }
+
+    if (bonus > 0) {
+      get().addCoins(bonus);
+      localStorage.setItem('csp_collection_claimed', JSON.stringify(claimed));
+      msgs.forEach(m => emit('pet-bubble', { text: m }).catch(() => {}));
+    }
+  },
+
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, renameCards, gachaDailyPulls, gachaDate, gachaPity } = get();
-    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, renameCards, gachaDailyPulls, gachaDate, gachaPity };
+    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
+    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed };
     localStorage.setItem('csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     // Auto show/hide pet window based on whether pets exist
@@ -323,7 +487,7 @@ export const usePetStore = create<PetState>((set, get) => ({
         const migrated = data.ownedPets.map((p: any) => {
           if (p.renderType) return p;
           const config = getPetConfig(p.speciesId);
-          return { ...p, renderType: config?.renderType || '3d', modelPath: config?.modelPath || '' };
+          return { ...p, renderType: config?.renderType || '2d', modelPath: config?.modelPath || '' };
         });
         set({
           ownedPets: migrated,
@@ -332,6 +496,14 @@ export const usePetStore = create<PetState>((set, get) => ({
           foods: data.foods || { basic: 3 },
           pendingExp: data.pendingExp || 0,
           pendingCoins: data.pendingCoins || 0,
+          expPool: data.expPool || 0,
+          renameCards: data.renameCards || 0,
+          gachaDailyPulls: data.gachaDailyPulls || 0,
+          gachaDate: data.gachaDate || '',
+          gachaPity: data.gachaPity || 0,
+          trainingCampActive: data.trainingCampActive || false,
+          trainingCampEndDate: data.trainingCampEndDate || '',
+          trainingCampFoodsClaimed: data.trainingCampFoodsClaimed || [],
         });
       }
     } catch { /* ignore */ }

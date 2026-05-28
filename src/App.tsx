@@ -75,22 +75,28 @@ function PetActionHandler() {
   return null;
 }
 
+function getWeekKey() {
+  const d = new Date();
+  const jan1 = new Date(d.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((d.getTime() - jan1.getTime()) / 86400000);
+  return `${d.getFullYear()}-W${Math.ceil((dayOfYear + jan1.getDay() + 1) / 7)}`;
+}
+
 function doCheckinFromPet() {
   try {
-    const today = new Date().toISOString().slice(0, 10);
+    const thisWeek = getWeekKey();
     const data = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-    if (data.date === today) {
-      emit('pet-bubble', { text: '今天已经签到过啦~ 🎁' }).catch(() => {});
+    if (data.week === thisWeek) {
+      emit('pet-bubble', { text: '本周已经签到过啦~ 🎁' }).catch(() => {});
       return;
     }
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-    let streak = data.date === yesterday ? (data.streak || 0) : 0;
-    streak++;
-    const bonus = streak % 30 === 0 ? 100 : streak % 7 === 0 ? 20 : 10;
+    let streak = (data.streak || 0) + 1;
+    let bonus = 50;
+    if (streak % 8 === 0) { bonus = 200; usePetStore.getState().renameCards += 1; }
+    else if (streak % 4 === 0) { bonus = 100; }
     usePetStore.getState().addCoins(bonus);
-    localStorage.setItem('csp_checkin', JSON.stringify({ date: today, streak, tip: data.tip }));
-    emit('pet-bubble', { text: `🔥 连续 ${streak} 天！+${bonus}g` }).catch(() => {});
-    // Sync pet data so coins are updated
+    localStorage.setItem('csp_checkin', JSON.stringify({ week: thisWeek, streak }));
+    emit('pet-bubble', { text: `🔥 连续 ${streak} 周！+${bonus}g` }).catch(() => {});
     setTimeout(() => usePetStore.getState().save(), 100);
   } catch {
     emit('pet-bubble', { text: '签到成功！🎁' }).catch(() => {});
@@ -151,6 +157,19 @@ function App() {
   // Sync pet data to pet window and listen for clicks from pet window
   useEffect(() => {
     petLoaded();
+    // Weekly passive coins for Lv10+ pets
+    try {
+      const store = usePetStore.getState();
+      const activePet = store.ownedPets.find(p => p.petId === store.activePetId);
+      if (activePet && activePet.level >= 10) {
+        const lastGrant = localStorage.getItem('csp_last_passive_coin');
+        const now = Date.now();
+        if (!lastGrant || (now - parseInt(lastGrant)) >= 7 * 86400000) {
+          store.addCoins(20);
+          localStorage.setItem('csp_last_passive_coin', String(now));
+        }
+      }
+    } catch {}
     listen('pet-click', () => {
       usePetStore.getState().save();
     }).catch(() => {});
@@ -183,7 +202,42 @@ function App() {
       let stages: Stage[] = [];
       let lessons: Lesson[] = [];
 
-      // Check for user-imported course data first
+      // 1. Try remote update first
+      const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
+      try {
+        const verResp = await fetch(`${REMOTE_BASE}/version.json`, { cache: 'no-cache' });
+        if (verResp.ok) {
+          const remoteVer = await verResp.json();
+          const localVer = parseInt(localStorage.getItem('csp_data_version') || '0');
+          if (remoteVer.version > localVer) {
+            const [stagesResp, lessonsResp] = await Promise.all([
+              fetch(`${REMOTE_BASE}/stages.json`, { cache: 'no-cache' }),
+              fetch(`${REMOTE_BASE}/lessons.json`, { cache: 'no-cache' }),
+            ]);
+            if (stagesResp.ok && lessonsResp.ok) {
+              const remoteStages = await stagesResp.json();
+              const remoteLessonsData = await lessonsResp.json();
+              // Flatten nested lessons
+              let flatLessons = [];
+              if (Array.isArray(remoteLessonsData)) {
+                flatLessons = remoteLessonsData;
+              } else if (remoteLessonsData.lessons) {
+                flatLessons = remoteLessonsData.lessons;
+              } else {
+                for (const stage of (remoteLessonsData.stages || [])) {
+                  for (const l of (stage.lessons || [])) {
+                    flatLessons.push(l);
+                  }
+                }
+              }
+              localStorage.setItem('csp_imported_lessons', JSON.stringify({ stages: remoteStages, lessons: flatLessons }));
+              localStorage.setItem('csp_data_version', String(remoteVer.version));
+            }
+          }
+        }
+      } catch { /* network error, use local */ }
+
+      // 2. Check for imported course data
       const imported = localStorage.getItem('csp_imported_lessons');
       if (imported) {
         try {
@@ -195,6 +249,7 @@ function App() {
         } catch { /* fall through to bundled */ }
       }
 
+      // 3. Fallback to bundled data
       if (lessons.length === 0) {
         const [stagesResp, lessonsResp] = await Promise.all([
           fetch('/course-data/stages.json'),

@@ -1,7 +1,14 @@
 // Pet system types — V3 (simplified, no evolution branches)
 export type PetElement = 'earth' | 'fire' | 'wind' | 'water' | 'light';
 export type PetAnimation = 'idle' | 'walk' | 'sleep' | 'celebrate' | 'think' | 'eat' | 'unhappy';
-export type RenderType = '2d' | '3d';
+export type RenderType = '2d';
+export type PetTier = 'legendary' | 'rare' | 'common';
+
+export const TIER_PRICES: Record<PetTier, number> = {
+  legendary: 500,
+  rare: 260,
+  common: 150,
+};
 
 export interface PetSpecies {
   speciesId: string;
@@ -42,78 +49,132 @@ export interface ShopItem {
   requiredLevel?: number;
 }
 
-// ─── Starter pets (free, 4 choose 1) ───
+// ─── Starter pets (free, 4 choose 1, all 2D) ───
 export const STARTER_PETS: PetSpecies[] = [
-  { speciesId: 'xuanzai',   name: '小赤狐',   element: 'earth', renderType: '3d', modelPath: '/pet-sprites/3d/animal-fox.glb',       description: '3D 方块狐狸，稳重可靠',     price: 0 },
-  { speciesId: 'zhuque',    name: '小火龙',   element: 'fire',  renderType: '2d', modelPath: '/pet-sprites/2d/dragon.json',          description: '2D 像素小龙，活泼勇猛',     price: 0 },
-  { speciesId: 'qingluan',  name: '小丫鸭',   element: 'wind',  renderType: '2d', modelPath: '/pet-sprites/2d/ducky.json',           description: '2D 像素小鸭，自由好奇',     price: 0 },
-  { speciesId: 'kunbao',    name: '小冰企',   element: 'water', renderType: '3d', modelPath: '/pet-sprites/3d/animal-penguin.glb',    description: '3D 方块企鹅，冷静呆萌',     price: 0 },
+  { speciesId: 'capi',   name: '卡皮',   element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/capi.json',   description: '水豚君本君，佛系躺平',     price: 0 },
+  { speciesId: 'boba',   name: '啵啵',   element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/boba.json',   description: '珍珠奶茶精灵，Q弹圆润',     price: 0 },
+  { speciesId: 'bubu-2', name: '小布布', element: 'fire',  renderType: '2d', modelPath: '/pet-sprites/2d/bubu-2.json', description: '火焰小恐龙，热情活泼',     price: 0 },
+  { speciesId: 'miga',   name: '米伽',   element: 'wind',  renderType: '2d', modelPath: '/pet-sprites/2d/miga.json',   description: '魔法小白猫，神秘优雅',     price: 0 },
 ];
 
-// ─── All pets available in shop ───
-// 3D Cube Pets
-const ANIMALS_3D = [
-  'animal-bee', 'animal-bunny', 'animal-cat', 'animal-caterpillar',
-  'animal-cow', 'animal-crab', 'animal-deer', 'animal-dog',
-  'animal-elephant', 'animal-fish', 'animal-giraffe', 'animal-hog',
-  'animal-koala', 'animal-lion', 'animal-monkey', 'animal-panda',
-  'animal-parrot', 'animal-pig', 'animal-polar', 'animal-tiger',
-  'animal-beaver', 'animal-chick',
+// ─── 2D Pixel Pets (Petdex imports) ───
+const PETDEX_PETS: PetSpecies[] = [
+  { speciesId: 'peach', name: '桃桃', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/peach.json', description: '粉色小可爱，温柔甜美', price: 200 },
+  { speciesId: 'boba', name: '啵啵', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/boba.json', description: '珍珠奶茶精灵，Q弹圆润', price: 200 },
+  { speciesId: 'eve', name: '伊芙', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/eve.json', description: '灵动小天使，轻快飘逸', price: 200 },
+  { speciesId: 'bubu-2', name: '小布布', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/bubu-2.json', description: '火焰小恐龙，热情活泼', price: 200 },
+  { speciesId: 'pixel-panda', name: '像素熊猫', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/pixel-panda.json', description: '像素国宝，憨态可掬', price: 200 },
+  { speciesId: 'harry-poptart', name: '哈利泡芙', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/harry-poptart.json', description: '魔法甜点师，甜蜜暴击', price: 200 },
+  { speciesId: 'sky-dragon', name: '天空龙', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/sky-dragon.json', description: '翱翔天际，自由之翼', price: 200 },
+  { speciesId: 'glitch-bot', name: '故障机器人', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/glitch-bot.json', description: '赛博小故障，酷炫电波', price: 200 },
+  { speciesId: 'dino-bubu', name: '恐龙布布', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/dino-bubu.json', description: '史前小恐龙，霸气呆萌', price: 200 },
+  { speciesId: 'miga', name: '米伽', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/miga.json', description: '魔法小白猫，神秘优雅', price: 200 },
+  { speciesId: 'capi', name: '卡皮', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/capi.json', description: '水豚君本君，佛系躺平', price: 200 },
+  { speciesId: 'rio-2', name: '里奥', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/rio-2.json', description: '蓝色小鹦鹉，热带风情', price: 200 },
+  { speciesId: 'brassprout', name: '铜芽', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/brassprout.json', description: '铜色小芽苗，生机勃勃', price: 200 },
+  { speciesId: 'buswatch', name: '巴士守望', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/buswatch.json', description: '巴士小卫士，守护出行', price: 200 },
+  { speciesId: 'rx-78-2-gundam-2', name: '高达RX78', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/rx-78-2-gundam-2.json', description: '经典机甲战士，燃爆全场', price: 200 },
+  { speciesId: 'byte-bunny', name: '字节兔', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/byte-bunny.json', description: '数据小兔子，代码精灵', price: 200 },
+  { speciesId: 'currypet', name: 'CurryPet', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/currypet.json', description: '库里主题，篮球神射手', price: 200 },
+  { speciesId: 'round-maodie', name: '圆头耄耋', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/round-maodie.json', description: '圆头猫咪表情包，呆萌可爱', price: 200 },
+  { speciesId: 'gardevoir', name: '沙奈朵', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/gardevoir.json', description: '超能仙女，守护训练师', price: 200 },
+  { speciesId: 'capvolt', name: '皮卡丘', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/capvolt.json', description: '电气鼠精灵，戴着训练师帽', price: 200 },
+  { speciesId: 'anon', name: '小粉龙', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/anon.json', description: '粉发女孩穿恐龙卫衣，萌趣', price: 200 },
+  { speciesId: 'anya', name: '阿尼亚', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/anya.json', description: 'SPYxFAMILY 超能力少女', price: 200 },
+  { speciesId: 'cloudy', name: '云朵熊猫', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/cloudy.json', description: '坐在云上的小熊猫，软萌', price: 200 },
+  { speciesId: 'samo', name: '萨摩耶', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/samo.json', description: '白色微笑天使萨摩耶', price: 200 },
+  { speciesId: 'broom-witch', name: '扫帚女巫', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/broom-witch.json', description: '骑扫帚的小女巫和黑猫', price: 200 },
+  { speciesId: 'einstein', name: '小爱因斯坦', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/einstein.json', description: 'Q版科学家，智慧伙伴', price: 200 },
+  { speciesId: 'takagi', name: '高木同学', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/takagi.json', description: '擅长捉弄的高木同学', price: 200 },
+  { speciesId: 'dimo', name: '迪莫', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/dimo.json', description: '洛克王国001号宠物', price: 200 },
+  { speciesId: 'weilong', name: '威龙机甲', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/weilong.json', description: '太空机甲战士，酷炫', price: 200 },
+  { speciesId: 'liebao', name: '猎宝', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/liebao.json', description: '骨头面具研究伙伴', price: 200 },
+  { speciesId: 'blue-qilin', name: '蓝麒麟', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/blue-qilin.json', description: '国风麒麟少年，守护者', price: 200 },
+  { speciesId: 'poncho-chick', name: '雨衣小鸡', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/poncho-chick.json', description: '穿黑卫衣的小黄鸡', price: 200 },
+  { speciesId: 'wode-daodun-3d', name: '刀盾守卫', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/wode-daodun-3d.json', description: '狗蛙守卫，码剑科技盾', price: 200 },
+  { speciesId: 'puffel', name: '泡芙犬', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/puffel.json', description: '紫色玩具贵宾犬，蓬松', price: 200 },
+  { speciesId: 'xiaobai', name: '小白', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/xiaobai.json', description: '白色线稿小狗狗，简约可爱', price: 200 },
+  { speciesId: 'little-blue-star', name: '小蓝星', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/little-blue-star.json', description: '蓝色小星星，闪耀夜空', price: 200 },
+  { speciesId: 'astra', name: '阿斯特拉', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/astra.json', description: '星空精灵，宇宙来客', price: 200 },
+  { speciesId: 'sillycat', name: '呆猫', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/sillycat.json', description: '灰白小猫咪，呆萌大眼', price: 200 },
+  { speciesId: 'backpack-forest-spirit', name: '背包森灵', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/backpack-forest-spirit.json', description: '背着行囊的森林精灵', price: 200 },
+  { speciesId: 'emilia', name: '艾米莉亚', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/emilia.json', description: '银发精灵使，温柔治愈', price: 200 },
+  { speciesId: 'boolet', name: '子弹君', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/boolet.json', description: '子弹头小人，火力全开', price: 200 },
+  { speciesId: 'itachi', name: '鼬', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/itachi.json', description: '写轮眼忍者，暗部精英', price: 200 },
+  { speciesId: 'nyanko-v2', name: '喵子V2', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/nyanko-v2.json', description: '进化版猫咪，软萌加倍', price: 200 },
+  { speciesId: 'yuanshi-tianzun', name: '元始天尊', element: 'light', renderType: '2d', modelPath: '/pet-sprites/2d/yuanshi-tianzun.json', description: '三清之首，大道至尊', price: 200 },
+  { speciesId: 'baobao', name: '宝宝', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/baobao.json', description: '可爱小宝贝，纯真无邪', price: 200 },
+  { speciesId: 'sukuna', name: '宿傩', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/sukuna.json', description: '诅咒之王，领域展开', price: 200 },
+  { speciesId: 'nezukocoder', name: '祢豆子', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/nezukocoder.json', description: '鬼灭少女，竹筒咬咬', price: 200 },
+  { speciesId: 'gugugaga', name: '咕咕嘎嘎', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/gugugaga.json', description: '小企鹅精灵，摇摇摆摆', price: 200 },
+  { speciesId: 'godzilla-fire', name: '火焰哥斯拉', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/godzilla-fire.json', description: '迷你哥斯拉，原子吐息', price: 200 },
+  { speciesId: 'kyojuro-rengoku', name: '炼狱杏寿郎', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/kyojuro-rengoku.json', description: '炎柱大哥，燃尽一切', price: 200 },
+  { speciesId: 'forest-spirit-yahaha', name: '呀哈哈', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/forest-spirit-yahaha.json', description: '克格洛森林精灵，呀哈哈！', price: 200 },
+  { speciesId: 'kunkunball', name: '坤坤球', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/kunkunball.json', description: '篮球小将，鸡你太美', price: 200 },
+  { speciesId: 'nibble', name: '小咬', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/nibble.json', description: '小嘴巴精灵，轻轻咬一口', price: 200 },
+  { speciesId: 'wukong', name: '悟空', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/wukong.json', description: '齐天大圣，金箍棒在手', price: 200 },
+  { speciesId: 'cow-meme-pet', name: '奶牛表情包', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/cow-meme-pet.json', description: '魔性奶牛，表情包之王', price: 200 },
+  { speciesId: 'boo', name: '小幽灵', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/boo.json', description: '白白小幽灵，飘来飘去', price: 200 },
+  { speciesId: 'sasuke', name: '佐助', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/sasuke.json', description: '宇智波佐助，千鸟锐枪', price: 200 },
+  { speciesId: 'paimo', name: '派蒙', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/paimo.json', description: '应急食品，最好的伙伴', price: 200 },
+  { speciesId: 'kunkun-pixel', name: '像素坤坤', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/kunkun-pixel.json', description: '像素风篮球少年', price: 200 },
+  { speciesId: 'wall-e', name: '瓦力', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/wall-e.json', description: '小小机器人，地球清道夫', price: 200 },
+  { speciesId: 'hanli', name: '韩立', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/hanli.json', description: '凡人修仙传，掌天瓶在手', price: 200 },
+  { speciesId: 'mallow', name: '毛毛', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/mallow.json', description: '灰白双色小猫，金色眼眸', price: 200 },
+  { speciesId: 'muichiro-tokito', name: '时透无一郎', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/muichiro-tokito.json', description: '霞柱Q版，空灵刀法', price: 200 },
+  { speciesId: 'ayaka', name: '神里绫华', element: 'water', renderType: '2d', modelPath: '/pet-sprites/2d/ayaka.json', description: '白鹭公主，冰华绽放', price: 200 },
+  { speciesId: 'ziling', name: '紫灵', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/ziling.json', description: '紫眸修仙者，仙气飘飘', price: 200 },
+  { speciesId: 'werllyt', name: '薇尔莉特', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/werllyt.json', description: '金发蓝瞳，自动手记人偶', price: 200 },
+  { speciesId: 'zhoukeke', name: '周可可', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/zhoukeke.json', description: '软萌可爱，童心陪伴', price: 200 },
+  { speciesId: 'jett', name: 'Jett', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/jett.json', description: '风系战术决斗者，快如闪电', price: 200 },
+  { speciesId: 'gameboy', name: '电玩小子', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/gameboy.json', description: '王者荣耀电玩小子，像素街机风', price: 200 },
 ];
 
-// 3D Blocky Characters
-const CHARS_3D = Array.from({ length: 18 }, (_, i) => `character-${String.fromCharCode(97 + i)}`);
-
-// 3D Mini Characters
-const MINIS_3D = [
-  'character-female-a', 'character-female-b', 'character-female-c',
-  'character-female-d', 'character-female-e', 'character-female-f',
-  'character-male-a', 'character-male-b', 'character-male-c',
-  'character-male-d', 'character-male-e', 'character-male-f',
-];
-
-// 2D sprites
-const SPRITES_2D = ['otter', 'teddy', 'ghost', 'zombie', 'knight', 'dragon', 'ducky', 'penguin', 'char64', 'bomb', 'redgirl', 'capybara'];
+export const PET_TIERS: Record<string, PetTier> = {
+  'poncho-chick': 'legendary',
+  'kunkunball': 'legendary',
+  'kunkun-pixel': 'legendary',
+  'zhoukeke': 'legendary',
+  'wode-daodun-3d': 'legendary',
+  'little-blue-star': 'legendary',
+  'baobao': 'legendary',
+  'wukong': 'legendary',
+  'round-maodie': 'rare',
+  'anon': 'rare',
+  'anya': 'rare',
+  'backpack-forest-spirit': 'rare',
+  'itachi': 'rare',
+  'nyanko-v2': 'rare',
+  'nezukocoder': 'rare',
+  'gugugaga': 'rare',
+  'forest-spirit-yahaha': 'rare',
+  'cow-meme-pet': 'rare',
+  'wall-e': 'rare',
+  'dino-bubu': 'rare',
+  'rio-2': 'rare',
+  'rx-78-2-gundam-2': 'rare',
+  'currypet': 'rare',
+  'einstein': 'rare',
+  'blue-qilin': 'rare',
+  'emilia': 'rare',
+  'sukuna': 'rare',
+  'godzilla-fire': 'rare',
+  'kyojuro-rengoku': 'rare',
+  'sasuke': 'rare',
+  'paimo': 'rare',
+  'ziling': 'rare',
+  'jett': 'rare',
+  'gameboy': 'rare',
+  'weilong': 'rare',
+};
 
 function buildShop(): ShopItem[] {
   const items: ShopItem[] = [];
 
-  const cnNames3D: Record<string, [string, string]> = {
-    'animal-bee': ['小蜜蜂', '3D'], 'animal-bunny': ['小兔子', '3D'], 'animal-cat': ['小猫咪', '3D'],
-    'animal-caterpillar': ['毛毛虫', '3D'], 'animal-chick': ['小鸡仔', '3D'], 'animal-cow': ['小奶牛', '3D'],
-    'animal-crab': ['小螃蟹', '3D'], 'animal-deer': ['小鹿', '3D'], 'animal-dog': ['小狗狗', '3D'],
-    'animal-elephant': ['小象', '3D'], 'animal-fish': ['小鱼', '3D'], 'animal-fox': ['小赤狐', '3D'],
-    'animal-giraffe': ['长颈鹿', '3D'], 'animal-hog': ['小野猪', '3D'], 'animal-koala': ['考拉', '3D'],
-    'animal-lion': ['小狮子', '3D'], 'animal-monkey': ['小猴子', '3D'], 'animal-panda': ['熊猫', '3D'],
-    'animal-parrot': ['小鹦鹉', '3D'], 'animal-penguin': ['小冰企', '3D'], 'animal-pig': ['小猪', '3D'],
-    'animal-polar': ['北极熊', '3D'], 'animal-tiger': ['小老虎', '3D'], 'animal-beaver': ['小河狸', '3D'],
-  };
-
-  for (const a of ANIMALS_3D) {
-    const [cn] = cnNames3D[a] || [a.replace('animal-', '')];
-    items.push({ itemId: `pet-3d-${a}`, itemType: 'pet', name: cn, description: `3D 方块智子`, price: 100, speciesId: a, requiredLevel: 1 });
-  }
-
-  const blockyNames = ['小勇','小猛','小刚','小强','小杰','小帅','小酷','小武','小侠','小雷','小风','小云','小阳','小星','小月','小天','小海','小石'];
-  for (let i = 0; i < CHARS_3D.length; i++) {
-    items.push({ itemId: `pet-3d-${CHARS_3D[i]}`, itemType: 'pet', name: blockyNames[i], description: '3D 方块角色', price: 300, speciesId: CHARS_3D[i], requiredLevel: 5 });
-  }
-
-  const miniF = ['小艾','小贝','小茜','小黛','小伊','小菲'];
-  const miniM = ['小安','小波','小晨','小迪','小恩','小飞'];
-  for (let i = 0; i < 6; i++) {
-    items.push({ itemId: `pet-3d-f-${i}`, itemType: 'pet', name: miniF[i], description: '3D Q版女孩', price: 400, speciesId: MINIS_3D[i], requiredLevel: 5 });
-    items.push({ itemId: `pet-3d-m-${i}`, itemType: 'pet', name: miniM[i], description: '3D Q版男孩', price: 400, speciesId: MINIS_3D[i+6], requiredLevel: 5 });
-  }
-
-  const cnNames2D: Record<string, string> = {
-    'otter': '小水獭', 'teddy': '泰迪熊', 'ghost': '小幽灵', 'zombie': '小僵尸',
-    'knight': '小骑士', 'dragon': '小火龙', 'ducky': '小丫鸭', 'penguin': '小企鹅',
-    'char64': '像素猫咪', 'bomb': '炸弹人', 'redgirl': '小猫头鹰', 'capybara': '卡皮巴拉',
-  };
-  const prices2D: Record<string, number> = { otter: 200, teddy: 400, ghost: 200, zombie: 200, knight: 200, dragon: 400, ducky: 400, penguin: 400, char64: 200, char60: 400, bomb: 200, redgirl: 200, capybara: 300 };
-  for (const s of SPRITES_2D) {
-    items.push({ itemId: `pet-2d-${s}`, itemType: 'pet', name: cnNames2D[s] || s, description: '2D 像素智子', price: prices2D[s] || 200, speciesId: s, requiredLevel: 1 });
+  // 2D pixel pets from Petdex
+  for (const p of PETDEX_PETS) {
+    const tier = PET_TIERS[p.speciesId] || 'common';
+    items.push({ itemId: `pet-2d-${p.speciesId}`, itemType: 'pet', name: p.name, description: p.description, price: TIER_PRICES[tier], speciesId: p.speciesId, requiredLevel: 1 });
   }
 
   return items;
@@ -126,38 +187,8 @@ export function getPetConfig(speciesId: string): { renderType: RenderType; model
   const starter = STARTER_PETS.find(s => s.speciesId === speciesId);
   if (starter) return { renderType: starter.renderType, modelPath: starter.modelPath, element: starter.element };
 
-  // 3D animal
-  if (speciesId.startsWith('animal-')) {
-    const elem = ANIMAL_ELEMENTS[speciesId] || 'earth';
-    return { renderType: '3d', modelPath: `/pet-sprites/3d/${speciesId}.glb`, element: elem };
-  }
-  // 3D blocky character
-  if (speciesId.startsWith('character-') && speciesId.length <= 13) {
-    const idx = speciesId.charCodeAt(speciesId.length - 1) - 97;
-    const elements: PetElement[] = ['fire','wind','earth','water','fire','wind'];
-    return { renderType: '3d', modelPath: `/pet-sprites/3d/blocky/${speciesId}.glb`, element: elements[idx % 6] };
-  }
-  // 3D mini character
-  if (speciesId.startsWith('character-')) {
-    return { renderType: '3d', modelPath: `/pet-sprites/3d/mini/${speciesId}.glb`, element: speciesId.includes('female') ? 'wind' : 'water' };
-  }
-  // 2D sprite
-  const elem2D = SPRITE_ELEMENTS[speciesId] || 'earth';
-  return { renderType: '2d', modelPath: `/pet-sprites/2d/${speciesId}.json`, element: elem2D };
+  const petdex = PETDEX_PETS.find(p => p.speciesId === speciesId);
+  if (petdex) return { renderType: petdex.renderType, modelPath: petdex.modelPath, element: petdex.element };
+
+  return null;
 }
-
-// Element mappings
-const ANIMAL_ELEMENTS: Record<string, PetElement> = {
-  'animal-bee': 'wind', 'animal-bunny': 'earth', 'animal-cat': 'fire', 'animal-caterpillar': 'wind',
-  'animal-chick': 'fire', 'animal-cow': 'earth', 'animal-crab': 'water', 'animal-deer': 'earth',
-  'animal-dog': 'fire', 'animal-elephant': 'earth', 'animal-fish': 'water', 'animal-fox': 'earth',
-  'animal-giraffe': 'earth', 'animal-hog': 'earth', 'animal-koala': 'earth', 'animal-lion': 'fire',
-  'animal-monkey': 'earth', 'animal-panda': 'earth', 'animal-parrot': 'wind', 'animal-penguin': 'water',
-  'animal-pig': 'earth', 'animal-polar': 'water', 'animal-tiger': 'fire', 'animal-beaver': 'water',
-};
-
-const SPRITE_ELEMENTS: Record<string, PetElement> = {
-  'otter': 'water', 'teddy': 'earth', 'ghost': 'wind', 'zombie': 'earth',
-  'knight': 'fire', 'dragon': 'fire', 'ducky': 'wind', 'penguin': 'water',
-  'char64': 'earth', 'char60': 'wind', 'bomb': 'fire', 'redgirl': 'wind', 'capybara': 'water',
-};
