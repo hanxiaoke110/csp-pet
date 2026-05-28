@@ -53,7 +53,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: windows-x86_64
-          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*.exe
 
   # ── Release to Gitee + update update.json ──
   release:
@@ -84,7 +84,7 @@ jobs:
           VERSION_NUM="${VERSION#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-          pkg() { find "dist/$1" \( -name "*.dmg" -o -name "*.msi" -o -name "*.msi.zip" \) -type f | head -1; }
+          pkg() { find "dist/$1" \( -name "*.dmg" -o -name "*.exe" \) -type f | head -1; }
 
           MAC_ARM=$(pkg macos-aarch64)
           MAC_INTEL=$(pkg macos-x86_64)
