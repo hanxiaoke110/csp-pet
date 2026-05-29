@@ -23,7 +23,8 @@ function makeHash(level: string, date: string): string {
 }
 
 function verifyExcellenceCode(code: string): { level: string } | null {
-  const match = code.match(/^EXC-([123])-(\d{4})-([A-Z0-9]{4})$/);
+  // Support both old format EXC-1-0529-ABCD and new format EXC-1-0529-ABCD-RAND
+  const match = code.match(/^EXC-([123])-(\d{4})-([A-Z0-9]{4})(?:-[A-Z0-9]{4})?$/);
   if (!match) return null;
   const [, level, date, check] = match;
   return makeHash(level, date) === check ? { level } : null;
