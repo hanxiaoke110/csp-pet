@@ -1,5 +1,5 @@
 import { appDataDir } from '@tauri-apps/api/path';
-import { exists, mkdir, readFile, writeFile } from '@tauri-apps/plugin-fs';
+import { exists, mkdir, writeFile } from '@tauri-apps/plugin-fs';
 
 const GITEE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/main/pet-sprites-remote/2d';
 const FALLBACK_BASE = ''; // Reserve for future CDN failover
@@ -131,7 +131,5 @@ export async function getCachedSpritePath(petId: string, ext: 'png' | 'json'): P
 
 // ─── Clear all cached sprites (for settings/troubleshooting) ───
 export async function clearSpriteCache(): Promise<void> {
-  const cache = await getCacheDir();
-  // We don't have a recursive delete, so just clear known files
-  // In practice, individual files can be managed
+  // TODO: implement recursive delete of cache dir when needed
 }

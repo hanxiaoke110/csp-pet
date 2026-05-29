@@ -45,6 +45,48 @@ function randomDuration(rarity: HatchRarity): number {
 
 const STORAGE_KEY = 'csp_hatch_eggs';
 
+// Shared download logic — used by startHatching and load (app restart recovery)
+function resumeDownload(get: () => HatchState, set: (fn: (s: HatchState) => Partial<HatchState>) => void, eggId: string, speciesId: string) {
+  set(s => ({
+    eggs: s.eggs.map(e =>
+      e.eggId === eggId ? { ...e, downloadStatus: 'downloading' as const, downloadProgress: '正在连接...' } : e
+    ),
+  }));
+  downloadPetSprites(speciesId, (phase) => {
+    const current = get().eggs.find(e => e.eggId === eggId);
+    if (!current || current.downloadStatus === 'done') return;
+    if (phase === 'downloading') {
+      set(s => ({
+        eggs: s.eggs.map(e =>
+          e.eggId === eggId ? { ...e, downloadProgress: '下载中...' } : e
+        ),
+      }));
+    }
+  }).then(result => {
+    const current = get().eggs.find(e => e.eggId === eggId);
+    if (!current) return;
+    if (result.errors.length === 0) {
+      set(s => ({
+        eggs: s.eggs.map(e =>
+          e.eggId === eggId ? { ...e, downloadStatus: 'done' as const, downloadProgress: '' } : e
+        ),
+      }));
+      get().save();
+    } else {
+      set(s => ({
+        eggs: s.eggs.map(e =>
+          e.eggId === eggId ? {
+            ...e,
+            downloadStatus: 'error' as const,
+            downloadProgress: result.errors.join(', '),
+          } : e
+        ),
+      }));
+      get().save();
+    }
+  });
+}
+
 export const useHatchStore = create<HatchState>((set, get) => ({
   eggs: [],
 
@@ -79,44 +121,7 @@ export const useHatchStore = create<HatchState>((set, get) => ({
 
     // Start download in background for rare/legendary
     if (egg.rarity !== 'common') {
-      set(s => ({
-        eggs: s.eggs.map(e =>
-          e.eggId === eggId ? { ...e, downloadStatus: 'downloading' as const, downloadProgress: '正在连接...' } : e
-        ),
-      }));
-      downloadPetSprites(egg.speciesId, (phase) => {
-        const current = get().eggs.find(e => e.eggId === eggId);
-        if (!current || current.downloadStatus === 'done') return;
-        if (phase === 'downloading') {
-          set(s => ({
-            eggs: s.eggs.map(e =>
-              e.eggId === eggId ? { ...e, downloadProgress: '下载中...' } : e
-            ),
-          }));
-        }
-      }).then(result => {
-        const current = get().eggs.find(e => e.eggId === eggId);
-        if (!current) return;
-        if (result.errors.length === 0) {
-          set(s => ({
-            eggs: s.eggs.map(e =>
-              e.eggId === eggId ? { ...e, downloadStatus: 'done' as const, downloadProgress: '' } : e
-            ),
-          }));
-          get().save();
-        } else {
-          set(s => ({
-            eggs: s.eggs.map(e =>
-              e.eggId === eggId ? {
-                ...e,
-                downloadStatus: 'error' as const,
-                downloadProgress: result.errors.join(', '),
-              } : e
-            ),
-          }));
-          get().save();
-        }
-      });
+      resumeDownload(get, set, eggId, egg.speciesId);
     } else {
       // Common pets need no download
       set(s => ({
@@ -197,10 +202,17 @@ export const useHatchStore = create<HatchState>((set, get) => ({
     try {
       const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       if (Array.isArray(data) && data.length > 0) {
-        // Re-check status on load (time may have passed while app was closed)
         set({ eggs: data });
-        // Delay check to let state settle
-        setTimeout(() => get().checkEggs(), 100);
+        // Re-check status + restart interrupted downloads
+        setTimeout(() => {
+          get().checkEggs();
+          // Resume downloads for eggs that were incubating when app closed
+          for (const egg of get().eggs) {
+            if (egg.status === 'incubating' && egg.rarity !== 'common' && egg.downloadStatus !== 'done') {
+              resumeDownload(get, set, egg.eggId, egg.speciesId);
+            }
+          }
+        }, 100);
       }
     } catch { /* ignore */ }
   },

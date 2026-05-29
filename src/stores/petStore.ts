@@ -30,6 +30,8 @@ interface PetState {
   gachaDailyPulls: number;
   gachaDate: string;
   gachaPity: number;
+  _rollGacha: () => { item: ShopItem; rarity: string; autoName?: string; pityBreak: boolean } | null;
+  claimHatchedPet: (speciesId: string, petName: string) => boolean;
   doGacha: () => { item: ShopItem; rarity: string; pityBreak: boolean } | null;
 
   // Attributes
@@ -342,10 +344,23 @@ export const usePetStore = create<PetState>((set, get) => ({
     return { item, rarity, autoName, pityBreak: gachaPity === 0 && rarity !== 'common' };
   },
 
-  // Buy pet after hatching completes
+  // Add pet after hatching — coins already deducted in gacha/shop flow
   claimHatchedPet: (speciesId: string, petName: string) => {
     if (get().isOwned(speciesId)) return false;
-    return get().buyPet(speciesId, petName);
+    const config = getPetConfig(speciesId);
+    if (!config) return false;
+
+    const pet: OwnedPet = {
+      petId: crypto.randomUUID(), petName,
+      speciesId, element: config.element,
+      renderType: config.renderType, modelPath: config.modelPath,
+      level: 1, exp: 0, expToNext: 100,
+      hunger: 100, mood: 80, affection: 50,
+      lastFedAt: null, obtainedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+    };
+    set(s => ({ ownedPets: [...s.ownedPets, pet] }));
+    get().save();
+    return true;
   },
 
   doGacha: () => {

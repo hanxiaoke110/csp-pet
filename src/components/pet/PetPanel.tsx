@@ -19,7 +19,6 @@ export default function PetPanel() {
   const setActivePet = usePetStore(s => s.setActivePet);
   const feedPet = usePetStore(s => s.feedPet);
   const spendCoins = usePetStore(s => s.spendCoins);
-  const buyPet = usePetStore(s => s.buyPet);
   const renamePet = usePetStore(s => s.renamePet);
   const renameCards = usePetStore(s => s.renameCards);
   const save = usePetStore(s => s.save);
@@ -362,7 +361,7 @@ export default function PetPanel() {
       )}
 
       {tab === 'shop' && (
-        <ShopPanel coins={coins} ownedPets={ownedPets} buyPet={buyPet} spendCoins={spendCoins} />
+        <ShopPanel coins={coins} ownedPets={ownedPets} spendCoins={spendCoins} setTab={setTab} />
       )}
 
       {tab === 'hatch' && <HatchPanel />}
@@ -430,13 +429,12 @@ export default function PetPanel() {
 }
 
 // ─── Shop sub-component ───
-function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
-  coins: number; ownedPets: any[]; buyPet: (s: string, n: string) => boolean; spendCoins: (a: number) => boolean;
+function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
+  coins: number; ownedPets: any[]; spendCoins: (a: number) => boolean; setTab: (t: 'status' | 'shop' | 'hatch' | 'guide') => void;
 }) {
   const [shopTab, setShopTab] = useState<'food' | 'common' | 'rare' | 'legend' | 'special'>('food');
-  const [gachaResult, setGachaResult] = useState<any>(null);
-  const [pendingHatch, setPendingHatch] = useState<{ speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
   const [buyConfirm, setBuyConfirm] = useState<{ speciesId: string; name: string; price: number; icon: string } | null>(null);
+  const [pendingHatch, setPendingHatch] = useState<{ speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
   const [buyNameInput, setBuyNameInput] = useState('');
   const [foodConfirm, setFoodConfirm] = useState<any>(null);
   const [shopToast, setShopToast] = useState<string | null>(null);
@@ -448,13 +446,6 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
   const buyRenameCard = usePetStore(s => s.buyRenameCard);
   const addEgg = useHatchStore(s => s.addEgg);
   const startHatching = useHatchStore(s => s.startHatching);
-  const claimHatchedPet = usePetStore(s => s.claimHatchedPet);
-  const [foodConfirm, setFoodConfirm] = useState<{ id: string; name: string; price: number; hunger: number; icon: string } | null>(null);
-  const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha'; title: string; desc: string; price: number } | null>(null);
-  const renameCards = usePetStore(s => s.renameCards);
-  const buyRenameCard = usePetStore(s => s.buyRenameCard);
-  const doGacha = usePetStore(s => s.doGacha);
-  const gachaPulls = usePetStore(s => s.gachaDailyPulls);
   const isOwned = usePetStore(s => s.isOwned);
 
   const allPets = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet');
@@ -561,11 +552,6 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
               🎯 单抽 200g
             </button>
           </div>
-
-          {/* Gacha ceremony modal */}
-          {gachaResult && (
-            <GachaCeremony result={gachaResult} onClose={() => setGachaResult(null)} />
-          )}
         </div>
       )}
 
@@ -720,8 +706,7 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
             setPendingHatch(null);
           }}
           onLater={() => {
-            const egg = addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
-            // Don't start hatching, student can start later from hatch tab
+            addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
             setPendingHatch(null);
           }}
           onClose={() => setPendingHatch(null)}
@@ -731,64 +716,3 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
   );
 }
 
-// ─── Gacha ceremony with multi-step animation ───
-function GachaCeremony({ result, onClose }: { result: any; onClose: () => void }) {
-  const [phase, setPhase] = useState<'flip' | 'glow' | 'reveal'>('flip');
-
-  useEffect(() => {
-    if (result.rarity === 'refund') { setPhase('reveal'); return; }
-    const t1 = setTimeout(() => setPhase('glow'), 1200);
-    const t2 = setTimeout(() => setPhase('reveal'), 2200);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [result]);
-
-  const rc: Record<string, { bg: string; glow: string; label: string; emoji: string }> = {
-    legendary: { bg: 'linear-gradient(135deg, #fef3c7, #fde68a, #fbbf24)', glow: '#f59e0b', label: '🌈 传说', emoji: '👑' },
-    rare: { bg: 'linear-gradient(135deg, #e0e7ff, #c7d2fe, #818cf8)', glow: '#6366f1', label: '✨ 稀有', emoji: '⭐' },
-    common: { bg: '#fff', glow: '#94a3b8', label: '普通', emoji: '🎁' },
-    refund: { bg: 'linear-gradient(135deg, #fef2f2, #fecaca)', glow: '#ef4444', label: '已全部拥有', emoji: '💸' },
-  };
-  const c = rc[result.rarity] || rc.common;
-
-  return (
-    <div className="gacha-overlay" onClick={onClose}>
-      <div className="gacha-ceremony" onClick={e => e.stopPropagation()} style={{ background: c.bg }}>
-        {phase === 'flip' && (
-          <div className="gacha-flip">
-            <div className="gacha-card-back">
-              <div className="gacha-card-inner">🎰</div>
-            </div>
-            <div className="gacha-spin-text">抽卡中...</div>
-          </div>
-        )}
-        {phase === 'glow' && (
-          <div className="gacha-glow">
-            <div className="gacha-light" style={{ boxShadow: `0 0 80px ${c.glow}` }} />
-            <div className="gacha-glow-icon">{c.emoji}</div>
-          </div>
-        )}
-        {phase === 'reveal' && (
-          <div className="gacha-reveal">
-            <div className="gacha-reveal-icon">{c.emoji}</div>
-            {result.rarity !== 'refund' ? (
-              <>
-                <div className="gacha-preview-big">
-                  <img src={`/pet-sprites/previews/${result.item.speciesId}.png`} alt="" />
-                </div>
-                <div className="gacha-name">{result.item.name}</div>
-                <div className="gacha-rarity" style={{ color: c.glow }}>{c.label}{result.pityBreak ? ' · 保底!' : ''}</div>
-                <div className="gacha-hint">已自动加入你的灵犀智子！</div>
-              </>
-            ) : (
-              <>
-                <div style={{ fontSize: 18, fontWeight: 700, marginTop: 12 }}>已全部拥有</div>
-                <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>该等级智子已集齐，返还 100g</div>
-              </>
-            )}
-            <button className="gacha-done-btn" onClick={onClose}>确定</button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}

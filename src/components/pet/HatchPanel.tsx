@@ -11,7 +11,7 @@ const RARITY_STYLE: Record<string, { border: string; glow: string; label: string
 function EggCard({ egg, onClaim }: { egg: HatchingEgg; onClaim: (egg: HatchingEgg) => void }) {
   const style = RARITY_STYLE[egg.rarity];
   const [remaining, setRemaining] = useState('');
-  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
   useEffect(() => {
     const update = () => {
