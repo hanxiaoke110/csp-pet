@@ -50,6 +50,29 @@
 - 已添加 MIT LICENSE
 - macOS 未签名应用需右键打开或 xattr -cr
 
+## 2026-05-29 — 孵化系统 6 层 Bug 修复 (v1.1.1)
+
+### 背景
+稀有/传说精灵孵化永远卡在「即将完成」，实际是 6 层独立问题叠加，因缺少 .catch() 全部被静默吞掉。
+
+### Bug 链
+1. **无 .catch()** — `resumeDownload()` 中 promise 异常静默吞掉
+2. **fs:scope 未配置** — Tauri v2 scope 为空，所有路径被拒
+3. **fetch CORS** — 浏览器 fetch 请求 Gitee 被跨域拦截
+4. **HTTP 插件未注册** — Cargo.toml 有但 lib.rs 漏了 .plugin()
+5. **路径拼接缺 /** — appDataDir() 无尾部 /
+6. **convertFileSrc 协议不兼容** — asset:// fetch 不支持，asset-localhost 缺少 scope
+
+### 关键变更
+- `PetSprite.tsx`: 移除 convertFileSrc，直接用 readFile/readTextFile + Blob URL
+- `spriteDownloader.ts`: fetch → @tauri-apps/plugin-http
+- `lib.rs`: 注册 tauri_plugin_http::init()
+- `capabilities/default.json`: 加 fs:scope、http:allow-fetch
+
+### Tauri v2 安全模型（三层）
+每个插件 = Capability 权限声明 + Scope 范围 + Rust .plugin() 注册，缺一不可。
+本地文件加载用 fs plugin 直接读写；外部下载用 HTTP plugin。
+
 ## 2026-05-29 — 教练端修复
 
 ### 集训码按钮不显示
@@ -74,8 +97,31 @@
 1. 修改版本号：`src-tauri/tauri.conf.json` → `version`
 2. 提交代码 + 打 tag（如 `v1.1.0`）
 3. `git push origin main --tags`
-4. GitHub Actions 自动构建 → 自动创建 Gitee Release → 自动更新 update.json
-5. 学生 App 检测到新版本 → 点更新
+4. **同时推送到 Gitee**：`git push gitee main --tags`（Gitee Release API 要求 tag 存在于 Gitee 仓库）
+5. GitHub Actions 自动构建 → GitHub Release 自动创建并上传安装包
+6. **⚠️ 手动上传到 Gitee**：从 GitHub Release 下载安装包 → 本地上传到 Gitee Release（见下方「Gitee 上传」）
+7. 更新 Gitee `update.json`（指向 Gitee 下载地址）
+8. 学生 App 检测到新版本 → 点更新
+
+### Gitee 上传（手动步骤）
+CI 无法可靠上传大文件到 Gitee（美国→中国跨境传 70MB×3 太慢/超时）。改为手动：
+```bash
+# 1. 从 GitHub Release 下载安装包
+curl -sL "https://github.com/hanxiaoke110/csp-pet/releases/download/vX.Y.Z/CSP._X.Y.Z_aarch64.dmg" -o /tmp/csp-arm.dmg
+curl -sL "https://github.com/hanxiaoke110/csp-pet/releases/download/vX.Y.Z/CSP._X.Y.Z_x64.dmg" -o /tmp/csp-intel.dmg
+curl -sL "https://github.com/hanxiaoke110/csp-pet/releases/download/vX.Y.Z/CSP._X.Y.Z_x64-setup.exe" -o /tmp/csp-win.exe
+
+# 2. 在 Gitee 网页上创建 Release（或通过 API 创建）
+# 3. 上传 3 个文件到 Gitee Release
+# 4. 更新 update.json，指向 Gitee 下载地址
+# 5. 提交 update.json 到 Gitee 仓库
+```
+
+### ⚠️ Gitee vs GitHub 分支名陷阱
+- GitHub 默认分支：`main`
+- **Gitee 默认分支：`master`**
+- CI release.yml 中 `target_commitish` 必须用 `"master"`（不是 `"main"`）
+- Gitee API 文件的 raw URL 也用 `master`：`https://gitee.com/hanliuliu110/csp-pet/raw/master/...`
 
 ### 教练端发版
 1. 修改 `coach/manifest.json` → `version`

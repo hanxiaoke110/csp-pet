@@ -1,8 +1,11 @@
 import { appDataDir } from '@tauri-apps/api/path';
-import { exists, mkdir, writeFile } from '@tauri-apps/plugin-fs';
+import { BaseDirectory, exists, mkdir, writeFile } from '@tauri-apps/plugin-fs';
+import { fetch } from '@tauri-apps/plugin-http';
 
 const GITEE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/main/pet-sprites-remote/2d';
 const FALLBACK_BASE = ''; // Reserve for future CDN failover
+
+const CACHE_SUBDIR = 'pet-sprites/2d';
 
 // ─── Random delay to spread download load ───
 function randomDelay(): Promise<void> {
@@ -20,29 +23,30 @@ export type DownloadResult =
   | { ok: true; localUrl: string }
   | { ok: false; error: string };
 
-// ─── Ensure sprite cache dir exists ───
-let cacheDir: string | null = null;
-async function getCacheDir(): Promise<string> {
-  if (cacheDir) return cacheDir;
+// ─── Cache absolute path (for convertFileSrc) ───
+let cacheDirAbs: string | null = null;
+async function getCacheDirAbs(): Promise<string> {
+  if (cacheDirAbs) return cacheDirAbs;
   const base = await appDataDir();
-  cacheDir = `${base}pet-sprites/2d`;
-  if (!await exists(cacheDir)) {
-    await mkdir(cacheDir, { recursive: true });
-  }
-  return cacheDir;
+  cacheDirAbs = `${base}/${CACHE_SUBDIR}`;
+  return cacheDirAbs;
 }
 
-// ─── Fetch with timeout ───
-async function fetchWithTimeout(url: string, timeoutMs = 30_000): Promise<Response> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { signal: controller.signal });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return res;
-  } finally {
-    clearTimeout(timer);
+// ─── Ensure sprite cache dir exists (uses AppData scope) ───
+let cacheReady = false;
+async function ensureCacheDir(): Promise<void> {
+  if (cacheReady) return;
+  if (!await exists(CACHE_SUBDIR, { baseDir: BaseDirectory.AppData })) {
+    await mkdir(CACHE_SUBDIR, { baseDir: BaseDirectory.AppData, recursive: true });
   }
+  cacheReady = true;
+}
+
+// ─── Fetch with timeout (via Tauri HTTP plugin) ───
+async function fetchWithTimeout(url: string, timeoutMs = 30_000): Promise<Response> {
+  const res = await fetch(url, { connectTimeout: timeoutMs });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res;
 }
 
 // ─── Download a single sprite file ───
@@ -51,12 +55,14 @@ export async function downloadSprite(
   ext: 'png' | 'json',
   onProgress?: (phase: string, attempt: number) => void,
 ): Promise<DownloadResult> {
-  const cache = await getCacheDir();
+  await ensureCacheDir();
+  const cacheAbs = await getCacheDirAbs();
   const filename = `${petId}.${ext}`;
-  const localPath = `${cache}/${filename}`;
+  const localPath = `${cacheAbs}/${filename}`;
+  const relPath = `${CACHE_SUBDIR}/${filename}`;
 
   // Already cached?
-  if (await exists(localPath)) {
+  if (await exists(relPath, { baseDir: BaseDirectory.AppData })) {
     return { ok: true, localUrl: localPath };
   }
 
@@ -76,13 +82,11 @@ export async function downloadSprite(
       try {
         const res = await fetchWithTimeout(url);
         const buf = await res.arrayBuffer();
-        await writeFile(localPath, new Uint8Array(buf));
+        await writeFile(relPath, new Uint8Array(buf), { baseDir: BaseDirectory.AppData });
         return { ok: true, localUrl: localPath };
       } catch (err) {
         const isLastAttempt = attempt === 4 && urlIdx === urls.length - 1;
         if (isLastAttempt) {
-          // Clean up partial file
-          try { if (await exists(localPath)) { /* keep for debugging */ } } catch {}
           return { ok: false, error: `Download failed after all retries: ${err}` };
         }
         // Wait with backoff before retry
@@ -124,9 +128,13 @@ export async function downloadPetSprites(
 
 // ─── Get local path for a cached sprite ───
 export async function getCachedSpritePath(petId: string, ext: 'png' | 'json'): Promise<string | null> {
-  const cache = await getCacheDir();
-  const path = `${cache}/${petId}.${ext}`;
-  return (await exists(path)) ? path : null;
+  await ensureCacheDir();
+  const cacheAbs = await getCacheDirAbs();
+  const relPath = `${CACHE_SUBDIR}/${petId}.${ext}`;
+  if (await exists(relPath, { baseDir: BaseDirectory.AppData })) {
+    return `${cacheAbs}/${petId}.${ext}`;
+  }
+  return null;
 }
 
 // ─── Clear all cached sprites (for settings/troubleshooting) ───

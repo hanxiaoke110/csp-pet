@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { convertFileSrc } from '@tauri-apps/api/core';
+import { readFile, readTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { tick, wakeUp, triggerAnim, updateLastEvent, type PetAnimState } from './PetStateMachine';
 import { createStateMachine } from './PetStateMachine';
 import { isRemotePet } from '../../types/pet';
-import { getCachedSpritePath } from '../../utils/spriteDownloader';
 
 const CANVAS_SIZE = 200;
+const CACHE_SUBDIR = 'pet-sprites/2d';
 
 interface SpriteMeta { frameWidth: number; frameHeight: number; maxFrames: number; anims: Record<string, number>; animOrder: string[]; durations?: Record<string, number>; }
 interface SpriteData { img: HTMLImageElement; meta: SpriteMeta; }
@@ -14,6 +14,7 @@ const ANIM_ORDER = ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhap
 
 // ─── 2D sprite sheet cache ───
 const spriteCache = new Map<string, SpriteData>();
+const spriteBlobUrls = new Map<string, string>();
 
 // Extract pet ID from modelPath like "/pet-sprites/2d/capi.json"
 function getPetId(modelPath: string): string {
@@ -22,6 +23,7 @@ function getPetId(modelPath: string): string {
   return filename.replace('.json', '');
 }
 
+// ─── Load bundled/common pet sprites ───
 async function loadSpriteSheet(jsonPath: string, pngPath: string): Promise<SpriteData> {
   const cacheKey = jsonPath;
   if (spriteCache.has(cacheKey)) return spriteCache.get(cacheKey)!;
@@ -37,6 +39,42 @@ async function loadSpriteSheet(jsonPath: string, pngPath: string): Promise<Sprit
   const data: SpriteData = { img, meta: metaResp as SpriteMeta };
   spriteCache.set(cacheKey, data);
   return data;
+}
+
+// ─── Load cached remote pet sprites from AppData ───
+async function loadCachedSprite(petId: string): Promise<{ data: SpriteData; blobUrl: string }> {
+  const cacheKey = `cached:${petId}`;
+  const cached = spriteCache.get(cacheKey);
+  const cachedBlob = spriteBlobUrls.get(cacheKey);
+  if (cached && cachedBlob) return { data: cached, blobUrl: cachedBlob };
+
+  const jsonRelPath = `${CACHE_SUBDIR}/${petId}.json`;
+  const pngRelPath = `${CACHE_SUBDIR}/${petId}.png`;
+
+  const [jsonText, pngBytes] = await Promise.all([
+    readTextFile(jsonRelPath, { baseDir: BaseDirectory.AppData }),
+    readFile(pngRelPath, { baseDir: BaseDirectory.AppData }),
+  ]);
+
+  const meta = JSON.parse(jsonText) as SpriteMeta;
+  const blob = new Blob([new Uint8Array(pngBytes)], { type: 'image/png' });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const i = new Image();
+    i.onload = () => { URL.revokeObjectURL(blobUrl); resolve(i); };
+    i.onerror = () => reject(new Error(`Failed to load sprite: ${petId}`));
+    i.src = blobUrl;
+  });
+
+  // Re-create blob for CSS background (first one was revoked after Image load)
+  const cssBlob = new Blob([new Uint8Array(pngBytes)], { type: 'image/png' });
+  const cssBlobUrl = URL.createObjectURL(cssBlob);
+
+  const data: SpriteData = { img, meta };
+  spriteCache.set(cacheKey, data);
+  spriteBlobUrls.set(cacheKey, cssBlobUrl);
+  return { data, blobUrl: cssBlobUrl };
 }
 
 export default function PetSprite({
@@ -78,34 +116,27 @@ export default function PetSprite({
 
     let cancelled = false;
 
-    async function resolvePaths(): Promise<{ jsonUrl: string; pngUrl: string }> {
+    async function load() {
       const petId = getPetId(modelPath!);
-      if (isRemotePet(petId)) {
-        // Check local cache for remote pets
-        const cachedJson = await getCachedSpritePath(petId, 'json');
-        const cachedPng = await getCachedSpritePath(petId, 'png');
-        if (cachedJson && cachedPng) {
-          return {
-            jsonUrl: convertFileSrc(cachedJson),
-            pngUrl: convertFileSrc(cachedPng),
-          };
-        }
-        // Not cached — fall back to bundled path (won't work, but won't crash)
-        // In normal flow this shouldn't happen as hatching downloads before reveal
-        return {
-          jsonUrl: modelPath!,
-          pngUrl: modelPath!.replace('.json', '.png'),
-        };
-      }
-      // Common/starter pets — use bundled path
-      return {
-        jsonUrl: modelPath!,
-        pngUrl: modelPath!.replace('.json', '.png'),
-      };
-    }
 
-    resolvePaths().then(({ jsonUrl, pngUrl }) => {
-      if (cancelled) return;
+      // Remote pets: read directly from AppData cache
+      if (isRemotePet(petId)) {
+        try {
+          if (isFirstMount) setStatus('loading');
+          const { data, blobUrl } = await loadCachedSprite(petId);
+          if (cancelled) return;
+          spriteRef.current = data;
+          setResolvedPngUrl(blobUrl);
+          setStatus('ready');
+          return;
+        } catch {
+          // Cache miss — fall through to bundled path
+        }
+      }
+
+      // Common pet or remote pet without cache
+      const jsonUrl = modelPath!;
+      const pngUrl = modelPath!.replace('.json', '.png');
       if (isFirstMount) setStatus('loading');
       setResolvedPngUrl(pngUrl);
 
@@ -114,7 +145,9 @@ export default function PetSprite({
         spriteRef.current = data;
         setStatus('ready');
       }).catch(() => { if (!cancelled) setStatus('error'); });
-    });
+    }
+
+    load();
 
     // Lightweight rAF — state machine tick only, no rendering
     let raf = 0;

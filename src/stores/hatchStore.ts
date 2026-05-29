@@ -84,6 +84,19 @@ function resumeDownload(get: () => HatchState, set: (fn: (s: HatchState) => Part
       }));
       get().save();
     }
+  }).catch(err => {
+    const current = get().eggs.find(e => e.eggId === eggId);
+    if (!current) return;
+    set(s => ({
+      eggs: s.eggs.map(e =>
+        e.eggId === eggId ? {
+          ...e,
+          downloadStatus: 'error' as const,
+          downloadProgress: String(err).slice(0, 200),
+        } : e
+      ),
+    }));
+    get().save();
   });
 }
 

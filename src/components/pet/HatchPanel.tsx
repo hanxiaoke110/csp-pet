@@ -66,6 +66,11 @@ function EggCard({ egg, onClaim }: { egg: HatchingEgg; onClaim: (egg: HatchingEg
           {style.label}
         </div>
         <div className="egg-status-text">{display.text}</div>
+        {egg.status === 'failed' && egg.downloadProgress && (
+          <div style={{ fontSize: 10, color: '#ef4444', marginTop: 4, wordBreak: 'break-all' }}>
+            {egg.downloadProgress}
+          </div>
+        )}
       </div>
       <div className="egg-actions">
         {egg.status === 'ready' && (

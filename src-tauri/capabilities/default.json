@@ -12,6 +12,18 @@
     "fs:allow-appdata-read",
     "fs:allow-appdata-write",
     "fs:allow-exists",
-    "fs:allow-mkdir"
+    "fs:allow-mkdir",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$APPDATA/**" }]
+    },
+    "http:default",
+    {
+      "identifier": "http:allow-fetch",
+      "allow": [
+        { "url": "https://gitee.com/**" },
+        { "url": "https://raw.giteeusercontent.com/**" }
+      ]
+    }
   ]
 }
