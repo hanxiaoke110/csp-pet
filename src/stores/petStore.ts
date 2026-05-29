@@ -386,8 +386,8 @@ export const usePetStore = create<PetState>((set, get) => ({
       get().save();
       return true;
     }
-    // CAMP-{date}-{check} format
-    const match = password.match(/^CAMP-(\d{8})-([A-Z0-9]{4})$/);
+    // CAMP-{date}-{check} or CAMP-{date}-{check}-{rand} format
+    const match = password.match(/^CAMP-(\d{8})-([A-Z0-9]{4})(?:-[A-Z0-9]{4})?$/);
     if (match) {
       const [, date, check] = match;
       // Validate hash
