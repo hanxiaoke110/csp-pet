@@ -5,6 +5,7 @@ import type { OwnedPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, ALL_SHOP_ITEMS, PET_TIERS } from '../types/pet';
 import type { ShopItem } from '../types/pet';
 import { validatePetName } from '../utils/validateName';
+import { useHatchStore } from './hatchStore';
 
 interface PetState {
   activePetId: string | null;
@@ -142,7 +143,11 @@ export const usePetStore = create<PetState>((set, get) => ({
   isOwned: (shopSpeciesId: string) => {
     const config = getPetConfig(shopSpeciesId);
     if (!config) return false;
-    return get().ownedPets.some(p => p.modelPath === config.modelPath || p.speciesId === shopSpeciesId);
+    // Check owned pets
+    if (get().ownedPets.some(p => p.modelPath === config.modelPath || p.speciesId === shopSpeciesId)) return true;
+    // Check hatching eggs (prevent duplicate gacha/shop while incubating)
+    const eggs = useHatchStore.getState().eggs;
+    return eggs.some(e => e.speciesId === shopSpeciesId);
   },
 
   buyPet: (speciesId, petName) => {
