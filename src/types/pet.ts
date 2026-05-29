@@ -128,6 +128,7 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'zhoukeke', name: '周可可', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/zhoukeke.json', description: '软萌可爱，童心陪伴', price: 200 },
   { speciesId: 'jett', name: 'Jett', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/jett.json', description: '风系战术决斗者，快如闪电', price: 200 },
   { speciesId: 'gameboy', name: '电玩小子', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/gameboy.json', description: '王者荣耀电玩小子，像素街机风', price: 200 },
+  { speciesId: 'wanglin', name: '王林', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/wanglin.json', description: 'Q版修士，白银长发玄袍，冷静', price: 200 },
 ];
 
 export const PET_TIERS: Record<string, PetTier> = {
@@ -165,7 +166,8 @@ export const PET_TIERS: Record<string, PetTier> = {
   'ziling': 'rare',
   'jett': 'rare',
   'gameboy': 'rare',
-  'weilong': 'rare',
+  'weilong': 'legendary',
+  'wanglin': 'rare',
 };
 
 function buildShop(): ShopItem[] {
