@@ -91,20 +91,14 @@ jobs:
           MAC_INTEL=$(pkg macos-x86_64)
           WIN_MSI=$(pkg windows-x86_64)
 
-          # Write privkey
           echo "$PRIVKEY" > /tmp/privkey
 
-          # Sign each package
           sign_file() {
             local f="$1"
             if [ -n "$f" ] && [ -f "$f" ]; then
               npx @tauri-apps/cli signer sign --private-key /tmp/privkey --password "" "$f" 2>/dev/null || true
               local sigfile="${f}.sig"
-              if [ -f "$sigfile" ]; then
-                cat "$sigfile"
-              else
-                echo ""
-              fi
+              if [ -f "$sigfile" ]; then cat "$sigfile"; else echo ""; fi
             else
               echo ""
             fi
@@ -116,39 +110,37 @@ jobs:
 
           # Create Gitee release
           GITEE_API="https://gitee.com/api/v5/repos/hanliuliu110/csp-pet"
-          BODY="Release ${VERSION} - auto built by CI"
           RELEASE_ID=$(curl -s -X POST "$GITEE_API/releases" \
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITEE_TOKEN" \
-            -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"$BODY\",\"prerelease\":false,\"target_commitish\":\"master\"}" | jq -r '.id // empty')
+            -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"Release $VERSION\",\"prerelease\":false,\"target_commitish\":\"master\"}" | jq -r '.id // empty')
 
           if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
-            echo "WARNING: Failed to create Gitee release, falling back to local-only update.json"
+            echo "WARNING: Failed to create Gitee release, falling back to GitHub URLs"
             RELEASE_ID=""
           fi
 
           upload_file() {
-            local f="$1" label="$2"
+            local f="$1"
             if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then return; fi
             if [ -z "$f" ] || [ ! -f "$f" ]; then return; fi
-            local resp=$(curl -s -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
+            local resp=$(curl -s --connect-timeout 30 --max-time 600 -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
               -H "Authorization: token $GITEE_TOKEN" \
               -F "file=@$f")
             local url=$(echo "$resp" | jq -r '.browser_download_url // .download_url // empty')
             echo "$url"
           }
 
-          URL_MAC_ARM=$(upload_file "$MAC_ARM" "macOS Apple Silicon")
-          URL_MAC_INTEL=$(upload_file "$MAC_INTEL" "macOS Intel")
-          URL_WIN=$(upload_file "$WIN_MSI" "Windows x64")
+          URL_MAC_ARM=$(upload_file "$MAC_ARM")
+          URL_MAC_INTEL=$(upload_file "$MAC_INTEL")
+          URL_WIN=$(upload_file "$WIN_MSI")
 
-          # Fallback URLs
+          # Fallback to GitHub Release URLs
           GH_RELEASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
           URL_MAC_ARM="${URL_MAC_ARM:-$GH_RELEASE/$(basename "$MAC_ARM")}"
           URL_MAC_INTEL="${URL_MAC_INTEL:-$GH_RELEASE/$(basename "$MAC_INTEL")}"
           URL_WIN="${URL_WIN:-$GH_RELEASE/$(basename "$WIN_MSI")}"
 
-          # Generate update.json
           cat > dist/update.json << JSONEOF
           {
             "version": "$VERSION_NUM",
