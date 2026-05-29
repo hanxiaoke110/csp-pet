@@ -120,7 +120,7 @@ jobs:
           RELEASE_ID=$(curl -s -X POST "$GITEE_API/releases" \
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITEE_TOKEN" \
-            -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"$BODY\",\"prerelease\":false}" | jq -r '.id // empty')
+            -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"$BODY\",\"prerelease\":false,\"target_commitish\":\"main\"}" | jq -r '.id // empty')
 
           if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
             echo "WARNING: Failed to create Gitee release, falling back to local-only update.json"
