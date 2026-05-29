@@ -30,6 +30,11 @@ function PetActionHandler() {
           invoke('bring_to_front').catch(() => {});
           break;
         }
+        case 'switch-pet': {
+          const petId = (e.payload as any).petId;
+          if (petId) usePetStore.getState().setActivePet(petId);
+          break;
+        }
         case 'navigate': {
           invoke('bring_to_front').catch(() => {});
           navigate(target);

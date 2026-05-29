@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
+import { emit } from '@tauri-apps/api/event';
 import { renderCodeText } from '../../utils/markdown';
 import { useNavigate } from 'react-router-dom';
 
@@ -124,6 +125,10 @@ export default function QuizPractice() {
       const newResults = { ...results, correct: results.correct + 1, total: results.total + 1 };
       setResults(newResults);
 
+      // Pet reacts
+      if (results.correct === 0) emit('pet-anim', { anim: 'celebrate', duration: 2000 }).catch(() => {});
+      else emit('pet-anim', { anim: 'think', duration: 1500 }).catch(() => {});
+
       // Track KP result
       if (q.knowledgePoint) {
         setKpResults(prev => {
@@ -148,6 +153,10 @@ export default function QuizPractice() {
       }
     } else {
       setResults(r => ({ ...r, total: r.total + 1 }));
+      // Pet reacts to wrong answer
+      emit('pet-anim', { anim: 'unhappy', duration: 2000 }).catch(() => {});
+      const lines = ['没关系，再看看！💡', '差一点点，再想想~', '别灰心，错题才是进步的阶梯！'];
+      emit('pet-bubble', { text: lines[Math.floor(Math.random() * lines.length)] }).catch(() => {});
       // Track KP result (wrong)
       if (q.knowledgePoint) {
         setKpResults(prev => {
@@ -188,6 +197,18 @@ export default function QuizPractice() {
           addCoins(Math.floor(sr.coins * mult));
         }
       }
+
+      // Pet celebrates on quiz completion
+      emit('pet-anim', { anim: 'celebrate', duration: 3000 }).catch(() => {});
+      const completionLines: Record<string, string[]> = {
+        weekly: ['本周任务完成！去领奖励吧 🎁', '全部搞定！你太强了 🔥', '一周的努力没有白费！'],
+        extra: ['额外挑战完成！加练达人 💪', '超额完成任务！'],
+        super: ['超级挑战通关！🏆', '极限模式征服者！'],
+        review: ['复盘完成，查漏补缺！📋', '错题全部消化！'],
+        free: ['练习完成，手感火热！', '又进步了一点点 ✨'],
+      };
+      const lines = completionLines[mode || 'free'] || ['全部完成！'];
+      emit('pet-bubble', { text: lines[Math.floor(Math.random() * lines.length)] }).catch(() => {});
     } else {
       setCurrentIdx(i => i + 1);
       setSelected(null);

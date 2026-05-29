@@ -5,6 +5,7 @@ import HintSystem from './HintSystem';
 import AskAIModal from './AskAIModal';
 import UnderstandModal from './UnderstandModal';
 import { usePetStore } from '../../stores/petStore';
+import { emit } from '@tauri-apps/api/event';
 
 export type SectionType = 'review' | 'inClassCodes' | 'inClassQuiz' | 'homework' | 'extended';
 export type ProblemStatus = 'not_started' | 'completed' | 'retry' | 'attempted';
@@ -70,6 +71,10 @@ export default function ProblemViewer({ problem, sectionType }: Props) {
       // Track milestone
       trackCompletion();
     }
+    // Notify pet: celebrate!
+    emit('pet-anim', { anim: 'celebrate', duration: 3000 }).catch(() => {});
+    const lines = ['又搞定一道题！🎉', '厉害！继续加油~', '一道接一道，根本停不下来！', '学会了！真棒 👏'];
+    emit('pet-bubble', { text: lines[Math.floor(Math.random() * lines.length)] }).catch(() => {});
   };
 
   const trackCompletion = () => {

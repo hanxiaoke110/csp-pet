@@ -1,0 +1,6 @@
+{
+  "id": "capi",
+  "displayName": "Capi",
+  "description": "A calm hand-drawn capybara coder companion inspired by the provided logo.",
+  "spritesheetPath": "spritesheet.webp"
+}

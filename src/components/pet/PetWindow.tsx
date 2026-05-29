@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { listen, emit } from '@tauri-apps/api/event';
+import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import PetSprite from './PetSprite';
 import type { PetAnimState } from './PetStateMachine';
@@ -44,14 +45,31 @@ export default function PetWindow() {
   const [showRing, setShowRing] = useState(false);
   const ringTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number } | null>(null);
+  const isDragging = useRef(false);
+  const [ownedPets, setOwnedPets] = useState<OwnedPet[]>([]);
 
   // ─── ALL hooks must be called unconditionally ───
 
-  // Window dragging
+  // Window dragging — only start drag when mouse moved > 5px (distinguish from click)
   useEffect(() => {
-    const onMD = () => getCurrentWindow().startDragging().catch(() => {});
+    let startX = 0, startY = 0;
+    const onMD = (e: MouseEvent) => { startX = e.clientX; startY = e.clientY; isDragging.current = false; };
+    const onMM = (e: MouseEvent) => {
+      if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
+        isDragging.current = true;
+        getCurrentWindow().startDragging().catch(() => {});
+      }
+    };
+    const onMU = () => { startX = startY = 0; };
     document.addEventListener('mousedown', onMD);
-    return () => document.removeEventListener('mousedown', onMD);
+    document.addEventListener('mousemove', onMM);
+    document.addEventListener('mouseup', onMU);
+    return () => {
+      document.removeEventListener('mousedown', onMD);
+      document.removeEventListener('mousemove', onMM);
+      document.removeEventListener('mouseup', onMU);
+    };
   }, []);
 
   // Data sync & events
@@ -73,6 +91,7 @@ export default function PetWindow() {
       if (d.activePetId && d.ownedPets) {
         const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
         if (p) setActivePet(p);
+        setOwnedPets(d.ownedPets);
       }
     }).then(fn => c.push(fn));
 
@@ -140,6 +159,8 @@ export default function PetWindow() {
 
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
+    if (isDragging.current) return; // Don't respond to drag-clicks
+    setCtxMenu(null);
     window.__petWake__?.(); window.__petUpdate__?.();
     const c = clickCount + 1; setClickCount(c);
     let l: string;
@@ -153,12 +174,26 @@ export default function PetWindow() {
     if (activePet) emit('pet-click', { petId: activePet.petId, count: c }).catch(() => {});
   }, [clickCount, activePet]);
 
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowRing(false);
+    setCtxMenu({ x: e.clientX, y: e.clientY });
+  }, []);
+
+  const switchPet = (pet: OwnedPet) => {
+    emit('pet-action', { action: 'switch-pet', petId: pet.petId }).catch(() => {});
+    setCtxMenu(null);
+    setBubble(`已切换为「${pet.petName}」！`);
+    setTimeout(() => setBubble(''), 3000);
+  };
+
   // ─── Render ───
   if (!activePet) return null;
 
   return (
     <div style={{ width: 220, height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="pet-interact" style={{ width: 200, height: 200, position: 'relative' }} onClick={handleClick}>
+      <div className="pet-interact" style={{ width: 200, height: 200, position: 'relative' }} onClick={handleClick} onContextMenu={handleContextMenu}>
         <PetSprite key={activePet.modelPath || 'empty'}
           renderType={activePet.renderType} modelPath={activePet.modelPath} />
       </div>
@@ -191,6 +226,42 @@ export default function PetWindow() {
               </button>
             );
           })}
+        </div>
+      )}
+
+      {/* Right-click context menu */}
+      {ctxMenu && (
+        <div style={{
+          position: 'fixed', left: ctxMenu.x, top: ctxMenu.y, zIndex: 9999,
+          background: 'rgba(20,20,22,0.96)', color: '#f0f0f0',
+          border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8,
+          padding: 4, fontSize: 10, minWidth: 140,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)',
+          display: 'flex', flexDirection: 'column', gap: 2,
+        }} onClick={() => setCtxMenu(null)}>
+          <div style={{ padding: '2px 8px', color: 'rgba(255,255,255,0.5)', fontSize: 9, borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: 2 }}>
+            🐾 {activePet?.petName || '智子'}
+          </div>
+          {ownedPets.map(p => (
+            <div key={p.petId} onClick={() => switchPet(p)} style={{
+              padding: '4px 8px', borderRadius: 4, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: p.petId === activePet?.petId ? 'rgba(0,122,255,0.18)' : 'transparent',
+            }}>
+              <span>{p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : '🔵'}</span>
+              <span style={{ flex: 1 }}>{p.petName}</span>
+              <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)' }}>Lv.{p.level}</span>
+              {p.petId === activePet?.petId && <span style={{ fontSize: 10 }}>✓</span>}
+            </div>
+          ))}
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 2, paddingTop: 2 }}>
+            <div onClick={() => { emit('pet-action', { action: 'open-window' }).catch(() => {}); setCtxMenu(null); }}
+              style={{ padding: '4px 8px', borderRadius: 4, cursor: 'pointer' }}>📂 打开主窗口</div>
+            <div onClick={() => { emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}); setCtxMenu(null); }}
+              style={{ padding: '4px 8px', borderRadius: 4, cursor: 'pointer' }}>🛒 商城</div>
+            <div onClick={() => { invoke('toggle_pet_window').catch(() => {}); setCtxMenu(null); }}
+              style={{ padding: '4px 8px', borderRadius: 4, cursor: 'pointer' }}>👁️ 隐藏窗口</div>
+          </div>
         </div>
       )}
     </div>

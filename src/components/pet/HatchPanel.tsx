@@ -63,7 +63,7 @@ function EggCard({ egg, onClaim }: { egg: HatchingEgg; onClaim: (egg: HatchingEg
       <div className="egg-info">
         <div className="egg-name">{egg.petName}</div>
         <div className="egg-tier" style={{ color: style.border, fontSize: 11 }}>
-          {style.label} · {egg.status === 'incubating' && egg.rarity !== 'common' && egg.downloadStatus === 'downloading' ? '下载中' : ''}
+          {style.label}
         </div>
         <div className="egg-status-text">{display.text}</div>
       </div>
