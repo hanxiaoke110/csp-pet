@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
-import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig, PET_TIERS } from '../../types/pet';
+import { useHatchStore } from '../../stores/hatchStore';
+import type { HatchRarity } from '../../stores/hatchStore';
+import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig, PET_TIERS, getPetTier } from '../../types/pet';
 import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
 import CeremonyModal from './CeremonyModal';
 import PetSprite from './PetSprite';
+import HatchConfirmModal from './HatchConfirmModal';
+import HatchPanel from './HatchPanel';
 import RaisingGuide from './RaisingGuide';
 
 export default function PetPanel() {
@@ -31,7 +35,8 @@ export default function PetPanel() {
     newName?: string;
   } | null>(null);
   const [searchParams] = useSearchParams();
-  const [tab, setTab] = useState<'status' | 'shop' | 'guide'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
+  const [tab, setTab] = useState<'status' | 'shop' | 'hatch' | 'guide'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
+  const eggCount = useHatchStore(s => s.eggs.length);
 
   // Keep tab in sync with URL param
   useEffect(() => {
@@ -147,6 +152,9 @@ export default function PetPanel() {
       <div className="pet-tabs">
         <button className={`pet-tab ${tab === 'status' ? 'active' : ''}`} onClick={() => setTab('status')}>🐾 智子</button>
         <button className={`pet-tab ${tab === 'shop' ? 'active' : ''}`} onClick={() => setTab('shop')}>🛒 商城</button>
+        <button className={`pet-tab ${tab === 'hatch' ? 'active' : ''}`} onClick={() => setTab('hatch')}>
+          🐣 孵化中{eggCount > 0 && <span className="hatch-badge">{eggCount}</span>}
+        </button>
         <button className={`pet-tab ${tab === 'guide' ? 'active' : ''}`} onClick={() => setTab('guide')}>📖 指南</button>
       </div>
 
@@ -357,6 +365,8 @@ export default function PetPanel() {
         <ShopPanel coins={coins} ownedPets={ownedPets} buyPet={buyPet} spendCoins={spendCoins} />
       )}
 
+      {tab === 'hatch' && <HatchPanel />}
+
       {tab === 'guide' && <RaisingGuide />}
 
       {/* Rename modal */}
@@ -425,10 +435,20 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
 }) {
   const [shopTab, setShopTab] = useState<'food' | 'common' | 'rare' | 'legend' | 'special'>('food');
   const [gachaResult, setGachaResult] = useState<any>(null);
+  const [pendingHatch, setPendingHatch] = useState<{ speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
   const [buyConfirm, setBuyConfirm] = useState<{ speciesId: string; name: string; price: number; icon: string } | null>(null);
   const [buyNameInput, setBuyNameInput] = useState('');
+  const [foodConfirm, setFoodConfirm] = useState<any>(null);
   const [shopToast, setShopToast] = useState<string | null>(null);
   const showShopToast = (msg: string) => { setShopToast(msg); setTimeout(() => setShopToast(null), 3000); };
+  const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha'; title: string; desc: string; price: number } | null>(null);
+  const renameCards = usePetStore(s => s.renameCards);
+  const rollGacha = usePetStore(s => s._rollGacha);
+  const gachaPulls = usePetStore(s => s.gachaDailyPulls);
+  const buyRenameCard = usePetStore(s => s.buyRenameCard);
+  const addEgg = useHatchStore(s => s.addEgg);
+  const startHatching = useHatchStore(s => s.startHatching);
+  const claimHatchedPet = usePetStore(s => s.claimHatchedPet);
   const [foodConfirm, setFoodConfirm] = useState<{ id: string; name: string; price: number; hunger: number; icon: string } | null>(null);
   const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha'; title: string; desc: string; price: number } | null>(null);
   const renameCards = usePetStore(s => s.renameCards);
@@ -580,8 +600,10 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
                       const name = buyNameInput.trim();
                       if (!name || name.length < 1) { showShopToast('请输入名字'); return; }
                       if (name.length > 8) { showShopToast('名字最多 8 个字'); return; }
-                      const ok = buyPet(buyConfirm.speciesId, name);
-                      showShopToast(ok ? `成功领养「${name}」！` : '购买失败，请检查金币或是否已拥有。');
+                      const tier = getPetTier(buyConfirm.speciesId);
+                      const ok = spendCoins(buyConfirm.price);
+                      if (!ok) { showShopToast('金币不足，无法购买。'); setBuyConfirm(null); return; }
+                      setPendingHatch({ speciesId: buyConfirm.speciesId, petName: name, rarity: tier as HatchRarity });
                       setBuyConfirm(null);
                     }
                   }}
@@ -599,10 +621,13 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
                 onClick={() => {
                   const name = buyNameInput.trim();
                   if (!name) return;
-                  const ok = buyPet(buyConfirm.speciesId, name);
-                  showShopToast(ok ? `成功领养「${name}」！` : '购买失败，请检查金币或是否已拥有。');
+                  const tier = getPetTier(buyConfirm.speciesId);
+                  const ok = spendCoins(buyConfirm.price);
+                  if (!ok) { showShopToast('金币不足，无法购买。'); setBuyConfirm(null); return; }
+                  setPendingHatch({ speciesId: buyConfirm.speciesId, petName: name, rarity: tier as HatchRarity });
                   setBuyConfirm(null);
-                }}>
+                }}
+              >
                 确认购买 🪙 {buyConfirm.price}
               </button>
             </div>
@@ -669,9 +694,10 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
                       showShopToast('金币不足，无法购买。');
                     }
                   } else {
-                    const r = doGacha();
-                    if (r) { setGachaResult(r); }
-                    else { showShopToast('抽卡失败，请检查金币或今日次数。'); }
+                    const r = rollGacha();
+                    if (!r) { showShopToast('抽卡失败，请检查金币或今日次数。'); }
+                    else if (r.rarity === 'refund') { showShopToast('该池精灵已集齐，金币已退还。'); }
+                    else { setPendingHatch({ speciesId: r.item.speciesId!, petName: (r as any).autoName, rarity: r.rarity as HatchRarity }); }
                   }
                   setActionConfirm(null);
                 }}>
@@ -680,6 +706,26 @@ function ShopPanel({ coins, ownedPets, buyPet, spendCoins }: {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Hatch confirmation modal */}
+      {pendingHatch && (
+        <HatchConfirmModal
+          petName={pendingHatch.petName}
+          rarity={pendingHatch.rarity}
+          onStart={() => {
+            const egg = addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
+            startHatching(egg.eggId);
+            setTab('hatch');
+            setPendingHatch(null);
+          }}
+          onLater={() => {
+            const egg = addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
+            // Don't start hatching, student can start later from hatch tab
+            setPendingHatch(null);
+          }}
+          onClose={() => setPendingHatch(null)}
+        />
       )}
     </div>
   );

@@ -296,10 +296,13 @@ export const usePetStore = create<PetState>((set, get) => ({
     return '';
   },
 
-  doGacha: () => {
+  // Gacha: RNG + deduct coins, return result without buying pet
+  _rollGacha: () => {
     const s = get();
     const today = new Date().toISOString().slice(0, 10);
-    let { gachaDailyPulls, gachaDate, gachaPity } = s;
+    let gachaDailyPulls = s.gachaDailyPulls;
+    let gachaDate = s.gachaDate;
+    let gachaPity = s.gachaPity;
     if (gachaDate !== today) { gachaDailyPulls = 0; gachaDate = today; }
     if (gachaDailyPulls >= 5) return null;
     if (s.coins < 200) return null;
@@ -321,12 +324,10 @@ export const usePetStore = create<PetState>((set, get) => ({
     const pool = rarity === 'legendary' ? legends.length ? legends : rares :
                  rarity === 'rare' ? rares.length ? rares : commons : commons;
 
-    // Filter out already-owned pets
     const available = pool.filter(i => !get().isOwned(i.speciesId!));
     if (available.length === 0) {
-      // All pets in this pool are owned — refund
       set({ gachaDailyPulls, gachaDate: today, gachaPity: s.gachaPity, coins: s.coins });
-      return { item: pool[0], rarity: 'refund', pityBreak: false };
+      return { item: pool[0], rarity: 'refund' as const, pityBreak: false };
     }
 
     const item = available[Math.floor(Math.random() * available.length)];
@@ -334,11 +335,26 @@ export const usePetStore = create<PetState>((set, get) => ({
 
     const ownedNames = s.ownedPets.map(p => p.petName);
     const autoName = item.name + (ownedNames.includes(item.name) ? Math.floor(Math.random()*100).toString() : '');
-    if (!get().buyPet(item.speciesId!, autoName)) return null;
 
+    // Deduct coins but don't buy pet yet — hatching flow handles it
     set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 200 });
     get().save();
-    return { item, rarity, pityBreak: gachaPity === 0 && rarity !== 'common' };
+    return { item, rarity, autoName, pityBreak: gachaPity === 0 && rarity !== 'common' };
+  },
+
+  // Buy pet after hatching completes
+  claimHatchedPet: (speciesId: string, petName: string) => {
+    if (get().isOwned(speciesId)) return false;
+    return get().buyPet(speciesId, petName);
+  },
+
+  doGacha: () => {
+    const result = get()._rollGacha();
+    if (!result) return null;
+    if (result.rarity === 'refund') return { item: result.item, rarity: 'refund', pityBreak: false };
+    const r = result as any;
+    if (!get().buyPet(r.item.speciesId!, r.autoName)) return null;
+    return { item: r.item, rarity: r.rarity, pityBreak: r.pityBreak };
   },
 
   // ─── Training camp ───

@@ -192,3 +192,14 @@ export function getPetConfig(speciesId: string): { renderType: RenderType; model
 
   return null;
 }
+
+// Check if a pet's spritesheet needs remote download (not bundled)
+export function isRemotePet(speciesId: string): boolean {
+  if (STARTER_PETS.some(s => s.speciesId === speciesId)) return false;
+  return PET_TIERS[speciesId] === 'rare' || PET_TIERS[speciesId] === 'legendary';
+}
+
+export function getPetTier(speciesId: string): PetTier {
+  if (STARTER_PETS.some(s => s.speciesId === speciesId)) return 'common';
+  return PET_TIERS[speciesId] || 'common';
+}

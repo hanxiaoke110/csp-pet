@@ -1389,3 +1389,76 @@
 }
 .buy-confirm-actions .mode-btn { flex: 1; }
 .buy-confirm-actions .mode-btn-back { background: #f1f5f9 !important; color: var(--text) !important; }
+
+/* ─── Hatch Confirm Modal ─── */
+.hatch-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+.hatch-modal {
+  background: #fff; border-radius: 20px; padding: 32px; width: 360px;
+  text-align: center; position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hatch-modal-close {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none; font-size: 20px; color: #94a3b8; cursor: pointer;
+}
+.hatch-modal h3 { margin: 0 0 16px; font-size: 20px; }
+.hatch-egg-preview {
+  width: 100px; height: 100px; margin: 0 auto 16px;
+  border: 3px solid; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #fafbfc;
+}
+.hatch-rarity-badge {
+  display: inline-block; padding: 3px 14px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; border: 1px solid; margin-bottom: 8px;
+}
+.hatch-pet-name { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.hatch-duration { font-size: 14px; color: #64748b; margin-bottom: 12px; }
+.hatch-warning {
+  font-size: 12px; color: #f59e0b; background: #fef3c7; border-radius: 8px;
+  padding: 8px 12px; margin-bottom: 16px; line-height: 1.5;
+}
+.hatch-actions { display: flex; gap: 10px; justify-content: center; }
+
+/* ─── Hatch Panel ─── */
+.hatch-panel { padding: 10px; }
+.hatch-empty {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px 20px;
+}
+.hatch-badge {
+  display: inline-block; background: #ef4444; color: #fff;
+  border-radius: 10px; padding: 1px 7px; font-size: 11px; font-weight: 700;
+  margin-left: 4px; vertical-align: top;
+}
+.hatch-claimed-toast {
+  background: #dcfce7; color: #16a34a; padding: 10px 14px;
+  border-radius: 10px; font-size: 13px; font-weight: 600;
+  margin-bottom: 12px; text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+.egg-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; border-radius: 14px; margin-bottom: 10px;
+  background: #fff; transition: all 0.3s ease;
+}
+.egg-card.egg-ready {
+  background: #fefce8; border-color: #f59e0b !important;
+  box-shadow: 0 0 16px #fcd34d44 !important;
+}
+.egg-card.egg-failed {
+  opacity: 0.6; filter: grayscale(30%);
+}
+.egg-icon { font-size: 36px; min-width: 48px; text-align: center; }
+.egg-info { flex: 1; }
+.egg-name { font-size: 15px; font-weight: 600; }
+.egg-status-text { font-size: 12px; color: #64748b; margin-top: 2px; }
+.egg-actions { min-width: 80px; text-align: right; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
