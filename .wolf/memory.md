@@ -67,3 +67,33 @@
 
 ### 教练端完整按钮列表
 5 个按钮（无搜索框）：+ 课程管理 | 📥 导入 | 📤 导出 | ⭐ 优秀码 | 🏕️ 集训码
+
+## 发版流程
+
+### 常规发版
+1. 修改版本号：`src-tauri/tauri.conf.json` → `version`
+2. 提交代码 + 打 tag（如 `v1.1.0`）
+3. `git push origin main --tags`
+4. GitHub Actions 自动构建 → 自动创建 Gitee Release → 自动更新 update.json
+5. 学生 App 检测到新版本 → 点更新
+
+### 教练端发版
+1. 修改 `coach/manifest.json` → `version`
+2. `npm run build:coach`
+3. 提交 + 打 tag → push
+4. 教练重新加载 Chrome 扩展（`chrome://extensions/` → 刷新）
+
+### 新增精灵流程
+1. 用户提供精灵素材（PNG + JSON）
+2. 上传到 Gitee `pet-sprites-remote/2d/`（稀有/传说）或放到 `public/pet-sprites/2d/`（普通/初始）
+3. 修改 `src/types/pet.ts`：添加 speciesId、名字、`PET_TIERS` 分级
+4. 修改 `src/stores/petStore.ts`：加入商城/抽卡池（如需要）
+5. 重新发版（更新版本号 + tag + push）
+6. 学生更新 App 即可看到新精灵
+7. 稀有/传说精灵首次使用时自动孵化下载
+
+### 课程数据更新流程
+1. 教练端编辑课程 → 导出 lessons-coach.json
+2. 上传到 Gitee `public/course-data/`（更新 lessons.json + version.json）
+3. 学生 App 启动时自动检测更新 → 自动下载新课程数据
+4. 无需发新版
