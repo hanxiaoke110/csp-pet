@@ -132,6 +132,12 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'nailong', name: '奶龙·星心', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/nailong.json', description: '星光闪闪，爱你心满满', price: 200 },
   { speciesId: 'bellylaugh', name: '奶龙·笑肚', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/bellylaugh.json', description: '圆黄肚皮，眯眼坏笑', price: 200 },
   { speciesId: 'ali', name: '阿离', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/ali.json', description: 'Q版舞姬，白发折扇火蝶', price: 200 },
+  { speciesId: 'madara', name: '宇智波斑', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/madara.json', description: '黑发红眼，暗袍红甲', price: 200 },
+  { speciesId: 'obito', name: '带土', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/obito.json', description: '六道白袍，黑杖求道玉', price: 200 },
+  { speciesId: 'leafspark', name: '鸣人·幼年', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/leafspark.json', description: '金发蓝眼，橙色运动服', price: 200 },
+  { speciesId: 'garra', name: '我爱罗', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/garra.json', description: '红发沙葫芦，灰衣忍者', price: 200 },
+  { speciesId: 'liudao-ban', name: '六道斑', element: 'light', renderType: '2d', modelPath: '/pet-sprites/2d/liudao-ban.json', description: '银白长发，求道玉环', price: 200 },
+  { speciesId: 'naruto', name: '鸣人·疾风传', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/naruto.json', description: '金色尖发，永不放弃', price: 200 },
 ];
 
 export const PET_TIERS: Record<string, PetTier> = {
@@ -174,6 +180,12 @@ export const PET_TIERS: Record<string, PetTier> = {
   'nailong': 'legendary',
   'bellylaugh': 'legendary',
   'ali': 'rare',
+  'madara': 'rare',
+  'obito': 'legendary',
+  'leafspark': 'legendary',
+  'garra': 'rare',
+  'liudao-ban': 'legendary',
+  'naruto': 'rare',
 };
 
 function buildShop(): ShopItem[] {
