@@ -138,6 +138,8 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'garra', name: '我爱罗', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/garra.json', description: '红发沙葫芦，灰衣忍者', price: 200 },
   { speciesId: 'liudao-ban', name: '六道斑', element: 'light', renderType: '2d', modelPath: '/pet-sprites/2d/liudao-ban.json', description: '银白长发，求道玉环', price: 200 },
   { speciesId: 'naruto', name: '鸣人·疾风传', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/naruto.json', description: '金色尖发，永不放弃', price: 200 },
+  { speciesId: 'jotaro', name: '承太郎', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/jotaro.json', description: 'JOJO奇妙冒险，替身使者', price: 200 },
+  { speciesId: 'leo-ultraman', name: '雷欧奥特曼', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/leo-ultraman.json', description: '蓝胸灯奥特战士', price: 200 },
 ];
 
 export const PET_TIERS: Record<string, PetTier> = {
@@ -186,6 +188,8 @@ export const PET_TIERS: Record<string, PetTier> = {
   'garra': 'rare',
   'liudao-ban': 'legendary',
   'naruto': 'rare',
+  'jotaro': 'legendary',
+  'leo-ultraman': 'rare',
 };
 
 function buildShop(): ShopItem[] {
