@@ -131,6 +131,7 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'wanglin', name: '王林', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/wanglin.json', description: 'Q版修士，白银长发玄袍，冷静', price: 200 },
   { speciesId: 'nailong', name: '奶龙·星心', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/nailong.json', description: '星光闪闪，爱你心满满', price: 200 },
   { speciesId: 'bellylaugh', name: '奶龙·笑肚', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/bellylaugh.json', description: '圆黄肚皮，眯眼坏笑', price: 200 },
+  { speciesId: 'ali', name: '阿离', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/ali.json', description: 'Q版舞姬，白发折扇火蝶', price: 200 },
 ];
 
 export const PET_TIERS: Record<string, PetTier> = {
@@ -172,6 +173,7 @@ export const PET_TIERS: Record<string, PetTier> = {
   'wanglin': 'rare',
   'nailong': 'legendary',
   'bellylaugh': 'legendary',
+  'ali': 'rare',
 };
 
 function buildShop(): ShopItem[] {

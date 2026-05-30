@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { useEffect, useState } from 'react';
 import { listen, emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
+import { getCurrentWindow, LogicalSize } from '@tauri-apps/api/window';
 import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 import AppShell from './components/layout/AppShell';
 import CourseList from './components/courses/CourseList';
@@ -201,6 +202,29 @@ function App() {
   useEffect(() => {
     loadConfig();
     loadCourseData();
+
+    // Restore saved window size
+    const saved = localStorage.getItem('csp_window_size');
+    if (saved) {
+      try {
+        const { width, height } = JSON.parse(saved);
+        if (width > 400 && height > 300) {
+          getCurrentWindow().setSize(new LogicalSize(width, height));
+        }
+      } catch { /* ignore */ }
+    }
+  }, []);
+
+  // Save window size on resize (debounced)
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const unlisten = getCurrentWindow().onResized(({ payload: size }) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        localStorage.setItem('csp_window_size', JSON.stringify({ width: size.width, height: size.height }));
+      }, 500);
+    });
+    return () => { unlisten.then(fn => fn()); };
   }, []);
 
   async function loadCourseData() {
