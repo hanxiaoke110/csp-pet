@@ -143,3 +143,33 @@ curl -sL "https://github.com/hanxiaoke110/csp-pet/releases/download/vX.Y.Z/CSP._
 2. 上传到 Gitee `public/course-data/`（更新 lessons.json + version.json）
 3. 学生 App 启动时自动检测更新 → 自动下载新课程数据
 4. 无需发新版
+
+## 2026-05-30 — 签名修复 + 密钥迁移 (v1.2.1)
+
+### 问题
+v1.2.0 更新失败：「The signature could not be decoded」。`update.json` 中 3 个平台签名全部为空字符串。
+
+### 根因
+两层问题叠加：
+1. **密钥不匹配**：`.tauri/csp-updater.key`（OpenSSH 格式）的 pubkey 与 `tauri.conf.json` 里写死的 pubkey 是两对不同的密钥。真正配对的私钥锁在 GitHub Secrets 里，无法读取。
+2. **CI 签名命令错误**：`release.yml` 中 `sign_file()` 用了 `--private-key /tmp/privkey`，但 `--private-key` 接收的是**字符串**而非文件路径。正确用法是 `--private-key "$PRIVKEY"` 或 `--private-key-path`。
+
+### 修复
+1. 重新生成密钥对（minisign 格式）
+2. `tauri.conf.json` 更新 pubkey → 版本 1.2.1
+3. CI `release.yml` 中签名命令改为 `--private-key "$PRIVKEY"`
+4. GitHub Secret `TAURI_UPDATER_PRIVKEY` 更新为新私钥
+5. 新密钥保存到 `~/.tauri/csp-updater-v2.key`，不再丢失
+
+### 发版流程优化
+CI 只负责构建 + GitHub Release + 推 update.json 到 Gitee。
+Gitee 大文件上传 CI 做不了（跨境超时），改为本地操作：
+```bash
+export GITEE_TOKEN="b346a4706f8c8ee823ab9e8377d1173c"  # 已在 ~/.zshrc
+```
+本地签名 + 推 update.json 到 Gitee，秒传。
+
+### 特殊操作
+- 旧版 App（v0.x, v1.x）无法自动更新到 v1.2.1（pubkey 变了），需手动下载安装一次
+- 之后所有更新全自动
+- Gitee git remote 带 token：`https://hanliuliu110:TOKEN@gitee.com/hanliuliu110/csp-pet.git`

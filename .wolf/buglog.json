@@ -69,6 +69,13 @@
       "root_cause": "appDataDir() 返回路径无尾部 '/'（如 .../com.csp.desktop-pet），代码写成 ${base}${CACHE_SUBDIR} 少了一个 /，结果路径变成 .../com.csp.desktop-petpet-sprites/2d",
       "fix": "改为 ${base}/${CACHE_SUBDIR}。更安全的做法是使用 @tauri-apps/api/path 的 join() 函数",
       "tags": ["path-join", "appDataDir", "trailing-slash"]
+    },
+    {
+      "date": "2026-05-30",
+      "error_message": "更新失败：The signature Bk1hlRjVhpYJnlC0bwzL3nA1R5jEWIrp68EHlwRceSw= could not be decoded",
+      "root_cause": "两层问题：(1) CI release.yml 签名命令用了 --private-key /tmp/privkey，但该 flag 接收字符串而非文件路径，应改用 --private-key \"$PRIVKEY\" 或 --private-key-path；(2) .tauri/ 下的密钥对与 tauri.conf.json 中的 pubkey 不匹配，是两对不同的密钥",
+      "fix": "重新生成密钥对(minisign)、更新 pubkey、修复 CI 签名命令、私钥存 GitHub Secrets + ~/.tauri/csp-updater-v2.key。旧版 App 需手动安装一次 v1.2.1，之后全自动",
+      "tags": ["signing", "updater", "pubkey", "tauri-v2", "ci"]
     }
   ]
 }
