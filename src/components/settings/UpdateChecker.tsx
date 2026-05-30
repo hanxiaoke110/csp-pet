@@ -4,6 +4,7 @@ import { getVersion } from '@tauri-apps/api/app';
 import { openUrl } from '@tauri-apps/plugin-opener';
 
 const GITEE_RELEASES = 'https://gitee.com/hanliuliu110/csp-pet/releases';
+const DOWNLOAD_PAGE = 'https://gitee.com/hanliuliu110/csp-pet/raw/main/public/download.html';
 
 function isMac(): boolean {
   return navigator.userAgent.includes('Mac');
@@ -43,8 +44,8 @@ export default function UpdateChecker() {
   const doUpdate = async () => {
     if (!update) return;
     if (isMac()) {
-      await openUrl(GITEE_RELEASES);
-      setError('已打开下载页面，请手动下载安装');
+      await openUrl(DOWNLOAD_PAGE);
+      setError('已打开下载页面');
     } else {
       setDownloading(true);
       try {

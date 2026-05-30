@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSP 学习助手 - 下载</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .card { background: white; border-radius: 16px; padding: 40px; max-width: 480px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
+  h1 { font-size: 24px; margin-bottom: 8px; }
+  .version { color: #7c3aed; font-weight: 600; margin-bottom: 24px; }
+  .btn { display: block; width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; font-size: 15px; cursor: pointer; text-decoration: none; color: #1e293b; transition: all 0.2s; }
+  .btn:hover { border-color: #7c3aed; background: #f5f3ff; }
+  .btn .platform { font-weight: 600; display: block; }
+  .btn .detail { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+  .note { margin-top: 20px; font-size: 12px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>CSP 学习助手</h1>
+  <p class="version" id="ver">最新版本</p>
+  <a class="btn" id="btn-mac-arm" href="#">
+    <span class="platform">macOS Apple Silicon</span>
+    <span class="detail">M1/M2/M3 Mac</span>
+  </a>
+  <a class="btn" id="btn-mac-intel" href="#">
+    <span class="platform">macOS Intel</span>
+    <span class="detail">旧款 Intel Mac</span>
+  </a>
+  <a class="btn" id="btn-win" href="#">
+    <span class="platform">Windows 64位</span>
+    <span class="detail">Windows 10/11</span>
+  </a>
+  <p class="note">下载后打开安装包即可安装</p>
+</div>
+<script>
+const BASE = 'https://gitee.com/hanliuliu110/csp-pet/releases/download';
+fetch('https://gitee.com/hanliuliu110/csp-pet/raw/master/update.json')
+  .then(r => r.json())
+  .then(data => {
+    const v = data.version;
+    document.getElementById('ver').textContent = 'v' + v;
+    const short = v.replace(/\./g, '');
+    document.getElementById('btn-mac-arm').href = `${BASE}/v${v}/csp-v${short}-arm.dmg`;
+    document.getElementById('btn-mac-intel').href = `${BASE}/v${v}/csp-v${short}-intel.dmg`;
+    document.getElementById('btn-win').href = `${BASE}/v${v}/csp-v${short}-win.exe`;
+  })
+  .catch(() => {
+    document.getElementById('ver').textContent = '请打开 Gitee Releases 查看';
+  });
+</script>
+</body>
+</html>
