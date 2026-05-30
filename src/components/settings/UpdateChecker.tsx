@@ -85,7 +85,7 @@ export default function UpdateChecker() {
               <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {Object.entries(links).map(([name, url]) => (
                   <button key={name} className="mode-btn"
-                    onClick={() => openUrl(url)}
+                    onClick={() => openUrl(url as string)}
                     style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0', fontSize: 13, padding: '10px 16px' }}>
                     {name}
                   </button>
