@@ -21,6 +21,7 @@
 - `.app.tar.gz` 比 `.dmg` 更适合 Tauri updater（gzip 原生支持）
 - 版本号用 `@tauri-apps/api/app` 的 `getVersion()`，不要用不存在的 `/version` 接口
 - Gitee 仓库附件总配额 1GB，不发版时清理旧 Release
+- 新增精灵需要同时做：spritesheet → Gitee + preview → public/ + pet.ts 配置，缺一不可
 
 ## Do-Not-Repeat
 - **绝不**: Promise 链只用 `.then()` 不加 `.catch()` — 错误会被静默吞掉
@@ -33,3 +34,4 @@
 - **绝不**: Tauri 签名后的文件改名 — 签名内嵌了原始文件名，改名就验签失败
 - **绝不**: macOS 更新用 Gitee Release 下载 URL — 多级 302 重定向 Tauri updater 处理不了
 - **绝不**: 用 `fetch('/version')` 取版本号 — 该接口不存在，用 `getVersion()`
+- **绝不**: 新增精灵只上传 spritesheet 不生成 preview — 商城和智子都会白屏

@@ -100,6 +100,13 @@
     },
     {
       "date": "2026-05-30",
+      "error_message": "奶龙·星心、奶龙·笑肚、王林 商城和智子界面显示白色无图",
+      "root_cause": "新增精灵时只上传了 spritesheet 到 Gitee + 修改 pet.ts，但忘记生成 public/pet-sprites/previews/{id}.png 缩略图",
+      "fix": "从 spritesheet 第一帧 crop(0,0,192,208) → resize(48,52) 生成 preview 放入 public/pet-sprites/previews/",
+      "tags": ["preview", "thumbnail", "add-pet", "checklist"]
+    },
+    {
+      "date": "2026-05-30",
       "error_message": "课程数据远程更新静默失败（学生永远不会收到课程更新）",
       "root_cause": "App.tsx 中用浏览器 fetch 请求 Gitee raw URL（public/course-data/version.json），Tauri WebView 中 CORS 拦截。外层 try {} catch {} 静默吞掉错误，fallback 到内置旧课程数据",
       "fix": "Gitee URL 改用 @tauri-apps/plugin-http 的 fetch（Rust 后端绕过 CORS），本地打包文件继续用浏览器 fetch",

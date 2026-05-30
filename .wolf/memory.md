@@ -129,14 +129,33 @@ curl -sL "https://github.com/hanxiaoke110/csp-pet/releases/download/vX.Y.Z/CSP._
 3. 提交 + 打 tag → push
 4. 教练重新加载 Chrome 扩展（`chrome://extensions/` → 刷新）
 
-### 新增精灵流程
-1. 用户提供精灵素材（PNG + JSON）
-2. 上传到 Gitee `pet-sprites-remote/2d/`（稀有/传说）或放到 `public/pet-sprites/2d/`（普通/初始）
-3. 修改 `src/types/pet.ts`：添加 speciesId、名字、`PET_TIERS` 分级
-4. 修改 `src/stores/petStore.ts`：加入商城/抽卡池（如需要）
-5. 重新发版（更新版本号 + tag + push）
-6. 学生更新 App 即可看到新精灵
-7. 稀有/传说精灵首次使用时自动孵化下载
+### 新增精灵流程（完整版 — 严格按顺序执行）
+
+```
+素材: pet素材/xxx.zip (含 pet.json + spritesheet.webp)
+      ↓
+① 解压 → 读 pet.json 获取 id、名字、描述
+② webp → png  (sips -s format png in.webp --out out.png)
+③ 生成帧元数据 pet-sprites-remote/2d/{id}.json
+   - 1536x1872 → frameWidth:192 frameHeight:208 maxFrames:8
+   - 7 动画: idle(6) walk(8) sleep(6) celebrate(4) think(6) eat(5) unhappy(8)
+④ 生成预览图 public/pet-sprites/previews/{id}.png
+   - 取第一帧 (0,0,192,208) → 缩放到 48×52
+   - Python: img.crop((0,0,192,208)).resize((48,52), NEAREST)
+⑤ 复制到 pet-sprites-remote/2d/{id}.png + {id}.json
+⑥ 修改 src/types/pet.ts:
+   - PETDEX_PETS 添加 speciesId、name、element、description
+   - PET_TIERS 添加 speciesId → 'rare' 或 'legendary'
+⑦ git add + commit + push gitee main
+   (push 后精灵文件即可被 App 下载，无需等发版)
+⑧ 发版时以上改动随 App 一起打包
+```
+
+**⚠️ 常见遗漏**：
+- 忘记生成 preview → 商城/智子界面白色无图
+- 忘记 push 精灵文件到 Gitee → 孵化下载 404
+- 忘记更新 PET_TIERS → `isRemotePet()` 返回 false，走 bundled 路径
+- spritesheet 不是 1536×1872 → 帧元数据需要重新计算
 
 ### 课程数据更新流程
 1. 教练端编辑课程 → 导出 lessons-coach.json
