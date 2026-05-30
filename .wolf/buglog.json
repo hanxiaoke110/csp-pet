@@ -79,6 +79,27 @@
     },
     {
       "date": "2026-05-30",
+      "error_message": "macOS 更新失败：invalid gzip header",
+      "root_cause": "Gitee 上传时改了文件名（csp-v122-arm.dmg），但 Tauri minisign 签名内嵌了原始文件名（CSP 学习助手_1.2.2_aarch64.dmg），文件名不匹配导致验签失败",
+      "fix": "上传到 Gitee 的文件名必须与 CI 构建时的原始文件名一致。或者本地重新签名使用新文件名",
+      "tags": ["signing", "filename", "minisign", "gitee", "tauri-v2"]
+    },
+    {
+      "date": "2026-05-30",
+      "error_message": "macOS 更新下载卡住/404（Gitee Release URL 多级跳转）",
+      "root_cause": "Gitee Release 下载链：releases/download → 302 → attach_files/download → 302 → foruda.gitee.com?token=。Tauri macOS updater HTTP 客户端无法正确处理 2 次 302 跳转",
+      "fix": "待验证方案：换 .app.tar.gz 格式 + 用不跳转的下载源（如直接 raw URL 或自建服务器）。Windows 不受影响",
+      "tags": ["gitee", "redirect", "302", "tauri-v2", "updater", "macos"]
+    },
+    {
+      "date": "2026-05-30",
+      "error_message": "版本号始终显示 v0.1.0（实际已是 v1.2.1）",
+      "root_cause": "UpdateChecker.tsx 用 fetch('/version') 取版本号，但该接口在 Tauri v2 中不存在（/version 不是内置路由），fallback 到 '0.1.0'",
+      "fix": "改用 @tauri-apps/api/app 的 getVersion() 函数",
+      "tags": ["version", "display", "tauri-v2", "ui"]
+    },
+    {
+      "date": "2026-05-30",
       "error_message": "课程数据远程更新静默失败（学生永远不会收到课程更新）",
       "root_cause": "App.tsx 中用浏览器 fetch 请求 Gitee raw URL（public/course-data/version.json），Tauri WebView 中 CORS 拦截。外层 try {} catch {} 静默吞掉错误，fallback 到内置旧课程数据",
       "fix": "Gitee URL 改用 @tauri-apps/plugin-http 的 fetch（Rust 后端绕过 CORS），本地打包文件继续用浏览器 fetch",

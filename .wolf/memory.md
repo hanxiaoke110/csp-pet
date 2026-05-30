@@ -181,3 +181,33 @@ export GITEE_TOKEN="b346a4706f8c8ee823ab9e8377d1173c"  # 已在 ~/.zshrc
 
 ### 修复
 Gitee URL 改用 `@tauri-apps/plugin-http` 的 `fetch`（Rust 后端发请求绕过 CORS），本地打包文件继续用浏览器 `fetch`。
+
+## 2026-05-30 — macOS 更新调试经验（重要）
+
+### 背景
+Windows 更新正常，macOS 反复失败。经过多轮排查找到 3 个独立问题。
+
+### Bug 1: 签名中嵌入文件名
+Tauri 签名（minisign 格式）包含原文件名：
+```
+trusted comment: timestamp:1780107621    file:CSP 学习助手_1.2.2_aarch64.dmg
+```
+上传时改名为 `csp-v122-arm.dmg` 导致文件名不匹配 → 验签失败 → "invalid gzip header"。
+
+修复：上传文件名必须与 CI 构建时的原始文件名一致，不能改。或者本地重新签名用新文件名。
+
+### Bug 2: Gitee Release 下载 URL 多次 302 跳转
+Gitee Release 下载链：`gitee.com/releases/download/...` → 302 → `gitee.com/attach_files/.../download` → 302 → `foruda.gitee.com/attach_file/...?token=...`。Tauri updater macOS 端 HTTP 客户端无法正确处理这 2 次跳转，下载卡死。
+
+Windows 不受影响（可能 Windows updater 的 HTTP 栈处理跳转不同）。
+
+### Bug 3: 版本号显示 `v0.1.0`
+`UpdateChecker.tsx` 用 `fetch('/version')` 获取版本号，但该接口不存在（fallback `'0.1.0'`）。应改用 `@tauri-apps/api/app` 的 `getVersion()`。
+
+### 关键经验
+- Tauri 签名后**文件名不能改**
+- Gitee Release 不适合做 Tauri macOS 更新下载源（多次 302）
+- DMG 格式可能不如 `.app.tar.gz` 稳定（tar.gz 是 Tauri updater 原生格式）
+- 每次发版前先在本地起 HTTP 服务验证更新流程
+- Gitee 仓库附件配额 1GB，超出需删除旧 Release
+- 版本显示不要用 `/version` 这种不存在的接口，用 `getVersion()`
