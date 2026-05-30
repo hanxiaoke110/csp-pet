@@ -129,6 +129,8 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'jett', name: 'Jett', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/jett.json', description: '风系战术决斗者，快如闪电', price: 200 },
   { speciesId: 'gameboy', name: '电玩小子', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/gameboy.json', description: '王者荣耀电玩小子，像素街机风', price: 200 },
   { speciesId: 'wanglin', name: '王林', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/wanglin.json', description: 'Q版修士，白银长发玄袍，冷静', price: 200 },
+  { speciesId: 'nailong', name: '奶龙·星心', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/nailong.json', description: '星光闪闪，爱你心满满', price: 200 },
+  { speciesId: 'bellylaugh', name: '奶龙·笑肚', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/bellylaugh.json', description: '圆黄肚皮，眯眼坏笑', price: 200 },
 ];
 
 export const PET_TIERS: Record<string, PetTier> = {
@@ -168,6 +170,8 @@ export const PET_TIERS: Record<string, PetTier> = {
   'gameboy': 'rare',
   'weilong': 'legendary',
   'wanglin': 'rare',
+  'nailong': 'legendary',
+  'bellylaugh': 'legendary',
 };
 
 function buildShop(): ShopItem[] {
