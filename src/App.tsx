@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { useEffect, useState } from 'react';
 import { listen, emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
+import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 import AppShell from './components/layout/AppShell';
 import CourseList from './components/courses/CourseList';
 import AIChat from './components/ai/AIChat';
@@ -207,17 +208,17 @@ function App() {
       let stages: Stage[] = [];
       let lessons: Lesson[] = [];
 
-      // 1. Try remote update first
+      // 1. Try remote update first (use Tauri HTTP plugin to bypass CORS)
       const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
       try {
-        const verResp = await fetch(`${REMOTE_BASE}/version.json`, { cache: 'no-cache' });
+        const verResp = await tauriFetch(`${REMOTE_BASE}/version.json`, { connectTimeout: 15_000 });
         if (verResp.ok) {
           const remoteVer = await verResp.json();
           const localVer = parseInt(localStorage.getItem('csp_data_version') || '0');
           if (remoteVer.version > localVer) {
             const [stagesResp, lessonsResp] = await Promise.all([
-              fetch(`${REMOTE_BASE}/stages.json`, { cache: 'no-cache' }),
-              fetch(`${REMOTE_BASE}/lessons.json`, { cache: 'no-cache' }),
+              tauriFetch(`${REMOTE_BASE}/stages.json`, { connectTimeout: 15_000 }),
+              tauriFetch(`${REMOTE_BASE}/lessons.json`, { connectTimeout: 15_000 }),
             ]);
             if (stagesResp.ok && lessonsResp.ok) {
               const remoteStages = await stagesResp.json();
