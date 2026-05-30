@@ -96,7 +96,7 @@ jobs:
           sign_file() {
             local f="$1"
             if [ -n "$f" ] && [ -f "$f" ]; then
-              npx @tauri-apps/cli signer sign --private-key /tmp/privkey --password "" "$f" 2>/dev/null || true
+              npx @tauri-apps/cli signer sign --private-key "$PRIVKEY" --password "" "$f" 2>/dev/null || true
               local sigfile="${f}.sig"
               if [ -f "$sigfile" ]; then cat "$sigfile"; else echo ""; fi
             else
