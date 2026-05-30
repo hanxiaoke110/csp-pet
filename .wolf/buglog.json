@@ -76,6 +76,13 @@
       "root_cause": "两层问题：(1) CI release.yml 签名命令用了 --private-key /tmp/privkey，但该 flag 接收字符串而非文件路径，应改用 --private-key \"$PRIVKEY\" 或 --private-key-path；(2) .tauri/ 下的密钥对与 tauri.conf.json 中的 pubkey 不匹配，是两对不同的密钥",
       "fix": "重新生成密钥对(minisign)、更新 pubkey、修复 CI 签名命令、私钥存 GitHub Secrets + ~/.tauri/csp-updater-v2.key。旧版 App 需手动安装一次 v1.2.1，之后全自动",
       "tags": ["signing", "updater", "pubkey", "tauri-v2", "ci"]
+    },
+    {
+      "date": "2026-05-30",
+      "error_message": "课程数据远程更新静默失败（学生永远不会收到课程更新）",
+      "root_cause": "App.tsx 中用浏览器 fetch 请求 Gitee raw URL（public/course-data/version.json），Tauri WebView 中 CORS 拦截。外层 try {} catch {} 静默吞掉错误，fallback 到内置旧课程数据",
+      "fix": "Gitee URL 改用 @tauri-apps/plugin-http 的 fetch（Rust 后端绕过 CORS），本地打包文件继续用浏览器 fetch",
+      "tags": ["cors", "fetch", "course-data", "gitee", "silent-failure"]
     }
   ]
 }

@@ -173,3 +173,11 @@ export GITEE_TOKEN="b346a4706f8c8ee823ab9e8377d1173c"  # 已在 ~/.zshrc
 - 旧版 App（v0.x, v1.x）无法自动更新到 v1.2.1（pubkey 变了），需手动下载安装一次
 - 之后所有更新全自动
 - Gitee git remote 带 token：`https://hanliuliu110:TOKEN@gitee.com/hanliuliu110/csp-pet.git`
+
+## 2026-05-30 — 课程数据远程更新 CORS 修复
+
+### 问题
+`App.tsx` 中用浏览器 `fetch` 请求 Gitee raw URL（`/public/course-data/version.json`），在 Tauri WebView 中被 CORS 拦截。外层 `try {} catch {}` 静默吞掉错误，学生永远拿不到课程更新。
+
+### 修复
+Gitee URL 改用 `@tauri-apps/plugin-http` 的 `fetch`（Rust 后端发请求绕过 CORS），本地打包文件继续用浏览器 `fetch`。
