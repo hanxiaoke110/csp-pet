@@ -3,11 +3,18 @@ import { check, type Update } from '@tauri-apps/plugin-updater';
 import { getVersion } from '@tauri-apps/api/app';
 import { openUrl } from '@tauri-apps/plugin-opener';
 
-const GITEE_RELEASES = 'https://gitee.com/hanliuliu110/csp-pet/releases';
-const DOWNLOAD_PAGE = 'https://gitee.com/hanliuliu110/csp-pet/raw/main/public/download.html';
-
 function isMac(): boolean {
   return navigator.userAgent.includes('Mac');
+}
+
+function buildUrls(version: string) {
+  const short = version.replace(/\./g, '');
+  const base = `https://gitee.com/hanliuliu110/csp-pet/releases/download/v${version}`;
+  return {
+    'macOS Apple Silicon': `${base}/csp-v${short}-arm.dmg`,
+    'macOS Intel': `${base}/csp-v${short}-intel.dmg`,
+    'Windows 64位': `${base}/csp-v${short}-win.exe`,
+  };
 }
 
 export default function UpdateChecker() {
@@ -16,6 +23,7 @@ export default function UpdateChecker() {
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState('');
   const [version, setVersion] = useState('');
+  const [showLinks, setShowLinks] = useState(false);
 
   useEffect(() => {
     getVersion()
@@ -44,8 +52,7 @@ export default function UpdateChecker() {
   const doUpdate = async () => {
     if (!update) return;
     if (isMac()) {
-      await openUrl(DOWNLOAD_PAGE);
-      setError('已打开下载页面');
+      setShowLinks(!showLinks);
     } else {
       setDownloading(true);
       try {
@@ -57,6 +64,8 @@ export default function UpdateChecker() {
     }
   };
 
+  const links = update ? buildUrls(update.version) : {};
+
   return (
     <div className="settings-section">
       <h3>🔄 版本更新</h3>
@@ -67,10 +76,24 @@ export default function UpdateChecker() {
 
       <div className="settings-form">
         {update ? (
-          <button className="mode-btn" onClick={doUpdate} disabled={downloading}
-            style={{ background: '#7c3aed' }}>
-            {downloading ? '下载中...' : isMac() ? `前往下载 v${update.version}` : `更新到 v${update.version}`}
-          </button>
+          <>
+            <button className="mode-btn" onClick={doUpdate} disabled={downloading}
+              style={{ background: '#7c3aed' }}>
+              {downloading ? '下载中...' : isMac() ? `获取 v${update.version}` : `更新到 v${update.version}`}
+            </button>
+            {isMac() && showLinks && (
+              <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {Object.entries(links).map(([name, url]) => (
+                  <button key={name} className="mode-btn"
+                    onClick={() => openUrl(url)}
+                    style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0', fontSize: 13, padding: '10px 16px' }}>
+                    {name}
+                  </button>
+                ))}
+                <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>点击上方按钮下载，完成后打开安装包即可</p>
+              </div>
+            )}
+          </>
         ) : (
           <button className="mode-btn" onClick={checkUpdate} disabled={checking}>
             {checking ? '检查中...' : '检查更新'}
