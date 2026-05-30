@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import { check, type Update } from '@tauri-apps/plugin-updater';
 import { getVersion } from '@tauri-apps/api/app';
+import { openUrl } from '@tauri-apps/plugin-opener';
+
+const GITEE_RELEASES = 'https://gitee.com/hanliuliu110/csp-pet/releases';
+
+function isMac(): boolean {
+  return navigator.userAgent.includes('Mac');
+}
 
 export default function UpdateChecker() {
   const [update, setUpdate] = useState<Update | null>(null);
@@ -35,13 +42,17 @@ export default function UpdateChecker() {
 
   const doUpdate = async () => {
     if (!update) return;
-    setDownloading(true);
-    try {
-      await update.downloadAndInstall();
-      // App will restart automatically after install
-    } catch (e) {
-      setError('更新失败：' + String(e));
-      setDownloading(false);
+    if (isMac()) {
+      await openUrl(GITEE_RELEASES);
+      setError('已打开下载页面，请手动下载安装');
+    } else {
+      setDownloading(true);
+      try {
+        await update.downloadAndInstall();
+      } catch (e) {
+        setError('更新失败：' + String(e));
+        setDownloading(false);
+      }
     }
   };
 
@@ -57,7 +68,7 @@ export default function UpdateChecker() {
         {update ? (
           <button className="mode-btn" onClick={doUpdate} disabled={downloading}
             style={{ background: '#7c3aed' }}>
-            {downloading ? '下载中...' : `更新到 v${update.version}`}
+            {downloading ? '下载中...' : isMac() ? `前往下载 v${update.version}` : `更新到 v${update.version}`}
           </button>
         ) : (
           <button className="mode-btn" onClick={checkUpdate} disabled={checking}>
