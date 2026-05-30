@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { check, type Update } from '@tauri-apps/plugin-updater';
+import { getVersion } from '@tauri-apps/api/app';
 
 export default function UpdateChecker() {
   const [update, setUpdate] = useState<Update | null>(null);
@@ -9,11 +10,9 @@ export default function UpdateChecker() {
   const [version, setVersion] = useState('');
 
   useEffect(() => {
-    // Get current version from Tauri package info
-    fetch('/version')
-      .then(r => r.json())
-      .then(d => setVersion(d.version || '0.1.0'))
-      .catch(() => setVersion('0.1.0'));
+    getVersion()
+      .then(v => setVersion(v))
+      .catch(() => setVersion('0.0.0'));
   }, []);
 
   const checkUpdate = async () => {
