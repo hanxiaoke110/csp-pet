@@ -89,8 +89,30 @@ function isLastWeekOfMonth(): boolean {
 function loadState() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : {};
-  } catch { return {}; }
+    if (!saved) {
+      // Fall back to temp backup (crash recovery)
+      const tmp = localStorage.getItem(STORAGE_KEY + '_tmp');
+      if (tmp) {
+        localStorage.setItem(STORAGE_KEY, tmp);
+        localStorage.removeItem(STORAGE_KEY + '_tmp');
+        return JSON.parse(tmp);
+      }
+      return {};
+    }
+    return JSON.parse(saved);
+  } catch {
+    // JSON corrupted — try temp backup
+    try {
+      const tmp = localStorage.getItem(STORAGE_KEY + '_tmp');
+      if (tmp) {
+        const data = JSON.parse(tmp);
+        localStorage.setItem(STORAGE_KEY, tmp);
+        localStorage.removeItem(STORAGE_KEY + '_tmp');
+        return data;
+      }
+    } catch { /* unrecoverable */ }
+    return {};
+  }
 }
 
 export const useQuizStore = create<QuizState>((set, get) => {
@@ -267,22 +289,28 @@ export const useQuizStore = create<QuizState>((set, get) => {
     },
 
     save: () => {
-      const s = get();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        errors: s.errors,
-        kpStats: s.kpStats,
-        extraChallengeCount: s.extraChallengeCount,
-        lastReviewDate: s.lastReviewDate,
-        lastReviewCorrect: s.lastReviewCorrect,
-        lastReviewTotal: s.lastReviewTotal,
-        lastSuperDate: s.lastSuperDate,
-        superCompletions: s.superCompletions,
-        superBestScore: s.superBestScore,
-        totalPractice: s.totalPractice,
-        totalCorrect: s.totalCorrect,
-        weeklyCompletions: s.weeklyCompletions,
-        weeklyPerfects: s.weeklyPerfects,
-      }));
+      try {
+        const s = get();
+        const json = JSON.stringify({
+          errors: s.errors,
+          kpStats: s.kpStats,
+          extraChallengeCount: s.extraChallengeCount,
+          lastReviewDate: s.lastReviewDate,
+          lastReviewCorrect: s.lastReviewCorrect,
+          lastReviewTotal: s.lastReviewTotal,
+          lastSuperDate: s.lastSuperDate,
+          superCompletions: s.superCompletions,
+          superBestScore: s.superBestScore,
+          totalPractice: s.totalPractice,
+          totalCorrect: s.totalCorrect,
+          weeklyCompletions: s.weeklyCompletions,
+          weeklyPerfects: s.weeklyPerfects,
+        });
+        // Write to temp key first, then swap — reduces corruption risk on crash
+        localStorage.setItem(STORAGE_KEY + '_tmp', json);
+        localStorage.setItem(STORAGE_KEY, json);
+        localStorage.removeItem(STORAGE_KEY + '_tmp');
+      } catch { /* quota exceeded or filesystem error */ }
     },
   };
 });
