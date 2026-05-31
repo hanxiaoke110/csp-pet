@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
-import { emit } from '@tauri-apps/api/event';
+import { emit, listen } from '@tauri-apps/api/event';
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
 import { useHatchStore } from '../../stores/hatchStore';
 import type { HatchRarity } from '../../stores/hatchStore';
@@ -42,6 +42,14 @@ export default function PetPanel() {
   useEffect(() => {
     if (searchParams.get('tab') === 'shop') setTab('shop');
   }, [searchParams]);
+
+  // Listen for visibility toggle from pet window action bar
+  useEffect(() => {
+    const unlisten = listen('pet-visibility-toggled', () => {
+      setPetWinVisible(prev => !prev);
+    });
+    return () => { unlisten.then(fn => fn()); };
+  }, []);
 
   // Listen for tab switch from pet window
   useEffect(() => {

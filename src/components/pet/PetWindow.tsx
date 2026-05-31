@@ -284,7 +284,7 @@ export default function PetWindow() {
             {[
               { icon: '📂', label: '窗口', action: () => emit('pet-action', { action: 'open-window' }).catch(() => {}) },
               { icon: '🛒', label: '商城', action: () => emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}) },
-              { icon: '👁️', label: '隐藏', action: () => invoke('toggle_pet_window').catch(() => {}) },
+              { icon: '👁️', label: '隐藏', action: () => { invoke('toggle_pet_window').catch(() => {}); emit('pet-visibility-toggled', {}).catch(() => {}); } },
             ].map(btn => (
               <button key={btn.label} onClick={(e) => { e.stopPropagation(); btn.action(); }}
                 style={{
