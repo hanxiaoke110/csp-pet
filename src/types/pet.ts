@@ -140,6 +140,11 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'naruto', name: '鸣人·疾风传', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/naruto.json', description: '金色尖发，永不放弃', price: 200 },
   { speciesId: 'jotaro', name: '承太郎', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/jotaro.json', description: 'JOJO奇妙冒险，替身使者', price: 200 },
   { speciesId: 'leo-ultraman', name: '雷欧奥特曼', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/leo-ultraman.json', description: '蓝胸灯奥特战士', price: 200 },
+  { speciesId: 'steve', name: '史蒂夫', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/steve.json', description: '方块冒险者，像素沙盒风', price: 200 },
+  { speciesId: 'steve-mc', name: 'Steve', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/steve-mc.json', description: '经典Minecraft史蒂夫，挖矿打盹骑猪', price: 200 },
+  { speciesId: 'akaza', name: '猗窝座', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/akaza.json', description: '鬼灭之刃 Q版武斗风', price: 200 },
+  { speciesId: 'tendou-alice', name: '天童爱丽丝', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/tendou-alice.json', description: '蔚蓝档案 萌系女仆光环', price: 200 },
+  { speciesId: 'df-maixiaoshu', name: '麦小鼠', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/df-maixiaoshu.json', description: '机械守护鼠，可爱金属伙伴', price: 200 },
 ];
 
 export const PET_TIERS: Record<string, PetTier> = {
@@ -190,6 +195,11 @@ export const PET_TIERS: Record<string, PetTier> = {
   'naruto': 'rare',
   'jotaro': 'legendary',
   'leo-ultraman': 'rare',
+  'steve': 'legendary',
+  'steve-mc': 'rare',
+  'akaza': 'rare',
+  'tendou-alice': 'legendary',
+  'df-maixiaoshu': 'legendary',
 };
 
 function buildShop(): ShopItem[] {
