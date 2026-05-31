@@ -1,10 +1,19 @@
 {
-  "version": "1.2.8",
-  "notes": "修复孵化蛋重启消失 + 答题进度丢失 + 防崩溃损坏",
-  "pub_date": "2026-05-31T06:40:00Z",
+  "version": "1.2.9",
+  "notes": "Release v1.2.9 - 详见 Gitee Releases",
+  "pub_date": "2026-05-31T08:08:43Z",
   "platforms": {
-    "darwin-aarch64":  { "signature": "", "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.8/csp-v128-arm.dmg" },
-    "darwin-x86_64":   { "signature": "", "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.8/csp-v128-intel.dmg" },
-    "windows-x86_64":  { "signature": "", "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.8/csp-v128-win.exe" }
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzVwNXV4dzdqeXFwUkg3QzZiOFQxY0hmTzY1eENONi92N2RlelJIdWp5K21CVWJQeTYyMW15ekxmZDkxck53NTNBcHlyV1htbm1ucTAwVFhjKy8rQ2cwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMjE0OTE0CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjIuOV9hYXJjaDY0LmRtZwpzTlo1c2VlSEZWem1sWFpQdkNKMmhvOWNsQTZ1SFVqcGlxRGgwcU1wdTB3ZWoxaWprQnRuemY4RXg3NWhZZmJFSkRvd2kwNWdiWHhYUzRLalNleDZBZz09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.9/csp-v129-arm.dmg"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3hMa25Ib01EQmx1VXF6eU5lYk9kSW8xZW5zZWswTll4eVhGUkZ6cXA5MXBjdklrVzJvUGZXNlJvbHQxNnJIZ2Z3bUloRmgwN2VGZS9oYzlWR1FYK0F3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMjE0OTE1CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjIuOV94NjQuZG1nCk5jTnRiakVrUGRWSkpZRFNhdFd3alBGbnh5YTI0U2VWMGozM1BwYnhmMlg2cUVQMUVoMzd4cTVsaERCcDF6S0ZYN3NIVzZ5VDV3YU05WGF4UlhqakNBPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.9/csp-v129-intel.dmg"
+    },
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzBsZkhRS1c5VXRjNjBVZWVFSWRGK2hiYXBkMEVPNTFvYUlLUWdjdVVzZit6cFFVTDg4ZGlUSmRKSzdhb0lVOUs4bkl2V0xqMmhDVjlncmtNUHJiZWdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMjE0OTE2CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjIuOV94NjQtc2V0dXAuZXhlCnhkMlJiVW51aTdZUW9Eb2F6TENxZmtLc2RpUVpHb2VPcVFXT3RPaVFkREI2N2NlbmpmOEZSK1l2NXcrU1NZZUc0eE0rbnJvSlVhd0s1MmNncFJ1SEFRPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.9/csp-v129-win.exe"
+    }
   }
 }
