@@ -3660,9 +3660,9 @@
     "knowledgePoint": "C++语法基础",
     "question": "C++语句cout<<\"5%2=\"<<5%2执行后输出是（ ）。",
     "options": [
-      "A. 5%2=5%2",
-      "B. 5%2=1",
-      "C. \"5%2=\"5%2",
+      "A. 2 2",
+      "B. 1 1",
+      "C. 5%2=2",
       "D. 5%2=1"
     ],
     "correctIndex": 3,
@@ -3786,10 +3786,10 @@
     "knowledgePoint": "函数与递归",
     "question": "下面代码执行后输出是（ ）。\n\n```cpp\nint N=10;\nwhile(N){if(N%3==0)cout<<N<<\"#\";N--;} cout<<0<<\"#\";\n```",
     "options": [
-      "A. 9#6#3#0#",
+      "A. 9#6#3#",
       "B. 9#6#3#0#",
-      "C. 0#",
-      "D. 9#6#3#"
+      "C. 8#7#5#4#2#1#",
+      "D. 10#8#7#5#4#2#1#"
     ],
     "correctIndex": 1,
     "explanation": "N=9,6,3时N%3==0满足，输出\"9#6#3#\"，然后N变为0，while不满足，最后输出\"0#\"。",
@@ -5352,9 +5352,9 @@
     "knowledgePoint": "C++语法基础",
     "question": "cout<<7%3<<' '<<\"7%3\"<<' '<<\"7%3={7%3}\"输出（ ）。",
     "options": [
-      "A. 1 7%3 7%3=1",
-      "B. 1 7%3 7%3={7%3}",
-      "C. 1 1 7%3={1}",
+      "A. 1 1 1=1",
+      "B. 1 7%3 1=1",
+      "C. 1 7%3 7%3=1",
       "D. 1 7%3 7%3={7%3}"
     ],
     "correctIndex": 3,
@@ -6180,9 +6180,9 @@
     "knowledgePoint": "函数与递归",
     "question": "下面代码输出是（ ）。\n\n```cpp\nfor(i=0;i<10;i++){\n    if(i%3==0) continue;\n        cout<<\"0\"<<\"#\";\n        }\n    if(i>=10) cout<<\"1#\";\n```",
     "options": [
-      "A. 0#0#0#0#0#0#0#",
-      "B. 0#0#0#0#0#0#",
-      "C. 0#0#0#0#0#0#1#",
+      "A. 0#0#0#0#0#0#",
+      "B. 0#0#0#0#0#0#0#1#",
+      "C. 0#0#0#0#1#",
       "D. 0#0#0#0#0#0#1#"
     ],
     "correctIndex": 3,
@@ -7231,12 +7231,12 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "执⾏下⾯C++代码输出是（ ）。",
+    "question": "执行下面C++代码输出是（ ）。\n\n```cpp\nint temp = 0;\nfor (int i = 1; i < 7; i++) {\n    for (int j = 1; j < 5; j++) {\n        if (i / j == 2) {\n            temp++;\n        }\n    }\n}\ncout << temp << endl;\n```",
     "options": [
       "A. 10",
-      "A. 10",
       "B. 8",
-      "C. 4"
+      "C. 4",
+      "D. 3"
     ],
     "correctIndex": 2,
     "explanation": "",
@@ -7501,18 +7501,19 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "下⾯C++代码执⾏后的结果是( )。",
+    "question": "下面C++代码执行后的结果是（ ）。\n\n```cpp\nint arr[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\nfor (int i = 0; i < 3; i++) {\n    for (int j = 2; j >= 0; j--) {\n        cout << arr[i][j] << \" \";\n    }\n    cout << endl;\n}\n```",
     "options": [
-      "A. ",
-      "B. ",
-      "C. ",
-      "D. "
+      "A. 1 2 3 / 4 5 6 / 7 8 9",
+      "B. 3 2 1 / 6 5 4 / 9 8 7",
+      "C. 0 / 3 2 1 / 6 5 4",
+      "D. 0 / 1 2 3 / 4 5 6"
     ],
-    "correctIndex": 2,
+    "correctIndex": 1,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "int arr[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\nfor (int i = 0; i < 3; i++) {\n    for (int j = 2; j >= 0; j--) {\n        cout << arr[i][j] << \" \";\n    }\n    cout << endl;\n}"
   },
   "gesp-2023-12-4-05": {
     "id": "gesp-2023-12-4-05",
@@ -7537,7 +7538,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "如果变量x的地址是0x6ffe14,下⾯C++代码执⾏以后输出的是（ ）。",
+    "question": "如果变量x的地址是0x6ffe14，下面C++代码执行以后输出的是（ ）。\n\n```cpp\nint *p = NULL;\nint x = 2;\np = &x;\np++;\ncout << p << endl;\n```",
     "options": [
       "A. 0x6ffe11",
       "B. 0x6ffe14",
@@ -8133,10 +8134,10 @@
     "knowledgePoint": "排序与查找",
     "question": "插⼊排序在最好情况下的时间复杂度是（ ）。",
     "options": [
-      "A. ",
-      "B. ",
-      "C. ",
-      "D. "
+      "A. O(1)",
+      "B. O(N/2)",
+      "C. O(N)",
+      "D. O(N²)"
     ],
     "correctIndex": 2,
     "explanation": "",
@@ -8295,10 +8296,10 @@
     "knowledgePoint": "C++语法基础",
     "question": "⼀般默认64位计算机系统中整型变量（int）还是32位，则整数能够表⽰的数据范围是( )。",
     "options": [
-      "A. ~",
-      "B. ~",
-      "C. ~",
-      "D. ~"
+      "A. 0 ~ 2³²",
+      "B. 0 ~ 2⁶⁴",
+      "C. -2³¹ ~ 2³¹-1",
+      "D. -2⁶³ ~ 2⁶³-1"
     ],
     "correctIndex": 2,
     "explanation": "",
@@ -8545,18 +8546,19 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "函数与递归",
-    "question": "下⾯函数不能正常执⾏的是（）",
+    "question": "下面函数不能正常执行的是（）。\n\n```cpp\n// A. func() 定义在 main() 之前\nint func() { return 0; }\nint main() { func(); return 0; }\n\n// B. func() 定义在 main() 之后，无前置声明\nint main() { func(); return 0; }\nint func() { return 0; }\n\n// C. func() 定义在 main() 之前\nvoid func() { }\nint main() { func(); return 0; }\n\n// D. func() 定义在 main() 之后，有前置声明\nint func();\nint main() { func(); return 0; }\nint func() { return 0; }\n```",
     "options": [
-      "A. ",
-      "B. ",
-      "C. ",
-      "D. "
+      "A. 代码 A",
+      "B. 代码 B",
+      "C. 代码 C",
+      "D. 代码 D"
     ],
     "correctIndex": 1,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "// A. func() 定义在 main() 之前\nint func() { return 0; }\nint main() { func(); return 0; }\n\n// B. func() 定义在 main() 之后，无前置声明\nint main() { func(); return 0; }\nint func() { return 0; }\n\n// C. func() 定义在 main() 之前\nvoid func() { }\nint main() { func(); return 0; }\n\n// D. func() 定义在 main() 之后，有前置声明\nint func();\nint main() { func(); return 0; }\nint func() { return 0; }"
   },
   "gesp-2024-06-4-03": {
     "id": "gesp-2024-06-4-03",
@@ -8581,7 +8583,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "C++语法基础",
-    "question": "假设变量a的地址是0x6ffe14，下⾯程序的输出是（ ）。",
+    "question": "假设变量a的地址是0x6ffe14，下面程序的输出是（ ）。\n\n```cpp\n#include <iostream>\nusing namespace std;\nint main() {\n    int *p;\n    int a = 10;\n    p = &a;\n    p++;\n    cout << p << endl;\n}\n```",
     "options": [
       "A. 10",
       "B. 0x6ffe14",
@@ -9537,10 +9539,10 @@
     "knowledgePoint": "数据类型与运算",
     "question": "给定如下代码，其时间复杂度为（ ）。\n\n```cpp\nreturn 1;\nreturn cellRecur(n - 1) + cellRecur(n - 1) + 1;\n```",
     "options": [
-      "A. ",
-      "B. ",
-      "C. ",
-      "D. "
+      "A. O(n²)",
+      "B. O(2ⁿ)",
+      "C. O(1)",
+      "D. O(n)"
     ],
     "correctIndex": 1,
     "explanation": "",
@@ -10059,10 +10061,10 @@
     "knowledgePoint": "数据类型与运算",
     "question": "给定如下算法，其时间复杂度为（ ）。\n\n```cpp\nint sum = 0;\nfor (int j = 0;\n    j < n;\n    j++) {\n        if (i & (1 << j)) {\n            sum += arr[j];\n            }\n        }\n    if (sum == target) return true;\n        }\n    return false;\n```",
     "options": [
-      "A. ",
-      "B. ",
-      "C. ",
-      "D. "
+      "A. O(n²)",
+      "B. O(n × 2ⁿ)",
+      "C. O(1)",
+      "D. O(n³)"
     ],
     "correctIndex": 1,
     "explanation": "",
@@ -10599,10 +10601,10 @@
     "knowledgePoint": "数据类型与运算",
     "question": "给定如下算法，其时间复杂度为（ ）。\n\n```cpp\nint sum = 0;\nfor (int j = 0;\n    j < n;\n    j++) {\n        if (i & (1 << j)) {\n            sum += arr[j];\n            }\n        }\n    if (sum == target) return true;\n        }\n    return false;\n```",
     "options": [
-      "A. ",
-      "B. ",
-      "C. ",
-      "D. "
+      "A. O(n²)",
+      "B. O(n × 2ⁿ)",
+      "C. O(1)",
+      "D. O(n³)"
     ],
     "correctIndex": 1,
     "explanation": "",
@@ -10617,10 +10619,10 @@
     "knowledgePoint": "数据类型与运算",
     "question": "下述斐波那契数列计算的时间复杂度是（ ）。\n\n```cpp\nif (n == 1) return 1;\n    return fibonacci(n - 1) + fibonacci(n - 2);\n```",
     "options": [
-      "A. ",
-      "B. ",
-      "C. ",
-      "D. "
+      "A. O(n)",
+      "B. O(n²)",
+      "C. O(log n)",
+      "D. O(2ⁿ)"
     ],
     "correctIndex": 3,
     "explanation": "",

@@ -230,3 +230,4 @@ Windows 不受影响（可能 Windows updater 的 HTTP 栈处理跳转不同）�
 - 每次发版前先在本地起 HTTP 服务验证更新流程
 - Gitee 仓库附件配额 1GB，超出需删除旧 Release
 - 版本显示不要用 `/version` 这种不存在的接口，用 `getVersion()`
+- 大文件场景下用 Agent subagent 做独立查询，不占主 context
