@@ -93,20 +93,22 @@ export default function PetSprite({
   const [resolvedPngUrl, setResolvedPngUrl] = useState<string>('');
   const mountCountRef = useRef(0);
 
-  // ─── Inject CSS @keyframes for sprite frame counts ───
+  // ─── Inject CSS @keyframes for sprite frame counts (dynamic, depends on sz) ───
   useEffect(() => {
-    if (document.getElementById('pet-sprite-keyframes')) return;
+    const styleId = 'pet-sprite-keyframes';
+    const old = document.getElementById(styleId);
+    if (old) old.remove();
     const style = document.createElement('style');
-    style.id = 'pet-sprite-keyframes';
+    style.id = styleId;
     style.textContent = `
-      @keyframes pet-spr-4 { to { background-position-x: -800px; } }
-      @keyframes pet-spr-5 { to { background-position-x: -1000px; } }
-      @keyframes pet-spr-6 { to { background-position-x: -1200px; } }
-      @keyframes pet-spr-8 { to { background-position-x: -1600px; } }
+      @keyframes pet-spr-4 { to { background-position-x: -${sz * 4}px; } }
+      @keyframes pet-spr-5 { to { background-position-x: -${sz * 5}px; } }
+      @keyframes pet-spr-6 { to { background-position-x: -${sz * 6}px; } }
+      @keyframes pet-spr-8 { to { background-position-x: -${sz * 8}px; } }
     `;
     document.head.appendChild(style);
     return () => { style.remove(); };
-  }, []);
+  }, [sz]);
 
   // ─── 2D CSS sprite ───
   useEffect(() => {
