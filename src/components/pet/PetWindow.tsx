@@ -1,10 +1,26 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { listen, emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
-import { getCurrentWindow } from '@tauri-apps/api/window';
+import { getCurrentWindow, PhysicalPosition, PhysicalSize, availableMonitors } from '@tauri-apps/api/window';
 import PetSprite from './PetSprite';
 import type { PetAnimState } from './PetStateMachine';
 import type { OwnedPet } from '../../types/pet';
+
+const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
+  small:  { canvas: 110, win: 122 },
+  medium: { canvas: 140, win: 154 },
+  large:  { canvas: 170, win: 188 },
+};
+
+function getPetSize(): string {
+  try { return localStorage.getItem('csp_pet_size') || 'medium'; }
+  catch { return 'medium'; }
+}
+
+function getRoamingEnabled(): boolean {
+  try { return localStorage.getItem('csp_pet_roaming') !== 'false'; }
+  catch { return true; }
+}
 
 const CLICK_LINES = [
   '别点啦，好痒~', '我在认真看你学习呢！', '今天学了什么新知识？', '今天的每周任务做完了吗？',
@@ -48,6 +64,15 @@ export default function PetWindow() {
   const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number } | null>(null);
   const isDragging = useRef(false);
   const [ownedPets, setOwnedPets] = useState<OwnedPet[]>([]);
+  const roamTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastDragTime = useRef(0);
+  const defaultPos = useRef<{ x: number; y: number } | null>(null);
+  const [petSize, setPetSize] = useState(getPetSize);
+  const lastClickTime = useRef(0);
+
+  const size = SIZE_MAP[petSize] || SIZE_MAP.medium;
+  const winSz = size.win;
+  const canvasSz = size.canvas;
 
   // ─── ALL hooks must be called unconditionally ───
 
@@ -61,7 +86,10 @@ export default function PetWindow() {
         getCurrentWindow().startDragging().catch(() => {});
       }
     };
-    const onMU = () => { startX = startY = 0; };
+    const onMU = () => {
+      if (isDragging.current) lastDragTime.current = Date.now();
+      startX = startY = 0;
+    };
     document.addEventListener('mousedown', onMD);
     document.addEventListener('mousemove', onMM);
     document.addEventListener('mouseup', onMU);
@@ -95,6 +123,11 @@ export default function PetWindow() {
       }
     }).then(fn => c.push(fn));
 
+    // Listen for size/preference changes from main window
+    listen('pet-settings-changed', () => {
+      setPetSize(getPetSize());
+    }).then(fn => c.push(fn));
+
     // Poll for data until we get a pet
     pollRef.current = setInterval(() => {
       emit('pet-request-sync', {}).catch(() => {});
@@ -113,6 +146,47 @@ export default function PetWindow() {
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, []);
+
+  // ─── Window size ───
+  useEffect(() => {
+    getCurrentWindow().setSize(new PhysicalSize(winSz, winSz)).catch(() => {});
+  }, [winSz]);
+
+  // ─── Save default position on mount ───
+  useEffect(() => {
+    getCurrentWindow().outerPosition().then(p => {
+      defaultPos.current = { x: p.x, y: p.y };
+    }).catch(() => {});
+  }, []);
+
+  // ─── Roaming ───
+  useEffect(() => {
+    const startRoaming = () => {
+      if (roamTimer.current) clearInterval(roamTimer.current);
+      roamTimer.current = setInterval(async () => {
+        if (!getRoamingEnabled()) return;
+        // Don't roam if recently dragged
+        if (Date.now() - lastDragTime.current < 60_000) return;
+        try {
+          const monitors = await availableMonitors();
+          if (!monitors || monitors.length === 0) return;
+          const monitor = monitors[0];
+          const sf = monitor.scaleFactor;
+          const mw = monitor.size.width / sf;
+          const mh = monitor.size.height / sf;
+          const mx = monitor.position.x / sf;
+          const my = monitor.position.y / sf;
+          // Random position within screen bounds, keep a margin
+          const margin = 40;
+          const nx = Math.round(mx + margin + Math.random() * (mw - winSz - margin * 2));
+          const ny = Math.round(my + margin + Math.random() * (mh - winSz - margin * 2));
+          await getCurrentWindow().setPosition(new PhysicalPosition(nx, ny));
+        } catch { /* ignore */ }
+      }, 10_000 + Math.random() * 20_000); // 10-30s
+    };
+    startRoaming();
+    return () => { if (roamTimer.current) clearInterval(roamTimer.current); };
+  }, [winSz]);
 
   // Stop polling once we have a pet
   useEffect(() => {
@@ -161,6 +235,20 @@ export default function PetWindow() {
     e.stopPropagation();
     if (isDragging.current) return; // Don't respond to drag-clicks
     setCtxMenu(null);
+
+    // Double-click detection — return to default position
+    const now = Date.now();
+    if (now - lastClickTime.current < 400) {
+      lastClickTime.current = 0;
+      if (defaultPos.current) {
+        getCurrentWindow().setPosition(new PhysicalPosition(defaultPos.current.x, defaultPos.current.y)).catch(() => {});
+        setBubble('我回来啦~ 🏠');
+        setTimeout(() => setBubble(''), 3000);
+      }
+      return;
+    }
+    lastClickTime.current = now;
+
     window.__petWake__?.(); window.__petUpdate__?.();
     const c = clickCount + 1; setClickCount(c);
     let l: string;
@@ -192,10 +280,10 @@ export default function PetWindow() {
   if (!activePet) return null;
 
   return (
-    <div style={{ width: 220, height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="pet-interact" style={{ width: 200, height: 200, position: 'relative' }} onClick={handleClick} onContextMenu={handleContextMenu}>
+    <div style={{ width: winSz, height: winSz, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="pet-interact" style={{ width: canvasSz, height: canvasSz, position: 'relative' }} onClick={handleClick} onContextMenu={handleContextMenu}>
         <PetSprite key={activePet.modelPath || 'empty'}
-          renderType={activePet.renderType} modelPath={activePet.modelPath} />
+          renderType={activePet.renderType} modelPath={activePet.modelPath} canvasSize={canvasSz} />
       </div>
       {bubble && (
         <div style={{ position: 'absolute',

@@ -163,12 +163,11 @@ pub fn run() {
                     }
                 }
                 RunEvent::WindowEvent { label, event: window_event, .. } => {
-                    if label == "main" {
+                    if label == "main" || label == "pet" {
                         if let tauri::WindowEvent::CloseRequested { api, .. } = window_event {
                             api.prevent_close();
-                            if let Some(window) = app_handle.get_webview_window("main") {
+                            if let Some(window) = app_handle.get_webview_window(&label) {
                                 let _ = window.hide();
-                                let _ = app_handle.emit("main-window-state", serde_json::json!({ "visible": false }));
                             }
                         }
                     }

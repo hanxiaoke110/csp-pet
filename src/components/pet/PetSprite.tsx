@@ -4,7 +4,7 @@ import { tick, wakeUp, triggerAnim, updateLastEvent, type PetAnimState } from '.
 import { createStateMachine } from './PetStateMachine';
 import { isRemotePet } from '../../types/pet';
 
-const CANVAS_SIZE = 200;
+const CANVAS_SIZE = 140;
 const CACHE_SUBDIR = 'pet-sprites/2d';
 
 interface SpriteMeta { frameWidth: number; frameHeight: number; maxFrames: number; anims: Record<string, number>; animOrder: string[]; durations?: Record<string, number>; }
@@ -78,10 +78,11 @@ async function loadCachedSprite(petId: string): Promise<{ data: SpriteData; blob
 }
 
 export default function PetSprite({
-  renderType: _renderType, modelPath,
+  renderType: _renderType, modelPath, canvasSize,
 }: {
-  renderType?: string; modelPath?: string;
+  renderType?: string; modelPath?: string; canvasSize?: number;
 }) {
+  const sz = canvasSize || CANVAS_SIZE;
   const containerRef = useRef<HTMLDivElement>(null);
   const spriteDivRef = useRef<HTMLDivElement | null>(null);
   const spriteRef = useRef<SpriteData | null>(null);
@@ -181,14 +182,14 @@ export default function PetSprite({
   const frames = spr?.meta.anims[anim] || 6;
   const duration = spr?.meta.durations?.[anim] || 1100;
   const rowIdx = ANIM_ORDER.indexOf(anim);
-  const displayH = Math.round(CANVAS_SIZE * (spr?.meta.frameHeight || 208) / (spr?.meta.frameWidth || 192));
+  const displayH = Math.round(sz * (spr?.meta.frameHeight || 208) / (spr?.meta.frameWidth || 192));
 
   return (
-    <div ref={containerRef} style={{ width: CANVAS_SIZE, height: CANVAS_SIZE, overflow: 'hidden', borderRadius: 12, position: 'relative' }}>
+    <div ref={containerRef} style={{ width: sz, height: sz, overflow: 'hidden', borderRadius: 12, position: 'relative' }}>
       <div ref={spriteDivRef} style={{
-        width: CANVAS_SIZE, height: CANVAS_SIZE,
+        width: sz, height: sz,
         backgroundImage: resolvedPngUrl ? `url("${resolvedPngUrl}")` : 'none',
-        backgroundSize: `${(spr?.meta.maxFrames || 8) * CANVAS_SIZE}px auto`,
+        backgroundSize: `${(spr?.meta.maxFrames || 8) * sz}px auto`,
         backgroundPositionY: `-${rowIdx * displayH}px`,
         backgroundRepeat: 'no-repeat',
         imageRendering: 'pixelated',
