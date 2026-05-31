@@ -48,12 +48,6 @@ const ACTIONS: { key: QuickAction; icon: string; label: string }[] = [
   { key: 'checkin', icon: '✅', label: '签到' },
 ];
 
-function ringPos(i: number, total: number, r: number) {
-  const start = -Math.PI, end = 0;
-  const a = start + (i / (total - 1)) * (end - start);
-  return { left: 86 + r * Math.cos(a), top: 110 + r * Math.sin(a) };
-}
-
 export default function PetWindow() {
   const [bubble, setBubble] = useState('');
   const [clickCount, setClickCount] = useState(0);
@@ -312,26 +306,29 @@ export default function PetWindow() {
         </div>
       )}
       {showRing && (
-        <div style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}>
-          {ACTIONS.map((a, i) => {
-            const ringR = Math.round(80 * uiScale);
-            const p = ringPos(i, ACTIONS.length, ringR);
-            return (
-              <button key={a.key} onClick={(e) => { e.stopPropagation(); doAction(a.key); }}
-                style={{ position: 'absolute', ...p,
-                  padding: `${Math.round(3 * uiScale)}px ${Math.round(6 * uiScale)}px`,
-                  fontSize: Math.max(7, Math.round(10 * uiScale)), fontWeight: 600,
-                  whiteSpace: 'nowrap',
-                  border: `${Math.max(1, Math.round(1.5 * uiScale))}px solid #fde68a`,
-                  borderRadius: Math.round(8 * uiScale), background: '#fff',
-                  cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', color: '#92400e',
-                  lineHeight: 1.2, pointerEvents: 'auto', animation: `fanIn .2s ease ${i * 0.04}s both` }}
-                onMouseEnter={e2 => { (e2.target as HTMLElement).style.background = '#fffbeb'; }}
-                onMouseLeave={e2 => { (e2.target as HTMLElement).style.background = '#fff'; }}>
-                {a.icon} {a.label}
-              </button>
-            );
-          })}
+        <div style={{
+          position: 'absolute', bottom: Math.round(-6 * uiScale),
+          left: '50%', transform: 'translateX(-50%)', zIndex: 10,
+          display: 'flex', flexDirection: 'column', gap: Math.round(4 * uiScale),
+          alignItems: 'center',
+        }}>
+          {ACTIONS.map((a, i) => (
+            <button key={a.key} onClick={(e) => { e.stopPropagation(); doAction(a.key); }}
+              style={{
+                padding: `${Math.round(3 * uiScale)}px ${Math.round(8 * uiScale)}px`,
+                fontSize: Math.max(7, Math.round(10 * uiScale)), fontWeight: 600,
+                whiteSpace: 'nowrap', cursor: 'pointer',
+                border: `${Math.max(1, Math.round(1.5 * uiScale))}px solid #fde68a`,
+                borderRadius: Math.round(8 * uiScale), background: '#fff',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.1)', color: '#92400e',
+                lineHeight: 1.2, pointerEvents: 'auto',
+                animation: `fanIn .2s ease ${i * 0.04}s both`,
+              }}
+              onMouseEnter={e2 => { (e2.target as HTMLElement).style.background = '#fffbeb'; }}
+              onMouseLeave={e2 => { (e2.target as HTMLElement).style.background = '#fff'; }}>
+              {a.icon} {a.label}
+            </button>
+          ))}
         </div>
       )}
 
