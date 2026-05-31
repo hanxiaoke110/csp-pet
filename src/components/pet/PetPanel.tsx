@@ -71,8 +71,8 @@ export default function PetPanel() {
     catch { return 'medium'; }
   });
   const [roaming, setRoaming] = useState(() => {
-    try { return localStorage.getItem('csp_pet_roaming') !== 'false'; }
-    catch { return true; }
+    try { return localStorage.getItem('csp_pet_roaming') === 'true'; }
+    catch { return false; }
   });
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 

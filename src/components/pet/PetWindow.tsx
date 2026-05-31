@@ -18,8 +18,8 @@ function getPetSize(): string {
 }
 
 function getRoamingEnabled(): boolean {
-  try { return localStorage.getItem('csp_pet_roaming') !== 'false'; }
-  catch { return true; }
+  try { return localStorage.getItem('csp_pet_roaming') === 'true'; }
+  catch { return false; }
 }
 
 const CLICK_LINES = [
