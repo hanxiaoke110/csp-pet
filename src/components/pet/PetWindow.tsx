@@ -64,7 +64,6 @@ export default function PetWindow() {
   const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number } | null>(null);
   const isDragging = useRef(false);
   const [ownedPets, setOwnedPets] = useState<OwnedPet[]>([]);
-  const roamTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastDragTime = useRef(0);
   const defaultPos = useRef<{ x: number; y: number } | null>(null);
   const [petSize, setPetSize] = useState(getPetSize);
@@ -161,31 +160,37 @@ export default function PetWindow() {
 
   // ─── Roaming ───
   useEffect(() => {
-    const startRoaming = () => {
-      if (roamTimer.current) clearInterval(roamTimer.current);
-      roamTimer.current = setInterval(async () => {
-        if (!getRoamingEnabled()) return;
-        // Don't roam if recently dragged
-        if (Date.now() - lastDragTime.current < 60_000) return;
-        try {
-          const monitors = await availableMonitors();
-          if (!monitors || monitors.length === 0) return;
-          const monitor = monitors[0];
-          const sf = monitor.scaleFactor;
-          const mw = monitor.size.width / sf;
-          const mh = monitor.size.height / sf;
-          const mx = monitor.position.x / sf;
-          const my = monitor.position.y / sf;
-          // Random position within screen bounds, keep a margin
-          const margin = 40;
-          const nx = Math.round(mx + margin + Math.random() * (mw - winSz - margin * 2));
-          const ny = Math.round(my + margin + Math.random() * (mh - winSz - margin * 2));
-          await getCurrentWindow().setPosition(new PhysicalPosition(nx, ny));
-        } catch { /* ignore */ }
-      }, 10_000 + Math.random() * 20_000); // 10-30s
+    let timer: ReturnType<typeof setTimeout>;
+    const roam = async () => {
+      if (!getRoamingEnabled()) { timer = setTimeout(roam, 3000); return; }
+      if (Date.now() - lastDragTime.current < 60_000) { timer = setTimeout(roam, 3000); return; }
+      try {
+        const monitors = await availableMonitors();
+        if (!monitors || monitors.length === 0) { timer = setTimeout(roam, 5000); return; }
+        const m = monitors[0];
+        // monitor.size/position may arrive as { type: 'Physical', data: { width, height } }
+        // or as plain { width, height } / { x, y } depending on Tauri version
+        const rawSize = (m.size as any).data || m.size;
+        const rawPos = (m.position as any).data || m.position;
+        const mw = Number(rawSize.width);
+        const mh = Number(rawSize.height);
+        const mx = Number(rawPos.x);
+        const my = Number(rawPos.y);
+        if (!mw || !mh) { timer = setTimeout(roam, 5000); return; }
+        const margin = 40;
+        const nx = Math.round(mx + margin + Math.random() * (mw - winSz - margin * 2));
+        const ny = Math.round(my + margin + Math.random() * (mh - winSz - margin * 2));
+        // Clamp to safe bounds
+        const safeX = Math.max(mx + margin, Math.min(mx + mw - winSz - margin, nx));
+        const safeY = Math.max(my + margin, Math.min(my + mh - winSz - margin, ny));
+        await getCurrentWindow().setPosition(new PhysicalPosition(safeX, safeY));
+      } catch { /* ignore */ }
+      // Next roam in 10-30 seconds
+      timer = setTimeout(roam, 10_000 + Math.random() * 20_000);
     };
-    startRoaming();
-    return () => { if (roamTimer.current) clearInterval(roamTimer.current); };
+    // First roam after 3 seconds so user sees it working
+    timer = setTimeout(roam, 3000);
+    return () => clearTimeout(timer);
   }, [winSz]);
 
   // Stop polling once we have a pet
