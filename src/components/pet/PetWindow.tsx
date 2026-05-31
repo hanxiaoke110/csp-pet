@@ -46,13 +46,19 @@ export default function PetWindow() {
   const [clickCount, setClickCount] = useState(0);
   const [activePet, setActivePet] = useState<OwnedPet | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number } | null>(null);
   const isDragging = useRef(false);
-  const [ownedPets, setOwnedPets] = useState<OwnedPet[]>([]);
   const lastDragTime = useRef(0);
   const defaultPos = useRef<{ x: number; y: number } | null>(null);
   const [petSize, setPetSize] = useState(getPetSize);
   const lastClickTime = useRef(0);
+  const [showActions, setShowActions] = useState(false);
+  const actionsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showActionBar = () => {
+    if (actionsTimer.current) clearTimeout(actionsTimer.current);
+    setShowActions(true);
+    actionsTimer.current = setTimeout(() => setShowActions(false), 5000);
+  };
 
   const size = SIZE_MAP[petSize] || SIZE_MAP.medium;
   const winSz = size.win;
@@ -104,7 +110,6 @@ export default function PetWindow() {
       if (d.activePetId && d.ownedPets) {
         const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
         if (p) setActivePet(p);
-        setOwnedPets(d.ownedPets);
       }
     }).then(fn => c.push(fn));
 
@@ -210,7 +215,6 @@ export default function PetWindow() {
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     if (isDragging.current) return;
-    setCtxMenu(null);
 
     // Double-click detection — return to default position
     const now = Date.now();
@@ -234,83 +238,69 @@ export default function PetWindow() {
     else if (c % 5 === 0) l = pickRandom(['好痒好痒~', '哈哈哈别戳了', '再戳我要生气了 😤', '你是戳戳怪吗']);
     else l = pickRandom(CLICK_LINES);
     setBubble(l); setTimeout(() => setBubble(''), 4000);
-    if (activePet) emit('pet-click', { petId: activePet.petId, count: c }).catch(() => {});
+    showActionBar();
   }, [clickCount, activePet]);
-
-  const handleContextMenu = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setCtxMenu({ x: e.clientX, y: e.clientY });
-  }, []);
-
-  const switchPet = (pet: OwnedPet) => {
-    emit('pet-action', { action: 'switch-pet', petId: pet.petId }).catch(() => {});
-    setCtxMenu(null);
-    setBubble(`已切换为「${pet.petName}」！`);
-    setTimeout(() => setBubble(''), 3000);
-  };
 
   // ─── Render ───
   if (!activePet) return null;
 
+  const barH = Math.round(22 * uiScale);
+
   return (
     <div style={{ width: winSz, height: winSz, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="pet-interact" style={{ width: canvasSz, height: canvasSz, position: 'relative' }} onClick={handleClick} onContextMenu={handleContextMenu}>
+      <div className="pet-interact" style={{ width: canvasSz, height: canvasSz, position: 'relative' }} onClick={handleClick}>
         <PetSprite key={activePet.modelPath || 'empty'}
           renderType={activePet.renderType} modelPath={activePet.modelPath} canvasSize={canvasSz} />
-      </div>
-      {bubble && (
-        <div style={{ position: 'absolute',
-          top: Math.round(2 * uiScale),
-          left: '50%', transform: 'translateX(-50%)', background: '#fff',
-          borderRadius: Math.round(14 * uiScale), padding: `${Math.round(5 * uiScale)}px ${Math.round(10 * uiScale)}px`,
-          fontSize: Math.max(10, Math.round(11 * uiScale)), fontWeight: 600, boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
-          maxWidth: Math.round(190 * uiScale), zIndex: 10, whiteSpace: 'nowrap', animation: 'bubbleIn .2s ease',
-          border: `${Math.max(1, Math.round(2 * uiScale))}px solid #fde68a` }}>
-          {bubble}
+
+        {/* Bubble */}
+        {bubble && (
           <div style={{ position: 'absolute',
-            bottom: Math.round(-6 * uiScale), borderTop: `${Math.round(6 * uiScale)}px solid #fff`,
-            left: '50%', transform: 'translateX(-50%)',
-            width: 0, height: 0,
-            borderLeft: `${Math.round(6 * uiScale)}px solid transparent`,
-            borderRight: `${Math.round(6 * uiScale)}px solid transparent` }} />
-        </div>
-      )}
-      {/* Right-click context menu */}
-      {ctxMenu && (
-        <div style={{
-          position: 'fixed', left: ctxMenu.x, top: ctxMenu.y, zIndex: 9999,
-          background: 'rgba(20,20,22,0.96)', color: '#f0f0f0',
-          border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8,
-          padding: 4, fontSize: 10, minWidth: 140,
-          boxShadow: '0 8px 24px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)',
-          display: 'flex', flexDirection: 'column', gap: 2,
-        }} onClick={() => setCtxMenu(null)}>
-          <div style={{ padding: '2px 8px', color: 'rgba(255,255,255,0.5)', fontSize: 9, borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: 2 }}>
-            🐾 {activePet?.petName || '智子'}
+            top: Math.round(2 * uiScale),
+            left: '50%', transform: 'translateX(-50%)', background: '#fff',
+            borderRadius: Math.round(14 * uiScale), padding: `${Math.round(5 * uiScale)}px ${Math.round(10 * uiScale)}px`,
+            fontSize: Math.max(10, Math.round(11 * uiScale)), fontWeight: 600, boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
+            maxWidth: Math.round(190 * uiScale), zIndex: 10, whiteSpace: 'nowrap', animation: 'bubbleIn .2s ease',
+            border: `${Math.max(1, Math.round(2 * uiScale))}px solid #fde68a`, pointerEvents: 'none' }}>
+            {bubble}
+            <div style={{ position: 'absolute',
+              bottom: Math.round(-6 * uiScale), borderTop: `${Math.round(6 * uiScale)}px solid #fff`,
+              left: '50%', transform: 'translateX(-50%)',
+              width: 0, height: 0,
+              borderLeft: `${Math.round(6 * uiScale)}px solid transparent`,
+              borderRight: `${Math.round(6 * uiScale)}px solid transparent` }} />
           </div>
-          {ownedPets.map(p => (
-            <div key={p.petId} onClick={() => switchPet(p)} style={{
-              padding: '4px 8px', borderRadius: 4, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 6,
-              background: p.petId === activePet?.petId ? 'rgba(0,122,255,0.18)' : 'transparent',
-            }}>
-              <span>{p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : '🔵'}</span>
-              <span style={{ flex: 1 }}>{p.petName}</span>
-              <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)' }}>Lv.{p.level}</span>
-              {p.petId === activePet?.petId && <span style={{ fontSize: 10 }}>✓</span>}
-            </div>
-          ))}
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 2, paddingTop: 2 }}>
-            <div onClick={() => { emit('pet-action', { action: 'open-window' }).catch(() => {}); setCtxMenu(null); }}
-              style={{ padding: '4px 8px', borderRadius: 4, cursor: 'pointer' }}>📂 打开主窗口</div>
-            <div onClick={() => { emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}); setCtxMenu(null); }}
-              style={{ padding: '4px 8px', borderRadius: 4, cursor: 'pointer' }}>🛒 商城</div>
-            <div onClick={() => { invoke('toggle_pet_window').catch(() => {}); setCtxMenu(null); }}
-              style={{ padding: '4px 8px', borderRadius: 4, cursor: 'pointer' }}>👁️ 隐藏窗口</div>
+        )}
+
+        {/* Action bar — overlaid at bottom of sprite, stays inside window */}
+        {showActions && (
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            height: barH, zIndex: 10,
+            background: 'linear-gradient(transparent, rgba(0,0,0,0.45))',
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: Math.round(6 * uiScale),
+            paddingBottom: Math.round(3 * uiScale),
+            borderRadius: '0 0 12px 12px',
+          }}>
+            {[
+              { icon: '📂', label: '窗口', action: () => emit('pet-action', { action: 'open-window' }).catch(() => {}) },
+              { icon: '🛒', label: '商城', action: () => emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}) },
+              { icon: '👁️', label: '隐藏', action: () => invoke('toggle_pet_window').catch(() => {}) },
+            ].map(btn => (
+              <button key={btn.label} onClick={(e) => { e.stopPropagation(); btn.action(); }}
+                style={{
+                  background: 'rgba(255,255,255,0.92)', border: 'none', borderRadius: Math.round(6 * uiScale),
+                  padding: `${Math.round(2 * uiScale)}px ${Math.round(5 * uiScale)}px`,
+                  fontSize: Math.max(10, Math.round(11 * uiScale)), cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: Math.round(2 * uiScale),
+                  color: '#334155', fontWeight: 600,
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+                }}>
+                {btn.icon}
+              </button>
+            ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
