@@ -7556,7 +7556,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "在C++中,执⾏下⾯代码后，输出的是（ ）。",
+    "question": "在C++中，执行下面代码后，输出的是（ ）。\n\n```cpp\nint point(int *p) {\n    return *p * *p;\n}\nint main() {\n    int a = 20;\n    int *p = &a;\n    *p = point(p);\n    cout << *p << endl;\n}\n```",
     "options": [
       "A. 400",
       "B. 200",
@@ -7628,7 +7628,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "下列C++代码输⼊1,2,3,4，执⾏后，将输出的是（ ）。",
+    "question": "下列C++代码输入 1,2,3,4，执行后，将输出的是（ ）。\n\n```cpp\nstring str = \"\";\ncin >> str;\nint strlen = str.length();\nfor (int i = 0; i < strlen; i++) {\n    if (str[i] <= '9' && str[i] >= '0') {\n        cout << str[i];\n    } else {\n        cout << \"#\";\n    }\n}\n```",
     "options": [
       "A. 1#4#",
       "B. 1#3#",
