@@ -140,8 +140,8 @@ curl -sL "https://github.com/hanxiaoke110/csp-pet/releases/download/vX.Y.Z/CSP._
    - 1536x1872 → frameWidth:192 frameHeight:208 maxFrames:8
    - 7 动画: idle(6) walk(8) sleep(6) celebrate(4) think(6) eat(5) unhappy(8)
 ④ 生成预览图 public/pet-sprites/previews/{id}.png
-   - 取第一帧 (0,0,192,208) → 缩放到 48×52
-   - Python: img.crop((0,0,192,208)).resize((48,52), NEAREST)
+   - 取第一帧 (0,0,192,208) → resize 到 200×216 → 居中裁 200×200
+   - **必须 200×200**，48×52 在 Retina 屏上会糊
 ⑤ 复制到 pet-sprites-remote/2d/{id}.png + {id}.json
 ⑥ 修改 src/types/pet.ts:
    - PETDEX_PETS 添加 speciesId、name、element、description
