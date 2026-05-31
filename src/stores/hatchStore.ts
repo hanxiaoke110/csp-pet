@@ -207,13 +207,29 @@ export const useHatchStore = create<HatchState>((set, get) => ({
   },
 
   save: () => {
-    const { eggs } = get();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(eggs));
+    try {
+      const { eggs } = get();
+      const json = JSON.stringify(eggs);
+      // Write to temp key first, then swap — reduces corruption risk on crash
+      localStorage.setItem(STORAGE_KEY + '_tmp', json);
+      localStorage.setItem(STORAGE_KEY, json);
+      localStorage.removeItem(STORAGE_KEY + '_tmp');
+    } catch { /* quota exceeded or filesystem error */ }
   },
 
   load: () => {
     try {
-      const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      // Try primary key first, fall back to temp (crash recovery)
+      let raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        raw = localStorage.getItem(STORAGE_KEY + '_tmp');
+        if (raw) {
+          // Restore from temp backup
+          localStorage.setItem(STORAGE_KEY, raw);
+          localStorage.removeItem(STORAGE_KEY + '_tmp');
+        }
+      }
+      const data = JSON.parse(raw || '[]');
       if (Array.isArray(data) && data.length > 0) {
         set({ eggs: data });
         // Re-check status + restart interrupted downloads
@@ -227,6 +243,28 @@ export const useHatchStore = create<HatchState>((set, get) => ({
           }
         }, 100);
       }
-    } catch { /* ignore */ }
+    } catch {
+      // JSON parse error — try temp backup
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY + '_tmp');
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (Array.isArray(data) && data.length > 0) {
+            set({ eggs: data });
+            localStorage.setItem(STORAGE_KEY, raw);
+            localStorage.removeItem(STORAGE_KEY + '_tmp');
+            // Re-check status
+            setTimeout(() => {
+              get().checkEggs();
+              for (const egg of get().eggs) {
+                if (egg.status === 'incubating' && egg.rarity !== 'common' && egg.downloadStatus !== 'done') {
+                  resumeDownload(get, set, egg.eggId, egg.speciesId);
+                }
+              }
+            }, 100);
+          }
+        }
+      } catch { /* unrecoverable */ }
+    }
   },
 }));

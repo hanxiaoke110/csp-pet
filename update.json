@@ -1,10 +1,10 @@
 {
-  "version": "0.1.0",
-  "notes": "CSP 学习助手初始版本",
-  "pub_date": "2025-05-28T00:00:00Z",
+  "version": "1.2.7",
+  "notes": "修复 10 道 GESP 选择题 — 选项为空/重复/缺代码",
+  "pub_date": "2026-05-31T06:00:00Z",
   "platforms": {
-    "darwin-aarch64":  { "signature": "", "url": "" },
-    "darwin-x86_64":   { "signature": "", "url": "" },
-    "windows-x86_64":  { "signature": "", "url": "" }
+    "darwin-aarch64":  { "signature": "", "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.7/csp-v127-arm.dmg" },
+    "darwin-x86_64":   { "signature": "", "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.7/csp-v127-intel.dmg" },
+    "windows-x86_64":  { "signature": "", "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.2.7/csp-v127-win.exe" }
   }
 }

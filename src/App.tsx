@@ -13,6 +13,7 @@ import AchievementsPanel from './components/achievements/AchievementsPanel';
 import OJTraining from './components/oj/OJTraining';
 import SettingsPage from './components/settings/SettingsPage';
 import { useCourseStore } from './stores/courseStore';
+import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
 import { useAIStore } from './stores/aiStore';
 import type { Lesson, Stage, LessonsData } from './types/course';
@@ -164,6 +165,8 @@ function App() {
   // Sync pet data to pet window and listen for clicks from pet window
   useEffect(() => {
     petLoaded();
+    // Restore hatching eggs (they're persisted to localStorage)
+    useHatchStore.getState().load();
     // Weekly passive coins for Lv10+ pets
     try {
       const store = usePetStore.getState();
