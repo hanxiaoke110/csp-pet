@@ -72,6 +72,7 @@ export default function PetWindow() {
   const size = SIZE_MAP[petSize] || SIZE_MAP.medium;
   const winSz = size.win;
   const canvasSz = size.canvas;
+  const uiScale = canvasSz / 200; // proportional to original 200px canvas
 
   // ─── ALL hooks must be called unconditionally ───
 
@@ -294,25 +295,35 @@ export default function PetWindow() {
       </div>
       {bubble && (
         <div style={{ position: 'absolute',
-          ...(showRing ? { bottom: 2 } : { top: 2 }),
+          ...(showRing ? { bottom: Math.round(2 * uiScale) } : { top: Math.round(2 * uiScale) }),
           left: '50%', transform: 'translateX(-50%)', background: '#fff',
-          borderRadius: 14, padding: '5px 10px', fontSize: 11, fontWeight: 600, boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
-          maxWidth: 190, zIndex: 10, whiteSpace: 'nowrap', animation: 'bubbleIn .2s ease', border: '2px solid #fde68a' }}>
+          borderRadius: Math.round(14 * uiScale), padding: `${Math.round(5 * uiScale)}px ${Math.round(10 * uiScale)}px`,
+          fontSize: Math.max(8, Math.round(11 * uiScale)), fontWeight: 600, boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
+          maxWidth: Math.round(190 * uiScale), zIndex: 10, whiteSpace: 'nowrap', animation: 'bubbleIn .2s ease',
+          border: `${Math.max(1, Math.round(2 * uiScale))}px solid #fde68a` }}>
           {bubble}
           <div style={{ position: 'absolute',
-            ...(showRing ? { top: -6, borderBottom: '6px solid #fff' } : { bottom: -6, borderTop: '6px solid #fff' }),
+            ...(showRing ? { top: Math.round(-6 * uiScale), borderBottom: `${Math.round(6 * uiScale)}px solid #fff` }
+                        : { bottom: Math.round(-6 * uiScale), borderTop: `${Math.round(6 * uiScale)}px solid #fff` }),
             left: '50%', transform: 'translateX(-50%)',
-            width: 0, height: 0, borderLeft: '6px solid transparent', borderRight: '6px solid transparent' }} />
+            width: 0, height: 0,
+            borderLeft: `${Math.round(6 * uiScale)}px solid transparent`,
+            borderRight: `${Math.round(6 * uiScale)}px solid transparent` }} />
         </div>
       )}
       {showRing && (
         <div style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}>
           {ACTIONS.map((a, i) => {
-            const p = ringPos(i, ACTIONS.length, 80);
+            const ringR = Math.round(80 * uiScale);
+            const p = ringPos(i, ACTIONS.length, ringR);
             return (
               <button key={a.key} onClick={(e) => { e.stopPropagation(); doAction(a.key); }}
-                style={{ position: 'absolute', ...p, padding: '3px 6px', fontSize: 10, fontWeight: 600,
-                  whiteSpace: 'nowrap', border: '1.5px solid #fde68a', borderRadius: 8, background: '#fff',
+                style={{ position: 'absolute', ...p,
+                  padding: `${Math.round(3 * uiScale)}px ${Math.round(6 * uiScale)}px`,
+                  fontSize: Math.max(7, Math.round(10 * uiScale)), fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                  border: `${Math.max(1, Math.round(1.5 * uiScale))}px solid #fde68a`,
+                  borderRadius: Math.round(8 * uiScale), background: '#fff',
                   cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', color: '#92400e',
                   lineHeight: 1.2, pointerEvents: 'auto', animation: `fanIn .2s ease ${i * 0.04}s both` }}
                 onMouseEnter={e2 => { (e2.target as HTMLElement).style.background = '#fffbeb'; }}
