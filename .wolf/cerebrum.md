@@ -35,3 +35,4 @@
 - **绝不**: macOS 更新用 Gitee Release 下载 URL — 多级 302 重定向 Tauri updater 处理不了
 - **绝不**: 用 `fetch('/version')` 取版本号 — 该接口不存在，用 `getVersion()`
 - **绝不**: 新增精灵只上传 spritesheet 不生成 preview — 商城和智子都会白屏
+- **绝不**: preview 用 48×52 — 原始素材预览都是 200×200，尺寸不一样就是糊的
