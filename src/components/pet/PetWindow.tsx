@@ -41,19 +41,10 @@ const MORNING_LINES = ['早上好！新的一天开始啦 ☀️', '今天也要
 const NIGHT_LINES = ['夜深了，早点休息吧 🌙', '不要熬夜太晚哦，明天再学！', '晚安~ 明天见！', '回顾一下今天学到的知识再睡吧~'];
 function pickRandom(arr: string[]): string { return arr[Math.floor(Math.random() * arr.length)]; }
 
-type QuickAction = 'window' | 'challenge' | 'care' | 'shop' | 'checkin';
-const ACTIONS: { key: QuickAction; icon: string; label: string }[] = [
-  { key: 'window', icon: '📂', label: '窗口' }, { key: 'challenge', icon: '⚡', label: '挑战' },
-  { key: 'care', icon: '🍖', label: '养成' }, { key: 'shop', icon: '🛒', label: '商城' },
-  { key: 'checkin', icon: '✅', label: '签到' },
-];
-
 export default function PetWindow() {
   const [bubble, setBubble] = useState('');
   const [clickCount, setClickCount] = useState(0);
   const [activePet, setActivePet] = useState<OwnedPet | null>(null);
-  const [showRing, setShowRing] = useState(false);
-  const ringTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number } | null>(null);
   const isDragging = useRef(false);
@@ -216,26 +207,9 @@ export default function PetWindow() {
     return () => clearInterval(i);
   }, [activePet]);
 
-  const showRingMenu = () => {
-    if (ringTimer.current) clearTimeout(ringTimer.current);
-    setShowRing(true);
-    ringTimer.current = setTimeout(() => setShowRing(false), 5000);
-  };
-
-  const doAction = useCallback((a: QuickAction) => {
-    setShowRing(false);
-    switch (a) {
-      case 'window': emit('pet-action', { action: 'open-window' }).catch(() => {}); break;
-      case 'challenge': emit('pet-action', { action: 'navigate', target: '/quiz' }).catch(() => {}); break;
-      case 'care': emit('pet-action', { action: 'navigate', target: '/pet' }).catch(() => {}); break;
-      case 'shop': emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}); break;
-      case 'checkin': emit('pet-action', { action: 'checkin' }).catch(() => {}); break;
-    }
-  }, []);
-
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isDragging.current) return; // Don't respond to drag-clicks
+    if (isDragging.current) return;
     setCtxMenu(null);
 
     // Double-click detection — return to default position
@@ -260,14 +234,12 @@ export default function PetWindow() {
     else if (c % 5 === 0) l = pickRandom(['好痒好痒~', '哈哈哈别戳了', '再戳我要生气了 😤', '你是戳戳怪吗']);
     else l = pickRandom(CLICK_LINES);
     setBubble(l); setTimeout(() => setBubble(''), 4000);
-    showRingMenu();
     if (activePet) emit('pet-click', { petId: activePet.petId, count: c }).catch(() => {});
   }, [clickCount, activePet]);
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setShowRing(false);
     setCtxMenu({ x: e.clientX, y: e.clientY });
   }, []);
 
@@ -289,49 +261,21 @@ export default function PetWindow() {
       </div>
       {bubble && (
         <div style={{ position: 'absolute',
-          ...(showRing ? { bottom: Math.round(2 * uiScale) } : { top: Math.round(2 * uiScale) }),
+          top: Math.round(2 * uiScale),
           left: '50%', transform: 'translateX(-50%)', background: '#fff',
           borderRadius: Math.round(14 * uiScale), padding: `${Math.round(5 * uiScale)}px ${Math.round(10 * uiScale)}px`,
-          fontSize: Math.max(8, Math.round(11 * uiScale)), fontWeight: 600, boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
+          fontSize: Math.max(10, Math.round(11 * uiScale)), fontWeight: 600, boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
           maxWidth: Math.round(190 * uiScale), zIndex: 10, whiteSpace: 'nowrap', animation: 'bubbleIn .2s ease',
           border: `${Math.max(1, Math.round(2 * uiScale))}px solid #fde68a` }}>
           {bubble}
           <div style={{ position: 'absolute',
-            ...(showRing ? { top: Math.round(-6 * uiScale), borderBottom: `${Math.round(6 * uiScale)}px solid #fff` }
-                        : { bottom: Math.round(-6 * uiScale), borderTop: `${Math.round(6 * uiScale)}px solid #fff` }),
+            bottom: Math.round(-6 * uiScale), borderTop: `${Math.round(6 * uiScale)}px solid #fff`,
             left: '50%', transform: 'translateX(-50%)',
             width: 0, height: 0,
             borderLeft: `${Math.round(6 * uiScale)}px solid transparent`,
             borderRight: `${Math.round(6 * uiScale)}px solid transparent` }} />
         </div>
       )}
-      {showRing && (
-        <div style={{
-          position: 'absolute', bottom: Math.round(-6 * uiScale),
-          left: '50%', transform: 'translateX(-50%)', zIndex: 10,
-          display: 'flex', flexDirection: 'column', gap: Math.round(4 * uiScale),
-          alignItems: 'center',
-        }}>
-          {ACTIONS.map((a, i) => (
-            <button key={a.key} onClick={(e) => { e.stopPropagation(); doAction(a.key); }}
-              style={{
-                padding: `${Math.round(3 * uiScale)}px ${Math.round(8 * uiScale)}px`,
-                fontSize: Math.max(7, Math.round(10 * uiScale)), fontWeight: 600,
-                whiteSpace: 'nowrap', cursor: 'pointer',
-                border: `${Math.max(1, Math.round(1.5 * uiScale))}px solid #fde68a`,
-                borderRadius: Math.round(8 * uiScale), background: '#fff',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.1)', color: '#92400e',
-                lineHeight: 1.2, pointerEvents: 'auto',
-                animation: `fanIn .2s ease ${i * 0.04}s both`,
-              }}
-              onMouseEnter={e2 => { (e2.target as HTMLElement).style.background = '#fffbeb'; }}
-              onMouseLeave={e2 => { (e2.target as HTMLElement).style.background = '#fff'; }}>
-              {a.icon} {a.label}
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* Right-click context menu */}
       {ctxMenu && (
         <div style={{
