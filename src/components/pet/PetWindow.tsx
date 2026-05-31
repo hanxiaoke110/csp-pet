@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { listen, emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
-import { getCurrentWindow, PhysicalPosition, PhysicalSize, availableMonitors } from '@tauri-apps/api/window';
+import { getCurrentWindow, PhysicalPosition, LogicalSize, availableMonitors } from '@tauri-apps/api/window';
 import PetSprite from './PetSprite';
 import type { PetAnimState } from './PetStateMachine';
 import type { OwnedPet } from '../../types/pet';
@@ -146,9 +146,9 @@ export default function PetWindow() {
     };
   }, []);
 
-  // ─── Window size ───
+  // ─── Window size (use LogicalSize — CSS pixels match canvas) ───
   useEffect(() => {
-    getCurrentWindow().setSize(new PhysicalSize(winSz, winSz)).catch(() => {});
+    getCurrentWindow().setSize(new LogicalSize(winSz, winSz)).catch(() => {});
   }, [winSz]);
 
   // ─── Save default position on mount ───
@@ -176,13 +176,15 @@ export default function PetWindow() {
         const mh = Number(rawSize.height);
         const mx = Number(rawPos.x);
         const my = Number(rawPos.y);
+        const sf = Number(m.scaleFactor) || 1;
         if (!mw || !mh) { timer = setTimeout(roam, 5000); return; }
+        // winSz is logical (CSS) pixels; monitor bounds are physical pixels
+        const physWinSz = winSz * sf;
         const margin = 40;
-        const nx = Math.round(mx + margin + Math.random() * (mw - winSz - margin * 2));
-        const ny = Math.round(my + margin + Math.random() * (mh - winSz - margin * 2));
-        // Clamp to safe bounds
-        const safeX = Math.max(mx + margin, Math.min(mx + mw - winSz - margin, nx));
-        const safeY = Math.max(my + margin, Math.min(my + mh - winSz - margin, ny));
+        const nx = Math.round(mx + margin + Math.random() * (mw - physWinSz - margin * 2));
+        const ny = Math.round(my + margin + Math.random() * (mh - physWinSz - margin * 2));
+        const safeX = Math.max(mx + margin, Math.min(mx + mw - physWinSz - margin, nx));
+        const safeY = Math.max(my + margin, Math.min(my + mh - physWinSz - margin, ny));
         await getCurrentWindow().setPosition(new PhysicalPosition(safeX, safeY));
       } catch { /* ignore */ }
       // Next roam in 10-30 seconds
