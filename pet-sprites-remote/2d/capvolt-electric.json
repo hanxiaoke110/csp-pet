@@ -1,0 +1,23 @@
+{
+  "frameWidth": 192,
+  "frameHeight": 208,
+  "maxFrames": 8,
+  "anims": {
+    "idle": 6,
+    "walk": 8,
+    "sleep": 6,
+    "celebrate": 4,
+    "think": 6,
+    "eat": 5,
+    "unhappy": 8
+  },
+  "animOrder": [
+    "idle",
+    "walk",
+    "sleep",
+    "celebrate",
+    "think",
+    "eat",
+    "unhappy"
+  ]
+}
