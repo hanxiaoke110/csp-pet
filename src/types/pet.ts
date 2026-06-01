@@ -146,7 +146,7 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'tendou-alice', name: '天童爱丽丝', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/tendou-alice.json', description: '蔚蓝档案 萌系女仆光环', price: 200 },
   { speciesId: 'df-maixiaoshu', name: '麦小鼠', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/df-maixiaoshu.json', description: '机械守护鼠，可爱金属伙伴', price: 200 },
   { speciesId: 'gojo-satoru', name: '五条悟', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/gojo-satoru.json', description: '白毛眼罩咒术师，苍蓝能量', price: 200 },
-  { speciesId: 'capvolt-electric', name: '皮卡丘·电', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/capvolt-electric.json', description: '电气鼠电属性，十万伏特', price: 200 },
+  { speciesId: 'capvolt-electric', name: '皮卡丘·电', element: 'light', renderType: '2d', modelPath: '/pet-sprites/2d/capvolt-electric.json', description: '电气鼠电属性，十万伏特', price: 200 },
 ];
 
 export const PET_TIERS: Record<string, PetTier> = {
