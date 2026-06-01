@@ -37,8 +37,6 @@ export default function RaisingGuide() {
 
       <Section title="💛 心情 & 好感度" icon="💛">
         <p>喂食、获得经验可提升心情。饥饿时（饱食 ≤ 20）心情会下降。</p>
-        <p><strong>好感度 ≥ 50</strong>：解锁专属气泡台词。</p>
-        <p><strong>好感度 ≥ 100</strong>：解锁宠物跟随模式。</p>
       </Section>
 
       <Section title="🍖 食物" icon="🍖">
@@ -67,7 +65,6 @@ export default function RaisingGuide() {
       </Section>
 
       <Section title="🎰 抽卡" icon="🎰">
-        <p>达成<strong>金丹</strong>（Lv.5）后解锁抽卡功能。</p>
         <p>单抽 <strong>200g</strong>，每日限 5 次。</p>
         <p>传说 1% · 稀有 10% · 保底 <strong>{ms.pityThreshold}</strong> 抽必出传说。</p>
         <p>达成<strong>化神</strong>（Lv.15）后保底减半至 50 抽。</p>
@@ -90,7 +87,7 @@ export default function RaisingGuide() {
                 </td>
                 <td>{TIER_PRICES[t]}g</td>
                 <td style={{ fontSize: 10, color: '#94a3b8' }}>
-                  {t === 'legendary' ? '4 位老师投票认定的顶级智子' : t === 'rare' ? '有一定人气的优质智子' : '基础智子伙伴'}
+                  {t === 'legendary' ? '万中无一的传说智子' : t === 'rare' ? '百里挑一的稀有智子' : '基础智子伙伴'}
                 </td>
               </tr>
             ))}
