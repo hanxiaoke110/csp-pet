@@ -343,7 +343,7 @@ export default function PetPanel() {
                 </div>
               </div>
 
-              <div className="pet-coins">🪙 {coins} 金币</div>
+              <div className="pet-coins">🪙 {coins} 金币 {expPool > 0 && <span style={{ color: '#818cf8', marginLeft: 8 }}>📦 {expPool} exp</span>}</div>
 
               {(pendingExp > 0 || pendingCoins > 0) && (
                 <div className="pet-pending">

@@ -59,7 +59,7 @@ export default function AchievementsPanel() {
   const [newUnlock, setNewUnlock] = useState<Achievement | null>(null);
   const prevUnlocked = useRef<Set<string> | null>(null);
 
-  // Detect new unlocks and show notification (skip initial mount)
+  // Detect new unlocks, give reward, and show notification (skip initial mount)
   useEffect(() => {
     const nowUnlocked = new Set(achievements.filter(a => a.check().unlocked).map(a => a.id));
     if (!prevUnlocked.current) {
@@ -70,6 +70,8 @@ export default function AchievementsPanel() {
     if (newlyUnlocked) {
       setNewUnlock(newlyUnlocked);
       setTimeout(() => setNewUnlock(null), 4000);
+      // Achievement reward: 10g
+      usePetStore.getState().addCoins(10);
     }
     prevUnlocked.current = nowUnlocked;
   }, [achievements]);
