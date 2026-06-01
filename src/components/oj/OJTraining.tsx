@@ -137,7 +137,7 @@ export default function OJTraining() {
                       </div>
                       <div className="oj-p-actions">
                         {p.url && <button onClick={() => openUrl(p.url)} className="oj-btn oj-btn-link">🔗 {p.source}</button>}
-                        {p.codemaoUrl && <button onClick={() => openUrl(p.codemaoUrl)} className="oj-btn oj-btn-link">🐱 编程猫</button>}
+                        {p.codemaoUrl && <button onClick={() => openUrl(p.codemaoUrl!)} className="oj-btn oj-btn-link">🐱 编程猫</button>}
                         {st === 'none' && (
                           <button className="oj-btn oj-btn-done" onClick={() => setStatus(p.id, 'done')}>标记已做</button>
                         )}
