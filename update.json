@@ -1,19 +1,19 @@
 {
-  "version": "1.3.2",
-  "notes": "Release v1.3.2 - 详见 Gitee Releases",
-  "pub_date": "2026-06-01T08:29:33Z",
+  "version": "1.3.3",
+  "notes": "Release v1.3.3 - 详见 Gitee Releases",
+  "pub_date": "2026-06-01T09:23:39Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzBqQWJLb1NPWlFSSUZ3cXlVU3ZmSkVrc0pwbmRsNnQ2dGdPT2UvMm1tR21XMjczdlNuUUFibUVmdGJ5RHFtd3VJT1F3aDV2SWdwTkNQUUNkaWpKSHdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMzAyNTY3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjMuMl9hYXJjaDY0LmRtZwpHQlQyMFN1ZUpNM29NZzJ0T2RpVjlETjBGL2NMVGtrS05FVVArTmt4QmRYYW1SRlkxcUhaVmZwbzlsNkhCQlVBdFhEdW1ITkNZMDlCZEtxMzVNUHhBUT09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.3.2/csp-v132-arm.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzcwb3NhVFRPN25tMzlGQjN1VTlVZzVVaDlyR3ZuQXZ6K0kzVkJIT1l4Und6UUtYbVQxNG5LclFiaUVMcHcyZGJMbVhwWCttOUlEV0lmRUxpdDdzb1FnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMzA1ODEzCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjMuM19hYXJjaDY0LmRtZwphN1kyYXBmS0RidzBJY2FZSllEZnB4MkZJQnZpcStvV2JHR1cvYmpkSnhDNGRkUjZFV3lRcTFONnVxOGgrOGpFRTZ6bThKd3hVWUhDclZTUHppK3JEdz09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.3.3/csp-v133-arm.dmg"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzZ2dnlNWDV1WUdRb0s3RGlJNnlHajRvSGovRE52Ymc0Z2I3ZXdQdlBpODh1emJ0cmJtSHpLbjk3bkh1T1Q4SzBKek9qRUtJYkhjQVQ4ZFplM1BodGdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMzAyNTY4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjMuMl94NjQuZG1nCnBQQ3hCU2UzbTVXODMvcVFZQW5PN0pyS25tL3pIS3FyQTBORVIwVFRYS0czaE1oQ3VjTnVvZFBWVkU4bStoZlNoTkR5RWpxZGhRUmhQME5tRnhmaERBPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.3.2/csp-v132-intel.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzhKbkFMdEZOOGlUcS8vSkJTTm9mTklia2VEL3hwZzFEUUwyQ0JZMU11bUxEU2ZYWkppS0d2SVFXb3lmbytpTy9sc1RGZEw0aGhtcjU5RFJTVE96U2dRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMzA1ODE0CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjMuM194NjQuZG1nClFHQkMxM1hXeEd0REc4ZStjZWFaNzR6bjYxWFJtZ0xTZHhkK0RjMG9XanJrZjUyQjlFSnFKa1N3M3VVRE9zSW01OVBLOU5ra2ovQzdTL0hqaUVIR0F3PT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.3.3/csp-v133-intel.dmg"
     },
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVy9OdTJleGt5eTZKdXFKV1lYY3JJYkUrc3ZCS21TZ3FyaUJBaFZzWGhOZUtuUWlnQ1ZmYitDQTFKS1pMOXNIelhHNGplMTFBSzc0UmRLNjRKeUZFVmdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMzAyNTcwCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjMuMl94NjQtc2V0dXAuZXhlCmxYcXZUTEFISkF1WG5uQ0tMM2FLMUZCYXVzNmgvdzd6dlFOTUpEMk5vOG1SdEh5UXFoaVR2WC9YYzVuVjJCano0RHR4dDFXUk9NZCtlMnRnNUhscURnPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.3.2/csp-v132-win.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3djRElSU2k3V0FmZmtvV1MxUGhYSmFGUDBVRnFiR1lPT2NqL1Zsck9OMGs0eHFTaU9SR2g3RDd0TytGT04zM0o4QkJwVVFPdDRKcUMxYTMyakNzL3dzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwMzA1ODE1CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjMuM194NjQtc2V0dXAuZXhlCnJpVmtBR1JNUXJuNjlYclJranNObE5kd2kzbGlFZldnM3JDTW9TSTZ2OTc4Qyt1QjhXbjVuc3Zrb1pCWmZLaTIrcUZZMWkyOWF0eHg4NjlXd3puMUR3PT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.3.3/csp-v133-win.exe"
     }
   }
 }
