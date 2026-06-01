@@ -120,6 +120,12 @@ pub fn run() {
                 })
                 .build(app)?;
 
+            // Disable minimize/maximize for pet window (Windows system menu prevention)
+            if let Some(pet) = app.get_webview_window("pet") {
+                let _ = pet.set_minimizable(false);
+                let _ = pet.set_maximizable(false);
+            }
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
