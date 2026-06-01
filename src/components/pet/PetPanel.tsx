@@ -15,7 +15,8 @@ import HatchPanel from './HatchPanel';
 import RaisingGuide from './RaisingGuide';
 
 export default function PetPanel() {
-  const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins } = usePetStore();
+  const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool } = usePetStore();
+  const allocateExpFromPool = usePetStore(s => s.allocateExpFromPool);
   const selectStarter = usePetStore(s => s.selectStarter);
   const setActivePet = usePetStore(s => s.setActivePet);
   const feedPet = usePetStore(s => s.feedPet);
@@ -308,6 +309,20 @@ export default function PetPanel() {
                   <span className="stat-value" style={{ color: getLevelBadgeColor(displayPet.level), fontWeight: 700 }}>Lv.{displayPet.level}</span>
                   <div className="stat-bar"><div className="stat-fill exp" style={{ width: `${(displayPet.exp / displayPet.expToNext) * 100}%` }} /></div>
                   <span className="stat-num">{displayPet.exp}/{displayPet.expToNext}</span>
+                  {expPool > 0 && (
+                    <button
+                      onClick={() => {
+                        const amount = Math.min(expPool, displayPet.expToNext - displayPet.exp);
+                        if (amount <= 0) { showToast('经验已满，升级后再来'); return; }
+                        allocateExpFromPool(displayPet.petId, amount);
+                        showToast(`已分配 ${amount} 经验给 ${formatPetDisplayName(displayPet.petName, displayPet.level)}`);
+                      }}
+                      style={{
+                        padding: '2px 8px', fontSize: 10, fontWeight: 600, cursor: 'pointer',
+                        background: '#ede9fe', border: '1px solid #7c3aed', borderRadius: 6, color: '#7c3aed',
+                        marginLeft: 8, whiteSpace: 'nowrap',
+                      }}>📦 分配 {Math.min(expPool, displayPet.expToNext - displayPet.exp)} exp</button>
+                  )}
                 </div>
                 <div className="pet-stat-row">
                   <span className="stat-name">🍖 饱食</span>
