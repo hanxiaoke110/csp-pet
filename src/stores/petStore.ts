@@ -364,6 +364,12 @@ export const usePetStore = create<PetState>((set, get) => ({
       lastFedAt: null, obtainedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
     };
     set(s => ({ ownedPets: [...s.ownedPets, pet] }));
+    // Mark as newly obtained for badge display
+    try {
+      const news = JSON.parse(localStorage.getItem('csp_new_pets') || '[]');
+      news.push(pet.petId);
+      localStorage.setItem('csp_new_pets', JSON.stringify(news));
+    } catch {}
     get().save();
     return true;
   },

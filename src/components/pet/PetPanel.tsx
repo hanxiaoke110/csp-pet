@@ -37,6 +37,10 @@ export default function PetPanel() {
   const [searchParams] = useSearchParams();
   const [tab, setTab] = useState<'status' | 'shop' | 'hatch' | 'guide' | 'settings'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
   const eggCount = useHatchStore(s => s.eggs.length);
+  const [newPetCount, setNewPetCount] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('csp_new_pets') || '[]').length; }
+    catch { return 0; }
+  });
 
   // Keep tab in sync with URL param
   useEffect(() => {
@@ -166,7 +170,9 @@ export default function PetPanel() {
   return (
     <div className="pet-panel">
       <div className="pet-tabs">
-        <button className={`pet-tab ${tab === 'status' ? 'active' : ''}`} onClick={() => setTab('status')}>🐾 智子</button>
+        <button className={`pet-tab ${tab === 'status' ? 'active' : ''}`} onClick={() => { setTab('status'); localStorage.removeItem('csp_new_pets'); setNewPetCount(0); }}>
+          🐾 智子 {newPetCount > 0 && <span style={{ background: '#ef4444', color: '#fff', borderRadius: 10, padding: '1px 6px', fontSize: 10, fontWeight: 700, marginLeft: 4 }}>NEW</span>}
+        </button>
         <button className={`pet-tab ${tab === 'shop' ? 'active' : ''}`} onClick={() => setTab('shop')}>🛒 商城</button>
         <button className={`pet-tab ${tab === 'hatch' ? 'active' : ''}`} onClick={() => setTab('hatch')}>
           🐣 孵化中{eggCount > 0 && <span className="hatch-badge">{eggCount}</span>}

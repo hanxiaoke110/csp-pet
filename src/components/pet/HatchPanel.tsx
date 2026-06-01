@@ -122,7 +122,7 @@ export default function HatchPanel() {
     <div className="hatch-panel">
       {claimedPet && (
         <div className="hatch-claimed-toast">
-          ✅ {claimedPet.petName} 孵化成功！已加入智子背包
+          ✅ 智子孵化成功！已加入智子背包
         </div>
       )}
 

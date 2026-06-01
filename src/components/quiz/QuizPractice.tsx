@@ -230,7 +230,7 @@ export default function QuizPractice() {
             <div className="mode-header">
               <span className="mode-icon">📋</span>
               <span className="mode-title">每周任务</span>
-              <span className="mode-badge mode-weekly">+15 EXP +5 金币/题</span>
+              <span className="mode-badge mode-weekly">+15 EXP +8 金币/题</span>
             </div>
             <p className="mode-desc">
               {quizStore.canDoWeeklyTask()
@@ -254,7 +254,7 @@ export default function QuizPractice() {
             <div className="mode-header">
               <span className="mode-icon">🔥</span>
               <span className="mode-title">额外挑战</span>
-              <span className="mode-badge mode-extra">+8 EXP +3 金币/题</span>
+              <span className="mode-badge mode-extra">+8 EXP +5 金币/题</span>
             </div>
             <p className="mode-desc">完成每周任务后解锁，再做 5 道题赚更多奖励</p>
             <button
@@ -270,7 +270,7 @@ export default function QuizPractice() {
             <div className="mode-header">
               <span className="mode-icon">📚</span>
               <span className="mode-title">月度复盘</span>
-              <span className="mode-badge mode-review">+20 EXP +10 金币/题</span>
+              <span className="mode-badge mode-review">+20 EXP +15 金币/题</span>
             </div>
             <p className="mode-desc">
               {(() => {
@@ -293,7 +293,7 @@ export default function QuizPractice() {
             <div className="mode-header">
               <span className="mode-icon">🏋️</span>
               <span className="mode-title">自由练习</span>
-              <span className="mode-badge mode-free">+3 EXP +1 金币/题</span>
+              <span className="mode-badge mode-free">+3 EXP +3 金币/题</span>
             </div>
             <p className="mode-desc">不限次数，微薄奖励，随时练习保持手感</p>
             <button className="mode-btn" onClick={() => startMode('free')}>
