@@ -5,112 +5,209 @@
       "error_message": "Gitee Release CI 创建失败：target_commitish is missing",
       "root_cause": "Gitee API POST /repos/:owner/:repo/releases 要求 target_commitish 字段，但 release.yml 中未传递此参数",
       "fix": "在 release.yml 的 curl -d 中添加 \"target_commitish\":\"master\"",
-      "tags": ["ci", "gitee", "release"]
+      "tags": [
+        "ci",
+        "gitee",
+        "release"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "Gitee Release CI 创建失败：target_commitish 指向不存在的分支",
       "root_cause": "release.yml 中 target_commitish 写死为 \"main\"，但 Gitee 仓库默认分支是 \"master\"（GitHub 用 main，Gitee 用 master）",
       "fix": "将 target_commitish 从 \"main\" 改为 \"master\"",
-      "tags": ["ci", "gitee", "release", "branch-naming"]
+      "tags": [
+        "ci",
+        "gitee",
+        "release",
+        "branch-naming"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "CI release job 上传安装包到 Gitee 卡死 30+ 分钟",
       "root_cause": "GitHub Actions runner 在美国，上传 70MB×3=210MB 文件到 Gitee 国内服务器速度极慢/超时。curl 未设 --connect-timeout 和 --max-time，导致无限挂起",
       "fix": "取消 CI 构建，改为手动从 GitHub Release 下载安装包后本地上传到 Gitee。长期方案：CI release job 中 curl 上传需加超时参数，或改为手动上传",
-      "tags": ["ci", "gitee", "upload", "timeout", "cross-border"]
+      "tags": [
+        "ci",
+        "gitee",
+        "upload",
+        "timeout",
+        "cross-border"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "Gitee 历史上 v0.1.4 和 v1.0.0 Release 看似由 CI 创建，实际都是手动创建",
       "root_cause": "CI 从未成功向 Gitee 上传过安装包。由于 release job 中 Gitee API 失败时脚本静默 fallback（echo WARNING 后继续），CI 整体显示 success，掩盖了 Gitee 上传失败的事实",
       "fix": "release.yml 中应添加 set -e 或显式检查上传结果，而非静默跳过",
-      "tags": ["ci", "gitee", "silent-failure"]
+      "tags": [
+        "ci",
+        "gitee",
+        "silent-failure"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "孵化永远卡在「即将完成」，无任何错误提示",
       "root_cause": "resumeDownload() 中 downloadPetSprites() 只有 .then() 没有 .catch()，任何下载异常都静默吞掉，downloadStatus 永久 stuck 在 'downloading'",
       "fix": "添加 .catch() handler，设置 downloadStatus: 'error' 并记录错误信息到 downloadProgress",
-      "tags": ["hatch", "promise", "error-handling", "silent-failure"]
+      "tags": [
+        "hatch",
+        "promise",
+        "error-handling",
+        "silent-failure"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "孵化失败: forbidden path: .../AppData/.../pet-sprites/2d",
       "root_cause": "Tauri v2 fs 插件有两层权限：API 权限（fs:allow-*）和 Scope（允许访问的路径）。capability 中只有 fs:default 和 fs:allow-appdata-*，缺少显式的 fs:scope 配置，默认 scope 为空，所有路径被拒",
       "fix": "在 capabilities/default.json 添加 {\"identifier\": \"fs:scope\", \"allow\": [{\"path\": \"$APPDATA/**\"}]}",
-      "tags": ["tauri-v2", "fs-plugin", "scope", "permission-model"]
+      "tags": [
+        "tauri-v2",
+        "fs-plugin",
+        "scope",
+        "permission-model"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "孵化失败: TypeError: Load failed (fetch 下载阶段)",
       "root_cause": "Tauri WebView 中浏览器 fetch 受 CORS 限制，Gitee raw 文件返回 302 重定向且缺少 Access-Control-Allow-Origin 头，fetch 被浏览器拦截",
       "fix": "用 @tauri-apps/plugin-http 的 fetch（Rust 后端发请求）替代浏览器 fetch。需同时：安装 JS 包、配置 http:allow-fetch scope、注册 Rust 端 plugin",
-      "tags": ["cors", "fetch", "tauri-v2", "http-plugin", "gitee"]
+      "tags": [
+        "cors",
+        "fetch",
+        "tauri-v2",
+        "http-plugin",
+        "gitee"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "孵化失败: plugin http not found",
       "root_cause": "Cargo.toml 中有 tauri-plugin-http 依赖，JS 端也装了 @tauri-apps/plugin-http，但 lib.rs 中只注册了 .plugin(tauri_plugin_fs::init())，漏了 .plugin(tauri_plugin_http::init())",
       "fix": "在 lib.rs 的 Builder 链中添加 .plugin(tauri_plugin_http::init())",
-      "tags": ["tauri-v2", "plugin-registration", "rust-backend"]
+      "tags": [
+        "tauri-v2",
+        "plugin-registration",
+        "rust-backend"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "精灵领取后主界面和悬浮窗均显示 ？",
       "root_cause": "convertFileSrc 生成 asset:// 自定义协议 URL，<img> 可加载但 fetch() 不支持（JS fetch 只支持 http/https）。loadSpriteSheet 用 fetch 读 JSON metadata 因此失败。改用 asset-localhost 协议（https://asset.localhost/）也不行，因为缺少 assetProtocol scope 配置（默认只含 bundle 资源目录，不含 AppData）",
       "fix": "完全绕过 convertFileSrc 和 asset protocol。用 @tauri-apps/plugin-fs 的 readFile + readTextFile 直接从 AppData 读文件，PNG 转 Blob → createObjectURL 生成 blob: URL（纯浏览器操作，不经过 Tauri 权限检查）",
-      "tags": ["tauri-v2", "asset-protocol", "convertFileSrc", "fetch", "blob-url"]
+      "tags": [
+        "tauri-v2",
+        "asset-protocol",
+        "convertFileSrc",
+        "fetch",
+        "blob-url"
+      ]
     },
     {
       "date": "2026-05-29",
       "error_message": "appDataDir() 路径拼接错误导致 convertFileSrc 找不到文件",
       "root_cause": "appDataDir() 返回路径无尾部 '/'（如 .../com.csp.desktop-pet），代码写成 ${base}${CACHE_SUBDIR} 少了一个 /，结果路径变成 .../com.csp.desktop-petpet-sprites/2d",
       "fix": "改为 ${base}/${CACHE_SUBDIR}。更安全的做法是使用 @tauri-apps/api/path 的 join() 函数",
-      "tags": ["path-join", "appDataDir", "trailing-slash"]
+      "tags": [
+        "path-join",
+        "appDataDir",
+        "trailing-slash"
+      ]
     },
     {
       "date": "2026-05-30",
       "error_message": "更新失败：The signature Bk1hlRjVhpYJnlC0bwzL3nA1R5jEWIrp68EHlwRceSw= could not be decoded",
       "root_cause": "两层问题：(1) CI release.yml 签名命令用了 --private-key /tmp/privkey，但该 flag 接收字符串而非文件路径，应改用 --private-key \"$PRIVKEY\" 或 --private-key-path；(2) .tauri/ 下的密钥对与 tauri.conf.json 中的 pubkey 不匹配，是两对不同的密钥",
       "fix": "重新生成密钥对(minisign)、更新 pubkey、修复 CI 签名命令、私钥存 GitHub Secrets + ~/.tauri/csp-updater-v2.key。旧版 App 需手动安装一次 v1.2.1，之后全自动",
-      "tags": ["signing", "updater", "pubkey", "tauri-v2", "ci"]
+      "tags": [
+        "signing",
+        "updater",
+        "pubkey",
+        "tauri-v2",
+        "ci"
+      ]
     },
     {
       "date": "2026-05-30",
       "error_message": "macOS 更新失败：invalid gzip header",
       "root_cause": "Gitee 上传时改了文件名（csp-v122-arm.dmg），但 Tauri minisign 签名内嵌了原始文件名（CSP 学习助手_1.2.2_aarch64.dmg），文件名不匹配导致验签失败",
       "fix": "上传到 Gitee 的文件名必须与 CI 构建时的原始文件名一致。或者本地重新签名使用新文件名",
-      "tags": ["signing", "filename", "minisign", "gitee", "tauri-v2"]
+      "tags": [
+        "signing",
+        "filename",
+        "minisign",
+        "gitee",
+        "tauri-v2"
+      ]
     },
     {
       "date": "2026-05-30",
       "error_message": "macOS 更新下载卡住/404（Gitee Release URL 多级跳转）",
       "root_cause": "Gitee Release 下载链：releases/download → 302 → attach_files/download → 302 → foruda.gitee.com?token=。Tauri macOS updater HTTP 客户端无法正确处理 2 次 302 跳转",
       "fix": "待验证方案：换 .app.tar.gz 格式 + 用不跳转的下载源（如直接 raw URL 或自建服务器）。Windows 不受影响",
-      "tags": ["gitee", "redirect", "302", "tauri-v2", "updater", "macos"]
+      "tags": [
+        "gitee",
+        "redirect",
+        "302",
+        "tauri-v2",
+        "updater",
+        "macos"
+      ]
     },
     {
       "date": "2026-05-30",
       "error_message": "版本号始终显示 v0.1.0（实际已是 v1.2.1）",
       "root_cause": "UpdateChecker.tsx 用 fetch('/version') 取版本号，但该接口在 Tauri v2 中不存在（/version 不是内置路由），fallback 到 '0.1.0'",
       "fix": "改用 @tauri-apps/api/app 的 getVersion() 函数",
-      "tags": ["version", "display", "tauri-v2", "ui"]
+      "tags": [
+        "version",
+        "display",
+        "tauri-v2",
+        "ui"
+      ]
     },
     {
       "date": "2026-05-30",
       "error_message": "奶龙·星心、奶龙·笑肚、王林 商城和智子界面显示白色无图",
       "root_cause": "新增精灵时只上传了 spritesheet 到 Gitee + 修改 pet.ts，但忘记生成 public/pet-sprites/previews/{id}.png 缩略图",
       "fix": "从 spritesheet 第一帧 crop(0,0,192,208) → resize(48,52) 生成 preview 放入 public/pet-sprites/previews/",
-      "tags": ["preview", "thumbnail", "add-pet", "checklist"]
+      "tags": [
+        "preview",
+        "thumbnail",
+        "add-pet",
+        "checklist"
+      ]
     },
     {
       "date": "2026-05-30",
       "error_message": "课程数据远程更新静默失败（学生永远不会收到课程更新）",
       "root_cause": "App.tsx 中用浏览器 fetch 请求 Gitee raw URL（public/course-data/version.json），Tauri WebView 中 CORS 拦截。外层 try {} catch {} 静默吞掉错误，fallback 到内置旧课程数据",
       "fix": "Gitee URL 改用 @tauri-apps/plugin-http 的 fetch（Rust 后端绕过 CORS），本地打包文件继续用浏览器 fetch",
-      "tags": ["cors", "fetch", "course-data", "gitee", "silent-failure"]
+      "tags": [
+        "cors",
+        "fetch",
+        "course-data",
+        "gitee",
+        "silent-failure"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "error_message": "商城精灵预览图显示一半或横竖方向错误（Jett/电玩小子/5只新精灵/33只旧精灵）",
+      "root_cause": "sips -r 90 旋转了图片，-c 参数使用错误导致裁剪尺寸不对。33只旧预览是192×208原帧未缩放，5只新预览被旋转90度，Jett/电玩小子仅44×48",
+      "fix": "统一用 Python PIL：crop(0,0,192,208) → resize(200,217) → center crop(200,200)。禁止用 sips 做预览图",
+      "tags": [
+        "preview",
+        "sprite",
+        "sips",
+        "PIL",
+        "shop"
+      ]
     }
   ]
 }

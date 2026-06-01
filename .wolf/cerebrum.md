@@ -36,3 +36,4 @@
 - **绝不**: 用 `fetch('/version')` 取版本号 — 该接口不存在，用 `getVersion()`
 - **绝不**: 新增精灵只上传 spritesheet 不生成 preview — 商城和智子都会白屏
 - **绝不**: preview 用 48×52 — 原始素材预览都是 200×200，尺寸不一样就是糊的
+- **绝不**: 用 sips 做预览图 — `-r 90` 会旋转、`-c` 参数易出错。统一用 Python PIL：`crop(0,0,192,208) → resize(200,217) → center crop(200×200)`
