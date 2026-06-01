@@ -43,6 +43,14 @@ export default function PetPanel() {
     catch { return 0; }
   });
 
+  // Refresh new pet badge when ownedPets changes (new pet claimed)
+  useEffect(() => {
+    try {
+      const count = JSON.parse(localStorage.getItem('csp_new_pets') || '[]').length;
+      setNewPetCount(count);
+    } catch {}
+  }, [ownedPets]);
+
   // Keep tab in sync with URL param
   useEffect(() => {
     if (searchParams.get('tab') === 'shop') setTab('shop');

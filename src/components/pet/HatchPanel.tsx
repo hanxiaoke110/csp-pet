@@ -109,7 +109,7 @@ export default function HatchPanel() {
     }
   };
 
-  if (eggs.length === 0) {
+  if (eggs.length === 0 && !claimedPet) {
     return (
       <div className="hatch-empty">
         <div style={{ fontSize: 48, opacity: 0.4 }}>🥚</div>
