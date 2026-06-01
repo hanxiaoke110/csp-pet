@@ -122,11 +122,11 @@ export const useQuizStore = create<QuizState>((set, get) => {
     errors: initial.errors || [],
     kpStats: initial.kpStats || {},
     lastKpResults: [],
-    weeklyTaskDone: 0,
-    weeklyTaskDate: getWeekStart(),
+    weeklyTaskDone: initial.weeklyTaskDate === getWeekStart() ? (initial.weeklyTaskDone || 0) : 0,
+    weeklyTaskDate: initial.weeklyTaskDate || getWeekStart(),
     weeklyCompletions: initial.weeklyCompletions || 0,
     weeklyPerfects: initial.weeklyPerfects || 0,
-    extraChallengeDone: false,
+    extraChallengeDone: initial.weeklyTaskDate === getWeekStart() ? (initial.extraChallengeDone || false) : false,
     extraChallengeCount: initial.extraChallengeCount || 0,
     lastReviewDate: initial.lastReviewDate || '',
     lastReviewCorrect: initial.lastReviewCorrect || 0,
@@ -268,6 +268,8 @@ export const useQuizStore = create<QuizState>((set, get) => {
 
     load: () => {
       const data = loadState();
+      const today = getWeekStart();
+      const sameWeek = data.weeklyTaskDate === today;
       set({
         errors: data.errors || [],
         kpStats: data.kpStats || {},
@@ -282,9 +284,9 @@ export const useQuizStore = create<QuizState>((set, get) => {
         totalCorrect: data.totalCorrect || 0,
         weeklyCompletions: data.weeklyCompletions || 0,
         weeklyPerfects: data.weeklyPerfects || 0,
-        weeklyTaskDone: 0,
-        weeklyTaskDate: getWeekStart(),
-        extraChallengeDone: false,
+        weeklyTaskDone: sameWeek ? (data.weeklyTaskDone || 0) : 0,
+        weeklyTaskDate: sameWeek ? (data.weeklyTaskDate || today) : today,
+        extraChallengeDone: sameWeek ? (data.extraChallengeDone || false) : false,
       });
     },
 
@@ -305,6 +307,9 @@ export const useQuizStore = create<QuizState>((set, get) => {
           totalCorrect: s.totalCorrect,
           weeklyCompletions: s.weeklyCompletions,
           weeklyPerfects: s.weeklyPerfects,
+          weeklyTaskDone: s.weeklyTaskDone,
+          weeklyTaskDate: s.weeklyTaskDate,
+          extraChallengeDone: s.extraChallengeDone,
         });
         // Write to temp key first, then swap — reduces corruption risk on crash
         localStorage.setItem(STORAGE_KEY + '_tmp', json);
