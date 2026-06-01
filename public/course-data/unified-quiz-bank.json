@@ -605,8 +605,8 @@
       "C. 91",
       "D. 93"
     ],
-    "correctIndex": 0,
-    "explanation": "",
+    "correctIndex": 1,
+    "explanation": "100以内的素数中最大的是97。89虽然也是素数但小于97。91=7×13，93=3×31，都不是素数。",
     "difficulty": 2,
     "questionType": "choice",
     "hasImage": false
