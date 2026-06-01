@@ -173,7 +173,7 @@
       "C. 01 0010 1000 0001",
       "D. 01 0010 1000 0011"
     ],
-    "correctIndex": 3,
+    "correctIndex": 0,
     "explanation": "",
     "difficulty": 2,
     "questionType": "choice",
@@ -191,7 +191,7 @@
       "C. 13",
       "D. 12"
     ],
-    "correctIndex": 3,
+    "correctIndex": 0,
     "explanation": "",
     "difficulty": 2,
     "questionType": "choice",
