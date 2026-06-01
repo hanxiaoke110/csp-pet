@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { openUrl } from '@tauri-apps/plugin-opener';
 
 interface OJProblem {
   id: number;
@@ -135,10 +136,8 @@ export default function OJTraining() {
                         </div>
                       </div>
                       <div className="oj-p-actions">
-                        {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer"
-                          className="oj-btn oj-btn-link">🔗 {p.source}</a>}
-                        {p.codemaoUrl && <a href={p.codemaoUrl} target="_blank" rel="noopener noreferrer"
-                          className="oj-btn oj-btn-link">🐱 编程猫</a>}
+                        {p.url && <button onClick={() => openUrl(p.url)} className="oj-btn oj-btn-link">🔗 {p.source}</button>}
+                        {p.codemaoUrl && <button onClick={() => openUrl(p.codemaoUrl)} className="oj-btn oj-btn-link">🐱 编程猫</button>}
                         {st === 'none' && (
                           <button className="oj-btn oj-btn-done" onClick={() => setStatus(p.id, 'done')}>标记已做</button>
                         )}
@@ -202,7 +201,7 @@ function CodeMaoTab() {
             onClick={() => toggle(i)}>
             {doneSets.has(i) ? '✅ 已完成' : '标记完成'}
           </button>
-          <a href={ps.url} target="_blank" rel="noopener noreferrer" className="oj-btn oj-btn-link">🔗 前往练习</a>
+          <button onClick={() => openUrl(ps.url)} className="oj-btn oj-btn-link">🔗 前往练习</button>
         </div>
       ))}
     </div>
