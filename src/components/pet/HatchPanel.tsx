@@ -73,6 +73,9 @@ function EggCard({ egg, onClaim }: { egg: HatchingEgg; onClaim: (egg: HatchingEg
         )}
       </div>
       <div className="egg-actions">
+        {egg.status === 'waiting' && (
+          <button className="oj-btn oj-btn-pass" onClick={() => useHatchStore.getState().startHatching(egg.eggId)}>开始孵化</button>
+        )}
         {egg.status === 'ready' && (
           <button className="oj-btn oj-btn-pass" onClick={() => onClaim(egg)}>领取</button>
         )}
