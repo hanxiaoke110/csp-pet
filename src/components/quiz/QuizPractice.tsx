@@ -466,7 +466,8 @@ export default function QuizPractice() {
       if (sr.exp > 0) {
         const activePetId = usePetStore.getState().activePetId;
         if (activePetId) addExp(activePetId, sr.exp);
-        addCoins(sr.coins);
+        const mult = usePetStore.getState().getRewardMultiplier();
+        addCoins(Math.floor(sr.coins * mult));
       }
     };
 
