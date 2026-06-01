@@ -6,9 +6,9 @@ import type { Lesson } from '../../types/course';
 // ─── Code validation ───
 const SECRET = 'csp-coach-2025';
 
-function makeHash(level: string, date: string): string {
+function makeHash(level: string, date: string, rand: string): string {
   let h = 0;
-  const s = `${level}-${date}-${SECRET}`;
+  const s = `${level}-${date}-${rand}-${SECRET}`;
   for (let i = 0; i < s.length; i++) {
     h = ((h << 5) - h + s.charCodeAt(i)) | 0;
   }
@@ -23,11 +23,12 @@ function makeHash(level: string, date: string): string {
 }
 
 function verifyExcellenceCode(code: string): { level: string } | null {
-  // Support both old format EXC-1-0529-ABCD and new format EXC-1-0529-ABCD-RAND
-  const match = code.match(/^EXC-([123])-(\d{4})-([A-Z0-9]{4})(?:-[A-Z0-9]{4})?$/);
+  // Format: EXC-{level}-{MMDD}-{4-char-hash}-{4-char-rand}
+  // The random suffix is PART of the hash — changing any character invalidates the code
+  const match = code.match(/^EXC-([123])-(\d{4})-([A-Z0-9]{4})-([A-Z0-9]{4})$/);
   if (!match) return null;
-  const [, level, date, check] = match;
-  return makeHash(level, date) === check ? { level } : null;
+  const [, level, date, check, rand] = match;
+  return makeHash(level, date, rand) === check ? { level } : null;
 }
 
 // ─── Rewards ───
