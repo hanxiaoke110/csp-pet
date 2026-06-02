@@ -1,6 +1,22 @@
 // CSP 许愿墙 API — Cloudflare Workers + D1
 // 部署在 api.cspstudy.top
 
+// ── 敏感词黑名单 ──
+const BAD_WORDS = [
+  '色情','裸体','裸聊','性交','淫秽','色诱','约炮','嫖娼','卖淫',
+  '杀人','杀死','砍死','炸死','枪毙','自杀','割腕','跳楼','虐杀',
+  '习近','法轮','六四','天安门','台独','藏独','港独','疆独',
+  '傻逼','操你','你妈','草泥马','fuck','shit','bitch','nigger',
+  '赌博','赌场','吸毒','大麻','海洛因','摇头丸','冰毒','可卡因',
+  '诈骗','传销','网赌','裸贷','校园贷','高利贷',
+];
+
+function hasBadContent(text) {
+  const lower = text.toLowerCase().replace(/\s/g, '');
+  return BAD_WORDS.some(w => lower.includes(w));
+}
+// ────────────────────────
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -37,6 +53,11 @@ export default {
       if (path === '/api/wishes' && request.method === 'POST') {
         const body = await request.json();
         const { content, display_name, real_name_enc, device_hash } = body;
+
+        // ── 内容审核 ──
+        if (hasBadContent(content) || hasBadContent(display_name)) {
+          return new Response(JSON.stringify({ error: '内容包含不当词汇，请重新输入' }), { status: 400, headers: cors });
+        }
 
         // 校验
         if (!content || content.length < 2 || content.length > 60) {
