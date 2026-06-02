@@ -208,6 +208,69 @@
         "PIL",
         "shop"
       ]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "学生改 CAMP 码末尾数字仍可使用集训",
+      "root_cause": "随机后缀不在 hash 计算中，regex 中后缀可选",
+      "fix": "随机后缀纳入 hash，regex 必填后缀。教练端和学生端同步修改",
+      "tags": [
+        "security",
+        "training-camp",
+        "code"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "领取最后一只蛋后 Toast 不显示",
+      "root_cause": "claimEgg 移除蛋后 eggs.length===0，组件渲染空状态跳过 Toast",
+      "fix": "加 !claimedPet 条件，Toast 未消失时不显示空状态",
+      "tags": [
+        "UI",
+        "hatch",
+        "toast"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "NEW 红点不自动更新",
+      "root_cause": "newPetCount 只在组件初始化时计算一次",
+      "fix": "加 useEffect 监听 ownedPets 变化触发重新计数",
+      "tags": [
+        "UI",
+        "pet",
+        "badge"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "二进制 1011 换算答案错误（选 D:12，应为 A:11）",
+      "root_cause": "correctIndex 标错",
+      "fix": "correctIndex 改为 0 (A:11)",
+      "tags": [
+        "quiz",
+        "answer"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "100以内最大素数答案错误（选 A:89，应为 B:97）",
+      "root_cause": "correctIndex 标错",
+      "fix": "correctIndex 改为 1 (B:97)，补充解析",
+      "tags": [
+        "quiz",
+        "answer"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "硬编码 SUMMER2025 密码可被学生直接激活集训",
+      "root_cause": "遗留测试密码",
+      "fix": "删除 legacy 密码，只保留 CAMP 码校验",
+      "tags": [
+        "security",
+        "training-camp"
+      ]
     }
   ]
 }
