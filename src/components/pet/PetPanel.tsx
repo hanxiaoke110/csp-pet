@@ -13,6 +13,7 @@ import HatchConfirmModal from './HatchConfirmModal';
 import HatchPanel from './HatchPanel';
 import RaisingGuide from './RaisingGuide';
 import PetSettings from './PetSettings';
+import WishWall from './WishWall';
 import PetStatus from './PetStatus';
 
 export default function PetPanel() {
@@ -34,7 +35,7 @@ export default function PetPanel() {
     newName?: string;
   } | null>(null);
   const [searchParams] = useSearchParams();
-  const [tab, setTab] = useState<'status' | 'shop' | 'hatch' | 'guide' | 'settings'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
+  const [tab, setTab] = useState<'status' | 'shop' | 'hatch' | 'guide' | 'settings' | 'wish'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
   const eggCount = useHatchStore(s => s.eggs.length);
   const [newPetCount, setNewPetCount] = useState(() => {
     try { return JSON.parse(localStorage.getItem('csp_new_pets') || '[]').length; }
@@ -186,6 +187,7 @@ export default function PetPanel() {
         </button>
         <button className={`pet-tab ${tab === 'guide' ? 'active' : ''}`} onClick={() => setTab('guide')}>📖 指南</button>
         <button className={`pet-tab ${tab === 'settings' ? 'active' : ''}`} onClick={() => setTab('settings')}>⚙️ 显示</button>
+        <button className={`pet-tab ${tab === 'wish' ? 'active' : ''}`} onClick={() => setTab('wish')}>💡 许愿</button>
       </div>
 
       {tab === 'status' && (
@@ -206,6 +208,7 @@ export default function PetPanel() {
       {tab === 'guide' && <RaisingGuide />}
 
       {tab === 'settings' && <PetSettings petSize={petSize} setPetSize={setPetSize} roaming={roaming} setRoaming={setRoaming} petWinVisible={petWinVisible} setPetWinVisible={setPetWinVisible} showToast={showToast} />}
+      {tab === 'wish' && <WishWall />}
 
       {/* Rename modal */}
       {renameModal && displayPet && (
@@ -377,6 +380,44 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <button className="shop-card-buy" disabled={coins < 200}
               onClick={() => setActionConfirm({ type: 'rename', title: '改名卡', desc: '给一只灵犀智子改名字', price: 200 })}>
               🪙 200 购买
+            </button>
+          </div>
+
+          {/* Wish Tickets */}
+          <div className="special-card" style={{ borderColor: '#7c3aed44' }}>
+            <div className="special-icon">🎫</div>
+            <h4>许愿票 ×1</h4>
+            <p>给你喜欢的许愿投一票</p>
+            <button className="shop-card-buy" disabled={coins < 100}
+              onClick={() => {
+                import('../../utils/crypto').then(m => { m.addTickets(1); window.dispatchEvent(new CustomEvent('tickets-updated')); });
+                spendCoins(100);
+                const toast = document.createElement('div');
+                toast.textContent = '🎫 +1 许愿票已到账';
+                toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#7c3aed;color:#fff;padding:8px 20px;border-radius:10px;z-index:999;font-weight:600;font-size:13px;';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+              }}>
+              🪙 100 购买
+            </button>
+          </div>
+
+          <div className="special-card" style={{ borderColor: '#7c3aed66' }}>
+            <div className="special-icon">🎫🎫🎫</div>
+            <h4>许愿票 ×3</h4>
+            <p>打包优惠！给你喜欢的许愿投 3 票</p>
+            <div className="special-stock">省 50g</div>
+            <button className="shop-card-buy" disabled={coins < 250}
+              onClick={() => {
+                import('../../utils/crypto').then(m => { m.addTickets(3); window.dispatchEvent(new CustomEvent('tickets-updated')); });
+                spendCoins(250);
+                const toast = document.createElement('div');
+                toast.textContent = '🎫 +3 许愿票已到账';
+                toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#7c3aed;color:#fff;padding:8px 20px;border-radius:10px;z-index:999;font-weight:600;font-size:13px;';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+              }}>
+              🪙 250 购买（省 50g）
             </button>
           </div>
 
