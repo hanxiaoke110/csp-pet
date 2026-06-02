@@ -95,7 +95,9 @@ export default function PetWindow() {
   useEffect(() => {
     const load = () => {
       try {
-        const d = JSON.parse(localStorage.getItem('csp_pet_data') || '{}');
+        let raw = localStorage.getItem('csp_pet_data');
+        if (!raw) raw = localStorage.getItem('csp_pet_data_tmp');
+        const d = JSON.parse(raw || '{}');
         if (d.activePetId && d.ownedPets) {
           const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
           if (p) setActivePet(p);
@@ -106,7 +108,10 @@ export default function PetWindow() {
     const c: (() => void)[] = [];
     listen('pet-data-sync', (e: any) => {
       const d = e.payload;
-      localStorage.setItem('csp_pet_data', JSON.stringify(d));
+      const json = JSON.stringify(d);
+      localStorage.setItem('csp_pet_data_tmp', json);
+      localStorage.setItem('csp_pet_data', json);
+      localStorage.removeItem('csp_pet_data_tmp');
       if (d.activePetId && d.ownedPets) {
         const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
         if (p) setActivePet(p);

@@ -516,14 +516,18 @@ export const usePetStore = create<PetState>((set, get) => ({
       } else {
         invoke('hide_pet_window').catch(() => {});
       }
-      } catch { /* quota exceeded or filesystem error */ }
+      } catch (e) { console.error('[petStore] save failed:', e); }
     },
 
   load: () => {
     try {
       let raw = localStorage.getItem('csp_pet_data');
-      if (!raw) { raw = localStorage.getItem('csp_pet_data_tmp'); if (raw) localStorage.setItem('csp_pet_data', raw); }
-      const data = JSON.parse(raw || '{}');
+      let data: any = {};
+      if (raw) { try { data = JSON.parse(raw); } catch { /* corrupted */ } }
+      if (!data.ownedPets) {
+        raw = localStorage.getItem('csp_pet_data_tmp');
+        if (raw) { try { data = JSON.parse(raw); localStorage.setItem('csp_pet_data', raw); } catch {} }
+      }
       if (data.ownedPets) {
         // Migrate old pets without renderType/modelPath
         const migrated = data.ownedPets.map((p: any) => {
