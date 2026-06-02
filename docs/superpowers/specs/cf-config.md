@@ -9,7 +9,7 @@
 | 邮箱 | Hanyanwei8062@dingtalk.com |
 | 账户 ID | `908f0def3e8015ca7a20de49a99cf334` |
 | 区域 ID | `9babb3d83455c4e3f92f206de64f544b` |
-| API Token | `cfut_m87njUVs3dp87p2bpz0eurlgqPeoAxwaRX2DXA8e7d34714d` |
+| API Token | `cfut_9Z2eXQ70rHHOmEiRV1lPl8E8q6C92Yn5mg3aEuPQ961e2771` |
 | 权限 | Workers Scripts:Edit / D1:Edit / DNS:Edit |
 
 ## 域名
