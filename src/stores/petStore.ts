@@ -385,13 +385,13 @@ export const usePetStore = create<PetState>((set, get) => ({
 
   // ─── Training camp ───
   activateTrainingCamp: (password: string) => {
-    // CAMP-{date}-{check} or CAMP-{date}-{check}-{rand} format
-    const match = password.match(/^CAMP-(\d{8})-([A-Z0-9]{4})(?:-[A-Z0-9]{4})?$/);
+    // CAMP-{date}-{check}-{rand} format — rand is part of the hash
+    const match = password.match(/^CAMP-(\d{8})-([A-Z0-9]{4})-([A-Z0-9]{4})$/);
     if (match) {
-      const [, date, check] = match;
-      // Validate hash
+      const [, date, check, rand] = match;
+      // Validate hash — rand is now included, changing any char invalidates the code
       const SECRET = 'csp-camp-2025';
-      const s = `${date}-${SECRET}`;
+      const s = `${date}-${rand}-${SECRET}`;
       let h = 0;
       for (let i = 0; i < s.length; i++) {
         h = ((h << 5) - h + s.charCodeAt(i)) | 0;
