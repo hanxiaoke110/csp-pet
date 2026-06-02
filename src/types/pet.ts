@@ -4,6 +4,16 @@ export type PetAnimation = 'idle' | 'walk' | 'sleep' | 'celebrate' | 'think' | '
 export type RenderType = '2d';
 export type PetTier = 'legendary' | 'rare' | 'common';
 
+export const ELEMENT_EMOJI: Record<PetElement, string> = {
+  earth: '🟫', fire: '🔴', wind: '🟢', water: '🔵', light: '🌟',
+};
+
+export const TIER_LABELS: Record<PetTier, { icon: string; label: string }> = {
+  legendary: { icon: '👑', label: '传说' },
+  rare:      { icon: '✨', label: '稀有' },
+  common:    { icon: '⭐', label: '普通' },
+};
+
 export const TIER_PRICES: Record<PetTier, number> = {
   legendary: 500,
   rare: 260,

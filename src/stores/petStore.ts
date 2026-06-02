@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
+import { safeLsSet, safeLsGet } from '../lib/storage';
 import type { OwnedPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, ALL_SHOP_ITEMS, PET_TIERS } from '../types/pet';
 import type { ShopItem } from '../types/pet';
@@ -502,32 +503,23 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   save: () => {
-    try {
-      const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
-      const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed };
-      const json = JSON.stringify(data);
-      localStorage.setItem('csp_pet_data_tmp', json);
-      localStorage.setItem('csp_pet_data', json);
-      localStorage.removeItem('csp_pet_data_tmp');
+    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
+    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed };
+    safeLsSet('csp_pet_data', JSON.stringify(data));
       emit('pet-data-sync', data).catch(() => {});
       // Auto show/hide pet window based on whether pets exist
       if (activePetId) {
         invoke('show_pet_window').catch(() => {});
       } else {
         invoke('hide_pet_window').catch(() => {});
-      }
-      } catch (e) { console.error('[petStore] save failed:', e); }
+    }
     },
 
   load: () => {
     try {
-      let raw = localStorage.getItem('csp_pet_data');
+      const raw = safeLsGet('csp_pet_data', '{}');
       let data: any = {};
-      if (raw) { try { data = JSON.parse(raw); } catch { /* corrupted */ } }
-      if (!data.ownedPets) {
-        raw = localStorage.getItem('csp_pet_data_tmp');
-        if (raw) { try { data = JSON.parse(raw); localStorage.setItem('csp_pet_data', raw); } catch {} }
-      }
+      try { data = JSON.parse(raw); } catch { /* corrupted */ }
       if (data.ownedPets) {
         // Migrate old pets without renderType/modelPath
         const migrated = data.ownedPets.map((p: any) => {
