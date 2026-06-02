@@ -385,13 +385,6 @@ export const usePetStore = create<PetState>((set, get) => ({
 
   // ─── Training camp ───
   activateTrainingCamp: (password: string) => {
-    // Master password (legacy)
-    if (password === 'SUMMER2025') {
-      const end = new Date(Date.now() + 12 * 86400000).toISOString().slice(0, 10);
-      set({ trainingCampActive: true, trainingCampEndDate: end, trainingCampFoodsClaimed: [] });
-      get().save();
-      return true;
-    }
     // CAMP-{date}-{check} or CAMP-{date}-{check}-{rand} format
     const match = password.match(/^CAMP-(\d{8})-([A-Z0-9]{4})(?:-[A-Z0-9]{4})?$/);
     if (match) {
@@ -509,21 +502,28 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
-    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed };
-    localStorage.setItem('csp_pet_data', JSON.stringify(data));
-    emit('pet-data-sync', data).catch(() => {});
-    // Auto show/hide pet window based on whether pets exist
-    if (activePetId) {
-      invoke('show_pet_window').catch(() => {});
-    } else {
-      invoke('hide_pet_window').catch(() => {});
-    }
-  },
+    try {
+      const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
+      const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed };
+      const json = JSON.stringify(data);
+      localStorage.setItem('csp_pet_data_tmp', json);
+      localStorage.setItem('csp_pet_data', json);
+      localStorage.removeItem('csp_pet_data_tmp');
+      emit('pet-data-sync', data).catch(() => {});
+      // Auto show/hide pet window based on whether pets exist
+      if (activePetId) {
+        invoke('show_pet_window').catch(() => {});
+      } else {
+        invoke('hide_pet_window').catch(() => {});
+      }
+      } catch { /* quota exceeded or filesystem error */ }
+    },
 
   load: () => {
     try {
-      const data = JSON.parse(localStorage.getItem('csp_pet_data') || '{}');
+      let raw = localStorage.getItem('csp_pet_data');
+      if (!raw) { raw = localStorage.getItem('csp_pet_data_tmp'); if (raw) localStorage.setItem('csp_pet_data', raw); }
+      const data = JSON.parse(raw || '{}');
       if (data.ownedPets) {
         // Migrate old pets without renderType/modelPath
         const migrated = data.ownedPets.map((p: any) => {
