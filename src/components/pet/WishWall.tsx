@@ -89,7 +89,7 @@ export default function WishWall() {
   const restWishes = sort === 'hot' ? wishes.slice(3) : wishes;
 
   return (
-    <div style={{ padding: '0 4px', maxHeight: 'calc(100vh - 200px)', overflow: 'auto', color: '#e2e8f0' }}>
+    <div style={{ padding: '0 4px 40px', overflow: 'auto', color: '#e2e8f0' }}>
       {/* ── Top Bar ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
         <div style={{ display: 'flex', gap: 6 }}>

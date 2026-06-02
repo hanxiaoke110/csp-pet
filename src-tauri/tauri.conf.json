@@ -16,7 +16,7 @@
         "label": "main",
         "title": "CSP 学习助手",
         "width": 950,
-        "height": 600,
+        "height": 560,
         "resizable": true,
         "minWidth": 800,
         "minHeight": 500,
