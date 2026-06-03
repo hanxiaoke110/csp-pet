@@ -12,6 +12,7 @@ import PetPanel from './components/pet/PetPanel';
 import AchievementsPanel from './components/achievements/AchievementsPanel';
 import OJTraining from './components/oj/OJTraining';
 import SettingsPage from './components/settings/SettingsPage';
+import AdminPage from './components/admin/AdminPage';
 import { useCourseStore } from './stores/courseStore';
 import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
@@ -246,14 +247,14 @@ function App() {
           const remoteVer = await verResp.json();
           const localVer = parseInt(localStorage.getItem('csp_data_version') || '0');
           if (remoteVer.version > localVer) {
-            const [stagesResp, lessonsResp] = await Promise.all([
+            const [stagesResp, lessonsResp, quizResp] = await Promise.all([
               tauriFetch(`${REMOTE_BASE}/stages.json`, { connectTimeout: 15_000 }),
               tauriFetch(`${REMOTE_BASE}/lessons.json`, { connectTimeout: 15_000 }),
+              tauriFetch(`${REMOTE_BASE}/unified-quiz-bank.json`, { connectTimeout: 15_000 }),
             ]);
             if (stagesResp.ok && lessonsResp.ok) {
               const remoteStages = await stagesResp.json();
               const remoteLessonsData = await lessonsResp.json();
-              // Flatten nested lessons
               let flatLessons = [];
               if (Array.isArray(remoteLessonsData)) {
                 flatLessons = remoteLessonsData;
@@ -268,6 +269,13 @@ function App() {
               }
               localStorage.setItem('csp_imported_lessons', JSON.stringify({ stages: remoteStages, lessons: flatLessons }));
               localStorage.setItem('csp_data_version', String(remoteVer.version));
+              // Save quiz bank if available
+              if (quizResp.ok) {
+                try {
+                  const quizData = await quizResp.json();
+                  localStorage.setItem('csp_quiz_bank', JSON.stringify(quizData));
+                } catch {}
+              }
             }
           }
         }
@@ -364,6 +372,7 @@ function App() {
           <Route path="/achievements" element={<AchievementsPanel />} />
           <Route path="/oj-training" element={<OJTraining />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
         {toast && <div className="milestone-toast">{toast}</div>}
       </AppShell>

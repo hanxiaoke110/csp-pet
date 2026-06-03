@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精灵工坊 - CSP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#f8fafc;color:#1e293b;font-size:14px}
+#app{max-width:900px;margin:0 auto;padding:20px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:2px solid #e2e8f0;margin-bottom:20px}
+.header h1{font-size:20px;color:#FF8C00}
+.btn{padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-primary{background:#FF8C00;color:#fff}.btn-primary:hover{background:#F96D00}
+.btn-outline{background:#fff;border:1px solid #e2e8f0;color:#334155}
+.btn-danger{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:12px}
+.input{width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;outline:none;font-family:inherit}
+.input:focus{border-color:#FF8C00}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px}
+.tabs{display:flex;gap:4px;background:#f1f5f9;border-radius:10px;padding:3px;margin-bottom:20px}
+.tab{padding:8px 18px;border:none;background:none;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border-radius:8px}
+.tab.active{background:#fff;color:#FF8C00;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:10px;font-weight:600;font-size:13px;z-index:999}
+.toast-success{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.toast-error{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
+.element-btn{padding:10px 16px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;transition:all .15s;text-align:center;flex:1}
+.element-btn:hover{border-color:#fed7aa}
+.element-btn.sel{border-color:#FF8C00;background:#fff7ed}
+.preview-box{width:200px;height:200px;border:2px dashed #e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#fafafa;overflow:hidden}
+.preview-box img{max-width:100%;max-height:100%;object-fit:contain}
+.progress-steps{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.progress-step{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600}
+.progress-step.pending{background:#f1f5f9;color:#94a3b8}
+.progress-step.running{background:#fff7ed;color:#FF8C00}
+.progress-step.done{background:#f0fdf4;color:#16a34a}
+.progress-step.failed{background:#fef2f2;color:#ef4444}
+.spinner{width:16px;height:16px;border:2px solid #e2e8f0;border-top-color:#FF8C00;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pet-card{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px}
+.pet-thumb{width:60px;height:60px;border-radius:8px;background:#f1f5f9;overflow:hidden}
+.pet-thumb img{width:100%;height:100%;object-fit:contain}
+.login-box{max-width:380px;margin:80px auto}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const API = 'https://api.cspstudy.top';
+let state = { page: 'login', token: '', teacher: null };
+
+function toast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`; el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; setTimeout(() => el.remove(), 300); }, 2500);
+}
+
+async function api(path, opts={}) {
+  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+  if (state.token) headers['X-Teacher-Token'] = state.token;
+  const resp = await fetch(`${API}${path}`, { ...opts, headers });
+  if (!resp.ok) {
+    try { const err = await resp.json(); return { error: err.error || `请求失败 (${resp.status})` }; }
+    catch { return { error: `请求失败 (${resp.status})` }; }
+  }
+  try { return await resp.json(); } catch { return { error: '响应格式错误' }; }
+}
+
+// ═══ Login ═══
+function LoginPage() {
+  const [phone, setPhone] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  const login = async () => {
+    if (!phone || !password) { toast('请填写手机号和密码','error'); return; }
+    setLoading(true);
+    const d = await api('/api/teacher/login', { method:'POST', body:JSON.stringify({ phone, password }) });
+    if (d.error) { toast(d.error,'error'); setLoading(false); return; }
+    state.token = d.token; state.teacher = { teacher_id: d.teacher_id, name: d.name };
+    localStorage.setItem('csp_teacher_token', d.token);
+    localStorage.setItem('csp_teacher_info', JSON.stringify(state.teacher));
+    state.page = 'dashboard'; render();
+  };
+
+  return React.createElement('div', { className:'login-box card' },
+    React.createElement('h2', { style:{ textAlign:'center', marginBottom:20, color:'#FF8C00' } }, '🏭 精灵工坊'),
+    React.createElement('div', { className:'form-group' },
+      React.createElement('label', null, '手机号'),
+      React.createElement('input', { className:'input', value:phone, onChange:e=>setPhone(e.target.value), placeholder:'教师手机号', onKeyDown:e=>e.key==='Enter'&&login() }),
+    ),
+    React.createElement('div', { className:'form-group' },
+      React.createElement('label', null, '密码'),
+      React.createElement('input', { className:'input', type:'password', value:password, onChange:e=>setPassword(e.target.value), placeholder:'登录密码', onKeyDown:e=>e.key==='Enter'&&login() }),
+    ),
+    React.createElement('button', { className:'btn btn-primary', style:{ width:'100%', padding:12 }, onClick:login, disabled:loading },
+      loading ? '登录中...' : '登录'),
+  );
+}
+
+// ═══ Dashboard ═══
+function Dashboard() {
+  const [tab, setTab] = React.useState('create');
+  const [pets, setPets] = React.useState([]);
+
+  React.useEffect(() => { loadPets(); }, []);
+
+  async function loadPets() {
+    const d = await api('/api/workshop/pets');
+    if (Array.isArray(d)) setPets(d);
+  }
+
+  return React.createElement('div', null,
+    React.createElement('div', { className:'header' },
+      React.createElement('h1', null, '🏭 精灵工坊'),
+      React.createElement('div', { style:{ display:'flex', alignItems:'center', gap:12 } },
+        React.createElement('span', { style:{ fontSize:13, color:'#64748b' } }, state.teacher?.name),
+        React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12 }, onClick:()=>{ state.token=''; state.teacher=null; localStorage.clear(); state.page='login'; render(); } }, '退出'),
+      ),
+    ),
+    React.createElement('div', { className:'tabs' },
+      React.createElement('button', { className:`tab ${tab==='create'?'active':''}`, onClick:()=>setTab('create') }, '🎨 创建精灵'),
+      React.createElement('button', { className:`tab ${tab==='my'?'active':''}`, onClick:()=>setTab('my') }, '📚 我的精灵'),
+      React.createElement('button', { className:`tab ${tab==='settings'?'active':''}`, onClick:()=>setTab('settings') }, '⚙️ AI配置'),
+    ),
+    tab === 'create' ? React.createElement(CreatePanel, { onCreated: loadPets }) :
+    tab === 'my' ? React.createElement(MyPetsPanel, { pets, onRefresh: loadPets }) :
+    React.createElement(SettingsPanel),
+  );
+}
+
+// ═══ Create Panel ═══
+const ELEMENTS = ['earth','fire','wind','water','light'];
+const ELEM_LABEL = { earth:'🟫 地', fire:'🔴 火', wind:'🟢 风', water:'🔵 水', light:'🌟 光' };
+const STYLES = ['pixel','plush','clay','3d-toy','flat-vector','painterly'];
+const STYLE_LABEL = { pixel:'🎮 像素', plush:'🧸 毛绒', clay:'🫧 黏土', '3d-toy':'🧊 3D玩具', 'flat-vector':'✏️ 矢量', painterly:'🎨 水彩' };
+const TIERS = [{ key:'common', label:'⭐ 普通', price:150 },{ key:'rare', label:'✨ 稀有', price:260 },{ key:'legendary', label:'👑 传说', price:500 }];
+const ANIM_STEPS = [
+  { key:'base', label:'生成基准图' },
+  { key:'idle', label:'idle 待机' },
+  { key:'walk', label:'walk 行走' },
+  { key:'sleep', label:'sleep 睡觉' },
+  { key:'celebrate', label:'celebrate 庆祝' },
+  { key:'think', label:'think 思考' },
+  { key:'eat', label:'eat 进食' },
+  { key:'unhappy', label:'unhappy 不开心' },
+];
+
+function CreatePanel({ onCreated }) {
+  const [name, setName] = React.useState('');
+  const [element, setElement] = React.useState('fire');
+  const [style, setStyle] = React.useState('pixel');
+  const [tier, setTier] = React.useState('rare');
+  const [desc, setDesc] = React.useState('');
+  const [refImg, setRefImg] = React.useState(null);
+  const [genStatus, setGenStatus] = React.useState('idle'); // idle|running|done
+  const [steps, setSteps] = React.useState(ANIM_STEPS.map(s=>({...s, status:'pending'})));
+  const [baseImg, setBaseImg] = React.useState(null);
+  const [rowImgs, setRowImgs] = React.useState({});
+  const [resultUrl, setResultUrl] = React.useState(null);
+
+  function handleRefUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 1024*1024) { toast('图片不能超过1MB','error'); return; }
+    const reader = new FileReader();
+    reader.onload = () => setRefImg(reader.result);
+    reader.readAsDataURL(file);
+  }
+
+  function updateStep(key, status) {
+    setSteps(prev => prev.map(s => s.key===key ? {...s, status} : s));
+  }
+
+  async function startGenerate() {
+    const keys = JSON.parse(localStorage.getItem('ws_ai_keys')||'{}');
+    let provider = localStorage.getItem('ws_ai_provider') || 'zhipu';
+    let apiKey = keys[provider] || '';
+    // Auto-fallback: try other providers if default has no key
+    if (!apiKey) {
+      for (const pk of ['zhipu','qwen','hunyuan','coze']) {
+        if (keys[pk]) { provider = pk; apiKey = keys[pk]; break; }
+      }
+    }
+    if (!apiKey) { toast('请先在 ⚙️ AI配置 中配置 API Key','error'); return; }
+    if (!name.trim()) { toast('请输入精灵名字','error'); return; }
+    if (!desc.trim()) { toast('请输入精灵描述','error'); return; }
+    setGenStatus('running'); setBaseImg(null); setRowImgs({}); setResultUrl(null);
+    setSteps(ANIM_STEPS.map(s=>({...s, status:'pending'})));
+
+    const fullPrompt = `${STYLE_LABEL[style]}风格精灵，${ELEM_LABEL[element]}元素。${desc.trim()}。spritesheet单行动画条带，6帧水平排列，每帧192x208像素，透明背景，干净无阴影无文字。`;
+
+    // Step 1: Generate base
+    updateStep('base', 'running'); render();
+    const baseResp = await api('/api/ai/generate', { method:'POST', body:JSON.stringify({ prompt: `${fullPrompt} 正面全身标准站姿`, provider, api_key: (JSON.parse(localStorage.getItem('ws_ai_keys')||'{}')[provider] || '') }) });
+    if (baseResp.error) { updateStep('base','failed'); toast(baseResp.error,'error'); setGenStatus('idle'); return; }
+    // Extract image URL - depends on provider
+    const baseUrl = extractImageUrl(baseResp);
+    if (!baseUrl) { updateStep('base','failed'); toast('未能获取生成图片','error'); setGenStatus('idle'); return; }
+    setBaseImg(baseUrl); updateStep('base', 'done'); render();
+
+    // Steps 2-7: Generate animation rows with base as reference
+    const animPrompts = {
+      idle: 'idle待机动画，6帧微呼吸，站姿不变',
+      walk: 'walk行走动画，6帧迈步前进，身体上下微动',
+      sleep: 'sleep睡觉动画，6帧闭眼趴下，呼吸起伏',
+      celebrate: 'celebrate庆祝动画，6帧跳跃举手开心',
+      think: 'think思考动画，6帧歪头托腮想问题',
+      eat: 'eat进食动画，6帧吃东西咀嚼',
+      unhappy: 'unhappy不高兴动画，6帧垂头丧气',
+    };
+
+    const animKeys = ['idle','walk','sleep','celebrate','think','eat','unhappy'];
+    const ri = {};
+    for (const ak of animKeys) {
+      updateStep(ak, 'running'); render();
+      const animResp = await api('/api/ai/generate', { method:'POST', body:JSON.stringify({ prompt: `${fullPrompt} ${animPrompts[ak]}`, reference_image: baseUrl, provider, api_key: (JSON.parse(localStorage.getItem('ws_ai_keys')||'{}')[provider] || '') }) });
+      if (animResp.error) { updateStep(ak,'failed'); toast(`${ak}生成失败: ${animResp.error}`,'error'); continue; }
+      const animUrl = extractImageUrl(animResp);
+      if (animUrl) { ri[ak] = animUrl; updateStep(ak, 'done'); } else { updateStep(ak, 'failed'); }
+      render();
+    }
+    setRowImgs(ri);
+
+    // Step 8: Assemble spritesheet using Canvas
+    updateStep('base', 'running'); setSteps(prev => [...prev, {key:'assemble',label:'拼合spritesheet',status:'running'}]); render();
+    try {
+      const spritesheetDataUrl = await assembleSpritesheet(baseUrl, ri);
+      setResultUrl(spritesheetDataUrl);
+      setSteps(prev => prev.map(s => s.key==='assemble'?{...s,status:'done'}:s));
+    } catch(e) {
+      setSteps(prev => prev.map(s => s.key==='assemble'?{...s,status:'failed'}:s));
+      toast('拼合失败: '+e.message,'error');
+    }
+
+    setGenStatus('done'); render();
+  }
+
+  function extractImageUrl(resp) {
+    const r = resp.result || resp;
+    if (typeof r === 'string') return r;
+    // Zhipu CogView format
+    if (r.data && r.data[0] && r.data[0].url) return r.data[0].url;
+    // Qwen format
+    if (r.output && r.output.results && r.output.results[0] && r.output.results[0].url) return r.output.results[0].url;
+    // Generic
+    if (r.url) return r.url;
+    if (r.image_url) return r.image_url;
+    return null;
+  }
+
+  async function savePet() {
+    if (!resultUrl) { toast('请先生成精灵','error'); return; }
+    const tierData = TIERS.find(t=>t.key===tier);
+    const d = await api('/api/workshop/pets', { method:'POST', body:JSON.stringify({
+      name: name.trim(), element, style, description: desc.trim(), tier: tierData.key, price: tierData.price,
+      spritesheet_url: resultUrl, thumbnail_url: resultUrl,
+    })});
+    if (d.error) { toast(d.error,'error'); return; }
+    toast('✅ 精灵已保存！');
+    onCreated();
+  }
+
+  return React.createElement('div', null,
+    React.createElement('div', { className:'card' },
+      React.createElement('h3', null, '🎨 创建精灵'),
+      React.createElement('div', { style:{ display:'flex', gap:16 } },
+        React.createElement('div', { style:{ flex:1 } },
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '名字'),
+            React.createElement('input', { className:'input', value:name, onChange:e=>setName(e.target.value), placeholder:'如：火灵狐' }),
+          ),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '元素'),
+            React.createElement('div', { style:{ display:'flex', gap:6 } },
+              ELEMENTS.map(el => React.createElement('button', { key:el, className:`element-btn ${element===el?'sel':''}`, onClick:()=>setElement(el) }, ELEM_LABEL[el])),
+            ),
+          ),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '样式'),
+            React.createElement('select', { className:'input', value:style, onChange:e=>setStyle(e.target.value) },
+              STYLES.map(s => React.createElement('option', { key:s, value:s }, STYLE_LABEL[s])),
+            ),
+          ),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '等级'),
+            React.createElement('div', { style:{ display:'flex', gap:6 } },
+              TIERS.map(t => React.createElement('button', { key:t.key, className:`element-btn ${tier===t.key?'sel':''}`, onClick:()=>setTier(t.key) }, t.label, ' ', t.price, 'g')),
+            ),
+          ),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '描述'),
+            React.createElement('textarea', { className:'input', value:desc, onChange:e=>setDesc(e.target.value), placeholder:'描述精灵的样子：颜色、体型、表情、特征...', rows:3, style:{ resize:'vertical' } }),
+          ),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '参考图（可选）'),
+            React.createElement('input', { type:'file', accept:'image/jpeg,image/png', onChange:handleRefUpload, style:{ fontSize:12 } }),
+          ),
+
+          React.createElement('button', { className:'btn btn-primary', onClick:startGenerate, disabled:genStatus==='running', style:{ width:'100%', padding:12 } },
+            genStatus==='running' ? '生成中...' : '🚀 开始生成'),
+        ),
+        React.createElement('div', { style:{ width:220, flexShrink:0 } },
+          React.createElement('div', { className:'preview-box', style:{ width:200, height:200 } },
+            resultUrl ? React.createElement('img', { src:resultUrl }) :
+            baseImg ? React.createElement('img', { src:baseImg }) :
+            refImg ? React.createElement('img', { src:refImg }) :
+            React.createElement('span', { style:{ fontSize:12, color:'#94a3b8', textAlign:'center' } }, '预览'),
+          ),
+        ),
+      ),
+    ),
+    genStatus !== 'idle' && React.createElement('div', { className:'card' },
+      React.createElement('h3', null, '⏳ 生成进度'),
+      React.createElement('div', { className:'progress-steps' },
+        steps.map(s => React.createElement('div', { key:s.key, className:`progress-step ${s.status}` },
+          s.status==='running' && React.createElement('span', { className:'spinner' }),
+          s.status==='done' && React.createElement('span', null, '✅'),
+          s.status==='failed' && React.createElement('span', null, '❌'),
+          ' ', s.label,
+        )),
+      ),
+    ),
+    resultUrl && React.createElement('div', { className:'card', style:{ display:'flex', gap:8, alignItems:'center' } },
+      React.createElement('span', { style:{ fontWeight:700 } }, '✅ 生成完成！'),
+      React.createElement('button', { className:'btn btn-primary', onClick:savePet }, '💾 保存精灵'),
+    ),
+  );
+}
+
+// ═══ Canvas Sprite Assembly ═══
+async function assembleSpritesheet(baseUrl, rowImgs) {
+  const FRAME_W = 192, FRAME_H = 208, FRAMES = 6, ROWS = 7;
+  const CANVAS_W = FRAME_W * 9; // 9 cols to match Petdex format
+  const CANVAS_H = FRAME_H * 8; // 8 rows
+
+  const canvas = document.createElement('canvas');
+  canvas.width = CANVAS_W; canvas.height = CANVAS_H;
+  const ctx = canvas.getContext('2d');
+
+  // Load and draw each row
+  const animOrder = ['idle','walk','sleep','celebrate','think','eat','unhappy'];
+  for (let i = 0; i < animOrder.length; i++) {
+    const url = rowImgs[animOrder[i]];
+    if (!url) continue;
+    try {
+      const img = await loadImage(url);
+      // Extract 6 frames from horizontal strip
+      const frameW = img.width / FRAMES;
+      const frameH = img.height;
+      for (let f = 0; f < FRAMES; f++) {
+        ctx.drawImage(img, f * frameW, 0, frameW, frameH, f * FRAME_W, i * FRAME_H, FRAME_W, FRAME_H);
+      }
+    } catch(e) { console.error(`Failed to load ${animOrder[i]}:`, e); }
+  }
+
+  return canvas.toDataURL('image/png');
+}
+
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+// ═══ Settings Panel ═══
+const AI_PROVIDERS = [
+  { key:'zhipu', name:'智谱 CogView-4', link:'https://open.bigmodel.cn', desc:'国产大模型，图生图能力强，中文理解好' },
+  { key:'qwen', name:'阿里通义万象', link:'https://dashscope.aliyun.com', desc:'阿里云出品，风格多样，生态全' },
+  { key:'hunyuan', name:'腾讯混元', link:'https://hunyuan.tencent.com', desc:'腾讯出品，免费额度多，内网快' },
+  { key:'coze', name:'字节豆包 (Coze)', link:'https://www.coze.cn', desc:'字节出品，免费100次/天，门槛最低' },
+];
+
+function SettingsPanel() {
+  const [provider, setProvider] = React.useState(() => localStorage.getItem('ws_ai_provider') || 'zhipu');
+  const [keys, setKeys] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem('ws_ai_keys') || '{}'); } catch { return {}; }
+  });
+  const [msg, setMsg] = React.useState('');
+  const selP = AI_PROVIDERS.find(p => p.key === provider) || AI_PROVIDERS[0];
+
+  function save() {
+    localStorage.setItem('ws_ai_provider', provider);
+    localStorage.setItem('ws_ai_keys', JSON.stringify(keys));
+    setMsg('✅ 配置已保存'); setTimeout(() => setMsg(''), 2000);
+  }
+  function setKey(pk, v) { setKeys(prev => ({ ...prev, [pk]: v })); }
+  async function testApi(p) {
+    if (!keys[p.key]) { toast('请先填写 ' + p.name + ' 的 API Key','error'); return; }
+    toast('正在测试 ' + p.name + '...', 'success');
+    const d = await api('/api/ai/generate', { method:'POST', body:JSON.stringify({ prompt:'一只像素风测试小猫', provider:p.key, api_key:keys[p.key] }) });
+    if (d.error) { toast('❌ ' + p.name + ': ' + d.error,'error'); return; }
+    toast('✅ ' + p.name + ' 连接成功！');
+  }
+
+  return React.createElement('div', { className:'card' },
+    React.createElement('h3', null, '⚙️ AI 模型配置'),
+    React.createElement('p', { style:{ fontSize:12, color:'#94a3b8', marginBottom:16 } }, '选择模型并填写 API Key，Key 保存在浏览器本地。'),
+    React.createElement('div', { className:'form-group' },
+      React.createElement('label', null, 'AI 模型'),
+      React.createElement('select', { className:'input', value:provider, onChange:e=>setProvider(e.target.value) },
+        AI_PROVIDERS.map(p => React.createElement('option', { key:p.key, value:p.key }, p.name))
+      )
+    ),
+    React.createElement('div', { className:'form-group' },
+      React.createElement('label', null, selP.name + ' API Key'),
+      React.createElement('input', { className:'input', type:'password', value:keys[provider]||'', onChange:function(e){ setKey(provider, e.target.value); }, placeholder:'输入 API Key' }),
+      React.createElement('div', { style:{ fontSize:11, color:'#94a3b8', marginTop:4 } },
+        React.createElement('a', { href:selP.link, target:'_blank', style:{ color:'#FF8C00' } }, selP.link), ' → API Keys → 复制 · ', selP.desc
+      ),
+      React.createElement('button', { className:'btn btn-outline', style:{ marginTop:8, fontSize:12, padding:'4px 14px' }, onClick:function(){ testApi(selP); } }, '🔍 测试连接')
+    ),
+    React.createElement('button', { className:'btn btn-primary', onClick:save, style:{ width:'100%', padding:12 } }, '💾 保存配置'),
+    msg && React.createElement('div', { style:{ marginTop:8, fontSize:12, color:'#16a34a', fontWeight:600 } }, msg)
+  );
+}
+// ═══ My Pets Panel ═══
+function MyPetsPanel({ pets, onRefresh }) {
+  async function deletePet(id) {
+    if (!confirm('删除这个精灵？')) return;
+    const d = await api(`/api/workshop/pets/${id}`, { method:'DELETE' });
+    d.error ? toast(d.error,'error') : (toast('已删除'), onRefresh());
+  }
+
+  return React.createElement('div', null,
+    pets.length === 0 ? React.createElement('div', { className:'card', style:{ textAlign:'center', padding:40, color:'#94a3b8' } }, '还没有生成精灵，去「🎨 创建精灵」看看吧') :
+    pets.map(p => React.createElement('div', { key:p.id, className:'pet-card' },
+      React.createElement('div', { className:'pet-thumb' },
+        React.createElement('span', { style:{ fontSize:24 } }, '🐣'),
+      ),
+      React.createElement('div', { style:{ flex:1 } },
+        React.createElement('div', { style:{ fontWeight:700 } }, ELEM_LABEL[p.element]||'', ' ', p.name),
+        React.createElement('div', { style:{ fontSize:12, color:'#94a3b8' } }, p.style, ' · ', p.tier, ' · 🪙', p.price, 'g'),
+      ),
+      React.createElement('button', { className:'btn btn-danger', style:{ fontSize:12 }, onClick:()=>deletePet(p.id) }, '🗑'),
+    )),
+  );
+}
+
+// ═══ App ═══
+function App() {
+  React.useEffect(() => {
+    const token = localStorage.getItem('csp_teacher_token');
+    const info = localStorage.getItem('csp_teacher_info');
+    if (token && info) {
+      state.token = token; state.teacher = JSON.parse(info);
+      state.page = 'dashboard'; render();
+    }
+  }, []);
+  if (state.page === 'login') return React.createElement(LoginPage);
+  return React.createElement(Dashboard);
+}
+
+function render() { ReactDOM.render(React.createElement(App), document.getElementById('app')); }
+
+// Load React
+if (typeof React === 'undefined') {
+  const s1 = document.createElement('script');
+  s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js';
+  s1.onload = () => {
+    const s2 = document.createElement('script');
+    s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js';
+    s2.onload = render;
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+} else { render(); }
+</script>
+</body>
+</html>

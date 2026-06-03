@@ -23,6 +23,16 @@ let questionBank: QuizQuestion[] | null = null;
 
 async function loadBank(): Promise<QuizQuestion[]> {
   if (questionBank) return questionBank;
+  // Try remote quiz bank from localStorage first
+  try {
+    const cached = localStorage.getItem('csp_quiz_bank');
+    if (cached) {
+      const data = JSON.parse(cached);
+      questionBank = Object.values(data) as QuizQuestion[];
+      if (questionBank.length > 0) return questionBank;
+    }
+  } catch {}
+  // Fallback to bundled quiz bank
   const resp = await fetch('/course-data/unified-quiz-bank.json');
   const data = await resp.json();
   questionBank = Object.values(data) as QuizQuestion[];

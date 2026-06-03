@@ -1,0 +1,13 @@
+name = "api"
+main = "cf-workers/api.js"
+compatibility_date = "2024-12-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "csp-db"
+database_id = "5477cbee-76aa-4e7f-854e-39860f9644d7"
+
+# R2 disabled until image gen goes live
+# [[r2_buckets]]
+# binding = "SPRITES"
+# bucket_name = "csp-sprites"

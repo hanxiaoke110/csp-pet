@@ -70,8 +70,64 @@ export default function AchievementsPanel() {
     if (newlyUnlocked) {
       setNewUnlock(newlyUnlocked);
       setTimeout(() => setNewUnlock(null), 4000);
-      // Achievement reward: 10g
-      usePetStore.getState().addCoins(10);
+      // Achievement rewards
+      const store = usePetStore.getState();
+      const rewards: Record<string, { coins: number; renameCards?: number }> = {
+        // 📚 课程
+        'course-1': { coins: 20 },
+        'course-10': { coins: 50 },
+        'course-30': { coins: 80 },
+        'course-60': { coins: 120 },
+        'course-100': { coins: 200, renameCards: 1 },
+        // 🧠 选择题
+        'quiz-weekly-1': { coins: 30 },
+        'quiz-weekly-5': { coins: 80 },
+        'quiz-weekly-20': { coins: 150 },
+        'quiz-perfect-1': { coins: 50 },
+        'quiz-perfect-5': { coins: 100 },
+        'quiz-streak': { coins: 60 },
+        'quiz-total-100': { coins: 100 },
+        'quiz-review-1': { coins: 30 },
+        'quiz-review-80': { coins: 80 },
+        'quiz-extra-10': { coins: 50 },
+        // ⚡ 超级挑战
+        'super-1': { coins: 50 },
+        'super-5': { coins: 150 },
+        'super-3of5': { coins: 80 },
+        'super-4of5': { coins: 120 },
+        'super-5of5': { coins: 200, renameCards: 1 },
+        'super-double': { coins: 300, renameCards: 2 },
+        // 🐾 智子
+        'pet-first': { coins: 30 },
+        'pet-2': { coins: 40 },
+        'pet-3': { coins: 60 },
+        'pet-5': { coins: 100 },
+        'pet-8': { coins: 150 },
+        'pet-lv5': { coins: 50 },
+        'pet-lv10': { coins: 100 },
+        'pet-lv15': { coins: 150 },
+        'pet-lv20': { coins: 200, renameCards: 1 },
+        'pet-feed-20': { coins: 40 },
+        'pet-coins-500': { coins: 50 },
+        'pet-coins-2000': { coins: 100 },
+        'pet-affection': { coins: 80 },
+        'pet-all-elements': { coins: 200, renameCards: 1 },
+        // 🎓 阶段毕业
+        'stage-c1': { coins: 30 },
+        'stage-c2': { coins: 60 },
+        'stage-c3': { coins: 100 },
+        'stage-c4': { coins: 150 },
+        // 💻 OJ
+        'oj-cm-1': { coins: 50 },
+        'oj-cm-all': { coins: 200, renameCards: 1 },
+      };
+      const reward = rewards[newlyUnlocked.id];
+      if (reward) {
+        store.addCoins(reward.coins);
+        if (reward.renameCards) store.renameCards += reward.renameCards;
+      } else {
+        store.addCoins(10);
+      }
     }
     prevUnlocked.current = nowUnlocked;
   }, [achievements]);

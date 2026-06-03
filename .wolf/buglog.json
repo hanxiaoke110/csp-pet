@@ -271,6 +271,146 @@
         "security",
         "training-camp"
       ]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "许愿墙投票先扣票后调API，API报错后票已扣",
+      "root_cause": "handleVote中useTicket()在API调用前执行，API返回'已投过票'时票已消耗",
+      "fix": "改为API成功后才调useTicket()",
+      "tags": ["wish-wall", "vote", "logic-order"]
+    },
+    {
+      "date": "2026-06-02",
+      "error_message": "许愿票先加后扣钱，扣钱失败票也到账",
+      "root_cause": "addTickets()在spendCoins()之前调用，无视spendCoins返回值",
+      "fix": "先spendCoins()检查返回值，成功才addTickets()",
+      "tags": ["shop", "tickets", "logic-order"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "ensureSchema缺wishes/votes的CREATE TABLE，新D1部署崩溃",
+      "root_cause": "只做了ALTER TABLE迁移，未覆盖CREATE TABLE IF NOT EXISTS",
+      "fix": "补全所有核心表的CREATE TABLE IF NOT EXISTS",
+      "tags": ["d1", "schema", "deployment"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "ensureSchema建classes表缺teacher_name列",
+      "root_cause": "CREATE TABLE只包含class_code/teacher_id/label/created_at/status，漏了teacher_name",
+      "fix": "CREATE TABLE加teacher_name，加ALTER TABLE迁移旧表",
+      "tags": ["d1", "schema", "classes"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "votes表无UNIQUE索引，投票竞态修复无效",
+      "root_cause": "INSERT-try-catch依赖UNIQUE约束抛异常，但表上无此索引",
+      "fix": "CREATE UNIQUE INDEX IF NOT EXISTS idx_votes_unique ON votes(wish_id, device_hash)",
+      "tags": ["vote", "race-condition", "d1", "index"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "realName变量名错误，学生真名自动入班时丢失",
+      "root_cause": "Worker中destructure为real_name但引用时用了realName(camelCase)",
+      "fix": "统一使用real_name",
+      "tags": ["variable-name", "typo", "class-binding"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "英文昵称无法绑定班级",
+      "root_cause": "后端正则/^[一-龥]{2,10}$/只接受纯汉字",
+      "fix": "改为/^[a-zA-Z一-龥]{1,10}$/允许英文",
+      "tags": ["regex", "validation", "class-binding"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "Admin看不到学生列表",
+      "root_cause": "/api/teacher/students只验证X-Teacher-Token，Admin token被拒",
+      "fix": "加Admin token回退，admin模式跳过teacher_id过滤",
+      "tags": ["admin", "auth", "students"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "教师Web白屏（JS语法错误）",
+      "root_cause": "编辑时留了重复的'移除'按钮，多了2个}",
+      "fix": "删除重复代码行",
+      "tags": ["syntax", "js", "teacher-app"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "unbind_pending状态学生立即被锁定",
+      "root_cause": "validate端点只接受status='active'，pending不被认可",
+      "fix": "验证时接受active和unbind_pending两种状态",
+      "tags": ["unbind", "status", "class-binding"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "兑换码Worker用UTC时间而Chrome插件用本地时间，生成码不匹配",
+      "root_cause": "getDateStr使用getUTCFullYear等UTC方法",
+      "fix": "改用getFullYear/getMonth/getDate本地时间方法",
+      "tags": ["code-generation", "timezone", "utc"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "GESP第13题缺代码部分，显示不完整",
+      "root_cause": "原题代码在GESP PDF中是图片格式，导入时丢失",
+      "fix": "手动补充代码块到unified-quiz-bank.json",
+      "tags": ["quiz", "data", "gesp"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "周计算getWeekKey偏差1天",
+      "root_cause": "使用Math.ceil((dayOfYear+jan1.getDay()+1)/7)在特定日期过渡不当",
+      "fix": "改用(jan1.getDay()+6)%7调整后计算",
+      "tags": ["week", "off-by-one", "crypto"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "许愿票class_students自动入班用空device_hash",
+      "root_cause": "INSERT OR IGNORE中device_hash写死为空字符串",
+      "fix": "传入实际的device_hash参数",
+      "tags": ["wish", "class-binding", "device-hash"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "GESP 2023-12-4-03 缺代码块，题目不完整",
+      "root_cause": "原题代码在GESP PDF中是图片格式，导入时丢失",
+      "fix": "手动补充代码块（指针传参+数组初始化题）到unified-quiz-bank.json",
+      "tags": ["quiz", "data", "gesp"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "GESP 2024-12-4-10 排序算法题选项BC缺O(n²)",
+      "root_cause": "数学符号在导入时丢失",
+      "fix": "补全选项A的3个单元操作/B的O(n²)/C的O(n²)到unified-quiz-bank.json",
+      "tags": ["quiz", "data", "gesp", "sorting"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "题库每次修改需要发版才能生效",
+      "root_cause": "题库打包在App内，无远程更新机制",
+      "fix": "App.tsx启动时从Gitee下载unified-quiz-bank.json存localStorage，QuizPractice优先用缓存",
+      "tags": ["quiz", "hot-update", "remote-data"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "全系收集成就只给10g，不是描述的200g+改名卡",
+      "root_cause": "成就系统所有成就统一只给10g，无差异化奖励",
+      "fix": "为37个成就分别配置差异化奖励（10g~300g），高难度成就加改名卡",
+      "tags": ["achievements", "reward", "balance"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "教师Web花名正则只接受汉字，英文名教师无法注册",
+      "root_cause": "后端正则/^[一-龥]{2,10}$/只接受纯汉字",
+      "fix": "改为/^[a-zA-Z一-龥]{2,10}$/",
+      "tags": ["teacher", "regex", "registration"]
+    },
+    {
+      "date": "2026-06-03",
+      "error_message": "Admin兑换码页面报'请先登录'",
+      "root_cause": "EXC/CAMP端点只验证X-Teacher-Token，无admin回退",
+      "fix": "EXC/CAMP端点加checkAdmin回退",
+      "tags": ["admin", "auth", "code-generation"]
     }
   ]
 }

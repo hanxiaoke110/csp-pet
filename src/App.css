@@ -873,9 +873,10 @@
 /* Pet tabs */
 .pet-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
 .pet-tab {
-  padding: 10px 24px; border: none; background: none; font-size: 14px; font-weight: 600;
+  padding: 10px 14px; border: none; background: none; font-size: 13px; font-weight: 600;
   color: var(--text-secondary); cursor: pointer; transition: all .15s;
   border-bottom: 2px solid transparent; margin-bottom: -2px;
+  white-space: nowrap; flex-shrink: 0;
 }
 .pet-tab.active { color: var(--primary-dark); border-bottom-color: var(--primary); }
 .pet-tab:hover:not(.active) { color: var(--text); }

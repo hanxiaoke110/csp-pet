@@ -7,6 +7,7 @@ import type { HatchRarity } from '../../stores/hatchStore';
 import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig, PET_TIERS, getPetTier } from '../../types/pet';
 import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
+import { addTickets, canBuyTickets } from '../../utils/crypto';
 import CeremonyModal from './CeremonyModal';
 import PetSprite from './PetSprite';
 import HatchConfirmModal from './HatchConfirmModal';
@@ -248,7 +249,7 @@ export default function PetPanel() {
             <div className="buy-confirm-actions">
               <button className="mode-btn mode-btn-back" onClick={() => setRenameModal(false)}>取消</button>
               <button className="mode-btn"
-                disabled={(() => { const v = renameInput.trim(); return !v || v.length < 2 || v.length > 8 || !/^[一-龥a-zA-Z0-9]+$/.test(v); })()}
+                disabled={(() => { const v = renameInput.trim(); return !v || v.length < 1 || v.length > 8 || !/^[一-龥a-zA-Z0-9]+$/.test(v); })()}
                 onClick={() => {
                   const err = renamePet(displayPet!.petId, renameInput.trim());
                   if (!err) {
@@ -388,17 +389,17 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <div className="special-icon">🎫</div>
             <h4>许愿票 ×1</h4>
             <p>给你喜欢的许愿投一票</p>
-            <button className="shop-card-buy" disabled={coins < 100}
+            <div className="special-stock">本周还可购买：{canBuyTickets(0).remaining} 张</div>
+            <button className="shop-card-buy" disabled={coins < 100 || !canBuyTickets(1).allowed || !localStorage.getItem('csp_class_code')}
+              title={!localStorage.getItem('csp_class_code') ? '请先在设置中绑定班级码' : ''}
               onClick={() => {
-                import('../../utils/crypto').then(m => { m.addTickets(1); window.dispatchEvent(new CustomEvent('tickets-updated')); });
-                spendCoins(100);
-                const toast = document.createElement('div');
-                toast.textContent = '🎫 +1 许愿票已到账';
-                toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#7c3aed;color:#fff;padding:8px 20px;border-radius:10px;z-index:999;font-weight:600;font-size:13px;';
-                document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 2000);
+                if (!localStorage.getItem('csp_class_code')) { showShopToast('请先在设置中绑定班级码'); return; }
+                if (!canBuyTickets(1).allowed) { showShopToast('本周许愿票已买完，下周再来吧'); return; }
+                if (!spendCoins(100)) { showShopToast('金币不足'); return; }
+                addTickets(1); window.dispatchEvent(new CustomEvent('tickets-updated'));
+                showShopToast('🎫 +1 许愿票已到账');
               }}>
-              🪙 100 购买
+              {!canBuyTickets(1).allowed ? '📦 本周已满' : '🪙 100 购买'}
             </button>
           </div>
 
@@ -407,17 +408,16 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <h4>许愿票 ×3</h4>
             <p>打包优惠！给你喜欢的许愿投 3 票</p>
             <div className="special-stock">省 50g</div>
-            <button className="shop-card-buy" disabled={coins < 250}
+            <button className="shop-card-buy" disabled={coins < 250 || !canBuyTickets(3).allowed || !localStorage.getItem('csp_class_code')}
+              title={!localStorage.getItem('csp_class_code') ? '请先在设置中绑定班级码' : ''}
               onClick={() => {
-                import('../../utils/crypto').then(m => { m.addTickets(3); window.dispatchEvent(new CustomEvent('tickets-updated')); });
-                spendCoins(250);
-                const toast = document.createElement('div');
-                toast.textContent = '🎫 +3 许愿票已到账';
-                toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#7c3aed;color:#fff;padding:8px 20px;border-radius:10px;z-index:999;font-weight:600;font-size:13px;';
-                document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 2000);
+                if (!localStorage.getItem('csp_class_code')) { showShopToast('请先在设置中绑定班级码'); return; }
+                if (!canBuyTickets(3).allowed) { showShopToast('本周许愿票额度不足，还剩 ' + canBuyTickets(0).remaining + ' 张'); return; }
+                if (!spendCoins(250)) { showShopToast('金币不足'); return; }
+                addTickets(3); window.dispatchEvent(new CustomEvent('tickets-updated'));
+                showShopToast('🎫 +3 许愿票已到账');
               }}>
-              🪙 250 购买（省 50g）
+              {!canBuyTickets(3).allowed ? '📦 额度不足' : '🪙 250 购买（省 50g）'}
             </button>
           </div>
 
