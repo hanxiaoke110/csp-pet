@@ -76,7 +76,41 @@ export function useTicket(): boolean {
   return true;
 }
 
+// ── Weekly ticket purchase limit (3 per week) ──
+
+function getWeekKey(): string {
+  const d = new Date();
+  const jan1 = new Date(d.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((d.getTime() - jan1.getTime()) / 86400000);
+  const adjust = (jan1.getDay() + 6) % 7;
+  return `${d.getFullYear()}-W${Math.floor((dayOfYear + adjust) / 7) + 1}`;
+}
+
+const WEEKLY_TICKET_MAX = 3;
+
+export function getWeeklyTicketsBought(): number {
+  try {
+    const data = JSON.parse(localStorage.getItem('csp_wish_tickets_weekly') || '{}');
+    const thisWeek = getWeekKey();
+    return data.week === thisWeek ? (data.count || 0) : 0;
+  } catch { return 0; }
+}
+
+export function canBuyTickets(count: number): { allowed: boolean; remaining: number } {
+  const bought = getWeeklyTicketsBought();
+  const remaining = WEEKLY_TICKET_MAX - bought;
+  return { allowed: count <= remaining, remaining };
+}
+
 export function addTickets(count: number): void {
   const current = getTicketCount();
   localStorage.setItem('csp_wish_tickets', String(current + count));
+
+  // Track weekly purchases
+  const thisWeek = getWeekKey();
+  const bought = getWeeklyTicketsBought();
+  localStorage.setItem('csp_wish_tickets_weekly', JSON.stringify({
+    week: thisWeek,
+    count: bought + count,
+  }));
 }

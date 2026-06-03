@@ -260,4 +260,81 @@ Windows 不受影响（可能 Windows updater 的 HTTP 栈处理跳转不同）�
 ### 设计决策
 - 暂不做 E2E 测试（搭建成本高，编译检查 + 手动测足够）
 - 暂不做 localStorage 迁移到 SQLite（风险大，现有数据兼容难保障）
-- `light` 元素保留（已有 3 只使用）
+## 2026-06-02/03 — 许愿墙 + 班级系统 + 教师后台 完整开发
+
+## 2026-06-02/03 — 许愿墙 + 班级系统 + 教师后台 完整开发
+
+### 概述
+从单人使用到多教师多班级的完整升级。新增：许愿墙（学生提交/投票，老师管理）、班级码系统、教师Web后台、管理员后台。
+
+### 核心功能
+
+**许愿墙** (`src/components/pet/WishWall.tsx`)
+- 班级码锁定：无码显示🔒锁屏，有码显示同老师所有班级许愿
+- 三Tab独立：📋许愿规则 / 🔥热门 / 🆕最新
+- 投票：商城购票(100g×1, 250g×3)，每周限购3张，每条每人限投1票
+- 提交：Lv.10+ 宠物 + 完成本周练习 + 每月限3条
+- 隐私：昵称公开，真名+手机号服务端AES加密，仅老师可解密
+- 审核：服务端敏感词黑名单60+词
+- 月度清理：懒触发（首次访问当月），0票优先，7天保护期
+
+**班级系统**
+- 班级码：12位纯随机（如P79VF54MHR37），服务端查表验证
+- 学生绑定：SettingsPage弹窗一次性填码+昵称+真名+手机号
+- 自动校验：打开设置时验证绑定状态，被移除自动清空
+- 修改信息：可修改昵称等，同步到服务端
+- 解绑：教师端操作（学生不解绑）
+
+**教师Web后台** (`teacher-app/index.html` → teacher-csp.pages.dev)
+- 教师：手机号+密码登录/注册，管理自己班级
+- 管理员：密码登录(csp-teacher-2026)，看全校数据
+- Tab: 班级管理 | 许愿管理 | 兑换码 | 需求反馈
+- 兑换码：内联表单，生成方式与Chrome插件算法完全一致
+- 需求反馈：提交类型(功能/Bug/建议)+标题+描述
+
+**Worker API** (`cf-workers/api.js`, ~670行)
+- 8张D1表：wishes, votes, teachers, classes, class_students, meta, generated_codes, feedback
+- 20+端点：教师认证、班级CRUD、许愿、投票、兑换码、反馈收集
+- AES-GCM服务端加密隐私字段（无硬编码回退密钥）
+- 投票防竞态：INSERT-try-catch + UNIQUE INDEX
+- ensureSchema缓存（只跑一次）+ 完整的CREATE TABLE覆盖
+
+### 关键Bug修复（本次）
+1. 许愿票先加后扣钱 → 颠倒顺序
+2. 投票无跨老师范围校验 → 三级验证(wish→class→teacher)
+3. 投票check-then-insert竞态 → INSERT+UNIQUE INDEX
+4. ensureSchema缺CREATE TABLE → 补全核心表
+5. ensureSchema缺teacher_name列 → 加ALTER TABLE
+6. realName变量名错误 → real_name
+7. ensureSchema无UNIQUE索引 → CREATE UNIQUE INDEX
+8. 顶层catch无日志 → console.error
+9. loadWishes报错不提示 → setMsg
+10. 英文昵称无法绑定 → 正则放宽
+11. Admin看不到学生列表 → 加Admin token回退
+12. 绑定两次HTTP调用 → 合并为一次
+13. 周计算偏差 → 修正算法
+14. unbind_pending立即被锁 → validate接受pending状态
+15. parseInt falsy-zero → Number.isFinite
+16. 班级删除缺.catch() → 加错误处理
+17. api()不检查resp.ok → 加状态码检查
+18. 许愿成功后monthlySubmitted不更新 → 重新拉取
+19. Teacher name不显示 → bind返回teacher_name
+20. 兑换码日期用UTC → 改为本地时间
+
+### 架构决策
+- 兑换码日期：本地时间MMDD(EXC)/YYYYMMDD(CAMP)，与Chrome插件完全一致
+- 班级隔离：老师级（同老师所有班级共享许愿墙）
+- 学生不解绑，解绑全部由教师端管理
+- AES加密密钥来自CF Worker env SERVER_SECRET
+- Token生成用crypto.getRandomValues（非Math.random）
+
+### 部署信息
+- Worker: api.cspstudy.top (wrangler deploy)
+- Web后台: teacher-csp.pages.dev (wrangler pages deploy)
+- 管理员密码: csp-teacher-2026
+- Cloudflare Token: csp-deploy-v2
+
+### 设计文档
+- docs/superpowers/specs/2026-06-02-wish-wall-design.md
+- docs/superpowers/specs/csp-roadmap.md
+- docs/superpowers/specs/cf-config.md

@@ -45,3 +45,28 @@
 
 - **绝不**: 在版本发布说明中出现"防篡改"等字眼——统一写"修复部分已知问题"
 - **绝不**: 硬编码任何密码/密钥在前端代码——统一用教练端生成＋学生端校验
+
+## 2026-06-02/03 许愿墙 + 班级系统新增
+
+### Preferences
+- 兑换码日期用**本地时间**（非 UTC），与 Chrome 插件保持一致
+- 班级码用纯随机字符串（不要编码 teacher_id），服务端查表验证
+- 许愿墙风格与主应用统一（暖橙白）
+- 教师端和学生端分离：学生只管绑定，教师管理所有操作
+
+### Learnings
+- ensureSchema 必须用 `CREATE TABLE IF NOT EXISTS` 覆盖核心表（不仅是 ALTER），否则新 D1 部署崩溃
+- 投票防竞态：INSERT-try-catch + UNIQUE INDEX 比 check-then-insert 可靠
+- 教师/Admin 两套 token 体系需要每个端点都处理两种认证
+- Cloudflare Pages 部署后旧 URL 可能缓存，需用新部署 URL 验证
+- `prompt()`/`confirm()` 在 Tauri WebView 中不可靠，需替换为自定义弹窗
+- unpkg.com 在国内加载慢，用 cdnjs.cloudflare.com 替代
+- 周计算算法 `(jan1.getDay() + 6) % 7` 正确，`jan1.getDay() + 1` 有偏差
+
+### Do-Not-Repeat
+- **绝不**: 在新 Worker 端点的 INSERT 中使用未定义的变量（如 `realName` vs `real_name`）
+- **绝不**: 在 `ensureSchema` 中只做 ALTER TABLE 不做 CREATE TABLE
+- **绝不**: 许愿票的先加后扣——必须先扣钱再给票
+- **绝不**: 忘记给 votes 表建 UNIQUE INDEX（INSERT-try-catch 依赖它）
+- **绝不**: API 的 `resp.json()` 不检查 `resp.ok`——非 2xx 响应会导致 JSON 解析抛异常
+- **绝不**: Promise 链只用 `.then()` 不加 `.catch()` —— 错误会被静默吞掉

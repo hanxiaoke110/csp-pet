@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSP 教师管理后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#f8fafc;color:#1e293b;font-size:14px;line-height:1.5}
+#app{max-width:900px;margin:0 auto;padding:20px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:2px solid #e2e8f0;margin-bottom:20px}
+.header h1{font-size:20px;color:#FF8C00}
+.header .user{font-size:13px;color:#64748b}
+.btn{padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-primary{background:#FF8C00;color:#fff}.btn-primary:hover{background:#F96D00}
+.btn-outline{background:#fff;border:1px solid #e2e8f0;color:#334155}.btn-outline:hover{background:#f8fafc}
+.btn-danger{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}.btn-danger:hover{background:#fee2e2}
+.btn-sm{padding:4px 10px;font-size:11px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:8px}
+.card:hover{border-color:#d1d5db}
+h3{font-size:15px;margin-bottom:8px}
+.input{width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;outline:none}.input:focus{border-color:#FF8C00}
+.form-group{margin-bottom:14px}.form-group label{display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px}
+.tabs{display:flex;gap:4px;background:#f1f5f9;border-radius:10px;padding:3px;margin-bottom:20px}
+.tab{padding:8px 18px;border:none;background:none;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border-radius:8px;transition:all .15s}
+.tab.active{background:#fff;color:#FF8C00;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.class-code{font-family:monospace;font-size:11px;color:#64748b;background:#f1f5f9;padding:2px 8px;border-radius:4px}
+.wish-card{padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px}
+.wish-private{color:#FF8C00;font-weight:600}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:10px;font-weight:600;font-size:13px;z-index:999;animation:toastIn .3s ease}
+.toast-success{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.toast-error{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.spinner{width:28px;height:28px;border:3px solid #e2e8f0;border-top-color:#FF8C00;border-radius:50%;animation:spin .8s linear infinite;margin:40px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:40px;color:#94a3b8}
+.breadcrumb{font-size:12px;color:#64748b;margin-bottom:12px}
+.breadcrumb button{background:none;border:none;color:#FF8C00;cursor:pointer;font-weight:600;font-size:12px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.badge-active{background:#f0fdf4;color:#16a34a}
+.badge-pending{background:#fef3c7;color:#d97706}
+.login-box{max-width:380px;margin:80px auto}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const API = 'https://api.cspstudy.top';
+let state = { page: 'login', token: '', teacher: null, _adminToken: '' };
+
+function toast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`; el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; setTimeout(() => el.remove(), 300); }, 2500);
+}
+
+async function api(path, opts={}) {
+  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+  if (state._adminToken) headers['X-Admin-Token'] = state._adminToken;
+  else if (state.token) headers['X-Teacher-Token'] = state.token;
+  const resp = await fetch(`${API}${path}`, { ...opts, headers });
+  if (!resp.ok) {
+    try { const err = await resp.json(); return { error: err.error || `请求失败 (${resp.status})` }; }
+    catch { return { error: `请求失败 (${resp.status})` }; }
+  }
+  try { return await resp.json(); }
+  catch { return { error: '响应格式错误' }; }
+}
+
+// ═══ Login ═══
+function LoginPage() {
+  const [mode, setMode] = React.useState('login');
+  const [phone, setPhone] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [adminToken, setAdminToken] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const isAdmin = mode === 'admin';
+
+  const submit = async () => {
+    setLoading(true);
+    if (isAdmin) {
+      if (!adminToken) { toast('请输入管理密码','error'); setLoading(false); return; }
+      const resp = await fetch(`${API}/admin/wishes`, { headers: { 'X-Admin-Token': adminToken } });
+      if (resp.status === 401) { toast('管理密码错误','error'); setLoading(false); return; }
+      state._adminToken = adminToken; state.token = '';
+      state.teacher = { teacher_id: 'admin', name: '管理员' };
+      localStorage.setItem('csp_admin_token', adminToken);
+      state.page = 'dashboard'; render(); return;
+    }
+    if (!phone) { toast('请输入手机号','error'); setLoading(false); return; }
+    if (!/^1[3-9]\d{9}$/.test(phone)) { toast('手机号格式不正确','error'); setLoading(false); return; }
+    if (!password || password.length < 6) { toast('密码至少6位','error'); setLoading(false); return; }
+    if (mode === 'register' && !name.trim()) { toast('请填写花名','error'); setLoading(false); return; }
+    if (mode === 'register' && !/^[一-龥]{2,10}$/.test(name.trim())) { toast('花名需2-10个汉字','error'); setLoading(false); return; }
+    const ep = mode === 'register' ? '/api/teacher/register' : '/api/teacher/login';
+    const data = await api(ep, { method: 'POST', body: JSON.stringify(mode === 'register' ? { phone, password, name: name.trim() } : { phone, password }) });
+    if (data.error) { toast(data.error, 'error'); setLoading(false); return; }
+    state.token = data.token; state._adminToken = '';
+    state.teacher = { teacher_id: data.teacher_id, name: data.name };
+    localStorage.setItem('csp_teacher_token', data.token);
+    localStorage.setItem('csp_teacher_info', JSON.stringify(state.teacher));
+    localStorage.removeItem('csp_admin_token');
+    state.page = 'dashboard'; render();
+  };
+
+  return React.createElement('div', { className: 'login-box card' },
+    React.createElement('h2', { style: { textAlign:'center', marginBottom:20, color:'#FF8C00' } }, '🎓 CSP 教师管理'),
+    React.createElement('div', { className:'tabs', style:{ justifyContent:'center' } },
+      React.createElement('button', { className:`tab ${mode==='login'?'active':''}`, onClick:()=>setMode('login') }, '教师登录'),
+      React.createElement('button', { className:`tab ${mode==='register'?'active':''}`, onClick:()=>setMode('register') }, '注册'),
+      React.createElement('button', { className:`tab ${mode==='admin'?'active':''}`, onClick:()=>setMode('admin') }, '🔑 管理员'),
+    ),
+    isAdmin ? React.createElement('div', null,
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '管理密码'),
+        React.createElement('input', { className:'input', type:'password', value:adminToken, onChange:e=>setAdminToken(e.target.value), placeholder:'输入管理密码', onKeyDown:e=>e.key==='Enter'&&submit() }),
+      ),
+      React.createElement('button', { className:'btn btn-primary', style:{ width:'100%', padding:12 }, onClick:submit, disabled:loading }, loading ? '验证中...' : '登录'),
+    ) : React.createElement('div', null,
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '手机号'),
+        React.createElement('input', { className:'input', value:phone, onChange:e=>setPhone(e.target.value.slice(0,11)), placeholder:'请输入11位手机号', autoFocus:true }),
+      ),
+      mode==='register' && React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '花名'),
+        React.createElement('input', { className:'input', value:name, onChange:e=>setName(e.target.value), placeholder:'花名 2-10个汉字（如：李老师）' }),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '密码'),
+        React.createElement('input', { className:'input', type:'password', value:password, onChange:e=>setPassword(e.target.value), placeholder:'至少6位', onKeyDown:e=>e.key==='Enter'&&submit() }),
+      ),
+      React.createElement('button', { className:'btn btn-primary', style:{ width:'100%', padding:12 }, onClick:submit, disabled:loading },
+        loading ? '处理中...' : (mode==='login'?'登录':'注册')),
+      React.createElement('div', { style:{ fontSize:11, color:'#94a3b8', textAlign:'center', marginTop:10 } },
+        mode==='register' ? '注册后自动登录 · 手机号重复会提示' : '没有账号？点上方"注册"创建'),
+    ),
+  );
+}
+
+// ═══ Dashboard ═══
+function Dashboard() {
+  const [tab, setTab] = React.useState('teachers');
+  const [loading, setLoading] = React.useState(false);
+  const [data, setData] = React.useState([]);
+  const [selected, setSelected] = React.useState(null);
+  const [subData, setSubData] = React.useState([]);
+  const [subSelected, setSubSelected] = React.useState(null);
+  const [wishes, setWishes] = React.useState([]);
+
+  const isAdmin = !!state._adminToken;
+
+  React.useEffect(() => {
+    if (tab === 'teachers') isAdmin ? loadAdminTeachers() : loadClasses();
+    if (tab === 'wishes') loadWishes();
+    setSelected(null); setSubData([]); setSubSelected(null);
+  }, [tab]);
+
+  // ── Data loaders ──
+  async function loadAdminTeachers() {
+    setLoading(true); const d = await api('/admin/teachers');
+    if (Array.isArray(d)) setData(d); setLoading(false); render();
+  }
+  async function loadClasses() {
+    setLoading(true); const d = await api('/api/classes');
+    if (Array.isArray(d)) setData(d); setLoading(false); render();
+  }
+  async function loadStudents(classCode) {
+    setLoading(true); setSelected(classCode);
+    if (isAdmin) { const d = await api(`/api/teacher/students?class_code=${classCode}`); setSubData(Array.isArray(d)?d:[]); }
+    else { const d = await api(`/api/teacher/students?class_code=${classCode}`); setSubData(Array.isArray(d)?d:[]); }
+    setLoading(false); render();
+  }
+  async function loadAdminClasses(teacherId) {
+    setLoading(true); setSelected(teacherId);
+    const d = await api(`/admin/classes?teacher_id=${teacherId}`);
+    if (Array.isArray(d)) setSubData(d); setLoading(false); render();
+  }
+  async function loadWishes() {
+    setLoading(true);
+    if (isAdmin) { const d = await api('/admin/teachers'); if (Array.isArray(d)) setData(d); }
+    else { const d = await api('/admin/wishes'); if (Array.isArray(d)) setWishes(d); }
+    setLoading(false); render();
+  }
+  async function loadTeacherWishes(teacherId) {
+    setLoading(true); setSelected(teacherId);
+    const d = await api(`/admin/wishes/by-teacher?teacher_id=${teacherId}`);
+    if (Array.isArray(d)) setWishes(d); setLoading(false); render();
+  }
+
+  // ── Actions ──
+  async function addTeacher() {
+    const phone = prompt('手机号：'); if (!phone) return;
+    const password = prompt('密码（至少6位）：'); if (!password||password.length<6) return toast('密码至少6位','error');
+    const name = prompt('姓名：'); if (!name) return;
+    const d = await api('/admin/teachers', { method:'POST', body:JSON.stringify({ phone, password, name }) });
+    d.error ? toast(d.error,'error') : (toast('老师已添加'), loadAdminTeachers());
+  }
+  async function addClass(teacherId) {
+    const label = prompt('班级名称：'); if (!label) return;
+    const tid = teacherId || (prompt('老师ID：')); if (!tid) return;
+    const d = await api(isAdmin?'/admin/classes':'/api/classes', { method:'POST', body:JSON.stringify({ teacher_id:tid, label }) });
+    d.error ? toast(d.error,'error') : (toast('班级已创建'), isAdmin ? loadAdminClasses(tid) : loadClasses());
+  }
+  function getTabs() {
+    if (isAdmin) return [
+      { key:'teachers', label:'👥 教师管理' },
+      { key:'wishes', label:'💡 许愿管理' },
+      { key:'codes', label:'🎫 兑换码' },
+      { key:'feedback', label:'💬 需求收集' },
+    ];
+    return [
+      { key:'teachers', label:'📋 班级管理' },
+      { key:'wishes', label:'💡 许愿管理' },
+      { key:'codes', label:'🎫 兑换码' },
+      { key:'feedback', label:'💬 需求反馈' },
+    ];
+  }
+
+  function logout() {
+    state.token=''; state.teacher=null; state._adminToken='';
+    localStorage.clear(); state.page='login'; render();
+  }
+
+  // ═══ RENDER ═══
+  return React.createElement('div', null,
+    React.createElement('div', { className:'header' },
+      React.createElement('h1', null, isAdmin ? '🎓 管理员后台' : '📋 班级管理'),
+      React.createElement('div', { className:'row', style:{ gap:12 } },
+        React.createElement('span', { className:'user' }, state.teacher?.name || ''),
+        React.createElement('button', { className:'btn btn-outline btn-sm', onClick:logout }, '退出'),
+      ),
+    ),
+    React.createElement('div', { className:'tabs' },
+      getTabs().map(t => React.createElement('button', {
+        key:t.key, className:`tab ${tab===t.key?'active':''}`,
+        onClick:()=>setTab(t.key),
+      }, t.label))
+    ),
+
+    loading && React.createElement('div', { className:'spinner' }),
+
+    // ═══ TEACHERS TAB (admin) / CLASSES TAB (teacher) ═══
+    tab === 'teachers' && !loading && React.createElement('div', null,
+
+      // ── Admin: Teacher List ──
+      isAdmin && !selected && React.createElement('div', null,
+        React.createElement('div', { className:'row', style:{ marginBottom:16 } },
+          React.createElement('span', { style:{ fontSize:13, color:'#64748b' } }, `共 ${data.length} 位老师`),
+          React.createElement('button', { className:'btn btn-primary', onClick:addTeacher }, '+ 添加老师'),
+        ),
+        data.map(t => React.createElement('div', { key:t.teacher_id, className:'card', style:{ cursor:'pointer' }, onClick:()=>loadAdminClasses(t.teacher_id) },
+          React.createElement('div', { className:'row' },
+            React.createElement('div', null, React.createElement('h3', null, '👤 ', t.name), React.createElement('div', { style:{ fontSize:12, color:'#64748b' } }, '📱', t.phone)),
+            React.createElement('div', { style:{ textAlign:'right' } },
+              React.createElement('div', { style:{ fontSize:13, fontWeight:600 } }, '📋 ',t.class_count,' 班级'),
+              React.createElement('div', { style:{ fontSize:12, color:'#64748b' } }, '👥 ',t.student_count,' 学生'),
+            ),
+          ),
+        )),
+      ),
+
+      // ── Admin: Teacher's Classes ──
+      isAdmin && selected && !subSelected && React.createElement('div', null,
+        React.createElement('div', { className:'breadcrumb' },
+          React.createElement('button', { onClick:()=>{setSelected(null);setSubData([]);render();} }, '← 教师管理'),
+          ' / ', data.find(t=>t.teacher_id===selected)?.name || ''
+        ),
+        React.createElement('div', { className:'row', style:{ marginBottom:16 } },
+          React.createElement('span', { style:{ fontSize:13, color:'#64748b' } }, `${subData.length} 个班级`),
+          React.createElement('button', { className:'btn btn-primary', onClick:()=>addClass(selected) }, '+ 添加班级'),
+        ),
+        subData.map(c => React.createElement('div', { key:c.class_code, className:'card', style:{ cursor:'pointer' }, onClick:()=>{setSubSelected(c.class_code);loadStudents(c.class_code);render();} },
+          React.createElement('div', { className:'row' },
+            React.createElement('div', null,
+              React.createElement('h3', null, '📋 ', c.label),
+              React.createElement('span', { className:'class-code', style:{ cursor:'pointer' }, onClick:e=>{e.stopPropagation();navigator.clipboard.writeText(c.class_code);toast('已复制')} }, '🔗 ', c.class_code),
+            ),
+            React.createElement('span', { style:{ fontSize:12, color:'#64748b' } }, '👥 ', c.student_count||0, ' 学生'),
+          ),
+        )),
+      ),
+
+      // ── Admin: Class Students ──
+      isAdmin && selected && subSelected && React.createElement('div', null,
+        React.createElement('div', { className:'breadcrumb' },
+          React.createElement('button', { onClick:()=>{setSubSelected(null);setSubData([]);render();} }, '← 班级列表'),
+        ),
+        React.createElement('h3', { style:{ marginBottom:12 } }, '👥 学生列表 (', subData.length, '人)'),
+        subData.length === 0 ? React.createElement('div', { className:'empty' }, '暂无学生绑定') :
+        subData.map(s => React.createElement('div', { key:s.device_hash, className:'card', style:{ padding:'10px 14px' } },
+          React.createElement('div', { className:'row' },
+            React.createElement('div', null,
+              React.createElement('span', { style:{ fontWeight:600 } }, s.student_name || '未填写姓名'),
+              React.createElement('span', { style:{ fontSize:11, color:'#94a3b8', marginLeft:8 } }, '设备:',(s.device_hash||'').slice(0,8),'...'),
+              ' ', React.createElement('span', { className:`badge ${s.status==='active'?'badge-active':''}` }, s.status==='active'?'活跃':'已移除'),
+            ),
+            s.status==='active' && React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
+              if(!confirm('移除该学生？')) return;
+              const d = await api('/admin/students/remove', { method:'POST', body:JSON.stringify({ class_code:subSelected, device_hash:s.device_hash }) });
+              d.error ? toast(d.error,'error') : (toast('已移除'), loadStudents(subSelected));
+            }}, '移除'),
+          ),
+        )),
+      ),
+
+      // ── Teacher: Classes List ──
+      !isAdmin && !selected && React.createElement('div', null,
+        React.createElement('div', { className:'row', style:{ marginBottom:16 } },
+          React.createElement('span', { style:{ fontSize:13, color:'#64748b' } }, `共 ${data.length} 个班级`),
+          React.createElement('button', { className:'btn btn-primary', onClick:()=>addClass(state.teacher.teacher_id) }, '+ 新建班级'),
+        ),
+        data.map(c => React.createElement('div', { key:c.class_code, className:'card', style:{ cursor:'pointer' }, onClick:()=>loadStudents(c.class_code) },
+          React.createElement('div', { className:'row' },
+            React.createElement('div', null,
+              React.createElement('h3', null, '📋 ', c.label),
+              React.createElement('span', { className:'class-code', style:{ cursor:'pointer' }, onClick:e=>{e.stopPropagation();navigator.clipboard.writeText(c.class_code);toast('已复制')} }, '🔗 ', c.class_code),
+            ),
+            React.createElement('button', { className:'btn btn-danger btn-sm', onClick:e=>{e.stopPropagation();if(!confirm('删除？'))return;api(`/api/classes/${c.class_code}/delete`,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadClasses())).catch(()=>toast('网络错误','error'))} }, '🗑'),
+          ),
+        )),
+      ),
+
+      // ── Teacher: Class Students ──
+      !isAdmin && selected && React.createElement('div', null,
+        React.createElement('div', { className:'breadcrumb' },
+          React.createElement('button', { onClick:()=>{setSelected(null);setSubData([]);render();} }, '← 班级列表'),
+        ),
+        React.createElement('h3', { style:{ marginBottom:12 } }, '👥 学生 (', subData.filter(s=>s.status==='active').length, '人)', subData.filter(s=>s.status!=='active').length > 0 ? ` · 已移除 ${subData.filter(s=>s.status!=='active').length} 人` : ''),
+        (() => { const active = subData.filter(s=>s.status==='active'); return active.length===0 ? React.createElement('div', { className:'empty' }, '暂无活跃学生') :
+        active.map(s => React.createElement('div', { key:s.device_hash, className:'card', style:{ padding:'10px 14px' } },
+          React.createElement('div', { className:'row' },
+            React.createElement('div', null,
+              React.createElement('span', { style:{ fontWeight:600 } }, s.student_name || '未填写姓名'),
+              React.createElement('span', { style:{ fontSize:11, color:'#94a3b8', marginLeft:8 } }, '设备:',(s.device_hash||'').slice(0,8),'...'),
+              ' ', React.createElement('span', { className:`badge ${s.status==='active'?'badge-active':''}` }, s.status==='active'?'活跃':'已移除'),
+            ),
+            s.status==='active' && React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
+              if(!confirm('移除？')) return;
+              const d = await api('/api/teacher/students/remove', { method:'POST', body:JSON.stringify({ class_code:selected, device_hash:s.device_hash }) });
+              d.error ? toast(d.error,'error') : (toast('已移除'), loadStudents(selected));
+            }}, '移除'),
+          ),
+        ))})(),
+      ),
+    ),
+
+    // ═══ WISHES TAB ═══
+    tab === 'wishes' && !loading && React.createElement('div', null,
+
+      // Admin: teacher list → click to see wishes
+      isAdmin && !selected && React.createElement('div', null,
+        React.createElement('div', { style:{ marginBottom:16, fontSize:13, color:'#64748b' } }, '选择老师查看许愿：'),
+        data.map(t => React.createElement('div', { key:t.teacher_id, className:'card', style:{ cursor:'pointer' }, onClick:()=>loadTeacherWishes(t.teacher_id) },
+          React.createElement('div', { className:'row' },
+            React.createElement('h3', null, '👤 ', t.name), React.createElement('span', { style:{ fontSize:12, color:'#94a3b8' } }, '点击查看 →'),
+          ),
+        )),
+      ),
+
+      // Admin: teacher's wishes
+      isAdmin && selected && React.createElement('div', null,
+        React.createElement('div', { className:'breadcrumb' },
+          React.createElement('button', { onClick:()=>{setSelected(null);setWishes([]);render();} }, '← 返回'),
+        ),
+        React.createElement('h3', null, '💡 ', wishes.length, ' 条许愿'),
+        wishes.length===0 ? React.createElement('div', { className:'empty' }, '暂无') :
+        wishes.map(w => React.createElement('div', { key:w.id, className:'wish-card' },
+          React.createElement('div', { className:'row' },
+            React.createElement('div', null,
+              React.createElement('div', { style:{ fontSize:13, fontWeight:600 } }, w.content),
+              React.createElement('div', { style:{ fontSize:11, color:'#64748b' } },
+                `${w.display_name||'匿名'} · ⬆${w.votes}`,
+                w.class_label && ` · 📍${w.class_label}`,
+                w.real_name && React.createElement('span', { className:'wish-private', style:{ marginLeft:8 } }, '👤', w.real_name),
+                w.phone && React.createElement('span', { className:'wish-private', style:{ marginLeft:8 } }, '📱', w.phone),
+              ),
+            ),
+            w.status==='active' && React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
+              if(!confirm('删除？')) return;
+              await api(`/admin/wishes/${w.id}`, { method:'DELETE' });
+              toast('已删除'); loadTeacherWishes(selected);
+            }}, '🗑'),
+            w.status==='active' && React.createElement('button', { className:'btn btn-primary btn-sm', style:{ marginLeft:4 }, onClick:async()=>{
+              if(!confirm('标记为已实现？')) return;
+              const d = await api(`/admin/wishes/complete/${w.id}`, { method:'POST' });
+              d.error ? toast(d.error,'error') : (toast('✅ 已标记'), loadTeacherWishes(selected));
+            }}, '✅ 实现'),
+            w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600 } }, '✅ 已实现'),
+          ),
+        )),
+      ),
+
+      // Teacher: own wishes
+      !isAdmin && React.createElement('div', null,
+        React.createElement('h3', null, '💡 ', wishes.length, ' 条许愿'),
+        wishes.length===0 ? React.createElement('div', { className:'empty' }, '暂无许愿') :
+        wishes.map(w => React.createElement('div', { key:w.id, className:'wish-card' },
+          React.createElement('div', { className:'row' },
+            React.createElement('div', null,
+              React.createElement('div', { style:{ fontSize:13, fontWeight:600 } }, w.content),
+              React.createElement('div', { style:{ fontSize:11, color:'#64748b' } },
+                `${w.display_name||'匿名'} · ⬆${w.votes}`,
+                w.class_label && ` · 📍${w.class_label}`,
+                w.real_name && React.createElement('span', { className:'wish-private', style:{ marginLeft:8 } }, '👤', w.real_name),
+                w.phone && React.createElement('span', { className:'wish-private', style:{ marginLeft:8 } }, '📱', w.phone),
+              ),
+            ),
+            w.status==='active' && React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
+              if(!confirm('删除？')) return;
+              await api(`/admin/wishes/${w.id}`, { method:'DELETE' });
+              toast('已删除'); loadWishes();
+            }}, '🗑'),
+            w.status==='active' && React.createElement('button', { className:'btn btn-primary btn-sm', style:{ marginLeft:4 }, onClick:async()=>{
+              if(!confirm('标记为已实现？')) return;
+              const d = await api(`/admin/wishes/complete/${w.id}`, { method:'POST' });
+              d.error ? toast(d.error,'error') : (toast('✅ 已标记'), loadWishes());
+            }}, '✅ 实现'),
+            w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600 } }, '✅ 已实现'),
+          ),
+        )),
+      ),
+    ),
+
+    // ═══ CODES TAB ═══
+    tab === 'codes' && !loading && React.createElement('div', null,
+      React.createElement(ExcCodePanel),
+      React.createElement('div', { style:{ marginTop:16 } },
+        React.createElement(CampCodePanel),
+      ),
+    ),
+    // ═══ FEEDBACK TAB ═══
+    tab === 'feedback' && !loading && React.createElement(FeedbackPanel),
+  );
+}
+
+// ── Code Panels ──
+function ExcCodePanel() {
+  const [level, setLevel] = React.useState('1');
+  const [count, setCount] = React.useState(3);
+  const [result, setResult] = React.useState(null);
+  const [genLoading, setGenLoading] = React.useState(false);
+
+  const generate = async () => {
+    setGenLoading(true);
+    const d = await api('/api/codes/exc', { method:'POST', body:JSON.stringify({ level, count: Math.min(count, 20) }) });
+    if (d.error) { toast(d.error,'error'); setGenLoading(false); return; }
+    setResult(d.codes);
+    setGenLoading(false);
+    navigator.clipboard.writeText(d.codes.join('\n')).catch(()=>{});
+  };
+
+  return React.createElement('div', { className:'card' },
+    React.createElement('h3', null, '⭐ 优秀学生奖励码'),
+    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:14 } }, '生成兑换码发给学生，在桌宠 App「神秘代码」中输入领取。'),
+    React.createElement('div', { style:{ display:'flex', gap:10, alignItems:'end', marginBottom:12 } },
+      React.createElement('div', { style:{ flex:1 } },
+        React.createElement('label', { style:{ fontSize:11, fontWeight:600, color:'#64748b', display:'block', marginBottom:4 } }, '等级'),
+        React.createElement('select', { className:'input', value:level, onChange:e=>setLevel(e.target.value) },
+          React.createElement('option', { value:'1' }, '🥇 一等奖 (+100EXP +60金币)'),
+          React.createElement('option', { value:'2' }, '🥈 二等奖 (+60EXP +40金币)'),
+          React.createElement('option', { value:'3' }, '🥉 三等奖 (+30EXP +20金币)'),
+        ),
+      ),
+      React.createElement('div', { style:{ width:80 } },
+        React.createElement('label', { style:{ fontSize:11, fontWeight:600, color:'#64748b', display:'block', marginBottom:4 } }, '数量'),
+        React.createElement('input', { className:'input', type:'number', value:count, onChange:e=>setCount(parseInt(e.target.value)||1), min:1, max:20 }),
+      ),
+      React.createElement('button', { className:'btn btn-primary', onClick:generate, disabled:genLoading, style:{ whiteSpace:'nowrap' } },
+        genLoading ? '生成中...' : '🎲 生成'),
+    ),
+    result && React.createElement('div', { style:{ background:'#f8fafc', borderRadius:8, padding:12 } },
+      React.createElement('div', { style:{ fontSize:12, fontWeight:600, marginBottom:8, display:'flex', justifyContent:'space-between' } },
+        React.createElement('span', null, `已生成 ${result.length} 个优秀码（已自动复制）`),
+        React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(result.join('\n')); toast('已复制'); } }, '📋 复制'),
+      ),
+      React.createElement('div', { style:{ display:'flex', flexWrap:'wrap', gap:6 } },
+        result.map(c => React.createElement('code', { key:c, style:{ background:'#fff', padding:'4px 10px', borderRadius:6, fontSize:12, fontFamily:'monospace', border:'1px solid #e2e8f0' } }, c)),
+      ),
+    ),
+  );
+}
+
+function CampCodePanel() {
+  const [result, setResult] = React.useState(null);
+  const [genLoading, setGenLoading] = React.useState(false);
+
+  const generate = async () => {
+    setGenLoading(true);
+    const d = await api('/api/codes/camp', { method:'POST' });
+    if (d.error) { toast(d.error,'error'); setGenLoading(false); return; }
+    setResult(d.code);
+    setGenLoading(false);
+    navigator.clipboard.writeText(d.code).catch(()=>{});
+  };
+
+  return React.createElement('div', { className:'card' },
+    React.createElement('h3', null, '🏕️ 集训激活码'),
+    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:14 } }, '激活后 12 天内所有奖励 ×1.5，每日额外领 3 份食物。重新生成即可停用旧码。'),
+    React.createElement('button', { className:'btn btn-primary', onClick:generate, disabled:genLoading },
+      genLoading ? '生成中...' : '🎲 生成集训码'),
+    result && React.createElement('div', { style:{ background:'#f8fafc', borderRadius:8, padding:12, marginTop:12 } },
+      React.createElement('div', { style:{ fontSize:12, fontWeight:600, marginBottom:6, display:'flex', justifyContent:'space-between' } },
+        React.createElement('span', null, '集训码已自动复制'),
+        React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(result); toast('已复制'); } }, '📋 复制'),
+      ),
+      React.createElement('code', { style:{ display:'block', background:'#fff', padding:'10px 14px', borderRadius:8, fontSize:14, fontFamily:'monospace', fontWeight:700, letterSpacing:1, border:'1px solid #e2e8f0', wordBreak:'break-all' } }, result),
+    ),
+  );
+}
+
+function FeedbackPanel() {
+  const [type, setType] = React.useState('bug');
+  const [title, setTitle] = React.useState('');
+  const [desc, setDesc] = React.useState('');
+  const [submitting, setSubmitting] = React.useState(false);
+  const [items, setItems] = React.useState([]);
+  const [loaded, setLoaded] = React.useState(false);
+  const [studentItems, setStudentItems] = React.useState([]);
+  const [showStudent, setShowStudent] = React.useState(false);
+  const isAdmin = !!state._adminToken;
+
+  React.useEffect(() => { loadItems(); }, []);
+
+  async function loadItems() {
+    const d = await api('/api/feedback');
+    if (Array.isArray(d)) setItems(d);
+    setLoaded(true);
+  }
+
+  async function submit() {
+    if (!title.trim()) { toast('请填写标题','error'); return; }
+    if (!desc.trim()) { toast('请填写描述','error'); return; }
+    setSubmitting(true);
+    const d = await api('/api/feedback', { method:'POST', body:JSON.stringify({ type, title:title.trim(), description:desc.trim(), submitter:'teacher' }) });
+    if (d.error) { toast(d.error,'error'); setSubmitting(false); return; }
+    toast('✅ 提交成功，感谢反馈！');
+    setTitle(''); setDesc(''); setSubmitting(false);
+    loadItems();
+  }
+
+  async function loadStudentFeedback() {
+    const d = await api('/api/feedback?submitter=student');
+    if (Array.isArray(d)) setStudentItems(d);
+    setShowStudent(!showStudent);
+  }
+
+  const typeLabel = { bug:'🐛 Bug反馈', feature:'✨ 功能需求', other:'💡 其他建议' };
+  const fbHints = {
+    bug: { title:'比如：学生列表加载不出来', desc:'在哪一页、什么操作后出现的问题？' },
+    feature: { title:'比如：希望增加成绩导出功能', desc:'你希望增加什么功能？为什么需要它？' },
+    other: { title:'比如：希望能批量操作学生', desc:'任何建议或想法都可以写在这里' },
+  };
+  const statusLabel = { open:'⏳待处理', processed:'✅已处理', closed:'📦已关闭' };
+
+  async function toggleFeedbackStatus(id, currentStatus) {
+    const next = currentStatus === 'open' ? 'processed' : currentStatus === 'processed' ? 'closed' : 'open';
+    const d = await api(`/admin/feedback/${id}`, { method:'PATCH', body:JSON.stringify({ status: next }) });
+    if (d.error) { toast(d.error,'error'); return; }
+    toast('状态已更新');
+    loadItems();
+  }
+
+  return React.createElement('div', null,
+    !isAdmin && React.createElement('div', { className:'card' },
+      React.createElement('h3', null, '💬 提交反馈'),
+      React.createElement('div', { style:{ display:'flex', gap:8, marginBottom:12 } },
+        ['bug','feature','other'].map(t => React.createElement('button', {
+          key:t, className:`tab ${type===t?'active':''}`, style:{ flex:1, textAlign:'center' },
+          onClick:()=>setType(t),
+        }, typeLabel[t])),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '标题'),
+        React.createElement('input', { className:'input', value:title, onChange:e=>setTitle(e.target.value), placeholder:'简要描述你的需求或问题' }),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '详细描述'),
+        React.createElement('textarea', { className:'input', value:desc, onChange:e=>setDesc(e.target.value), placeholder:'请详细描述你希望的功能或遇到的问题...', rows:4, style:{ resize:'vertical' } }),
+      ),
+      React.createElement('button', { className:'btn btn-primary', onClick:submit, disabled:submitting },
+        submitting ? '提交中...' : '📩 提交反馈'),
+    ),
+    loaded && React.createElement('div', { style:{ marginTop:16 } },
+      !isAdmin && React.createElement('button', { className:'btn btn-outline btn-sm', style:{ marginBottom:8 }, onClick:loadStudentFeedback },
+        showStudent ? '收起学生反馈' : '👀 查看学生反馈'
+      ),
+      showStudent && React.createElement('div', { className:'card', style:{ marginBottom:8 } },
+        React.createElement('h3', null, '👀 学生反馈 (', studentItems.length, ')'),
+        studentItems.length===0 ? React.createElement('div', { className:'empty', style:{ padding:16 } }, '暂无学生反馈') :
+        studentItems.map(item => React.createElement('div', { key:'s'+item.id, style:{ padding:'6px 0', borderBottom:'1px solid #f1f5f9' } },
+          React.createElement('div', { style:{ fontWeight:600, fontSize:13 } }, item.title),
+          React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginTop:2 } },
+            React.createElement('span', { style:{ fontSize:10, background:'#f1f5f9', padding:'1px 6px', borderRadius:4 } }, typeLabel[item.type]||item.type),
+            ' ', item.description
+          ),
+          React.createElement('div', { style:{ fontSize:10, color:'#94a3b8', marginTop:2 } },
+            item.created_at,
+            item.status && React.createElement('span', { style:{ fontWeight:600, marginLeft:8, color: item.status==='processed'?'#16a34a':item.status==='closed'?'#94a3b8':'#d97706' } }, statusLabel[item.status]||item.status),
+            isAdmin && React.createElement('button', { className:'btn btn-outline btn-sm', style:{ marginLeft:8, fontSize:10 }, onClick:()=>toggleFeedbackStatus(item.id, item.status) }, '🔄'),
+          ),
+          !isAdmin && React.createElement('div', { style:{ textAlign:'right', marginTop:4 } },
+            React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:10 }, onClick:async()=>{
+              if(!confirm('删除这条学生反馈？')) return;
+              const d = await api(`/admin/feedback/${item.id}`, { method:'DELETE' });
+              d.error ? toast(d.error,'error') : (toast('已删除'), loadStudentFeedback());
+            }}, '🗑 删除'),
+          ),
+        )),
+      ),
+      (items.length > 0 || isAdmin) ? React.createElement('div', { className:'card' },
+        React.createElement('h3', null, isAdmin ? '📋 所有反馈' : '📋 我的反馈'),
+        items.length===0 ? React.createElement('div', { className:'empty' }, '暂无反馈') :
+        items.map(item => React.createElement('div', { key:item.id, style:{ padding:'8px 0', borderBottom:'1px solid #f1f5f9' } },
+          React.createElement('div', { style:{ fontWeight:600, fontSize:13 } }, item.title),
+          React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginTop:2 } },
+            React.createElement('span', { style:{ fontSize:10, background:'#f1f5f9', padding:'1px 6px', borderRadius:4 } }, typeLabel[item.type]||item.type),
+            isAdmin && React.createElement('span', { style:{ marginLeft:8 } }, item.teacher_name||'匿名'),
+            ' ', item.description,
+          ),
+          React.createElement('div', { style:{ fontSize:10, color:'#94a3b8', marginTop:2 } },
+            item.created_at,
+            item.status && React.createElement('span', { style:{ fontWeight:600, marginLeft:8, color: item.status==='processed'?'#16a34a':item.status==='closed'?'#94a3b8':'#d97706' } }, statusLabel[item.status]||item.status),
+            isAdmin && React.createElement('button', { className:'btn btn-outline btn-sm', style:{ marginLeft:8, fontSize:10 }, onClick:()=>toggleFeedbackStatus(item.id, item.status) }, '🔄'),
+          ),
+          !isAdmin && React.createElement('div', { style:{ textAlign:'right', marginTop:4 } },
+            React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:10 }, onClick:async()=>{
+              if(!confirm('删除这条反馈？')) return;
+              const d = await api(`/admin/feedback/${item.id}`, { method:'DELETE' });
+              d.error ? toast(d.error,'error') : (toast('已删除'), loadItems());
+            }}, '🗑 删除'),
+          ),
+        ))
+      ) : null
+    ),
+  );
+}
+
+function App() {
+  React.useEffect(() => {
+    const token = localStorage.getItem('csp_admin_token');
+    const tToken = localStorage.getItem('csp_teacher_token');
+    const info = localStorage.getItem('csp_teacher_info');
+    if (token) { state._adminToken = token; state.teacher = { teacher_id:'admin', name:'管理员' }; state.page='dashboard'; render(); }
+    else if (tToken && info) { state.token = tToken; state.teacher = JSON.parse(info); state.page='dashboard'; render(); }
+  }, []);
+  if (state.page === 'login') return React.createElement(LoginPage);
+  return React.createElement(Dashboard);
+}
+
+function render() { ReactDOM.render(React.createElement(App), document.getElementById('app')); }
+render();
+</script>
+</body>
+</html>
