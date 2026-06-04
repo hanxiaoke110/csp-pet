@@ -5,11 +5,11 @@
   "platforms": {
     "darwin-aarch64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3pJTWpuZDc3VWRUL1V0R3JJZGhhS2hyM1Z6cURMdXZrRFdjL3hnMkVrWkk0WXFnanUzTUtiZ0s3TnhNNUhHNXN6ZG05bWUrN1Bkdk9HSXVoWVRWZEEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwNDk2MjY4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjQuMF9hYXJjaDY0LmRtZwpTLzBmaWxBQU1lR0lLdmU0Q3ZWb0hmS2dnMHFTRHlkc1BHNjhONTV0b0IwWkk2VGdBQWI1SUNGYzRpckVpZEY5Y0lWeEU3T2Y2RTkzODllWTZQTStCdz09Cg==",
-      "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.4.0/CSP._1.4.0_aarch64.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.4.0/csp-arm.dmg"
     },
     "darwin-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzcxUkExRHhhdkthemRrNHFJWWg1b1FwYjVXREVJd2JsQk9qK2swZ2Q5QWFxRzZmdS80U1hIMEQrRUQ1YnorT1F1ZVpBelE5SjlNUEVLcCtnNDJ3MWdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwNDk2MjcwCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjQuMF94NjQuZG1nCkY3ZlNoMFdpTDVFcXhHdlh1ZGtGb3pvaWVSM3JydUx3ZXNEQkxvaGU0ZWFoNytkZG0vNitIdTZxZWhnVVR1cFhjYy9CSGFGSmpzZWg4TjJNSi9VOERnPT0K",
-      "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.4.0/CSP._1.4.0_x64.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.4.0/csp-intel.dmg"
     },
     "windows-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVyttUWpHak01VUgxb0RERE1jdWozWkFFSTRLSjVEU0pPU2xGZytjY3RvamNUbjM1ZWx0QzA2TWpMeGVreEtZbm1zaWh1TFFJNys0UGpwSTVnYm4zY2drPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwNDk2MjcxCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjQuMF94NjQtc2V0dXAuZXhlCmhyL2lRZURMRDQxY3dkRVJvZk9zY0R4Z1JjbENjekNFNXFPb0lXc2hZeE5yRk8zOXFyaGVnNEJzZ0MrbkE4RTc3MGpxempoQTZ1R2c4ZnIrWW1zV0NnPT0K",
