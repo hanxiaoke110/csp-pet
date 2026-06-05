@@ -7303,7 +7303,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "下⾯C++代码执⾏后的输出是（ ）。",
+    "question": "下面C++代码执行后的输出是（ ）。\n\n```cpp\nchar ch[10] = {'1'};\ncout << ch[2] << endl;\n```",
     "options": [
       "A. 0",
       "B. 1",
