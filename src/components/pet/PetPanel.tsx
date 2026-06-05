@@ -237,9 +237,8 @@ export default function PetPanel() {
               {(() => {
                 const v = renameInput.trim();
                 if (!v) return <p className="name-error">请输入新名字</p>;
-                if (v.length < 1) return <p className="name-error">请输入名字</p>;
-                if (v.length > 8) return <p className="name-error">名字最多 8 个字</p>;
-                if (!/^[一-龥a-zA-Z0-9]+$/.test(v)) return <p className="name-error">只能使用中文、英文和数字</p>;
+                const err = validatePetName(v);
+                if (err) return <p className="name-error">{err}</p>;
                 return null;
               })()}
               <div style={{ fontSize: 12, color: '#f59e0b', marginTop: 4 }}>
@@ -249,7 +248,7 @@ export default function PetPanel() {
             <div className="buy-confirm-actions">
               <button className="mode-btn mode-btn-back" onClick={() => setRenameModal(false)}>取消</button>
               <button className="mode-btn"
-                disabled={(() => { const v = renameInput.trim(); return !v || v.length < 1 || v.length > 8 || !/^[一-龥a-zA-Z0-9]+$/.test(v); })()}
+                disabled={(() => { const v = renameInput.trim(); return !v || !!validatePetName(v); })()}
                 onClick={() => {
                   const err = renamePet(displayPet!.petId, renameInput.trim());
                   if (!err) {
@@ -464,8 +463,8 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
                       const name = buyNameInput.trim();
-                      if (!name || name.length < 1) { showShopToast('请输入名字'); return; }
-                      if (name.length > 8) { showShopToast('名字最多 8 个字'); return; }
+                      const err = validatePetName(name, ownedPets.map(p => p.petName));
+                      if (err) { showShopToast(err); return; }
                       const tier = getPetTier(buyConfirm.speciesId);
                       const ok = spendCoins(buyConfirm.price);
                       if (!ok) { showShopToast('金币不足，无法购买。'); setBuyConfirm(null); return; }
@@ -589,7 +588,10 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
             setPendingHatch(null);
           }}
-          onClose={() => setPendingHatch(null)}
+          onClose={() => {
+            addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
+            setPendingHatch(null);
+          }}
         />
       )}
     </div>

@@ -18,6 +18,8 @@ import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
 import { useQuizStore } from './stores/quizStore';
 import { useAIStore } from './stores/aiStore';
+import { migrateLocalStorageToSqlite } from './lib/migration';
+import { loadProblemStatuses } from './lib/problemStatusCache';
 import type { Lesson, Stage, LessonsData } from './types/course';
 import './App.css';
 
@@ -166,31 +168,41 @@ function App() {
 
   // Sync pet data to pet window and listen for clicks from pet window
   useEffect(() => {
-    petLoaded();
-    // Restore hatching eggs (they're persisted to localStorage)
-    useHatchStore.getState().load();
-    // Restore quiz progress (errors, stats, etc.)
-    useQuizStore.getState().load();
-    // Weekly passive coins for Lv10+ pets
-    try {
-      const store = usePetStore.getState();
-      const activePet = store.ownedPets.find(p => p.petId === store.activePetId);
-      if (activePet && activePet.level >= 10) {
-        const lastGrant = localStorage.getItem('csp_last_passive_coin');
-        const now = Date.now();
-        if (!lastGrant || (now - parseInt(lastGrant)) >= 7 * 86400000) {
-          store.addCoins(20);
-          localStorage.setItem('csp_last_passive_coin', String(now));
+    const init = async () => {
+      // 1. One-time migration: localStorage → SQLite
+      await migrateLocalStorageToSqlite();
+      // 2. Preload problem status cache
+      await loadProblemStatuses();
+      // 3. Load all stores from SQLite (parallel)
+      await Promise.all([
+        petLoaded(),
+        useHatchStore.getState().load(),
+        useQuizStore.getState().load(),
+      ]);
+      // 4. Sync to pet window
+      usePetStore.getState().save();
+      // 5. Weekly passive coins for Lv10+ pets
+      try {
+        const store = usePetStore.getState();
+        const activePet = store.ownedPets.find(p => p.petId === store.activePetId);
+        if (activePet && activePet.level >= 10) {
+          const lastGrant = localStorage.getItem('csp_last_passive_coin');
+          const now = Date.now();
+          if (!lastGrant || (now - parseInt(lastGrant)) >= 7 * 86400000) {
+            store.addCoins(20);
+            localStorage.setItem('csp_last_passive_coin', String(now));
+          }
         }
-      }
-    } catch {}
-    listen('pet-click', () => {
-      usePetStore.getState().save();
-    }).catch(() => {});
-    listen('pet-request-sync', () => {
-      usePetStore.getState().save();
-    }).catch(() => {});
-    setTimeout(() => usePetStore.getState().save(), 500);
+      } catch {}
+      listen('pet-click', () => {
+        usePetStore.getState().save();
+      }).catch(() => {});
+      listen('pet-request-sync', () => {
+        usePetStore.getState().save();
+      }).catch(() => {});
+      setTimeout(() => usePetStore.getState().save(), 500);
+    };
+    init();
   }, []);
 
   // Milestone toast listener

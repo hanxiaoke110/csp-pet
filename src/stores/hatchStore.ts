@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { downloadPetSprites } from '../utils/spriteDownloader';
+import { sqliteSetFireAndForget, sqliteGet } from '../lib/sqlite-storage';
+import { safeLsSet, safeLsGet } from '../lib/storage';
 
 export type HatchRarity = 'common' | 'rare' | 'legendary';
 export type HatchStatus = 'waiting' | 'incubating' | 'ready' | 'failed';
@@ -35,7 +37,7 @@ interface HatchState {
 
   // Persistence
   save: () => void;
-  load: () => void;
+  load: () => Promise<void>;
 }
 
 function randomDuration(rarity: HatchRarity): number {
@@ -210,32 +212,19 @@ export const useHatchStore = create<HatchState>((set, get) => ({
     try {
       const { eggs } = get();
       const json = JSON.stringify(eggs);
-      // Write to temp key first, then swap — reduces corruption risk on crash
-      localStorage.setItem(STORAGE_KEY + '_tmp', json);
-      localStorage.setItem(STORAGE_KEY, json);
-      localStorage.removeItem(STORAGE_KEY + '_tmp');
+      sqliteSetFireAndForget('hatch_eggs', json);
+      safeLsSet(STORAGE_KEY, json); // backup
     } catch { /* quota exceeded or filesystem error */ }
   },
 
-  load: () => {
-    try {
-      // Try primary key first, fall back to temp (crash recovery)
-      let raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        raw = localStorage.getItem(STORAGE_KEY + '_tmp');
-        if (raw) {
-          // Restore from temp backup
-          localStorage.setItem(STORAGE_KEY, raw);
-          localStorage.removeItem(STORAGE_KEY + '_tmp');
-        }
-      }
-      const data = JSON.parse(raw || '[]');
+  load: async () => {
+    const hydrate = (raw: string | null) => {
+      if (!raw) return;
+      const data = JSON.parse(raw);
       if (Array.isArray(data) && data.length > 0) {
         set({ eggs: data });
-        // Re-check status + restart interrupted downloads
         setTimeout(() => {
           get().checkEggs();
-          // Resume downloads for eggs that were incubating when app closed
           for (const egg of get().eggs) {
             if (egg.status === 'incubating' && egg.rarity !== 'common' && egg.downloadStatus !== 'done') {
               resumeDownload(get, set, egg.eggId, egg.speciesId);
@@ -243,28 +232,18 @@ export const useHatchStore = create<HatchState>((set, get) => ({
           }
         }, 100);
       }
-    } catch {
-      // JSON parse error — try temp backup
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY + '_tmp');
-        if (raw) {
-          const data = JSON.parse(raw);
-          if (Array.isArray(data) && data.length > 0) {
-            set({ eggs: data });
-            localStorage.setItem(STORAGE_KEY, raw);
-            localStorage.removeItem(STORAGE_KEY + '_tmp');
-            // Re-check status
-            setTimeout(() => {
-              get().checkEggs();
-              for (const egg of get().eggs) {
-                if (egg.status === 'incubating' && egg.rarity !== 'common' && egg.downloadStatus !== 'done') {
-                  resumeDownload(get, set, egg.eggId, egg.speciesId);
-                }
-              }
-            }, 100);
-          }
-        }
-      } catch { /* unrecoverable */ }
-    }
+    };
+
+    // Primary: SQLite
+    try {
+      const raw = await sqliteGet('hatch_eggs');
+      if (raw) { hydrate(raw); return; }
+    } catch { /* SQLite unavailable */ }
+
+    // Fallback: localStorage
+    try {
+      const raw = safeLsGet(STORAGE_KEY, '');
+      hydrate(raw || null);
+    } catch { /* unrecoverable */ }
   },
 }));

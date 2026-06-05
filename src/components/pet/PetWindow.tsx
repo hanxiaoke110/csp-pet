@@ -93,10 +93,18 @@ export default function PetWindow() {
 
   // Data sync & events
   useEffect(() => {
-    const load = () => {
+    const load = async () => {
       try {
-        let raw = localStorage.getItem('csp_pet_data');
-        if (!raw) raw = localStorage.getItem('csp_pet_data_tmp');
+        // Primary: SQLite
+        let raw: string | null = null;
+        try {
+          raw = await invoke('get_setting', { key: 'pet_data' }) as string | null;
+        } catch { /* SQLite unavailable */ }
+        // Fallback: localStorage
+        if (!raw) {
+          raw = localStorage.getItem('csp_pet_data');
+          if (!raw) raw = localStorage.getItem('csp_pet_data_tmp');
+        }
         const d = JSON.parse(raw || '{}');
         if (d.activePetId && d.ownedPets) {
           const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
@@ -108,10 +116,7 @@ export default function PetWindow() {
     const c: (() => void)[] = [];
     listen('pet-data-sync', (e: any) => {
       const d = e.payload;
-      const json = JSON.stringify(d);
-      localStorage.setItem('csp_pet_data_tmp', json);
-      localStorage.setItem('csp_pet_data', json);
-      localStorage.removeItem('csp_pet_data_tmp');
+      // Data already persisted to SQLite by main window — just update UI
       if (d.activePetId && d.ownedPets) {
         const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
         if (p) setActivePet(p);

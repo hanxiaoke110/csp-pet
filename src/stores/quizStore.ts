@@ -1,4 +1,7 @@
 import { create } from 'zustand';
+import { sqliteSetFireAndForget, sqliteGet } from '../lib/sqlite-storage';
+import { safeLsSet, safeLsGet } from '../lib/storage';
+import { usePetStore } from './petStore';
 
 export interface ErrorRecord {
   questionId: string;
@@ -41,7 +44,7 @@ export interface QuizState {
   totalPractice: number;
   totalCorrect: number;
 
-  addError: (questionId: string, wrongAnswer: number, correctAnswer: number) => void;
+  addError: (questionId: string, wrongAnswer: number, correctAnswer: number, knowledgePoint?: string) => void;
   removeError: (questionId: string) => void;
   recordKpResults: (results: WeeklyKpResult[]) => void;
   resetMonthlyKpStats: () => void;
@@ -56,7 +59,7 @@ export interface QuizState {
   canDoExtraChallenge: () => boolean;
   canDoMonthlyReview: () => { allowed: boolean; reason: string };
   errorCount: () => number;
-  load: () => void;
+  load: () => Promise<void>;
   save: () => void;
 }
 
@@ -73,10 +76,10 @@ function getMonthKey(): string {
   return new Date().toISOString().slice(0, 7);
 }
 
-function getBiWeekKey(): string {
+function getWeekKeyStr(): string {
   const d = new Date();
   const weekNum = Math.floor((d.getTime() - new Date(d.getFullYear(), 0, 1).getTime()) / 604800000);
-  return `${d.getFullYear()}-W${Math.floor(weekNum / 2)}`;
+  return `${d.getFullYear()}-W${weekNum}`;
 }
 
 function isLastWeekOfMonth(): boolean {
@@ -86,58 +89,27 @@ function isLastWeekOfMonth(): boolean {
   return daysLeft <= 6; // last 7 days of month
 }
 
-function loadState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) {
-      // Fall back to temp backup (crash recovery)
-      const tmp = localStorage.getItem(STORAGE_KEY + '_tmp');
-      if (tmp) {
-        localStorage.setItem(STORAGE_KEY, tmp);
-        localStorage.removeItem(STORAGE_KEY + '_tmp');
-        return JSON.parse(tmp);
-      }
-      return {};
-    }
-    return JSON.parse(saved);
-  } catch {
-    // JSON corrupted — try temp backup
-    try {
-      const tmp = localStorage.getItem(STORAGE_KEY + '_tmp');
-      if (tmp) {
-        const data = JSON.parse(tmp);
-        localStorage.setItem(STORAGE_KEY, tmp);
-        localStorage.removeItem(STORAGE_KEY + '_tmp');
-        return data;
-      }
-    } catch { /* unrecoverable */ }
-    return {};
-  }
-}
-
 export const useQuizStore = create<QuizState>((set, get) => {
-  const initial = loadState();
-
   return {
-    errors: initial.errors || [],
-    kpStats: initial.kpStats || {},
+    errors: [],
+    kpStats: {},
     lastKpResults: [],
-    weeklyTaskDone: initial.weeklyTaskDate === getWeekStart() ? (initial.weeklyTaskDone || 0) : 0,
-    weeklyTaskDate: initial.weeklyTaskDate || getWeekStart(),
-    weeklyCompletions: initial.weeklyCompletions || 0,
-    weeklyPerfects: initial.weeklyPerfects || 0,
-    extraChallengeDone: initial.weeklyTaskDate === getWeekStart() ? (initial.extraChallengeDone || false) : false,
-    extraChallengeCount: initial.extraChallengeCount || 0,
-    lastReviewDate: initial.lastReviewDate || '',
-    lastReviewCorrect: initial.lastReviewCorrect || 0,
-    lastReviewTotal: initial.lastReviewTotal || 0,
-    lastSuperDate: initial.lastSuperDate || '',
-    superCompletions: initial.superCompletions || 0,
-    superBestScore: initial.superBestScore || 0,
-    totalPractice: initial.totalPractice || 0,
-    totalCorrect: initial.totalCorrect || 0,
+    weeklyTaskDone: 0,
+    weeklyTaskDate: getWeekStart(),
+    weeklyCompletions: 0,
+    weeklyPerfects: 0,
+    extraChallengeDone: false,
+    extraChallengeCount: 0,
+    lastReviewDate: '',
+    lastReviewCorrect: 0,
+    lastReviewTotal: 0,
+    lastSuperDate: '',
+    superCompletions: 0,
+    superBestScore: 0,
+    totalPractice: 0,
+    totalCorrect: 0,
 
-    addError: (questionId, wrongAnswer, correctAnswer) => {
+    addError: (questionId, wrongAnswer, correctAnswer, knowledgePoint) => {
       set(s => {
         const existing = s.errors.find(e => e.questionId === questionId);
         const updated = existing
@@ -148,6 +120,17 @@ export const useQuizStore = create<QuizState>((set, get) => {
         return { errors: updated };
       });
       get().save();
+      // Report to server (fire-and-forget, don't block quiz flow)
+      try {
+        const kp = knowledgePoint || '';
+        const classCode = localStorage.getItem('csp_class_code') || '';
+        if (kp && classCode) {
+          fetch('https://api.cspstudy.top/api/quiz/error', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question_id: questionId, knowledge_point: kp, class_code: classCode }),
+          }).catch(() => {});
+        }
+      } catch {}
     },
 
     recordKpResults: (results) => {
@@ -213,26 +196,41 @@ export const useQuizStore = create<QuizState>((set, get) => {
       const s = get();
       const completions = (s.superCompletions || 0) + 1;
       const best = Math.max(s.superBestScore || 0, correct);
-      set({ lastSuperDate: getBiWeekKey(), superCompletions: completions, superBestScore: best });
+      set({ lastSuperDate: getWeekKeyStr(), superCompletions: completions, superBestScore: best });
       get().save();
     },
 
     canDoSuperChallenge: () => {
-      return get().lastSuperDate !== getBiWeekKey();
+      // Check if training camp is active (unlimited attempts)
+      try {
+        const petState = usePetStore.getState();
+        if (petState.trainingCampActive && petState.trainingCampEndDate) {
+          const end = new Date(petState.trainingCampEndDate).getTime();
+          if (Date.now() < end) return true;
+        }
+      } catch {}
+      return get().lastSuperDate !== getWeekKeyStr();
     },
 
     superDaysLeft: () => {
       const s = get();
-      if (s.lastSuperDate === getBiWeekKey()) return 0;
+      if (s.lastSuperDate === getWeekKeyStr()) return 0;
       if (!s.lastSuperDate) return 0;
-      // Calculate days until next bi-week
+      // Check if training camp is active (unlimited)
+      try {
+        const petState = usePetStore.getState();
+        if (petState.trainingCampActive && petState.trainingCampEndDate) {
+          const end = new Date(petState.trainingCampEndDate).getTime();
+          if (Date.now() < end) return 0;
+        }
+      } catch {}
+      // Calculate days until next week
       const wPart = s.lastSuperDate.split('-W')[1];
       const lastWeek = parseInt(wPart || '0');
       const now = new Date();
-      const weekNum = Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 1).getTime()) / 604800000);
-      const targetWeek = (lastWeek + 1) * 2;
-      const weeksLeft = targetWeek - weekNum;
-      return Math.max(0, Math.ceil(weeksLeft * 7));
+      const nowWeek = Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 1).getTime()) / 604800000);
+      if (nowWeek <= lastWeek) return 7 - (now.getDay() || 7);
+      return 0;
     },
 
     canDoWeeklyTask: () => {
@@ -266,28 +264,46 @@ export const useQuizStore = create<QuizState>((set, get) => {
 
     errorCount: () => get().errors.length,
 
-    load: () => {
-      const data = loadState();
-      const today = getWeekStart();
-      const sameWeek = data.weeklyTaskDate === today;
-      set({
-        errors: data.errors || [],
-        kpStats: data.kpStats || {},
-        extraChallengeCount: data.extraChallengeCount || 0,
-        lastReviewDate: data.lastReviewDate || '',
-        lastReviewCorrect: data.lastReviewCorrect || 0,
-        lastReviewTotal: data.lastReviewTotal || 0,
-        lastSuperDate: data.lastSuperDate || '',
-        superCompletions: data.superCompletions || 0,
-        superBestScore: data.superBestScore || 0,
-        totalPractice: data.totalPractice || 0,
-        totalCorrect: data.totalCorrect || 0,
-        weeklyCompletions: data.weeklyCompletions || 0,
-        weeklyPerfects: data.weeklyPerfects || 0,
-        weeklyTaskDone: sameWeek ? (data.weeklyTaskDone || 0) : 0,
-        weeklyTaskDate: sameWeek ? (data.weeklyTaskDate || today) : today,
-        extraChallengeDone: sameWeek ? (data.extraChallengeDone || false) : false,
-      });
+    load: async () => {
+      // Helper to parse and hydrate from raw JSON
+      const hydrate = (raw: string | null) => {
+        if (!raw) return;
+        let data: any = {};
+        try { data = JSON.parse(raw); } catch { return; }
+        const today = getWeekStart();
+        const sameWeek = data.weeklyTaskDate === today;
+        set({
+          errors: data.errors || [],
+          kpStats: data.kpStats || {},
+          lastKpResults: data.lastKpResults || [],
+          extraChallengeCount: data.extraChallengeCount || 0,
+          lastReviewDate: data.lastReviewDate || '',
+          lastReviewCorrect: data.lastReviewCorrect || 0,
+          lastReviewTotal: data.lastReviewTotal || 0,
+          lastSuperDate: data.lastSuperDate || '',
+          superCompletions: data.superCompletions || 0,
+          superBestScore: data.superBestScore || 0,
+          totalPractice: data.totalPractice || 0,
+          totalCorrect: data.totalCorrect || 0,
+          weeklyCompletions: data.weeklyCompletions || 0,
+          weeklyPerfects: data.weeklyPerfects || 0,
+          weeklyTaskDone: sameWeek ? (data.weeklyTaskDone || 0) : 0,
+          weeklyTaskDate: sameWeek ? (data.weeklyTaskDate || today) : today,
+          extraChallengeDone: sameWeek ? (data.extraChallengeDone || false) : false,
+        });
+      };
+
+      // Primary: SQLite
+      try {
+        const raw = await sqliteGet('quiz_state');
+        if (raw) { hydrate(raw); return; }
+      } catch { /* SQLite unavailable */ }
+
+      // Fallback: localStorage
+      try {
+        const raw = safeLsGet(STORAGE_KEY, '');
+        hydrate(raw || null);
+      } catch { /* unrecoverable */ }
     },
 
     save: () => {
@@ -296,6 +312,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
         const json = JSON.stringify({
           errors: s.errors,
           kpStats: s.kpStats,
+          lastKpResults: s.lastKpResults,
           extraChallengeCount: s.extraChallengeCount,
           lastReviewDate: s.lastReviewDate,
           lastReviewCorrect: s.lastReviewCorrect,
@@ -311,10 +328,8 @@ export const useQuizStore = create<QuizState>((set, get) => {
           weeklyTaskDate: s.weeklyTaskDate,
           extraChallengeDone: s.extraChallengeDone,
         });
-        // Write to temp key first, then swap — reduces corruption risk on crash
-        localStorage.setItem(STORAGE_KEY + '_tmp', json);
-        localStorage.setItem(STORAGE_KEY, json);
-        localStorage.removeItem(STORAGE_KEY + '_tmp');
+        sqliteSetFireAndForget('quiz_state', json);
+        safeLsSet(STORAGE_KEY, json); // backup
       } catch { /* quota exceeded or filesystem error */ }
     },
   };

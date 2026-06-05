@@ -411,6 +411,20 @@
       "root_cause": "EXC/CAMP端点只验证X-Teacher-Token，无admin回退",
       "fix": "EXC/CAMP端点加checkAdmin回退",
       "tags": ["admin", "auth", "code-generation"]
+    },
+    {
+      "date": "2026-06-04",
+      "error_message": "v1.4.0 macOS更新链接404",
+      "root_cause": "UpdateChecker.tsx硬编码文件名csp-v{short}-{arch}，不看update.json实际URL。Gitee上传文件名与App期望不一致",
+      "fix": "Gitee上传文件严格按App命名规则：csp-v140-arm.dmg, csp-v140-intel.dmg, csp-v140-win.exe",
+      "tags": ["release", "update", "filename", "gitee"]
+    },
+    {
+      "date": "2026-06-05",
+      "error_message": "商城抽卡后，HatchConfirmModal点X关闭导致宠物蛋丢失",
+      "root_cause": "HatchConfirmModal的onClose只调用setPendingHatch(null)清空状态，不调用addEgg()保存蛋。金币已在确认购买时扣除，但蛋没有进入孵化队列",
+      "fix": "onClose改为和onLater一样：先addEgg()再setPendingHatch(null)，确保蛋进入孵化队列",
+      "tags": ["pet", "gacha", "hatch", "data-loss"]
     }
   ]
 }

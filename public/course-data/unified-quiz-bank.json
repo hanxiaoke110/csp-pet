@@ -2578,7 +2578,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据结构-图",
-    "question": "下列流程图的输出结果是（ ）？（x=5,y=12，判断x>y，若否则a=y,b=x）",
+    "question": "下列流程图的输出结果是（ ）？\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2023-09-2-02.svg)",
     "options": [
       "A. 5 12",
       "B. 12 5",
@@ -7267,7 +7267,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "执⾏下⾯C++代码后输出的是（ ）。",
+    "question": "执行下面C++代码后输出的是（ ）。\n\n```cpp\nstring str(\"chen\");\nint x = str.length();\ncout << x << endl;\n```",
     "options": [
       "A. 4",
       "B. 3",
@@ -7285,7 +7285,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "执⾏下⾯C++代码后输出的是（ ）。",
+    "question": "执行下面C++代码后输出的是（ ）。\n\n```cpp\nstring str = \"chen\";\ncout << str[5] << endl;\n```",
     "options": [
       "A. 输出未知的数",
       "B. 输出'n'",

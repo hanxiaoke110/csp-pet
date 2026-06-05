@@ -338,3 +338,86 @@ Windows 不受影响（可能 Windows updater 的 HTTP 栈处理跳转不同）�
 - docs/superpowers/specs/2026-06-02-wish-wall-design.md
 - docs/superpowers/specs/csp-roadmap.md
 - docs/superpowers/specs/cf-config.md
+
+## 2026-06-03 — 精灵工坊开发
+
+### 核心功能
+- 🏭 workshop.cspstudy.top + teacher.cspstudy.top 互通
+- AI 多厂商切换（智谱/阿里/混元/豆包），教师各自配 Key
+- 参考 Hatch Pet：提示词按基准图→逐行动画→身份锁定→负面约束
+- Canvas 帧提取+校验+拼合 spritesheet（8行×9列 Petdex 格式）
+- KV 图片存储（免绑卡），缩略图 200×200 + GIF 预览
+- pet.json 自动生成（anims/frameWidth/animsOrder/durations）
+- 教师专属 localStorage Key（ws_ai_keys_{teacher_id}）
+
+### Bug修复
+- 许愿墙投票提示词 Hatch Pet 标准重写
+- 参考图预览用 DOM 直接更新
+- KV 存储二进制（非 base64 字符串）
+- pet_json 反序列化补全
+- 精灵列表教师过滤
+- Admin 登录 !resp.ok 修复
+- 图片加载错误日志修复
+- 退出登录只清 token，保留 AI 配置
+- submitting 变量声明缺失修复
+
+### 部署信息
+- Cloudflare API Token 因 GitHub 扫描泄露已轮换
+- wrangler.toml: KV namespace csp-sprites (4fd505c38b4d4ce89833b660afb37703)
+- 精灵工坊 Pages 项目: workshop-csp
+
+## 题库图片更新流程
+
+带图的题目：
+1. 图片放到 `public/course-data/images/quiz-{id}.png`，push 到 Gitee
+2. 题库 JSON 里加上 `<img src="https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/images/quiz-{id}.png">`
+3. bump `version.json` 版本号
+4. 学生端自动热更新，无需发版
+
+Gitee 仓库路径：`public/course-data/images/`
+Gitee raw URL 格式：`https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/images/{filename}`
+
+## ⚠️ 发版文件命名规则
+
+App `UpdateChecker.tsx` 硬编码了下载链接格式，不看 `update.json`：
+```
+csp-v{版本号去点}-arm.dmg     (如 csp-v140-arm.dmg)
+csp-v{版本号去点}-intel.dmg   (如 csp-v140-intel.dmg)
+csp-v{版本号去点}-win.exe     (如 csp-v140-win.exe)
+```
+
+上传 Gitee 时文件名必须严格匹配这个格式，否则 App 内手动下载 404。
+
+## 2026-06-04 — 学习分析 + 超级挑战调整 + 发版修复
+
+### 学习上报系统
+- quizStore.addError 加 fetch 上报到 Worker API
+- 全部模式（周常/自由/额外/超级）都上报，静默不阻塞
+- D1 quiz_errors 表：question_id, knowledge_point, class_code, device_hash, UNIQUE(question_id, device_hash)
+- Worker API: POST /api/quiz/error (上报) + GET /api/quiz/analytics (教师查询)
+
+### 教师端 📊 学习分析 Tab
+- 按班级筛选（下拉框切换）
+- 本月知识点错题排行（🥇🥈🥉）
+- 点击知识点 → 查看具体哪些学生错了
+- 仅教师可见，管理员不显示
+
+### 超级挑战调整
+- 频率：两周1次 → 每周1次
+- 集训模式激活时：不限次数
+- 删除 getBiWeekKey，新增 getWeekKeyStr
+- 成就无需修改（跟踪完成次数，不依赖频率）
+
+### 发版流程修复
+- v1.4.0 GitHub → Gitee 手动上传三平台安装包
+- macOS 更新链接问题：App UpdateChecker.tsx 硬编码文件名格式 csp-v{short}-{arch}，不看 update.json
+- ⚠️ 上传 Gitee 时文件名必须匹配：csp-v140-arm.dmg, csp-v140-intel.dmg, csp-v140-win.exe
+- API Token 因 GitHub 扫描泄露，已轮换新 Token
+- update.json 同时推送到 Gitee main 和 master 分支
+
+### 教师端小修复
+- 管理员可删除老师（含班级） + 删除反馈
+- 精灵工坊链接（🏭）加到教师后台 header
+- 管理员登录 resp.ok 检查修复
+- 2026-06-05: 修复商城抽卡HatchConfirmModal点X关闭导致蛋丢失-Bug。onClose只清pendingHatch不调addEgg。改为和onLater一样先addEgg再setPendingHatch(null)。
+- 2026-06-05: Plan A: 核心数据 localStorage→SQLite 迁移完成。用现有 settings 表+get_setting/set_setting 命令，无需改 Rust。4 个 core key (pet_data, hatch_eggs, quiz_state, problem_status) 迁至 SQLite，localStorage 保留作备份。新增 sqlite-storage.ts / migration.ts / problemStatusCache.ts。改造 petStore/hatchStore/quizStore 的 save/load 为 async+invoke。ProblemViewer 改用缓存 API。PetWindow 改用 invoke。quizStore 移除同步 loadState 初始化器。canDoSuperChallenge 改为读 petStore 内存状态。

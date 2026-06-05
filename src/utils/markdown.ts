@@ -19,6 +19,12 @@ export function renderCodeText(text: string): { __html: string } {
     return '<pre class="code-block"><code>' + lines.join('<br>') + '</code></pre>';
   });
 
+  // Image syntax ![alt](url) — only outside <pre> blocks (skip if inside code)
+  html = html.replace(/(<pre[\s\S]*?<\/pre>)|!\[([^\]]*)\]\(([^)]+)\)/g, (_match, pre, alt, url) => {
+    if (pre) return pre; // inside <pre>, leave untouched
+    return `<img src="${url}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:8px 0" />`;
+  });
+
   // Replace newlines with <br> only in non-code parts (which are outside <pre>)
   html = html.replace(/\n/g, '<br>');
 

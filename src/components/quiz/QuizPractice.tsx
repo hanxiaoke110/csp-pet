@@ -176,10 +176,8 @@ export default function QuizPractice() {
           return next;
         });
       }
-      // Add to error pool (for weekly/extra modes)
-      if (mode === 'weekly' || mode === 'extra') {
-        quizStore.addError(q.id, selected, q.correctIndex);
-      }
+      // Report error to error pool and server
+      quizStore.addError(q.id, selected, q.correctIndex, q.knowledgePoint);
     }
   };
 

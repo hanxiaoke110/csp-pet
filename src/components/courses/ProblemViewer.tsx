@@ -5,6 +5,7 @@ import HintSystem from './HintSystem';
 import AskAIModal from './AskAIModal';
 import UnderstandModal from './UnderstandModal';
 import { usePetStore } from '../../stores/petStore';
+import { getProblemStatus, setProblemStatus } from '../../lib/problemStatusCache';
 import { emit } from '@tauri-apps/api/event';
 
 export type SectionType = 'review' | 'inClassCodes' | 'inClassQuiz' | 'homework' | 'extended';
@@ -13,22 +14,6 @@ export type ProblemStatus = 'not_started' | 'completed' | 'retry' | 'attempted';
 interface Props {
   problem: Problem;
   sectionType: SectionType;
-}
-
-function loadStatus(problemId: string): ProblemStatus {
-  try {
-    const saved = localStorage.getItem('csp_problem_status');
-    return saved ? (JSON.parse(saved)[problemId] || 'not_started') : 'not_started';
-  } catch { return 'not_started'; }
-}
-
-function saveStatus(problemId: string, status: ProblemStatus) {
-  try {
-    const saved = localStorage.getItem('csp_problem_status');
-    const all = saved ? JSON.parse(saved) : {};
-    all[problemId] = status;
-    localStorage.setItem('csp_problem_status', JSON.stringify(all));
-  } catch { /* ignore */ }
 }
 
 export const STATUS_LABELS: Record<ProblemStatus, string> = {
@@ -53,7 +38,7 @@ export default function ProblemViewer({ problem, sectionType }: Props) {
   const [showHints, setShowHints] = useState(false);
   const [showAI, setShowAI] = useState(false);
   const [showUnderstand, setShowUnderstand] = useState(false);
-  const [status, setStatus] = useState<ProblemStatus>(() => loadStatus(problem.id));
+  const [status, setStatus] = useState<ProblemStatus>(() => getProblemStatus(problem.id));
 
   const cfg = TYPE_CONFIG[sectionType];
   const hasDesc = (problem.description || '').trim().length > 0;
@@ -63,7 +48,7 @@ export default function ProblemViewer({ problem, sectionType }: Props) {
 
   const handleUnderstand = () => {
     setStatus('completed');
-    saveStatus(problem.id, 'completed');
+    setProblemStatus(problem.id, 'completed');
     // Hold rewards until weekly practice done
     if (cfg.hasExp) {
       const store = usePetStore.getState();
