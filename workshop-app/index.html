@@ -125,10 +125,12 @@ function Dashboard() {
     ),
     React.createElement('div', { className:'tabs' },
       React.createElement('button', { className:`tab ${tab==='create'?'active':''}`, onClick:()=>setTab('create') }, '🎨 创建精灵'),
+      React.createElement('button', { className:`tab ${tab==='import'?'active':''}`, onClick:()=>setTab('import') }, '📦 导入素材'),
       React.createElement('button', { className:`tab ${tab==='my'?'active':''}`, onClick:()=>setTab('my') }, '📚 我的精灵'),
       React.createElement('button', { className:`tab ${tab==='settings'?'active':''}`, onClick:()=>setTab('settings') }, '⚙️ AI配置'),
     ),
     tab === 'create' ? React.createElement(CreatePanel, { onCreated: loadPets }) :
+    tab === 'import' ? React.createElement(ImportPanel, { onCreated: loadPets }) :
     tab === 'my' ? React.createElement(MyPetsPanel, { pets, onRefresh: loadPets }) :
     React.createElement(SettingsPanel),
   );
@@ -182,73 +184,6 @@ function CreatePanel({ onCreated }) {
       if (pv) pv.src = reader.result;
     };
     reader.readAsDataURL(file);
-  }
-
-  // ═══ Zip Import from Petdex ═══
-  async function handleZipImport(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const zip = await JSZip.loadAsync(file);
-      // Extract pet.json
-      const jsonFile = zip.file('pet.json');
-      if (!jsonFile) { toast('压缩包缺少 pet.json','error'); return; }
-      const petMeta = JSON.parse(await jsonFile.async('text'));
-
-      // Extract spritesheet
-      const ssFile = zip.file(/spritesheet\.(webp|png)/i);
-      if (!ssFile) { toast('压缩包缺少 spritesheet','error'); return; }
-      const ssBlob = await ssFile.async('blob');
-
-      // Auto-fill form
-      if (petMeta.displayName) setName(petMeta.displayName);
-      if (petMeta.description) setDesc(petMeta.description);
-
-      // Detect element from name (simple heuristic)
-      const elemHints = { '火':'fire','焰':'fire', '水':'water','冰':'water','海':'water', '风':'wind','气':'wind', '地':'earth','岩':'earth','土':'earth','草':'earth', '电':'light','雷':'light','光':'light','暗':'light' };
-      let detected = false;
-      for (const [kw, el] of Object.entries(elemHints)) {
-        if ((petMeta.displayName||'').includes(kw)) { setElement(el); detected = true; break; }
-      }
-
-      // Convert webp to png dataUrl for preview and KV upload
-      const img = new Image();
-      img.onload = function() {
-        const c = document.createElement('canvas');
-        c.width = img.width; c.height = img.height;
-        c.getContext('2d').drawImage(img, 0, 0);
-        const pngDataUrl = c.toDataURL('image/png');
-        setResultUrl(pngDataUrl);
-        setBaseImg(pngDataUrl);
-        // Generate thumbnail (first frame: 192x208)
-        const tc = document.createElement('canvas');
-        tc.width = 200; tc.height = 217;
-        const tctx = tc.getContext('2d');
-        tctx.drawImage(img, 0, 0, 192, 208, 0, 0, 200, 217);
-        setThumbUrl(tc.toDataURL('image/png'));
-        // Build minimal petJson for upload
-        setPetJsonData({
-          anims: petMeta.anims || { idle: [0,5] },
-          frameWidth: 192, frameHeight: 208,
-          animsOrder: petMeta.animsOrder || ['idle'],
-          durations: petMeta.durations || { idle: 750 },
-        });
-        setGenStatus('done');
-        render();
-      };
-      img.src = URL.createObjectURL(ssBlob);
-
-      // Update preview DOM
-      setTimeout(function() {
-        var pv = document.querySelector('.preview-box img');
-        if (pv) pv.src = img.src;
-      }, 200);
-
-      toast('✅ 素材包导入成功！请确认信息后保存');
-    } catch(err) {
-      toast('导入失败: ' + err.message, 'error');
-    }
-    e.target.value = '';
   }
 
   function updateStep(key, status) {
@@ -448,12 +383,6 @@ function CreatePanel({ onCreated }) {
 
           React.createElement('button', { className:'btn btn-primary', onClick:startGenerate, disabled:genStatus==='running', style:{ width:'100%', padding:12 } },
             genStatus==='running' ? '生成中...' : '🚀 开始生成'),
-
-          React.createElement('div', { style:{ display:'flex', gap:8, marginTop:8 } },
-            React.createElement('button', { className:'btn btn-outline', onClick:()=>document.getElementById('importZipFile').click(), style:{ flex:1, padding:10 } },
-              '📦 导入素材包'),
-            React.createElement('input', { id:'importZipFile', type:'file', accept:'.zip', style:{ display:'none' }, onChange:handleZipImport }),
-          ),
         ),
         React.createElement('div', { style:{ width:220, flexShrink:0 } },
           React.createElement('div', { className:'preview-box', style:{ width:200, height:200 } },
@@ -520,6 +449,129 @@ function CreatePanel({ onCreated }) {
           submitting ? '保存中...' : '✅ 确认保存 (' + (TIERS.find(t=>t.key===tier)||{}).price + 'g)'),
         React.createElement('button', { className:'btn btn-outline', onClick:()=>setShowConfirm(false), style:{ flex:1, padding:12 } },
           '取消'),
+      ),
+    ),
+  );
+}
+
+
+// ═══ Import Panel ═══
+function ImportPanel({ onCreated }) {
+  const [name, setName] = React.useState("");
+  const [element, setElement] = React.useState("fire");
+  const [tier, setTier] = React.useState("rare");
+  const [desc, setDesc] = React.useState("");
+  const [resultUrl, setResultUrl] = React.useState(null);
+  const [thumbUrl, setThumbUrl] = React.useState(null);
+  const [petJsonData, setPetJsonData] = React.useState(null);
+  const [submitting, setSubmitting] = React.useState(false);
+  const [imported, setImported] = React.useState(false);
+
+  async function handleZipImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const zip = await JSZip.loadAsync(file);
+      const jsonFile = zip.file("pet.json");
+      if (!jsonFile) { toast("压缩包缺少 pet.json","error"); return; }
+      const petMeta = JSON.parse(await jsonFile.async("text"));
+      const ssFile = zip.file(/spritesheet.(webp|png)/i);
+      if (!ssFile) { toast("压缩包缺少 spritesheet","error"); return; }
+      const ssBlob = await ssFile.async("blob");
+      if (petMeta.displayName) setName(petMeta.displayName);
+      if (petMeta.description) setDesc(petMeta.description);
+      const elemHints = { "火":"fire","焰":"fire", "水":"water","冰":"water","海":"water", "风":"wind","气":"wind", "地":"earth","岩":"earth","土":"earth","草":"earth", "电":"light","雷":"light","光":"light","暗":"light" };
+      for (const [kw, el] of Object.entries(elemHints)) {
+        if ((petMeta.displayName||"").includes(kw)) { setElement(el); break; }
+      }
+      const img = new Image();
+      img.onload = function() {
+        const c = document.createElement("canvas");
+        c.width = img.width; c.height = img.height;
+        c.getContext("2d").drawImage(img, 0, 0);
+        const pngDataUrl = c.toDataURL("image/png");
+        setResultUrl(pngDataUrl);
+        const tc = document.createElement("canvas");
+        tc.width = 200; tc.height = 217;
+        tc.getContext("2d").drawImage(img, 0, 0, 192, 208, 0, 0, 200, 217);
+        setThumbUrl(tc.toDataURL("image/png"));
+        setPetJsonData({ anims: petMeta.anims || { idle: [0,5] }, frameWidth: 192, frameHeight: 208, animsOrder: petMeta.animsOrder || ["idle"], durations: petMeta.durations || { idle: 750 } });
+        setImported(true);
+        render();
+      };
+      img.src = URL.createObjectURL(ssBlob);
+      toast("✅ 素材包导入成功！请确认信息后保存");
+    } catch(err) { toast("导入失败: " + err.message, "error"); }
+    e.target.value = "";
+  }
+
+  async function doSavePet() {
+    if (!resultUrl) { toast("请先导入素材包","error"); return; }
+    if (!name.trim()) { toast("请输入名字","error"); return; }
+    setSubmitting(true);
+    try {
+      const ssResp = await api("/api/workshop/upload", { method:"POST", body:JSON.stringify({ image: resultUrl, filename: (name.trim()||"pet") + "-spritesheet.png" }) });
+      if (ssResp.error) { toast("上传失败: "+ssResp.error,"error"); setSubmitting(false); return; }
+      const thumbResp = await api("/api/workshop/upload", { method:"POST", body:JSON.stringify({ image: thumbUrl || resultUrl, filename: (name.trim()||"pet") + "-thumb.png" }) });
+      if (thumbResp.error) { toast("缩略图上传失败","error"); setSubmitting(false); return; }
+      const tierData = TIERS.find(function(t){ return t.key===tier; });
+      const d = await api("/api/workshop/pets", { method:"POST", body:JSON.stringify({ name: name.trim(), element: element, style: "pixel", description: desc.trim(), tier: tierData.key, price: tierData.price, spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData) }) });
+      if (d.error) { toast(d.error,"error"); setSubmitting(false); return; }
+      toast("✅ 精灵已保存！");
+      onCreated();
+      render();
+    } catch(err) { toast("保存失败: "+err.message,"error"); }
+    setSubmitting(false);
+  }
+
+  return React.createElement("div", null,
+    React.createElement("div", { className:"card" },
+      React.createElement("h3", null, "📦 导入素材包"),
+      React.createElement("p", { style:{ fontSize:12, color:"#94a3b8", marginBottom:16 } }, "从 Petdex 下载的素材包 (.zip)，包含 pet.json + spritesheet.webp"),
+      !imported && React.createElement("div", { style:{ border:"2px dashed #e2e8f0", borderRadius:12, padding:40, textAlign:"center", cursor:"pointer" }, onClick:function(){ document.getElementById("importZipInput").click(); } },
+        React.createElement("div", { style:{ fontSize:40, marginBottom:8 } }, "📦"),
+        React.createElement("div", { style:{ fontSize:14, fontWeight:600, color:"#FF8C00" } }, "点击选择 .zip 文件"),
+        React.createElement("div", { style:{ fontSize:11, color:"#94a3b8" } }, "支持 Petdex 导出格式"),
+        React.createElement("input", { id:"importZipInput", type:"file", accept:".zip", style:{ display:"none" }, onChange:handleZipImport }),
+      ),
+      imported && React.createElement("div", null,
+        React.createElement("div", { style:{ display:"flex", gap:16, flexWrap:"wrap" } },
+          React.createElement("div", { style:{ flex:"1 1 200px" } },
+            React.createElement("div", { className:"form-group" },
+              React.createElement("label", null, "名字"),
+              React.createElement("input", { className:"input", value:name, onChange:function(e){ setName(e.target.value); } }),
+            ),
+            React.createElement("div", { className:"form-group" },
+              React.createElement("label", null, "元素"),
+              React.createElement("div", { style:{ display:"flex", gap:6 } },
+                ELEMENTS.map(function(el){ return React.createElement("button", { key:el, className:"element-btn" + (element===el?" sel":""), onClick:function(){ setElement(el); } }, ELEM_LABEL[el]); }),
+              ),
+            ),
+            React.createElement("div", { className:"form-group" },
+              React.createElement("label", null, "等级"),
+              React.createElement("div", { style:{ display:"flex", gap:6 } },
+                TIERS.map(function(t){ return React.createElement("button", { key:t.key, className:"element-btn" + (tier===t.key?" sel":""), onClick:function(){ setTier(t.key); } }, t.label + " " + t.price + "g"); }),
+              ),
+            ),
+            React.createElement("div", { className:"form-group" },
+              React.createElement("label", null, "描述"),
+              React.createElement("textarea", { className:"input", value:desc, onChange:function(e){ setDesc(e.target.value); }, rows:2, style:{ resize:"vertical" } }),
+            ),
+          ),
+          React.createElement("div", { style:{ width:220, flexShrink:0 } },
+            React.createElement("div", { className:"preview-box", style:{ width:200, height:200 } },
+              thumbUrl ? React.createElement("img", { src:thumbUrl }) :
+              resultUrl ? React.createElement("img", { src:resultUrl }) :
+              React.createElement("span", { style:{ fontSize:12, color:"#94a3b8", textAlign:"center" } }, "预览"),
+            ),
+          ),
+        ),
+        React.createElement("div", { style:{ display:"flex", gap:8, marginTop:12 } },
+          React.createElement("button", { className:"btn btn-primary", onClick:doSavePet, disabled:submitting||!name.trim(), style:{ flex:1, padding:12 } },
+            submitting ? "保存中..." : "💾 确认保存 (" + (TIERS.find(function(t){ return t.key===tier; })||{}).price + "g)"),
+          React.createElement("button", { className:"btn btn-outline", onClick:function(){ setImported(false); setResultUrl(null); setThumbUrl(null); setName(""); setDesc(""); }, style:{ flex:1, padding:12 } },
+            "🔄 重新导入"),
+        ),
       ),
     ),
   );
