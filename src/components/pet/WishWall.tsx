@@ -1,13 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getDeviceId, getTicketCount, useTicket } from '../../utils/crypto';
 import { usePetStore } from '../../stores/petStore';
 import { useQuizStore } from '../../stores/quizStore';
-import { useHatchStore } from '../../stores/hatchStore';
-import type { HatchRarity } from '../../stores/hatchStore';
-import { BaseDirectory, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
-import HatchConfirmModal from './HatchConfirmModal';
 
 const API = 'https://api.cspstudy.top';
 
@@ -16,81 +11,10 @@ interface Wish {
   votes: number; created_at: string; status?: string;
 }
 
-function WorkshopTab() {
-  const spendCoins = usePetStore(s => s.spendCoins);
-  const isOwned = usePetStore(s => s.isOwned);
-  const addEgg = useHatchStore(s => s.addEgg);
-  const startHatching = useHatchStore(s => s.startHatching);
-  const [pets, setPets] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
-  useEffect(() => {
-    fetch(API + '/api/workshop/pets')
-      .then(r => r.json()).then(d => { if (Array.isArray(d)) setPets(d); })
-      .catch(() => {}).finally(() => setLoading(false));
-  }, []);
-  const handleBuy = (pet: any) => {
-    if (isOwned('workshop-' + pet.id)) { return; }
-    if (!spendCoins(pet.price || 200)) { return; }
-    const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
-    setPendingHatch({ pet, rarity });
-  };
-  const downloadAndHatch = async (pet: any) => {
-    try {
-      if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
-        await mkdir('pet-sprites/2d', { baseDir: BaseDirectory.AppData, recursive: true });
-      }
-      const ssUrl = API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url || '');
-      const ssBuf = new Uint8Array(await (await fetch(ssUrl)).arrayBuffer());
-      const petId = 'ws-' + pet.id;
-      await writeFile('pet-sprites/2d/' + petId + '.png', ssBuf, { baseDir: BaseDirectory.AppData });
-      let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
-      try { if (pet.pet_json) pj = JSON.parse(pet.pet_json); } catch {}
-      await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(JSON.stringify(pj)), { baseDir: BaseDirectory.AppData });
-    } catch (e: any) { alert('下载失败: ' + (e.message || '网络错误')); }
-  };
-  if (loading) return React.createElement('div', { style: { padding: 40, textAlign: 'center', color: '#94a3b8' } }, '加载中...');
-  if (!pets.length) return React.createElement('div', { style: { padding: 40, textAlign: 'center', color: '#94a3b8' } }, '工坊还没有老师上传精灵，敬请期待~');
-  return React.createElement('div', null,
-    pendingHatch && React.createElement(HatchConfirmModal, {
-      petName: pendingHatch.pet.name,
-      rarity: pendingHatch.rarity,
-      onStart: () => {
-        downloadAndHatch(pendingHatch.pet);
-        const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
-        startHatching(egg.eggId);
-        setPendingHatch(null);
-      },
-      onLater: () => {
-        addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
-        setPendingHatch(null);
-      },
-      onClose: () => {
-        addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
-        setPendingHatch(null);
-      },
-    }),
-    React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 } },
-      pets.map((pet: any) => React.createElement('div', { key: pet.id, style: { background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 16, textAlign: 'center' } },
-        React.createElement('img', { src: API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || ''),
-          style: { width: 80, height: 87, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' },
-          onError: (e: any) => { e.target.style.display = 'none'; } }),
-        React.createElement('div', { style: { fontWeight: 600, fontSize: 14, marginTop: 8 } }, pet.name),
-        React.createElement('div', { style: { fontSize: 11, color: '#94a3b8' } }, (pet.teacher_name || '?') + ' · ' + (pet.element || '?')),
-        React.createElement('button', {
-          style: { marginTop: 8, width: '100%', padding: '8px 14px', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer',
-            background: isOwned('workshop-' + pet.id) ? '#f1f5f9' : '#FF8C00', color: isOwned('workshop-' + pet.id) ? '#94a3b8' : '#fff' },
-          disabled: isOwned('workshop-' + pet.id), onClick: () => handleBuy(pet) },
-          isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200) + ' 购买'),
-      )),
-    ),
-  );
-}
-
 export default function WishWall() {
   const navigate = useNavigate();
   const [wishes, setWishes] = useState<Wish[]>([]);
-  const [view, setView] = useState<'rules' | 'hot' | 'new' | 'feedback' | 'workshop'>('hot');
+  const [view, setView] = useState<'rules' | 'hot' | 'new' | 'feedback'>('hot');
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [content, setContent] = useState('');
@@ -118,7 +42,7 @@ export default function WishWall() {
   const canSubmit = hasLv6 && weekQuizDone && monthlySubmitted < 3;
 
   // Simple cache to avoid re-fetching on tab switch
-  const cacheRef = useRef<{ hot: Wish[] | null; new: Wish[] | null; workshop: any[] | null; time: number }>({ hot: null, new: null, workshop: null, time: 0 });
+  const cacheRef = useRef<{ hot: Wish[] | null; new: Wish[] | null; time: number }>({ hot: null, new: null, time: 0 });
   const maxLevel = ownedPets.length > 0 ? Math.max(...ownedPets.map(p => p.level)) : 0;
 
   const loadWishes = useCallback(async () => {
@@ -296,9 +220,7 @@ export default function WishWall() {
           {([
             { k: 'rules', icon: '📋', label: '许愿规则' },
             { k: 'hot', icon: '🔥', label: '热门' },
-            { k: 'new', icon: '🆕', label: '最新' },
-            { k: 'workshop', icon: '🏭', label: '工坊精灵' },
-            { k: 'feedback', icon: '💬', label: '反馈' },
+            { k: 'new', icon: '🆕', label: '最新' },            { k: 'feedback', icon: '💬', label: '反馈' },
           ] as const).map(({ k, icon, label }) => (
             <button key={k} onClick={() => { setView(k); setMsg(''); }} style={{
               padding: '6px 16px', fontSize: 13, fontWeight: 600, borderRadius: 8, cursor: 'pointer',
@@ -359,14 +281,14 @@ export default function WishWall() {
       )}
 
       {/* ── Loading ── */}
-      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && loading && (
+      {view !== 'rules' && view !== 'feedback' && loading && (
         <div style={{ display: 'flex', justifyContent: 'center', padding: 48 }}>
           <div className="loading-spinner" />
         </div>
       )}
 
       {/* ── Top 3 Podium ── */}
-      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && !loading && topWishes.length > 0 && (
+      {view !== 'rules' && view !== 'feedback' && !loading && topWishes.length > 0 && (
         <div style={{ marginBottom: 10 }}>
           {topWishes.map((w, i) => {
             const rs = rankStyles[i];
@@ -384,7 +306,7 @@ export default function WishWall() {
       )}
 
       {/* ── Rest Wishes ── */}
-      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && restWishes.map(w => (
+      {view !== 'rules' && view !== 'feedback' && restWishes.map(w => (
         <div key={w.id} style={{
           background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12,
           padding: '12px 14px', marginBottom: 6, transition: 'all .15s',
@@ -394,7 +316,7 @@ export default function WishWall() {
       ))}
 
       {/* ── Empty ── */}
-      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && !loading && wishes.length === 0 && (
+      {view !== 'rules' && view !== 'feedback' && !loading && wishes.length === 0 && (
         <div style={{ textAlign: 'center', padding: 48, color: '#94a3b8', fontSize: 13 }}>
           <div style={{ fontSize: 40, opacity: .4, marginBottom: 8 }}>💡</div>
           还没有许愿，来做第一个吧！
@@ -402,7 +324,7 @@ export default function WishWall() {
       )}
 
       {/* ── Submit Button or Eligibility Hint ── */}
-      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && (canSubmit ? (
+      {view !== 'rules' && view !== 'feedback' && (canSubmit ? (
         <button onClick={() => setShowForm(true)} style={{
           width: '100%', marginTop: 14, padding: '14px',
           background: 'linear-gradient(135deg, #FF8C00, #F96D00)',
@@ -476,9 +398,7 @@ export default function WishWall() {
       )}
 
       {/* ── Workshop ── */}
-      {view === 'workshop' && React.createElement(WorkshopTab)}
-
-      {/* ── Feedback Form ── */}
+            {/* ── Feedback Form ── */}
       {view === 'feedback' && (
         <div style={{ background:'#fff', border:'1px solid #e2e8f0', borderRadius:14, padding:'20px', animation:'fadeIn .2s ease' }}>
           <h3 style={{ fontSize:15, fontWeight:700, color:'#1e293b', marginBottom:4 }}>💬 提交反馈</h3>

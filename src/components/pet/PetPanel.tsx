@@ -9,7 +9,7 @@ import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig, PET_TIERS, getPetTier } fro
 import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
 import { addTickets, canBuyTickets } from '../../utils/crypto';
-import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
+import { BaseDirectory, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
 import CeremonyModal from './CeremonyModal';
 import PetSprite from './PetSprite';
 import HatchConfirmModal from './HatchConfirmModal';
@@ -38,7 +38,7 @@ export default function PetPanel() {
     newName?: string;
   } | null>(null);
   const [searchParams] = useSearchParams();
-  const [tab, setTab] = useState<'status' | 'shop' | 'hatch' | 'guide' | 'settings' | 'wish'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
+  const [tab, setTab] = useState<'status' | 'shop' | 'hatch' | 'guide' | 'settings' | 'wish' | 'workshop'>(searchParams.get('tab') === 'shop' ? 'shop' : 'status');
   const eggCount = useHatchStore(s => s.eggs.length);
   const [newPetCount, setNewPetCount] = useState(() => {
     try { return JSON.parse(localStorage.getItem('csp_new_pets') || '[]').length; }
@@ -191,6 +191,7 @@ export default function PetPanel() {
         <button className={`pet-tab ${tab === 'guide' ? 'active' : ''}`} onClick={() => setTab('guide')}>📖 指南</button>
         <button className={`pet-tab ${tab === 'settings' ? 'active' : ''}`} onClick={() => setTab('settings')}>⚙️ 显示</button>
         <button className={`pet-tab ${tab === 'wish' ? 'active' : ''}`} onClick={() => setTab('wish')}>💡 许愿</button>
+        <button className={`pet-tab ${tab === 'workshop' ? 'active' : ''}`} onClick={() => setTab('workshop')}>🏭 工坊</button>
       </div>
 
       {tab === 'status' && (
@@ -212,6 +213,7 @@ export default function PetPanel() {
 
       {tab === 'settings' && <PetSettings petSize={petSize} setPetSize={setPetSize} roaming={roaming} setRoaming={setRoaming} petWinVisible={petWinVisible} setPetWinVisible={setPetWinVisible} showToast={showToast} />}
       {tab === 'wish' && <WishWall />}
+      {tab === 'workshop' && <WorkshopShop />}
 
       {/* Rename modal */}
       {renameModal && displayPet && (
@@ -275,12 +277,16 @@ export default function PetPanel() {
 // ─── Shop sub-component ───
 const WORKSHOP_API = 'https://api.cspstudy.top';
 
-export function WorkshopShop({ coins, spendCoins, setPendingHatch, showShopToast }: {
-  coins: number; spendCoins: (a: number) => boolean; setPendingHatch: (p: any) => void; showShopToast: (m: string) => void;
-}) {
+function WorkshopShop() {
+  const coins = usePetStore(s => s.coins);
+  const spendCoins = usePetStore(s => s.spendCoins);
+  const isOwned = usePetStore(s => s.isOwned);
+  const addEgg = useHatchStore(s => s.addEgg);
+  const startHatching = useHatchStore(s => s.startHatching);
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const isOwned = usePetStore(s => s.isOwned);
+  const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
+  const hasClassCode = !!(localStorage.getItem('csp_class_code'));
 
   useEffect(() => {
     fetch(WORKSHOP_API + '/api/workshop/pets')
@@ -288,49 +294,83 @@ export function WorkshopShop({ coins, spendCoins, setPendingHatch, showShopToast
       .catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const handleBuy = async (pet: any) => {
-    if (isOwned('workshop-' + pet.id)) { showShopToast('已经拥有这只精灵了'); return; }
-    const price = pet.price || 200;
-    if (!spendCoins(price)) { showShopToast('金币不足'); return; }
-    showShopToast('正在下载精灵素材...');
-    try {
-      // Download spritesheet & thumbnail
-      const ssUrl = WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url || '');
-      const ssResp = await fetch(ssUrl);
-      const ssBuf = new Uint8Array(await ssResp.arrayBuffer());
-      const petId = 'ws-' + pet.id;
-      await writeFile('pet-sprites/2d/' + petId + '.png', ssBuf, { baseDir: BaseDirectory.AppData });
-      // Save pet.json metadata
-      let petJson = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
-      try { if (pet.pet_json) petJson = JSON.parse(pet.pet_json); } catch {}
-      const jsonStr = JSON.stringify(petJson);
-      await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(jsonStr), { baseDir: BaseDirectory.AppData });
-      // Start hatching
-      const rarity = pet.tier === 'legendary' ? 'legendary' as const : pet.tier === 'rare' ? 'rare' as const : 'common' as const;
-      setPendingHatch({ speciesId: 'workshop-' + pet.id, petName: pet.name, rarity });
-      showShopToast('✅ 购买成功！请孵化');
-    } catch (e: any) { showShopToast('下载失败: ' + (e.message || '网络错误')); }
+  const handleBuy = (pet: any) => {
+    if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
+    if (coins < (pet.price || 200)) { alert('金币不足'); return; }
+    spendCoins(pet.price || 200);
+    const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
+    setPendingHatch({ pet, rarity });
   };
 
-  if (loading) return React.createElement('div', { style: { textAlign: 'center', padding: 40, color: '#94a3b8' } }, '加载中...');
-  if (!pets.length) return React.createElement('div', { style: { textAlign: 'center', padding: 40, color: '#94a3b8' } },
-    '🏭 还没有老师上传精灵，敬请期待~');
+  const downloadAndHatch = async (pet: any) => {
+    try {
+      if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
+        await mkdir('pet-sprites/2d', { baseDir: BaseDirectory.AppData, recursive: true });
+      }
+      const ssUrl = WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url || '');
+      const buf = new Uint8Array(await (await fetch(ssUrl)).arrayBuffer());
+      const petId = 'ws-' + pet.id;
+      await writeFile('pet-sprites/2d/' + petId + '.png', buf, { baseDir: BaseDirectory.AppData });
+      let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
+      try { if (pet.pet_json) pj = JSON.parse(pet.pet_json); } catch {}
+      await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(JSON.stringify(pj)), { baseDir: BaseDirectory.AppData });
+    } catch (e: any) { alert('下载失败: ' + (e.message || '网络错误')); }
+  };
 
-  return React.createElement('div', { className: 'special-grid' },
-    pets.map((pet: any) => React.createElement('div', { key: pet.id, className: 'special-card' },
-      React.createElement('img', {
-        src: WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || ''),
-        style: { width: 80, height: 87, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' },
-        onError: (e: any) => { e.target.style.display = 'none'; },
-      }),
-      React.createElement('h4', null, pet.name),
-      React.createElement('p', { style: { fontSize: 11, color: '#94a3b8' } }, (pet.teacher_name || '未知老师') + ' · ' + (pet.element || '?')),
-      React.createElement('button', {
-        className: 'shop-card-buy',
-        disabled: coins < (pet.price || 200) || isOwned('workshop-' + pet.id),
-        onClick: () => handleBuy(pet),
-      }, isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200) + ' 购买'),
-    )),
+  if (!hasClassCode) return (
+    <div style={{ textAlign: 'center', padding: 60, color: '#94a3b8' }}>
+      <div style={{ fontSize: 48, marginBottom: 12 }}>🔒</div>
+      <div style={{ fontSize: 15, fontWeight: 600 }}>请先在设置页绑定班级码</div>
+      <div style={{ fontSize: 13, marginTop: 4 }}>加入班级后才能访问工坊精灵</div>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 4 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <h3 style={{ margin: 0 }}>🏭 教师工坊</h3>
+        <span style={{ fontSize: 12, color: '#94a3b8' }}>🪙 {coins} 金币</span>
+      </div>
+      {loading ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>加载中...</div> :
+       !pets.length ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>🏭 还没有老师上传精灵，敬请期待~</div> :
+       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12 }}>
+        {pets.map((pet: any) => (
+          <div key={pet.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 14, textAlign: 'center' }}>
+            <img src={WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || '')}
+              style={{ width: 72, height: 78, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' }}
+              onError={(e: any) => { e.target.style.display = 'none'; }} />
+            <div style={{ fontWeight: 600, fontSize: 13, marginTop: 6 }}>{pet.name}</div>
+            <div style={{ fontSize: 10, color: '#94a3b8' }}>{(pet.teacher_name || '?')} · {pet.element || '?'}</div>
+            <div style={{ fontSize: 10, color: '#f59e0b', marginBottom: 4 }}>
+              {pet.tier === 'legendary' ? '👑 传说' : pet.tier === 'rare' ? '✨ 稀有' : '⭐ 普通'}
+            </div>
+            <button className="shop-card-buy" style={{ width: '100%' }}
+              disabled={coins < (pet.price || 200) || isOwned('workshop-' + pet.id)}
+              onClick={() => handleBuy(pet)}>
+              {isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200)}
+            </button>
+          </div>
+        ))}
+      </div>}
+      {pendingHatch && <HatchConfirmModal
+        petName={pendingHatch.pet.name}
+        rarity={pendingHatch.rarity}
+        onStart={() => {
+          downloadAndHatch(pendingHatch.pet);
+          const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+          startHatching(egg.eggId);
+          setPendingHatch(null);
+        }}
+        onLater={() => {
+          addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+          setPendingHatch(null);
+        }}
+        onClose={() => {
+          addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+          setPendingHatch(null);
+        }}
+      />}
+    </div>
   );
 }
 
