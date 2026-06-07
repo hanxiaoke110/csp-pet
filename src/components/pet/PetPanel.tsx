@@ -303,20 +303,23 @@ function WorkshopShop() {
     setPendingHatch({ pet, rarity });
   };
 
-  const downloadAndHatch = async (pet: any) => {
+  const downloadAndHatch = async (pet: any): Promise<boolean> => {
     try {
       if (!pet.spritesheet_url) throw new Error('精灵素材缺失');
       if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
         await mkdir('pet-sprites/2d', { baseDir: BaseDirectory.AppData, recursive: true });
       }
       const ssUrl = WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url);
-      const buf = new Uint8Array(await (await fetch(ssUrl)).arrayBuffer());
+      const resp = await fetch(ssUrl);
+      if (!resp.ok) throw new Error('素材下载失败（' + resp.status + '），请联系老师重新上传精灵');
+      const buf = new Uint8Array(await resp.arrayBuffer());
       const petId = 'ws-' + pet.id;
       await writeFile('pet-sprites/2d/' + petId + '.png', buf, { baseDir: BaseDirectory.AppData });
       let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
       try { if (pet.pet_json) pj = JSON.parse(pet.pet_json); } catch {}
       await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(JSON.stringify(pj)), { baseDir: BaseDirectory.AppData });
-    } catch (e: any) { alert('下载失败: ' + (e.message || '网络错误')); }
+      return true;
+    } catch (e: any) { alert('下载失败: ' + (e.message || '网络错误')); return false; }
   };
 
   if (!hasClassCode) return (
@@ -364,7 +367,8 @@ function WorkshopShop() {
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}
         onStart={async () => {
-          await downloadAndHatch(pendingHatch.pet);
+          const ok = await downloadAndHatch(pendingHatch.pet);
+          if (!ok) { setPendingHatch(null); return; }
           const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
           startHatching(egg.eggId);
           setPendingHatch(null);
