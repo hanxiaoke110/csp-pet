@@ -7375,7 +7375,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "计算机基础",
-    "question": "C++的数据类型转换让⼈很难琢磨透，下列代码输出的值是（ ）。",
+    "question": "C++的数据类型转换让人很难琢磨透，下列代码输出的值是（ ）。\n\n```cpp\nint a = 3, b = 2;\ncout << a / b * 1.0 << endl;\n```",
     "options": [
       "A. 1.5",
       "B. 1",
