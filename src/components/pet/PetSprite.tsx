@@ -187,7 +187,7 @@ export default function PetSprite({
   const displayH = Math.round(sz * (spr?.meta.frameHeight || 208) / (spr?.meta.frameWidth || 192));
 
   return (
-    <div ref={containerRef} style={{ width: sz, height: sz, overflow: 'hidden', borderRadius: 12, position: 'relative' }}>
+    <div ref={containerRef} style={{ width: sz, height: sz, borderRadius: 12, position: 'relative' }}>
       <div ref={spriteDivRef} style={{
         width: sz, height: sz,
         backgroundImage: resolvedPngUrl ? `url("${resolvedPngUrl}")` : 'none',
