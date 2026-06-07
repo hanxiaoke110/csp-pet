@@ -5,12 +5,16 @@ import { invoke } from '@tauri-apps/api/core';
 /**
  * Read a value from SQLite settings table.
  * Returns the stored string, or null if the key doesn't exist or on error.
+ * 5-second timeout prevents hanging on slow/blocked SQLite (Windows).
  */
 export async function sqliteGet(key: string): Promise<string | null> {
   try {
-    return await invoke('get_setting', { key }) as string | null;
+    return await Promise.race([
+      invoke('get_setting', { key }) as Promise<string | null>,
+      new Promise<null>((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000)),
+    ]);
   } catch (e) {
-    console.error(`[sqlite] get_setting failed for "${key}":`, e);
+    console.error('[sqlite] get_setting failed for "' + key + '":', e);
     return null;
   }
 }
@@ -18,12 +22,16 @@ export async function sqliteGet(key: string): Promise<string | null> {
 /**
  * Write a value to SQLite settings table (async, awaits completion).
  * Use for migrations and one-time writes where you need confirmation.
+ * 5-second timeout prevents hanging on slow/blocked SQLite (Windows).
  */
 export async function sqliteSet(key: string, value: string): Promise<void> {
   try {
-    await invoke('set_setting', { key, value });
+    await Promise.race([
+      invoke('set_setting', { key, value }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000)),
+    ]);
   } catch (e) {
-    console.error(`[sqlite] set_setting failed for "${key}":`, e);
+    console.error('[sqlite] set_setting failed for "' + key + '":', e);
   }
 }
 
@@ -36,9 +44,9 @@ export async function sqliteSet(key: string, value: string): Promise<void> {
 export function sqliteSetFireAndForget(key: string, value: string): void {
   try {
     invoke('set_setting', { key, value }).catch(e =>
-      console.error(`[sqlite] set_setting failed for "${key}":`, e)
+      console.error('[sqlite] set_setting failed for "' + key + '":', e)
     );
   } catch (e) {
-    console.error(`[sqlite] set_setting sync throw for "${key}":`, e);
+    console.error('[sqlite] set_setting sync throw for "' + key + '":', e);
   }
 }
