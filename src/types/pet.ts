@@ -238,12 +238,19 @@ export function getPetConfig(speciesId: string): { renderType: RenderType; model
   const petdex = PETDEX_PETS.find(p => p.speciesId === speciesId);
   if (petdex) return { renderType: petdex.renderType, modelPath: petdex.modelPath, element: petdex.element };
 
+  // Workshop pets: speciesId = "workshop-{id}", cached at pet-sprites/2d/ws-{id}.json
+  if (speciesId.startsWith('workshop-')) {
+    const wsId = 'ws-' + speciesId.replace('workshop-', '');
+    return { renderType: '2d', modelPath: '/pet-sprites/2d/' + wsId + '.json', element: 'fire' };
+  }
+
   return null;
 }
 
 // Check if a pet's spritesheet needs remote download (not bundled)
 export function isRemotePet(speciesId: string): boolean {
   if (STARTER_PETS.some(s => s.speciesId === speciesId)) return false;
+  if (speciesId.startsWith('workshop-')) return true;
   return PET_TIERS[speciesId] === 'rare' || PET_TIERS[speciesId] === 'legendary';
 }
 

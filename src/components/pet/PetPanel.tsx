@@ -305,10 +305,11 @@ function WorkshopShop() {
 
   const downloadAndHatch = async (pet: any) => {
     try {
+      if (!pet.spritesheet_url) throw new Error('精灵素材缺失');
       if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
         await mkdir('pet-sprites/2d', { baseDir: BaseDirectory.AppData, recursive: true });
       }
-      const ssUrl = WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url || '');
+      const ssUrl = WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url);
       const buf = new Uint8Array(await (await fetch(ssUrl)).arrayBuffer());
       const petId = 'ws-' + pet.id;
       await writeFile('pet-sprites/2d/' + petId + '.png', buf, { baseDir: BaseDirectory.AppData });
@@ -362,8 +363,8 @@ function WorkshopShop() {
       {pendingHatch && <HatchConfirmModal
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}
-        onStart={() => {
-          downloadAndHatch(pendingHatch.pet);
+        onStart={async () => {
+          await downloadAndHatch(pendingHatch.pet);
           const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
           startHatching(egg.eggId);
           setPendingHatch(null);
