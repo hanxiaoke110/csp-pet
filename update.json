@@ -1,19 +1,19 @@
 {
-  "version": "1.5.0",
-  "notes": "v1.5.0: 数据持久化升级(SQLite) + 修复商城丢蛋 + 改名验证去重 + 题库修复 + 流程图支持",
-  "pub_date": "2026-06-05T08:00:00Z",
+  "version": "1.5.1",
+  "notes": "v1.5.1: 饥饿系统 + 领取按钮 + 白屏容错 + 答题进度 + 隐藏成就 + 许愿Lv6 + AI Debug + 工坊导入 + 题库修复",
+  "pub_date": "2026-06-07T03:46:00Z",
   "platforms": {
     "darwin-aarch64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.0/csp-v150-arm.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.1/csp-v151-arm.dmg"
     },
     "darwin-x86_64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.0/csp-v150-intel.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.1/csp-v151-intel.dmg"
     },
     "windows-x86_64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.0/csp-v150-win.exe"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.1/csp-v151-win.exe"
     }
   }
 }
