@@ -44,6 +44,8 @@ interface PetState {
   spendCoins: (amount: number) => boolean;
   feedPet: (petId: string, foodId: string) => boolean;
   tickHunger: () => void;
+  lastActiveAt: string;
+  applyOfflineHunger: () => number;
 
   // Pending rewards
   pendingExp: number;
@@ -113,6 +115,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   trainingCampActive: false,
   trainingCampEndDate: '',
   trainingCampFoodsClaimed: [],
+  lastActiveAt: new Date().toISOString(),
 
   selectStarter: (speciesId, petName) => {
     const species = STARTER_PETS.find(s => s.speciesId === speciesId);
@@ -261,10 +264,33 @@ export const usePetStore = create<PetState>((set, get) => ({
     set(s => ({
       ownedPets: s.ownedPets.map(p =>
         p.petId === activePetId
-          ? { ...p, hunger: Math.max(0, p.hunger - 2), mood: p.hunger <= 20 ? Math.max(0, p.mood - 1) : p.mood }
+          ? { ...p, hunger: Math.max(0, p.hunger - 1), mood: p.hunger <= 20 ? Math.max(0, p.mood - 1) : p.mood }
           : p
       ),
     }));
+    get().save();
+  },
+
+  // Calculate and apply offline hunger when app opens
+  // Every 7 days offline → -25 hunger, max -75
+  applyOfflineHunger: () => {
+    const { lastActiveAt, activePetId } = get();
+    if (!activePetId) return 0;
+    const now = Date.now();
+    const last = new Date(lastActiveAt).getTime();
+    if (!last || last >= now) return 0;
+    const daysOffline = Math.floor((now - last) / 86400000);
+    if (daysOffline < 7) return 0;
+    const penalty = Math.min(Math.floor(daysOffline / 7) * 25, 75);
+    set(s => ({
+      lastActiveAt: new Date().toISOString(),
+      ownedPets: s.ownedPets.map(p =>
+        p.petId === activePetId
+          ? { ...p, hunger: Math.max(0, p.hunger - penalty) }
+          : p
+      ),
+    }));
+    return penalty;
   },
 
   addPendingRewards: (exp, coins) => {
@@ -504,8 +530,8 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
-    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed };
+    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt } = get();
+    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt };
     const json = JSON.stringify(data);
     sqliteSetFireAndForget('pet_data', json);
     safeLsSet('csp_pet_data', json); // backup
@@ -551,6 +577,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           trainingCampActive: data.trainingCampActive || false,
           trainingCampEndDate: data.trainingCampEndDate || '',
           trainingCampFoodsClaimed: data.trainingCampFoodsClaimed || [],
+          lastActiveAt: data.lastActiveAt || new Date().toISOString(),
         });
       }
     } catch { /* corrupted data — ignore */ }

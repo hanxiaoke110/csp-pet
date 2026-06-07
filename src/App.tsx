@@ -168,6 +168,7 @@ function App() {
 
   // Sync pet data to pet window and listen for clicks from pet window
   useEffect(() => {
+    let hungerTimer: ReturnType<typeof setInterval>;
     const init = async () => {
       // 1. One-time migration: localStorage → SQLite
       await migrateLocalStorageToSqlite();
@@ -179,9 +180,15 @@ function App() {
         useHatchStore.getState().load(),
         useQuizStore.getState().load(),
       ]);
-      // 4. Sync to pet window
+      // 4. Apply offline hunger (before first save)
+      usePetStore.getState().applyOfflineHunger();
+      // 5. Sync to pet window
       usePetStore.getState().save();
-      // 5. Weekly passive coins for Lv10+ pets
+      // 6. Start hunger timer: tick every 10 minutes while app is open
+      hungerTimer = setInterval(() => {
+        usePetStore.getState().tickHunger();
+      }, 600000); // 10 min
+      // 7. Weekly passive coins for Lv10+ pets
       try {
         const store = usePetStore.getState();
         const activePet = store.ownedPets.find(p => p.petId === store.activePetId);
@@ -203,6 +210,7 @@ function App() {
       setTimeout(() => usePetStore.getState().save(), 500);
     };
     init();
+    return () => { if (hungerTimer) clearInterval(hungerTimer); };
   }, []);
 
   // Milestone toast listener

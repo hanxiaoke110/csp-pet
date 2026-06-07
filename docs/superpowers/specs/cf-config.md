@@ -12,7 +12,7 @@
 | 账户 ID | `908f0def3e8015ca7a20de49a99cf334` |
 | 区域 ID | `9babb3d83455c4e3f92f206de64f544b` |
 | API Token 名 | `csp-deploy-v2` |
-| API Token | `***`（见本地 .env 或 Cloudflare Dashboard） |
+| API Token | `cfut_sL...`（见 Cloudflare Dashboard → csp-deploy-v2，因 GitHub 检测泄露已于 2026-06-03 轮换） |
 
 ### Token 权限
 

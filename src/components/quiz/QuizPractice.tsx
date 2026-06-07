@@ -182,6 +182,8 @@ export default function QuizPractice() {
   };
 
   const nextQuestion = () => {
+    // Per-question hunger: -1 satiety for thinking
+    usePetStore.getState().tickHunger();
     if (currentIdx + 1 >= questions.length) {
       const finalResults = { ...results, done: true, correct: results.correct + (selected === q.correctIndex ? 1 : 0), total: results.total + 1 };
       setResults(finalResults);

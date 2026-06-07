@@ -7,7 +7,6 @@ binding = "DB"
 database_name = "csp-db"
 database_id = "5477cbee-76aa-4e7f-854e-39860f9644d7"
 
-# R2 disabled until image gen goes live
-# [[r2_buckets]]
-# binding = "SPRITES"
-# bucket_name = "csp-sprites"
+[[kv_namespaces]]
+binding = "SPRITES"
+id = "4fd505c38b4d4ce89833b660afb37703"

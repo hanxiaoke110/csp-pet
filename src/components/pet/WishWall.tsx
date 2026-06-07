@@ -36,10 +36,10 @@ export default function WishWall() {
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
 
   const ownedPets = usePetStore(s => s.ownedPets);
-  const hasLv10 = ownedPets.some(p => p.level >= 10);
+  const hasLv6 = ownedPets.some(p => p.level >= 6);
   const weeklyTaskDone = useQuizStore(s => s.weeklyTaskDone);
   const weekQuizDone = weeklyTaskDone >= 5;
-  const canSubmit = hasLv10 && weekQuizDone && monthlySubmitted < 3;
+  const canSubmit = hasLv6 && weekQuizDone && monthlySubmitted < 3;
 
   // Simple cache to avoid re-fetching on tab switch
   const cacheRef = useRef<{ hot: Wish[] | null; new: Wish[] | null; time: number }>({ hot: null, new: null, time: 0 });
@@ -347,16 +347,16 @@ export default function WishWall() {
             暂未达到许愿门槛
           </div>
           <div style={{ fontSize: 12, color: '#a16207', lineHeight: 1.8 }}>
-            {!hasLv10 && (
-              <div>⚠️ 需要 Lv.10+ 智子（当前最高 Lv.{maxLevel}）</div>
+            {!hasLv6 && (
+              <div>⚠️ 需要 Lv.6+ 智子（当前最高 Lv.{maxLevel}）</div>
             )}
             {!weekQuizDone && (
               <div>⚠️ 需要完成本周练习（已做 {weeklyTaskDone}/5 道）</div>
             )}
-            {hasLv10 && weekQuizDone && monthlySubmitted >= 3 && (
+            {hasLv6 && weekQuizDone && monthlySubmitted >= 3 && (
               <div>📅 本月已提交 {monthlySubmitted}/3 条，下个月再来</div>
             )}
-            {hasLv10 && weekQuizDone && monthlySubmitted < 3 && (
+            {hasLv6 && weekQuizDone && monthlySubmitted < 3 && (
               <div style={{ color: '#16a34a' }}>✅ 达标！本月还可提交 {3 - monthlySubmitted} 条</div>
             )}
           </div>

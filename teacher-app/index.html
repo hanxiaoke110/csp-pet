@@ -86,7 +86,7 @@ function LoginPage() {
     if (isAdmin) {
       if (!adminToken) { toast('请输入管理密码','error'); setLoading(false); return; }
       const resp = await fetch(`${API}/admin/wishes`, { headers: { 'X-Admin-Token': adminToken } });
-      if (resp.status === 401) { toast('管理密码错误','error'); setLoading(false); return; }
+      if (!resp.ok) { toast(resp.status===401?'管理密码错误':'网络错误','error'); setLoading(false); return; }
       state._adminToken = adminToken; state.token = '';
       state.teacher = { teacher_id: 'admin', name: '管理员' };
       localStorage.setItem('csp_admin_token', adminToken);
@@ -215,6 +215,7 @@ function Dashboard() {
     ];
     return [
       { key:'teachers', label:'📋 班级管理' },
+      { key:'analytics', label:'📊 学习分析' },
       { key:'wishes', label:'💡 许愿管理' },
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求反馈' },
@@ -260,6 +261,7 @@ function Dashboard() {
             React.createElement('div', { style:{ textAlign:'right' } },
               React.createElement('div', { style:{ fontSize:13, fontWeight:600 } }, '📋 ',t.class_count,' 班级'),
               React.createElement('div', { style:{ fontSize:12, color:'#64748b' } }, '👥 ',t.student_count,' 学生'),
+              React.createElement('button', { className:'btn btn-danger btn-sm', style:{ marginTop:6 }, onClick:e=>{e.stopPropagation();if(!confirm('删除老师 '+t.name+'？这将同时删除其所有班级。'))return;api('/admin/teachers/'+t.teacher_id,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadAdminTeachers())).catch(()=>toast('网络错误','error'))} }, '🗑 删除'),
             ),
           ),
         )),
@@ -434,6 +436,8 @@ function Dashboard() {
         React.createElement(CampCodePanel),
       ),
     ),
+    // ═══ ANALYTICS TAB ═══
+    tab === 'analytics' && !loading && React.createElement(AnalyticsPanel),
     // ═══ FEEDBACK TAB ═══
     tab === 'feedback' && !loading && React.createElement(FeedbackPanel),
   );
@@ -510,6 +514,75 @@ function CampCodePanel() {
         React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(result); toast('已复制'); } }, '📋 复制'),
       ),
       React.createElement('code', { style:{ display:'block', background:'#fff', padding:'10px 14px', borderRadius:8, fontSize:14, fontFamily:'monospace', fontWeight:700, letterSpacing:1, border:'1px solid #e2e8f0', wordBreak:'break-all' } }, result),
+    ),
+  );
+}
+
+function AnalyticsPanel() {
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [selKp, setSelKp] = React.useState(null);
+  const [selClass, setSelClass] = React.useState('');
+  const month = new Date().toISOString().slice(0, 7);
+
+  React.useEffect(() => { loadData(); }, []);
+
+  async function loadData(kp, cls) {
+    setLoading(true);
+    const c = cls !== undefined ? cls : selClass;
+    const d = await api('/api/quiz/analytics?month=' + month + (kp ? '&kp=' + encodeURIComponent(kp) : '') + (c ? '&class_code=' + encodeURIComponent(c) : ''));
+    if (!d.error) { setData(d); if (kp) setSelKp(kp); else setSelKp(null); if (cls !== undefined) setSelClass(cls); }
+    setLoading(false);
+  }
+
+  const classes = data ? (data.classes || []) : [];
+
+  return React.createElement('div', null,
+    React.createElement('div', { className:'form-group', style:{ marginBottom:12 } },
+      React.createElement('select', { className:'input', value:selClass, onChange:e => { const v = e.target.value; setSelClass(v); loadData(null, v); } },
+        React.createElement('option', { value:'' }, '全部班级'),
+        classes.map(c => React.createElement('option', { key:c.class_code, value:c.class_code }, c.label)),
+      )
+    ),
+    React.createElement('div', { className:'card' },
+      React.createElement('h3', null, '📊 本月错题知识点排行'),
+      React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:12 } }, month),
+      loading ? React.createElement('div', { className:'spinner' }) :
+      !data ? null :
+      data.by_kp.length === 0 ? React.createElement('div', { className:'empty' }, '本月暂无错题记录') :
+      React.createElement('div', null,
+        data.by_kp.map((item, i) => React.createElement('div', {
+          key: item.knowledge_point,
+          onClick: () => loadData(item.knowledge_point),
+          style: {
+            display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 14px',
+            marginBottom:4, borderRadius:10, cursor:'pointer', background: selKp===item.knowledge_point ? '#fff7ed' : '#fff',
+            border: '1px solid ' + (selKp===item.knowledge_point ? '#fed7aa' : '#e2e8f0'),
+            transition: 'all .15s',
+          }
+        },
+          React.createElement('div', { style:{ display:'flex', alignItems:'center', gap:10 } },
+            React.createElement('span', { style:{ fontSize:16, fontWeight:700, color: i===0?'#f59e0b':i===1?'#94a3b8':i===2?'#d97706':'#94a3b8', width:24, textAlign:'center' } }, i+1),
+            React.createElement('div', null,
+              React.createElement('div', { style:{ fontWeight:600, fontSize:14 } }, item.knowledge_point),
+            ),
+          ),
+          React.createElement('span', { style:{ fontSize:14, fontWeight:700, color:'#ef4444' } }, item.count, ' 次'),
+        )),
+      ),
+    ),
+    selKp && data && data.by_student && React.createElement('div', { className:'card' },
+      React.createElement('div', { style:{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 } },
+        React.createElement('h3', null, '📋 「', selKp, '」错题学生'),
+        React.createElement('button', { className:'btn btn-outline btn-sm', onClick:() => loadData() }, '← 返回'),
+      ),
+      data.by_student.length === 0 ? React.createElement('div', { className:'empty' }, '暂无详情') :
+      data.by_student.map(s => React.createElement('div', { key:s.question_id + s.created_at, style:{ padding:'8px 0', borderBottom:'1px solid #f1f5f9' } },
+        React.createElement('div', { style:{ display:'flex', justifyContent:'space-between' } },
+          React.createElement('span', { style:{ fontWeight:600 } }, s.student_name || '未绑定姓名'),
+          React.createElement('span', { style:{ fontSize:11, color:'#94a3b8' } }, s.created_at?.slice(0, 10)),
+        ),
+      )),
     ),
   );
 }
@@ -603,6 +676,11 @@ function FeedbackPanel() {
             item.created_at,
             item.status && React.createElement('span', { style:{ fontWeight:600, marginLeft:8, color: item.status==='processed'?'#16a34a':item.status==='closed'?'#94a3b8':'#d97706' } }, statusLabel[item.status]||item.status),
             isAdmin && React.createElement('button', { className:'btn btn-outline btn-sm', style:{ marginLeft:8, fontSize:10 }, onClick:()=>toggleFeedbackStatus(item.id, item.status) }, '🔄'),
+            isAdmin && React.createElement('button', { className:'btn btn-danger btn-sm', style:{ marginLeft:4, fontSize:10 }, onClick:async()=>{
+              if(!confirm('删除这条反馈？')) return;
+              const d = await api('/admin/feedback/'+item.id, { method:'DELETE' });
+              d.error ? toast(d.error,'error') : (toast('已删除'), loadItems());
+            }}, '🗑'),
           ),
           !isAdmin && React.createElement('div', { style:{ textAlign:'right', marginTop:4 } },
             React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:10 }, onClick:async()=>{
@@ -627,6 +705,11 @@ function FeedbackPanel() {
             item.created_at,
             item.status && React.createElement('span', { style:{ fontWeight:600, marginLeft:8, color: item.status==='processed'?'#16a34a':item.status==='closed'?'#94a3b8':'#d97706' } }, statusLabel[item.status]||item.status),
             isAdmin && React.createElement('button', { className:'btn btn-outline btn-sm', style:{ marginLeft:8, fontSize:10 }, onClick:()=>toggleFeedbackStatus(item.id, item.status) }, '🔄'),
+            isAdmin && React.createElement('button', { className:'btn btn-danger btn-sm', style:{ marginLeft:4, fontSize:10 }, onClick:async()=>{
+              if(!confirm('删除这条反馈？')) return;
+              const d = await api('/admin/feedback/'+item.id, { method:'DELETE' });
+              d.error ? toast(d.error,'error') : (toast('已删除'), loadItems());
+            }}, '🗑'),
           ),
           !isAdmin && React.createElement('div', { style:{ textAlign:'right', marginTop:4 } },
             React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:10 }, onClick:async()=>{
