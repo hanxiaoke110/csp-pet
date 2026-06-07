@@ -808,10 +808,11 @@ export default {
       if (path === '/api/workshop/pets' && request.method === 'POST') {
         const teacher = await checkTeacher(request, db);
         if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        const { name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url } = await request.json();
+        const { name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, creator_name } = await request.json();
         if (!name || !element || !tier) return new Response(JSON.stringify({ error: '缺少必填字段' }), { status: 400, headers: cors });
         const id = 'ws-' + randomChars(10);
-        await db.prepare('INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))').bind(id, teacher.teacher_id, teacher.name, name, element, style||'', description||'', tier, price||200, pet_json||'', spritesheet_url||'', thumbnail_url||'').run();
+        const displayTeacher = creator_name || teacher.name;
+        await db.prepare('INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))').bind(id, teacher.teacher_id, displayTeacher, name, element, style||'', description||'', tier, price||200, pet_json||'', spritesheet_url||'', thumbnail_url||'').run();
         return new Response(JSON.stringify({ success: true, id }), { headers: cors });
       }
 
