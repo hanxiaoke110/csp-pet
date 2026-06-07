@@ -170,18 +170,21 @@ function App() {
   useEffect(() => {
     let hungerTimer: ReturnType<typeof setInterval>;
     const init = async () => {
-      // 1. One-time migration: localStorage → SQLite
-      await migrateLocalStorageToSqlite();
+      // Each step is wrapped independently — failure in one doesn't block the rest
+      // 1. One-time migration: localStorage → SQLite (failure → fall back to localStorage)
+      try { await migrateLocalStorageToSqlite(); } catch (e) { console.error('[init] migration failed:', e); }
       // 2. Preload problem status cache
-      await loadProblemStatuses();
-      // 3. Load all stores from SQLite (parallel)
-      await Promise.all([
-        petLoaded(),
-        useHatchStore.getState().load(),
-        useQuizStore.getState().load(),
-      ]);
+      try { await loadProblemStatuses(); } catch (e) { console.error('[init] problemStatuses failed:', e); }
+      // 3. Load all stores from SQLite (parallel). Each store has internal localStorage fallback.
+      try {
+        await Promise.all([
+          petLoaded(),
+          useHatchStore.getState().load(),
+          useQuizStore.getState().load(),
+        ]);
+      } catch (e) { console.error('[init] store load failed:', e); }
       // 4. Apply offline hunger (before first save)
-      usePetStore.getState().applyOfflineHunger();
+      try { usePetStore.getState().applyOfflineHunger(); } catch {}
       // 5. Sync to pet window
       usePetStore.getState().save();
       // 6. Start hunger timer: tick every 10 minutes while app is open
@@ -209,7 +212,11 @@ function App() {
       }).catch(() => {});
       setTimeout(() => usePetStore.getState().save(), 500);
     };
-    init();
+    // 15s safety timeout: force loading to finish even if init hangs
+    const safetyTimer = setTimeout(() => {
+      console.warn('[init] safety timeout — forcing load complete');
+    }, 15000);
+    init().finally(() => clearTimeout(safetyTimer));
     return () => { if (hungerTimer) clearInterval(hungerTimer); };
   }, []);
 
