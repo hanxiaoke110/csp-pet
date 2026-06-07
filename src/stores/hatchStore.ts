@@ -134,8 +134,8 @@ export const useHatchStore = create<HatchState>((set, get) => ({
     }));
     get().save();
 
-    // Start download in background for rare/legendary
-    if (egg.rarity !== 'common') {
+    // Start download in background for rare/legendary (skip workshop — already cached)
+    if (egg.rarity !== 'common' && !egg.speciesId.startsWith('workshop-')) {
       resumeDownload(get, set, eggId, egg.speciesId);
     } else {
       // Common pets need no download
