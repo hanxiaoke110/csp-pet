@@ -751,6 +751,14 @@ function MyPetsPanel({ pets, onRefresh }) {
   const [editName, setEditName] = React.useState('');
   const [editCreator, setEditCreator] = React.useState('');
 
+  const deletePet = async (id) => {
+    if (!confirm('确定要删除这只精灵吗？')) return;
+    const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method: 'DELETE' });
+    if (resp.error) { toast(resp.error, 'error'); return; }
+    toast('已删除');
+    onRefresh();
+  };
+
   const startEdit = (p) => { setEditingId(p.id); setEditName(p.name); setEditCreator(p.teacher_name || ''); };
   const cancelEdit = () => { setEditingId(null); };
   const saveEdit = async (id) => {
