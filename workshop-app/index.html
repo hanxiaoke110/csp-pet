@@ -475,7 +475,8 @@ function ImportPanel({ onCreated }) {
       const jsonFile = zip.file("pet.json");
       if (!jsonFile) { toast("压缩包缺少 pet.json","error"); return; }
       const petMeta = JSON.parse(await jsonFile.async("text"));
-      const ssFile = zip.file(/spritesheet.(webp|png)/i);
+      const ssFiles = zip.file(/spritesheet\.(webp|png)/i);
+      const ssFile = Array.isArray(ssFiles) ? ssFiles[0] : ssFiles;
       if (!ssFile) { toast("压缩包缺少 spritesheet","error"); return; }
       const ssBlob = await ssFile.async("blob");
       if (petMeta.displayName) setName(petMeta.displayName);
