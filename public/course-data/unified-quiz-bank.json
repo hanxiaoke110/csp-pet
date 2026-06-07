@@ -5242,7 +5242,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "数论",
-    "question": "关于与7相关的判定代码说法错误的是（ ）。",
+    "question": "关于与7相关的判定代码说法错误的是（ ）。\n\n```cpp\nint N, M;\nbool Flag = false;\ncin >> N;\nM = N;\n\nif (M % 7 == 0)\n    Flag = true;\n\nwhile (!Flag && M) {\n    if (M % 10 == 7) {\n        Flag = true;\n        break;\n    }\n    M /= 10;\n}\n\nif (Flag)\n    cout << N << \"与7有关\";\nelse\n    cout << N << \"与7无关\";\n```",
     "options": [
       "A. 删除break会导致结果错误",
       "B. 程序判断数是否含数字7",
