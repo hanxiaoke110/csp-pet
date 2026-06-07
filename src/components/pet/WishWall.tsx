@@ -7,6 +7,7 @@ import { useQuizStore } from '../../stores/quizStore';
 import { useHatchStore } from '../../stores/hatchStore';
 import type { HatchRarity } from '../../stores/hatchStore';
 import { BaseDirectory, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
+import HatchConfirmModal from './HatchConfirmModal';
 
 const API = 'https://api.cspstudy.top';
 
@@ -22,16 +23,20 @@ function WorkshopTab() {
   const startHatching = useHatchStore(s => s.startHatching);
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
   useEffect(() => {
     fetch(API + '/api/workshop/pets')
       .then(r => r.json()).then(d => { if (Array.isArray(d)) setPets(d); })
       .catch(() => {}).finally(() => setLoading(false));
   }, []);
-  const handleBuy = async (pet: any) => {
-    if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
-    if (!spendCoins(pet.price || 200)) { alert('金币不足'); return; }
+  const handleBuy = (pet: any) => {
+    if (isOwned('workshop-' + pet.id)) { return; }
+    if (!spendCoins(pet.price || 200)) { return; }
+    const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
+    setPendingHatch({ pet, rarity });
+  };
+  const downloadAndHatch = async (pet: any) => {
     try {
-      // Ensure cache directory exists
       if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
         await mkdir('pet-sprites/2d', { baseDir: BaseDirectory.AppData, recursive: true });
       }
@@ -42,28 +47,43 @@ function WorkshopTab() {
       let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
       try { if (pet.pet_json) pj = JSON.parse(pet.pet_json); } catch {}
       await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(JSON.stringify(pj)), { baseDir: BaseDirectory.AppData });
-      const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
-      const egg = addEgg('workshop-' + pet.id, pet.name, rarity);
-      startHatching(egg.eggId);
-      setPets(pets.filter((p: any) => p.id !== pet.id));
-      alert('✅ 购买成功！精灵已加入孵化');
     } catch (e: any) { alert('下载失败: ' + (e.message || '网络错误')); }
   };
   if (loading) return React.createElement('div', { style: { padding: 40, textAlign: 'center', color: '#94a3b8' } }, '加载中...');
-  if (!pets.length) return React.createElement('div', { style: { padding: 40, textAlign: 'center', color: '#94a3b8' } }, '🏭 还没有老师上传精灵，敬请期待~');
-  return React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 } },
-    pets.map((pet: any) => React.createElement('div', { key: pet.id, style: { background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 16, textAlign: 'center' } },
-      React.createElement('img', { src: API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || ''),
-        style: { width: 80, height: 87, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' },
-        onError: (e: any) => { e.target.style.display = 'none'; } }),
-      React.createElement('div', { style: { fontWeight: 600, fontSize: 14, marginTop: 8 } }, pet.name),
-      React.createElement('div', { style: { fontSize: 11, color: '#94a3b8' } }, (pet.teacher_name || '?') + ' · ' + (pet.element || '?')),
-      React.createElement('button', {
-        style: { marginTop: 8, width: '100%', padding: '8px 14px', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer',
-          background: isOwned('workshop-' + pet.id) ? '#f1f5f9' : '#FF8C00', color: isOwned('workshop-' + pet.id) ? '#94a3b8' : '#fff' },
-        disabled: isOwned('workshop-' + pet.id), onClick: () => handleBuy(pet) },
-        isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200) + ' 购买'),
-    )),
+  if (!pets.length) return React.createElement('div', { style: { padding: 40, textAlign: 'center', color: '#94a3b8' } }, '工坊还没有老师上传精灵，敬请期待~');
+  return React.createElement('div', null,
+    pendingHatch && React.createElement(HatchConfirmModal, {
+      petName: pendingHatch.pet.name,
+      rarity: pendingHatch.rarity,
+      onStart: () => {
+        downloadAndHatch(pendingHatch.pet);
+        const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+        startHatching(egg.eggId);
+        setPendingHatch(null);
+      },
+      onLater: () => {
+        addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+        setPendingHatch(null);
+      },
+      onClose: () => {
+        addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+        setPendingHatch(null);
+      },
+    }),
+    React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 } },
+      pets.map((pet: any) => React.createElement('div', { key: pet.id, style: { background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 16, textAlign: 'center' } },
+        React.createElement('img', { src: API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || ''),
+          style: { width: 80, height: 87, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' },
+          onError: (e: any) => { e.target.style.display = 'none'; } }),
+        React.createElement('div', { style: { fontWeight: 600, fontSize: 14, marginTop: 8 } }, pet.name),
+        React.createElement('div', { style: { fontSize: 11, color: '#94a3b8' } }, (pet.teacher_name || '?') + ' · ' + (pet.element || '?')),
+        React.createElement('button', {
+          style: { marginTop: 8, width: '100%', padding: '8px 14px', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer',
+            background: isOwned('workshop-' + pet.id) ? '#f1f5f9' : '#FF8C00', color: isOwned('workshop-' + pet.id) ? '#94a3b8' : '#fff' },
+          disabled: isOwned('workshop-' + pet.id), onClick: () => handleBuy(pet) },
+          isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200) + ' 购买'),
+      )),
+    ),
   );
 }
 
