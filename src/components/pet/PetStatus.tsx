@@ -1,5 +1,6 @@
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
 import { PET_TIERS, type OwnedPet } from '../../types/pet';
+import { useQuizStore } from '../../stores/quizStore';
 import PetSprite from './PetSprite';
 
 interface Props {
@@ -20,6 +21,8 @@ export default function PetStatus({
   switchTarget, setSwitchTarget, renameCards, setRenameInput, setRenameModal, showToast,
 }: Props) {
   const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool } = usePetStore();
+  const claimPendingRewards = usePetStore(s => s.claimPendingRewards);
+  const weeklyTaskDone = useQuizStore(s => s.weeklyTaskDone);
   const setActivePet = usePetStore(s => s.setActivePet);
   const feedPet = usePetStore(s => s.feedPet);
   const allocateExpFromPool = usePetStore(s => s.allocateExpFromPool);
@@ -189,7 +192,14 @@ export default function PetStatus({
           {(pendingExp > 0 || pendingCoins > 0) && (
             <div className="pet-pending">
               🎁 待领取：+{pendingExp} EXP +{pendingCoins} 金币
-              <span className="pending-hint">（完成本周选择题后发放）</span>
+              {weeklyTaskDone >= 5 ? (
+                <button className="claim-btn" onClick={claimPendingRewards}
+                  style={{ marginLeft: 8, padding: '4px 12px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>
+                  📥 领取奖励
+                </button>
+              ) : (
+                <span className="pending-hint" style={{ marginLeft: 8 }}>🔒 完成本周选择题后领取</span>
+              )}
             </div>
           )}
 
