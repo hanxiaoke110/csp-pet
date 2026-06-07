@@ -275,7 +275,7 @@ export default function PetPanel() {
 // ─── Shop sub-component ───
 const WORKSHOP_API = 'https://api.cspstudy.top';
 
-function WorkshopShop({ coins, spendCoins, setPendingHatch, showShopToast }: {
+export function WorkshopShop({ coins, spendCoins, setPendingHatch, showShopToast }: {
   coins: number; spendCoins: (a: number) => boolean; setPendingHatch: (p: any) => void; showShopToast: (m: string) => void;
 }) {
   const [pets, setPets] = useState<any[]>([]);
@@ -337,7 +337,7 @@ function WorkshopShop({ coins, spendCoins, setPendingHatch, showShopToast }: {
 function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   coins: number; ownedPets: any[]; spendCoins: (a: number) => boolean; setTab: (t: 'status' | 'shop' | 'hatch' | 'guide' | 'settings') => void;
 }) {
-  const [shopTab, setShopTab] = useState<'food' | 'common' | 'rare' | 'legend' | 'special' | 'workshop'>('food');
+  const [shopTab, setShopTab] = useState<'food' | 'common' | 'rare' | 'legend' | 'special'>('food');
   const [buyConfirm, setBuyConfirm] = useState<{ speciesId: string; name: string; price: number; icon: string } | null>(null);
   const [pendingHatch, setPendingHatch] = useState<{ speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
   const [buyNameInput, setBuyNameInput] = useState('');
@@ -366,7 +366,6 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
     { key: 'rare', label: '✨ 稀有' },
     { key: 'legend', label: '👑 传说' },
     { key: 'special', label: '🎁 特殊' },
-    { key: 'workshop', label: '🏭 工坊' },
   ] as const;
 
   return (
@@ -497,9 +496,6 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
           </div>
         </div>
       )}
-
-      {/* Workshop tab */}
-      {shopTab === 'workshop' && <WorkshopShop coins={coins} spendCoins={spendCoins} setPendingHatch={setPendingHatch} showShopToast={showShopToast} />}
 
       {/* Purchase confirmation modal */}
       {buyConfirm && (
