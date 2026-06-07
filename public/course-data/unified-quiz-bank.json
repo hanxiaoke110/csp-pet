@@ -8528,7 +8528,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "其他",
-    "question": "下列代码中，输出结果是（ ）",
+    "question": "下列代码中，输出结果是（ ）\n\n```cpp\n#include<iostream>\nusing namespace std;\n\nint func(int x, int y)\n{\n    int a = x, b = y;\n    int t;\n    t = a;\n    a = b;\n    b = t;\n    cout << a << \" \" << b << \" \";\n}\n\nint main()\n{\n    int c, d;\n    c = 12;\n    d = 24;\n    func(12, 24);\n    cout << c << \" \" << d << endl;\n}\n```",
     "options": [
       "A. 12 24 24 12",
       "B. 24 12 12 24",
