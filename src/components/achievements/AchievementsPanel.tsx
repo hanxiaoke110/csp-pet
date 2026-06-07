@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
 import { usePetStore } from '../../stores/petStore';
+import { useQuizStore } from '../../stores/quizStore';
 import { createAchievements, type Achievement } from '../../stores/achievements';
 
 const CATEGORIES: Record<string, { label: string; color: string }> = {
@@ -14,19 +15,11 @@ export default function AchievementsPanel() {
   const ownedPets = usePetStore(s => s.ownedPets);
   const activePet = usePetStore(s => s.getActivePet());
   const coins = usePetStore(s => s.coins);
+  const quizState = useQuizStore();
 
   // Count feed from localStorage
   let feedCount = 0;
   try { feedCount = parseInt(localStorage.getItem('csp_feed_count') || '0'); } catch {}
-
-  // Read super challenge stats from localStorage
-  let superCompletions = 0;
-  let superBestScore = 0;
-  try {
-    const qs = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
-    superCompletions = qs.superCompletions || 0;
-    superBestScore = qs.superBestScore || 0;
-  } catch {}
 
   const achievements = useMemo(() => {
     const elements = new Set(ownedPets.map(p => p.element));
@@ -39,10 +32,15 @@ export default function AchievementsPanel() {
       coins,
       feedCount,
       hasAllElements,
-      superCompletions,
-      superBestScore,
+      quizState.superCompletions,
+      quizState.superBestScore,
+      quizState.weeklyPerfects,
+      quizState.extraChallengeCount,
+      quizState.lastReviewCorrect,
+      quizState.lastReviewTotal,
+      ownedPets,
     );
-  }, [ownedPets, activePet, coins, feedCount, superCompletions, superBestScore]);
+  }, [ownedPets, activePet, coins, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal]);
 
   // Group by category
   const grouped = useMemo(() => {
@@ -120,6 +118,13 @@ export default function AchievementsPanel() {
         // 💻 OJ
         'oj-cm-1': { coins: 50 },
         'oj-cm-all': { coins: 200, renameCards: 1 },
+        // 🌟 隐藏
+        'hidden-triple': { coins: 100, renameCards: 1 },
+        'hidden-name': { coins: 50 },
+        'hidden-3perfect': { coins: 80 },
+        'hidden-starve': { coins: 20 },
+        'hidden-ai-csp': { coins: 30 },
+        'hidden-perfect-review': { coins: 100 },
       };
       const reward = rewards[newlyUnlocked.id];
       if (reward) {

@@ -49,6 +49,11 @@ export function createAchievements(
   hasAllElements: boolean,
   superCompletions: number,
   superBestScore: number,
+  weeklyPerfects: number,
+  extraChallengeCount: number,
+  lastReviewCorrect: number,
+  lastReviewTotal: number,
+  ownedPets: { petName?: string; hunger?: number }[],
 ): Achievement[] {
   return [
     // === 📚 学海无涯 ===
@@ -207,44 +212,26 @@ export function createAchievements(
     { id: 'hidden-triple', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
       check: () => {
         try {
-          const qs = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
           const ci = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-          return { unlocked: (ci.streak || 0) >= 1 && (qs.superCompletions || 0) >= 1 && (qs.extraChallengeCount || 0) >= 1 };
+          return { unlocked: (ci.streak || 0) >= 1 && superCompletions >= 1 && extraChallengeCount >= 1 };
         } catch { return { unlocked: false }; }
       }},
     { id: 'hidden-name', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
-      check: () => {
-        try {
-          const data = JSON.parse(localStorage.getItem('csp_pet_data') || '{}');
-          const pets = data.ownedPets || [];
-          return { unlocked: pets.some((p: { petName?: string }) =>
-            (p.petName || '').includes('C++') || (p.petName || '').includes('编程') || (p.petName || '').includes('代码')
-          )};
-        } catch { return { unlocked: false }; }
-      }},
+      check: () => ({
+        unlocked: ownedPets.some(p =>
+          (p.petName || '').includes('C++') || (p.petName || '').includes('编程') || (p.petName || '').includes('代码')
+        ),
+      })},
     { id: 'hidden-3perfect', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
-      check: () => ({ unlocked: getWeeklyPerfectCount() >= 3 }) },
+      check: () => ({ unlocked: weeklyPerfects >= 3 }) },
     { id: 'hidden-starve', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
-      check: () => {
-        try {
-          const data = JSON.parse(localStorage.getItem('csp_pet_data') || '{}');
-          return { unlocked: (data.ownedPets || []).some((p: any) => p.hunger <= 0) };
-        } catch { return { unlocked: false }; }
-      }},
+      check: () => ({ unlocked: ownedPets.some(p => (p.hunger ?? 100) <= 0) }) },
     { id: 'hidden-ai-csp', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
       check: () => {
-        try {
-          return { unlocked: localStorage.getItem('csp_asked_cspj') === 'true' };
-        } catch { return { unlocked: false }; }
+        try { return { unlocked: localStorage.getItem('csp_asked_cspj') === 'true' }; }
+        catch { return { unlocked: false }; }
       }},
     { id: 'hidden-perfect-review', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
-      check: () => {
-        try {
-          const saved = JSON.parse(localStorage.getItem('csp_quiz_state') || '{}');
-          const correct = saved.lastReviewCorrect || 0;
-          const total = saved.lastReviewTotal || 0;
-          return { unlocked: total > 0 && correct === total };
-        } catch { return { unlocked: false }; }
-      }},
+      check: () => ({ unlocked: lastReviewTotal > 0 && lastReviewCorrect === lastReviewTotal }) },
   ];
 }
