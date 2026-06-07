@@ -372,6 +372,8 @@ function WorkshopShop() {
           const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
           startHatching(egg.eggId);
           setPendingHatch(null);
+          // Switch to hatch tab
+          window.dispatchEvent(new CustomEvent('switch-pet-tab', { detail: 'hatch' }));
         }}
         onLater={() => {
           addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
