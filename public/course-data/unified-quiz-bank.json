@@ -155,8 +155,8 @@
       "C. Android",
       "D. HTML"
     ],
-    "correctIndex": 2,
-    "explanation": "",
+    "correctIndex": 3,
+    "explanation": "Linux、Windows、Android 都是操作系统。HTML 是超文本标记语言，不是操作系统。",
     "difficulty": 2,
     "questionType": "choice",
     "hasImage": false
