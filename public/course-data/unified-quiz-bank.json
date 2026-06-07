@@ -6113,8 +6113,8 @@
       "C. 3 3",
       "D. 4 4"
     ],
-    "correctIndex": 0,
-    "explanation": "关系运算符==不会修改变量的值。a和b保持原值。",
+    "correctIndex": 3,
+    "explanation": "a=b 执行后 a 变为 4；b=a 执行后 b 也变为 4（此时 a 已是 4，不是 3）。= 是赋值运算符，会改变变量值。最终输出 4 4。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false
