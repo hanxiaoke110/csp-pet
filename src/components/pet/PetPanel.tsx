@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { listen } from '@tauri-apps/api/event';
 import { usePetStore, FOODS, formatPetDisplayName } from '../../stores/petStore';
@@ -8,6 +9,7 @@ import { STARTER_PETS, ALL_SHOP_ITEMS, getPetConfig, PET_TIERS, getPetTier } fro
 import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
 import { addTickets, canBuyTickets } from '../../utils/crypto';
+import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
 import CeremonyModal from './CeremonyModal';
 import PetSprite from './PetSprite';
 import HatchConfirmModal from './HatchConfirmModal';
@@ -271,10 +273,71 @@ export default function PetPanel() {
 }
 
 // ─── Shop sub-component ───
+const WORKSHOP_API = 'https://api.cspstudy.top';
+
+function WorkshopShop({ coins, spendCoins, setPendingHatch, showShopToast }: {
+  coins: number; spendCoins: (a: number) => boolean; setPendingHatch: (p: any) => void; showShopToast: (m: string) => void;
+}) {
+  const [pets, setPets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const isOwned = usePetStore(s => s.isOwned);
+
+  useEffect(() => {
+    fetch(WORKSHOP_API + '/api/workshop/pets')
+      .then(r => r.json()).then(d => { if (Array.isArray(d)) setPets(d); })
+      .catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  const handleBuy = async (pet: any) => {
+    if (isOwned('workshop-' + pet.id)) { showShopToast('已经拥有这只精灵了'); return; }
+    const price = pet.price || 200;
+    if (!spendCoins(price)) { showShopToast('金币不足'); return; }
+    showShopToast('正在下载精灵素材...');
+    try {
+      // Download spritesheet & thumbnail
+      const ssUrl = WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url || '');
+      const ssResp = await fetch(ssUrl);
+      const ssBuf = new Uint8Array(await ssResp.arrayBuffer());
+      const petId = 'ws-' + pet.id;
+      await writeFile('pet-sprites/2d/' + petId + '.png', ssBuf, { baseDir: BaseDirectory.AppData });
+      // Save pet.json metadata
+      let petJson = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
+      try { if (pet.pet_json) petJson = JSON.parse(pet.pet_json); } catch {}
+      const jsonStr = JSON.stringify(petJson);
+      await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(jsonStr), { baseDir: BaseDirectory.AppData });
+      // Start hatching
+      const rarity = pet.tier === 'legendary' ? 'legendary' as const : pet.tier === 'rare' ? 'rare' as const : 'common' as const;
+      setPendingHatch({ speciesId: 'workshop-' + pet.id, petName: pet.name, rarity });
+      showShopToast('✅ 购买成功！请孵化');
+    } catch (e: any) { showShopToast('下载失败: ' + (e.message || '网络错误')); }
+  };
+
+  if (loading) return React.createElement('div', { style: { textAlign: 'center', padding: 40, color: '#94a3b8' } }, '加载中...');
+  if (!pets.length) return React.createElement('div', { style: { textAlign: 'center', padding: 40, color: '#94a3b8' } },
+    '🏭 还没有老师上传精灵，敬请期待~');
+
+  return React.createElement('div', { className: 'special-grid' },
+    pets.map((pet: any) => React.createElement('div', { key: pet.id, className: 'special-card' },
+      React.createElement('img', {
+        src: WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || ''),
+        style: { width: 80, height: 87, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' },
+        onError: (e: any) => { e.target.style.display = 'none'; },
+      }),
+      React.createElement('h4', null, pet.name),
+      React.createElement('p', { style: { fontSize: 11, color: '#94a3b8' } }, (pet.teacher_name || '未知老师') + ' · ' + (pet.element || '?')),
+      React.createElement('button', {
+        className: 'shop-card-buy',
+        disabled: coins < (pet.price || 200) || isOwned('workshop-' + pet.id),
+        onClick: () => handleBuy(pet),
+      }, isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200) + ' 购买'),
+    )),
+  );
+}
+
 function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   coins: number; ownedPets: any[]; spendCoins: (a: number) => boolean; setTab: (t: 'status' | 'shop' | 'hatch' | 'guide' | 'settings') => void;
 }) {
-  const [shopTab, setShopTab] = useState<'food' | 'common' | 'rare' | 'legend' | 'special'>('food');
+  const [shopTab, setShopTab] = useState<'food' | 'common' | 'rare' | 'legend' | 'special' | 'workshop'>('food');
   const [buyConfirm, setBuyConfirm] = useState<{ speciesId: string; name: string; price: number; icon: string } | null>(null);
   const [pendingHatch, setPendingHatch] = useState<{ speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
   const [buyNameInput, setBuyNameInput] = useState('');
@@ -303,6 +366,7 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
     { key: 'rare', label: '✨ 稀有' },
     { key: 'legend', label: '👑 传说' },
     { key: 'special', label: '🎁 特殊' },
+    { key: 'workshop', label: '🏭 工坊' },
   ] as const;
 
   return (
@@ -433,6 +497,9 @@ function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
           </div>
         </div>
       )}
+
+      {/* Workshop tab */}
+      {shopTab === 'workshop' && <WorkshopShop coins={coins} spendCoins={spendCoins} setPendingHatch={setPendingHatch} showShopToast={showShopToast} />}
 
       {/* Purchase confirmation modal */}
       {buyConfirm && (
