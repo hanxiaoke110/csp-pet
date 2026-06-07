@@ -58,6 +58,7 @@ export interface QuizState {
   canDoWeeklyTask: () => boolean;
   canDoExtraChallenge: () => boolean;
   canDoMonthlyReview: () => { allowed: boolean; reason: string };
+  recordAnswer: (correct: boolean) => void;
   errorCount: () => number;
   load: () => Promise<void>;
   save: () => void;
@@ -260,6 +261,14 @@ export const useQuizStore = create<QuizState>((set, get) => {
         return { allowed: true, reason: '月末最后一周，可以复盘！' };
       }
       return { allowed: false, reason: `完成 2 次每周挑战或等到月末最后一周可开启（当前已完成 ${s.weeklyCompletions} 次）` };
+    },
+
+    recordAnswer: (correct: boolean) => {
+      set(s => ({
+        totalPractice: (s.totalPractice || 0) + 1,
+        totalCorrect: correct ? (s.totalCorrect || 0) + 1 : (s.totalCorrect || 0),
+      }));
+      get().save();
     },
 
     errorCount: () => get().errors.length,

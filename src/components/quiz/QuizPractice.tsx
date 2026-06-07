@@ -132,6 +132,7 @@ export default function QuizPractice() {
     const reward = getReward();
 
     if (selected === q.correctIndex) {
+      quizStore.recordAnswer(true);
       const newResults = { ...results, correct: results.correct + 1, total: results.total + 1 };
       setResults(newResults);
 
@@ -178,6 +179,7 @@ export default function QuizPractice() {
       }
       // Report error to error pool and server
       quizStore.addError(q.id, selected, q.correctIndex, q.knowledgePoint);
+      quizStore.recordAnswer(false);
     }
   };
 
