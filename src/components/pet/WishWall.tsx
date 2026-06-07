@@ -6,7 +6,7 @@ import { usePetStore } from '../../stores/petStore';
 import { useQuizStore } from '../../stores/quizStore';
 import { useHatchStore } from '../../stores/hatchStore';
 import type { HatchRarity } from '../../stores/hatchStore';
-import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
+import { BaseDirectory, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
 
 const API = 'https://api.cspstudy.top';
 
@@ -31,6 +31,10 @@ function WorkshopTab() {
     if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
     if (!spendCoins(pet.price || 200)) { alert('金币不足'); return; }
     try {
+      // Ensure cache directory exists
+      if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
+        await mkdir('pet-sprites/2d', { baseDir: BaseDirectory.AppData, recursive: true });
+      }
       const ssUrl = API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url || '');
       const ssBuf = new Uint8Array(await (await fetch(ssUrl)).arrayBuffer());
       const petId = 'ws-' + pet.id;
