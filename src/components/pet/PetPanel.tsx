@@ -328,7 +328,7 @@ function WorkshopShop() {
   return (
     <div style={{ padding: 4 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-        <h3 style={{ margin: 0 }}>🏭 教师工坊</h3>
+        <h3 style={{ margin: 0 }}>🏭 智子工坊</h3>
         <span style={{ fontSize: 12, color: '#94a3b8' }}>🪙 {coins} 金币</span>
       </div>
       {loading ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>加载中...</div> :
