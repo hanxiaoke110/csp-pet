@@ -21,6 +21,11 @@ impl Database {
         conn.execute_batch("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
             .map_err(|e| format!("Failed to set pragmas: {}", e))?;
 
+        // Flush stale WAL that may have been left by a crashed/killed previous process.
+        // This prevents reads from blocking on corrupted WAL after an unclean shutdown.
+        // TRUNCATE mode cleans up the WAL file entirely after checkpoint.
+        let _ = conn.execute_batch("PRAGMA wal_checkpoint(TRUNCATE);");
+
         migrations::run(&conn)?;
 
         Ok(Database {
