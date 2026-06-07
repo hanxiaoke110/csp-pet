@@ -475,8 +475,11 @@ function ImportPanel({ onCreated }) {
       const jsonFile = zip.file("pet.json");
       if (!jsonFile) { toast("压缩包缺少 pet.json","error"); return; }
       const petMeta = JSON.parse(await jsonFile.async("text"));
-      const ssFiles = zip.file(/spritesheet\.(webp|png)/i);
-      const ssFile = Array.isArray(ssFiles) ? ssFiles[0] : ssFiles;
+      // Find spritesheet file by extension: .webp or .png
+      let ssFile = null;
+      zip.forEach(function(relativePath, file) {
+        if (!ssFile && /spritesheet\.(webp|png)$/i.test(relativePath)) ssFile = file;
+      });
       if (!ssFile) { toast("压缩包缺少 spritesheet","error"); return; }
       const ssBlob = await ssFile.async("blob");
       if (petMeta.displayName) setName(petMeta.displayName);
