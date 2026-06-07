@@ -335,14 +335,14 @@ export default function WishWall() {
       )}
 
       {/* ── Loading ── */}
-      {view !== 'rules' && view !== 'feedback' && loading && (
+      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && loading && (
         <div style={{ display: 'flex', justifyContent: 'center', padding: 48 }}>
           <div className="loading-spinner" />
         </div>
       )}
 
       {/* ── Top 3 Podium ── */}
-      {view !== 'rules' && view !== 'feedback' && !loading && topWishes.length > 0 && (
+      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && !loading && topWishes.length > 0 && (
         <div style={{ marginBottom: 10 }}>
           {topWishes.map((w, i) => {
             const rs = rankStyles[i];
@@ -360,7 +360,7 @@ export default function WishWall() {
       )}
 
       {/* ── Rest Wishes ── */}
-      {view !== 'rules' && view !== 'feedback' && restWishes.map(w => (
+      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && restWishes.map(w => (
         <div key={w.id} style={{
           background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12,
           padding: '12px 14px', marginBottom: 6, transition: 'all .15s',
@@ -370,7 +370,7 @@ export default function WishWall() {
       ))}
 
       {/* ── Empty ── */}
-      {view !== 'rules' && view !== 'feedback' && !loading && wishes.length === 0 && (
+      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && !loading && wishes.length === 0 && (
         <div style={{ textAlign: 'center', padding: 48, color: '#94a3b8', fontSize: 13 }}>
           <div style={{ fontSize: 40, opacity: .4, marginBottom: 8 }}>💡</div>
           还没有许愿，来做第一个吧！
@@ -378,7 +378,7 @@ export default function WishWall() {
       )}
 
       {/* ── Submit Button or Eligibility Hint ── */}
-      {view !== 'rules' && view !== 'feedback' && (canSubmit ? (
+      {view !== 'rules' && view !== 'feedback' && view !== 'workshop' && (canSubmit ? (
         <button onClick={() => setShowForm(true)} style={{
           width: '100%', marginTop: 14, padding: '14px',
           background: 'linear-gradient(135deg, #FF8C00, #F96D00)',
