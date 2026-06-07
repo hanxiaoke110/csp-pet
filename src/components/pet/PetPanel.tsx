@@ -286,6 +286,7 @@ function WorkshopShop() {
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
+  const [filter, setFilter] = useState<'all' | 'rare' | 'legendary'>('all');
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
 
   useEffect(() => {
@@ -331,10 +332,16 @@ function WorkshopShop() {
         <h3 style={{ margin: 0 }}>🏭 智子工坊</h3>
         <span style={{ fontSize: 12, color: '#94a3b8' }}>🪙 {coins} 金币</span>
       </div>
+      <div className="shop-tabs" style={{ marginBottom: 12 }}>
+        {([{ k: 'all', label: '全部' }, { k: 'rare', label: '✨ 稀有' }, { k: 'legendary', label: '👑 传说' }] as const).map(t => (
+          <button key={t.k} className={`shop-tab ${filter === t.k ? 'active' : ''}`}
+            onClick={() => setFilter(t.k as any)}>{t.label}</button>
+        ))}
+      </div>
       {loading ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>加载中...</div> :
        !pets.length ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>🏭 还没有老师上传精灵，敬请期待~</div> :
        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12 }}>
-        {pets.map((pet: any) => (
+        {pets.filter((pet: any) => filter === 'all' || pet.tier === filter).map((pet: any) => (
           <div key={pet.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 14, textAlign: 'center' }}>
             <img src={WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || '')}
               style={{ width: 72, height: 78, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' }}
