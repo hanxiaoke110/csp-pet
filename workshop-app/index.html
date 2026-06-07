@@ -747,22 +747,42 @@ function SettingsPanel() {
 }
 // ═══ My Pets Panel ═══
 function MyPetsPanel({ pets, onRefresh }) {
-  async function deletePet(id) {
-    if (!confirm('删除这个精灵？')) return;
-    const d = await api(`/api/workshop/pets/${id}`, { method:'DELETE' });
-    d.error ? toast(d.error,'error') : (toast('已删除'), onRefresh());
-  }
+  const [editingId, setEditingId] = React.useState(null);
+  const [editName, setEditName] = React.useState('');
+  const [editCreator, setEditCreator] = React.useState('');
+
+  const startEdit = (p) => { setEditingId(p.id); setEditName(p.name); setEditCreator(p.teacher_name || ''); };
+  const cancelEdit = () => { setEditingId(null); };
+  const saveEdit = async (id) => {
+    const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method:'PUT', body:JSON.stringify({ name:editName.trim(), teacher_name:editCreator.trim() }) });
+    if (resp.error) { toast(resp.error,'error'); return; }
+    toast('✅ 已更新'); setEditingId(null); onRefresh();
+  };
 
   return React.createElement('div', null,
     pets.length === 0 ? React.createElement('div', { className:'card', style:{ textAlign:'center', padding:40, color:'#94a3b8' } }, '还没有生成精灵，去「🎨 创建精灵」看看吧') :
-    pets.map(p => React.createElement('div', { key:p.id, className:'pet-card' },
+    pets.map(p => editingId === p.id ? React.createElement('div', { key:p.id, className:'card', style:{ border:'2px solid #FF8C00' } },
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '名字'),
+        React.createElement('input', { className:'input', value:editName, onChange:e=>setEditName(e.target.value) }),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '发布者'),
+        React.createElement('input', { className:'input', value:editCreator, onChange:e=>setEditCreator(e.target.value), placeholder:'显示在学生端的名字' }),
+      ),
+      React.createElement('div', { style:{ display:'flex', gap:8 } },
+        React.createElement('button', { className:'btn btn-primary', onClick:()=>saveEdit(p.id), style:{ flex:1 } }, '✅ 保存'),
+        React.createElement('button', { className:'btn btn-outline', onClick:cancelEdit, style:{ flex:1 } }, '取消'),
+      ),
+    ) : React.createElement('div', { key:p.id, className:'pet-card' },
       React.createElement('div', { className:'pet-thumb' },
         (p.thumbnail_url ? React.createElement('img', { src: 'https://api.cspstudy.top/api/workshop/image?key=' + encodeURIComponent(p.thumbnail_url) }) : React.createElement('span', { style:{ fontSize:24 } }, '🐣')),
       ),
       React.createElement('div', { style:{ flex:1 } },
         React.createElement('div', { style:{ fontWeight:700 } }, ELEM_LABEL[p.element]||'', ' ', p.name),
-        React.createElement('div', { style:{ fontSize:12, color:'#94a3b8' } }, p.style, ' · ', p.tier, ' · 🪙', p.price, 'g'),
+        React.createElement('div', { style:{ fontSize:12, color:'#94a3b8' } }, '发布者: ', (p.teacher_name||'?'), ' · ', p.tier, ' · 🪙', p.price, 'g'),
       ),
+      React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12, marginRight:6 }, onClick:()=>startEdit(p) }, '✏️'),
       React.createElement('button', { className:'btn btn-danger', style:{ fontSize:12 }, onClick:()=>deletePet(p.id) }, '🗑'),
     )),
   );

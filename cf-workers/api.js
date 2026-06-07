@@ -825,6 +825,21 @@ export default {
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
+      // PUT /api/workshop/pets/:id — teacher updates own pet (name, teacher_name)
+      if (path.startsWith('/api/workshop/pets/') && request.method === 'PUT') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+        const id = path.split('/').pop();
+        const body = await request.json();
+        const sets = []; const vals = [];
+        if (body.name !== undefined) { sets.push('name=?'); vals.push(body.name); }
+        if (body.teacher_name !== undefined) { sets.push('teacher_name=?'); vals.push(body.teacher_name); }
+        if (!sets.length) return new Response(JSON.stringify({ error: '无可更新字段' }), { status: 400, headers: cors });
+        vals.push(id, teacher.teacher_id);
+        await db.prepare('UPDATE workshop_pets SET ' + sets.join(',') + ' WHERE id=? AND teacher_id=?').bind(...vals).run();
+        return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+
       // POST /api/ai/generate — proxy AI image generation
       if (path === '/api/ai/generate' && request.method === 'POST') {
         const teacher = await checkTeacher(request, db);
