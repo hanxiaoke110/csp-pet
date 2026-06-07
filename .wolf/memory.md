@@ -421,3 +421,39 @@ csp-v{版本号去点}-win.exe     (如 csp-v140-win.exe)
 - 管理员登录 resp.ok 检查修复
 - 2026-06-05: 修复商城抽卡HatchConfirmModal点X关闭导致蛋丢失-Bug。onClose只清pendingHatch不调addEgg。改为和onLater一样先addEgg再setPendingHatch(null)。
 - 2026-06-05: Plan A: 核心数据 localStorage→SQLite 迁移完成。用现有 settings 表+get_setting/set_setting 命令，无需改 Rust。4 个 core key (pet_data, hatch_eggs, quiz_state, problem_status) 迁至 SQLite，localStorage 保留作备份。新增 sqlite-storage.ts / migration.ts / problemStatusCache.ts。改造 petStore/hatchStore/quizStore 的 save/load 为 async+invoke。ProblemViewer 改用缓存 API。PetWindow 改用 invoke。quizStore 移除同步 loadState 初始化器。canDoSuperChallenge 改为读 petStore 内存状态。
+
+## 2026-06-05/06 — 教练端 AI Debug 重构 + 题库修复 + 饥饿系统 + 工坊优化
+
+### 教练端 AI Debug 推倒重来
+- 旧：对比参考答案模式 → 太死板 (死磕参考答案)
+- 中：评审模式 → 太宽容 (错代码说对)
+- 新：推演模式 — AI 当代码追踪器，读题→推演→对比→检查→结论
+- 输出极简化：AI 只输出 原因+错代码+正代码，UI 自带标签
+- 修复：sendMessage 加 30s 超时、提示词反引号→纯字符串拼接、解析器兼容两种格式
+- 部署命令：`CLOUDFLARE_API_TOKEN="xxx" npx wrangler pages deploy coach-app --project-name=coach-csp`
+
+### 题库修复 (version 5→6)
+- gesp-2023-12-3-06: 补 C++ 代码 (string::length)
+- gesp-2023-12-3-07: 补 C++ 代码 (str[5] 越界)
+- gesp-2023-12-3-08: 补 C++ 代码 (char数组初始化)
+- gesp-2023-09-2-02: 补 SVG 流程图 + markdown 图片渲染支持
+- markdown.ts: renderCodeText 加 ![alt](url) 图片支持
+
+### 饥饿系统 (v1.5.1)
+- tickHunger: -2→-1，每 10 分钟触发
+- 离线饥饿：每 7 天 -25 (封顶 -75)
+- 做题消耗：每题 -1
+- lastActiveAt 字段持久化
+
+### v1.5.0 发版
+- Gitee API Token 创建 release 成功 (ID 701567)
+- 文件格式：csp-v150-arm.dmg / csp-v150-intel.dmg / csp-v150-win.exe
+- update.json 签名通过 Gitee API 推送
+
+### 精灵工坊优化
+- 🎨 创建精灵 | 📦 导入素材 分为两个独立 Tab
+- ImportPanel: 上传 Petdex .zip → 自动解压 spritesheet + pet.json → 填表 → 确认保存
+- JSZip CDN 引入
+- 保存前确认弹窗（名字/元素/等级/描述均可修改）
+- 工坊部署：`CLOUDFLARE_API_TOKEN="xxx" npx wrangler pages deploy workshop-app --project-name=workshop-csp`
+- 注意：工坊无自动 CI，需手动 wrangler 部署

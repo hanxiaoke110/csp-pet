@@ -425,6 +425,41 @@
       "root_cause": "HatchConfirmModal的onClose只调用setPendingHatch(null)清空状态，不调用addEgg()保存蛋。金币已在确认购买时扣除，但蛋没有进入孵化队列",
       "fix": "onClose改为和onLater一样：先addEgg()再setPendingHatch(null)，确保蛋进入孵化队列",
       "tags": ["pet", "gacha", "hatch", "data-loss"]
+    },
+    {
+      "date": "2026-06-06",
+      "error_message": "教练端 AI Debug '分析中' 永远转圈不返回结果",
+      "root_cause": "ai-provider.js 的 fetch() 无超时，API 不响应就永久挂起；提示词里反引号 ``` 嵌套在模板字符串中导致 JS ReferenceError",
+      "fix": "sendMessage 加 30s Promise.race 超时；所有提示词改为纯字符串拼接消除反引号",
+      "tags": ["coach", "ai-debug", "timeout", "template-literal"]
+    },
+    {
+      "date": "2026-06-06",
+      "error_message": "教练端 AI Debug 太死板：用不同算法、不同写法被判错",
+      "root_cause": "系统提示词让 AI 对参考答案，buildDebugContext 用户提示词也写「不要因为写法不同就判错」，两者矛盾",
+      "fix": "推倒重来为推演模式：AI 当代码追踪器，读题→推演→对比→检查→结论。系统+用户提示词一致",
+      "tags": ["coach", "ai-debug", "prompt", "accuracy"]
+    },
+    {
+      "date": "2026-06-06",
+      "error_message": "教练端 AI Debug 太宽容：错误代码被判定为正确",
+      "root_cause": "评审模式下 AI 偷懒直接说对，没有实际推演代码",
+      "fix": "改为推演模式，强制 AI 逐行执行学生代码，提交题目要求+样例输入，必须实际推演",
+      "tags": ["coach", "ai-debug", "prompt", "false-positive"]
+    },
+    {
+      "date": "2026-06-06",
+      "error_message": "工坊部署后 Cloudflare Pages 页面不更新",
+      "root_cause": "工坊无自动 CI/CD，需要手动执行 wrangler pages deploy；Cloudflare Pages 不会自动拉取 Gitee 提交",
+      "fix": "手动执行 CLOUDFLARE_API_TOKEN=\"xxx\" npx wrangler pages deploy workshop-app --project-name=workshop-csp",
+      "tags": ["workshop", "deployment", "cloudflare-pages"]
+    },
+    {
+      "date": "2026-06-06",
+      "error_message": "宠物饥饿系统 tickHunger 定义了但从未被调用",
+      "root_cause": "petStore 有 tickHunger 函数，但 App.tsx 没有任何 setInterval 或组件来调用它；饥饿功能形同虚设",
+      "fix": "App.tsx 加 10 分钟 setInterval；加 lastActiveAt + applyOfflineHunger；QuizPractice 每题 -1",
+      "tags": ["pet", "hunger", "dead-code"]
     }
   ]
 }
