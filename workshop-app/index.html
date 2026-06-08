@@ -638,7 +638,7 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
   }
 
   console.log(`Assembly: ${totalFrames} frames, ${emptyFrames} empty skipped`);
-  console.log(`Spritesheet size: ${canvas.width}x${canvas.height}, thumbnail: ${thumbCanvas.width}x${thumbCanvas.height}`);
+  console.log(`Spritesheet size: ${canvas.width}x${canvas.height}`);
   console.log(`Active anims:`, Object.keys(actualAnims));
 
   // Generate thumbnail from first idle frame (200×200) — use JPEG for size
@@ -648,14 +648,6 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
   thumbCtx.drawImage(canvas, 0, 0, FRAME_W, FRAME_H, 0, 0, 200, 200);
   let thumbnailDataUrl; try { thumbnailDataUrl = thumbCanvas.toDataURL('image/png'); } catch(e) { thumbnailDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.9); }
 
-  const thumbCanvas = document.createElement('canvas');
-  thumbCanvas.width = 200; thumbCanvas.height = 200;
-  const thumbCtx = thumbCanvas.getContext('2d');
-  thumbCtx.drawImage(canvas, 0, 0, FRAME_W, FRAME_H, 0, 0, 200, 200);
-  let thumbnailDataUrl;
-  try { thumbnailDataUrl = thumbCanvas.toDataURL('image/png'); } catch(e) { thumbnailDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.9); }
-
-  let spritesheetDataUrl;
   try { spritesheetDataUrl = canvas.toDataURL('image/png'); } catch(e) {
     try { spritesheetDataUrl = canvas.toDataURL('image/jpeg', 0.85); } catch(e2) {
       spritesheetDataUrl = 'data:image/png;base64,iVBORw0KGgo=';
