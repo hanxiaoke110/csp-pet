@@ -210,15 +210,31 @@ function CreatePanel({ onCreated }) {
     if (oldCanvas && oldCanvas._t) { clearTimeout(oldCanvas._t); oldCanvas._t = null; }
     setSteps(ANIM_STEPS.map(s=>({...s, status:'pending'})));
 
+    // Enhance simple descriptions for better AI generation quality
+    const enhanceDesc = (d, elem, stl) => {
+      let enhanced = d.trim();
+      // Add visual details based on element and style
+      const elemVisuals = { fire: '暖色调配色，橙红主色', water: '冷色调配色，蓝色主色', wind: '清新绿色调', earth: '大地棕色系', light: '明亮金色调' };
+      const styleVisuals = { pixel: '像素艺术，清晰边缘，16-bit风格', plush: '毛绒玩具质感，柔软圆润', clay: '黏土质感，光滑表面', '3d-toy': '3D玩具风格，立体光影', 'flat-vector': '扁平矢量风格，纯色块', painterly: '水彩风格，柔和渐变' };
+      // If description is too short (< 15 chars), expand it
+      if (enhanced.length < 15) {
+        enhanced = `${enhanced}，可爱的${elem}属性精灵，${(styleVisuals[stl] || '').split('，')[0]}，圆润大眼睛，小巧身材`;
+      }
+      // Always append quality details
+      return `${enhanced}，${elemVisuals[elem] || '色彩丰富'}，${styleVisuals[stl] || '像素艺术风格'}，轮廓清晰，高对比度`;
+    };
+
     // Build detailed prompt following Hatch Pet pattern
     const hasRef = !!refImg;
     const styleNote = hasRef ? '保留参考图的角色设计和风格，' : '';
+    const artQuality = 'masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency';
     const basePrompt = [
+      enhanceDesc(desc, element, style),
       `${STYLE_LABEL[style]}风格精灵，${ELEM_LABEL[element]}元素`,
-      `设计：${desc.trim()}`,
       `${styleNote}全身站立，正面视角，四肢完整可见，表情清晰`,
       '192x208像素游戏精灵，饱满轮廓，纯色背景去底',
-      '禁止：阴影、速度线、光晕、漂浮特效、文字、场景',
+      `画质要求：${artQuality}`,
+      '禁止：阴影、速度线、光晕、漂浮特效、文字、场景、渐变、模糊',
     ].join('。');
 
     // Step 1: Generate base (use refImg if provided)
@@ -240,13 +256,13 @@ function CreatePanel({ onCreated }) {
     // Steps 2-7: Generate animation rows with base as reference
     // Animation prompts with Hatch Pet state-specific rules
     const animPrompts = {
-      idle: 'idle待机循环，6帧水平排列每帧192x208。仅微小呼吸起伏，站姿完全不变，表情平静。禁止位移、禁止肢体运动。角色设计严格与基准图一致。',
-      walk: 'walk行走循环，6帧水平排列每帧192x208。身体轻微弹跳，四肢交替迈步，手臂自然摆动。角色设计严格与基准图一致。禁止速度线、禁止灰尘。',
-      sleep: 'sleep睡觉，6帧水平排列每帧192x208。闭眼，身体微蜷，呼吸缓慢起伏。角色设计严格与基准图一致。禁止Z字、禁止呼噜气泡。',
-      celebrate: 'celebrate庆祝，6帧水平排列每帧192x208。身体上跳，手臂高举，开心表情。角色设计严格与基准图一致。禁止彩带星星闪光等漂浮物。',
-      think: 'think思考，6帧水平排列每帧192x208。头微歪，手托下巴，眼睛向上半闭，专注。角色设计严格与基准图一致。禁止问号灯泡图标。',
-      eat: 'eat进食，6帧水平排列每帧192x208。嘴巴张合咀嚼，手做拿食物动作。角色设计严格与基准图一致。禁止餐具食物残渣飞溅。',
-      unhappy: 'unhappy不开心，6帧水平排列每帧192x208。低头垂肩，沮丧表情，微下坠叹气。角色设计严格与基准图一致。禁止眼泪线条乌云。',
+      idle: 'idle待机循环，6帧水平排列每帧192x208。仅微小呼吸起伏，站姿完全不变，表情平静。禁止位移、禁止肢体运动。角色设计严格与基准图一致。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
+      walk: 'walk行走循环，6帧水平排列每帧192x208。身体轻微弹跳，四肢交替迈步，手臂自然摆动。角色设计严格与基准图一致。禁止速度线、禁止灰尘。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
+      sleep: 'sleep睡觉，6帧水平排列每帧192x208。闭眼，身体微蜷，呼吸缓慢起伏。角色设计严格与基准图一致。禁止Z字、禁止呼噜气泡。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
+      celebrate: 'celebrate庆祝，6帧水平排列每帧192x208。身体上跳，手臂高举，开心表情。角色设计严格与基准图一致。禁止彩带星星闪光等漂浮物。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
+      think: 'think思考，6帧水平排列每帧192x208。头微歪，手托下巴，眼睛向上半闭，专注。角色设计严格与基准图一致。禁止问号灯泡图标。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
+      eat: 'eat进食，6帧水平排列每帧192x208。嘴巴张合咀嚼，手做拿食物动作。角色设计严格与基准图一致。禁止餐具食物残渣飞溅。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
+      unhappy: 'unhappy不开心，6帧水平排列每帧192x208。低头垂肩，沮丧表情，微下坠叹气。角色设计严格与基准图一致。禁止眼泪线条乌云。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
     };
 
     const animKeys = ['idle','walk','sleep','celebrate','think','eat','unhappy'];
