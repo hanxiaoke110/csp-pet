@@ -26,10 +26,14 @@ export function WorkshopShop() {
   }, []);
 
   const handleBuy = async (pet: any) => {
+    console.log('[Workshop] handleBuy called', pet.name, pet.price);
     if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
     if (coins < (pet.price || 200)) { alert('金币不足'); return; }
     // Download sprites first (before spending coins)
-    if (!await downloadSprites(pet)) return; // downloadAndHatch shows error alert
+    console.log('[Workshop] downloading sprites...');
+    const ok = await downloadSprites(pet);
+    console.log('[Workshop] download result:', ok);
+    if (!ok) return;
     spendCoins(pet.price || 200);
     const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
     setPendingHatch({ pet, rarity });
