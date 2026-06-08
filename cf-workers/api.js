@@ -787,8 +787,18 @@ export default {
         if (!image) return new Response(JSON.stringify({ error: '缺少图片数据' }), { status: 400, headers: cors });
         const base64 = image.replace(/^data:image\/\w+;base64,/, '');
         const binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        // Size limit: 5MB to prevent abuse
+        if (binary.length > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过5MB' }), { status: 400, headers: cors });
         const key = `workshop/${teacher.teacher_id}/${filename || Date.now() + '.png'}`;
-        await env.SPRITES.put(key, binary, { metadata: { contentType: 'image/png' } });
+        // Write + verify: retry up to 3 times
+        let ok = false;
+        for (let i = 0; i < 3; i++) {
+          await env.SPRITES.put(key, binary, { metadata: { contentType: 'image/png' } });
+          const verify = await env.SPRITES.get(key, 'arrayBuffer');
+          if (verify && verify.byteLength === binary.length) { ok = true; break; }
+          if (i < 2) await new Promise(r => setTimeout(r, 500)); // wait 500ms before retry
+        }
+        if (!ok) return new Response(JSON.stringify({ error: '上传失败，请重试' }), { status: 500, headers: cors });
         return new Response(JSON.stringify({ success: true, key }), { headers: cors });
       }
 
