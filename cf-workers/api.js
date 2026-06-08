@@ -775,8 +775,8 @@ export default {
         const key = url.searchParams.get('key') || '';
         if (!key) return new Response(JSON.stringify({ error: '缺少key' }), { status: 400, headers: cors });
         const image = await env.SPRITES.get(key, 'arrayBuffer');
-        if (!image) return new Response('Not found', { status: 404 });
-        return new Response(image, { headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400' } });
+        if (!image) return new Response('Not found', { status: 404, headers: cors });
+        return new Response(image, { headers: { ...cors, 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400' } });
       }
 
       // POST /api/workshop/upload — upload image to R2
