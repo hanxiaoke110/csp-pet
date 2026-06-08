@@ -483,6 +483,7 @@ function CreatePanel({ onCreated }) {
 function ImportPanel({ onCreated }) {
   const [name, setName] = React.useState("");
   const [element, setElement] = React.useState("fire");
+  const [style, setStyle] = React.useState("pixel");
   const [tier, setTier] = React.useState("rare");
   const [desc, setDesc] = React.useState("");
   const [resultUrl, setResultUrl] = React.useState(null);
@@ -490,6 +491,7 @@ function ImportPanel({ onCreated }) {
   const [petJsonData, setPetJsonData] = React.useState(null);
   const [submitting, setSubmitting] = React.useState(false);
   const [imported, setImported] = React.useState(false);
+  const [creatorName, setCreatorName] = React.useState(state.teacher?.name || '');
 
   async function handleZipImport(e) {
     const file = e.target.files[0];
