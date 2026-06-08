@@ -25,15 +25,17 @@ export function WorkshopShop() {
       .catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const handleBuy = (pet: any) => {
+  const handleBuy = async (pet: any) => {
     if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
     if (coins < (pet.price || 200)) { alert('金币不足'); return; }
+    // Download sprites first (before spending coins)
+    if (!await downloadSprites(pet)) return; // downloadAndHatch shows error alert
     spendCoins(pet.price || 200);
     const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
     setPendingHatch({ pet, rarity });
   };
 
-  const downloadAndHatch = async (pet: any): Promise<boolean> => {
+  const downloadSprites = async (pet: any): Promise<boolean> => {
     try {
       if (!pet.spritesheet_url) throw new Error('精灵素材缺失');
       if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
@@ -96,13 +98,10 @@ export function WorkshopShop() {
       {pendingHatch && <HatchConfirmModal
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}
-        onStart={async () => {
-          const ok = await downloadAndHatch(pendingHatch.pet);
-          if (!ok) { setPendingHatch(null); return; }
+        onStart={() => {
           const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
           startHatching(egg.eggId);
           setPendingHatch(null);
-          // Switch to hatch tab
           window.dispatchEvent(new CustomEvent('switch-pet-tab', { detail: 'hatch' }));
         }}
         onLater={() => {
