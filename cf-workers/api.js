@@ -902,7 +902,7 @@ export default {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'X-DashScope-Async': 'enable' },
             body: JSON.stringify({
-              model: 'wan2.1-t2i-turbo',
+              model: 'wanx2.1-t2i-turbo',
               input: { prompt },
               parameters: { size: '1024*1024', n: 1 },
             }),
