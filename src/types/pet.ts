@@ -251,7 +251,7 @@ export function getPetConfig(speciesId: string): { renderType: RenderType; model
 // Check if a pet's spritesheet needs remote download (not bundled)
 export function isRemotePet(speciesId: string): boolean {
   if (STARTER_PETS.some(s => s.speciesId === speciesId)) return false;
-  if (speciesId.startsWith('workshop-')) return true;
+  if (speciesId.startsWith('workshop-') || speciesId.startsWith('ws-')) return true;
   return PET_TIERS[speciesId] === 'rare' || PET_TIERS[speciesId] === 'legendary';
 }
 
