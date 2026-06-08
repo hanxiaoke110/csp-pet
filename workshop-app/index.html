@@ -621,7 +621,7 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
           emptyFrames++;
         }
       }
-    } catch(e) { console.error('Failed to load ' + animOrder[i] + ':', String(e)); }
+    } catch(e) { console.error('Failed to load ' + animOrder[i] + ': ' + String(e).substring(0,100)); }
   }
 
   console.log(`Assembly: ${totalFrames} frames, ${emptyFrames} empty skipped`);
