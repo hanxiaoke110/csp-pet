@@ -302,17 +302,17 @@ export const useQuizStore = create<QuizState>((set, get) => {
         });
       };
 
-      // Primary: SQLite
+      // Primary: localStorage (sync, reliable). Fallback: SQLite.
+      try {
+        const raw = safeLsGet(STORAGE_KEY, '');
+        if (raw) { hydrate(raw); return; }
+      } catch { /* unrecoverable */ }
+
+      // Fallback: SQLite
       try {
         const raw = await sqliteGet('quiz_state');
         if (raw) { hydrate(raw); return; }
       } catch { /* SQLite unavailable */ }
-
-      // Fallback: localStorage
-      try {
-        const raw = safeLsGet(STORAGE_KEY, '');
-        hydrate(raw || null);
-      } catch { /* unrecoverable */ }
     },
 
     save: () => {

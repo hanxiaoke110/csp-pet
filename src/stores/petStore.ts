@@ -545,13 +545,15 @@ export const usePetStore = create<PetState>((set, get) => ({
     },
 
   load: async () => {
-    // Primary: SQLite, fallback: localStorage
-    let raw = await sqliteGet('pet_data');
-    // If SQLite returned nothing or corrupted data, fall back to localStorage
-    if (raw) {
-      try { JSON.parse(raw); } catch { raw = null; }
+    // Primary: localStorage (sync, reliable). Fallback: SQLite.
+    let raw = safeLsGet('csp_pet_data', '{}');
+    if (!raw || raw === '{}') {
+      try { raw = await sqliteGet('pet_data') || raw; } catch {}
     }
-    if (!raw) raw = safeLsGet('csp_pet_data', '{}');
+    // Verify JSON validity
+    if (raw && raw !== '{}') {
+      try { JSON.parse(raw); } catch { raw = safeLsGet('csp_pet_data', '{}'); }
+    }
 
     try {
       const data = JSON.parse(raw);
