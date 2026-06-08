@@ -898,16 +898,32 @@ export default {
           });
           result = await resp.json();
         } else if (provider === 'qwen') {
-          const resp = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation', {
+          const resp = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis', {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'X-DashScope-Async': 'enable' },
             body: JSON.stringify({
-              model: 'wanx-v1',
+              model: 'wan2.1-t2i-turbo',
               input: { prompt },
-              parameters: { size: '1536*1872', n: 1 },
+              parameters: { size: '1024*1024', n: 1 },
             }),
           });
           result = await resp.json();
+          // Wanxiang async: poll for result
+          if (result.output?.task_id) {
+            const taskId = result.output.task_id;
+            for (let i = 0; i < 30; i++) {
+              await new Promise(r => setTimeout(r, 2000));
+              const pollResp = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
+                headers: { 'Authorization': `Bearer ${apiKey}` },
+              });
+              const pollResult = await pollResp.json();
+              if (pollResult.output?.task_status === 'SUCCEEDED') {
+                result = pollResult; break;
+              } else if (pollResult.output?.task_status === 'FAILED') {
+                return new Response(JSON.stringify({ error: pollResult.output.message || '万象生成失败' }), { status: 400, headers: cors });
+              }
+            }
+          }
         } else if (provider === 'hunyuan') {
           return new Response(JSON.stringify({ error: '腾讯混元接入开发中，请先用智谱或阿里' }), { status: 400, headers: cors });
         } else if (provider === 'coze') {
