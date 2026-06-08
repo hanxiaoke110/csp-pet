@@ -165,7 +165,7 @@ export default {
 
     const cors = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Token, X-Teacher-Token',
       'Content-Type': 'application/json',
     };
