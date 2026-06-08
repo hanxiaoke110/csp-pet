@@ -146,8 +146,12 @@ export default function PetStatus({
             </div>
             <div className="buy-confirm-body">
               <div className="buy-confirm-preview">
-                <img src={`/pet-sprites/previews/${switchTarget.speciesId}.png`} alt=""
-                  onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                {switchTarget.speciesId.startsWith('workshop-') ? (
+                  React.createElement(WorkshopThumb, { modelPath: switchTarget.modelPath })
+                ) : (
+                  <img src={`/pet-sprites/previews/${switchTarget.speciesId}.png`} alt=""
+                    onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                )}
               </div>
               <div className="buy-confirm-info">
                 <div className="buy-confirm-name">{formatPetDisplayName(switchTarget.petName, switchTarget.level)}</div>
