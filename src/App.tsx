@@ -187,10 +187,10 @@ function App() {
       try { usePetStore.getState().applyOfflineHunger(); } catch {}
       // 5. Sync to pet window
       usePetStore.getState().save();
-      // 6. Start hunger timer: tick every 10 minutes while app is open
+      // 6. Start hunger timer: tick every 15 minutes while app is open
       hungerTimer = setInterval(() => {
         usePetStore.getState().tickHunger();
-      }, 600000); // 10 min
+      }, 900000); // 15 min
       // 7. Weekly passive coins for Lv10+ pets
       try {
         const store = usePetStore.getState();
