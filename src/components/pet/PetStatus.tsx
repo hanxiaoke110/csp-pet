@@ -1,5 +1,5 @@
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
-import { PET_TIERS, type OwnedPet } from '../../types/pet';
+import { PET_TIERS, getPetTier, type OwnedPet } from '../../types/pet';
 import { useQuizStore } from '../../stores/quizStore';
 import PetSprite from './PetSprite';
 
@@ -57,9 +57,9 @@ export default function PetStatus({
 
       <div className="pet-collection">
         {[
-          { label: '👑 传说', pets: ownedPets.filter(p => PET_TIERS[p.speciesId] === 'legendary') },
-          { label: '✨ 稀有', pets: ownedPets.filter(p => PET_TIERS[p.speciesId] === 'rare') },
-          { label: '⭐ 普通', pets: ownedPets.filter(p => (PET_TIERS[p.speciesId] || 'common') === 'common') },
+          { label: '👑 传说', pets: ownedPets.filter(p => getPetTier(p.speciesId) === 'legendary') },
+          { label: '✨ 稀有', pets: ownedPets.filter(p => getPetTier(p.speciesId) === 'rare') },
+          { label: '⭐ 普通', pets: ownedPets.filter(p => getPetTier(p.speciesId) === 'common') },
         ].filter(g => g.pets.length > 0).map(g => {
           const isOpen = openGroups.has(g.label);
           return (
@@ -82,8 +82,14 @@ export default function PetStatus({
                         className={`pet-mini-card ${isActive ? 'active' : ''} ${isSelected ? 'selected' : ''}`}
                         onClick={() => setViewingPetId(p.petId)}>
                         <div className="pet-mini-preview">
-                          <img src={`/pet-sprites/previews/${p.speciesId}.png`} alt=""
-                            onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                          {p.speciesId.startsWith('workshop-') ? (
+                            <span style={{ fontSize: 30 }}>
+                              {p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : p.element === 'water' ? '🔵' : '🌟'}
+                            </span>
+                          ) : (
+                            <img src={`/pet-sprites/previews/${p.speciesId}.png`} alt=""
+                              onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                          )}
                           {isActive && <div className="pet-mini-badge">伙伴</div>}
                         </div>
                         <div className="pet-mini-name">{formatPetDisplayName(p.petName, p.level)}</div>
