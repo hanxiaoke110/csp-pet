@@ -785,10 +785,22 @@ export default {
         if (!teacher && !checkAdmin(request, env)) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
         const { image, filename } = await request.json();
         if (!image) return new Response(JSON.stringify({ error: '缺少图片数据' }), { status: 400, headers: cors });
+        // Rate-limit: 5/h, 20/d, 50 total per teacher
+        const now = new Date().toISOString();
+        const hourAgo = new Date(Date.now() - 3600000).toISOString();
+        const dayAgo = new Date(Date.now() - 86400000).toISOString();
+        const [hourCount, dayCount, totalCount] = await Promise.all([
+          db.prepare("SELECT COUNT(*) c FROM workshop_pets WHERE teacher_id=? AND created_at>?").bind(teacher.teacher_id, hourAgo).first("c"),
+          db.prepare("SELECT COUNT(*) c FROM workshop_pets WHERE teacher_id=? AND created_at>?").bind(teacher.teacher_id, dayAgo).first("c"),
+          db.prepare("SELECT COUNT(*) c FROM workshop_pets WHERE teacher_id=? AND status='active'").bind(teacher.teacher_id).first("c"),
+        ]);
+        if (hourCount >= 5) return new Response(JSON.stringify({ error: '每小时最多上传5只精灵' }), { status: 429, headers: cors });
+        if (dayCount >= 20) return new Response(JSON.stringify({ error: '每天最多上传20只精灵' }), { status: 429, headers: cors });
+        if (totalCount >= 50) return new Response(JSON.stringify({ error: '每位教师最多50只精灵' }), { status: 429, headers: cors });
         const base64 = image.replace(/^data:image\/\w+;base64,/, '');
         const binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
         // Size limit: 5MB to prevent abuse
-        if (binary.length > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过5MB' }), { status: 400, headers: cors });
+        if (binary.length > 3 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过3MB' }), { status: 400, headers: cors });
         const key = `workshop/${teacher.teacher_id}/${filename || Date.now() + '.png'}`;
         // Write + verify: retry up to 3 times
         let ok = false;
