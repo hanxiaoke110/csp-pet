@@ -911,7 +911,7 @@ export default {
           // Wanxiang async: poll for result
           if (result.output?.task_id) {
             const taskId = result.output.task_id;
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 60; i++) {
               await new Promise(r => setTimeout(r, 2000));
               const pollResp = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
                 headers: { 'Authorization': `Bearer ${apiKey}` },
