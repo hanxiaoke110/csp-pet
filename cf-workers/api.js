@@ -783,8 +783,25 @@ export default {
       if (path === '/api/workshop/upload' && request.method === 'POST') {
         const teacher = await checkTeacher(request, db);
         if (!teacher && !checkAdmin(request, env)) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        const { image, filename } = await request.json();
-        if (!image) return new Response(JSON.stringify({ error: '缺少图片数据' }), { status: 400, headers: cors });
+
+        let image, filename, binary;
+        const contentType = request.headers.get('Content-Type') || '';
+
+        if (contentType.includes('multipart/form-data')) {
+          // FormData upload (Blob, more reliable for large files)
+          const formData = await request.formData();
+          const file = formData.get('file');
+          if (!file || typeof file === 'string') return new Response(JSON.stringify({ error: '缺少图片文件' }), { status: 400, headers: cors });
+          binary = new Uint8Array(await file.arrayBuffer());
+          filename = file.name;
+        } else {
+          // Legacy JSON upload (data URL)
+          ({ image, filename } = await request.json());
+          if (!image) return new Response(JSON.stringify({ error: '缺少图片数据' }), { status: 400, headers: cors });
+          const base64 = image.replace(/^data:image\/\w+;base64,/, '');
+          binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        }
+
         // Rate-limit: 5/h, 20/d, 50 total per teacher
         const now = new Date().toISOString();
         const hourAgo = new Date(Date.now() - 3600000).toISOString();
@@ -797,8 +814,6 @@ export default {
         if (hourCount >= 5) return new Response(JSON.stringify({ error: '每小时最多上传5只精灵' }), { status: 429, headers: cors });
         if (dayCount >= 20) return new Response(JSON.stringify({ error: '每天最多上传20只精灵' }), { status: 429, headers: cors });
         if (totalCount >= 50) return new Response(JSON.stringify({ error: '每位教师最多50只精灵' }), { status: 429, headers: cors });
-        const base64 = image.replace(/^data:image\/\w+;base64,/, '');
-        const binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
         // Size limit: 5MB to prevent abuse
         if (binary.length > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过5MB' }), { status: 400, headers: cors });
         const key = `workshop/${teacher.teacher_id}/${filename || Date.now() + '.png'}`;

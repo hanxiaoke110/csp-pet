@@ -319,16 +319,34 @@ function CreatePanel({ onCreated }) {
     if (!resultUrl) { toast('请先生成精灵或导入素材','error'); return; }
     setShowConfirm(false); setSubmitting(true);
     try {
-      // Upload spritesheet to R2
-      const ssResp = await api('/api/workshop/upload', { method:'POST', body:JSON.stringify({
-        image: resultUrl, filename: `${name.trim() || 'pet'}-spritesheet.png`,
-      })});
+      // Convert dataURL to Blob for reliable upload (avoids base64 truncation)
+      const dataUrlToBlob = (url) => {
+        const parts = url.split(',');
+        const mime = parts[0].match(/:(.*?);/)[1];
+        const raw = atob(parts[1]);
+        const arr = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+        return new Blob([arr], { type: mime });
+      };
+
+      // Upload spritesheet as binary FormData (more reliable than JSON base64)
+      const ssBlob = dataUrlToBlob(resultUrl);
+      const ssForm = new FormData();
+      ssForm.append('file', ssBlob, `${name.trim() || 'pet'}-spritesheet.png`);
+      const ssResp = await fetch(API + '/api/workshop/upload', {
+        method: 'POST', headers: { 'X-Teacher-Token': state.token },
+        body: ssForm,
+      }).then(r => r.json());
       if (ssResp.error) { toast('上传失败: '+ssResp.error,'error'); setSubmitting(false); return; }
 
-      // Upload thumbnail to R2
-      const thumbResp = await api('/api/workshop/upload', { method:'POST', body:JSON.stringify({
-        image: thumbUrl || resultUrl, filename: `${name.trim() || 'pet'}-thumb.png`,
-      })});
+      // Upload thumbnail
+      const thumbBlob = dataUrlToBlob(thumbUrl || resultUrl);
+      const thumbForm = new FormData();
+      thumbForm.append('file', thumbBlob, `${name.trim() || 'pet'}-thumb.png`);
+      const thumbResp = await fetch(API + '/api/workshop/upload', {
+        method: 'POST', headers: { 'X-Teacher-Token': state.token },
+        body: thumbForm,
+      }).then(r => r.json());
       if (thumbResp.error) { toast('缩略图上传失败','error'); setSubmitting(false); return; }
 
       const tierData = TIERS.find(t=>t.key===tier);
@@ -525,7 +543,7 @@ function ImportPanel({ onCreated }) {
       const thumbResp = await api("/api/workshop/upload", { method:"POST", body:JSON.stringify({ image: thumbUrl || resultUrl, filename: (name.trim()||"pet") + "-thumb.png" }) });
       if (thumbResp.error) { toast("缩略图上传失败","error"); setSubmitting(false); return; }
       const tierData = TIERS.find(function(t){ return t.key===tier; });
-      const d = await api("/api/workshop/pets", { method:"POST", body:JSON.stringify({ name: name.trim(), element: element, style: "pixel", description: desc.trim(), tier: tierData.key, price: tierData.price, spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData) }) });
+      const d = await api("/api/workshop/pets", { method:"POST", body:JSON.stringify({ name: name.trim(), element: element, style: style, description: desc.trim(), tier: tierData.key, price: tierData.price, spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData), creator_name: creatorName || '' }) });
       if (d.error) { toast(d.error,"error"); setSubmitting(false); return; }
       toast("✅ 精灵已保存！");
       onCreated();
