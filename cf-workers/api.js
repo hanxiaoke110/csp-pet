@@ -903,7 +903,7 @@ export default {
             headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'X-DashScope-Async': 'enable' },
             body: JSON.stringify({
               model: 'wanx2.1-t2i-turbo',
-              input: { prompt },
+              input: { prompt, ...(reference_image ? { ref_image: reference_image } : {}) },
               parameters: { size: '1024*1024', n: 1 },
             }),
           });
