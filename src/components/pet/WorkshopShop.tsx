@@ -49,6 +49,19 @@ export function WorkshopShop() {
       let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
       try { if (pet.pet_json) pj = JSON.parse(pet.pet_json); } catch {}
       await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(JSON.stringify(pj)), { baseDir: BaseDirectory.AppData });
+      // Generate thumbnail from spritesheet first frame
+      try {
+        const blob = new Blob([buf], { type: 'image/png' });
+        const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+          const i = new Image(); i.onload = () => resolve(i); i.onerror = reject;
+          i.src = URL.createObjectURL(blob);
+        });
+        const c = document.createElement('canvas');
+        c.width = 72; c.height = 78;
+        c.getContext('2d')!.drawImage(img, 0, 0, 192, 208, 0, 0, 72, 78);
+        const thumbBuf = new Uint8Array(await new Promise<ArrayBuffer>((resolve) => c.toBlob(b => b && resolve(b.arrayBuffer()), 'image/png')));
+        await writeFile('pet-sprites/2d/' + petId + '-thumb.png', thumbBuf, { baseDir: BaseDirectory.AppData });
+      } catch { /* thumbnail is optional */ }
       return true;
     } catch (e: any) { alert('下载失败: ' + (e.message || '网络错误')); return false; }
   };

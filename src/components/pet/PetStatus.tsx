@@ -83,7 +83,7 @@ export default function PetStatus({
                         onClick={() => setViewingPetId(p.petId)}>
                         <div className="pet-mini-preview">
                           {p.speciesId.startsWith('workshop-') ? (
-                            <span style={{ fontSize: 30 }}>
+                            <span style={{ fontSize: 32, lineHeight: '48px' }}>
                               {p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : p.element === 'water' ? '🔵' : '🌟'}
                             </span>
                           ) : (
