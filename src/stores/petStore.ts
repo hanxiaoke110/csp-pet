@@ -406,7 +406,20 @@ export const usePetStore = create<PetState>((set, get) => ({
     if (!result) return null;
     if (result.rarity === 'refund') return { item: result.item, rarity: 'refund', pityBreak: false };
     const r = result as any;
-    if (!get().buyPet(r.item.speciesId!, r.autoName)) return null;
+    // Coins already deducted in _rollGacha (200g). Don't call buyPet — it would deduct again.
+    const config = getPetConfig(r.item.speciesId);
+    if (!config) return null;
+    const pet: OwnedPet = {
+      petId: crypto.randomUUID(), petName: r.autoName || r.item.name,
+      speciesId: r.item.speciesId!, element: config.element,
+      renderType: config.renderType, modelPath: config.modelPath,
+      level: 1, exp: 0, expToNext: 100,
+      hunger: 100, mood: 80, affection: 50,
+      lastFedAt: null, obtainedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+    };
+    set(s => ({ ownedPets: [...s.ownedPets, pet] }));
+    get().save();
+    get().checkCollectionRewards();
     return { item: r.item, rarity: r.rarity, pityBreak: r.pityBreak };
   },
 
