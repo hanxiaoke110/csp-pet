@@ -641,11 +641,33 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
   console.log(`Spritesheet size: ${canvas.width}x${canvas.height}`);
   console.log(`Active anims:`, Object.keys(actualAnims));
 
-  // Generate thumbnail from first idle frame (200×200) — use JPEG for size
+  // Generate thumbnail: smart-crop first frame to remove white space
   const thumbCanvas = document.createElement('canvas');
   thumbCanvas.width = 200; thumbCanvas.height = 200;
   const thumbCtx = thumbCanvas.getContext('2d');
-  thumbCtx.drawImage(canvas, 0, 0, FRAME_W, FRAME_H, 0, 0, 200, 200);
+  // Get first frame pixel data to find content bounds
+  const frameData = ctx.getImageData(0, 0, FRAME_W, FRAME_H);
+  let minX = FRAME_W, minY = FRAME_H, maxX = 0, maxY = 0;
+  for (let y = 0; y < FRAME_H; y++) {
+    for (let x = 0; x < FRAME_W; x++) {
+      const idx = (y * FRAME_W + x) * 4;
+      if (frameData.data[idx + 3] > 20) { // non-transparent
+        const isWhite = frameData.data[idx] > 240 && frameData.data[idx + 1] > 240 && frameData.data[idx + 2] > 240;
+        if (!isWhite) { minX = Math.min(minX, x); minY = Math.min(minY, y); maxX = Math.max(maxX, x); maxY = Math.max(maxY, y); }
+      }
+    }
+  }
+  if (maxX > minX && maxY > minY) {
+    // Add 10% padding
+    const padW = (maxX - minX) * 0.1, padH = (maxY - minY) * 0.1;
+    const sx = Math.max(0, minX - padW), sy = Math.max(0, minY - padH);
+    const sw = Math.min(FRAME_W - sx, (maxX - minX) + padW * 2);
+    const sh = Math.min(FRAME_H - sy, (maxY - minY) + padH * 2);
+    thumbCtx.drawImage(canvas, sx, sy, sw, sh, 0, 0, 200, 200);
+  } else {
+    // Fallback: full frame
+    thumbCtx.drawImage(canvas, 0, 0, FRAME_W, FRAME_H, 0, 0, 200, 200);
+  }
   let thumbnailDataUrl; try { thumbnailDataUrl = thumbCanvas.toDataURL('image/png'); } catch(e) { thumbnailDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.9); }
 
   try { spritesheetDataUrl = canvas.toDataURL('image/png'); } catch(e) {
