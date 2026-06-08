@@ -26,9 +26,13 @@ export function WorkshopShop() {
   }, []);
 
   const handleBuy = async (pet: any) => {
+    console.log('[WS] buy clicked', pet.id, 'isOwned:', isOwned('workshop-' + pet.id), 'coins:', coins, 'price:', pet.price);
     if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
     if (coins < (pet.price || 200)) { alert('金币不足'); return; }
-    if (!await downloadSprites(pet)) return;
+    console.log('[WS] downloading...');
+    const ok = await downloadSprites(pet);
+    console.log('[WS] download ok:', ok);
+    if (!ok) return;
     spendCoins(pet.price || 200);
     const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
     setPendingHatch({ pet, rarity });
@@ -64,6 +68,7 @@ export function WorkshopShop() {
         const thumbBuf = Uint8Array.from(atob(base64), ch => ch.charCodeAt(0));
         await writeFile('pet-sprites/2d/' + petId + '-thumb.png', thumbBuf, { baseDir: BaseDirectory.AppData });
       } catch { /* thumbnail is optional */ }
+      return true;
     } catch (e: any) { alert('下载失败: ' + (e.message || '网络错误')); return false; }
   };
 
