@@ -238,9 +238,10 @@ export function getPetConfig(speciesId: string): { renderType: RenderType; model
   const petdex = PETDEX_PETS.find(p => p.speciesId === speciesId);
   if (petdex) return { renderType: petdex.renderType, modelPath: petdex.modelPath, element: petdex.element };
 
-  // Workshop pets: speciesId = "workshop-{id}", cached at pet-sprites/2d/ws-{id}.json
+  // Workshop pets: speciesId = "workshop-{id}", cached at pet-sprites/2d/{id}.json
+  // Note: pet.id from API already has ws- prefix, so wsId = id (no extra ws-)
   if (speciesId.startsWith('workshop-')) {
-    const wsId = 'ws-' + speciesId.replace('workshop-', '');
+    const wsId = speciesId.replace('workshop-', '');
     return { renderType: '2d', modelPath: '/pet-sprites/2d/' + wsId + '.json', element: 'fire' };
   }
 

@@ -44,7 +44,7 @@ export function WorkshopShop() {
       const resp = await fetch(ssUrl);
       if (!resp.ok) throw new Error('素材下载失败（' + resp.status + '），请联系老师重新上传精灵');
       const buf = new Uint8Array(await resp.arrayBuffer());
-      const petId = 'ws-' + pet.id;
+      const petId = pet.id; // pet.id already has ws- prefix from API
       await writeFile('pet-sprites/2d/' + petId + '.png', buf, { baseDir: BaseDirectory.AppData });
       let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
       try { if (pet.pet_json) pj = JSON.parse(pet.pet_json); } catch {}
