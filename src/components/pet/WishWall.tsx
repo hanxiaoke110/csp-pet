@@ -204,7 +204,7 @@ export default function WishWall() {
           <div style={{ marginTop: 20 }}>
             <h4 style={{ fontSize: 13, fontWeight: 700, color: '#334155', marginBottom: 12 }}>📋 许愿规则预览</h4>
             <div style={{ textAlign: 'left', fontSize: 12, color: '#64748b', lineHeight: 2, maxWidth: 340, margin: '0 auto' }}>
-              <div>📝 Lv.10+ 智子 + 完成本周练习才能提交许愿</div>
+              <div>📝 Lv.6+ 智子 + 完成本周练习才能提交许愿</div>
               <div>🎫 许愿票在商城购买（100g/张，250g/3张）</div>
               <div>🗳️ 每条许愿每人只能投 1 票</div>
               <div>📅 每人每月最多提交 3 条许愿</div>
@@ -250,7 +250,7 @@ export default function WishWall() {
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {[
-              { icon: '📝', title: '提交门槛', desc: '需要 Lv.10+ 灵犀智子 + 完成本周练习。每人每月最多提交 3 条许愿。' },
+              { icon: '📝', title: '提交门槛', desc: '需要 Lv.6+ 灵犀智子 + 完成本周练习。每人每月最多提交 3 条许愿。' },
               { icon: '🎫', title: '许愿票', desc: '在商城购买：100g/张，打包 250g/3张。每周限购 3 张，没用完可以累积。' },
               { icon: '🗳️', title: '投票规则', desc: '每条许愿你只能投 1 票。投票后许愿票会消耗，不可撤销。' },
               { icon: '🔄', title: '月度更新', desc: '每月 1 号自动清理低票许愿（0 票优先淘汰，7 天内新愿望受保护），让榜单保持新鲜。' },
