@@ -325,7 +325,7 @@ export default {
 
         const sort = url.searchParams.get('sort') || 'hot';
         const classCode = url.searchParams.get('class_code') || '';
-        const order = sort === 'new' ? 'created_at DESC' : 'votes DESC, created_at DESC';
+        const order = sort === 'new' ? 'created_at DESC' : 'votes DESC, created_at ASC';
         const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
 
         let result;
