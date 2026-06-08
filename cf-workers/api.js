@@ -770,6 +770,21 @@ export default {
       }
 
       // ═══ WORKSHOP ═══
+      // GET /api/workshop/proxy-image — proxy external images with CORS
+      if (path === '/api/workshop/proxy-image' && request.method === 'GET') {
+        const targetUrl = url.searchParams.get('url');
+        if (!targetUrl) return new Response(JSON.stringify({ error: '缺少url' }), { status: 400, headers: cors });
+        try {
+          const imgResp = await fetch(targetUrl);
+          if (!imgResp.ok) return new Response('Proxy failed', { status: 502, headers: cors });
+          const buf = await imgResp.arrayBuffer();
+          const ct = imgResp.headers.get('Content-Type') || 'image/png';
+          return new Response(buf, { headers: { ...cors, 'Content-Type': ct, 'Cache-Control': 'public, max-age=3600' } });
+        } catch (e) {
+          return new Response(JSON.stringify({ error: '代理失败: ' + e.message }), { status: 502, headers: cors });
+        }
+      }
+
       // GET /api/workshop/upload — serve uploaded image from KV
       if (path === '/api/workshop/image' && request.method === 'GET') {
         const key = url.searchParams.get('key') || '';
