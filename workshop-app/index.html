@@ -597,6 +597,18 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
   const checkCtx = checkCanvas.getContext('2d');
 
   const animOrder = ['idle','walk','sleep','celebrate','think','eat','unhappy'];
+  // Draw base image as first row (fills all 9 columns with same frame)
+  try {
+    if (baseUrl) {
+      const baseImg = await loadImage(baseUrl);
+      const baseW = baseImg.width;
+      const baseH = baseImg.height;
+      // Draw the base image across all 9 columns of row 0
+      for (let col = 0; col < COLS; col++) {
+        ctx.drawImage(baseImg, 0, 0, baseW, baseH, col * FRAME_W, 0, FRAME_W, FRAME_H);
+      }
+    }
+  } catch(e) { console.error('Failed to load base image:', String(e)); }
   let totalFrames = 0, emptyFrames = 0;
   const actualAnims = {};
 
@@ -633,10 +645,10 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
   thumbCanvas.width = 200; thumbCanvas.height = 200;
   const thumbCtx = thumbCanvas.getContext('2d');
   thumbCtx.drawImage(canvas, 0, 0, FRAME_W, FRAME_H, 0, 0, 200, 200);
-  const thumbnailDataUrl = thumbCanvas.toDataURL('image/png');
+  let thumbnailDataUrl; try { thumbnailDataUrl = thumbCanvas.toDataURL('image/png'); } catch(e) { thumbnailDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.9); }
 
   return {
-    spritesheet: canvas.toDataURL('image/png'),
+    spritesheet: (function() { try { return canvas.toDataURL('image/png'); } catch(e) { console.error('toDataURL failed, using JPEG fallback'); return canvas.toDataURL('image/jpeg', 0.9); } })(),
     thumbnail: thumbnailDataUrl,
     petJson: {
       frameWidth: FRAME_W, frameHeight: FRAME_H, maxFrames: FRAMES,
