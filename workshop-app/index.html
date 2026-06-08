@@ -170,8 +170,6 @@ function CreatePanel({ onCreated }) {
   const [submitting, setSubmitting] = React.useState(false);
   const [creatorName, setCreatorName] = React.useState(state.teacher?.name || '');
 
-  const [showConfirm, setShowConfirm] = React.useState(false);
-
   function handleRefUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -333,7 +331,7 @@ function CreatePanel({ onCreated }) {
 
   async function doSavePet() {
     if (!resultUrl) { toast('请先生成精灵或导入素材','error'); return; }
-    setShowConfirm(false); setSubmitting(true);
+    setSubmitting(true);
     try {
       // Convert dataURL to Blob for reliable upload (avoids base64 truncation)
       const dataUrlToBlob = (url) => {
@@ -447,49 +445,8 @@ function CreatePanel({ onCreated }) {
       React.createElement('div', { style:{ width:220, margin:'12px 0' } },
         React.createElement('canvas', { id:'preview-anim', width:200, height:217, style:{ borderRadius:12, background:'transparent' } })
       ),
-      React.createElement('button', { className:'btn btn-primary', onClick:()=>setShowConfirm(true), style:{ width:'100%', padding:12 } },
-        '💾 保存精灵'),
-    ),
-
-    // ═══ Save Confirmation Modal ═══
-    showConfirm && React.createElement('div', { className:'card', style:{ border:'2px solid #FF8C00' } },
-      React.createElement('h3', { style:{ color:'#FF8C00', marginBottom:12 } }, '📋 确认保存'),
-      React.createElement('div', { style:{ display:'flex', gap:16, flexWrap:'wrap', marginBottom:12 } },
-        React.createElement('div', { style:{ flex:'1 1 200px' } },
-          React.createElement('label', { style:{ fontSize:11, color:'#64748b', display:'block' } }, '名字'),
-          React.createElement('input', { className:'input', value:name, onChange:e=>setName(e.target.value) }),
-        ),
-        React.createElement('div', { style:{ flex:'1 1 100px' } },
-          React.createElement('label', { style:{ fontSize:11, color:'#64748b', display:'block' } }, '元素'),
-          React.createElement('select', { className:'input', value:element, onChange:e=>setElement(e.target.value) },
-            ELEMENTS.map(el=>React.createElement('option',{key:el,value:el},ELEM_LABEL[el])),
-          ),
-        ),
-        React.createElement('div', { style:{ flex:'1 1 120px' } },
-          React.createElement('label', { style:{ fontSize:11, color:'#64748b', display:'block' } }, '等级'),
-          React.createElement('select', { className:'input', value:tier, onChange:e=>setTier(e.target.value) },
-            TIERS.map(t=>React.createElement('option',{key:t.key,value:t.key},t.label+' '+t.price+'g')),
-          ),
-        ),
-      ),
-      React.createElement('div', { style:{ marginBottom:12 } },
-        React.createElement('label', { style:{ fontSize:11, color:'#64748b', display:'block' } }, '描述'),
-        React.createElement('textarea', { className:'input', value:desc, onChange:e=>setDesc(e.target.value), rows:2, style:{ resize:'vertical' } }),
-      ),
-      React.createElement('div', { style:{ marginBottom:12 } },
-        React.createElement('label', { style:{ fontSize:11, color:'#64748b', display:'block' } }, '发布者'),
-        React.createElement('input', { className:'input', value:creatorName, onChange:e=>setCreatorName(e.target.value), placeholder:state.teacher?.name || '发布者名称' }),
-      ),
-      thumbUrl && React.createElement('div', { style:{ textAlign:'center', marginBottom:12 } },
-        React.createElement('img', { src:thumbUrl, style:{ width:100,height:108,borderRadius:8,border:'2px solid #e2e8f0' } }),
-        React.createElement('div', { style:{ fontSize:10, color:'#94a3b8' } }, '预览'),
-      ),
-      React.createElement('div', { style:{ display:'flex', gap:8 } },
-        React.createElement('button', { className:'btn btn-primary', onClick:doSavePet, disabled:submitting||!name.trim(), style:{ flex:1, padding:12 } },
-          submitting ? '保存中...' : '✅ 确认保存 (' + (TIERS.find(t=>t.key===tier)||{}).price + 'g)'),
-        React.createElement('button', { className:'btn btn-outline', onClick:()=>setShowConfirm(false), style:{ flex:1, padding:12 } },
-          '取消'),
-      ),
+      React.createElement('button', { className:'btn btn-primary', onClick:doSavePet, disabled:submitting||!name.trim(), style:{ width:'100%', padding:12 } },
+        submitting ? '保存中...' : '💾 保存精灵'),
     ),
   );
 }
@@ -668,6 +625,8 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
   }
 
   console.log(`Assembly: ${totalFrames} frames, ${emptyFrames} empty skipped`);
+  console.log(`Spritesheet size: ${canvas.width}x${canvas.height}, thumbnail: ${thumbCanvas.width}x${thumbCanvas.height}`);
+  console.log(`Active anims:`, Object.keys(actualAnims));
 
   // Generate thumbnail from first idle frame (200×200) — use JPEG for size
   const thumbCanvas = document.createElement('canvas');
