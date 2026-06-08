@@ -800,7 +800,7 @@ export default {
         const base64 = image.replace(/^data:image\/\w+;base64,/, '');
         const binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
         // Size limit: 5MB to prevent abuse
-        if (binary.length > 3 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过3MB' }), { status: 400, headers: cors });
+        if (binary.length > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过5MB' }), { status: 400, headers: cors });
         const key = `workshop/${teacher.teacher_id}/${filename || Date.now() + '.png'}`;
         // Write + verify: retry up to 3 times
         let ok = false;
