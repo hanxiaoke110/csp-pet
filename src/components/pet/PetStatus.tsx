@@ -1,7 +1,24 @@
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
-import { PET_TIERS, getPetTier, type OwnedPet } from '../../types/pet';
+import { getPetTier, type OwnedPet } from '../../types/pet';
 import { useQuizStore } from '../../stores/quizStore';
+import { readFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import PetSprite from './PetSprite';
+import { useState, useEffect } from 'react';
+import React from 'react';
+
+function WorkshopThumb({ modelPath }: { modelPath: string }) {
+  const [url, setUrl] = useState('');
+  useEffect(() => {
+    const thumbPath = modelPath.replace('.json', '-thumb.png');
+    const id = thumbPath.replace('/pet-sprites/2d/', '');
+    readFile('pet-sprites/2d/' + id, { baseDir: BaseDirectory.AppData })
+      .then(buf => { setUrl(URL.createObjectURL(new Blob([new Uint8Array(buf)], { type: 'image/png' }))); })
+      .catch(() => {});
+    return () => { if (url) URL.revokeObjectURL(url); };
+  }, [modelPath]);
+  if (!url) return React.createElement('span', { style: { fontSize: 32, lineHeight: '48px' } }, '🔴');
+  return React.createElement('img', { src: url, alt: '', style: { width: '100%', height: '100%', objectFit: 'contain', imageRendering: 'pixelated' } });
+}
 
 interface Props {
   viewingPetId: string | null;
@@ -83,9 +100,7 @@ export default function PetStatus({
                         onClick={() => setViewingPetId(p.petId)}>
                         <div className="pet-mini-preview">
                           {p.speciesId.startsWith('workshop-') ? (
-                            <span style={{ fontSize: 32, lineHeight: '48px' }}>
-                              {p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : p.element === 'water' ? '🔵' : '🌟'}
-                            </span>
+                            React.createElement(WorkshopThumb, { modelPath: p.modelPath })
                           ) : (
                             <img src={`/pet-sprites/previews/${p.speciesId}.png`} alt=""
                               onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
