@@ -74,9 +74,9 @@ export default function PetStatus({
 
       <div className="pet-collection">
         {[
-          { label: '👑 传说', pets: ownedPets.filter(p => getPetTier(p.speciesId) === 'legendary') },
-          { label: '✨ 稀有', pets: ownedPets.filter(p => getPetTier(p.speciesId) === 'rare') },
-          { label: '⭐ 普通', pets: ownedPets.filter(p => getPetTier(p.speciesId) === 'common') },
+          { label: '👑 传说', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'legendary') },
+          { label: '✨ 稀有', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'rare') },
+          { label: '⭐ 普通', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'common') },
         ].filter(g => g.pets.length > 0).map(g => {
           const isOpen = openGroups.has(g.label);
           return (

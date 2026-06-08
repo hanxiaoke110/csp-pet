@@ -33,7 +33,7 @@ interface PetState {
   gachaDate: string;
   gachaPity: number;
   _rollGacha: () => { item: ShopItem; rarity: string; autoName?: string; pityBreak: boolean } | null;
-  claimHatchedPet: (speciesId: string, petName: string) => boolean;
+  claimHatchedPet: (speciesId: string, petName: string, tier?: string) => boolean;
   doGacha: () => { item: ShopItem; rarity: string; pityBreak: boolean } | null;
 
   // Attributes
@@ -167,6 +167,7 @@ export const usePetStore = create<PetState>((set, get) => ({
       petId: crypto.randomUUID(), petName,
       speciesId, element: config.element,
       renderType: config.renderType, modelPath: config.modelPath,
+      tier: tier || undefined,
       level: 1, exp: 0, expToNext: 100,
       hunger: 100, mood: 80, affection: 50,
       lastFedAt: null, obtainedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
@@ -377,7 +378,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   // Add pet after hatching — coins already deducted in gacha/shop flow
-  claimHatchedPet: (speciesId: string, petName: string) => {
+  claimHatchedPet: (speciesId: string, petName: string, tier?: string) => {
     if (get().isOwned(speciesId)) return false;
     const config = getPetConfig(speciesId);
     if (!config) return false;
@@ -386,6 +387,7 @@ export const usePetStore = create<PetState>((set, get) => ({
       petId: crypto.randomUUID(), petName,
       speciesId, element: config.element,
       renderType: config.renderType, modelPath: config.modelPath,
+      tier: tier || undefined,
       level: 1, exp: 0, expToNext: 100,
       hunger: 100, mood: 80, affection: 50,
       lastFedAt: null, obtainedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
@@ -413,6 +415,7 @@ export const usePetStore = create<PetState>((set, get) => ({
       petId: crypto.randomUUID(), petName: r.autoName || r.item.name,
       speciesId: r.item.speciesId!, element: config.element,
       renderType: config.renderType, modelPath: config.modelPath,
+      tier: tier || undefined,
       level: 1, exp: 0, expToNext: 100,
       hunger: 100, mood: 80, affection: 50,
       lastFedAt: null, obtainedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),

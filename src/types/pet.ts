@@ -37,6 +37,7 @@ export interface OwnedPet {
   element: PetElement;
   renderType: RenderType;
   modelPath: string;
+  tier?: string;
   level: number;
   exp: number;
   expToNext: number;

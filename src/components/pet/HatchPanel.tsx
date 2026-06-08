@@ -103,7 +103,7 @@ export default function HatchPanel() {
   const handleClaim = (egg: HatchingEgg) => {
     const result = claimEgg(egg.eggId);
     if (result) {
-      claimHatchedPet(result.speciesId, result.petName);
+      claimHatchedPet(result.speciesId, result.petName, result.rarity);
       setClaimedPet(result);
       setTimeout(() => setClaimedPet(null), 3000);
     }
