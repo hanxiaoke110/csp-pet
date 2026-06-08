@@ -309,8 +309,9 @@ function CreatePanel({ onCreated }) {
       }, 200);
       setSteps(prev => prev.map(s => s.key==='assemble'?{...s,status:'done'}:s));
     } catch(e) {
+      console.error('Assembly failed:', e.message, e.stack);
       setSteps(prev => prev.map(s => s.key==='assemble'?{...s,status:'failed'}:s));
-      toast('拼合失败: '+e.message,'error');
+      toast('拼合失败: '+e.message + ' (查看Console了解详情)','error');
     }
 
     setGenStatus('done'); render();
