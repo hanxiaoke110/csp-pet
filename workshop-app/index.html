@@ -656,7 +656,7 @@ async function assembleSpritesheet(baseUrl, rowImgs) {
   thumbCanvas.width = 200; thumbCanvas.height = 200;
   const thumbCtx = thumbCanvas.getContext('2d');
   thumbCtx.drawImage(canvas, 0, 0, FRAME_W, FRAME_H, 0, 0, 200, 200);
-  const thumbnailDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.85);
+  const thumbnailDataUrl = thumbCanvas.toDataURL('image/png');
 
   return {
     spritesheet: canvas.toDataURL('image/png'),
