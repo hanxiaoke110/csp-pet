@@ -457,3 +457,34 @@ csp-v{版本号去点}-win.exe     (如 csp-v140-win.exe)
 - 保存前确认弹窗（名字/元素/等级/描述均可修改）
 - 工坊部署：`CLOUDFLARE_API_TOKEN="xxx" npx wrangler pages deploy workshop-app --project-name=workshop-csp`
 - 注意：工坊无自动 CI，需手动 wrangler 部署
+
+## 导入素材功能 (ImportPanel) — 稳定版本
+
+**标签:** v1.5.2-import-stable
+
+### 独立状态变量（和 CreatePanel 完全隔离）
+- name, element, style, tier, desc
+- resultUrl, thumbUrl, petJsonData
+- submitting, imported, creatorName
+
+### 保存流程 (doSavePet)
+1. dataUrlToBlob(resultUrl) → FormData 上传到 /api/workshop/upload
+2. dataUrlToBlob(thumbUrl || resultUrl) → FormData 上传缩略图
+3. POST /api/workshop/pets (含 style, creator_name)
+
+### 学生端下载链路 (WorkshopShop.downloadSprites)
+1. fetch KV → writeFile spritesheet.png + pet.json
+2. Canvas 截第一帧 192x208 → 缩到 72x78 → writeFile thumb.png
+3. return true (‼️ 不能漏！)
+
+### 展示链路 (PetStatus + WorkshopThumb)
+- 缩略图: readFile + Blob URL → <img src=blobUrl>
+- isRemotePet: 检查 ws- + workshop- 前缀
+- getPetTier: 检查 workshop- 前缀
+
+### Worker API
+- upload: 支持 JSON (旧) + FormData (新)
+- 写入验证: put → get 确认 → 失败重试 3 次
+- 限流: 5/h, 20/d, 50总, 5MB/单文件
+
+⚠️ 改 CreatePanel 时不要动 ImportPanel 的状态变量和 doSavePet 函数！
