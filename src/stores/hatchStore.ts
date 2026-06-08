@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { downloadPetSprites } from '../utils/spriteDownloader';
-import { sqliteSetFireAndForget, sqliteGet } from '../lib/sqlite-storage';
-import { safeLsSet, safeLsGet } from '../lib/storage';
+import { dualSave, dualLoad } from '../lib/persist';
 
 export type HatchRarity = 'common' | 'rare' | 'legendary';
 export type HatchStatus = 'waiting' | 'incubating' | 'ready' | 'failed';
@@ -211,9 +210,7 @@ export const useHatchStore = create<HatchState>((set, get) => ({
   save: () => {
     try {
       const { eggs } = get();
-      const json = JSON.stringify(eggs);
-      sqliteSetFireAndForget('hatch_eggs', json);
-      safeLsSet(STORAGE_KEY, json); // backup
+      dualSave('hatch_eggs', STORAGE_KEY, JSON.stringify(eggs));
     } catch { /* quota exceeded or filesystem error */ }
   },
 
@@ -234,16 +231,7 @@ export const useHatchStore = create<HatchState>((set, get) => ({
       }
     };
 
-    // Primary: localStorage (sync, reliable). Fallback: SQLite.
-    try {
-      const raw = safeLsGet(STORAGE_KEY, '');
-      if (raw) { hydrate(raw); return; }
-    } catch { /* unrecoverable */ }
-
-    // Fallback: SQLite
-    try {
-      const raw = await sqliteGet('hatch_eggs');
-      if (raw) { hydrate(raw); return; }
-    } catch { /* SQLite unavailable */ }
+    const raw = await dualLoad('hatch_eggs', STORAGE_KEY);
+    if (raw) { hydrate(raw); return; }
   },
 }));

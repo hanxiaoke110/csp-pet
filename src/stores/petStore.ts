@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
-import { safeLsSet, safeLsGet } from '../lib/storage';
-import { sqliteSetFireAndForget, sqliteGet } from '../lib/sqlite-storage';
+import { dualSave, dualLoad } from '../lib/persist';
 import type { OwnedPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, ALL_SHOP_ITEMS, PET_TIERS } from '../types/pet';
 import type { ShopItem } from '../types/pet';
@@ -532,29 +531,15 @@ export const usePetStore = create<PetState>((set, get) => ({
   save: () => {
     const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt } = get();
     const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt };
-    const json = JSON.stringify(data);
-    sqliteSetFireAndForget('pet_data', json);
-    safeLsSet('csp_pet_data', json); // backup
+    dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
-    // Auto show/hide pet window based on whether pets exist
-    if (activePetId) {
-      invoke('show_pet_window').catch(() => {});
-    } else {
-      invoke('hide_pet_window').catch(() => {});
-    }
+    if (activePetId) { invoke('show_pet_window').catch(() => {}); }
+    else { invoke('hide_pet_window').catch(() => {}); }
     },
 
   load: async () => {
-    // Primary: localStorage (sync, reliable). Fallback: SQLite.
-    let raw = safeLsGet('csp_pet_data', '{}');
-    if (!raw || raw === '{}') {
-      try { raw = await sqliteGet('pet_data') || raw; } catch {}
-    }
-    // Verify JSON validity
-    if (raw && raw !== '{}') {
-      try { JSON.parse(raw); } catch { raw = safeLsGet('csp_pet_data', '{}'); }
-    }
-
+    const raw = await dualLoad('pet_data', 'csp_pet_data');
+    if (!raw) return;
     try {
       const data = JSON.parse(raw);
       if (data.ownedPets) {

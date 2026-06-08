@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import { sqliteSetFireAndForget, sqliteGet } from '../lib/sqlite-storage';
-import { safeLsSet, safeLsGet } from '../lib/storage';
+import { dualSave, dualLoad } from '../lib/persist';
 import { usePetStore } from './petStore';
 
 export interface ErrorRecord {
@@ -302,17 +301,8 @@ export const useQuizStore = create<QuizState>((set, get) => {
         });
       };
 
-      // Primary: localStorage (sync, reliable). Fallback: SQLite.
-      try {
-        const raw = safeLsGet(STORAGE_KEY, '');
-        if (raw) { hydrate(raw); return; }
-      } catch { /* unrecoverable */ }
-
-      // Fallback: SQLite
-      try {
-        const raw = await sqliteGet('quiz_state');
-        if (raw) { hydrate(raw); return; }
-      } catch { /* SQLite unavailable */ }
+      const raw = await dualLoad('quiz_state', STORAGE_KEY);
+      if (raw) { hydrate(raw); return; }
     },
 
     save: () => {
@@ -337,8 +327,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
           weeklyTaskDate: s.weeklyTaskDate,
           extraChallengeDone: s.extraChallengeDone,
         });
-        sqliteSetFireAndForget('quiz_state', json);
-        safeLsSet(STORAGE_KEY, json); // backup
+        dualSave('quiz_state', STORAGE_KEY, json);
       } catch { /* quota exceeded or filesystem error */ }
     },
   };
