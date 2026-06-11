@@ -22,7 +22,7 @@ export default function AIChat() {
   const currentId = useAIStore(s => s.currentSessionId);
   const session = sessions.find(s => s.id === currentId);
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>(
-    session?.messages?.length ? session.messages : [{
+    session?.messages?.length ? session.messages as { role: 'user' | 'assistant'; content: string }[] : [{
       role: 'assistant',
       content: '👋 你好！我是你的AI进阶教练。\n\n我可以帮你：\n📚 总结这节课的知识点\n📝 推荐额外的洛谷练习题\n🗺️ 梳理近10节课学了什么\n📅 查看后续课程安排\n🔍 回答课外C++问题\n\n试试下面的快捷按钮，或者直接问我！',
     }]
