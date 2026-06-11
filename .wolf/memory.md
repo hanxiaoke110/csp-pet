@@ -488,3 +488,63 @@ csp-v{版本号去点}-win.exe     (如 csp-v140-win.exe)
 - 限流: 5/h, 20/d, 50总, 5MB/单文件
 
 ⚠️ 改 CreatePanel 时不要动 ImportPanel 的状态变量和 doSavePet 函数！
+
+## v1.5.2 发布 — 2026-06-11
+
+### 标签
+- `v1.5.2-session` — 本次会话存档
+- `v1.5.2` — 发布版本
+- `v1.5.2-import-stable` — 导入素材稳定版
+
+### 存储架构
+- **load 优先级**: localStorage 先 → SQLite 兜底（降低 SQLite 阻塞风险）
+- **persist.ts**: dualSave/dualLoad 公共模块，三 store 去重
+- **sqlite-storage.ts**: sqliteGet/sqliteSet 加 5s 超时
+- **Rust WAL**: 启动时 `PRAGMA wal_checkpoint(TRUNCATE)` 清理残留
+
+### 饥饿系统
+- 在线: 15min -1 | 做题: 2题 -1 | 离线: 7天 -25
+- 每日上限 15 点（dailyHungerConsumed + hungerDate）
+
+### 代码结构
+- PetPanel 拆 3 文件: PetPanel(273行) + ShopPanel(327行) + WorkshopShop(113行)
+- 公共持久化: src/lib/persist.ts
+
+### 工坊 (Workshop)
+- CORS 代理: Worker /api/workshop/proxy-image 解决智谱 CDN 无 CORS
+- 拼合: base 图填入第 1 行 | toDataURL 三级容错
+- 缩略图: 智能裁剪白底
+- 保存: Blob/FormData 上传（避免 base64 截断）
+- KV 可靠性: 写入验证 + 重试 3 次 + 限流(5/h, 20/d, 50总, 5MB)
+- 导入: ImportPanel 完整流程已验证（独立状态,不和 CreatePanel 混）
+- 万象: wanx2.1-t2i-turbo + 异步轮询 + ref_image
+- 即梦/万象: 只支持固定比例，不适合 spritesheet 生成
+
+### 桌面端关键修复
+- tier 存入 OwnedPet: claimHatchedPet 可选 tier 参数
+- getPetTier: workshop-/ws- 前缀 + p.tier 优先
+- isRemotePet: workshop-/ws- 前缀
+- WorkshopThumb: readFile + blob URL 加载缩略图
+- HatchConfirmModal: onClose 同 onLater 或 addEgg
+- doGacha: 双重扣费修复
+- 许愿墙 Lv.10→6
+
+### 新功能
+- 更新公告弹窗: ChangelogModal
+- AI 对话持久化: aiStore → SQLite (最近20条) + 🗑清空
+- 每日饥饿上限: 15 点
+- 工坊独立 Tab: PetPanel 主 Tab 🏭智子工坊
+
+### 题库修复 (version 4→14)
+- 修复 10+ 道缺代码/答案错误/选项被污染
+
+### Web 端
+- 学生反馈: display_name + real_name → 教师端可看到姓名
+- 许愿热门: votes DESC, created_at ASC
+- CORS: image endpoint + Allow-Methods 加 PUT
+- 创建精灵: 去二次确认，直接保存
+
+### 部署
+- API: wrangler deploy cf-workers/api.js
+- Workshop: wrangler pages deploy workshop-app --project-name=workshop-csp
+- Teacher: wrangler pages deploy teacher-app --project-name=teacher-csp
