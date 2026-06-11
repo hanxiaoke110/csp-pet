@@ -45,6 +45,8 @@ interface PetState {
   tickHunger: () => void;
   lastActiveAt: string;
   applyOfflineHunger: () => number;
+  dailyHungerConsumed: number;
+  hungerDate: string;
 
   // Pending rewards
   pendingExp: number;
@@ -115,6 +117,8 @@ export const usePetStore = create<PetState>((set, get) => ({
   trainingCampEndDate: '',
   trainingCampFoodsClaimed: [],
   lastActiveAt: new Date().toISOString(),
+  dailyHungerConsumed: 0,
+  hungerDate: '',
 
   selectStarter: (speciesId, petName) => {
     const species = STARTER_PETS.find(s => s.speciesId === speciesId);
@@ -259,9 +263,14 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   tickHunger: () => {
-    const { activePetId } = get();
+    const { activePetId, dailyHungerConsumed, hungerDate } = get();
     if (!activePetId) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const consumed = hungerDate === today ? dailyHungerConsumed : 0;
+    if (consumed >= 15) return; // Daily cap reached
     set(s => ({
+      dailyHungerConsumed: consumed + 1,
+      hungerDate: today,
       ownedPets: s.ownedPets.map(p =>
         p.petId === activePetId
           ? { ...p, hunger: Math.max(0, p.hunger - 1), mood: p.hunger <= 20 ? Math.max(0, p.mood - 1) : p.mood }
@@ -545,8 +554,8 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt } = get();
-    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt };
+    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate } = get();
+    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     if (activePetId) { invoke('show_pet_window').catch(() => {}); }
@@ -581,6 +590,8 @@ export const usePetStore = create<PetState>((set, get) => ({
           trainingCampEndDate: data.trainingCampEndDate || '',
           trainingCampFoodsClaimed: data.trainingCampFoodsClaimed || [],
           lastActiveAt: data.lastActiveAt || new Date().toISOString(),
+          dailyHungerConsumed: data.dailyHungerConsumed || 0,
+          hungerDate: data.hungerDate || '',
         });
       }
     } catch { /* corrupted data — ignore */ }
