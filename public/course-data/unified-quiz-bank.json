@@ -850,7 +850,7 @@
     "source": "csp_exam",
     "year": 2022,
     "knowledgePoint": "函数与递归",
-    "question": "",
+    "question": "以下关于递归的说法中，正确的是（ ）。",
     "options": [
       "A. 递归是允许使用多组参数调用函数的编程技术",
       "B. 递归是通过调用自身来求解问题的编程技术",
@@ -8907,7 +8907,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "数据类型与运算",
-    "question": "下列代码实现的是（ ） 1 void Swap(int &a, int &b) {\n\n```cpp\nb ^= a;\na ^= b;\n}\n```",
+    "question": "下列代码实现的是（ ）\n\n```cpp\nvoid Swap(int &a, int &b) {\n    if (a != b) {\n        a ^= b;\n        b ^= a;\n        a ^= b;\n    }\n}\n```",
     "options": [
       "A. a和b的异或",
       "B. a和b的同或",
