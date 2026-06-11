@@ -159,6 +159,31 @@ function WelcomeModal() {
     </div>
   );
 }
+
+function ChangelogModal() {
+  const VER = '1.5.2';
+  const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
+  if (!show) return null;
+  return (
+    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:5000 }}>
+      <div style={{ background:'#fff', borderRadius:20, padding:'32px 28px', textAlign:'center', maxWidth:340, boxShadow:'0 8px 40px rgba(0,0,0,0.2)', animation:'popIn .3s ease' }}>
+        <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
+        <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
+        <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
+          <div>🍖 每日饥饿上限 15 点</div>
+          <div>📥 奖励一键领取</div>
+          <div>🛡️ 白屏/数据丢失修复</div>
+          <div>🏭 智子工坊上线</div>
+          <div>🔧 多项体验优化</div>
+        </div>
+        <button onClick={() => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); }} style={{
+          padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
+          color:'#fff', border:'none', borderRadius:12, cursor:'pointer', boxShadow:'0 4px 12px rgba(245,158,11,0.3)',
+        }}>知道了</button>
+      </div>
+    </div>
+  );
+}
 function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -389,6 +414,7 @@ function App() {
     <BrowserRouter>
       <PetActionHandler />
       <WelcomeModal />
+      <ChangelogModal />
       <AppShell>
         <Routes>
           <Route path="/" element={<Navigate to="/courses" replace />} />
