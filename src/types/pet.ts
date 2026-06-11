@@ -258,6 +258,6 @@ export function isRemotePet(speciesId: string): boolean {
 
 export function getPetTier(speciesId: string): PetTier {
   if (STARTER_PETS.some(s => s.speciesId === speciesId)) return 'common';
-  if (speciesId.startsWith('workshop-')) return 'rare';
+  if (speciesId.startsWith('workshop-') || speciesId.startsWith('ws-')) return 'rare';
   return PET_TIERS[speciesId] || 'common';
 }
