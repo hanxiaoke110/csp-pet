@@ -669,6 +669,7 @@ function FeedbackPanel() {
         studentItems.map(item => React.createElement('div', { key:'s'+item.id, style:{ padding:'6px 0', borderBottom:'1px solid #f1f5f9' } },
           React.createElement('div', { style:{ fontWeight:600, fontSize:13 } }, item.title),
           React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginTop:2 } },
+            React.createElement('span', null, (item.teacher_name && item.teacher_name !== '学生反馈' ? '👤 ' + item.teacher_name + ' · ' : '')),
             React.createElement('span', { style:{ fontSize:10, background:'#f1f5f9', padding:'1px 6px', borderRadius:4 } }, typeLabel[item.type]||item.type),
             ' ', item.description
           ),

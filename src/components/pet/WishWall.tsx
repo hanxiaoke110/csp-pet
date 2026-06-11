@@ -428,9 +428,11 @@ export default function WishWall() {
             setSubmitting(true);
             try {
               const classCode = localStorage.getItem('csp_class_code') || '';
+              const dispName = localStorage.getItem('csp_display_name') || '';
+              const realName = localStorage.getItem('csp_student_name') || '';
               const resp = await fetch(`${API}/api/feedback`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({ type:fbType, title:fbTitle.trim(), description:fbDesc.trim(), submitter:'student', class_code:classCode }),
+                body: JSON.stringify({ type:fbType, title:fbTitle.trim(), description:fbDesc.trim(), submitter:'student', class_code:classCode, display_name:dispName, real_name:realName }),
               });
               const data = await resp.json();
               if (data.error) setMsg(data.error);

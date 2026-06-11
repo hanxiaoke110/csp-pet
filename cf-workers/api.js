@@ -640,11 +640,12 @@ export default {
       // ═══ FEEDBACK ═══
       // POST /api/feedback — submit (teacher or student)
       if (path === '/api/feedback' && request.method === 'POST') {
-        const { type, title, description, submitter, class_code } = await request.json();
+        const { type, title, description, submitter, class_code, display_name, real_name } = await request.json();
         if (!title || !description) return new Response(JSON.stringify({ error: '请填写标题和描述' }), { status: 400, headers: cors });
         if (hasBadContent(title) || hasBadContent(description)) return new Response(JSON.stringify({ error: '内容包含不当词汇，请重新输入' }), { status: 400, headers: cors });
         if (submitter === 'student') {
-          await db.prepare('INSERT INTO feedback (type, title, description, teacher_id, teacher_name, submitter, created_at) VALUES (?,?,?,?,?,?,datetime("now"))').bind(type||'feature', title, description, class_code || '', '学生反馈', 'student').run();
+        const stName = display_name || real_name || '学生反馈';
+        await db.prepare('INSERT INTO feedback (type, title, description, teacher_id, teacher_name, submitter, created_at) VALUES (?,?,?,?,?,?,datetime("now"))').bind(type||'feature', title, description, class_code || '', stName, 'student').run();
         } else {
           const teacher = await checkTeacher(request, db);
           const teacherId = teacher ? teacher.teacher_id : '';
