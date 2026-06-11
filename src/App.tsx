@@ -164,7 +164,6 @@ function ChangelogModal() {
   const VER = '1.5.2';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
-  return (
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
   return (
     <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:5000 }} onClick={dismiss}>
@@ -263,6 +262,7 @@ function App() {
 
   useEffect(() => {
     loadConfig();
+    useAIStore.getState().loadSessions();
     loadCourseData();
 
     // Restore saved window size

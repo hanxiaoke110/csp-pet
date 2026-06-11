@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useCourseStore } from '../../stores/courseStore';
+import { useAIStore } from '../../stores/aiStore';
 import AIService from '../../services/ai/ai-service';
 import { renderCodeText } from '../../utils/markdown';
 
@@ -14,10 +15,18 @@ const QUICK_BTNS = [
 ];
 
 export default function AIChat() {
-  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([{
-    role: 'assistant',
-    content: '👋 你好！我是你的AI进阶教练。\n\n我可以帮你：\n📚 总结这节课的知识点\n📝 推荐额外的洛谷练习题\n🗺️ 梳理近10节课学了什么\n📅 查看后续课程安排\n🔍 回答课外C++问题\n\n试试下面的快捷按钮，或者直接问我！',
-  }]);
+  const createSession = useAIStore(s => s.createSession);
+  const addMessage = useAIStore(s => s.addMessage);
+  const deleteSession = useAIStore(s => s.deleteSession);
+  const sessions = useAIStore(s => s.sessions);
+  const currentId = useAIStore(s => s.currentSessionId);
+  const session = sessions.find(s => s.id === currentId);
+  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>(
+    session?.messages?.length ? session.messages : [{
+      role: 'assistant',
+      content: '👋 你好！我是你的AI进阶教练。\n\n我可以帮你：\n📚 总结这节课的知识点\n📝 推荐额外的洛谷练习题\n🗺️ 梳理近10节课学了什么\n📅 查看后续课程安排\n🔍 回答课外C++问题\n\n试试下面的快捷按钮，或者直接问我！',
+    }]
+  );
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const msgsRef = useRef<HTMLDivElement>(null);
@@ -55,9 +64,16 @@ export default function AIChat() {
     const text = content || input.trim();
     if (!text || loading) return;
 
+    // Ensure session exists
+    const id = currentId || createSession();
+    const saveMsg = (role: string, msgContent: string) => {
+      try { addMessage(id, { role: role as 'user'|'assistant', content: msgContent }); } catch {}
+    };
+
     if (text === 'help_qa') {
       const ctx = buildContext() + '\n\n【模式】课外答疑。请用轻松鼓励的语气回复，告诉学生直接发题目或贴代码即可。';
       setMessages(prev => [...prev, { role: 'user', content: '🔍 我想问一个课外 C++ 问题' }]);
+      saveMsg('user', '🔍 我想问一个课外 C++ 问题');
       setInput('');
       setLoading(true);
       try {
@@ -131,6 +147,10 @@ export default function AIChat() {
           rows={2}
         />
         <button onClick={() => sendMsg()} disabled={loading || !input.trim()}>发送</button>
+        <button onClick={() => {
+          if (currentId) deleteSession(currentId);
+          setMessages([{ role: 'assistant', content: '👋 你好！我是你的AI进阶教练。\n\n对话已清空，有什么想问的？' }]);
+        }} style={{ background: '#fee2e2', color: '#ef4444', border: '1px solid #fecaca' }} className="ai-coach-qb">🗑 清空</button>
       </div>
     </div>
   );
