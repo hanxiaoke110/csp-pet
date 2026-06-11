@@ -7357,7 +7357,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "下⾯C++程序执⾏的结果是（ ）。",
+    "question": "下面C++程序执行的结果是（ ）。\n\n```cpp\nint cnt = 0;\nfor(int i = 0; i <= 20; i++) {\n    if(i % 3 == 0 && i % 5 == 0)\n        cnt++;\n}\ncout << cnt;\n```",
     "options": [
       "A. 2",
       "B. 3",
@@ -8565,7 +8565,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "其他",
-    "question": "下⾯程序输出的是（）",
+    "question": "下面程序输出的是（ ）。\n\n```cpp\n#include<iostream>\nusing namespace std;\nint func();\nint main() {\n    int i = 2;\n    cout << i << endl;\n    for (int x = 0; x < 1; x++) {\n        int i = 10;\n        cout << i << endl;\n    }\n    i = i + 1;\n    cout << i << endl;\n    {\n        i = i * i;\n        cout << i << endl;\n    }\n}\n```",
     "options": [
       "A. 2 2 3 9",
       "B. 2 10 3 9",
