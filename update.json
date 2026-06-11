@@ -1,19 +1,19 @@
 {
-  "version": "1.5.1",
-  "notes": "v1.5.1: 饥饿系统 + 领取按钮 + 白屏容错 + 答题进度 + 隐藏成就 + 许愿Lv6 + AI Debug + 工坊导入 + 题库修复",
-  "pub_date": "2026-06-07T03:46:00Z",
+  "version": "1.5.2",
+  "notes": "v1.5.2: 饥饿15点上限 + AI对话持久化 + 工坊修复 + 许愿排序 + 更新公告 + 题库修复x10 + 稳定性增强",
+  "pub_date": "2026-06-11T10:00:00Z",
   "platforms": {
     "darwin-aarch64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.1/csp-v151-arm.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.2/csp-v152-arm.dmg"
     },
     "darwin-x86_64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.1/csp-v151-intel.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.2/csp-v152-intel.dmg"
     },
     "windows-x86_64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.1/csp-v151-win.exe"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.5.2/csp-v152-win.exe"
     }
   }
 }
