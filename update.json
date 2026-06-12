@@ -5,15 +5,15 @@
   "platforms": {
     "darwin-aarch64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3lldVZUNURTZ3VnNzhxNytsUkJSdFBVMk5MYk9ZR2F0SmVmNXRZREpvalh6eHRNMERLMU16WWtLSUc0aklLbEZwL1JRZ3lQN2NHYjRMQTIvNmFMYkE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxMjQ5MDA3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuMF9hYXJjaDY0LmRtZwpzdXczeHd6WWdqZkVjOVRFQ3p3cmFaZnNZdmJIZ01jem9sOEZIZVRvWTNKdkE4S2s0clZSRGFHcDR4RkVwMDZjUmZGSi9sVjl4QTdMaWJoRmNQOWREZz09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP 学习助手_1.6.0_aarch64.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP._1.6.0_aarch64.dmg"
     },
     "darwin-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzdpWFNWQXhnM0J1Tmt6QjdqYlo4S0h5VTRxUkVLQUZvQnpvczRwSklJVmxGa1JtTFQ4eWFYNWgxc3N5aHVXRDhpeXBBd1BLT0drZXZKOXZjcms3aXdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxMjQ5MDA4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuMF94NjQuZG1nCm5WSVNKY1RBTURteW12Q2J0c21YbEVZZVUxdzlteG91N3FIdE9kYi9rMXIyT3VLTTdLVlNaVEhsNm1Nc1A0clhkaG1wT3lhdTJraTBsTGQvTVQwMUJRPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP 学习助手_1.6.0_x64.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP._1.6.0_x64.dmg"
     },
     "windows-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzU3SUFHUlRNRVB3UlArdTlOWTI3bnB1ZStkUGxoTFI3MVQ1LzQ2NFlwdThWNGliK1lMYTM3cGVCNW9VUWt6SFg5S1hZMC9vbVJPWXpieW8zQ0h4S1E0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxMjQ5MDA5CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuMF94NjQtc2V0dXAuZXhlCkxKcUg2SDVEWVJnYVhyamMvS3VBWkEzRGhjUXdCMWJTZG9zREVtdUFCd2VidkRtWFdTSUNGK1cwYXp3TWdRcnFrVUFTVFo0Tmo3T1ZNYVAwVks1K0N3PT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP 学习助手_1.6.0_x64-setup.exe"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP._1.6.0_x64-setup.exe"
     }
   }
 }
