@@ -1,7 +1,7 @@
 {
-  "version": "1.6.0",
-  "notes": "v1.6.0: CSP真题训练(240题 J/S双组别) + 饥饿三级预警 + 正确率阶梯奖励 + 班级码限制 + 题库在线更新 + 多项修复",
-  "pub_date": "2026-06-12T10:00:00Z",
+  "version": "1.6.1",
+  "notes": "v1.6.1: 选项渲染修复 + 题库数据修复(选项前缀/干扰项/流程图) + 缓存刷新 + ChangelogModal更新",
+  "pub_date": "2026-06-12T14:00:00Z",
   "platforms": {
     "darwin-aarch64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3lldVZUNURTZ3VnNzhxNytsUkJSdFBVMk5MYk9ZR2F0SmVmNXRZREpvalh6eHRNMERLMU16WWtLSUc0aklLbEZwL1JRZ3lQN2NHYjRMQTIvNmFMYkE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxMjQ5MDA3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuMF9hYXJjaDY0LmRtZwpzdXczeHd6WWdqZkVjOVRFQ3p3cmFaZnNZdmJIZ01jem9sOEZIZVRvWTNKdkE4S2s0clZSRGFHcDR4RkVwMDZjUmZGSi9sVjl4QTdMaWJoRmNQOWREZz09Cg==",
