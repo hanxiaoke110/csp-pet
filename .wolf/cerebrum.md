@@ -38,7 +38,7 @@
 - **绝不**: preview 用 48×52 — 原始素材预览都是 200×200，尺寸不一样就是糊的
 - **绝不**: 用 sips 做预览图 — `-r 90` 会旋转、`-c` 参数易出错。统一用 Python PIL：`crop(0,0,192,208) → resize(200,217) → center crop(200×200)`
 
-- 集训码和优秀码防篡改实现：随机后缀必须参与 hash，否则学生改任意一位仍有效
+- **绝不**: 用 `cargo install tauri-cli --version "^2"` 这种浮动版本！`^2` 可能拉到有编译错误的版本（如 2.11.2）。CI 必须锁死具体版本，如 `--version "=2.10.4"`，升级时手动验证后改版本号。
 - `window.set_minimizable/set_maximizable(false)` 可在 Windows 上禁用系统菜单，配合 `decorations:false`
 - PetPanel 拆组件原则：用 zustand hooks 直接在子组件取数据，减少 props 传递
 - 组件拆分不碰数据层，对现有用户数据零影响
