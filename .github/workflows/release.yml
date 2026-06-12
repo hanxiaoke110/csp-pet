@@ -17,8 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - run: npm ci
-      - run: cargo install tauri-cli --version ">=2.0, <2.11"
-      - run: cargo tauri build --target aarch64-apple-darwin
+      - run: npx tauri build --target aarch64-apple-darwin
       - uses: actions/upload-artifact@v4
         with:
           name: macos-aarch64
@@ -33,8 +32,7 @@ jobs:
         with: { node-version: '20' }
       - run: npm ci
       - run: rustup target add x86_64-apple-darwin
-      - run: cargo install tauri-cli --version ">=2.0, <2.11"
-      - run: cargo tauri build --target x86_64-apple-darwin
+      - run: npx tauri build --target x86_64-apple-darwin
       - uses: actions/upload-artifact@v4
         with:
           name: macos-x86_64
@@ -48,8 +46,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - run: npm ci
-      - run: cargo install tauri-cli --version ">=2.0, <2.11"
-      - run: cargo tauri build --target x86_64-pc-windows-msvc
+      - run: npx tauri build --target x86_64-pc-windows-msvc
       - uses: actions/upload-artifact@v4
         with:
           name: windows-x86_64
