@@ -52,7 +52,7 @@ export default function ExamTraining() {
   const hasPet = usePetStore(s => s.ownedPets.length > 0);
 
   // Load bank：localStorage 缓存优先 + 后台检查 Gitee 更新
-  const CACHE_KEY = 'csp_exam_bank_v2';
+  const CACHE_KEY = 'csp_exam_bank_v3';
   const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
   useEffect(() => {
     let cancelled = false;

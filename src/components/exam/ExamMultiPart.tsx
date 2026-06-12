@@ -89,7 +89,7 @@ export default function ExamMultiPart({ title, code, question, subItems, onSubmi
                           const a = [...answers]; a[i] = oi; setAnswers(a);
                         }}
                       >
-                        {opt}
+                        {opt}. {item.options[oi]}
                       </label>
                     );
                   })}

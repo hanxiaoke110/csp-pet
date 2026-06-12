@@ -1,5 +1,40 @@
 # 2026-05-29 — 包体优化 & 孵化系统 & 代码审查
 
+## 2026-06-12 — v1.6.0 CSP 真题训练 + 饥饿预警
+
+### 发版前必读
+- **ChangelogModal 版本号**：发版时必须更新 `src/App.tsx` 中 `ChangelogModal` 的 `VER` 为新版本号 + 更新内容
+- **v1.6.0 的 ChangelogModal 已修但未重构建**：当前 Gitee Release 的 DMG 仍是 1.5.2 的弹窗。下次发版包含此修复（commit c7867af）
+
+### CSP 真题训练
+- 新页面 `/exam`，侧边栏 `🏅 CSP 真题`（在 OJ 训练上方）
+- 3 层流程：选 J/S 组别 → 选题型(选择/阅读/填空) → 做题
+- 题库 `public/course-data/csp-exam-bank.json`：240 题(J120+S120)，2019-2024
+- 在线更新：`exam-version.json` 版本号 +1 → 学生端自动刷新（和课程数据同一模式）
+- `src/components/exam/ExamTraining.tsx`：主页面 + 远程更新逻辑
+- `src/components/exam/ExamChoice.tsx`：选择题（复用 quiz-opt CSS）
+- `src/components/exam/ExamMultiPart.tsx`：阅读+填空共用组件
+- `src/stores/quizStore.ts`：examDaily* 字段 + 3 方法（completeExamQuestion/canClaimExamDaily/claimExamDailyReward）
+- 班级码限制：`localStorage.getItem('csp_class_code')` 为空的无法进入
+- 每日任务：3选择+1阅读/填空，答对才算，+20 EXP +12g 基础
+- 正确率加成：≥80% +10 EXP +5g，100% +20 EXP +10g
+- 错题打通：答错 → quizStore.addError → 月度复盘
+
+### 饥饿预警
+- `petStore.ts` tickHunger：≤15 警告、≤10 虚弱、≤0 濒死
+- `PetWindow.tsx`：虚弱时强制显示、禁隐藏按钮、循环 unhappy 动画
+- `PetSettings.tsx`：虚弱时禁显示切换
+
+### 签名问题
+- CI 生成的 .sig 文件在 GitHub Release assets 中
+- 使用 `csp-updater-v2.key` 签名，本地签需要密码（记在别处）
+- 上传 Gitee Release 保持原文件名（签名内嵌文件名）
+
+### Gitee 注意事项
+- **默认分支是 `master`，不是 `main`**：`git push gitee main:master --force`
+- Raw 文件有 CDN 缓存：加 `?v=N` 或空 commit 触发刷新
+- 附件配额 1GB，旧 Release 需手动清理
+
 ## 2026-06-08 — PetSettings 虚弱状态禁隐藏
 - PetSettings.tsx "显示精灵" toggle 在 hunger <= 10 时禁用
 - 禁用状态：cursor not-allowed + opacity 0.5 + 灰色背景
