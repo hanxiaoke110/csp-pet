@@ -162,22 +162,23 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.5.2';
+  const VER = '1.6.0';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
   return (
     <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:5000 }} onClick={dismiss}>
-      <div style={{ background:'#fff', borderRadius:20, padding:'32px 28px', textAlign:'center', maxWidth:340, boxShadow:'0 8px 40px rgba(0,0,0,0.2)', animation:'popIn .3s ease', position:'relative' }} onClick={e => e.stopPropagation()}>
+      <div style={{ background:'#fff', borderRadius:20, padding:'32px 28px', textAlign:'center', maxWidth:360, boxShadow:'0 8px 40px rgba(0,0,0,0.2)', animation:'popIn .3s ease', position:'relative' }} onClick={e => e.stopPropagation()}>
         <button onClick={dismiss} style={{ position:'absolute', top:12, right:16, background:'none', border:'none', fontSize:18, cursor:'pointer', color:'#94a3b8' }}>✕</button>
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🍖 每日饥饿上限 15 点</div>
-          <div>📥 奖励一键领取</div>
-          <div>🛡️ 白屏/数据丢失修复</div>
-          <div>🏭 智子工坊上线</div>
-          <div>🔧 多项体验优化</div>
+          <div>🏅 CSP 真题训练 (240题, J/S双组别)</div>
+          <div>📝 每日任务 + 正确率阶梯奖励</div>
+          <div>🍖 饥饿三级预警 (≤15/≤10/≤0)</div>
+          <div>🔒 班级码限制</div>
+          <div>🌐 题库在线更新</div>
+          <div>🐛 多项 Bug 修复</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
