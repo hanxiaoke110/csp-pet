@@ -43,6 +43,14 @@ export interface QuizState {
   totalPractice: number;
   totalCorrect: number;
 
+  // CSP 真题训练
+  examDailyDate: string;
+  examDailyCompleted: { id: string; type: 'choice' | 'reading' | 'fillBlank' }[];
+  examDailyClaimed: boolean;
+  examDailyTotalAnswered: number;
+  examDailyTotalCorrect: number;
+  examGroup: 'J' | 'S' | null;
+
   addError: (questionId: string, wrongAnswer: number, correctAnswer: number, knowledgePoint?: string) => void;
   removeError: (questionId: string) => void;
   recordKpResults: (results: WeeklyKpResult[]) => void;
@@ -61,6 +69,12 @@ export interface QuizState {
   errorCount: () => number;
   load: () => Promise<void>;
   save: () => void;
+
+  // CSP 真题训练方法
+  completeExamQuestion: (questionId: string, type: 'choice' | 'reading' | 'fillBlank', isCorrect: boolean) => void;
+  canClaimExamDaily: () => boolean;
+  getExamDailyAccuracy: () => number;
+  claimExamDailyReward: () => { exp: number; coins: number; bonusLabel: string } | null;
 }
 
 const STORAGE_KEY = 'csp_quiz_state';
@@ -108,6 +122,14 @@ export const useQuizStore = create<QuizState>((set, get) => {
     superBestScore: 0,
     totalPractice: 0,
     totalCorrect: 0,
+
+    // CSP 真题训练
+    examDailyDate: '',
+    examDailyCompleted: [],
+    examDailyClaimed: false,
+    examDailyTotalAnswered: 0,
+    examDailyTotalCorrect: 0,
+    examGroup: null,
 
     addError: (questionId, wrongAnswer, correctAnswer, knowledgePoint) => {
       set(s => {
@@ -279,6 +301,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
         let data: any = {};
         try { data = JSON.parse(raw); } catch { return; }
         const today = getWeekStart();
+        const todayDate = new Date().toISOString().slice(0, 10);
         const sameWeek = data.weeklyTaskDate === today;
         set({
           errors: data.errors || [],
@@ -298,6 +321,13 @@ export const useQuizStore = create<QuizState>((set, get) => {
           weeklyTaskDone: sameWeek ? (data.weeklyTaskDone || 0) : 0,
           weeklyTaskDate: sameWeek ? (data.weeklyTaskDate || today) : today,
           extraChallengeDone: sameWeek ? (data.extraChallengeDone || false) : false,
+          // CSP 真题训练 — 每日重置（日期格式 YYYY-MM-DD，与现有 stores 一致）
+          examDailyDate: data.examDailyDate || todayDate,
+          examDailyCompleted: data.examDailyDate === todayDate ? (data.examDailyCompleted || []) : [],
+          examDailyClaimed: data.examDailyDate === todayDate ? (data.examDailyClaimed || false) : false,
+          examDailyTotalAnswered: data.examDailyDate === todayDate ? (data.examDailyTotalAnswered || 0) : 0,
+          examDailyTotalCorrect: data.examDailyDate === todayDate ? (data.examDailyTotalCorrect || 0) : 0,
+          examGroup: data.examGroup || null,
         });
       };
 
@@ -326,9 +356,93 @@ export const useQuizStore = create<QuizState>((set, get) => {
           weeklyTaskDone: s.weeklyTaskDone,
           weeklyTaskDate: s.weeklyTaskDate,
           extraChallengeDone: s.extraChallengeDone,
+          examDailyDate: s.examDailyDate,
+          examDailyCompleted: s.examDailyCompleted,
+          examDailyClaimed: s.examDailyClaimed,
+          examDailyTotalAnswered: s.examDailyTotalAnswered,
+          examDailyTotalCorrect: s.examDailyTotalCorrect,
+          examGroup: s.examGroup,
         });
         dualSave('quiz_state', STORAGE_KEY, json);
       } catch { /* quota exceeded or filesystem error */ }
+    },
+
+    // CSP 真题训练方法
+    completeExamQuestion: (questionId, type, isCorrect) => {
+      const s = get();
+      const todayDate = new Date().toISOString().slice(0, 10);
+      // Ensure examDailyDate is set to today
+      if (s.examDailyDate !== todayDate) {
+        set({ examDailyDate: todayDate, examDailyCompleted: [], examDailyClaimed: false, examDailyTotalAnswered: 0, examDailyTotalCorrect: 0 });
+      }
+      // Re-read state after potential date reset (avoid stale snapshot)
+      const current = get();
+      // Check duplicate BEFORE incrementing counters
+      if (isCorrect && current.examDailyCompleted.some(r => r.id === questionId)) return;
+      // Increment counters
+      set(state => ({
+        examDailyDate: todayDate,
+        examDailyTotalAnswered: state.examDailyTotalAnswered + 1,
+        examDailyTotalCorrect: state.examDailyTotalCorrect + (isCorrect ? 1 : 0),
+      }));
+      if (!isCorrect) {
+        s.recordAnswer(false);
+        return;
+      }
+      // 答对：加入 examDailyCompleted
+      set(state => ({
+        examDailyCompleted: [...state.examDailyCompleted, { id: questionId, type }],
+      }));
+      s.recordAnswer(true);
+      // 每 2 题 tick hunger (第2,4,6...次提交时)
+      const newLen = get().examDailyCompleted.length;
+      if (newLen > 0 && newLen % 2 === 0) {
+        try { usePetStore.getState().tickHunger(); } catch {}
+      }
+      get().save();
+    },
+
+    canClaimExamDaily: () => {
+      const s = get();
+      if (s.examDailyClaimed) return false;
+      let choiceCount = 0, hasReadingOrFill = false;
+      for (const r of s.examDailyCompleted) {
+        if (r.type === 'choice') choiceCount++;
+        else hasReadingOrFill = true;
+      }
+      return choiceCount >= 3 && hasReadingOrFill;
+    },
+
+    getExamDailyAccuracy: () => {
+      const s = get();
+      if (s.examDailyTotalAnswered === 0) return 0;
+      return s.examDailyTotalCorrect / s.examDailyTotalAnswered;
+    },
+
+    claimExamDailyReward: () => {
+      const s = get();
+      if (s.examDailyClaimed) return null;
+      if (!s.canClaimExamDaily()) return null;
+      // 计算正确率加成
+      const accuracy = s.getExamDailyAccuracy();
+      let bonusExp = 0, bonusCoins = 0, bonusLabel = '';
+      if (accuracy >= 1.0) {
+        bonusExp = 20; bonusCoins = 10; bonusLabel = '👑 全部正确！完美通关！';
+      } else if (accuracy >= 0.8) {
+        bonusExp = 10; bonusCoins = 5; bonusLabel = '🌟 正确率优秀！';
+      }
+      // 先设 guard flag
+      set({ examDailyClaimed: true });
+      // 发奖励
+      const totalExp = 20 + bonusExp;
+      const totalCoins = 12 + bonusCoins;
+      const petStore = usePetStore.getState();
+      const activePetId = petStore.activePetId;
+      if (activePetId) petStore.addExp(activePetId, totalExp);
+      const mult = petStore.getRewardMultiplier();
+      petStore.addCoins(Math.floor(totalCoins * mult));
+      get().save();
+      return { exp: totalExp, coins: totalCoins, bonusLabel };
     },
   };
 });

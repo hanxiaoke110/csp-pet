@@ -1,5 +1,13 @@
 # 2026-05-29 — 包体优化 & 孵化系统 & 代码审查
 
+## 2026-06-08 — PetSettings 虚弱状态禁隐藏
+- PetSettings.tsx "显示精灵" toggle 在 hunger <= 10 时禁用
+- 禁用状态：cursor not-allowed + opacity 0.5 + 灰色背景
+- 提示文案替换为："智子已进入虚弱状态，请先喂食！😿"
+- 通过 usePetStore 读取 activePet 的 hunger 状态
+
+# 2026-05-29 — 包体优化 & 孵化系统 & 代码审查
+
 ## 方案决策
 
 ### 精灵分级 + 孵化下载 (v1.1.0)

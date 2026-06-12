@@ -277,6 +277,21 @@ export const usePetStore = create<PetState>((set, get) => ({
           : p
       ),
     }));
+    // Hunger warnings: emit events when crossing thresholds
+    const newHunger = get().ownedPets.find(p => p.petId === activePetId)?.hunger ?? 100;
+    if (newHunger <= 0) {
+      try {
+        emit('pet-bubble', { text: '我快饿晕了...再不喂食我就要消失了！😿💔', urgent: true }).catch(() => {});
+      } catch {}
+    } else if (newHunger <= 10) {
+      try {
+        emit('pet-bubble', { text: '我太饿了，进入虚弱状态...快给我喂食吧！😿', urgent: true }).catch(() => {});
+      } catch {}
+    } else if (newHunger <= 15) {
+      try {
+        emit('pet-bubble', { text: '我有点饿了...请及时喂食给我补充饥饿值 🍖', urgent: true }).catch(() => {});
+      } catch {}
+    }
     get().save();
   },
 

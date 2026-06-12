@@ -11,6 +11,7 @@ import QuizPractice from './components/quiz/QuizPractice';
 import PetPanel from './components/pet/PetPanel';
 import AchievementsPanel from './components/achievements/AchievementsPanel';
 import OJTraining from './components/oj/OJTraining';
+import ExamTraining from './components/exam/ExamTraining';
 import SettingsPage from './components/settings/SettingsPage';
 import AdminPage from './components/admin/AdminPage';
 import { useCourseStore } from './stores/courseStore';
@@ -426,6 +427,7 @@ function App() {
           <Route path="/quiz" element={<QuizPractice />} />
           <Route path="/pet" element={<PetPanel />} />
           <Route path="/achievements" element={<AchievementsPanel />} />
+          <Route path="/exam" element={<ExamTraining />} />
           <Route path="/oj-training" element={<OJTraining />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/admin" element={<AdminPage />} />

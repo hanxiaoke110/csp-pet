@@ -204,6 +204,24 @@ export default function PetWindow() {
     }
   }, [activePet]);
 
+  // Force-show pet window when pet is in weak state (hunger <= 10)
+  useEffect(() => {
+    if (activePet && activePet.hunger <= 10) {
+      invoke('show_pet_window').catch(() => {});
+    }
+  }, [activePet?.hunger]);
+
+  // Force unhappy animation when hunger <= 10
+  useEffect(() => {
+    if (activePet && activePet.hunger <= 10) {
+      // Re-trigger unhappy every 2.5s (duration is 3s) to keep it looping
+      const trigger = () => window.__petTrigger__?.('unhappy');
+      trigger();
+      const i = setInterval(trigger, 2500);
+      return () => clearInterval(i);
+    }
+  }, [activePet?.hunger, activePet]);
+
   // Auto idle dialogue
   useEffect(() => {
     if (!activePet) return;
@@ -294,20 +312,30 @@ export default function PetWindow() {
             {[
               { icon: '📂', label: '窗口', action: () => emit('pet-action', { action: 'open-window' }).catch(() => {}) },
               { icon: '🛒', label: '商城', action: () => emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}) },
-              { icon: '👁️', label: '隐藏', action: () => { invoke('toggle_pet_window').catch(() => {}); emit('pet-visibility-toggled', {}).catch(() => {}); } },
-            ].map(btn => (
-              <button key={btn.label} onClick={(e) => { e.stopPropagation(); btn.action(); }}
+              { icon: '👁️', label: '隐藏', action: () => { invoke('toggle_pet_window').catch(() => {}); emit('pet-visibility-toggled', {}).catch(() => {}); },
+                disabled: activePet && activePet.hunger <= 10,
+                tooltip: activePet && activePet.hunger <= 10 ? '虚弱状态，无法关闭' : undefined },
+            ].map(btn => {
+              const isDisabled = btn.disabled;
+              return (
+              <button key={btn.label}
+                disabled={isDisabled}
+                title={btn.tooltip}
+                onClick={(e) => { e.stopPropagation(); if (!isDisabled) btn.action(); }}
                 style={{
-                  background: 'rgba(255,255,255,0.92)', border: 'none', borderRadius: Math.round(6 * uiScale),
+                  background: isDisabled ? '#e2e8f0' : 'rgba(255,255,255,0.92)',
+                  border: 'none', borderRadius: Math.round(6 * uiScale),
                   padding: `${Math.round(2 * uiScale)}px ${Math.round(5 * uiScale)}px`,
-                  fontSize: Math.max(10, Math.round(11 * uiScale)), cursor: 'pointer',
+                  fontSize: Math.max(10, Math.round(11 * uiScale)),
+                  cursor: isDisabled ? 'not-allowed' : 'pointer',
                   display: 'flex', alignItems: 'center', gap: Math.round(2 * uiScale),
-                  color: '#334155', fontWeight: 600,
+                  color: isDisabled ? '#94a3b8' : '#334155', fontWeight: 600,
                   boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+                  opacity: isDisabled ? 0.6 : 1,
                 }}>
                 {btn.icon}
               </button>
-            ))}
+            )})}
           </div>
         )}
       </div>

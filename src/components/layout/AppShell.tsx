@@ -119,6 +119,9 @@ export default function AppShell({ children }: Props) {
         <NavLink to="/achievements" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           🏆 成就
         </NavLink>
+        <NavLink to="/exam" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          🏅 CSP 真题
+        </NavLink>
         <NavLink to="/oj-training" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           💻 OJ 训练
         </NavLink>
