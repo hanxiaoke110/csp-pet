@@ -80,8 +80,8 @@ export const useCourseStore = create<CourseState>((set, get) => ({
       const q = searchQuery.toLowerCase();
       return l.title.toLowerCase().includes(q) ||
         (l.tags || []).some(t => t.toLowerCase().includes(q)) ||
-        (l.knowledgePoints || []).some(k => k.name.toLowerCase().includes(q)) ||
-        (l.homework || []).some(h => h.title.toLowerCase().includes(q));
+        (l.knowledgePoints || []).some(k => (typeof k === 'string' ? k : k.name).toLowerCase().includes(q)) ||
+        (l.homework || []).some(h => (h.title || '').toLowerCase().includes(q));
     });
   },
 
