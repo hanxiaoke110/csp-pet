@@ -56,11 +56,12 @@ export default function ExamTraining() {
   const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
   useEffect(() => {
     let cancelled = false;
+    let hasData = false;
     const load = async () => {
       // 1. 先读缓存，秒开
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
-        try { const d = JSON.parse(cached); if (d.questions?.length) { setBank(d.questions); setLoading(false); } } catch {}
+        try { const d = JSON.parse(cached); if (d.questions?.length) { setBank(d.questions); hasData = true; setLoading(false); } } catch {}
       }
       // 2. 后台检查远程版本
       try {
@@ -69,7 +70,6 @@ export default function ExamTraining() {
           const remoteVer = await verResp.json() as { version: number };
           const localVer = parseInt(localStorage.getItem('csp_exam_version') || '0');
           if (remoteVer.version > localVer) {
-            // 有新版本，下载
             const bankResp = await tauriFetch(`${REMOTE_BASE}/csp-exam-bank.json`, { connectTimeout: 15_000 });
             if (bankResp.ok && !cancelled) {
               const data = await bankResp.json() as { questions: any[] };
@@ -77,11 +77,23 @@ export default function ExamTraining() {
                 setBank(data.questions);
                 localStorage.setItem(CACHE_KEY, JSON.stringify(data));
                 localStorage.setItem('csp_exam_version', String(remoteVer.version));
+                hasData = true;
               }
             }
           }
         }
-      } catch { /* 网络错误，用缓存即可 */ }
+      } catch { /* 网络错误，回退到内置题库 */ }
+      // 3. 缓存和远程都不可用时，加载 App 内置题库
+      if (!cancelled && !hasData) {
+        try {
+          const resp = await fetch('/course-data/csp-exam-bank.json');
+          const data = await resp.json();
+          if (data.questions?.length) {
+            setBank(data.questions);
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+          }
+        } catch { /* 内置文件也加载失败 */ }
+      }
       if (!cancelled) setLoading(false);
     };
     load();
