@@ -209,8 +209,10 @@ function ClassBindingSection() {
   const handleBind = async () => {
     if (!nickname.trim()) { setMsg('请填写昵称'); return; }
     if (!/^[a-zA-Z一-龥]{1,10}$/.test(nickname.trim())) { setMsg('昵称只能使用中文或英文，1-10个字'); return; }
-    if (realName.trim() && !/^[一-龥]{2,10}$/.test(realName.trim())) { setMsg('真实姓名需2-10个汉字'); return; }
-    if (phone && !/^1[3-9]\d{9}$/.test(phone)) { setMsg('手机号格式不正确'); return; }
+    if (!realName.trim()) { setMsg('请填写真实姓名'); return; }
+    if (!/^[一-龥]{2,10}$/.test(realName.trim())) { setMsg('真实姓名需2-10个汉字'); return; }
+    if (!phone.trim()) { setMsg('请填写手机号'); return; }
+    if (!/^1[3-9]\d{9}$/.test(phone.trim())) { setMsg('手机号格式不正确'); return; }
     setBinding(true); setMsg('');
     try {
       const resp = await fetch(`${API}/api/classes/bind`, {
@@ -218,7 +220,8 @@ function ClassBindingSection() {
         body: JSON.stringify({
           class_code: code.trim(),
           device_hash: getDeviceId(),
-          student_name: realName.trim() || nickname.trim(),
+          student_name: realName.trim(),
+          phone: phone.trim(),
         }),
       });
       const data = await resp.json();
@@ -239,8 +242,10 @@ function ClassBindingSection() {
   const saveInfo = async () => {
     if (!nickname.trim()) { setMsg('请填写昵称'); return; }
     if (!/^[a-zA-Z一-龥]{1,10}$/.test(nickname.trim())) { setMsg('昵称只能使用中文或英文，1-10个字'); return; }
-    if (realName.trim() && !/^[一-龥]{2,10}$/.test(realName.trim())) { setMsg('真实姓名需2-10个汉字'); return; }
-    if (phone && !/^1[3-9]\d{9}$/.test(phone)) { setMsg('手机号格式不正确'); return; }
+    if (!realName.trim()) { setMsg('请填写真实姓名'); return; }
+    if (!/^[一-龥]{2,10}$/.test(realName.trim())) { setMsg('真实姓名需2-10个汉字'); return; }
+    if (!phone.trim()) { setMsg('请填写手机号'); return; }
+    if (!/^1[3-9]\d{9}$/.test(phone.trim())) { setMsg('手机号格式不正确'); return; }
     localStorage.setItem('csp_display_name', nickname.trim());
     localStorage.setItem('csp_student_name', realName.trim() || nickname.trim());
     localStorage.setItem('csp_student_phone', phone.trim());

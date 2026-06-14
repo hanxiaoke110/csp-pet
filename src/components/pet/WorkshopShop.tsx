@@ -112,14 +112,14 @@ export function WorkshopShop() {
       {pendingHatch && <HatchConfirmModal
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}
-        onStart={() => {
-          const egg = addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+        onStart={(customName) => {
+          const egg = addEgg('workshop-' + pendingHatch.pet.id, customName, pendingHatch.rarity);
           startHatching(egg.eggId);
           setPendingHatch(null);
           window.dispatchEvent(new CustomEvent('switch-pet-tab', { detail: 'hatch' }));
         }}
-        onLater={() => {
-          addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
+        onLater={(customName) => {
+          addEgg('workshop-' + pendingHatch.pet.id, customName, pendingHatch.rarity);
           setPendingHatch(null);
         }}
         onClose={() => {

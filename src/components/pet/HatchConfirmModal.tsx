@@ -5,8 +5,8 @@ import { HATCH_DURATIONS } from '../../stores/hatchStore';
 interface Props {
   petName: string;
   rarity: HatchRarity;
-  onStart: () => void;
-  onLater: () => void;
+  onStart: (name: string) => void;
+  onLater: (name: string) => void;
   onClose: () => void;
 }
 
@@ -22,6 +22,7 @@ export default function HatchConfirmModal({ petName, rarity, onStart, onLater, o
   const minStr = min >= 60_000 ? `${Math.round(min / 60_000)} 分钟` : `${Math.round(min / 1000)} 秒`;
   const maxStr = max >= 60_000 ? `${Math.round(max / 60_000)} 分钟` : `${Math.round(max / 1000)} 秒`;
   const [isEgg, setIsEgg] = useState(false);
+  const [name, setName] = useState(petName);
 
   // Pulse animation
   useEffect(() => {
@@ -57,7 +58,18 @@ export default function HatchConfirmModal({ petName, rarity, onStart, onLater, o
         </div>
 
         <div className="hatch-pet-name" style={{ color: info.color }}>
-          {petName}
+          <input
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={{
+              background: 'transparent', border: 'none', borderBottom: `2px solid ${info.color}44`,
+              fontSize: 16, fontWeight: 700, color: info.color, textAlign: 'center',
+              width: '100%', outline: 'none', padding: '4px 0',
+            }}
+            maxLength={20}
+            placeholder="给精灵取个名字..."
+          />
         </div>
 
         <div className="hatch-duration">
@@ -71,10 +83,10 @@ export default function HatchConfirmModal({ petName, rarity, onStart, onLater, o
         )}
 
         <div className="hatch-actions">
-          <button className="oj-btn oj-btn-pass" onClick={onStart}>
+          <button className="oj-btn oj-btn-pass" onClick={() => onStart(name || petName)}>
             🥚 开始孵化
           </button>
-          <button className="oj-btn oj-btn-done" onClick={onLater}>
+          <button className="oj-btn oj-btn-done" onClick={() => onLater(name || petName)}>
             🕐 稍后再说
           </button>
         </div>

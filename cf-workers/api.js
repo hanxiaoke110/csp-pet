@@ -111,7 +111,8 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS teachers (teacher_id TEXT PRIMARY KEY, phone TEXT UNIQUE, password_hash TEXT, name TEXT, token TEXT, created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS classes (class_code TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT DEFAULT '', label TEXT DEFAULT '', created_at TEXT, status TEXT DEFAULT 'active')`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS class_students (class_code TEXT, device_hash TEXT, student_name TEXT, joined_at TEXT, status TEXT DEFAULT 'active', PRIMARY KEY(class_code, device_hash))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS class_students (class_code TEXT, device_hash TEXT, student_name TEXT, phone TEXT DEFAULT '', joined_at TEXT, status TEXT DEFAULT 'active', PRIMARY KEY(class_code, device_hash))`); } catch {}
+  try { await db.exec(`ALTER TABLE class_students ADD COLUMN phone TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS generated_codes (code TEXT PRIMARY KEY, type TEXT, teacher_id TEXT, level TEXT, created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, title TEXT, description TEXT, teacher_id TEXT, teacher_name TEXT, submitter TEXT DEFAULT 'teacher', status TEXT DEFAULT 'open', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS workshop_pets (id TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT, name TEXT, element TEXT, style TEXT, description TEXT, tier TEXT, price INTEGER, pet_json TEXT, spritesheet_url TEXT, thumbnail_url TEXT, status TEXT DEFAULT 'active', created_at TEXT)`); } catch {}
@@ -267,29 +268,30 @@ export default {
 
       // Class binding (student registers to class)
       if (path === '/api/classes/bind' && request.method === 'POST') {
-        const { class_code, device_hash, student_name } = await request.json();
-        if (!class_code || !device_hash) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
-        if (student_name && !/^[a-zA-Z一-龥]{1,10}$/.test(student_name)) return new Response(JSON.stringify({ error: '姓名只能使用中文或英文，1-10个字' }), { status: 400, headers: cors });
+        const { class_code, device_hash, student_name, phone } = await request.json();
+        if (!class_code || !device_hash || !student_name) return new Response(JSON.stringify({ error: '请填写完整的班级码、姓名、手机号' }), { status: 400, headers: cors });
+        if (!/^[一-龥]{2,10}$/.test(student_name)) return new Response(JSON.stringify({ error: '真实姓名需2-10个汉字' }), { status: 400, headers: cors });
+        if (phone && !/^1[3-9]\d{9}$/.test(phone)) return new Response(JSON.stringify({ error: '手机号格式不正确' }), { status: 400, headers: cors });
 
         const cls = await db.prepare("SELECT * FROM classes WHERE class_code=? AND status='active'").bind(class_code).first();
         if (!cls) return new Response(JSON.stringify({ error: '班级码无效' }), { status: 404, headers: cors });
 
-        // Upsert student binding (preserve original joined_at)
-        await db.prepare("INSERT INTO class_students (class_code, device_hash, student_name, joined_at, status) VALUES (?,?,?,datetime('now'),'active') ON CONFLICT(class_code, device_hash) DO UPDATE SET student_name=excluded.student_name, status='active'").bind(class_code, device_hash, student_name || '').run();
+        // Upsert student binding
+        await db.prepare("INSERT INTO class_students (class_code, device_hash, student_name, phone, joined_at, status) VALUES (?,?,?,?,datetime('now'),'active') ON CONFLICT(class_code, device_hash) DO UPDATE SET student_name=excluded.student_name, phone=excluded.phone, status='active'").bind(class_code, device_hash, student_name, phone || '').run();
         return new Response(JSON.stringify({ success: true, class_code, label: cls.label, teacher_name: cls.teacher_name }), { headers: cors });
       }
 
       // PUT /api/classes/update-info — student updates their info
       if (path === '/api/classes/update-info' && request.method === 'POST') {
-        const { class_code, device_hash, student_name } = await request.json();
-        if (!class_code || !device_hash) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
-        if (student_name && !/^[a-zA-Z一-龥]{1,10}$/.test(student_name)) return new Response(JSON.stringify({ error: '姓名只能使用中文或英文，1-10个字' }), { status: 400, headers: cors });
+        const { class_code, device_hash, student_name, phone } = await request.json();
+        if (!class_code || !device_hash || !student_name) return new Response(JSON.stringify({ error: '请填写完整的班级码、姓名' }), { status: 400, headers: cors });
+        if (!/^[一-龥]{2,10}$/.test(student_name)) return new Response(JSON.stringify({ error: '真实姓名需2-10个汉字' }), { status: 400, headers: cors });
+        if (phone && !/^1[3-9]\d{9}$/.test(phone)) return new Response(JSON.stringify({ error: '手机号格式不正确' }), { status: 400, headers: cors });
 
-        // Verify student is active in class
         const student = await db.prepare("SELECT * FROM class_students WHERE class_code=? AND device_hash=? AND status='active'").bind(class_code, device_hash).first();
         if (!student) return new Response(JSON.stringify({ error: '你已不在该班级中' }), { status: 403, headers: cors });
 
-        await db.prepare("UPDATE class_students SET student_name=? WHERE class_code=? AND device_hash=?").bind(student_name || '', class_code, device_hash).run();
+        await db.prepare("UPDATE class_students SET student_name=?, phone=? WHERE class_code=? AND device_hash=?").bind(student_name, phone || '', class_code, device_hash).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
