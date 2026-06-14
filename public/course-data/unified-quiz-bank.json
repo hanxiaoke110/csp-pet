@@ -279,7 +279,7 @@
       "A. 32",
       "B. 128",
       "C. 4",
-      "D. 8 在内存储器中每个存储单元都被赋予一个唯一的序号，称为（ A）。"
+      "D. 8"
     ],
     "correctIndex": 3,
     "explanation": "",
@@ -312,7 +312,7 @@
     "knowledgePoint": "计算机基础",
     "question": "在计算机中，以下哪个选项描述的数据存储容量最小？（ ）",
     "options": [
-      "A. 字节（byte）",
+      "字节（byte）",
       "B. 比特（bit）",
       "C. 字（word）",
       "D. 千字节（kilobyte）"
@@ -1518,7 +1518,7 @@
     "knowledgePoint": "计算机基础",
     "question": "下列关于C++语言的叙述，不正确的是（ ）。",
     "options": [
-      "A. double类型变量占用内存的大小是浮动的",
+      "double类型变量占用内存的大小是浮动的",
       "B. bool类型变量占用1字节内存",
       "C. int类型变量取值范围不是无限的",
       "D. char类型变量有256种取值"
@@ -8695,8 +8695,8 @@
     "options": [
       "A. 选择排序不是⼀个稳定的排序算法",
       "B. 冒泡排序算法不是⼀种稳定的排序算法",
-      "C. `插⼊排序是⼀种稳定的排序算法",
-      "D. 如果排序前2个相等的数在序列中的前后位置顺序和排序后它们2个的前后位置顺序相同，则称为⼀种稳定的 排序算法"
+      "C. 插入排序是一种稳定的排序算法",
+      "D. 如果排序前后相等元素的相对位置保持不变，则称为稳定的排序算法"
     ],
     "correctIndex": 1,
     "explanation": "",
@@ -9269,16 +9269,17 @@
     "knowledgePoint": "数据类型与运算",
     "question": "想要计算从数字n到数字m之间（包含n和m）有多少个数字d出现，下列程序哪个能够实现（ ）。",
     "options": [
-      "A.  1 int n,m,res,d; 2 cin >> n >> m>>d; 3 for(int i = n+1; i <= m; i++){ 4 int temp = i; 5 while(temp){ 6 if(temp % 10 == d) res++; 7 temp /= 10; 8 } 9 } 10 cout << res << endl; 11 return 0;",
-      "B.  1 int n,m,res,d; 2 cin >> n >> m>>d; 3 for(int i = n; i <= m; i++){ 4 int temp = i; 5 while(temp){ 6 if(temp % 10 = d) res++; 7 temp /= 10; 8 } 9 } 10 cout << res << endl; 11 return 0;",
-      "C.  1 int n,m,res=0,d; 2 cin >> n >> m>>d; 3 for(int i = n; i <= m; i++){ 4 int temp = i; 5 while(temp){ 6 if(temp % 10 == d) res++; 7 temp /= 10; 8 } 9 } 10 cout << res << endl; 11 return 0;",
-      "D.  1 int n,m,res=0,d; 2 cin >> n >> m>>d; 3 for(int i = n; i <= m; i++){ 4 while(temp){ 5 if(temp % 10 == d) res++; 6 temp /= 10; 7 } 8 } 9 cout << res << endl; 10 return 0;"
+      "A. 程序A",
+      "B. 程序B",
+      "C. 程序C",
+      "D. 程序D"
     ],
     "correctIndex": 2,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "// A\n1 int n,m,res,d; 2 cin >> n >> m>>d; 3 for(int i = n+1; i <= m; i++){ 4 int temp = i; 5 while(temp){ 6 if(temp % 10 == d) res++; 7 temp /= 10; 8 } 9 } 10 cout << res << endl; 11 return 0;\n// B\n1 int n,m,res,d; 2 cin >> n >> m>>d; 3 for(int i = n; i <= m; i++){ 4 int temp = i; 5 while(temp){ 6 if(temp % 10 = d) res++; 7 temp /= 10; 8 } 9 } 10 cout << res << endl; 11 return 0;\n// C\n1 int n,m,res=0,d; 2 cin >> n >> m>>d; 3 for(int i = n; i <= m; i++){ 4 int temp = i; 5 while(temp){ 6 if(temp % 10 == d) res++; 7 temp /= 10; 8 } 9 } 10 cout << res << endl; 11 return 0;\n// D\n1 int n,m,res=0,d; 2 cin >> n >> m>>d; 3 for(int i = n; i <= m; i++){ 4 while(temp){ 5 if(temp % 10 == d) res++; 6 temp /= 10; 7 } 8 } 9 cout << res << endl; 10 return 0;"
   },
   "gesp-2024-12-3-13": {
     "id": "gesp-2024-12-3-13",
@@ -9287,16 +9288,17 @@
     "knowledgePoint": "数据类型与运算",
     "question": "兔⼦五元⼀只，鸡三元⼀只，⼩鸭⼦⼀元三只，现在你有⼀百元要买⼀百只，兔⼦、鸡、鸭⼦，问兔⼦、 鸡、鸭⼦各买多少只，每种必须⾄少⼀只，下列哪个程序能实现。（ ）。",
     "options": [
-      "A.  1 for(int i = 0; i <= 100; i++){ 2 for(int j = 0; j <= 100; j++){ 3 for(int k = 0; k <= 100; k++){ 4 if(i + j + k == 100 && 25 * i + 10 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }",
-      "B.  1 for(int i = 0; i <= 100; i++){ 2 for(int j = 0; j <= 100; j++){ 3 for(int k = 0; k <= 100; k++){ 4 if(i + j + k == 100 && 20 * i + 10 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }",
-      "C.  1 for(int i = 0; i <= 20; i++){ 2 for(int j = 0; j <= 34; j++){ 3 for(int k = 0; k <= 20; k++){ 4 if(i + j + k == 100 && 15 * i + 9 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }",
-      "D.  1 for(int i = 0; i <= 100; i++){ 2 for(int j = 0; j <= 100; j++){ 3 for(int k = 0; k <= 100; k++){ 4 if(i + j + k == 100 && 15 * i + 9 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }"
+      "A. 程序A",
+      "B. 程序B",
+      "C. 程序C",
+      "D. 程序D"
     ],
     "correctIndex": 3,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "// A\n1 for(int i = 0; i <= 100; i++){ 2 for(int j = 0; j <= 100; j++){ 3 for(int k = 0; k <= 100; k++){ 4 if(i + j + k == 100 && 25 * i + 10 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }\n// B\n1 for(int i = 0; i <= 100; i++){ 2 for(int j = 0; j <= 100; j++){ 3 for(int k = 0; k <= 100; k++){ 4 if(i + j + k == 100 && 20 * i + 10 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }\n// C\n1 for(int i = 0; i <= 20; i++){ 2 for(int j = 0; j <= 34; j++){ 3 for(int k = 0; k <= 20; k++){ 4 if(i + j + k == 100 && 15 * i + 9 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }\n// D\n1 for(int i = 0; i <= 100; i++){ 2 for(int j = 0; j <= 100; j++){ 3 for(int k = 0; k <= 100; k++){ 4 if(i + j + k == 100 && 15 * i + 9 * j + k == 300) 5 cout << i << \" \" << j << \" \" << k << endl; 6 } 7 } 8 }"
   },
   "gesp-2024-12-3-14": {
     "id": "gesp-2024-12-3-14",
@@ -9305,16 +9307,17 @@
     "knowledgePoint": "数据类型与运算",
     "question": "求⼩于等于N的素数的⽅法中，有⼀种⽅法是将所有从2到它本⾝减1的数都除⼀遍，如果不能整除，就是素 数。下列哪个程序，体现了这种⽅法（）",
     "options": [
-      "A.  1 if(N >= 3){ 2 cout<<2<<endl; 3 for(int i = 2;i <= N;i ++){ 4 for(int j = 2;j < i;j ++){ 5 if(i % j != 0){ 6 flag = 1; 7 } 8 } 9 if(flag == 0){ 10 cout<<i<<endl; 11 } 12 flag = 0; 13 } 14 }",
-      "B.  1 if(N >= 2){ 2 for(int i = 3;i <= N;i ++){ 3 for(int j = 2;j < i;j ++){ 4 if(i % j == 0){ 5 flag = 1; 6 } 7 } 8 if(flag == 0){ 9 cout<<i<<endl; 10 } 11 flag = 0; 12 } 13 }",
-      "C.  1 if(N >= 2){ 2 cout<<2<<endl; 3 for(int i = 3;i <= N;i ++){ 4 for(int j = 2;j < i;j ++){ 5 if(i % j == 0){ 6 flag = 1; 7 } 8 } 9 if(flag == 0){ 10 cout<<i<<endl; 11 } 12 flag = 0; 13 } 14 }",
-      "D.  1 if(N >= 2){ 2 cout<<2<<endl; 3 for(int i = 3;i <= N;i ++){ 4 for(int j = 2;j < i;j ++){ 5 if(i % j == 0){ 6 flag = 1; 7 } 8 } 9 if(flag == 0){ 10 cout<<i<<endl; 11 } 12 } 13 }"
+      "A. 程序A",
+      "B. 程序B",
+      "C. 程序C",
+      "D. 程序D"
     ],
     "correctIndex": 2,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "// A\n1 if(N >= 3){ 2 cout<<2<<endl; 3 for(int i = 2;i <= N;i ++){ 4 for(int j = 2;j < i;j ++){ 5 if(i % j != 0){ 6 flag = 1; 7 } 8 } 9 if(flag == 0){ 10 cout<<i<<endl; 11 } 12 flag = 0; 13 } 14 }\n// B\n1 if(N >= 2){ 2 for(int i = 3;i <= N;i ++){ 3 for(int j = 2;j < i;j ++){ 4 if(i % j == 0){ 5 flag = 1; 6 } 7 } 8 if(flag == 0){ 9 cout<<i<<endl; 10 } 11 flag = 0; 12 } 13 }\n// C\n1 if(N >= 2){ 2 cout<<2<<endl; 3 for(int i = 3;i <= N;i ++){ 4 for(int j = 2;j < i;j ++){ 5 if(i % j == 0){ 6 flag = 1; 7 } 8 } 9 if(flag == 0){ 10 cout<<i<<endl; 11 } 12 flag = 0; 13 } 14 }\n// D\n1 if(N >= 2){ 2 cout<<2<<endl; 3 for(int i = 3;i <= N;i ++){ 4 for(int j = 2;j < i;j ++){ 5 if(i % j == 0){ 6 flag = 1; 7 } 8 } 9 if(flag == 0){ 10 cout<<i<<endl; 11 } 12 } 13 }"
   },
   "gesp-2024-12-3-15": {
     "id": "gesp-2024-12-3-15",
@@ -9431,16 +9434,17 @@
     "knowledgePoint": "数据类型与运算",
     "question": "下⾯的描述中，（ ）不能正确定义⼀个名为Student的结构体以及⼀个包含20个元素的结构数组。",
     "options": [
-      "A.  1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 struct Student students[20];",
-      "B.  1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 Student students[20];",
-      "C.  1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 Student* students = new Student[20];",
-      "D.  1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 Student students = new Student[20];"
+      "A. 定义A",
+      "B. 定义B",
+      "C. 定义C",
+      "D. 定义D"
     ],
     "correctIndex": 3,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "// A\n1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 struct Student students[20];\n// B\n1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 Student students[20];\n// C\n1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 Student* students = new Student[20];\n// D\n1 struct Student { 2 string name; 3 int age; 4 float score; 5 }; 6 Student students = new Student[20];"
   },
   "gesp-2024-12-4-07": {
     "id": "gesp-2024-12-4-07",
@@ -9575,16 +9579,17 @@
     "knowledgePoint": "数据类型与运算",
     "question": "下⾯哪种⽅式不能实现将字符串\"Welcome to GESP!\"输出重定向到⽂件log.txt（ ）。",
     "options": [
-      "A.  1 freopen(\"log.txt\", \"w\", stdout); 2 cout << \"Welcome to GESP!\" << endl; 3 fclose(stdout);",
-      "B.  1 std::ofstream outFile(\"log.txt\"); 2 outFile << \"Welcome to GESP!\" << endl; 3 outFile.close();",
-      "C.  1 std::ofstream outFile(\"log.txt\"); 2 cout << \"Welcome to GESP!\" << endl; 3 outFile.close();",
-      "D.  1 ofstream log_file(\"log.txt\"); 2 streambuf* org_cout = cout.rdbuf(); 3 cout.rdbuf(log_file.rdbuf()); 4 cout << \"This output will go to the log file.\" << endl; 5 cout.rdbuf(oorg_cout);"
+      "A. 方式A",
+      "B. 方式B",
+      "C. 方式C",
+      "D. 方式D"
     ],
     "correctIndex": 2,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "// A\n1 freopen(\"log.txt\", \"w\", stdout); 2 cout << \"Welcome to GESP!\" << endl; 3 fclose(stdout);\n// B\n1 std::ofstream outFile(\"log.txt\"); 2 outFile << \"Welcome to GESP!\" << endl; 3 outFile.close();\n// C\n1 std::ofstream outFile(\"log.txt\"); 2 cout << \"Welcome to GESP!\" << endl; 3 outFile.close();\n// D\n1 ofstream log_file(\"log.txt\"); 2 streambuf* org_cout = cout.rdbuf(); 3 cout.rdbuf(log_file.rdbuf()); 4 cout << \"This output will go to the log file.\" << endl; 5 cout.rdbuf(oorg_cout);"
   },
   "gesp-2024-12-4-15": {
     "id": "gesp-2024-12-4-15",
@@ -9611,7 +9616,7 @@
     "knowledgePoint": "计算机基础",
     "question": "Base64 编码将每3字节的输⼊数据编码为 4 字节的输出数据。如果输⼊数据长度不是 3 的倍数，会⽤=号填 充。在Base64编码中，如果输⼊字符串的长度为10字节，编码后的字符串长度是多少（ ）",
     "options": [
-      "A. 12 字节",
+      "12 字节",
       "B. 13 字节",
       "C. 14 字节",
       "D. 16 字节"
@@ -10133,16 +10138,17 @@
     "knowledgePoint": "数据类型与运算",
     "question": "下⾯哪种⽅式不能实现将字符串\"Happy Spring!\"输出重定向到⽂件log.txt（ ）。",
     "options": [
-      "A.  1 freopen(\"log.txt\", \"w\", stdout); 2 cout << \"Happy Spring!\" << endl; 3 fclose(stdout);",
-      "B.  1 std::ofstream outFile(\"log.txt\"); 2 outFile << \"Happy Spring!\" << endl; 3 outFile.close();",
-      "C.  1 std::ofstream outFile(\"log.txt\"); 2 cout << \"Happy Spring!\" << endl; 3 outFile.close();",
-      "D.  1 ofstream log_file(\"log.txt\"); 2 streambuf* org_cout = cout.rdbuf(); 3 cout.rdbuf(log_file.rdbuf()); 4 cout << \"Happy Spring!\" << endl; 5 cout.rdbuf(org_cout);"
+      "A. 方式A",
+      "B. 方式B",
+      "C. 方式C",
+      "D. 方式D"
     ],
     "correctIndex": 2,
     "explanation": "",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false
+    "hasImage": false,
+    "code": "// A\n1 freopen(\"log.txt\", \"w\", stdout); 2 cout << \"Happy Spring!\" << endl; 3 fclose(stdout);\n// B\n1 std::ofstream outFile(\"log.txt\"); 2 outFile << \"Happy Spring!\" << endl; 3 outFile.close();\n// C\n1 std::ofstream outFile(\"log.txt\"); 2 cout << \"Happy Spring!\" << endl; 3 outFile.close();\n// D\n1 ofstream log_file(\"log.txt\"); 2 streambuf* org_cout = cout.rdbuf(); 3 cout.rdbuf(log_file.rdbuf()); 4 cout << \"Happy Spring!\" << endl; 5 cout.rdbuf(org_cout);"
   },
   "gesp-2025-06-3-01": {
     "id": "gesp-2025-06-3-01",

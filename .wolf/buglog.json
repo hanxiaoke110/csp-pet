@@ -277,189 +277,415 @@
       "error_message": "许愿墙投票先扣票后调API，API报错后票已扣",
       "root_cause": "handleVote中useTicket()在API调用前执行，API返回'已投过票'时票已消耗",
       "fix": "改为API成功后才调useTicket()",
-      "tags": ["wish-wall", "vote", "logic-order"]
+      "tags": [
+        "wish-wall",
+        "vote",
+        "logic-order"
+      ]
     },
     {
       "date": "2026-06-02",
       "error_message": "许愿票先加后扣钱，扣钱失败票也到账",
       "root_cause": "addTickets()在spendCoins()之前调用，无视spendCoins返回值",
       "fix": "先spendCoins()检查返回值，成功才addTickets()",
-      "tags": ["shop", "tickets", "logic-order"]
+      "tags": [
+        "shop",
+        "tickets",
+        "logic-order"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "ensureSchema缺wishes/votes的CREATE TABLE，新D1部署崩溃",
       "root_cause": "只做了ALTER TABLE迁移，未覆盖CREATE TABLE IF NOT EXISTS",
       "fix": "补全所有核心表的CREATE TABLE IF NOT EXISTS",
-      "tags": ["d1", "schema", "deployment"]
+      "tags": [
+        "d1",
+        "schema",
+        "deployment"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "ensureSchema建classes表缺teacher_name列",
       "root_cause": "CREATE TABLE只包含class_code/teacher_id/label/created_at/status，漏了teacher_name",
       "fix": "CREATE TABLE加teacher_name，加ALTER TABLE迁移旧表",
-      "tags": ["d1", "schema", "classes"]
+      "tags": [
+        "d1",
+        "schema",
+        "classes"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "votes表无UNIQUE索引，投票竞态修复无效",
       "root_cause": "INSERT-try-catch依赖UNIQUE约束抛异常，但表上无此索引",
       "fix": "CREATE UNIQUE INDEX IF NOT EXISTS idx_votes_unique ON votes(wish_id, device_hash)",
-      "tags": ["vote", "race-condition", "d1", "index"]
+      "tags": [
+        "vote",
+        "race-condition",
+        "d1",
+        "index"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "realName变量名错误，学生真名自动入班时丢失",
       "root_cause": "Worker中destructure为real_name但引用时用了realName(camelCase)",
       "fix": "统一使用real_name",
-      "tags": ["variable-name", "typo", "class-binding"]
+      "tags": [
+        "variable-name",
+        "typo",
+        "class-binding"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "英文昵称无法绑定班级",
       "root_cause": "后端正则/^[一-龥]{2,10}$/只接受纯汉字",
       "fix": "改为/^[a-zA-Z一-龥]{1,10}$/允许英文",
-      "tags": ["regex", "validation", "class-binding"]
+      "tags": [
+        "regex",
+        "validation",
+        "class-binding"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "Admin看不到学生列表",
       "root_cause": "/api/teacher/students只验证X-Teacher-Token，Admin token被拒",
       "fix": "加Admin token回退，admin模式跳过teacher_id过滤",
-      "tags": ["admin", "auth", "students"]
+      "tags": [
+        "admin",
+        "auth",
+        "students"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "教师Web白屏（JS语法错误）",
       "root_cause": "编辑时留了重复的'移除'按钮，多了2个}",
       "fix": "删除重复代码行",
-      "tags": ["syntax", "js", "teacher-app"]
+      "tags": [
+        "syntax",
+        "js",
+        "teacher-app"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "unbind_pending状态学生立即被锁定",
       "root_cause": "validate端点只接受status='active'，pending不被认可",
       "fix": "验证时接受active和unbind_pending两种状态",
-      "tags": ["unbind", "status", "class-binding"]
+      "tags": [
+        "unbind",
+        "status",
+        "class-binding"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "兑换码Worker用UTC时间而Chrome插件用本地时间，生成码不匹配",
       "root_cause": "getDateStr使用getUTCFullYear等UTC方法",
       "fix": "改用getFullYear/getMonth/getDate本地时间方法",
-      "tags": ["code-generation", "timezone", "utc"]
+      "tags": [
+        "code-generation",
+        "timezone",
+        "utc"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "GESP第13题缺代码部分，显示不完整",
       "root_cause": "原题代码在GESP PDF中是图片格式，导入时丢失",
       "fix": "手动补充代码块到unified-quiz-bank.json",
-      "tags": ["quiz", "data", "gesp"]
+      "tags": [
+        "quiz",
+        "data",
+        "gesp"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "周计算getWeekKey偏差1天",
       "root_cause": "使用Math.ceil((dayOfYear+jan1.getDay()+1)/7)在特定日期过渡不当",
       "fix": "改用(jan1.getDay()+6)%7调整后计算",
-      "tags": ["week", "off-by-one", "crypto"]
+      "tags": [
+        "week",
+        "off-by-one",
+        "crypto"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "许愿票class_students自动入班用空device_hash",
       "root_cause": "INSERT OR IGNORE中device_hash写死为空字符串",
       "fix": "传入实际的device_hash参数",
-      "tags": ["wish", "class-binding", "device-hash"]
+      "tags": [
+        "wish",
+        "class-binding",
+        "device-hash"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "GESP 2023-12-4-03 缺代码块，题目不完整",
       "root_cause": "原题代码在GESP PDF中是图片格式，导入时丢失",
       "fix": "手动补充代码块（指针传参+数组初始化题）到unified-quiz-bank.json",
-      "tags": ["quiz", "data", "gesp"]
+      "tags": [
+        "quiz",
+        "data",
+        "gesp"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "GESP 2024-12-4-10 排序算法题选项BC缺O(n²)",
       "root_cause": "数学符号在导入时丢失",
       "fix": "补全选项A的3个单元操作/B的O(n²)/C的O(n²)到unified-quiz-bank.json",
-      "tags": ["quiz", "data", "gesp", "sorting"]
+      "tags": [
+        "quiz",
+        "data",
+        "gesp",
+        "sorting"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "题库每次修改需要发版才能生效",
       "root_cause": "题库打包在App内，无远程更新机制",
       "fix": "App.tsx启动时从Gitee下载unified-quiz-bank.json存localStorage，QuizPractice优先用缓存",
-      "tags": ["quiz", "hot-update", "remote-data"]
+      "tags": [
+        "quiz",
+        "hot-update",
+        "remote-data"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "全系收集成就只给10g，不是描述的200g+改名卡",
       "root_cause": "成就系统所有成就统一只给10g，无差异化奖励",
       "fix": "为37个成就分别配置差异化奖励（10g~300g），高难度成就加改名卡",
-      "tags": ["achievements", "reward", "balance"]
+      "tags": [
+        "achievements",
+        "reward",
+        "balance"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "教师Web花名正则只接受汉字，英文名教师无法注册",
       "root_cause": "后端正则/^[一-龥]{2,10}$/只接受纯汉字",
       "fix": "改为/^[a-zA-Z一-龥]{2,10}$/",
-      "tags": ["teacher", "regex", "registration"]
+      "tags": [
+        "teacher",
+        "regex",
+        "registration"
+      ]
     },
     {
       "date": "2026-06-03",
       "error_message": "Admin兑换码页面报'请先登录'",
       "root_cause": "EXC/CAMP端点只验证X-Teacher-Token，无admin回退",
       "fix": "EXC/CAMP端点加checkAdmin回退",
-      "tags": ["admin", "auth", "code-generation"]
+      "tags": [
+        "admin",
+        "auth",
+        "code-generation"
+      ]
     },
     {
       "date": "2026-06-04",
       "error_message": "v1.4.0 macOS更新链接404",
       "root_cause": "UpdateChecker.tsx硬编码文件名csp-v{short}-{arch}，不看update.json实际URL。Gitee上传文件名与App期望不一致",
       "fix": "Gitee上传文件严格按App命名规则：csp-v140-arm.dmg, csp-v140-intel.dmg, csp-v140-win.exe",
-      "tags": ["release", "update", "filename", "gitee"]
+      "tags": [
+        "release",
+        "update",
+        "filename",
+        "gitee"
+      ]
     },
     {
       "date": "2026-06-05",
       "error_message": "商城抽卡后，HatchConfirmModal点X关闭导致宠物蛋丢失",
       "root_cause": "HatchConfirmModal的onClose只调用setPendingHatch(null)清空状态，不调用addEgg()保存蛋。金币已在确认购买时扣除，但蛋没有进入孵化队列",
       "fix": "onClose改为和onLater一样：先addEgg()再setPendingHatch(null)，确保蛋进入孵化队列",
-      "tags": ["pet", "gacha", "hatch", "data-loss"]
+      "tags": [
+        "pet",
+        "gacha",
+        "hatch",
+        "data-loss"
+      ]
     },
     {
       "date": "2026-06-06",
       "error_message": "教练端 AI Debug '分析中' 永远转圈不返回结果",
       "root_cause": "ai-provider.js 的 fetch() 无超时，API 不响应就永久挂起；提示词里反引号 ``` 嵌套在模板字符串中导致 JS ReferenceError",
       "fix": "sendMessage 加 30s Promise.race 超时；所有提示词改为纯字符串拼接消除反引号",
-      "tags": ["coach", "ai-debug", "timeout", "template-literal"]
+      "tags": [
+        "coach",
+        "ai-debug",
+        "timeout",
+        "template-literal"
+      ]
     },
     {
       "date": "2026-06-06",
       "error_message": "教练端 AI Debug 太死板：用不同算法、不同写法被判错",
       "root_cause": "系统提示词让 AI 对参考答案，buildDebugContext 用户提示词也写「不要因为写法不同就判错」，两者矛盾",
       "fix": "推倒重来为推演模式：AI 当代码追踪器，读题→推演→对比→检查→结论。系统+用户提示词一致",
-      "tags": ["coach", "ai-debug", "prompt", "accuracy"]
+      "tags": [
+        "coach",
+        "ai-debug",
+        "prompt",
+        "accuracy"
+      ]
     },
     {
       "date": "2026-06-06",
       "error_message": "教练端 AI Debug 太宽容：错误代码被判定为正确",
       "root_cause": "评审模式下 AI 偷懒直接说对，没有实际推演代码",
       "fix": "改为推演模式，强制 AI 逐行执行学生代码，提交题目要求+样例输入，必须实际推演",
-      "tags": ["coach", "ai-debug", "prompt", "false-positive"]
+      "tags": [
+        "coach",
+        "ai-debug",
+        "prompt",
+        "false-positive"
+      ]
     },
     {
       "date": "2026-06-06",
       "error_message": "工坊部署后 Cloudflare Pages 页面不更新",
       "root_cause": "工坊无自动 CI/CD，需要手动执行 wrangler pages deploy；Cloudflare Pages 不会自动拉取 Gitee 提交",
       "fix": "手动执行 CLOUDFLARE_API_TOKEN=\"xxx\" npx wrangler pages deploy workshop-app --project-name=workshop-csp",
-      "tags": ["workshop", "deployment", "cloudflare-pages"]
+      "tags": [
+        "workshop",
+        "deployment",
+        "cloudflare-pages"
+      ]
     },
     {
       "date": "2026-06-06",
       "error_message": "宠物饥饿系统 tickHunger 定义了但从未被调用",
       "root_cause": "petStore 有 tickHunger 函数，但 App.tsx 没有任何 setInterval 或组件来调用它；饥饿功能形同虚设",
       "fix": "App.tsx 加 10 分钟 setInterval；加 lastActiveAt + applyOfflineHunger；QuizPractice 每题 -1",
-      "tags": ["pet", "hunger", "dead-code"]
+      "tags": [
+        "pet",
+        "hunger",
+        "dead-code"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "store.getState() called on Zustand hook return",
+      "root_cause": "useDungeonStore() returns state snapshot, not store object",
+      "fix": "Changed to useDungeonStore.getState() static call",
+      "tags": [
+        "crash",
+        "app"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "RewardScreen battle data nullified before reading",
+      "root_cause": "finishBattle() sets battle=null before reading stageId/correctCount",
+      "fix": "Capture battleData before calling finishBattle()",
+      "tags": [
+        "data-corruption",
+        "reward"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "FableCard not shown when correctIndex=0",
+      "root_cause": "!currentQuestion.correctIndex is falsy when answer is A (index 0)",
+      "fix": "Changed to selectedOption !== currentQuestion.correctIndex",
+      "tags": [
+        "logic",
+        "battle"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "School type missing 'dream'",
+      "root_cause": "Type not updated when 6th school added",
+      "fix": "Added 'dream' to School union type",
+      "tags": [
+        "types",
+        "schools"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "Duplicate RANK_TIER_NAMES export",
+      "root_cause": "Second declaration with mermaid school duplicated first",
+      "fix": "Removed duplicate, kept single declaration with 6 schools",
+      "tags": [
+        "build",
+        "game-logic"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "claim-daily uses wrong variable dh instead of device_hash",
+      "root_cause": "dh from previous block scope leaked",
+      "fix": "Changed bind(dh) to bind(device_hash)",
+      "tags": [
+        "api",
+        "crash"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "checkRankUp never called in answerQuestion",
+      "root_cause": "addRankPoints was called but rank tier never recalculated",
+      "fix": "Added get().checkRankUp() after addRankPoints",
+      "tags": [
+        "ranking",
+        "store"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "Stage HP hardcoded to 3 (ignores stage definition)",
+      "root_cause": "startBattle always uses const hp = isBoss ? 5 : 3",
+      "fix": "Read stage.hp from dungeon definition, fallback to 3",
+      "tags": [
+        "balance",
+        "battle"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "Badge count hardcoded to 24 (actually 38)",
+      "root_cause": "Manual count vs actual BADGE_DEFS keys",
+      "fix": "Changed to Object.keys(BADGE_DEFS).length",
+      "tags": [
+        "profile",
+        "ux"
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "error_message": "HealingScreen navigate(-1) no fallback",
+      "root_cause": "Browser history may be empty",
+      "fix": "Wrapped in try/catch with navigate('/map') fallback",
+      "tags": [
+        "healing",
+        "navigation"
+      ]
+    },
+    {
+      "date": "2026-06-14",
+      "error_message": "unified-quiz-bank.json: 11 questions had corrupted options",
+      "root_cause": "Data import corruption: bleeding text, code in options, stray backticks",
+      "fix": "Fixed 11 questions: trimmed bleeding text (1), stripped prefix (3), removed backtick+shortened (1), moved code to code field (7)",
+      "tags": [
+        "quiz",
+        "data-corruption",
+        "options"
+      ]
     }
   ]
 }

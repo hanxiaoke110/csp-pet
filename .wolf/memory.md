@@ -611,3 +611,60 @@ csp-v{版本号去点}-win.exe     (如 csp-v140-win.exe)
 - API: wrangler deploy cf-workers/api.js
 - Workshop: wrangler pages deploy workshop-app --project-name=workshop-csp
 - Teacher: wrangler pages deploy teacher-app --project-name=teacher-csp
+
+## 2026-06-13 — 潜龙闭关・学霸副本攻略 项目初始化
+
+### 完成内容
+- **Phase 1**: 项目脚手架（28文件）、类型系统、8副本40关卡定义、240题自动映射、5流派×8段位体系、D1（6表）+ API（10端点）
+- **Phase 2**: RegisterScreen（2步注册）、DungeonMap（8节点地图）、DungeonEntrance（关卡+Boss）、BattleScreen（HP/连击/暴击）、RewardScreen
+- **Phase 3**: LeaderboardScreen（4维度/班级全服）、ProfileScreen（24徽章5稀有度）
+
+### 技术决策
+- 5流派：修仙（乾卦六龙）、战术特勤、星轨学会、方块世界（MC）、代码神殿
+- 8段位统一后端映射，前端按流派显示不同称号
+- 班级排行默认+全服榜可选（2025年研究支持的保护低分段设计）
+- 软删除学生管理（status='inactive'）
+- 独立站点 dungeon.cspstudy.top，后期桌宠通过链接接入
+
+### 构建
+- Dungeon JS: 52.7KB (15.6KB gzip)
+- Dungeon CSS: 5.1KB (1.7KB gzip)
+- 零Tauri依赖，纯Web
+
+### 待部署
+- CF Worker: `cd cf-workers && npx wrangler deploy`
+- CF Pages: `npx wrangler pages deploy dist-dungeon --project-name=dungeon-csp`
+
+## 2026-06-14 — 统一题库选项修复
+
+### 问题
+unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
+- 1 道题选项 D 有来自相邻题的文本渗入
+- 3 道题选项 A 有多余的 "A. " 前缀
+- 1 道题选项 C 有飘移的反引号、选项 D 过于冗长
+- 7 道题的 C++ 代码块被塞进 options 数组而不是 code 字段
+
+### 修复
+- csp-j-2019-003: 选项 D 修剪渗入文本 → "D. 8"
+- csp-j-2023-013 / gesp-2023-03-2-03 / gesp-2025-03-3-01: 选项 A 去除多余前缀
+- gesp-2024-06-4-10: 选项 C 去除反引号，选项 D 精简为 "如果排序前后相等元素的相对位置保持不变，则称为稳定的排序算法"
+- gesp-2024-12-3-{12,13,14} / gesp-2024-12-4-{06,14} / gesp-2025-03-4-15: 代码从 options 移至 code 字段（格式化代码块，选项改为简短标签 "程序A/B/C/D" 等）
+
+### 格式规范
+- 选项存储时包含 "A. " 前缀（渲染代码用 `/^[A-D][.、]\s*/` 去除）
+- 含代码的题目应将代码放在 `code` 字段（渲染为 `<pre><code>`），选项使用简短标签
+
+## 2026-06-13 — 错题修炼系统 + 寓言教学法集成
+
+### 新增
+- **fables.json**: 13篇CSPJ知识点寓言（贪心/递归/栈/二分/哈夫曼/DP/二叉树/排列组合/进制/排序/指针/图论/时间复杂度），每篇含「故事+揭秘+一句话」
+- **FableCard.tsx**: 寓言卡片组件（先体验后命名模式，点击揭秘）
+- **HealingScreen.tsx**: 疗伤修炼模式（连续答对3道同类题净化弱点）
+- **Store新增**: weakPoints追踪、mistakeNotebook错题本、healing状态机
+- **BattleScreen改造**: 答错自动匹配寓言+记录弱点+入错题本
+- **ProfileScreen改造**: 弱点雷达（≥3触发疗伤）+ 错题本计数
+
+### 教育设计
+- 答错→守关者讲寓言（先体验后命名）→加入错题本→弱点+1
+- 同知识点错3次→触发疗伤：必须连续答对3题才能继续
+- 疗伤中再错→换寓言角度重新讲

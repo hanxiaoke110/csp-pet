@@ -8,6 +8,8 @@
 - 独立查询（跨文件搜索、GitHub 查资料、多文件探索）优先用 Agent subagent，不占主 context
 
 ## Learnings
+- 统一题库选项格式：选项存储时应包含 "A. " 前缀，渲染代码通过 `/^[A-D][.、]\s*/` 去除前缀并单独显示字母标签
+- 含 C++ 代码的选择题应将代码放在 `code` 字段（渲染为 `<pre><code>`），选项使用简短标签如 "A. 程序A" / "B. 程序B"
 - Tauri v2 插件必须三层配齐：Capability 权限 + Scope 范围 + Rust 端 `.plugin()` 注册
 - `appDataDir()` 不保证尾部有 `/`，路径拼接必须显式加 `/` 或用 `join()`
 - Gitee 默认分支是 `master`，不是 `main`
@@ -24,6 +26,8 @@
 - 新增精灵需要同时做：spritesheet → Gitee + preview → public/ + pet.ts 配置，缺一不可
 
 ## Do-Not-Repeat
+- **绝不**: 将 C++ 代码塞进 quiz options 数组 — 应放在 `code` 字段，选项用简短标签
+- **绝不**: 选项字段包含来自相邻题目的渗入文本 — 数据导入后应校验选项完整性
 - **绝不**: Promise 链只用 `.then()` 不加 `.catch()` — 错误会被静默吞掉
 - **绝不**: 在 Tauri WebView 中用浏览器 `fetch` 访问外部 URL — 用 `@tauri-apps/plugin-http`
 - **绝不**: 在 Tauri v2 中配了 fs plugin 但不加 `fs:scope` — 默认 scope 为空
