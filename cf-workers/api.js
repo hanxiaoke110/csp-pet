@@ -128,6 +128,14 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE classes ADD COLUMN teacher_name TEXT DEFAULT ''`); } catch {}
   // Unique index for vote dedup (atomic INSERT race-condition fix)
   try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_votes_unique ON votes(wish_id, device_hash)`); } catch {}
+  // ── Dungeon tables ──
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, question_id TEXT NOT NULL, dungeon_id TEXT NOT NULL, was_correct INTEGER DEFAULT 0, time_spent_ms INTEGER DEFAULT 0, season TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_dungeon_attempts_dh ON dungeon_attempts(device_hash, created_at)`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_daily_tasks (device_hash TEXT NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, stages_cleared INTEGER DEFAULT 0, bosses_defeated INTEGER DEFAULT 0, all_done INTEGER DEFAULT 0, claimed INTEGER DEFAULT 0, PRIMARY KEY (device_hash, date))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_broadcasts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT DEFAULT '', display_name TEXT DEFAULT '', school TEXT DEFAULT 'cultivation', message TEXT NOT NULL, broadcast_type TEXT DEFAULT 'dungeon_clear', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
   _schemaEnsured = true;
 }
 
@@ -952,6 +960,308 @@ export default {
         if (result && result.error) return new Response(JSON.stringify({ error: typeof result.error === 'string' ? result.error : (result.error.message || 'API调用失败') }), { status: 400, headers: cors });
 
         return new Response(JSON.stringify({ provider, result }), { headers: cors });
+      }
+
+      // ═══════════════════════════════════════════
+      // 🏰 潜龙闭关 · 学霸副本攻略 API
+      // ═══════════════════════════════════════════
+
+      // ── POST /api/dungeon/login ──
+      if (path === '/api/dungeon/login' && request.method === 'POST') {
+        const body = await request.json();
+        const { real_name, phone } = body;
+        if (!real_name || !phone) {
+          return new Response(JSON.stringify({ error: '姓名和手机号缺一不可' }), { status: 400, headers: cors });
+        }
+        if (!/^1[3-9]\d{9}$/.test(phone)) {
+          return new Response(JSON.stringify({ error: '手机号格式不正确' }), { status: 400, headers: cors });
+        }
+        const player = await db.prepare('SELECT * FROM dungeon_players WHERE real_name=? AND phone=?').bind(real_name, phone).first();
+        if (!player) {
+          return new Response(JSON.stringify({ error: '未找到账号，请检查姓名和手机号，或先注册' }), { status: 404, headers: cors });
+        }
+        if (player.status !== 'active') {
+          return new Response(JSON.stringify({ error: '你的修炼权限已被暂停，请联系老师' }), { status: 403, headers: cors });
+        }
+        // Get full progress
+        const dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(player.device_hash).all();
+        const badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(player.device_hash).all();
+        const today = new Date().toISOString().slice(0,10);
+        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(player.device_hash, today).first();
+        // Update login streak and last login
+        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+        const streakUpdate = player.last_login_date === yesterday ? player.login_streak + 1 :
+                             player.last_login_date === today ? player.login_streak : 1;
+        await db.prepare('UPDATE dungeon_players SET login_streak=?, last_login_date=?, updated_at=datetime(\'now\') WHERE device_hash=?')
+          .bind(streakUpdate, today, player.device_hash).run();
+        player.login_streak = streakUpdate;
+        return new Response(JSON.stringify({
+          success: true,
+          player,
+          dungeons: dungeons.results,
+          badges: (badges.results || []).map(b => b.badge_id),
+          dailyTasks: tasks || { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 },
+        }), { headers: cors });
+      }
+
+      // ── POST /api/dungeon/register ──
+      if (path === '/api/dungeon/register' && request.method === 'POST') {
+        const body = await request.json();
+        const { device_hash, class_code, display_name, real_name, phone, school } = body;
+        if (!device_hash || !class_code || !display_name || !real_name || !phone) {
+          return new Response(JSON.stringify({ error: '班级码、昵称、姓名、手机号缺一不可' }), { status: 400, headers: cors });
+        }
+        if (!/^1[3-9]\d{9}$/.test(phone)) {
+          return new Response(JSON.stringify({ error: '手机号格式不正确' }), { status: 400, headers: cors });
+        }
+        if (display_name.length < 2 || display_name.length > 8) {
+          return new Response(JSON.stringify({ error: '昵称需2-8字' }), { status: 400, headers: cors });
+        }
+        // Validate class code
+        const cls = await db.prepare('SELECT class_code, teacher_id, teacher_name, label FROM classes WHERE class_code=? AND status=\'active\'').bind(class_code).first();
+        if (!cls) {
+          return new Response(JSON.stringify({ error: '班级码无效或班级已失效' }), { status: 400, headers: cors });
+        }
+        // Check existing player
+        const existing = await db.prepare('SELECT device_hash, status FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
+        if (existing && existing.status === 'active') {
+          return new Response(JSON.stringify({ error: '该设备已注册，无需重复注册' }), { status: 409, headers: cors });
+        }
+        const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(school) ? school : 'cultivation';
+        if (existing && existing.status === 'inactive') {
+          await db.prepare('UPDATE dungeon_players SET status=\'active\', display_name=?, real_name=?, phone=?, class_code=?, school=?, teacher_id=?, updated_at=datetime(\'now\') WHERE device_hash=?')
+            .bind(display_name, real_name, phone, class_code, validSchool, cls.teacher_id, device_hash).run();
+        } else {
+          await db.prepare('INSERT OR REPLACE INTO dungeon_players (device_hash, class_code, teacher_id, display_name, real_name, phone, status, school, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,datetime(\'now\'),datetime(\'now\'))')
+            .bind(device_hash, class_code, cls.teacher_id, display_name, real_name, phone, 'active', validSchool).run();
+          // Init dungeon progress
+          const dungeonIds = ['dungeon-01','dungeon-02','dungeon-03','dungeon-04','dungeon-05','dungeon-06','dungeon-07','dungeon-08'];
+          for (const dId of dungeonIds) {
+            const initStatus = (dId === 'dungeon-01') ? 'unlocked' : 'locked';
+            await db.prepare('INSERT OR IGNORE INTO dungeon_progress (device_hash, dungeon_id, status, total_stages) VALUES (?,?,?,5)').bind(device_hash, dId, initStatus).run();
+          }
+        }
+        const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
+        return new Response(JSON.stringify({ success: true, player }), { headers: cors });
+      }
+
+      // ── GET /api/dungeon/status ──
+      if (path === '/api/dungeon/status' && request.method === 'GET') {
+        const dh = url.searchParams.get('device_hash') || '';
+        if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(dh).first();
+        if (!player) return new Response(JSON.stringify({ success: false, error: '未注册' }), { headers: cors });
+        if (player.status !== 'active') return new Response(JSON.stringify({ success: false, error: '你的修炼权限已被暂停，请联系你的老师恢复' }), { headers: cors });
+        const dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(dh).all();
+        const badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(dh).all();
+        const today = new Date().toISOString().slice(0,10);
+        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(dh, today).first();
+        return new Response(JSON.stringify({
+          success: true,
+          player,
+          dungeons: dungeons.results,
+          badges: (badges.results || []).map(b => b.badge_id),
+          dailyTasks: tasks || { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 },
+        }), { headers: cors });
+      }
+
+      // ── POST /api/dungeon/report ──
+      if (path === '/api/dungeon/report' && request.method === 'POST') {
+        const body = await request.json();
+        const { device_hash, question_id, dungeon_id, was_correct, time_spent_ms } = body;
+        if (!device_hash || !question_id) return new Response(JSON.stringify({ error: '缺少参数' }), { status: 400, headers: cors });
+        await db.prepare('INSERT INTO dungeon_attempts (device_hash, question_id, dungeon_id, was_correct, time_spent_ms, season) VALUES (?,?,?,?,?,?)')
+          .bind(device_hash, question_id, dungeon_id || '', was_correct ? 1 : 0, time_spent_ms || 0, '2026-autumn').run();
+        return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+
+      // ── POST /api/dungeon/sync ──
+      if (path === '/api/dungeon/sync' && request.method === 'POST') {
+        const body = await request.json();
+        const { device_hash, class_code, display_name, player_level, exp, gold, rank_tier, rank_points, total_answered, total_correct, current_streak, max_streak, login_streak, school } = body;
+        if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(school) ? school : 'cultivation';
+        await db.prepare(`UPDATE dungeon_players SET
+          player_level=?, exp=?, gold=?, rank_tier=?, rank_points=?,
+          total_answered=?, total_correct=?, current_streak=?, max_streak=?,
+          login_streak=?, school=?, updated_at=datetime('now')
+          WHERE device_hash=?`)
+          .bind(player_level||1, exp||0, gold||0, rank_tier||1, rank_points||0,
+                total_answered||0, total_correct||0, current_streak||0, max_streak||0,
+                login_streak||0, validSchool, device_hash).run();
+        // Sync dungeon progress
+        if (body.dungeon_progress && Array.isArray(body.dungeon_progress)) {
+          for (const dp of body.dungeon_progress) {
+            await db.prepare(`INSERT OR REPLACE INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
+              VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))`)
+              .bind(device_hash, dp.dungeonId, dp.status, dp.completedStages||0, dp.totalStages||5,
+                    dp.currentStageId||null, dp.bossDefeated?1:0, dp.bestScore||0, dp.bestRating||'D').run();
+          }
+        }
+        // Sync badges
+        if (body.badges && Array.isArray(body.badges)) {
+          for (const bid of body.badges) {
+            await db.prepare('INSERT OR IGNORE INTO dungeon_badges (device_hash, badge_id) VALUES (?,?)').bind(device_hash, bid).run();
+          }
+        }
+        return new Response(JSON.stringify({ success: true, synced: true }), { headers: cors });
+      }
+
+      // ── GET /api/dungeon/leaderboard ──
+      if (path === '/api/dungeon/leaderboard' && request.method === 'GET') {
+        const scope = url.searchParams.get('scope') || 'class';
+        const type = url.searchParams.get('type') || 'power';
+        const cc = url.searchParams.get('class_code') || '';
+        const dh = url.searchParams.get('device_hash') || '';
+        let orderBy = 'rank_points DESC';
+        if (type === 'streak') orderBy = 'max_streak DESC';
+        else if (type === 'conquest') orderBy = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') DESC';
+        else if (type === 'badge') orderBy = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) DESC';
+        let query, params;
+        if (scope === 'class' && cc) {
+          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
+          params = [cc];
+        } else {
+          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;
+          params = [];
+        }
+        const entries = await db.prepare(query).bind(...params).all();
+        // Find player rank
+        let playerEntry = null;
+        if (dh && entries.results) {
+          const idx = entries.results.findIndex(e => e.device_hash === dh);
+          if (idx >= 0) playerEntry = { ...entries.results[idx], rank: idx + 1 };
+        }
+        return new Response(JSON.stringify({
+          success: true, scope, type,
+          entries: (entries.results || []).map((e, i) => ({ ...e, rank: i + 1 })),
+          playerEntry,
+        }), { headers: cors });
+      }
+
+      // ── GET /api/dungeon/daily-tasks ──
+      if (path === '/api/dungeon/daily-tasks' && request.method === 'GET') {
+        const dh = url.searchParams.get('device_hash') || '';
+        if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        const today = new Date().toISOString().slice(0,10);
+        let tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(dh, today).first();
+        if (!tasks) {
+          await db.prepare('INSERT OR IGNORE INTO dungeon_daily_tasks (device_hash, date) VALUES (?,?)').bind(dh, today).run();
+          tasks = { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 };
+        }
+        return new Response(JSON.stringify({ success: true, tasks }), { headers: cors });
+      }
+
+      // ── POST /api/dungeon/claim-daily ──
+      if (path === '/api/dungeon/claim-daily' && request.method === 'POST') {
+        const body = await request.json();
+        const { device_hash } = body;
+        if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        const today = new Date().toISOString().slice(0,10);
+        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(device_hash, today).first();
+        if (!tasks) return new Response(JSON.stringify({ error: '今日还没有完成任务' }), { status: 400, headers: cors });
+        if (tasks.claimed) return new Response(JSON.stringify({ error: '今日奖励已领取' }), { status: 400, headers: cors });
+        const rewards = { exp: 0, gold: 0 };
+        if (tasks.questions_done >= 5) { rewards.exp += 50; rewards.gold += 30; }
+        if (tasks.stages_cleared >= 1) { rewards.exp += 100; rewards.gold += 50; }
+        if (tasks.bosses_defeated >= 1) { rewards.exp += 200; rewards.gold += 100; }
+        if (tasks.all_done) { rewards.gold += 100; }
+        await db.prepare('UPDATE dungeon_daily_tasks SET claimed=1 WHERE device_hash=? AND date=?').bind(device_hash, today).run();
+        // Update player
+        const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
+        if (player) {
+          await db.prepare('UPDATE dungeon_players SET exp=exp+?, gold=gold+?, updated_at=datetime(\'now\') WHERE device_hash=?')
+            .bind(rewards.exp, rewards.gold, device_hash).run();
+        }
+        return new Response(JSON.stringify({ success: true, rewards }), { headers: cors });
+      }
+
+      // ── GET /api/dungeon/broadcasts ──
+      if (path === '/api/dungeon/broadcasts' && request.method === 'GET') {
+        const broadcasts = await db.prepare('SELECT * FROM dungeon_broadcasts ORDER BY created_at DESC LIMIT 20').all();
+        return new Response(JSON.stringify({ success: true, broadcasts: broadcasts.results || [] }), { headers: cors });
+      }
+
+      // ── Teacher: GET /api/dungeon/teacher/students ──
+      if (path === '/api/dungeon/teacher/students' && request.method === 'GET') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+        const cc = url.searchParams.get('class_code') || '';
+        let query, params;
+        if (cc) {
+          query = 'SELECT * FROM dungeon_players WHERE class_code=? ORDER BY rank_points DESC';
+          params = [cc];
+        } else {
+          // Get teacher's classes
+          const classes = await db.prepare('SELECT class_code FROM classes WHERE teacher_id=? AND status=\'active\'').bind(teacher.teacher_id).all();
+          const codes = (classes.results || []).map(c => c.class_code);
+          if (codes.length === 0) return new Response(JSON.stringify({ success: true, students: [] }), { headers: cors });
+          const placeholders = codes.map(() => '?').join(',');
+          query = `SELECT * FROM dungeon_players WHERE class_code IN (${placeholders}) ORDER BY rank_points DESC`;
+          params = codes;
+        }
+        const students = await db.prepare(query).bind(...params).all();
+        return new Response(JSON.stringify({ success: true, students: students.results || [] }), { headers: cors });
+      }
+
+      // ── Teacher: POST /api/dungeon/teacher/students/remove ──
+      if (path === '/api/dungeon/teacher/students/remove' && request.method === 'POST') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+        const body = await request.json();
+        const { device_hash } = body;
+        if (!device_hash) return new Response(JSON.stringify({ error: '缺少学生标识' }), { status: 400, headers: cors });
+        // Verify student is in teacher's class
+        const student = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
+        if (!student) return new Response(JSON.stringify({ error: '学生不存在' }), { status: 404, headers: cors });
+        const cls = await db.prepare('SELECT * FROM classes WHERE class_code=? AND teacher_id=?').bind(student.class_code, teacher.teacher_id).first();
+        if (!cls) return new Response(JSON.stringify({ error: '无权操作该学生' }), { status: 403, headers: cors });
+        await db.prepare('UPDATE dungeon_players SET status=\'inactive\', updated_at=datetime(\'now\') WHERE device_hash=?').bind(device_hash).run();
+        return new Response(JSON.stringify({ success: true, message: '学生已暂停使用' }), { headers: cors });
+      }
+
+      // ── Teacher: POST /api/dungeon/teacher/students/restore ──
+      if (path === '/api/dungeon/teacher/students/restore' && request.method === 'POST') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+        const body = await request.json();
+        const { device_hash } = body;
+        if (!device_hash) return new Response(JSON.stringify({ error: '缺少学生标识' }), { status: 400, headers: cors });
+        const student = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
+        if (!student) return new Response(JSON.stringify({ error: '学生不存在' }), { status: 404, headers: cors });
+        const cls = await db.prepare('SELECT * FROM classes WHERE class_code=? AND teacher_id=?').bind(student.class_code, teacher.teacher_id).first();
+        if (!cls) return new Response(JSON.stringify({ error: '无权操作该学生' }), { status: 403, headers: cors });
+        await db.prepare('UPDATE dungeon_players SET status=\'active\', updated_at=datetime(\'now\') WHERE device_hash=?').bind(device_hash).run();
+        return new Response(JSON.stringify({ success: true, message: '学生已恢复使用' }), { headers: cors });
+      }
+
+      // ── Teacher: GET /api/dungeon/teacher/analytics ──
+      if (path === '/api/dungeon/teacher/analytics' && request.method === 'GET') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+        const cc = url.searchParams.get('class_code') || '';
+        if (!cc) return new Response(JSON.stringify({ error: '请指定班级码' }), { status: 400, headers: cors });
+        // Verify ownership
+        const cls = await db.prepare('SELECT * FROM classes WHERE class_code=? AND teacher_id=?').bind(cc, teacher.teacher_id).first();
+        if (!cls) return new Response(JSON.stringify({ error: '无权查看该班级' }), { status: 403, headers: cors });
+        const total = await db.prepare('SELECT COUNT(*) as c FROM dungeon_players WHERE class_code=?').bind(cc).first();
+        const active = await db.prepare('SELECT COUNT(*) as c FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
+        const avgQuestions = await db.prepare('SELECT AVG(total_answered) as avg_q FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
+        const avgCorrect = await db.prepare('SELECT AVG(total_correct) as avg_c FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
+        // Weak knowledge points (most wrong answers)
+        const weakKPs = await db.prepare(`SELECT question_id, COUNT(*) as wrong_count FROM dungeon_attempts
+          WHERE device_hash IN (SELECT device_hash FROM dungeon_players WHERE class_code=?)
+          AND was_correct=0 GROUP BY question_id ORDER BY wrong_count DESC LIMIT 10`).bind(cc).all();
+        return new Response(JSON.stringify({
+          success: true,
+          analytics: {
+            totalStudents: total?.c || 0,
+            activeStudents: active?.c || 0,
+            avgQuestionsAnswered: Math.round(avgQuestions?.avg_q || 0),
+            avgCorrectRate: avgCorrect?.avg_c ? Math.round((avgCorrect.avg_c / (avgQuestions?.avg_q || 1)) * 100) : 0,
+            weakKPs: weakKPs.results || [],
+          }
+        }), { headers: cors });
       }
 
       return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: cors });

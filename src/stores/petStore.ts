@@ -532,23 +532,8 @@ export const usePetStore = create<PetState>((set, get) => ({
     get().save();
   },
 
-  // ─── Collection rewards ───
-  checkCollectionRewards: () => {
-    const { ownedPets } = get();
-
-    const claimed: string[] = JSON.parse(localStorage.getItem('csp_collection_claimed') || '[]');
-    let bonus = 0;
-    const msgs: string[] = [];
-
-    // Collection rewards moved to achievement manual claim — no auto-grant here.
-    // AchievementsPanel handles manual claim for: elements4, common10, firstLegendary, etc.
-
-    if (bonus > 0) {
-      get().addCoins(bonus);
-      localStorage.setItem('csp_collection_claimed', JSON.stringify(claimed));
-      msgs.forEach(m => emit('pet-bubble', { text: m }).catch(() => {}));
-    }
-  },
+  // Collection rewards now handled by AchievementsPanel manual claim
+  checkCollectionRewards: () => {},
 
   save: () => {
     const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate } = get();

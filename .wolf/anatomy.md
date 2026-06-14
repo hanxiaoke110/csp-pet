@@ -101,3 +101,56 @@ Students  →  api.cspstudy.top (CF Worker + D1)
 - 教师管理：Web App → GET/POST /api/classes → D1 classes
 - 兑换码：Web App → POST /api/codes/exc|camp → 与 Chrome 插件算法一致
 - 月度清理：懒触发 (GET /api/wishes 首次访问当月)
+
+### src-dungeon/ — 潜龙闭关・学霸副本攻略（2026-06-13 新增）
+
+独立 Web 应用，CSP-J 初赛沉浸式闯关游戏，部署到 `dungeon.cspstudy.top`。
+
+```
+src-dungeon/
+├── index.html                     # 像素风入口 HTML
+├── main.tsx                       # React 入口
+├── App.tsx                        # 路由（HashRouter）+ 3级数据加载
+├── App.css                        # 像素 RPG 主题样式（~250行）
+├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API等）
+├── stores/dungeonStore.ts         # Zustand 核心状态管理（~270行）
+├── data/
+│   ├── dungeons.json              # 8 副本定义（40 关卡）
+│   ├── schools.json               # 5 流派 × 8 段位
+│   └── question-mapping.json      # 240 题 → 副本/关卡映射
+├── components/
+│   ├── screens/
+│   │   ├── TitleScreen.tsx        # 标题画面
+│   │   ├── RegisterScreen.tsx     # 2步注册（班级码+流派选择）
+│   │   ├── DungeonMap.tsx         # 世界地图（8节点）
+│   │   ├── DungeonEntrance.tsx    # 副本入口（关卡列表+Boss）
+│   │   ├── BattleScreen.tsx       # 核心战斗（HP/连击/暴击/特效）
+│   │   ├── RewardScreen.tsx       # 结算画面（EXP/金币/评级）
+│   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 4维度）
+│   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
+├── utils/
+│   ├── gameLogic.ts               # 数值公式（~200行）
+│   ├── api.ts                     # API 客户端
+│   └── questionLoader.ts          # 3级题目加载
+```
+
+### API 端点（cf-workers/api.js 新增 ~280行）
+
+| 端点 | 功能 |
+|------|------|
+| POST /api/dungeon/register | 注册（4字段+流派，缺一不可） |
+| GET /api/dungeon/status | 获取完整状态 |
+| POST /api/dungeon/sync | 同步进度 |
+| POST /api/dungeon/report | 上报答题 |
+| GET /api/dungeon/leaderboard | 排行榜（scope+type参数） |
+| GET/POST /api/dungeon/daily-tasks | 每日任务 |
+| POST /api/dungeon/claim-daily | 领取每日奖励 |
+| GET /api/dungeon/broadcasts | 全服广播 |
+| GET /api/dungeon/teacher/students | 教师查看学生 |
+| POST /api/dungeon/teacher/students/remove | 软删除学生 |
+| POST /api/dungeon/teacher/students/restore | 恢复学生 |
+| GET /api/dungeon/teacher/analytics | 班级分析 |
+
+### D1 新表（6张）
+
+dungeon_players, dungeon_progress, dungeon_attempts, dungeon_badges, dungeon_daily_tasks, dungeon_broadcasts

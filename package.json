@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:dungeon": "vite --open /src-dungeon/index.html",
     "build": "tsc && vite build",
+    "build:dungeon": "vite build --outDir dist-dungeon",
     "preview": "vite preview",
     "tauri": "tauri"
   },

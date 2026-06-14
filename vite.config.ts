@@ -32,10 +32,16 @@ export default defineConfig(async () => ({
     },
   },
   build: {
+    modulePreload: false,
+    target: 'es2015',
     rollupOptions: {
       input: {
         main: 'index.html',
         pet: 'pet.html',
+        dungeon: 'src-dungeon/index.html',
+      },
+      output: {
+        entryFileNames: 'assets/[name]-[hash].js',
       },
     },
   },

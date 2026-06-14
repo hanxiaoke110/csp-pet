@@ -1,0 +1,38 @@
+[
+  {
+    "id": "C1",
+    "name": "C1 入门阶段",
+    "lessonRange": [
+      1,
+      25
+    ],
+    "color": "#10b981"
+  },
+  {
+    "id": "C2",
+    "name": "C2 基础阶段",
+    "lessonRange": [
+      26,
+      50
+    ],
+    "color": "#3b82f6"
+  },
+  {
+    "id": "C3",
+    "name": "C3 进阶阶段",
+    "lessonRange": [
+      51,
+      71
+    ],
+    "color": "#7c3aed"
+  },
+  {
+    "id": "C4",
+    "name": "C4 提高阶段（敬请期待）",
+    "lessonRange": [
+      72,
+      0
+    ],
+    "color": "#f59e0b"
+  }
+]
