@@ -151,19 +151,33 @@ function UploadPanel(props) {
       if (!jsonFile) { toast('压缩包缺少 pet.json','error'); return; }
       var meta = JSON.parse(await jsonFile.async('text'));
       var ssFile = null;
-      zip.forEach(function(path, f) { if (!ssFile && /spritesheet\.png$/i.test(path)) ssFile = f; });
-      if (!ssFile) { toast('压缩包缺少 spritesheet.png','error'); return; }
+      zip.forEach(function(path, f) { if (!ssFile && /spritesheet\.(png|webp)$/i.test(path)) ssFile = f; });
+      if (!ssFile) { toast('压缩包缺少 spritesheet (png/webp)','error'); return; }
       var blob = await ssFile.async('blob');
-      if (blob.size < 100) { toast('spritesheet.png 无效','error'); return; }
+      if (blob.size < 100) { toast('spritesheet 无效','error'); return; }
       var url = URL.createObjectURL(blob);
       await new Promise(function(resolve, reject) {
         var img = new Image(); img.onload = resolve; img.onerror = function(){ reject(new Error('图片无法加载')); };
         img.src = url;
       });
-      if (meta.displayName) setName(meta.displayName);
+      // Support both CSP and Petdex pet.json formats
+      if (meta.displayName && !meta.name) meta.name = meta.displayName;
+      if (meta.id && !meta.slug) meta.slug = meta.id;
+      if (!meta.frameWidth) meta.frameWidth = 192;
+      if (!meta.frameHeight) meta.frameHeight = 208;
+      if (!meta.element) {
+        // Infer element from name or default to fire
+        var elHints = { dragon:'fire', phoenix:'fire', flame:'fire', aqua:'water', sea:'water', ocean:'water', forest:'earth', rock:'earth', mountain:'earth', wind:'wind', air:'wind', storm:'wind', light:'light', angel:'light', holy:'light' };
+        var inferred = null;
+        for (var k in elHints) { if ((meta.name||'').toLowerCase().indexOf(k) >= 0 || (meta.description||'').toLowerCase().indexOf(k) >= 0) { inferred = elHints[k]; break; } }
+        meta.element = inferred || 'fire';
+      }
+      if (!meta.tier) meta.tier = 'common';
+      if (meta.displayName) setName(meta.displayName); else if (meta.name) setName(meta.name);
       if (meta.description) setDesc(meta.description || '');
       if (meta.element && ELEMENTS.indexOf(meta.element) >= 0) setElement(meta.element);
       if (meta.tier && TIER_LABEL[meta.tier]) setTier(meta.tier);
+      if (meta.spritesheetPath && !meta.slug) meta.slug = meta.id || 'imported';
       setSsBlob(blob); setSsUrl(url); setPetJson(meta); setImported(true);
       toast('素材包导入成功！');
     } catch(e) { toast('导入失败: ' + e.message, 'error'); }
@@ -178,7 +192,7 @@ function UploadPanel(props) {
     try {
       var formData = new FormData();
       formData.append('pet_json', JSON.stringify(petJson));
-      formData.append('spritesheet', ssBlob, 'spritesheet.png');
+      formData.append('spritesheet', ssBlob, ssFile.name || 'spritesheet.png');
       formData.append('name', name.trim()); formData.append('element', element);
       formData.append('tier', tier); formData.append('description', desc.trim());
       formData.append('creator_name', creator.trim());
