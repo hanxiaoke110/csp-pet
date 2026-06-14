@@ -892,6 +892,8 @@ function MyPetsPanel({ pets, onRefresh }) {
   const [editingId, setEditingId] = React.useState(null);
   const [editName, setEditName] = React.useState('');
   const [editCreator, setEditCreator] = React.useState('');
+  const [editElement, setEditElement] = React.useState('fire');
+  const [editTier, setEditTier] = React.useState('common');
 
   const deletePet = async (id) => {
     if (!confirm('确定要删除这只精灵吗？')) return;
@@ -901,10 +903,10 @@ function MyPetsPanel({ pets, onRefresh }) {
     onRefresh();
   };
 
-  const startEdit = (p) => { setEditingId(p.id); setEditName(p.name); setEditCreator(p.teacher_name || ''); };
+  const startEdit = (p) => { setEditingId(p.id); setEditName(p.name); setEditCreator(p.teacher_name || ''); setEditElement(p.element || 'fire'); setEditTier(p.tier || 'common'); };
   const cancelEdit = () => { setEditingId(null); };
   const saveEdit = async (id) => {
-    const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method:'PUT', body:JSON.stringify({ name:editName.trim(), teacher_name:editCreator.trim() }) });
+    const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method:'PUT', body:JSON.stringify({ name:editName.trim(), teacher_name:editCreator.trim(), element:editElement, tier:editTier }) });
     if (resp.error) { toast(resp.error,'error'); return; }
     toast('✅ 已更新'); setEditingId(null); onRefresh();
   };
@@ -915,6 +917,19 @@ function MyPetsPanel({ pets, onRefresh }) {
       React.createElement('div', { className:'form-group' },
         React.createElement('label', null, '名字'),
         React.createElement('input', { className:'input', value:editName, onChange:e=>setEditName(e.target.value) }),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '元素'),
+        React.createElement('div', { style:{ display:'flex', gap:6 } },
+          ELEMENTS.map(el => React.createElement('button', { key:el, className:'element-btn'+(editElement===el?' sel':''), onClick:()=>setEditElement(el), style:{ fontSize:13, padding:'6px 12px' } }, ELEM_LABEL[el]))
+        ),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '等级'),
+        React.createElement('select', { className:'input', value:editTier, onChange:e=>setEditTier(e.target.value) },
+          Object.keys(TIER_LABEL).map(t => React.createElement('option', { key:t, value:t }, TIER_LABEL[t]))
+        ),
+        React.createElement('span', { style:{ fontSize:11, color:'#94a3b8' } }, '价格将自动更新: ', editTier==='legendary'?'500g':editTier==='rare'?'260g':'150g'),
       ),
       React.createElement('div', { className:'form-group' },
         React.createElement('label', null, '发布者'),

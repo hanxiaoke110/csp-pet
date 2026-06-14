@@ -101,7 +101,7 @@ export default function AchievementsPanel() {
     if (!reward) return;
     const store = usePetStore.getState();
     store.addCoins(reward.coins);
-    if (reward.renameCards) store.renameCards += reward.renameCards;
+    if (reward.renameCards) { store.renameCards += reward.renameCards; store.save(); }
     const next = new Set(claimed);
     next.add(achId);
     setClaimed(next);

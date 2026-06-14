@@ -1,7 +1,7 @@
 {
-  "version": "1.6.3",
-  "notes": "v1.6.3: \u6210\u5c31\u624b\u52a8\u9886\u53d6 + \u8bfe\u7a0b\u641c\u7d22\u4fee\u590d + \u9898\u5e93\u9009\u9879\u4fee\u590d",
-  "pub_date": "2026-06-14T05:00:00Z",
+  "version": "1.6.4",
+  "notes": "v1.6.4: SQLite\u4e09\u7ea7\u6062\u590d\u9632\u767d\u5c4f + DevTools + \u5de5\u574a\u53bb\u91cd/\u5b9a\u4ef7/\u7f16\u8f91 + \u73ed\u7ea7\u7ed1\u5b9a\u56db\u5fc5\u586b + \u6210\u5c31\u6539\u540d\u5361\u4fee\u590d + \u8bb8\u613f\u6392\u5e8f",
+  "pub_date": "2026-06-14T10:00:00Z",
   "platforms": {
     "darwin-aarch64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3ppL0twUFhMMUozcWxJb0Y2WnNiZWNaTitJempLQ2t6dVdidVNzN0xTRHpKT3ZMTWJob1hjT1RHdFhkRDNFS1EzQy81MjJDeWh4M1lnSkVDOXE4OWdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxNDEyMTg2CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuM19hYXJjaDY0LmRtZwo5ajUzbXI5bFNBWTZZMm9GWmRRT3NtcjI4L2FiOEprOHA2WGptZHVWeDJSRXJ1dDZtejFzRXRGWjJ6SXE0REtzNG1pZ3YvamZxaU80UW42RHdhSVVCZz09Cg==",
