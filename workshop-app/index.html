@@ -25,23 +25,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:10px;font-weight:600;font-size:13px;z-index:999}
 .toast-success{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
 .toast-error{background:#fef2f2;color:#ef4444;border:1px solid #fecaca}
+.preview-box{width:200px;height:200px;border:2px dashed #e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#fafafa;overflow:hidden}
+.preview-box img{max-width:100%;max-height:100%;object-fit:contain}
+.pet-card{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px}
+.pet-thumb{width:60px;height:68px;border-radius:8px;background:#f1f5f9;overflow:hidden;flex-shrink:0}
+.pet-thumb img,.pet-thumb canvas{width:100%;height:100%;object-fit:contain}
+.login-box{max-width:380px;margin:80px auto}
 .element-btn{padding:10px 16px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;transition:all .15s;text-align:center;flex:1}
 .element-btn:hover{border-color:#fed7aa}
 .element-btn.sel{border-color:#FF8C00;background:#fff7ed}
-.preview-box{width:200px;height:200px;border:2px dashed #e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#fafafa;overflow:hidden}
-.preview-box img{max-width:100%;max-height:100%;object-fit:contain}
-.progress-steps{display:flex;flex-direction:column;gap:6px;margin-top:12px}
-.progress-step{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600}
-.progress-step.pending{background:#f1f5f9;color:#94a3b8}
-.progress-step.running{background:#fff7ed;color:#FF8C00}
-.progress-step.done{background:#f0fdf4;color:#16a34a}
-.progress-step.failed{background:#fef2f2;color:#ef4444}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.badge-earth{background:#fef3c7;color:#92400e}.badge-fire{background:#fee2e2;color:#dc2626}.badge-wind{background:#f0fdf4;color:#16a34a}.badge-water{background:#dbeafe;color:#2563eb}.badge-light{background:#fef9c3;color:#ca8a04}
+.badge-common{background:#f1f5f9;color:#64748b}.badge-rare{background:#ede9fe;color:#7c3aed}.badge-legendary{background:#fef3c7;color:#b45309}
+.drop-zone{border:2px dashed #e2e8f0;border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .15s}
+.drop-zone:hover,.drop-zone.drag{border-color:#FF8C00;background:#fff7ed}
 .spinner{width:16px;height:16px;border:2px solid #e2e8f0;border-top-color:#FF8C00;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
-.pet-card{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px}
-.pet-thumb{width:60px;height:60px;border-radius:8px;background:#f1f5f9;overflow:hidden}
-.pet-thumb img{width:100%;height:100%;object-fit:contain}
-.login-box{max-width:380px;margin:80px auto}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -51,796 +50,280 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 
 <script>
 const API = 'https://api.cspstudy.top';
-let state = { page: 'login', token: '', teacher: null };
+const ELEMENTS = ['earth','fire','wind','water','light'];
+const ELEM_LABEL = { earth:'🟫 地', fire:'🔴 火', wind:'🟢 风', water:'🔵 水', light:'🌟 光' };
+const TIER_LABEL = { common:'⭐ 普通', rare:'✨ 稀有', legendary:'👑 传说' };
+let state = { page:'login', token:'', teacher:null };
 
-function toast(msg, type='success') {
-  const el = document.createElement('div');
-  el.className = `toast toast-${type}`; el.textContent = msg;
+function toast(msg, type) {
+  type = type || 'success';
+  var el = document.createElement('div');
+  el.className = 'toast toast-' + type; el.textContent = msg;
   document.body.appendChild(el);
-  setTimeout(() => { el.style.opacity='0'; setTimeout(() => el.remove(), 300); }, 2500);
+  setTimeout(function(){ el.style.opacity='0'; setTimeout(function(){ el.remove(); }, 300); }, 2500);
 }
 
-async function api(path, opts={}) {
-  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+async function api(path, opts) {
+  opts = opts || {};
+  var headers = { 'Content-Type':'application/json' };
+  if (opts.headers) Object.assign(headers, opts.headers);
   if (state.token) headers['X-Teacher-Token'] = state.token;
-  const resp = await fetch(`${API}${path}`, { ...opts, headers });
+  var resp = await fetch(API + path, Object.assign({}, opts, { headers:headers }));
   if (!resp.ok) {
-    try { const err = await resp.json(); return { error: err.error || `请求失败 (${resp.status})` }; }
-    catch { return { error: `请求失败 (${resp.status})` }; }
+    try { var err = await resp.json(); return { error:err.error || ('请求失败 (' + resp.status + ')') }; }
+    catch(e) { return { error:'请求失败 (' + resp.status + ')' }; }
   }
-  try { return await resp.json(); } catch { return { error: '响应格式错误' }; }
+  try { return await resp.json(); } catch(e) { return { error:'响应格式错误' }; }
 }
 
 // ═══ Login ═══
 function LoginPage() {
-  const [phone, setPhone] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+  var _1 = React.useState(''), phone = _1[0], setPhone = _1[1];
+  var _2 = React.useState(''), password = _2[0], setPassword = _2[1];
+  var _3 = React.useState(false), loading = _3[0], setLoading = _3[1];
 
-  const login = async () => {
+  async function login() {
     if (!phone || !password) { toast('请填写手机号和密码','error'); return; }
     setLoading(true);
-    const d = await api('/api/teacher/login', { method:'POST', body:JSON.stringify({ phone, password }) });
+    var d = await api('/api/teacher/login', { method:'POST', body:JSON.stringify({ phone:phone, password:password }) });
     if (d.error) { toast(d.error,'error'); setLoading(false); return; }
-    state.token = d.token; state.teacher = { teacher_id: d.teacher_id, name: d.name };
+    state.token = d.token; state.teacher = { teacher_id:d.teacher_id, name:d.name };
     localStorage.setItem('csp_teacher_token', d.token);
     localStorage.setItem('csp_teacher_info', JSON.stringify(state.teacher));
     state.page = 'dashboard'; render();
-  };
+  }
 
   return React.createElement('div', { className:'login-box card' },
     React.createElement('h2', { style:{ textAlign:'center', marginBottom:20, color:'#FF8C00' } }, '🏭 精灵工坊'),
     React.createElement('div', { className:'form-group' },
       React.createElement('label', null, '手机号'),
-      React.createElement('input', { className:'input', value:phone, onChange:e=>setPhone(e.target.value), placeholder:'教师手机号', onKeyDown:e=>e.key==='Enter'&&login() }),
-    ),
+      React.createElement('input', { className:'input', value:phone, onChange:function(e){ setPhone(e.target.value); }, placeholder:'教师手机号', onKeyDown:function(e){ if(e.key==='Enter') login(); } })),
     React.createElement('div', { className:'form-group' },
       React.createElement('label', null, '密码'),
-      React.createElement('input', { className:'input', type:'password', value:password, onChange:e=>setPassword(e.target.value), placeholder:'登录密码', onKeyDown:e=>e.key==='Enter'&&login() }),
-    ),
+      React.createElement('input', { className:'input', type:'password', value:password, onChange:function(e){ setPassword(e.target.value); }, placeholder:'登录密码', onKeyDown:function(e){ if(e.key==='Enter') login(); } })),
     React.createElement('button', { className:'btn btn-primary', style:{ width:'100%', padding:12 }, onClick:login, disabled:loading },
-      loading ? '登录中...' : '登录'),
-  );
+      loading ? '登录中...' : '登录'));
 }
 
 // ═══ Dashboard ═══
 function Dashboard() {
-  const [tab, setTab] = React.useState('create');
-  const [pets, setPets] = React.useState([]);
+  var _1 = React.useState('upload'), tab = _1[0], setTab = _1[1];
+  var _2 = React.useState([]), pets = _2[0], setPets = _2[1];
 
-  React.useEffect(() => { loadPets(); }, []);
+  React.useEffect(function(){ loadPets(); }, []);
 
   async function loadPets() {
-    const d = await api('/api/workshop/pets');
+    var d = await api('/api/workshop/pets');
     if (Array.isArray(d)) { setPets(d); render(); }
   }
 
   return React.createElement('div', null,
     React.createElement('div', { className:'header' },
-      React.createElement('h1', null, '🏭 精灵工坊'),
+      React.createElement('h1', null, '🏭 精灵工坊 - CSP'),
       React.createElement('div', { style:{ display:'flex', alignItems:'center', gap:12 } },
-        React.createElement('span', { style:{ fontSize:13, color:'#64748b' } }, state.teacher?.name),
-        React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12 }, onClick:()=>{ state.token=''; state.teacher=null; localStorage.removeItem('csp_teacher_token'); localStorage.removeItem('csp_teacher_info'); state.page='login'; render(); } }, '退出'),
-      ),
-    ),
+        React.createElement('span', { style:{ fontSize:13, color:'#64748b' } }, state.teacher && state.teacher.name),
+        React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12 }, onClick:function(){ state.token=''; state.teacher=null; localStorage.removeItem('csp_teacher_token'); localStorage.removeItem('csp_teacher_info'); state.page='login'; render(); } }, '退出'))),
     React.createElement('div', { className:'tabs' },
-      React.createElement('button', { className:`tab ${tab==='create'?'active':''}`, onClick:()=>setTab('create') }, '🎨 创建精灵'),
-      React.createElement('button', { className:`tab ${tab==='import'?'active':''}`, onClick:()=>setTab('import') }, '📦 导入素材'),
-      React.createElement('button', { className:`tab ${tab==='my'?'active':''}`, onClick:()=>setTab('my') }, '📚 我的精灵'),
-      React.createElement('button', { className:`tab ${tab==='settings'?'active':''}`, onClick:()=>setTab('settings') }, '⚙️ AI配置'),
-    ),
-    tab === 'create' ? React.createElement(CreatePanel, { onCreated: loadPets }) :
-    tab === 'import' ? React.createElement(ImportPanel, { onCreated: loadPets }) :
-    tab === 'my' ? React.createElement(MyPetsPanel, { pets, onRefresh: loadPets }) :
-    React.createElement(SettingsPanel),
-  );
+      React.createElement('button', { className:'tab'+(tab==='upload'?' active':''), onClick:function(){ setTab('upload'); } }, '📤 上传 (ZIP)'),
+      React.createElement('button', { className:'tab'+(tab==='my'?' active':''), onClick:function(){ setTab('my'); } }, '📋 我的精灵')),
+    tab === 'upload' ? React.createElement(UploadPanel, { onCreated:loadPets }) : React.createElement(MyPetsPanel, { pets:pets, onRefresh:loadPets }));
 }
 
-// ═══ Create Panel ═══
-const ELEMENTS = ['earth','fire','wind','water','light'];
-const ELEM_LABEL = { earth:'🟫 地', fire:'🔴 火', wind:'🟢 风', water:'🔵 水', light:'🌟 光' };
-const STYLES = ['pixel','plush','clay','3d-toy','flat-vector','painterly'];
-const STYLE_LABEL = { pixel:'🎮 像素', plush:'🧸 毛绒', clay:'🫧 黏土', '3d-toy':'🧊 3D玩具', 'flat-vector':'✏️ 矢量', painterly:'🎨 水彩' };
-const TIERS = [{ key:'common', label:'⭐ 普通', price:150 },{ key:'rare', label:'✨ 稀有', price:260 },{ key:'legendary', label:'👑 传说', price:500 }];
-const ANIM_STEPS = [
-  { key:'base', label:'生成基准图' },
-  { key:'idle', label:'idle 待机' },
-  { key:'walk', label:'walk 行走' },
-  { key:'sleep', label:'sleep 睡觉' },
-  { key:'celebrate', label:'celebrate 庆祝' },
-  { key:'think', label:'think 思考' },
-  { key:'eat', label:'eat 进食' },
-  { key:'unhappy', label:'unhappy 不开心' },
-];
+// ═══ Upload Panel ═══
+function UploadPanel(props) {
+  var _1 = React.useState(''), name = _1[0], setName = _1[1];
+  var _2 = React.useState('fire'), element = _2[0], setElement = _2[1];
+  var _3 = React.useState('rare'), tier = _3[0], setTier = _3[1];
+  var _4 = React.useState(''), desc = _4[0], setDesc = _4[1];
+  var _5 = React.useState(null), ssBlob = _5[0], setSsBlob = _5[1];
+  var _6 = React.useState(null), ssUrl = _6[0], setSsUrl = _6[1];
+  var _7 = React.useState(null), petJson = _7[0], setPetJson = _7[1];
+  var _8 = React.useState(false), imported = _8[0], setImported = _8[1];
+  var _9 = React.useState(false), submitting = _9[0], setSubmitting = _9[1];
+  var _10 = React.useState(false), drag = _10[0], setDrag = _10[1];
+  var _11 = React.useState(state.teacher && state.teacher.name || ''), creator = _11[0], setCreator = _11[1];
 
-function CreatePanel({ onCreated }) {
-  const [name, setName] = React.useState('');
-  const [element, setElement] = React.useState('fire');
-  const [style, setStyle] = React.useState('pixel');
-  const [tier, setTier] = React.useState('rare');
-  const [desc, setDesc] = React.useState('');
-  const [refImg, setRefImg] = React.useState(null);
-  const [genStatus, setGenStatus] = React.useState('idle'); // idle|running|done
-  const [steps, setSteps] = React.useState(ANIM_STEPS.map(s=>({...s, status:'pending'})));
-  const [baseImg, setBaseImg] = React.useState(null);
-  const [rowImgs, setRowImgs] = React.useState({});
-  const [resultUrl, setResultUrl] = React.useState(null);
-  const [thumbUrl, setThumbUrl] = React.useState(null);
-  const [petJsonData, setPetJsonData] = React.useState(null);
-  const [submitting, setSubmitting] = React.useState(false);
-  const [creatorName, setCreatorName] = React.useState(state.teacher?.name || '');
-
-  function handleRefUpload(e) {
-    const file = e.target.files[0];
+  async function handleZip(file) {
     if (!file) return;
-    if (file.size > 1024*1024) { toast('图片不能超过1MB','error'); return; }
-    const reader = new FileReader();
-    reader.onload = () => {
-      setRefImg(reader.result);
-      // Force preview update via DOM
-      var pv = document.querySelector('.preview-box img');
-      if (!pv) { var box = document.querySelector('.preview-box'); if (box) { box.innerHTML = ''; pv = document.createElement('img'); box.appendChild(pv); } }
-      if (pv) pv.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function updateStep(key, status) {
-    setSteps(prev => prev.map(s => s.key===key ? {...s, status} : s));
-  }
-
-  async function startGenerate() {
-    const keys = JSON.parse(localStorage.getItem('ws_ai_keys_' + (state.teacher?.teacher_id || ''))||'{}');
-    let provider = localStorage.getItem('ws_ai_provider_' + (state.teacher?.teacher_id || '')) || 'zhipu';
-    let apiKey = keys[provider] || '';
-    // Auto-fallback: try other providers if default has no key
-    if (!apiKey) {
-      for (const pk of ['zhipu','qwen','hunyuan','coze']) {
-        if (keys[pk]) { provider = pk; apiKey = keys[pk]; break; }
-      }
-    }
-    if (!apiKey) { toast('请先在 ⚙️ AI配置 中配置 API Key','error'); return; }
-    if (!name.trim()) { toast('请输入精灵名字','error'); return; }
-    if (!desc.trim()) { toast('请输入精灵描述','error'); return; }
-    setGenStatus('running'); setBaseImg(null); setRowImgs({}); setResultUrl(null);
-    // Clean up previous preview animation
-    var oldCanvas = document.getElementById('preview-anim');
-    if (oldCanvas && oldCanvas._t) { clearTimeout(oldCanvas._t); oldCanvas._t = null; }
-    setSteps(ANIM_STEPS.map(s=>({...s, status:'pending'})));
-
-    // Enhance simple descriptions for better AI generation quality
-    const enhanceDesc = (d, elem, stl) => {
-      let enhanced = d.trim();
-      // Add visual details based on element and style
-      const elemVisuals = { fire: '暖色调配色，橙红主色', water: '冷色调配色，蓝色主色', wind: '清新绿色调', earth: '大地棕色系', light: '明亮金色调' };
-      const styleVisuals = { pixel: '像素艺术，清晰边缘，16-bit风格', plush: '毛绒玩具质感，柔软圆润', clay: '黏土质感，光滑表面', '3d-toy': '3D玩具风格，立体光影', 'flat-vector': '扁平矢量风格，纯色块', painterly: '水彩风格，柔和渐变' };
-      // If description is too short (< 15 chars), expand it
-      if (enhanced.length < 15) {
-        enhanced = `${enhanced}，可爱的${elem}属性精灵，${(styleVisuals[stl] || '').split('，')[0]}，圆润大眼睛，小巧身材`;
-      }
-      // Always append quality details
-      return `${enhanced}，${elemVisuals[elem] || '色彩丰富'}，${styleVisuals[stl] || '像素艺术风格'}，轮廓清晰，高对比度`;
-    };
-
-    // Build detailed prompt following Hatch Pet pattern
-    const hasRef = !!refImg;
-    const styleNote = hasRef ? '保留参考图的角色设计和风格，' : '';
-    const artQuality = 'masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency';
-    const basePrompt = [
-      enhanceDesc(desc, element, style),
-      `${STYLE_LABEL[style]}风格精灵，${ELEM_LABEL[element]}元素`,
-      `${styleNote}全身站立，正面视角，四肢完整可见，表情清晰`,
-      '192x208像素游戏精灵，饱满轮廓，纯色背景去底',
-      `画质要求：${artQuality}`,
-      '禁止：阴影、速度线、光晕、漂浮特效、文字、场景、渐变、模糊',
-    ].join('。');
-
-    // Step 1: Generate base (use refImg if provided)
-    updateStep('base', 'running'); render();
-    const baseResp = await api('/api/ai/generate', {
-      method:'POST',
-      body:JSON.stringify({
-        prompt: basePrompt,
-        provider, api_key: apiKey,
-        ...(hasRef ? { reference_image: refImg } : {}),
-      })
-    });
-    if (baseResp.error) { updateStep('base','failed'); toast(baseResp.error,'error'); setGenStatus('idle'); return; }
-    // Extract image URL - depends on provider
-    const baseUrl = extractImageUrl(baseResp);
-    if (!baseUrl) { updateStep('base','failed'); toast('未能获取生成图片','error'); setGenStatus('idle'); return; }
-    setBaseImg(baseUrl); updateStep('base', 'done'); render();
-
-    // Steps 2-7: Generate animation rows with base as reference
-    // Animation prompts with Hatch Pet state-specific rules
-    const animPrompts = {
-      idle: 'idle待机循环，6帧水平排列每帧192x208。仅微小呼吸起伏，站姿完全不变，表情平静。禁止位移、禁止肢体运动。角色设计严格与基准图一致。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
-      walk: 'walk行走循环，6帧水平排列每帧192x208。身体轻微弹跳，四肢交替迈步，手臂自然摆动。角色设计严格与基准图一致。禁止速度线、禁止灰尘。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
-      sleep: 'sleep睡觉，6帧水平排列每帧192x208。闭眼，身体微蜷，呼吸缓慢起伏。角色设计严格与基准图一致。禁止Z字、禁止呼噜气泡。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
-      celebrate: 'celebrate庆祝，6帧水平排列每帧192x208。身体上跳，手臂高举，开心表情。角色设计严格与基准图一致。禁止彩带星星闪光等漂浮物。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
-      think: 'think思考，6帧水平排列每帧192x208。头微歪，手托下巴，眼睛向上半闭，专注。角色设计严格与基准图一致。禁止问号灯泡图标。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
-      eat: 'eat进食，6帧水平排列每帧192x208。嘴巴张合咀嚼，手做拿食物动作。角色设计严格与基准图一致。禁止餐具食物残渣飞溅。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
-      unhappy: 'unhappy不开心，6帧水平排列每帧192x208。低头垂肩，沮丧表情，微下坠叹气。角色设计严格与基准图一致。禁止眼泪线条乌云。。masterpiece, best quality, game sprite sheet, pixel art, vibrant colors, clean outlines, solid fill, no anti-aliasing, no dithering, no semi-transparency',
-    };
-
-    const animKeys = ['idle','walk','sleep','celebrate','think','eat','unhappy'];
-    const ri = {};
-    for (const ak of animKeys) {
-      updateStep(ak, 'running'); render();
-      const animResp = await api('/api/ai/generate', {
-        method:'POST',
-        body:JSON.stringify({
-          prompt: animPrompts[ak],
-          reference_image: baseUrl,
-          provider, api_key: apiKey,
-        })
-      });
-      if (animResp.error) { updateStep(ak,'failed'); toast(`${ak}生成失败: ${animResp.error}`,'error'); continue; }
-      const animUrl = extractImageUrl(animResp);
-      if (animUrl) { ri[ak] = animUrl; updateStep(ak, 'done'); } else { updateStep(ak, 'failed'); }
-      render();
-    }
-    setRowImgs(ri);
-
-    // Step 8: Assemble spritesheet using Canvas
-    updateStep('base', 'running'); setSteps(prev => [...prev, {key:'assemble',label:'拼合spritesheet',status:'running'}]); render();
     try {
-      const assembly = await assembleSpritesheet(baseUrl, ri);
-      setResultUrl(assembly.spritesheet);
-      setThumbUrl(assembly.thumbnail);
-      setPetJsonData(assembly.petJson);
-      // Start animated preview
-      setTimeout(function(){
-        var c = document.getElementById('preview-anim');
-        if (!c) return;
-        var img = new Image();
-        img.onload = function(){
-          var ctx = c.getContext('2d');
-          var f = 0;
-          function anim(){
-            ctx.clearRect(0,0,200,217);
-            ctx.drawImage(img, f*192, 0, 192, 208, 0, 0, 200, 217);
-            f = (f+1)%6;
-            c._t = setTimeout(anim, 125);
-          }
-          anim();
-        };
-        img.src = assembly.spritesheet;
-      }, 200);
-      setSteps(prev => prev.map(s => s.key==='assemble'?{...s,status:'done'}:s));
-    } catch(e) {
-      console.error('Assembly failed:', e.message, e.stack);
-      setSteps(prev => prev.map(s => s.key==='assemble'?{...s,status:'failed'}:s));
-      toast('拼合失败: '+e.message + ' (查看Console了解详情)','error');
-    }
-
-    setGenStatus('done'); render();
+      var zip = await JSZip.loadAsync(file);
+      var jsonFile = zip.file('pet.json');
+      if (!jsonFile) { toast('压缩包缺少 pet.json','error'); return; }
+      var meta = JSON.parse(await jsonFile.async('text'));
+      var ssFile = null;
+      zip.forEach(function(path, f) { if (!ssFile && /spritesheet\.png$/i.test(path)) ssFile = f; });
+      if (!ssFile) { toast('压缩包缺少 spritesheet.png','error'); return; }
+      var blob = await ssFile.async('blob');
+      if (blob.size < 100) { toast('spritesheet.png 无效','error'); return; }
+      var url = URL.createObjectURL(blob);
+      await new Promise(function(resolve, reject) {
+        var img = new Image(); img.onload = resolve; img.onerror = function(){ reject(new Error('图片无法加载')); };
+        img.src = url;
+      });
+      if (meta.displayName) setName(meta.displayName);
+      if (meta.description) setDesc(meta.description || '');
+      if (meta.element && ELEMENTS.indexOf(meta.element) >= 0) setElement(meta.element);
+      if (meta.tier && TIER_LABEL[meta.tier]) setTier(meta.tier);
+      setSsBlob(blob); setSsUrl(url); setPetJson(meta); setImported(true);
+      toast('素材包导入成功！');
+    } catch(e) { toast('导入失败: ' + e.message, 'error'); }
   }
 
-  function extractImageUrl(resp) {
-    const r = resp.result || resp;
-    if (typeof r === 'string') return r;
-    // Zhipu CogView format
-    if (r.data && r.data[0] && r.data[0].url) return r.data[0].url;
-    // Qwen format
-    if (r.output && r.output.results && r.output.results[0] && r.output.results[0].url) return r.output.results[0].url;
-    // Generic
-    if (r.url) return r.url;
-    if (r.image_url) return r.image_url;
-    return null;
-  }
+  function reset() { setImported(false); setSsBlob(null); setSsUrl(null); setPetJson(null); setName(''); setDesc(''); }
 
-  async function doSavePet() {
-    if (!resultUrl) { toast('请先生成精灵或导入素材','error'); return; }
+  async function doUpload() {
+    if (!ssBlob) { toast('请先导入素材包','error'); return; }
+    if (!name.trim()) { toast('请输入精灵名字','error'); return; }
     setSubmitting(true);
     try {
-      // Convert dataURL to Blob for reliable upload (avoids base64 truncation)
-      const dataUrlToBlob = (url) => {
-        const parts = url.split(',');
-        const mime = parts[0].match(/:(.*?);/)[1];
-        const raw = atob(parts[1]);
-        const arr = new Uint8Array(raw.length);
-        for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
-        return new Blob([arr], { type: mime });
-      };
-
-      // Upload spritesheet as binary FormData (more reliable than JSON base64)
-      const ssBlob = dataUrlToBlob(resultUrl);
-      const ssForm = new FormData();
-      ssForm.append('file', ssBlob, `${name.trim() || 'pet'}-spritesheet.png`);
-      const ssResp = await fetch(API + '/api/workshop/upload', {
-        method: 'POST', headers: { 'X-Teacher-Token': state.token },
-        body: ssForm,
-      }).then(r => r.json());
-      if (ssResp.error) { toast('上传失败: '+ssResp.error,'error'); setSubmitting(false); return; }
-
-      // Upload thumbnail
-      const thumbBlob = dataUrlToBlob(thumbUrl || resultUrl);
-      const thumbForm = new FormData();
-      thumbForm.append('file', thumbBlob, `${name.trim() || 'pet'}-thumb.png`);
-      const thumbResp = await fetch(API + '/api/workshop/upload', {
-        method: 'POST', headers: { 'X-Teacher-Token': state.token },
-        body: thumbForm,
-      }).then(r => r.json());
-      if (thumbResp.error) { toast('缩略图上传失败','error'); setSubmitting(false); return; }
-
-      const tierData = TIERS.find(t=>t.key===tier);
-      const d = await api('/api/workshop/pets', { method:'POST', body:JSON.stringify({
-        name: name.trim(), element, style, description: desc.trim(), tier: tierData.key, price: tierData.price,
-        spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData),
-        creator_name: creatorName || '',
-      })});
-      if (d.error) { toast(d.error,'error'); setSubmitting(false); return; }
-      toast('✅ 精灵已保存！');
-      onCreated();
-      render();
-    } catch(e) { toast('保存失败: '+e.message,'error'); }
+      var formData = new FormData();
+      formData.append('pet_json', JSON.stringify(petJson));
+      formData.append('spritesheet', ssBlob, 'spritesheet.png');
+      formData.append('name', name.trim()); formData.append('element', element);
+      formData.append('tier', tier); formData.append('description', desc.trim());
+      formData.append('creator_name', creator.trim());
+      var resp = await fetch(API + '/api/workshop/pets', { method:'POST', headers:{ 'X-Teacher-Token':state.token }, body:formData });
+      var data = await resp.json();
+      if (!resp.ok || data.error) { toast(data.error || ('上传失败 (' + resp.status + ')'),'error'); setSubmitting(false); return; }
+      toast('✅ 精灵已保存！'); props.onCreated(); reset(); render();
+    } catch(e) { toast('上传失败: ' + e.message,'error'); }
     setSubmitting(false);
   }
 
   return React.createElement('div', null,
-    React.createElement('div', { className:'card' },
-      React.createElement('h3', null, '🎨 创建精灵'),
-      React.createElement('div', { style:{ display:'flex', gap:16 } },
-        React.createElement('div', { style:{ flex:1 } },
+    imported ? React.createElement('div', { className:'card' },
+      React.createElement('h3', { style:{ marginBottom:16 } }, '📦 素材包预览'),
+      React.createElement('div', { style:{ display:'flex', gap:16, flexWrap:'wrap' } },
+        React.createElement('div', { style:{ flex:'1 1 200px' } },
           React.createElement('div', { className:'form-group' },
-            React.createElement('label', null, '名字'),
-            React.createElement('input', { className:'input', value:name, onChange:e=>setName(e.target.value), placeholder:'如：火灵狐' }),
-          ),
+            React.createElement('label', null, '名字'), React.createElement('input', { className:'input', value:name, onChange:function(e){ setName(e.target.value); } })),
           React.createElement('div', { className:'form-group' },
             React.createElement('label', null, '元素'),
             React.createElement('div', { style:{ display:'flex', gap:6 } },
-              ELEMENTS.map(el => React.createElement('button', { key:el, className:`element-btn ${element===el?'sel':''}`, onClick:()=>setElement(el) }, ELEM_LABEL[el])),
-            ),
-          ),
-          React.createElement('div', { className:'form-group' },
-            React.createElement('label', null, '样式'),
-            React.createElement('select', { className:'input', value:style, onChange:e=>setStyle(e.target.value) },
-              STYLES.map(s => React.createElement('option', { key:s, value:s }, STYLE_LABEL[s])),
-            ),
-          ),
+              ELEMENTS.map(function(el){ return React.createElement('button', { key:el, className:'element-btn'+(element===el?' sel':''), onClick:function(){ setElement(el); } }, ELEM_LABEL[el]); }))),
           React.createElement('div', { className:'form-group' },
             React.createElement('label', null, '等级'),
-            React.createElement('div', { style:{ display:'flex', gap:6 } },
-              TIERS.map(t => React.createElement('button', { key:t.key, className:`element-btn ${tier===t.key?'sel':''}`, onClick:()=>setTier(t.key) }, t.label, ' ', t.price, 'g')),
-            ),
-          ),
+            React.createElement('select', { className:'input', value:tier, onChange:function(e){ setTier(e.target.value); } },
+              Object.keys(TIER_LABEL).map(function(t){ return React.createElement('option', { key:t, value:t }, TIER_LABEL[t]); }))),
           React.createElement('div', { className:'form-group' },
-            React.createElement('label', null, '描述'),
-            React.createElement('textarea', { className:'input', value:desc, onChange:e=>setDesc(e.target.value),
-              placeholder: refImg ? '例：把参考图的狐狸改成红色，加上火焰尾巴，表情更凶狠一些' : '例：火红色的狐狸，圆圆的大眼睛，蓬松尾巴，可爱风格',
-              rows:3, style:{ resize:'vertical' } }),
-          ),
+            React.createElement('label', null, '描述'), React.createElement('textarea', { className:'input', value:desc, onChange:function(e){ setDesc(e.target.value); }, rows:2, style:{ resize:'vertical' } })),
           React.createElement('div', { className:'form-group' },
-            React.createElement('label', null, '参考图（可选）'),
-            React.createElement('input', { type:'file', accept:'image/jpeg,image/png', onChange:handleRefUpload, style:{ fontSize:12 } }),
-          ),
-
-          React.createElement('button', { className:'btn btn-primary', onClick:startGenerate, disabled:genStatus==='running', style:{ width:'100%', padding:12 } },
-            genStatus==='running' ? '生成中...' : '🚀 开始生成'),
+            React.createElement('label', null, '发布者'), React.createElement('input', { className:'input', value:creator, onChange:function(e){ setCreator(e.target.value); }, placeholder:'显示在学生端的名字' })),
+          petJson ? React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginTop:8 } },
+            '动画: ' + (petJson.anims ? Object.keys(petJson.anims).length : (petJson.animsOrder ? petJson.animsOrder.length : '?')) + ' 组  ·  帧尺寸: ' + (petJson.frameWidth||'?') + 'x' + (petJson.frameHeight||'?')) : null,
         ),
         React.createElement('div', { style:{ width:220, flexShrink:0 } },
-          React.createElement('div', { className:'preview-box', style:{ width:200, height:200 } },
-            thumbUrl ? React.createElement('img', { src:thumbUrl }) :
-            resultUrl ? React.createElement('img', { src:resultUrl }) :
-            baseImg ? React.createElement('img', { src:baseImg }) :
-            refImg ? React.createElement('img', { src:refImg }) :
-            React.createElement('span', { style:{ fontSize:12, color:'#94a3b8', textAlign:'center' } }, '预览'),
-          ),
+          ssUrl ? React.createElement('div', { className:'preview-box', style:{ width:200, height:200 } }, React.createElement('img', { src:ssUrl }))
+          : React.createElement('div', { className:'preview-box', style:{ width:200, height:200 } }, React.createElement('span', { style:{ fontSize:12, color:'#94a3b8' } }, '预览')),
         ),
       ),
-    ),
-    genStatus !== 'idle' && React.createElement('div', { className:'card' },
-      React.createElement('h3', null, '⏳ 生成进度'),
-      React.createElement('div', { className:'progress-steps' },
-        steps.map(s => React.createElement('div', { key:s.key, className:`progress-step ${s.status}` },
-          s.status==='running' && React.createElement('span', { className:'spinner' }),
-          s.status==='done' && React.createElement('span', null, '✅'),
-          s.status==='failed' && React.createElement('span', null, '❌'),
-          ' ', s.label,
-        )),
-      ),
-    ),
-    resultUrl && React.createElement('div', { className:'card', style:{ display:'flex', gap:8, alignItems:'center' } },
-      React.createElement('span', { style:{ fontWeight:700 } }, '✅ 生成完成！'),
-      React.createElement('div', { style:{ width:220, margin:'12px 0' } },
-        React.createElement('canvas', { id:'preview-anim', width:200, height:217, style:{ borderRadius:12, background:'transparent' } })
-      ),
-      React.createElement('button', { className:'btn btn-primary', onClick:doSavePet, disabled:submitting||!name.trim(), style:{ width:'100%', padding:12 } },
-        submitting ? '保存中...' : '💾 保存精灵'),
-    ),
+      React.createElement('div', { style:{ display:'flex', gap:8, marginTop:12 } },
+        React.createElement('button', { className:'btn btn-primary', onClick:doUpload, disabled:submitting||!name.trim(), style:{ flex:1, padding:12 } },
+          submitting ? '上传中...' : '📤 上传精灵'),
+        React.createElement('button', { className:'btn btn-outline', onClick:reset, style:{ flex:1, padding:12 } }, '🔄 重新导入')),
+    ) : React.createElement('div', { className:'card' },
+      React.createElement('h3', { style:{ marginBottom:16 } }, '📤 上传精灵素材包'),
+      React.createElement('div', { className:'drop-zone' + (drag?' drag':''),
+        onClick:function(){ document.getElementById('zipInput').click(); },
+        onDragOver:function(e){ e.preventDefault(); setDrag(true); }, onDragLeave:function(){ setDrag(false); },
+        onDrop:function(e){ e.preventDefault(); setDrag(false); handleZip(e.dataTransfer.files[0]); } },
+        React.createElement('div', { style:{ fontSize:40, marginBottom:8 } }, '📦'),
+        React.createElement('div', { style:{ fontSize:14, fontWeight:600, color:'#FF8C00' } }, '拖拽 .zip 文件到此处，或点击选择'),
+        React.createElement('div', { style:{ fontSize:11, color:'#94a3b8', marginTop:4 } }, '需包含 pet.json + spritesheet.png')),
+      React.createElement('input', { id:'zipInput', type:'file', accept:'.zip', style:{ display:'none' },
+        onChange:function(e){ handleZip(e.target.files[0]); e.target.value=''; } })),
   );
 }
 
-
-// ═══ Import Panel ═══
-function ImportPanel({ onCreated }) {
-  const [name, setName] = React.useState("");
-  const [element, setElement] = React.useState("fire");
-  const [style, setStyle] = React.useState("pixel");
-  const [tier, setTier] = React.useState("rare");
-  const [desc, setDesc] = React.useState("");
-  const [resultUrl, setResultUrl] = React.useState(null);
-  const [thumbUrl, setThumbUrl] = React.useState(null);
-  const [petJsonData, setPetJsonData] = React.useState(null);
-  const [submitting, setSubmitting] = React.useState(false);
-  const [imported, setImported] = React.useState(false);
-  const [creatorName, setCreatorName] = React.useState(state.teacher?.name || '');
-
-  async function handleZipImport(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const zip = await JSZip.loadAsync(file);
-      const jsonFile = zip.file("pet.json");
-      if (!jsonFile) { toast("压缩包缺少 pet.json","error"); return; }
-      const petMeta = JSON.parse(await jsonFile.async("text"));
-      // Find spritesheet file by extension: .webp or .png
-      let ssFile = null;
-      zip.forEach(function(relativePath, file) {
-        if (!ssFile && /spritesheet\.(webp|png)$/i.test(relativePath)) ssFile = file;
-      });
-      if (!ssFile) { toast("压缩包缺少 spritesheet","error"); return; }
-      const ssBlob = await ssFile.async("blob");
-      if (petMeta.displayName) setName(petMeta.displayName);
-      if (petMeta.description) setDesc(petMeta.description);
-      const elemHints = { "火":"fire","焰":"fire", "水":"water","冰":"water","海":"water", "风":"wind","气":"wind", "地":"earth","岩":"earth","土":"earth","草":"earth", "电":"light","雷":"light","光":"light","暗":"light" };
-      for (const [kw, el] of Object.entries(elemHints)) {
-        if ((petMeta.displayName||"").includes(kw)) { setElement(el); break; }
-      }
-      const img = new Image();
-      img.onload = function() {
-        const c = document.createElement("canvas");
-        c.width = img.width; c.height = img.height;
-        c.getContext("2d").drawImage(img, 0, 0);
-        const pngDataUrl = c.toDataURL("image/png");
-        setResultUrl(pngDataUrl);
-        const tc = document.createElement("canvas");
-        tc.width = 200; tc.height = 217;
-        tc.getContext("2d").drawImage(img, 0, 0, 192, 208, 0, 0, 200, 217);
-        setThumbUrl(tc.toDataURL("image/png"));
-        setPetJsonData({ anims: petMeta.anims || { idle: [0,5] }, frameWidth: 192, frameHeight: 208, animsOrder: petMeta.animsOrder || ["idle"], durations: petMeta.durations || { idle: 750 } });
-        setImported(true);
-        render();
-      };
-      img.src = URL.createObjectURL(ssBlob);
-      toast("✅ 素材包导入成功！请确认信息后保存");
-    } catch(err) { toast("导入失败: " + err.message, "error"); }
-    e.target.value = "";
-  }
-
-  async function doSavePet() {
-    if (!resultUrl) { toast("请先导入素材包","error"); return; }
-    if (!name.trim()) { toast("请输入名字","error"); return; }
-    setSubmitting(true);
-    try {
-      const ssResp = await api("/api/workshop/upload", { method:"POST", body:JSON.stringify({ image: resultUrl, filename: (name.trim()||"pet") + "-spritesheet.png" }) });
-      if (ssResp.error) { toast("上传失败: "+ssResp.error,"error"); setSubmitting(false); return; }
-      const thumbResp = await api("/api/workshop/upload", { method:"POST", body:JSON.stringify({ image: thumbUrl || resultUrl, filename: (name.trim()||"pet") + "-thumb.png" }) });
-      if (thumbResp.error) { toast("缩略图上传失败","error"); setSubmitting(false); return; }
-      const tierData = TIERS.find(function(t){ return t.key===tier; });
-      const d = await api("/api/workshop/pets", { method:"POST", body:JSON.stringify({ name: name.trim(), element: element, style: style, description: desc.trim(), tier: tierData.key, price: tierData.price, spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData), creator_name: creatorName || '' }) });
-      if (d.error) { toast(d.error,"error"); setSubmitting(false); return; }
-      toast("✅ 精灵已保存！");
-      onCreated();
-      render();
-    } catch(err) { toast("保存失败: "+err.message,"error"); }
-    setSubmitting(false);
-  }
-
-  return React.createElement("div", null,
-    React.createElement("div", { className:"card" },
-      React.createElement("h3", null, "📦 导入素材包"),
-      React.createElement("p", { style:{ fontSize:12, color:"#94a3b8", marginBottom:16 } }, "从 Petdex 下载的素材包 (.zip)，包含 pet.json + spritesheet.webp"),
-      !imported && React.createElement("div", { style:{ border:"2px dashed #e2e8f0", borderRadius:12, padding:40, textAlign:"center", cursor:"pointer" }, onClick:function(){ document.getElementById("importZipInput").click(); } },
-        React.createElement("div", { style:{ fontSize:40, marginBottom:8 } }, "📦"),
-        React.createElement("div", { style:{ fontSize:14, fontWeight:600, color:"#FF8C00" } }, "点击选择 .zip 文件"),
-        React.createElement("div", { style:{ fontSize:11, color:"#94a3b8" } }, "支持 Petdex 导出格式"),
-        React.createElement("input", { id:"importZipInput", type:"file", accept:".zip", style:{ display:"none" }, onChange:handleZipImport }),
-      ),
-      imported && React.createElement("div", null,
-        React.createElement("div", { style:{ display:"flex", gap:16, flexWrap:"wrap" } },
-          React.createElement("div", { style:{ flex:"1 1 200px" } },
-            React.createElement("div", { className:"form-group" },
-              React.createElement("label", null, "名字"),
-              React.createElement("input", { className:"input", value:name, onChange:function(e){ setName(e.target.value); } }),
-            ),
-            React.createElement("div", { className:"form-group" },
-              React.createElement("label", null, "元素"),
-              React.createElement("div", { style:{ display:"flex", gap:6 } },
-                ELEMENTS.map(function(el){ return React.createElement("button", { key:el, className:"element-btn" + (element===el?" sel":""), onClick:function(){ setElement(el); } }, ELEM_LABEL[el]); }),
-              ),
-            ),
-            React.createElement("div", { className:"form-group" },
-              React.createElement("label", null, "等级"),
-              React.createElement("div", { style:{ display:"flex", gap:6 } },
-                TIERS.map(function(t){ return React.createElement("button", { key:t.key, className:"element-btn" + (tier===t.key?" sel":""), onClick:function(){ setTier(t.key); } }, t.label + " " + t.price + "g"); }),
-              ),
-            ),
-            React.createElement("div", { className:"form-group" },
-              React.createElement("label", null, "描述"),
-              React.createElement("textarea", { className:"input", value:desc, onChange:function(e){ setDesc(e.target.value); }, rows:2, style:{ resize:"vertical" } }),
-            ),
-          ),
-          React.createElement("div", { style:{ width:220, flexShrink:0 } },
-            React.createElement("div", { className:"preview-box", style:{ width:200, height:200 } },
-              thumbUrl ? React.createElement("img", { src:thumbUrl }) :
-              resultUrl ? React.createElement("img", { src:resultUrl }) :
-              React.createElement("span", { style:{ fontSize:12, color:"#94a3b8", textAlign:"center" } }, "预览"),
-            ),
-          ),
-        ),
-        React.createElement("div", { style:{ display:"flex", gap:8, marginTop:12 } },
-          React.createElement("button", { className:"btn btn-primary", onClick:doSavePet, disabled:submitting||!name.trim(), style:{ flex:1, padding:12 } },
-            submitting ? "保存中..." : "💾 确认保存 (" + (TIERS.find(function(t){ return t.key===tier; })||{}).price + "g)"),
-          React.createElement("button", { className:"btn btn-outline", onClick:function(){ setImported(false); setResultUrl(null); setThumbUrl(null); setName(""); setDesc(""); }, style:{ flex:1, padding:12 } },
-            "🔄 重新导入"),
-        ),
-      ),
-    ),
-  );
-}
-
-// ═══ Canvas Sprite Assembly ═══
-async function assembleSpritesheet(baseUrl, rowImgs) {
-  const FRAME_W = 192, FRAME_H = 208, FRAMES = 6;
-  const ROWS = 8, COLS = 9; // Petdex format: 8 rows × 9 cols
-  const CANVAS_W = FRAME_W * COLS;
-  const CANVAS_H = FRAME_H * ROWS;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = CANVAS_W; canvas.height = CANVAS_H;
-  const ctx = canvas.getContext('2d');
-
-  // Validation canvas for frame checking
-  const checkCanvas = document.createElement('canvas');
-  checkCanvas.width = FRAME_W; checkCanvas.height = FRAME_H;
-  const checkCtx = checkCanvas.getContext('2d');
-
-  const animOrder = ['idle','walk','sleep','celebrate','think','eat','unhappy'];
-  // Draw base image as first row (fills all 9 columns with same frame)
-  try {
-    if (baseUrl) {
-      const baseImg = await loadImage(baseUrl);
-      const baseW = baseImg.width;
-      const baseH = baseImg.height;
-      // Draw the base image across all 9 columns of row 0
-      for (let col = 0; col < COLS; col++) {
-        ctx.drawImage(baseImg, 0, 0, baseW, baseH, col * FRAME_W, 0, FRAME_W, FRAME_H);
-      }
-    }
-  } catch(e) { console.error('Failed to load base image:', String(e)); }
-  let totalFrames = 0, emptyFrames = 0;
-  const actualAnims = {};
-
-  for (let i = 0; i < animOrder.length; i++) {
-    const url = rowImgs[animOrder[i]];
-    if (!url) continue;
-    try {
-      const img = await loadImage(url);
-      const frameW = img.width / FRAMES;
-      const frameH = img.height;
-      for (let f = 0; f < FRAMES; f++) {
-        // Extract frame to validation canvas
-        checkCtx.clearRect(0, 0, FRAME_W, FRAME_H);
-        checkCtx.drawImage(img, f * frameW, 0, frameW, frameH, 0, 0, FRAME_W, FRAME_H);
-        // Validate: check if frame has content (not empty/blank)
-        const pixel = checkCtx.getImageData(FRAME_W/2, FRAME_H/2, 1, 1).data;
-        const hasContent = pixel[3] > 10; // alpha > 10 = non-empty
-        if (hasContent) {
-          ctx.drawImage(img, f * frameW, 0, frameW, frameH, f * FRAME_W, i * FRAME_H, FRAME_W, FRAME_H);
-          totalFrames++;
-        } else {
-          emptyFrames++;
-        }
-      }
-    } catch(e) { console.error('Failed to load ' + animOrder[i] + ': ' + String(e).substring(0,100)); }
-  }
-
-  console.log(`Assembly: ${totalFrames} frames, ${emptyFrames} empty skipped`);
-  console.log(`Spritesheet size: ${canvas.width}x${canvas.height}`);
-  console.log(`Active anims:`, Object.keys(actualAnims));
-
-  // Generate thumbnail: smart-crop first frame to remove white space
-  const thumbCanvas = document.createElement('canvas');
-  thumbCanvas.width = 200; thumbCanvas.height = 200;
-  const thumbCtx = thumbCanvas.getContext('2d');
-  // Get first frame pixel data to find content bounds
-  const frameData = ctx.getImageData(0, 0, FRAME_W, FRAME_H);
-  let minX = FRAME_W, minY = FRAME_H, maxX = 0, maxY = 0;
-  for (let y = 0; y < FRAME_H; y++) {
-    for (let x = 0; x < FRAME_W; x++) {
-      const idx = (y * FRAME_W + x) * 4;
-      if (frameData.data[idx + 3] > 20) { // non-transparent
-        const isWhite = frameData.data[idx] > 240 && frameData.data[idx + 1] > 240 && frameData.data[idx + 2] > 240;
-        if (!isWhite) { minX = Math.min(minX, x); minY = Math.min(minY, y); maxX = Math.max(maxX, x); maxY = Math.max(maxY, y); }
-      }
-    }
-  }
-  if (maxX > minX && maxY > minY) {
-    // Add 10% padding
-    const padW = (maxX - minX) * 0.1, padH = (maxY - minY) * 0.1;
-    const sx = Math.max(0, minX - padW), sy = Math.max(0, minY - padH);
-    const sw = Math.min(FRAME_W - sx, (maxX - minX) + padW * 2);
-    const sh = Math.min(FRAME_H - sy, (maxY - minY) + padH * 2);
-    thumbCtx.drawImage(canvas, sx, sy, sw, sh, 0, 0, 200, 200);
-  } else {
-    // Fallback: full frame
-    thumbCtx.drawImage(canvas, 0, 0, FRAME_W, FRAME_H, 0, 0, 200, 200);
-  }
-  let thumbnailDataUrl; try { thumbnailDataUrl = thumbCanvas.toDataURL('image/png'); } catch(e) { thumbnailDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.9); }
-
-  try { spritesheetDataUrl = canvas.toDataURL('image/png'); } catch(e) {
-    try { spritesheetDataUrl = canvas.toDataURL('image/jpeg', 0.85); } catch(e2) {
-      spritesheetDataUrl = 'data:image/png;base64,iVBORw0KGgo=';
-    }
-  }
-
-  return {
-    spritesheet: spritesheetDataUrl,
-    thumbnail: thumbnailDataUrl || spritesheetDataUrl,
-    petJson: {
-      frameWidth: FRAME_W, frameHeight: FRAME_H, maxFrames: FRAMES,
-      anims: Object.keys(actualAnims).length > 0 ? actualAnims : { idle: FRAMES, walk: FRAMES, sleep: FRAMES, celebrate: FRAMES, think: FRAMES, eat: FRAMES, unhappy: FRAMES },
-      animOrder: animOrder,
-      durations: { idle: 1100, walk: 800, sleep: 1400, celebrate: 900, think: 1200, eat: 1000, unhappy: 1100 },
-    },
-  };
-}
-
-function loadImage(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = API + '/api/workshop/proxy-image?url=' + encodeURIComponent(url);
-  });
-}
-
-// Animated preview using idle frames from spritesheet
-function createPreviewAnim(spritesheetDataUrl) {
-  const FRAME_W = 192, FRAME_H = 208, FRAMES = 6, FPS = 8;
-  const previewW = 200, previewH = 217; // Scale proportionally
-
-  const canvas = document.createElement('canvas');
-  canvas.width = previewW; canvas.height = previewH;
-  canvas.style.borderRadius = '12px';
-  canvas.style.background = 'transparent';
-  const ctx = canvas.getContext('2d');
-
-  const img = new Image();
-  img.onload = () => {
-    let frame = 0;
-    function animate() {
-      ctx.clearRect(0, 0, previewW, previewH);
-      ctx.drawImage(img,
-        frame * FRAME_W, 0, FRAME_W, FRAME_H,  // source: idle row, column frame
-        0, 0, previewW, previewH                 // dest: preview canvas
-      );
-      frame = (frame + 1) % FRAMES;
-      canvas._timer = setTimeout(animate, 1000 / FPS);
-    }
-    animate();
-  };
-  img.src = spritesheetDataUrl;
-
-  // Cleanup
-  canvas.cleanup = () => { if (canvas._timer) clearTimeout(canvas._timer); };
-  return canvas;
-}
-
-// ═══ Settings Panel ═══
-const AI_PROVIDERS = [
-  { key:'zhipu', name:'智谱 CogView-4', link:'https://open.bigmodel.cn', desc:'国产大模型，图生图能力强，中文理解好' },
-  { key:'qwen', name:'阿里通义万象', link:'https://dashscope.aliyun.com', desc:'阿里云出品，风格多样，生态全' },
-  { key:'hunyuan', name:'腾讯混元', link:'https://hunyuan.tencent.com', desc:'腾讯出品，免费额度多，内网快' },
-  { key:'coze', name:'字节豆包 (Coze)', link:'https://www.coze.cn', desc:'字节出品，免费100次/天，门槛最低' },
-];
-
-function SettingsPanel() {
-  const [provider, setProvider] = React.useState(() => localStorage.getItem('ws_ai_provider_' + (state.teacher?.teacher_id || '')) || 'zhipu');
-  const [keys, setKeys] = React.useState(() => {
-    try { return JSON.parse(localStorage.getItem('ws_ai_keys_' + (state.teacher?.teacher_id || '')) || '{}'); } catch { return {}; }
-  });
-  const [msg, setMsg] = React.useState('');
-  const selP = AI_PROVIDERS.find(p => p.key === provider) || AI_PROVIDERS[0];
-
-  function save() {
-    localStorage.setItem('ws_ai_provider_' + (state.teacher?.teacher_id || ''), provider);
-    localStorage.setItem('ws_ai_keys_' + (state.teacher?.teacher_id || ''), JSON.stringify(keys));
-    setMsg('✅ 配置已保存'); setTimeout(() => setMsg(''), 2000);
-  }
-  function setKey(pk, v) { setKeys(prev => ({ ...prev, [pk]: v })); }
-  async function testApi(p) {
-    if (!keys[p.key]) { toast('请先填写 ' + p.name + ' 的 API Key','error'); return; }
-    toast('正在测试 ' + p.name + '...', 'success');
-    const d = await api('/api/ai/generate', { method:'POST', body:JSON.stringify({ prompt:'一只像素风测试小猫', provider:p.key, api_key:keys[p.key] }) });
-    if (d.error) { toast('❌ ' + p.name + ': ' + d.error,'error'); return; }
-    toast('✅ ' + p.name + ' 连接成功！');
-  }
-
-  return React.createElement('div', { className:'card' },
-    React.createElement('h3', null, '⚙️ AI 模型配置'),
-    React.createElement('p', { style:{ fontSize:12, color:'#94a3b8', marginBottom:16 } }, '选择模型并填写 API Key，Key 保存在浏览器本地。'),
-    React.createElement('div', { className:'form-group' },
-      React.createElement('label', null, 'AI 模型'),
-      React.createElement('select', { className:'input', value:provider, onChange:e=>setProvider(e.target.value) },
-        AI_PROVIDERS.map(p => React.createElement('option', { key:p.key, value:p.key }, p.name))
-      )
-    ),
-    React.createElement('div', { className:'form-group' },
-      React.createElement('label', null, selP.name + ' API Key'),
-      React.createElement('input', { className:'input', type:'password', value:keys[provider]||'', onChange:function(e){ setKey(provider, e.target.value); }, placeholder:'输入 API Key' }),
-      React.createElement('div', { style:{ fontSize:11, color:'#94a3b8', marginTop:4 } },
-        React.createElement('a', { href:selP.link, target:'_blank', style:{ color:'#FF8C00' } }, selP.link), ' → API Keys → 复制 · ', selP.desc
-      ),
-      React.createElement('button', { className:'btn btn-outline', style:{ marginTop:8, fontSize:12, padding:'4px 14px' }, onClick:function(){ testApi(selP); } }, '🔍 测试连接')
-    ),
-    React.createElement('button', { className:'btn btn-primary', onClick:save, style:{ width:'100%', padding:12 } }, '💾 保存配置'),
-    msg && React.createElement('div', { style:{ marginTop:8, fontSize:12, color:'#16a34a', fontWeight:600 } }, msg)
-  );
-}
 // ═══ My Pets Panel ═══
-function MyPetsPanel({ pets, onRefresh }) {
-  const [editingId, setEditingId] = React.useState(null);
-  const [editName, setEditName] = React.useState('');
-  const [editCreator, setEditCreator] = React.useState('');
+function PetThumb(props) {
+  var canvasRef = React.useRef(null);
+  React.useEffect(function(){
+    var c = canvasRef.current; if (!c || !props.url) return;
+    var img = new Image(); img.crossOrigin = 'anonymous';
+    img.onload = function(){
+      var ctx = c.getContext('2d'); ctx.clearRect(0, 0, 60, 68);
+      ctx.drawImage(img, 0, 0, Math.min(img.width, 192), Math.min(img.height, 208), 0, 0, 60, 68);
+    };
+    img.src = API + '/api/workshop/image?key=' + encodeURIComponent(props.url);
+  }, [props.url]);
+  return React.createElement('canvas', { ref:canvasRef, width:60, height:68 });
+}
 
-  const deletePet = async (id) => {
+function MyPetsPanel(props) {
+  var pets = props.pets;
+  var _1 = React.useState(null), editing = _1[0], setEditing = _1[1];
+  var _2 = React.useState(''), eName = _2[0], setEName = _2[1];
+  var _3 = React.useState('fire'), eElem = _3[0], setEElem = _3[1];
+  var _4 = React.useState('rare'), eTier = _4[0], setETier = _4[1];
+  var _5 = React.useState(''), eCreator = _5[0], setECreator = _5[1];
+
+  async function deletePet(id) {
     if (!confirm('确定要删除这只精灵吗？')) return;
-    const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method: 'DELETE' });
+    var resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method:'DELETE' });
     if (resp.error) { toast(resp.error, 'error'); return; }
-    toast('已删除');
-    onRefresh();
-  };
+    toast('已删除'); props.onRefresh();
+  }
 
-  const startEdit = (p) => { setEditingId(p.id); setEditName(p.name); setEditCreator(p.teacher_name || ''); };
-  const cancelEdit = () => { setEditingId(null); };
-  const saveEdit = async (id) => {
-    const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method:'PUT', body:JSON.stringify({ name:editName.trim(), teacher_name:editCreator.trim() }) });
+  function startEdit(p) { setEditing(p.id); setEName(p.name||''); setEElem(p.element||'fire'); setETier(p.tier||'rare'); setECreator(p.teacher_name||''); }
+  function cancelEdit() { setEditing(null); }
+
+  async function saveEdit(id) {
+    var resp = await api('/api/workshop/pets/' + encodeURIComponent(id), {
+      method:'PUT', body:JSON.stringify({ name:eName.trim(), element:eElem, tier:eTier, teacher_name:eCreator.trim() }),
+    });
     if (resp.error) { toast(resp.error,'error'); return; }
-    toast('✅ 已更新'); setEditingId(null); onRefresh();
-  };
+    toast('已更新'); setEditing(null); props.onRefresh();
+  }
+
+  if (pets.length === 0) {
+    return React.createElement('div', { className:'card', style:{ textAlign:'center', padding:40, color:'#94a3b8' } }, '还没有精灵，去「📤 上传 ZIP」添加吧');
+  }
 
   return React.createElement('div', null,
-    pets.length === 0 ? React.createElement('div', { className:'card', style:{ textAlign:'center', padding:40, color:'#94a3b8' } }, '还没有生成精灵，去「🎨 创建精灵」看看吧') :
-    pets.map(p => editingId === p.id ? React.createElement('div', { key:p.id, className:'card', style:{ border:'2px solid #FF8C00' } },
-      React.createElement('div', { className:'form-group' },
-        React.createElement('label', null, '名字'),
-        React.createElement('input', { className:'input', value:editName, onChange:e=>setEditName(e.target.value) }),
-      ),
-      React.createElement('div', { className:'form-group' },
-        React.createElement('label', null, '发布者'),
-        React.createElement('input', { className:'input', value:editCreator, onChange:e=>setEditCreator(e.target.value), placeholder:'显示在学生端的名字' }),
-      ),
-      React.createElement('div', { style:{ display:'flex', gap:8 } },
-        React.createElement('button', { className:'btn btn-primary', onClick:()=>saveEdit(p.id), style:{ flex:1 } }, '✅ 保存'),
-        React.createElement('button', { className:'btn btn-outline', onClick:cancelEdit, style:{ flex:1 } }, '取消'),
-      ),
-    ) : React.createElement('div', { key:p.id, className:'pet-card' },
-      React.createElement('div', { className:'pet-thumb' },
-        (p.thumbnail_url ? React.createElement('img', { src: 'https://api.cspstudy.top/api/workshop/image?key=' + encodeURIComponent(p.thumbnail_url) }) : React.createElement('span', { style:{ fontSize:24 } }, '🐣')),
-      ),
-      React.createElement('div', { style:{ flex:1 } },
-        React.createElement('div', { style:{ fontWeight:700 } }, ELEM_LABEL[p.element]||'', ' ', p.name),
-        React.createElement('div', { style:{ fontSize:12, color:'#94a3b8' } }, '发布者: ', (p.teacher_name||'?'), ' · ', p.tier, ' · 🪙', p.price, 'g'),
-      ),
-      React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12, marginRight:6 }, onClick:()=>startEdit(p) }, '✏️'),
-      React.createElement('button', { className:'btn btn-danger', style:{ fontSize:12 }, onClick:()=>deletePet(p.id) }, '🗑'),
-    )),
-  );
+    pets.map(function(p){
+      if (editing === p.id) {
+        return React.createElement('div', { key:p.id, className:'card', style:{ border:'2px solid #FF8C00' } },
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '名字'), React.createElement('input', { className:'input', value:eName, onChange:function(e){ setEName(e.target.value); } })),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '元素'),
+            React.createElement('div', { style:{ display:'flex', gap:6 } },
+              ELEMENTS.map(function(el){ return React.createElement('button', { key:el, className:'element-btn'+(eElem===el?' sel':''), onClick:function(){ setEElem(el); } }, ELEM_LABEL[el]); }))),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '等级'),
+            React.createElement('select', { className:'input', value:eTier, onChange:function(e){ setETier(e.target.value); } },
+              Object.keys(TIER_LABEL).map(function(t){ return React.createElement('option', { key:t, value:t }, TIER_LABEL[t]); }))),
+          React.createElement('div', { className:'form-group' },
+            React.createElement('label', null, '发布者'), React.createElement('input', { className:'input', value:eCreator, onChange:function(e){ setECreator(e.target.value); }, placeholder:'显示在学生端的名字' })),
+          React.createElement('div', { style:{ display:'flex', gap:8 } },
+            React.createElement('button', { className:'btn btn-primary', onClick:function(){ saveEdit(p.id); }, style:{ flex:1 } }, '✅ 保存'),
+            React.createElement('button', { className:'btn btn-outline', onClick:cancelEdit, style:{ flex:1 } }, '取消')));
+      }
+      return React.createElement('div', { key:p.id, className:'pet-card' },
+        React.createElement('div', { className:'pet-thumb' },
+          p.spritesheet_url ? React.createElement(PetThumb, { url:p.spritesheet_url }) :
+          p.thumbnail_url ? React.createElement('img', { src:API + '/api/workshop/image?key=' + encodeURIComponent(p.thumbnail_url) }) :
+          React.createElement('span', { style:{ fontSize:24 } }, '🐣')),
+        React.createElement('div', { style:{ flex:1 } },
+          React.createElement('div', { style:{ fontWeight:700, marginBottom:4 } },
+            (ELEM_LABEL[p.element]||'') + ' ' + (p.name||'?')),
+          React.createElement('div', { style:{ display:'flex', gap:6, flexWrap:'wrap', alignItems:'center' } },
+            p.element ? React.createElement('span', { className:'badge badge-' + p.element }, ELEM_LABEL[p.element]||p.element) : null,
+            p.tier ? React.createElement('span', { className:'badge badge-' + p.tier }, TIER_LABEL[p.tier]||p.tier) : null,
+            p.price ? React.createElement('span', { style:{ fontSize:11, color:'#94a3b8' } }, '🪙 ' + p.price + 'g') : null),
+          React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginTop:2 } }, '发布者: ' + (p.teacher_name||'?'))),
+        React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12, marginRight:6 }, onClick:function(){ startEdit(p); } }, '✏️'),
+        React.createElement('button', { className:'btn btn-danger', style:{ fontSize:12 }, onClick:function(){ deletePet(p.id); } }, '🗑'));
+    }));
 }
 
 // ═══ App ═══
 function App() {
-  React.useEffect(() => {
-    const token = localStorage.getItem('csp_teacher_token');
-    const info = localStorage.getItem('csp_teacher_info');
-    if (token && info) {
-      state.token = token; state.teacher = JSON.parse(info);
-      state.page = 'dashboard'; render();
-    }
+  React.useEffect(function(){
+    var token = localStorage.getItem('csp_teacher_token');
+    var info = localStorage.getItem('csp_teacher_info');
+    if (token && info) { state.token = token; state.teacher = JSON.parse(info); state.page = 'dashboard'; render(); }
   }, []);
   if (state.page === 'login') return React.createElement(LoginPage);
   return React.createElement(Dashboard);
@@ -848,12 +331,11 @@ function App() {
 
 function render() { ReactDOM.render(React.createElement(App), document.getElementById('app')); }
 
-// Load React
 if (typeof React === 'undefined') {
-  const s1 = document.createElement('script');
+  var s1 = document.createElement('script');
   s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js';
-  s1.onload = () => {
-    const s2 = document.createElement('script');
+  s1.onload = function(){
+    var s2 = document.createElement('script');
     s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js';
     s2.onload = render;
     document.head.appendChild(s2);

@@ -865,15 +865,75 @@ export default {
         return new Response(JSON.stringify(result.results), { headers: cors });
       }
 
-      // POST /api/workshop/pets — teacher submits a generated pet
+      // POST /api/workshop/pets — teacher uploads a generated pet (FormData or JSON)
       if (path === '/api/workshop/pets' && request.method === 'POST') {
         const teacher = await checkTeacher(request, db);
         if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        const { name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, creator_name } = await request.json();
+
+        const contentType = request.headers.get('content-type') || '';
+        let name, element, style, description, tier, pet_json_str, spritesheet_url, thumbnail_url, creator_name;
+
+        if (contentType.includes('multipart/form-data')) {
+          // FormData upload (from new workshop UI)
+          const formData = await request.formData();
+          name = formData.get('name');
+          element = formData.get('element');
+          tier = formData.get('tier') || 'common';
+          style = formData.get('style') || '';
+          description = formData.get('description') || '';
+          creator_name = formData.get('creator_name') || teacher.name;
+          pet_json_str = formData.get('pet_json');
+          const spritesheet_file = formData.get('spritesheet');
+
+          if (!name || !element || !pet_json_str) {
+            return new Response(JSON.stringify({ error: '缺少必填字段: name, element, pet_json' }), { status: 400, headers: cors });
+          }
+
+          // Validate pet_json
+          try {
+            const petJson = JSON.parse(pet_json_str);
+            if (!petJson.name || !petJson.slug || !petJson.animOrder) {
+              return new Response(JSON.stringify({ error: 'pet.json 缺少必填字段' }), { status: 400, headers: cors });
+            }
+          } catch { return new Response(JSON.stringify({ error: 'pet.json 格式无效' }), { status: 400, headers: cors }); }
+
+          const id = 'ws-' + randomChars(10);
+          const slug = (() => { try { return JSON.parse(pet_json_str).slug || id; } catch { return id; } })();
+
+          // Upload spritesheet + pet_json to KV
+          if (spritesheet_file && spritesheet_file instanceof File) {
+            const spritesheetBuf = await spritesheet_file.arrayBuffer();
+            const spritesheetKey = `workshop/${slug}/spritesheet.png`;
+            const petJsonKey = `workshop/${slug}/pet.json`;
+
+            // Retry upload with verify
+            for (let attempt = 0; attempt < 3; attempt++) {
+              await env.SPRITES.put(spritesheetKey, spritesheetBuf, { metadata: { contentType: 'image/png' } });
+              const verify = await env.SPRITES.get(spritesheetKey, 'arrayBuffer');
+              if (verify && verify.byteLength === spritesheetBuf.byteLength) break;
+              if (attempt === 2) return new Response(JSON.stringify({ error: '上传失败，请重试' }), { status: 500, headers: cors });
+              await new Promise(r => setTimeout(r, 500));
+            }
+            await env.SPRITES.put(petJsonKey, pet_json_str, { metadata: { contentType: 'application/json' } });
+
+            spritesheet_url = `/api/workshop/image?key=${encodeURIComponent(spritesheetKey)}`;
+            thumbnail_url = spritesheet_url; // Workshop UI generates thumbnails client-side
+          }
+
+          await db.prepare(
+            'INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))'
+          ).bind(id, teacher.teacher_id, creator_name, name, element, style, description, tier, 200, pet_json_str, spritesheet_url || '', thumbnail_url || '').run();
+
+          return new Response(JSON.stringify({ success: true, id }), { headers: cors });
+        }
+
+        // JSON upload (legacy, backward compat)
+        const body = await request.json();
+        ({ name, element, style, description, tier, pet_json: pet_json_str, spritesheet_url, thumbnail_url, creator_name } = body);
         if (!name || !element || !tier) return new Response(JSON.stringify({ error: '缺少必填字段' }), { status: 400, headers: cors });
         const id = 'ws-' + randomChars(10);
         const displayTeacher = creator_name || teacher.name;
-        await db.prepare('INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))').bind(id, teacher.teacher_id, displayTeacher, name, element, style||'', description||'', tier, price||200, pet_json||'', spritesheet_url||'', thumbnail_url||'').run();
+        await db.prepare('INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))').bind(id, teacher.teacher_id, displayTeacher, name, element, style||'', description||'', tier, 200, pet_json_str||'', spritesheet_url||'', thumbnail_url||'').run();
         return new Response(JSON.stringify({ success: true, id }), { headers: cors });
       }
 
@@ -895,6 +955,8 @@ export default {
         const sets = []; const vals = [];
         if (body.name !== undefined) { sets.push('name=?'); vals.push(body.name); }
         if (body.teacher_name !== undefined) { sets.push('teacher_name=?'); vals.push(body.teacher_name); }
+        if (body.element !== undefined) { sets.push('element=?'); vals.push(body.element); }
+        if (body.tier !== undefined) { sets.push('tier=?'); vals.push(body.tier); }
         if (!sets.length) return new Response(JSON.stringify({ error: '无可更新字段' }), { status: 400, headers: cors });
         vals.push(id, teacher.teacher_id);
         await db.prepare('UPDATE workshop_pets SET ' + sets.join(',') + ' WHERE id=? AND teacher_id=?').bind(...vals).run();
