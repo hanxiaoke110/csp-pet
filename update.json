@@ -1,7 +1,7 @@
 {
-  "version": "1.6.2",
-  "notes": "v1.6.2: \u79bb\u7ebf\u9898\u5e93fallback + \u9009\u9879\u6e32\u67d3\u4fee\u590d + \u9898\u5e93\u6570\u636e\u4fee\u590d + ChangelogModal",
-  "pub_date": "2026-06-13T04:00:00Z",
+  "version": "1.6.3",
+  "notes": "v1.6.3: \u6210\u5c31\u624b\u52a8\u9886\u53d6 + \u8bfe\u7a0b\u641c\u7d22\u5d29\u6e83\u4fee\u590d + \u9898\u5e93\u9009\u9879\u6c61\u67d3\u4fee\u590d + 11\u9053\u9898\u4fee\u590d",
+  "pub_date": "2026-06-14T04:00:00Z",
   "platforms": {
     "darwin-aarch64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3dCRG9JTm0zdkRodVBPV2tBUVliOHZvbzN2Sk40VjRBMHloVGlHWU1mZFV1Vlpyc1VIUmJFUWhxa0Zhdmw5cWFrS1RoRGxTU3NOdDZTZ2lOY0NkYndzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxMzIyOTY5CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuMl9hYXJjaDY0LmRtZwovcTY2N3JjbC81SE5UZkc3dUpEN25Sa1B2WmxuMTBHdHBkR1VvZG1jdTJpQ2ppZHhobkZCeWtHSHovbmVFbVRnTThiNENaSHlFV3hIZTRYbFFYaHVCZz09Cg==",

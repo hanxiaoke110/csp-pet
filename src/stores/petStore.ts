@@ -535,31 +535,13 @@ export const usePetStore = create<PetState>((set, get) => ({
   // ─── Collection rewards ───
   checkCollectionRewards: () => {
     const { ownedPets } = get();
-    const speciesIds = ownedPets.map(p => p.speciesId);
-    const elements = new Set(ownedPets.map(p => p.element));
-    const legendaries = speciesIds.filter(id => PET_TIERS[id] === 'legendary').length;
-    const commons = speciesIds.filter(id => (PET_TIERS[id] || 'common') === 'common').length;
 
     const claimed: string[] = JSON.parse(localStorage.getItem('csp_collection_claimed') || '[]');
     let bonus = 0;
     const msgs: string[] = [];
 
-    if (!claimed.includes('elements4') && elements.has('earth') && elements.has('fire') && elements.has('wind') && elements.has('water')) {
-      bonus += 200;
-      get().renameCards += 1;
-      claimed.push('elements4');
-      msgs.push('🌈 集齐四系！+200g + 改名卡');
-    }
-    if (!claimed.includes('common10') && commons >= 10) {
-      bonus += 150;
-      claimed.push('common10');
-      msgs.push('⭐ 收集 10 只！+150g');
-    }
-    if (!claimed.includes('firstLegendary') && legendaries >= 1) {
-      bonus += 100;
-      claimed.push('firstLegendary');
-      msgs.push('👑 首只传说！+100g');
-    }
+    // Collection rewards moved to achievement manual claim — no auto-grant here.
+    // AchievementsPanel handles manual claim for: elements4, common10, firstLegendary, etc.
 
     if (bonus > 0) {
       get().addCoins(bonus);
