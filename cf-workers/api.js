@@ -55,7 +55,8 @@ async function serverDecrypt(encBase64, env) {
 // ── Auth ──
 function checkAdmin(request, env) {
   const token = request.headers.get('X-Admin-Token') || '';
-  return token === (env.ADMIN_TOKEN || 'csp-admin-2024');
+  if (!env.ADMIN_TOKEN) return false;
+  return token === env.ADMIN_TOKEN;
 }
 async function checkTeacher(request, db) {
   const token = request.headers.get('X-Teacher-Token') || '';
