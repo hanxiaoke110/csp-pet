@@ -32,9 +32,13 @@ interface PetState {
   gachaDailyPulls: number;
   gachaDate: string;
   gachaPity: number;
-  _rollGacha: () => { item: ShopItem; rarity: string; autoName?: string; pityBreak: boolean } | null;
+  _rollGacha: () => { type: 'pet'; item: ShopItem; rarity: string; autoName?: string; pityBreak: boolean } | { type: 'food'; foodType: string } | { type: 'wishTicket' } | { type: 'renameCard' } | null;
   claimHatchedPet: (speciesId: string, petName: string, tier?: string) => boolean;
-  doGacha: () => { item: ShopItem; rarity: string; pityBreak: boolean } | null;
+  doGacha: () => { type: 'pet'; item: ShopItem; rarity: string; pityBreak: boolean } | { type: 'food'; foodType: string } | { type: 'wishTicket' } | { type: 'renameCard' } | null;
+
+  // Inventory
+  foodItems: { type: string; count: number }[];
+  wishTickets: number;
 
   // Attributes
   addExp: (petId: string, amount: number) => void;
@@ -110,6 +114,8 @@ export const usePetStore = create<PetState>((set, get) => ({
   pendingCoins: 0,
   expPool: 0,
   renameCards: 0,
+  foodItems: [],
+  wishTickets: 0,
   gachaDailyPulls: 0,
   gachaDate: '',
   gachaPity: 0,
@@ -355,7 +361,7 @@ export const usePetStore = create<PetState>((set, get) => ({
     return '';
   },
 
-  // Gacha: RNG + deduct coins, return result without buying pet
+  // Gacha: 150g/抽，混合奖池（食物/许愿票/精灵/改名卡）
   _rollGacha: () => {
     const s = get();
     const today = new Date().toISOString().slice(0, 10);
@@ -364,29 +370,74 @@ export const usePetStore = create<PetState>((set, get) => ({
     let gachaPity = s.gachaPity;
     if (gachaDate !== today) { gachaDailyPulls = 0; gachaDate = today; }
     if (gachaDailyPulls >= 5) return null;
-    if (s.coins < 200) return null;
+    if (s.coins < 150) return null;
     gachaDailyPulls++; gachaPity++;
 
     const activePet = s.ownedPets.find(p => p.petId === s.activePetId);
     const pityThreshold = activePet ? getLevelMilestone(activePet.level).pityThreshold : 100;
 
-    let rarity: string;
     const roll = Math.random() * 100;
-    if (gachaPity >= pityThreshold || roll < 1) { rarity = 'legendary'; gachaPity = 0; }
-    else if (roll < 11) { rarity = 'rare'; }
+
+    // Pity break: guaranteed legendary pet
+    if (gachaPity >= pityThreshold || roll < 4) {
+      gachaPity = 0;
+      const legends = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet' && PET_TIERS[i.speciesId!] === 'legendary');
+      const available = legends.filter(i => !get().isOwned(i.speciesId!));
+      if (available.length === 0) return { type: 'renameCard' };
+      const item = available[Math.floor(Math.random() * available.length)];
+      if (!item?.speciesId) return null;
+      const ownedNames = s.ownedPets.map(p => p.petName);
+      const autoName = item.name + (ownedNames.includes(item.name) ? Math.floor(Math.random()*100).toString() : '');
+      set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
+      get().save();
+      return { type: 'pet', item, rarity: 'legendary', autoName, pityBreak: true };
+    }
+
+    // Non-legendary: 70% consumables, 30% pets/rename card
+    if (roll < 30) {
+      // 30% 普通食物
+      set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
+      get().save();
+      return { type: 'food', foodType: 'normal' };
+    } else if (roll < 50) {
+      // 20% 高级食物
+      set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
+      get().save();
+      return { type: 'food', foodType: 'premium' };
+    } else if (roll < 70) {
+      // 20% 许愿票
+      set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
+      get().save();
+      return { type: 'wishTicket' };
+    } else if (roll < 80) {
+      // 10% 普通精灵
+    } else if (roll < 88) {
+      // 8% 稀有精灵
+    } else if (roll < 96) {
+      // 8% 改名卡
+      set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
+      get().save();
+      return { type: 'renameCard' };
+    } else {
+      // 4% 传说 (already handled by pity above, but catch the natural roll)
+    }
+
+    // Fall through to pet draw
+    let rarity: string;
+    if (roll < 80) rarity = 'common';
+    else if (roll < 88) rarity = 'rare';
     else { rarity = 'common'; }
 
     const allPets = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet');
     const commons = allPets.filter(i => (PET_TIERS[i.speciesId!] || 'common') === 'common');
     const rares = allPets.filter(i => PET_TIERS[i.speciesId!] === 'rare');
-    const legends = allPets.filter(i => PET_TIERS[i.speciesId!] === 'legendary');
-    const pool = rarity === 'legendary' ? legends.length ? legends : rares :
-                 rarity === 'rare' ? rares.length ? rares : commons : commons;
+    const pool = rarity === 'rare' ? rares.length ? rares : commons : commons;
 
     const available = pool.filter(i => !get().isOwned(i.speciesId!));
     if (available.length === 0) {
-      set({ gachaDailyPulls, gachaDate: today, gachaPity: s.gachaPity, coins: s.coins });
-      return { item: pool[0], rarity: 'refund' as const, pityBreak: false };
+      set({ gachaDailyPulls, gachaDate: today, gachaPity: s.gachaPity, coins: s.coins - 150 });
+      get().save();
+      return { type: 'renameCard' }; // All owned → fallback rename card
     }
 
     const item = available[Math.floor(Math.random() * available.length)];
@@ -395,10 +446,9 @@ export const usePetStore = create<PetState>((set, get) => ({
     const ownedNames = s.ownedPets.map(p => p.petName);
     const autoName = item.name + (ownedNames.includes(item.name) ? Math.floor(Math.random()*100).toString() : '');
 
-    // Deduct coins but don't buy pet yet — hatching flow handles it
-    set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 200 });
+    set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
     get().save();
-    return { item, rarity, autoName, pityBreak: gachaPity === 0 && rarity !== 'common' };
+    return { type: 'pet', item, rarity, autoName, pityBreak: false };
   },
 
   // Add pet after hatching — coins already deducted in gacha/shop flow
@@ -430,9 +480,32 @@ export const usePetStore = create<PetState>((set, get) => ({
   doGacha: () => {
     const result = get()._rollGacha();
     if (!result) return null;
-    if (result.rarity === 'refund') return { item: result.item, rarity: 'refund', pityBreak: false };
+
+    // Non-pet prizes
+    if (result.type === 'food') {
+      set(s => {
+        const items = [...s.foodItems];
+        const existing = items.find(f => f.type === result.foodType);
+        if (existing) existing.count++;
+        else items.push({ type: result.foodType!, count: 1 });
+        return { foodItems: items };
+      });
+      get().save();
+      return result;
+    }
+    if (result.type === 'wishTicket') {
+      set(s => ({ wishTickets: s.wishTickets + 1 }));
+      get().save();
+      return result;
+    }
+    if (result.type === 'renameCard') {
+      set(s => ({ renameCards: s.renameCards + 1 }));
+      get().save();
+      return result;
+    }
+
+    // Pet prize
     const r = result as any;
-    // Coins already deducted in _rollGacha (200g). Don't call buyPet — it would deduct again.
     const config = getPetConfig(r.item.speciesId);
     if (!config) return null;
     const pet: OwnedPet = {
@@ -447,7 +520,7 @@ export const usePetStore = create<PetState>((set, get) => ({
     set(s => ({ ownedPets: [...s.ownedPets, pet] }));
     get().save();
     get().checkCollectionRewards();
-    return { item: r.item, rarity: r.rarity, pityBreak: r.pityBreak };
+    return result;
   },
 
   // ─── Training camp ───
@@ -536,8 +609,8 @@ export const usePetStore = create<PetState>((set, get) => ({
   checkCollectionRewards: () => {},
 
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate } = get();
-    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate };
+    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate } = get();
+    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     if (activePetId) { invoke('show_pet_window').catch(() => {}); }
@@ -565,6 +638,8 @@ export const usePetStore = create<PetState>((set, get) => ({
           pendingCoins: data.pendingCoins || 0,
           expPool: data.expPool || 0,
           renameCards: data.renameCards || 0,
+          foodItems: data.foodItems || [],
+          wishTickets: data.wishTickets || 0,
           gachaDailyPulls: data.gachaDailyPulls || 0,
           gachaDate: data.gachaDate || '',
           gachaPity: data.gachaPity || 0,

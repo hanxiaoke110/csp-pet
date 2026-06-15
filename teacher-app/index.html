@@ -787,18 +787,20 @@ function ImportPanel({ onCreated }) {
       }
       const img = new Image();
       img.onload = function() {
-        const c = document.createElement("canvas");
-        c.width = img.width; c.height = img.height;
-        c.getContext("2d").drawImage(img, 0, 0);
-        const pngDataUrl = c.toDataURL("image/png");
-        setResultUrl(pngDataUrl);
-        const tc = document.createElement("canvas");
-        tc.width = 200; tc.height = 217;
-        tc.getContext("2d").drawImage(img, 0, 0, 192, 208, 0, 0, 200, 217);
+        // Full spritesheet for upload
+        var fc = document.createElement("canvas");
+        fc.width = img.width; fc.height = img.height;
+        fc.getContext("2d").drawImage(img, 0, 0);
+        setResultUrl(fc.toDataURL("image/png"));
+        // Cropped first frame for preview
+        var tc = document.createElement("canvas");
+        tc.width = 200; tc.height = 200;
+        var ctx = tc.getContext("2d");
+        ctx.drawImage(img, 0, 0, Math.min(img.width, 192), Math.min(img.height, 208), 0, 0, 200, 200);
         setThumbUrl(tc.toDataURL("image/png"));
         setPetJsonData({ anims: petMeta.anims || { idle: [0,5] }, frameWidth: 192, frameHeight: 208, animsOrder: petMeta.animsOrder || ["idle"], durations: petMeta.durations || { idle: 750 } });
         setImported(true);
-        render();
+        setTimeout(function() { render(); }, 0);
       };
       img.src = URL.createObjectURL(ssBlob);
       toast("✅ 素材包导入成功！请确认信息后保存");
