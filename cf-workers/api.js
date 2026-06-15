@@ -140,21 +140,9 @@ async function ensureSchema(db) {
   _schemaEnsured = true;
 }
 
-// ── Lazy monthly cleanup ──
-let _cleanupChecked = '';
-async function maybeCleanup(db) {
-  const thisMonth = getMonthKey();
-  if (_cleanupChecked === thisMonth) return; // Instance cache
-  const last = await db.prepare("SELECT value FROM meta WHERE key='last_cleanup'").first();
-  if (last && last.value === thisMonth) { _cleanupChecked = thisMonth; return; }
-  await db.prepare(`UPDATE wishes SET status='archived' WHERE status='active' AND votes=0 AND created_at < datetime('now','-${CLEANUP_PROTECT_DAYS} days')`).run();
-  const cnt = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE status='active'").first();
-  if (cnt && cnt.c > CLEANUP_MIN_KEEP) {
-    const n = Math.floor(cnt.c * 0.2);
-    if (n > 0) await db.prepare(`UPDATE wishes SET status='archived' WHERE id IN (SELECT id FROM wishes WHERE status='active' AND created_at < datetime('now','-${CLEANUP_PROTECT_DAYS} days') ORDER BY votes ASC, created_at ASC LIMIT ?)`).bind(n).run();
-  }
-  await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('last_cleanup', ?)").bind(thisMonth).run();
-  _cleanupChecked = thisMonth;
+// ── Lazy monthly cleanup (disabled — teachers manage manually) ──
+async function maybeCleanup(_db) {
+  // No auto-cleanup. Teachers manually delete/archive wishes.
 }
 
 // ── Password hashing (simple SHA-256) ──
