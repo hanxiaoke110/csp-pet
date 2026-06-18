@@ -551,6 +551,7 @@ export default function QuizPractice() {
       </div>
 
       <div className="quiz-question-card">
+        {q.code && <pre className="code-block"><code>{q.code}</code></pre>}
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderText(q.question)} />
 
         <div className="quiz-options">
