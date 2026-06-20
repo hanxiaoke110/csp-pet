@@ -15,6 +15,7 @@ export function WorkshopShop() {
   const startHatching = useHatchStore(s => s.startHatching);
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [buyingId, setBuyingId] = useState<string | null>(null);
   const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
   const [filter, setFilter] = useState<'all' | 'rare' | 'legendary'>('all');
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
@@ -26,12 +27,16 @@ export function WorkshopShop() {
   }, []);
 
   const handleBuy = async (pet: any) => {
+    if (buyingId) return; // Prevent double-click
     if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
     if (coins < (pet.price || 200)) { alert('金币不足'); return; }
+    setBuyingId(pet.id);
+    try {
     if (!await downloadSprites(pet)) return;
     spendCoins(pet.price || 200);
     const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
     setPendingHatch({ pet, rarity });
+    } finally { setBuyingId(null); }
   };
 
   const downloadSprites = async (pet: any): Promise<boolean> => {
@@ -102,9 +107,9 @@ export function WorkshopShop() {
               {pet.tier === 'legendary' ? '👑 传说' : pet.tier === 'rare' ? '✨ 稀有' : '⭐ 普通'}
             </div>
             <button className="shop-card-buy" style={{ width: '100%' }}
-              disabled={coins < (pet.price || 200) || isOwned('workshop-' + pet.id)}
+              disabled={buyingId !== null || coins < (pet.price || 200) || isOwned('workshop-' + pet.id)}
               onClick={() => handleBuy(pet)}>
-              {isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200)}
+              {isOwned('workshop-' + pet.id) ? '已拥有' : buyingId === pet.id ? '下载中...' : '🪙 ' + (pet.price || 200)}
             </button>
           </div>
         ))}
