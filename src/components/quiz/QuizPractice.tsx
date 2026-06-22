@@ -12,6 +12,7 @@ interface QuizQuestion {
   knowledgePoint: string;
   difficulty: number;
   question: string;
+  code?: string;
   options: string[];
   correctIndex: number;
   explanation: string;
