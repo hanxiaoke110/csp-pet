@@ -150,8 +150,8 @@ export default function QuizPractice() {
         });
       }
 
-      // Reward (per question for non-super modes)
-      if (mode !== 'super' && reward.exp > 0) {
+      // Reward (per question for non-weekly/non-extra modes — those reward on completion only)
+      if (mode !== 'super' && mode !== 'weekly' && mode !== 'extra' && reward.exp > 0) {
         const activePetId = usePetStore.getState().activePetId;
         if (activePetId) addExp(activePetId, reward.exp);
         const mult = usePetStore.getState().getRewardMultiplier();
@@ -194,9 +194,29 @@ export default function QuizPractice() {
       quizStore.recordKpResults(kpArray);
       if (mode === 'weekly') {
         quizStore.completeWeeklyTask(finalResults.correct === 5);
+        // Reward on completion (not per-question — prevents exploit by leaving mid-task)
+        const reward = getReward();
+        const correct = finalResults.correct;
+        if (reward.exp > 0 && correct > 0) {
+          const activePetId = usePetStore.getState().activePetId;
+          if (activePetId) addExp(activePetId, reward.exp * correct);
+          const mult = usePetStore.getState().getRewardMultiplier();
+          addCoins(Math.floor(reward.coins * correct * mult));
+        }
         usePetStore.getState().claimPendingRewards();
       }
-      if (mode === 'extra') quizStore.completeExtraChallenge();
+      if (mode === 'extra') {
+        quizStore.completeExtraChallenge();
+        // Reward on completion
+        const reward = getReward();
+        const correct = finalResults.correct;
+        if (reward.exp > 0 && correct > 0) {
+          const activePetId = usePetStore.getState().activePetId;
+          if (activePetId) addExp(activePetId, reward.exp * correct);
+          const mult = usePetStore.getState().getRewardMultiplier();
+          addCoins(Math.floor(reward.coins * correct * mult));
+        }
+      }
       if (mode === 'review') quizStore.completeMonthlyReview(finalResults.correct, finalResults.total);
       if (mode === 'super') {
         quizStore.completeSuperChallenge(finalResults.correct);
