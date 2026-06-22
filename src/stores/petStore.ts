@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
-import { invoke } from '@tauri-apps/api/core';
 import { dualSave, dualLoad } from '../lib/persist';
 import type { OwnedPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, ALL_SHOP_ITEMS, PET_TIERS } from '../types/pet';
@@ -613,8 +612,8 @@ export const usePetStore = create<PetState>((set, get) => ({
     const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
-    if (activePetId) { invoke('show_pet_window').catch(() => {}); }
-    else { invoke('hide_pet_window').catch(() => {}); }
+    // save() 只管数据同步，不管窗口显隐
+    // 窗口显隐由学生通过设置面板的开关来控制
     },
 
   load: async () => {
