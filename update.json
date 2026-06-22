@@ -1,6 +1,6 @@
 {
-  "version": "1.6.4",
-  "notes": "v1.6.4: SQLite\u4e09\u7ea7\u6062\u590d\u9632\u767d\u5c4f + DevTools + \u5de5\u574a\u53bb\u91cd/\u5b9a\u4ef7/\u7f16\u8f91 + \u73ed\u7ea7\u7ed1\u5b9a\u56db\u5fc5\u586b + \u6210\u5c31\u6539\u540d\u5361\u4fee\u590d + \u8bb8\u613f\u6392\u5e8f",
+  "version": "v1.6.5",
+  "notes": "v1.6.4: SQLite三级恢复防白屏 + DevTools + 工坊去重/定价/编辑 + 班级绑定四必填 + 成就改名卡修复 + 许愿排序",
   "pub_date": "2026-06-14T10:00:00Z",
   "platforms": {
     "darwin-aarch64": {
