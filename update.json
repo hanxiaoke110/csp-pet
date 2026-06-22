@@ -1,5 +1,5 @@
 {
-  "version": "v1.6.5",
+  "version": "v1.6.4",
   "notes": "v1.6.4: SQLite三级恢复防白屏 + DevTools + 工坊去重/定价/编辑 + 班级绑定四必填 + 成就改名卡修复 + 许愿排序",
   "pub_date": "2026-06-14T10:00:00Z",
   "platforms": {
