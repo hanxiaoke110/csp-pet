@@ -627,8 +627,8 @@
       "C. 29",
       "D. 31"
     ],
-    "correctIndex": 1,
-    "explanation": "",
+    "correctIndex": 2,
+    "explanation": "319=11×29，377=13×29，gcd=29。",
     "difficulty": 2,
     "questionType": "choice",
     "hasImage": false
@@ -1077,8 +1077,8 @@
       "C. b，a，c，d，e",
       "D. c，d，a，e，b"
     ],
-    "correctIndex": 0,
-    "explanation": "",
+    "correctIndex": 3,
+    "explanation": "D出栈时a在e前面出，但d出后c和b还在栈中，a被b压住无法先出。",
     "difficulty": 2,
     "questionType": "choice",
     "hasImage": false
@@ -2514,8 +2514,8 @@
       "C. 6",
       "D. 7"
     ],
-    "correctIndex": 1,
-    "explanation": "n:5,3,1,-1(退出)，3次循环，cnt=1+3=4。",
+    "correctIndex": 2,
+    "explanation": "n:10,8,6,4,2,0,-2(退出)，共6次循环，cnt=6。注意n=0时条件n>=0仍成立，还会再执行一次。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
