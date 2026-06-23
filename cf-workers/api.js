@@ -117,7 +117,6 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS generated_codes (code TEXT PRIMARY KEY, type TEXT, teacher_id TEXT, level TEXT, created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, title TEXT, description TEXT, teacher_id TEXT, teacher_name TEXT, submitter TEXT DEFAULT 'teacher', status TEXT DEFAULT 'open', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS workshop_pets (id TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT, name TEXT, element TEXT, style TEXT, description TEXT, tier TEXT, price INTEGER, pet_json TEXT, spritesheet_url TEXT, thumbnail_url TEXT, status TEXT DEFAULT 'active', created_at TEXT)`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS quiz_errors (id INTEGER PRIMARY KEY AUTOINCREMENT, question_id TEXT, knowledge_point TEXT, class_code TEXT, device_hash TEXT, created_at TEXT, UNIQUE(question_id, device_hash))`); } catch {}
   try { await db.exec(`ALTER TABLE feedback ADD COLUMN submitter TEXT DEFAULT 'teacher'`); } catch {}
   // Migrations for existing tables
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN phone_enc TEXT DEFAULT ''`); } catch {}
@@ -722,51 +721,6 @@ export default {
         }
         await db.prepare("UPDATE wishes SET status='completed' WHERE id=?").bind(id).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
-      }
-
-  try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_quiz_errors_unique ON quiz_errors(question_id, device_hash)`); } catch {}
-
-      // ═══ QUIZ ANALYTICS ═══
-      // POST /api/quiz/error — report a wrong answer
-      if (path === '/api/quiz/error' && request.method === 'POST') {
-        const { question_id, knowledge_point, class_code } = await request.json();
-        if (!question_id || !knowledge_point || !class_code) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
-        // Try insert, ignore if duplicate (same student same question)
-        try {
-          await db.prepare('INSERT OR IGNORE INTO quiz_errors (question_id, knowledge_point, class_code, created_at) VALUES (?,?,?,datetime("now"))').bind(question_id, knowledge_point, class_code).run();
-        } catch {}
-        return new Response(JSON.stringify({ success: true }), { headers: cors });
-      }
-
-      // GET /api/quiz/analytics — teacher views class error stats
-      if (path === '/api/quiz/analytics' && request.method === 'GET') {
-        const teacher = await checkTeacher(request, db);
-        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        const month = url.searchParams.get('month') || new Date().toISOString().slice(0, 7); // YYYY-MM
-
-        // Get all class codes for this teacher
-        const filterClass = url.searchParams.get('class_code') || '';
-        const classes = await db.prepare("SELECT class_code, label FROM classes WHERE teacher_id=? AND status='active'").bind(teacher.teacher_id).all();
-        let codes = classes.results.map(c => c.class_code);
-        if (filterClass && codes.includes(filterClass)) codes = [filterClass]; // Filter to specific class
-        if (codes.length === 0) return new Response(JSON.stringify({ by_kp: [], by_student: [], classes: classes.results }), { headers: cors });
-
-        const ph = codes.map(() => '?').join(',');
-        // Knowledge point ranking
-        const kpRows = await db.prepare(`SELECT knowledge_point, COUNT(*) as count FROM quiz_errors WHERE class_code IN (${ph}) AND created_at LIKE ? GROUP BY knowledge_point ORDER BY count DESC LIMIT 30`).bind(...codes, month + '%').all();
-
-        // Student detail for a specific KP
-        const kp = url.searchParams.get('kp') || '';
-        let studentRows = { results: [] };
-        if (kp) {
-          studentRows = await db.prepare(`SELECT qe.question_id, qe.knowledge_point, qe.class_code, qe.created_at, cs.student_name FROM quiz_errors qe LEFT JOIN class_students cs ON qe.class_code=cs.class_code WHERE qe.class_code IN (${ph}) AND qe.knowledge_point=? AND qe.created_at LIKE ? ORDER BY qe.created_at DESC LIMIT 100`).bind(...codes, kp, month + '%').all();
-        }
-
-        return new Response(JSON.stringify({
-          by_kp: kpRows.results,
-          by_student: studentRows.results,
-          classes: classes.results,
-        }), { headers: cors });
       }
 
       // ═══ WORKSHOP ═══

@@ -132,6 +132,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
     examGroup: null,
 
     addError: (questionId, wrongAnswer, correctAnswer, knowledgePoint) => {
+      void (knowledgePoint); // kept for API compatibility, was used for remote report
       set(s => {
         const existing = s.errors.find(e => e.questionId === questionId);
         const updated = existing
@@ -142,17 +143,6 @@ export const useQuizStore = create<QuizState>((set, get) => {
         return { errors: updated };
       });
       get().save();
-      // Report to server (fire-and-forget, don't block quiz flow)
-      try {
-        const kp = knowledgePoint || '';
-        const classCode = localStorage.getItem('csp_class_code') || '';
-        if (kp && classCode) {
-          fetch('https://api.cspstudy.top/api/quiz/error', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question_id: questionId, knowledge_point: kp, class_code: classCode }),
-          }).catch(() => {});
-        }
-      } catch {}
     },
 
     recordKpResults: (results) => {
