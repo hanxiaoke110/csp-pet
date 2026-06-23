@@ -79,17 +79,6 @@ export async function syncProgress(playerData: Record<string, unknown>): Promise
   return apiCall('/api/dungeon/sync', 'POST', playerData);
 }
 
-export async function reportAnswer(
-  questionId: string, dungeonId: string, wasCorrect: boolean, timeSpentMs: number
-): Promise<ReportResponse> {
-  return apiCall<ReportResponse>('/api/dungeon/report', 'POST', {
-    question_id: questionId,
-    dungeon_id: dungeonId,
-    was_correct: wasCorrect,
-    time_spent_ms: timeSpentMs,
-  });
-}
-
 export async function getLeaderboard(
   scope: LeaderboardScope, type: LeaderboardType
 ): Promise<LeaderboardResponse> {

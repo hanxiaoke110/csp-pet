@@ -132,8 +132,6 @@ async function ensureSchema(db) {
   // ── Dungeon tables ──
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, question_id TEXT NOT NULL, dungeon_id TEXT NOT NULL, was_correct INTEGER DEFAULT 0, time_spent_ms INTEGER DEFAULT 0, season TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
-  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_dungeon_attempts_dh ON dungeon_attempts(device_hash, created_at)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_daily_tasks (device_hash TEXT NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, stages_cleared INTEGER DEFAULT 0, bosses_defeated INTEGER DEFAULT 0, all_done INTEGER DEFAULT 0, claimed INTEGER DEFAULT 0, PRIMARY KEY (device_hash, date))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_broadcasts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT DEFAULT '', display_name TEXT DEFAULT '', school TEXT DEFAULT 'cultivation', message TEXT NOT NULL, broadcast_type TEXT DEFAULT 'dungeon_clear', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
@@ -1083,16 +1081,6 @@ export default {
         }), { headers: cors });
       }
 
-      // ── POST /api/dungeon/report ──
-      if (path === '/api/dungeon/report' && request.method === 'POST') {
-        const body = await request.json();
-        const { device_hash, question_id, dungeon_id, was_correct, time_spent_ms } = body;
-        if (!device_hash || !question_id) return new Response(JSON.stringify({ error: '缺少参数' }), { status: 400, headers: cors });
-        await db.prepare('INSERT INTO dungeon_attempts (device_hash, question_id, dungeon_id, was_correct, time_spent_ms, season) VALUES (?,?,?,?,?,?)')
-          .bind(device_hash, question_id, dungeon_id || '', was_correct ? 1 : 0, time_spent_ms || 0, '2026-autumn').run();
-        return new Response(JSON.stringify({ success: true }), { headers: cors });
-      }
-
       // ── POST /api/dungeon/sync ──
       if (path === '/api/dungeon/sync' && request.method === 'POST') {
         const body = await request.json();
@@ -1251,35 +1239,6 @@ export default {
         if (!cls) return new Response(JSON.stringify({ error: '无权操作该学生' }), { status: 403, headers: cors });
         await db.prepare('UPDATE dungeon_players SET status=\'active\', updated_at=datetime(\'now\') WHERE device_hash=?').bind(device_hash).run();
         return new Response(JSON.stringify({ success: true, message: '学生已恢复使用' }), { headers: cors });
-      }
-
-      // ── Teacher: GET /api/dungeon/teacher/analytics ──
-      if (path === '/api/dungeon/teacher/analytics' && request.method === 'GET') {
-        const teacher = await checkTeacher(request, db);
-        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        const cc = url.searchParams.get('class_code') || '';
-        if (!cc) return new Response(JSON.stringify({ error: '请指定班级码' }), { status: 400, headers: cors });
-        // Verify ownership
-        const cls = await db.prepare('SELECT * FROM classes WHERE class_code=? AND teacher_id=?').bind(cc, teacher.teacher_id).first();
-        if (!cls) return new Response(JSON.stringify({ error: '无权查看该班级' }), { status: 403, headers: cors });
-        const total = await db.prepare('SELECT COUNT(*) as c FROM dungeon_players WHERE class_code=?').bind(cc).first();
-        const active = await db.prepare('SELECT COUNT(*) as c FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
-        const avgQuestions = await db.prepare('SELECT AVG(total_answered) as avg_q FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
-        const avgCorrect = await db.prepare('SELECT AVG(total_correct) as avg_c FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
-        // Weak knowledge points (most wrong answers)
-        const weakKPs = await db.prepare(`SELECT question_id, COUNT(*) as wrong_count FROM dungeon_attempts
-          WHERE device_hash IN (SELECT device_hash FROM dungeon_players WHERE class_code=?)
-          AND was_correct=0 GROUP BY question_id ORDER BY wrong_count DESC LIMIT 10`).bind(cc).all();
-        return new Response(JSON.stringify({
-          success: true,
-          analytics: {
-            totalStudents: total?.c || 0,
-            activeStudents: active?.c || 0,
-            avgQuestionsAnswered: Math.round(avgQuestions?.avg_q || 0),
-            avgCorrectRate: avgCorrect?.avg_c ? Math.round((avgCorrect.avg_c / (avgQuestions?.avg_q || 1)) * 100) : 0,
-            weakKPs: weakKPs.results || [],
-          }
-        }), { headers: cors });
       }
 
       return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: cors });
