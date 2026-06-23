@@ -23,6 +23,8 @@ export default function WishWall() {
   const [tickets, setTickets] = useState(0);
   const [votingId, setVotingId] = useState<number | null>(null);
   const [monthlySubmitted, setMonthlySubmitted] = useState(0);
+  const [activeWishes, setActiveWishes] = useState(0);
+  const activeLimit = 3;
   // Feedback form
   const [fbType, setFbType] = useState('bug');
   const [fbTitle, setFbTitle] = useState('');
@@ -39,7 +41,7 @@ export default function WishWall() {
   const hasLv6 = ownedPets.some(p => p.level >= 6);
   const weeklyTaskDone = useQuizStore(s => s.weeklyTaskDone);
   const weekQuizDone = weeklyTaskDone >= 5;
-  const canSubmit = hasLv6 && weekQuizDone && monthlySubmitted < 3;
+  const canSubmit = hasLv6 && weekQuizDone && monthlySubmitted < 3 && activeWishes < activeLimit;
 
   // Simple cache to avoid re-fetching on tab switch
   const cacheRef = useRef<{ hot: Wish[] | null; new: Wish[] | null; time: number }>({ hot: null, new: null, time: 0 });
@@ -88,7 +90,10 @@ export default function WishWall() {
   // Fetch monthly submission count
   useEffect(() => {
     fetch(`${API}/api/wishes/my-stats?device_hash=${getDeviceId()}`)
-      .then(r => r.json()).then(d => setMonthlySubmitted(d.monthlySubmitted || 0))
+      .then(r => r.json()).then(d => {
+        setMonthlySubmitted(d.monthlySubmitted || 0);
+        setActiveWishes(d.activeWishes || 0);
+      })
       .catch(() => {});
   }, []);
 
@@ -125,8 +130,11 @@ export default function WishWall() {
       else {
         setMsg('✅ 许愿成功！');
         setContent(''); setShowForm(false);
-        // Refresh monthly count
-        fetch(`${API}/api/wishes/my-stats?device_hash=${getDeviceId()}`).then(r => r.json()).then(d => setMonthlySubmitted(d.monthlySubmitted || 0)).catch(()=>{});
+        // Refresh stats
+        fetch(`${API}/api/wishes/my-stats?device_hash=${getDeviceId()}`).then(r => r.json()).then(d => {
+          setMonthlySubmitted(d.monthlySubmitted || 0);
+          setActiveWishes(d.activeWishes || 0);
+        }).catch(()=>{});
         cacheRef.current.time = 0; // invalidate cache
         loadWishes();
       }
@@ -207,6 +215,7 @@ export default function WishWall() {
               <div>📝 Lv.6+ 智子 + 完成本周练习才能提交许愿</div>
               <div>🎫 许愿票在商城购买（100g/张，250g/3张）</div>
               <div>🗳️ 每条许愿每人只能投 1 票</div>
+              <div>📝 每人最多同时 3 条活跃许愿，老师实现/删除后恢复</div>
               <div>📅 每人每月最多提交 3 条许愿</div>
               <div>🔄 每月自动清理低票许愿</div>
             </div>
@@ -250,7 +259,7 @@ export default function WishWall() {
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {[
-              { icon: '📝', title: '提交门槛', desc: '需要 Lv.6+ 灵犀智子 + 完成本周练习。每人每月最多提交 3 条许愿。' },
+              { icon: '📝', title: '提交门槛', desc: '需要 Lv.6+ 灵犀智子 + 完成本周练习。每人最多同时有 3 条活跃许愿，老师实现或删除后恢复次数。每月最多提交 3 条。' },
               { icon: '🎫', title: '许愿票', desc: '在商城购买：100g/张，打包 250g/3张。每周限购 3 张，没用完可以累积。' },
               { icon: '🗳️', title: '投票规则', desc: '每条许愿你只能投 1 票。投票后许愿票会消耗，不可撤销。' },
               { icon: '🔄', title: '月度更新', desc: '每月 1 号自动清理低票许愿（0 票优先淘汰，7 天内新愿望受保护），让榜单保持新鲜。' },
@@ -355,8 +364,11 @@ export default function WishWall() {
             {hasLv6 && weekQuizDone && monthlySubmitted >= 3 && (
               <div>📅 本月已提交 {monthlySubmitted}/3 条，下个月再来</div>
             )}
-            {hasLv6 && weekQuizDone && monthlySubmitted < 3 && (
-              <div style={{ color: '#16a34a' }}>✅ 达标！本月还可提交 {3 - monthlySubmitted} 条</div>
+            {hasLv6 && weekQuizDone && monthlySubmitted < 3 && activeWishes >= activeLimit && (
+              <div>📝 已有 {activeWishes} 条活跃许愿，等老师实现或删除后再提交</div>
+            )}
+            {hasLv6 && weekQuizDone && monthlySubmitted < 3 && activeWishes < activeLimit && (
+              <div style={{ color: '#16a34a' }}>✅ 达标！本月还可提交 {3 - monthlySubmitted} 条（活跃：{activeWishes}/{activeLimit}）</div>
             )}
           </div>
         </div>

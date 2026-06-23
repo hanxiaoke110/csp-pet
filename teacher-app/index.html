@@ -87,6 +87,14 @@ const ELEM_LABEL = { earth:'🟫 地', fire:'🔴 火', wind:'🟢 风', water:'
 const TIER_LABEL = { common:'⭐ 普通', rare:'✨ 稀有', legendary:'👑 传说' };
 const TIERS = [{ key:'common', label:'⭐ 普通', price:150 },{ key:'rare', label:'✨ 稀有', price:260 },{ key:'legendary', label:'👑 传说', price:500 }];
 
+// Permission definitions — add new features here, Admin + Teacher UI auto-pickup
+const PERM_DEFS = [
+  { key:'qianlong', icon:'🐉', label:'潜龙计划' },
+  // { key:'summer2026', icon:'☀️', label:'暑期集训' },  ← 未来功能示例
+];
+
+function safeParsePerms(raw) { if (!raw) return []; try { return JSON.parse(raw); } catch { return []; } }
+
 // ═══ Login ═══
 function LoginPage() {
   const [mode, setMode] = React.useState('login');
@@ -117,7 +125,7 @@ function LoginPage() {
     const data = await api(ep, { method: 'POST', body: JSON.stringify(mode === 'register' ? { phone, password, name: name.trim() } : { phone, password }) });
     if (data.error) { toast(data.error, 'error'); setLoading(false); return; }
     state.token = data.token; state._adminToken = '';
-    state.teacher = { teacher_id: data.teacher_id, name: data.name };
+    state.teacher = { teacher_id: data.teacher_id, name: data.name, permissions: data.permissions || [] };
     localStorage.setItem('csp_teacher_token', data.token);
     localStorage.setItem('csp_teacher_info', JSON.stringify(state.teacher));
     localStorage.removeItem('csp_admin_token');
@@ -235,13 +243,18 @@ function Dashboard() {
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求收集' },
     ];
-    return [
+    const base = [
       { key:'teachers', label:'📋 班级管理' },
-      { key:'analytics', label:'📊 学习分析' },
       { key:'wishes', label:'💡 许愿管理' },
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求反馈' },
     ];
+    // Inject permission-gated tabs
+    const teacherPerms = state.teacher?.permissions || [];
+    PERM_DEFS.forEach(p => {
+      if (teacherPerms.includes(p.key)) base.push({ key: p.key, label: p.icon + ' ' + p.label });
+    });
+    return base;
   }
 
   function logout() {
@@ -286,6 +299,20 @@ function Dashboard() {
               React.createElement('div', { style:{ fontSize:12, color:'#64748b' } }, '👥 ',t.student_count,' 学生'),
               React.createElement('button', { className:'btn btn-danger btn-sm', style:{ marginTop:6 }, onClick:e=>{e.stopPropagation();if(!confirm('删除老师 '+t.name+'？这将同时删除其所有班级。'))return;api('/admin/teachers/'+t.teacher_id,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadAdminTeachers())).catch(()=>toast('网络错误','error'))} }, '🗑 删除'),
             ),
+          ),
+          PERM_DEFS.length > 0 && React.createElement('div', { style:{ display:'flex', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid #f1f5f9', flexWrap:'wrap' }, onClick:e=>e.stopPropagation() },
+            PERM_DEFS.map(p => {
+              const teacherPerms = safeParsePerms(t.permissions);
+              const on = teacherPerms.includes(p.key);
+              return React.createElement('label', { key:p.key, style:{ fontSize:12, cursor:'pointer', display:'flex', alignItems:'center', gap:4, padding:'4px 10px', borderRadius:6, background: on ? '#f0fdf4' : '#f8fafc', border: on ? '1px solid #bbf7d0' : '1px solid #e2e8f0', userSelect:'none' } },
+                React.createElement('input', { type:'checkbox', checked:on, style:{ accentColor:'#16a34a' }, onChange:async (e) => {
+                  e.stopPropagation();
+                  const d = await api('/admin/teachers/'+t.teacher_id+'/permissions', { method:'POST', body:JSON.stringify({ permission:p.key }) });
+                  if (d.error) toast(d.error,'error'); else loadAdminTeachers();
+                }}),
+                p.icon, ' ', p.label,
+              );
+            })
           ),
         )),
       ),
@@ -406,7 +433,7 @@ function Dashboard() {
                 w.phone && React.createElement('span', { className:'wish-private', style:{ marginLeft:8 } }, '📱', w.phone),
               ),
             ),
-            w.status==='active' && React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
+            React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
               if(!confirm('删除？')) return;
               await api(`/admin/wishes/${w.id}`, { method:'DELETE' });
               toast('已删除'); loadTeacherWishes(selected);
@@ -416,7 +443,7 @@ function Dashboard() {
               const d = await api(`/admin/wishes/complete/${w.id}`, { method:'POST' });
               d.error ? toast(d.error,'error') : (toast('✅ 已标记'), loadTeacherWishes(selected));
             }}, '✅ 实现'),
-            w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600 } }, '✅ 已实现'),
+            w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600, marginLeft:4 } }, '✅ 已实现'),
           ),
         )),
       ),
@@ -436,7 +463,7 @@ function Dashboard() {
                 w.phone && React.createElement('span', { className:'wish-private', style:{ marginLeft:8 } }, '📱', w.phone),
               ),
             ),
-            w.status==='active' && React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
+            React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
               if(!confirm('删除？')) return;
               await api(`/admin/wishes/${w.id}`, { method:'DELETE' });
               toast('已删除'); loadWishes();
@@ -446,7 +473,7 @@ function Dashboard() {
               const d = await api(`/admin/wishes/complete/${w.id}`, { method:'POST' });
               d.error ? toast(d.error,'error') : (toast('✅ 已标记'), loadWishes());
             }}, '✅ 实现'),
-            w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600 } }, '✅ 已实现'),
+            w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600, marginLeft:4 } }, '✅ 已实现'),
           ),
         )),
       ),
@@ -459,10 +486,10 @@ function Dashboard() {
         React.createElement(CampCodePanel),
       ),
     ),
-    // ═══ ANALYTICS TAB ═══
-    tab === 'analytics' && !loading && React.createElement(AnalyticsPanel),
     // ═══ FEEDBACK TAB ═══
     tab === 'feedback' && !loading && React.createElement(FeedbackPanel),
+    // ═══ PERMISSION-GATED TABS ═══
+    tab === 'qianlong' && !loading && React.createElement(QianLongPanel),
     // ═══ WORKSHOP TABS ═══
     tab==='workshop-import' ? React.createElement(ImportPanel, { onCreated:loadWorkshopPets }) : null,
     tab==='workshop-my' ? React.createElement(MyPetsPanel, { pets:workshopPets, onRefresh:loadWorkshopPets }) : null,
@@ -950,6 +977,42 @@ function MyPetsPanel({ pets, onRefresh }) {
       React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12, marginRight:6 }, onClick:()=>startEdit(p) }, '✏️'),
       React.createElement('button', { className:'btn btn-danger', style:{ fontSize:12 }, onClick:()=>deletePet(p.id) }, '🗑'),
     )),
+  );
+}
+
+function QianLongPanel() {
+  const [result, setResult] = React.useState(null);
+  const [genLoading, setGenLoading] = React.useState(false);
+  const LINK = 'https://qianlong.cspstudy.top'; // 待替换为实际链接
+
+  const generate = async () => {
+    setGenLoading(true);
+    const d = await api('/api/codes/qianlong', { method:'POST' });
+    if (d.error) { toast(d.error,'error'); setGenLoading(false); return; }
+    setResult(d.code);
+    setGenLoading(false);
+    navigator.clipboard.writeText(d.code).catch(()=>{});
+  };
+
+  return React.createElement('div', { className:'card' },
+    React.createElement('h3', null, '🐉 潜龙计划 — 验证码'),
+    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:14 } }, '生成验证码发给学生，学生在潜龙计划页面输入后使用。'),
+    React.createElement('button', { className:'btn btn-primary', onClick:generate, disabled:genLoading },
+      genLoading ? '生成中...' : '🎲 生成潜龙验证码'),
+    result && React.createElement('div', { style:{ background:'#f8fafc', borderRadius:8, padding:12, marginTop:12 } },
+      React.createElement('div', { style:{ fontSize:12, fontWeight:600, marginBottom:6, display:'flex', justifyContent:'space-between' } },
+        React.createElement('span', null, '验证码已自动复制'),
+        React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(result); toast('已复制'); } }, '📋 复制'),
+      ),
+      React.createElement('code', { style:{ display:'block', background:'#fff', padding:'10px 14px', borderRadius:8, fontSize:16, fontFamily:'monospace', fontWeight:700, letterSpacing:2, border:'1px solid #e2e8f0', wordBreak:'break-all', textAlign:'center' } }, result),
+      React.createElement('div', { style:{ marginTop:12, padding:'10px 14px', background:'#fffbeb', borderRadius:8, border:'1px solid #fde68a' } },
+        React.createElement('div', { style:{ fontSize:12, fontWeight:600, color:'#92400e', marginBottom:4 } }, '📎 学生入口链接'),
+        React.createElement('div', { style:{ display:'flex', gap:8, alignItems:'center' } },
+          React.createElement('code', { style:{ flex:1, padding:'8px 10px', background:'#fff', borderRadius:6, fontSize:12, fontFamily:'monospace', border:'1px solid #e2e8f0', wordBreak:'break-all' } }, LINK),
+          React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(LINK); toast('链接已复制'); } }, '📋 复制'),
+        ),
+      ),
+    ),
   );
 }
 

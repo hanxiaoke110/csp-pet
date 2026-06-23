@@ -3,6 +3,7 @@
 // 功能：许愿墙 + 教师管理 + 班级系统 + 兑换码生成
 
 const MONTHLY_SUBMIT_LIMIT = 3;
+const ACTIVE_WISH_LIMIT = 3;  // max active wishes per student — freed when teacher deletes/completes
 const CLEANUP_PROTECT_DAYS = 7;
 const CLEANUP_MIN_KEEP = 20;
 
@@ -61,8 +62,17 @@ function checkAdmin(request, env) {
 async function checkTeacher(request, db) {
   const token = request.headers.get('X-Teacher-Token') || '';
   if (!token) return null;
-  const t = await db.prepare('SELECT teacher_id, phone, name, token FROM teachers WHERE token=?').bind(token).first();
+  const t = await db.prepare('SELECT teacher_id, phone, name, token, permissions FROM teachers WHERE token=?').bind(token).first();
   return t || null;
+}
+
+function safeParsePermissions(raw) {
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch { return []; }
+}
+
+function hasPermission(teacher, perm) {
+  return safeParsePermissions(teacher?.permissions).includes(perm);
 }
 
 // ── Hash (matches Chrome extension algorithm) ──
@@ -123,6 +133,7 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN class_code TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN real_name_enc TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE votes ADD COLUMN class_code TEXT DEFAULT ''`); } catch {}
+  try { await db.exec(`ALTER TABLE teachers ADD COLUMN permissions TEXT DEFAULT '[]'`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN teacher_id TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN label TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN status TEXT DEFAULT 'active'`); } catch {}
@@ -190,7 +201,7 @@ export default {
         const pwHash = await hashPassword(password);
         const token = randomChars(32);
         await db.prepare('INSERT INTO teachers (teacher_id, phone, password_hash, name, token, created_at) VALUES (?,?,?,?,?,datetime("now"))').bind(teacherId, phone, pwHash, name, token).run();
-        return new Response(JSON.stringify({ success: true, teacher_id: teacherId, token, name }), { headers: cors });
+        return new Response(JSON.stringify({ success: true, teacher_id: teacherId, token, name, permissions: [] }), { headers: cors });
       }
 
       if (path === '/api/teacher/login' && request.method === 'POST') {
@@ -204,7 +215,7 @@ export default {
         // Rotate token
         const token = randomChars(32);
         await db.prepare('UPDATE teachers SET token=? WHERE teacher_id=?').bind(token, t.teacher_id).run();
-        return new Response(JSON.stringify({ success: true, teacher_id: t.teacher_id, token, name: t.name }), { headers: cors });
+        return new Response(JSON.stringify({ success: true, teacher_id: t.teacher_id, token, name: t.name, permissions: safeParsePermissions(t.permissions) }), { headers: cors });
       }
 
       // ═══ CLASS MANAGEMENT (teacher auth) ═══
@@ -286,6 +297,16 @@ export default {
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
+      // ═══ QIANLONG CODE (permission-gated) ═══
+      if (path === '/api/codes/qianlong' && request.method === 'POST') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+        if (!hasPermission(teacher, 'qianlong')) return new Response(JSON.stringify({ error: '无权限，请联系管理员开通' }), { status: 403, headers: cors });
+        const code = 'QL-' + randomChars(8).toUpperCase();
+        await db.prepare('INSERT INTO generated_codes (code, type, teacher_id, level, created_at) VALUES (?,"qianlong",?,?,datetime("now"))').bind(code, teacher.teacher_id, '').run();
+        return new Response(JSON.stringify({ code }), { headers: cors });
+      }
+
       // ═══ CODE GENERATION (teacher auth) ═══
       const EXC_SECRET = 'csp-coach-2025';
       const CAMP_SECRET = 'csp-camp-2025';
@@ -355,7 +376,8 @@ export default {
       if (path === '/api/wishes/my-stats' && request.method === 'GET') {
         const device_hash = url.searchParams.get('device_hash') || '';
         const count = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status IN ('active','archived') AND created_at >= datetime('now','start of month')").bind(device_hash).first();
-        return new Response(JSON.stringify({ monthlySubmitted: count ? count.c : 0, monthlyLimit: MONTHLY_SUBMIT_LIMIT }), { headers: cors });
+        const activeNow = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status='active'").bind(device_hash).first();
+        return new Response(JSON.stringify({ monthlySubmitted: count ? count.c : 0, monthlyLimit: MONTHLY_SUBMIT_LIMIT, activeWishes: activeNow ? activeNow.c : 0, activeLimit: ACTIVE_WISH_LIMIT }), { headers: cors });
       }
 
       if (path === '/api/wishes' && request.method === 'POST') {
@@ -384,6 +406,10 @@ export default {
 
         const monthly = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status IN ('active','archived') AND created_at >= datetime('now','start of month')").bind(device_hash).first();
         if (monthly && monthly.c >= MONTHLY_SUBMIT_LIMIT) return new Response(JSON.stringify({ error: `本月已提交${MONTHLY_SUBMIT_LIMIT}条，下个月再来吧` }), { status: 429, headers: cors });
+
+        // Active wish cap — freed when teacher deletes or completes a wish
+        const activeCount = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status='active'").bind(device_hash).first();
+        if (activeCount && activeCount.c >= ACTIVE_WISH_LIMIT) return new Response(JSON.stringify({ error: `你已有${ACTIVE_WISH_LIMIT}条活跃许愿，等老师实现或删除后再提交新愿望吧` }), { status: 429, headers: cors });
 
         const encName = real_name ? await serverEncrypt(real_name, env) : '';
         const encPhone = phone ? await serverEncrypt(phone, env) : '';
@@ -525,7 +551,7 @@ export default {
       // GET /admin/teachers — list all teachers with stats
       if (path === '/admin/teachers' && request.method === 'GET') {
         if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
-        const teachers = await db.prepare('SELECT teacher_id, phone, name, created_at FROM teachers ORDER BY created_at DESC').all();
+        const teachers = await db.prepare('SELECT teacher_id, phone, name, permissions, created_at FROM teachers ORDER BY created_at DESC').all();
         const result = await Promise.all(teachers.results.map(async (t) => {
           const classes = await db.prepare("SELECT COUNT(*) as c FROM classes WHERE teacher_id=? AND status='active'").bind(t.teacher_id).first();
           const students = await db.prepare("SELECT COUNT(*) as c FROM class_students cs JOIN classes c ON cs.class_code=c.class_code WHERE c.teacher_id=? AND cs.status='active'").bind(t.teacher_id).first();
@@ -573,6 +599,22 @@ export default {
         await db.prepare("UPDATE classes SET status='deleted' WHERE teacher_id=?").bind(teacherId).run();
         await db.prepare('DELETE FROM teachers WHERE teacher_id=?').bind(teacherId).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+
+      // Admin: toggle teacher permission
+      if (path.startsWith('/admin/teachers/') && path.endsWith('/permissions') && request.method === 'POST') {
+        if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+        const parts = path.split('/'); // /admin/teachers/:id/permissions
+        const teacherId = parts[3];
+        const { permission } = await request.json();
+        if (!permission) return new Response(JSON.stringify({ error: '缺少permission' }), { status: 400, headers: cors });
+        const t = await db.prepare('SELECT permissions FROM teachers WHERE teacher_id=?').bind(teacherId).first();
+        if (!t) return new Response(JSON.stringify({ error: '老师不存在' }), { status: 404, headers: cors });
+        const perms = safeParsePermissions(t.permissions);
+        const idx = perms.indexOf(permission);
+        if (idx >= 0) perms.splice(idx, 1); else perms.push(permission);
+        await db.prepare('UPDATE teachers SET permissions=? WHERE teacher_id=?').bind(JSON.stringify(perms), teacherId).run();
+        return new Response(JSON.stringify({ success: true, permissions: perms }), { headers: cors });
       }
 
       // Admin: add class for any teacher
