@@ -136,9 +136,16 @@ async function ensureSchema(db) {
   _schemaEnsured = true;
 }
 
-// ── Lazy monthly cleanup (disabled — teachers manage manually) ──
-async function maybeCleanup(_db) {
-  // No auto-cleanup. Teachers manually delete/archive wishes.
+// ── Periodic cleanup (runs once per request, cached) ──
+let _lastCleanup = '';
+async function maybeCleanup(db) {
+  const today = new Date().toISOString().slice(0, 10);
+  if (_lastCleanup === today) return;
+  // Clean votes older than 6 months
+  try { await db.prepare("DELETE FROM votes WHERE created_at < datetime('now', '-6 months')").run(); } catch {}
+  // Clean soft-deleted wishes older than 3 months
+  try { await db.prepare("DELETE FROM wishes WHERE status='deleted' AND created_at < datetime('now', '-3 months')").run(); } catch {}
+  _lastCleanup = today;
 }
 
 // ── Password hashing (simple SHA-256) ──
@@ -412,7 +419,10 @@ export default {
         // Atomic insert to prevent race-condition duplicate votes
         try {
           await db.prepare('INSERT INTO votes (wish_id, device_hash, class_code) VALUES (?,?,?)').bind(wish_id, device_hash, class_code).run();
-          await db.prepare('UPDATE wishes SET votes=votes+1 WHERE id=?').bind(wish_id).run();
+          // Defer UPDATE to prevent wish-level write-lock contention under load
+          ctx.waitUntil((async () => {
+            try { await db.prepare('UPDATE wishes SET votes=votes+1 WHERE id=?').bind(wish_id).run(); } catch {}
+          })());
         } catch (e) {
           if (e.message && e.message.includes('UNIQUE')) return new Response(JSON.stringify({ error: '你已经投过票了' }), { status: 400, headers: cors });
           throw e;
@@ -462,6 +472,7 @@ export default {
         }
 
         await db.prepare('UPDATE wishes SET status=? WHERE id=?').bind('deleted', id).run();
+        await db.prepare('DELETE FROM votes WHERE wish_id=?').bind(id).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -716,6 +727,7 @@ export default {
           if (!wish) return new Response(JSON.stringify({ error: '无权操作' }), { status: 403, headers: cors });
         }
         await db.prepare("UPDATE wishes SET status='completed' WHERE id=?").bind(id).run();
+        await db.prepare('DELETE FROM votes WHERE wish_id=?').bind(id).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -1065,6 +1077,12 @@ export default {
         const body = await request.json();
         const { device_hash, class_code, display_name, player_level, exp, gold, rank_tier, rank_points, total_answered, total_correct, current_streak, max_streak, login_streak, school } = body;
         if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        // Dedup: skip if last sync was < 5 seconds ago (prevents 200-student wave from serializing on D1 write lock)
+        const lastSync = await db.prepare("SELECT updated_at FROM dungeon_players WHERE device_hash=?").bind(device_hash).first();
+        if (lastSync && lastSync.updated_at) {
+          const elapsed = Date.now() - new Date(lastSync.updated_at + 'Z').getTime();
+          if (elapsed < 5000) return new Response(JSON.stringify({ success: true, synced: false, reason: 'too_frequent' }), { headers: cors });
+        }
         const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(school) ? school : 'cultivation';
         await db.prepare(`UPDATE dungeon_players SET
           player_level=?, exp=?, gold=?, rank_tier=?, rank_points=?,
