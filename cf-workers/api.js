@@ -1001,7 +1001,8 @@ export default {
         const dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(player.device_hash).all();
         const badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(player.device_hash).all();
         const today = new Date().toISOString().slice(0,10);
-        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(player.device_hash, today).first();
+        // Daily tasks removed — return stub for client compatibility
+        const tasks = { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 };
         // Update login streak and last login
         const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
         const streakUpdate = player.last_login_date === yesterday ? player.login_streak + 1 :
