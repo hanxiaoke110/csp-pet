@@ -133,8 +133,6 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_daily_tasks (device_hash TEXT NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, stages_cleared INTEGER DEFAULT 0, bosses_defeated INTEGER DEFAULT 0, all_done INTEGER DEFAULT 0, claimed INTEGER DEFAULT 0, PRIMARY KEY (device_hash, date))`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_broadcasts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT DEFAULT '', display_name TEXT DEFAULT '', school TEXT DEFAULT 'cultivation', message TEXT NOT NULL, broadcast_type TEXT DEFAULT 'dungeon_clear', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
   _schemaEnsured = true;
 }
 
@@ -1061,26 +1059,6 @@ export default {
         return new Response(JSON.stringify({ success: true, player }), { headers: cors });
       }
 
-      // ── GET /api/dungeon/status ──
-      if (path === '/api/dungeon/status' && request.method === 'GET') {
-        const dh = url.searchParams.get('device_hash') || '';
-        if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
-        const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(dh).first();
-        if (!player) return new Response(JSON.stringify({ success: false, error: '未注册' }), { headers: cors });
-        if (player.status !== 'active') return new Response(JSON.stringify({ success: false, error: '你的修炼权限已被暂停，请联系你的老师恢复' }), { headers: cors });
-        const dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(dh).all();
-        const badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(dh).all();
-        const today = new Date().toISOString().slice(0,10);
-        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(dh, today).first();
-        return new Response(JSON.stringify({
-          success: true,
-          player,
-          dungeons: dungeons.results,
-          badges: (badges.results || []).map(b => b.badge_id),
-          dailyTasks: tasks || { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 },
-        }), { headers: cors });
-      }
-
       // ── POST /api/dungeon/sync ──
       if (path === '/api/dungeon/sync' && request.method === 'POST') {
         const body = await request.json();
@@ -1143,49 +1121,6 @@ export default {
           entries: (entries.results || []).map((e, i) => ({ ...e, rank: i + 1 })),
           playerEntry,
         }), { headers: cors });
-      }
-
-      // ── GET /api/dungeon/daily-tasks ──
-      if (path === '/api/dungeon/daily-tasks' && request.method === 'GET') {
-        const dh = url.searchParams.get('device_hash') || '';
-        if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
-        const today = new Date().toISOString().slice(0,10);
-        let tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(dh, today).first();
-        if (!tasks) {
-          await db.prepare('INSERT OR IGNORE INTO dungeon_daily_tasks (device_hash, date) VALUES (?,?)').bind(dh, today).run();
-          tasks = { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 };
-        }
-        return new Response(JSON.stringify({ success: true, tasks }), { headers: cors });
-      }
-
-      // ── POST /api/dungeon/claim-daily ──
-      if (path === '/api/dungeon/claim-daily' && request.method === 'POST') {
-        const body = await request.json();
-        const { device_hash } = body;
-        if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
-        const today = new Date().toISOString().slice(0,10);
-        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(device_hash, today).first();
-        if (!tasks) return new Response(JSON.stringify({ error: '今日还没有完成任务' }), { status: 400, headers: cors });
-        if (tasks.claimed) return new Response(JSON.stringify({ error: '今日奖励已领取' }), { status: 400, headers: cors });
-        const rewards = { exp: 0, gold: 0 };
-        if (tasks.questions_done >= 5) { rewards.exp += 50; rewards.gold += 30; }
-        if (tasks.stages_cleared >= 1) { rewards.exp += 100; rewards.gold += 50; }
-        if (tasks.bosses_defeated >= 1) { rewards.exp += 200; rewards.gold += 100; }
-        if (tasks.all_done) { rewards.gold += 100; }
-        await db.prepare('UPDATE dungeon_daily_tasks SET claimed=1 WHERE device_hash=? AND date=?').bind(device_hash, today).run();
-        // Update player
-        const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
-        if (player) {
-          await db.prepare('UPDATE dungeon_players SET exp=exp+?, gold=gold+?, updated_at=datetime(\'now\') WHERE device_hash=?')
-            .bind(rewards.exp, rewards.gold, device_hash).run();
-        }
-        return new Response(JSON.stringify({ success: true, rewards }), { headers: cors });
-      }
-
-      // ── GET /api/dungeon/broadcasts ──
-      if (path === '/api/dungeon/broadcasts' && request.method === 'GET') {
-        const broadcasts = await db.prepare('SELECT * FROM dungeon_broadcasts ORDER BY created_at DESC LIMIT 20').all();
-        return new Response(JSON.stringify({ success: true, broadcasts: broadcasts.results || [] }), { headers: cors });
       }
 
       // ── Teacher: GET /api/dungeon/teacher/students ──
