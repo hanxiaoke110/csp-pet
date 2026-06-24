@@ -1327,4 +1327,9 @@ export default {
       return new Response(JSON.stringify({ error: '服务器错误，请稍后重试' }), { status: 500, headers: cors });
     }
   },
+
+  // Cron trigger — keeps Worker warm, no-op
+  async scheduled(event, env, ctx) {
+    try { await env.DB.prepare('SELECT 1').first(); } catch {}
+  },
 };

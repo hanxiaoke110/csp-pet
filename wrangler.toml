@@ -10,3 +10,6 @@ database_id = "5477cbee-76aa-4e7f-854e-39860f9644d7"
 [[kv_namespaces]]
 binding = "SPRITES"
 id = "4fd505c38b4d4ce89833b660afb37703"
+
+[triggers]
+crons = ["*/5 * * * *"]
