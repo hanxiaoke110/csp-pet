@@ -25,6 +25,10 @@ export default function WishWall() {
   const [monthlySubmitted, setMonthlySubmitted] = useState(0);
   const [activeWishes, setActiveWishes] = useState(0);
   const activeLimit = 3;
+  // Cursor pagination
+  const [hasMore, setHasMore] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
   // Feedback form
   const [fbType, setFbType] = useState('bug');
   const [fbTitle, setFbTitle] = useState('');
@@ -47,20 +51,16 @@ export default function WishWall() {
   const cacheRef = useRef<{ hot: Wish[] | null; new: Wish[] | null; time: number }>({ hot: null, new: null, time: 0 });
   const maxLevel = ownedPets.length > 0 ? Math.max(...ownedPets.map(p => p.level)) : 0;
 
-  const loadWishes = useCallback(async () => {
+  const loadWishes = useCallback(async (cursor?: string | null) => {
     if (view === 'rules' || view === 'feedback') return;
-    // Use cache if data is less than 30s old
-    const cached = cacheRef.current[view];
-    if (cached && Date.now() - cacheRef.current.time < 30000) {
-      setWishes(cached);
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
+    const isLoadMore = !!cursor;
+    if (isLoadMore) setLoadingMore(true); else setLoading(true);
     try {
       const classCode = localStorage.getItem('csp_class_code') || '';
       if (!classCode) { setWishes([]); setLoading(false); return; }
-      const resp = await fetch(`${API}/api/wishes?sort=${view}&limit=50&class_code=${encodeURIComponent(classCode)}`);
+      let url = `${API}/api/wishes?sort=${view}&limit=50&class_code=${encodeURIComponent(classCode)}`;
+      if (cursor) url += `&cursor=${encodeURIComponent(cursor)}`;
+      const resp = await fetch(url);
       const data = await resp.json();
       if (data.error) {
         setWishes([]);
@@ -69,16 +69,25 @@ export default function WishWall() {
           localStorage.removeItem('csp_class_info');
         }
         setMsg(data.error);
-      } else if (Array.isArray(data)) {
-        setWishes(data);
-        cacheRef.current[view] = data;
-        cacheRef.current.time = Date.now();
+      } else {
+        const items = data.items || data; // backward compat with old API
+        if (isLoadMore) {
+          setWishes(prev => [...prev, ...(Array.isArray(items) ? items : [])]);
+        } else {
+          setWishes(Array.isArray(items) ? items : []);
+          if (Array.isArray(items)) {
+            cacheRef.current[view] = items;
+            cacheRef.current.time = Date.now();
+          }
+        }
+        setHasMore(!!data.hasMore);
+        setNextCursor(data.nextCursor || null);
       }
     } catch { /* network error */ }
-    setLoading(false);
+    setLoading(false); setLoadingMore(false);
   }, [view]);
 
-  useEffect(() => { loadWishes(); }, [loadWishes]);
+  useEffect(() => { setHasMore(false); setNextCursor(null); loadWishes(); }, [loadWishes]);
 
   useEffect(() => {
     setTickets(getTicketCount());
@@ -323,6 +332,22 @@ export default function WishWall() {
           <WishContent w={w} timeAgo={timeAgo} votingId={votingId} handleVote={handleVote} />
         </div>
       ))}
+
+      {/* ── Load More ── */}
+      {view !== 'rules' && view !== 'feedback' && hasMore && (
+        <div style={{ textAlign: 'center', marginTop: 12 }}>
+          <button onClick={() => loadWishes(nextCursor)} disabled={loadingMore} style={{
+            padding: '10px 32px', fontSize: 13, fontWeight: 600,
+            background: loadingMore ? '#f1f5f9' : '#fff',
+            color: loadingMore ? '#94a3b8' : '#FF8C00',
+            border: `1px solid ${loadingMore ? '#e2e8f0' : '#fed7aa'}`,
+            borderRadius: 10, cursor: loadingMore ? 'not-allowed' : 'pointer',
+            transition: 'all .15s',
+          }}>
+            {loadingMore ? '加载中...' : '加载更多'}
+          </button>
+        </div>
+      )}
 
       {/* ── Empty ── */}
       {view !== 'rules' && view !== 'feedback' && !loading && wishes.length === 0 && (

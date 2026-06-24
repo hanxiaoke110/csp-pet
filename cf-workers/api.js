@@ -383,30 +383,72 @@ export default {
 
         const sort = url.searchParams.get('sort') || 'hot';
         const classCode = url.searchParams.get('class_code') || '';
-        const order = sort === 'new' ? 'created_at DESC' : 'votes DESC, created_at ASC';
         const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
+        const cursorRaw = url.searchParams.get('cursor') || '';
 
-        let result;
+        // Parse cursor for pagination
+        let cursor = null;
+        if (cursorRaw) {
+          try { cursor = JSON.parse(atob(decodeURIComponent(cursorRaw))); } catch {}
+        }
+
+        // Build the WHERE and ORDER
+        const statusFilter = "status IN ('active','completed')";
+        let orderClause, cursorClause = '';
+        const params = [];
+
+        if (sort === 'new') {
+          orderClause = 'id DESC';
+          if (cursor && cursor.id) {
+            cursorClause = 'AND id < ?';
+            params.push(cursor.id);
+          }
+        } else {
+          orderClause = 'votes DESC, id DESC';
+          if (cursor && cursor.votes !== undefined && cursor.id) {
+            cursorClause = 'AND (votes < ? OR (votes = ? AND id < ?))';
+            params.push(cursor.votes, cursor.votes, cursor.id);
+          }
+        }
+
+        // Collect class codes
+        let codes = [];
         if (classCode) {
-          // Teacher-level isolation: find teacher and show all their classes' wishes
           const cls = await db.prepare("SELECT teacher_id FROM classes WHERE class_code=? AND status='active'").bind(classCode).first();
           if (cls) {
             const classCodes = await db.prepare("SELECT class_code FROM classes WHERE teacher_id=? AND status='active'").bind(cls.teacher_id).all();
-            const codes = classCodes.results.map(r => r.class_code);
-            if (codes.length > 0) {
-              const placeholders = codes.map(() => '?').join(',');
-              result = await db.prepare(`SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE status IN ('active','completed') AND class_code IN (${placeholders}) ORDER BY ${order} LIMIT ?`).bind(...codes, limit).all();
-            } else {
-              result = { results: [] };
-            }
-          } else {
-            result = { results: [] };
+            codes = classCodes.results.map(r => r.class_code);
           }
-        } else {
-          // No class code — show all wishes (backward compat)
-          result = await db.prepare(`SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE status IN ('active','completed') ORDER BY ${order} LIMIT ?`).bind(limit).all();
         }
-        return new Response(JSON.stringify(result.results), { headers: cors });
+
+        let result;
+        if (codes.length > 0) {
+          const ph = codes.map(() => '?').join(',');
+          const sql = `SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE ${statusFilter} AND class_code IN (${ph}) ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(...codes, ...params, limit + 1).all();
+        } else if (classCode) {
+          result = { results: [] };
+        } else {
+          // No class code — all wishes (backward compat)
+          const sql = `SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE ${statusFilter} ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(...params, limit + 1).all();
+        }
+
+        const hasMore = result.results.length > limit;
+        const items = hasMore ? result.results.slice(0, limit) : result.results;
+
+        // Build next cursor
+        let nextCursor = null;
+        if (hasMore && items.length > 0) {
+          const last = items[items.length - 1];
+          if (sort === 'new') {
+            nextCursor = btoa(JSON.stringify({ id: last.id }));
+          } else {
+            nextCursor = btoa(JSON.stringify({ votes: last.votes, id: last.id }));
+          }
+        }
+
+        return new Response(JSON.stringify({ items, hasMore, nextCursor }), { headers: cors });
       }
 
       if (path === '/api/wishes/my-stats' && request.method === 'GET') {
