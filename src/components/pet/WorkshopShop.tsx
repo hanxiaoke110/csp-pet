@@ -19,12 +19,27 @@ export function WorkshopShop() {
   const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
   const [filter, setFilter] = useState<'all' | 'rare' | 'legendary'>('all');
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
+  // Cursor pagination
+  const [hasMore, setHasMore] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
-    fetch(WORKSHOP_API + '/api/workshop/pets')
-      .then(r => r.json()).then(d => { if (Array.isArray(d)) setPets(d); })
-      .catch(() => {}).finally(() => setLoading(false));
-  }, []);
+  const loadPets = (cursor?: string | null) => {
+    const isLoadMore = !!cursor;
+    if (isLoadMore) setLoadingMore(true); else setLoading(true);
+    let url = WORKSHOP_API + '/api/workshop/pets?limit=30';
+    if (cursor) url += '&cursor=' + encodeURIComponent(cursor);
+    fetch(url)
+      .then(r => r.json()).then(d => {
+        const items = d.items || d;
+        if (isLoadMore) setPets(prev => [...prev, ...(Array.isArray(items) ? items : [])]);
+        else setPets(Array.isArray(items) ? items : []);
+        setHasMore(!!d.hasMore); setNextCursor(d.nextCursor || null);
+      })
+      .catch(() => {}).finally(() => { setLoading(false); setLoadingMore(false); });
+  };
+
+  useEffect(() => { loadPets(); }, []);
 
   const handleBuy = async (pet: any) => {
     if (buyingId) return; // Prevent double-click
@@ -114,6 +129,19 @@ export function WorkshopShop() {
           </div>
         ))}
       </div>}
+      {hasMore && (
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <button onClick={() => loadPets(nextCursor)} disabled={loadingMore} style={{
+            padding: '10px 32px', fontSize: 13, fontWeight: 600,
+            background: loadingMore ? '#f1f5f9' : '#fff',
+            color: loadingMore ? '#94a3b8' : '#FF8C00',
+            border: `1px solid ${loadingMore ? '#e2e8f0' : '#fed7aa'}`,
+            borderRadius: 10, cursor: loadingMore ? 'not-allowed' : 'pointer',
+          }}>
+            {loadingMore ? '加载中...' : '加载更多'}
+          </button>
+        </div>
+      )}
       {pendingHatch && <HatchConfirmModal
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}

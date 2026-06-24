@@ -916,7 +916,7 @@ export default {
         ]);
         if (hourCount >= 5) return new Response(JSON.stringify({ error: '每小时最多上传5只精灵' }), { status: 429, headers: cors });
         if (dayCount >= 20) return new Response(JSON.stringify({ error: '每天最多上传20只精灵' }), { status: 429, headers: cors });
-        if (totalCount >= 50) return new Response(JSON.stringify({ error: '每位教师最多50只精灵' }), { status: 429, headers: cors });
+        if (totalCount >= 20) return new Response(JSON.stringify({ error: '每位教师最多20只精灵' }), { status: 429, headers: cors });
         // Size limit: 5MB to prevent abuse
         if (binary.length > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过5MB' }), { status: 400, headers: cors });
         const key = `workshop/${teacher.teacher_id}/${filename || Date.now() + '.png'}`;
@@ -932,16 +932,34 @@ export default {
         return new Response(JSON.stringify({ success: true, key }), { headers: cors });
       }
 
-      // GET /api/workshop/pets — list pets (with optional teacher filter)
+      // GET /api/workshop/pets — list pets with cursor pagination
       if (path === '/api/workshop/pets' && request.method === 'GET') {
         const teacher = await checkTeacher(request, db);
+        const limit = Math.min(parseInt(url.searchParams.get('limit') || '30'), 100);
+        const cursorRaw = url.searchParams.get('cursor') || '';
+        let cursor = null;
+        if (cursorRaw) { try { cursor = JSON.parse(atob(decodeURIComponent(cursorRaw))); } catch {} }
+
+        const cursorClause = cursor && cursor.id ? 'AND id < ?' : '';
+        const params = cursor && cursor.id ? [cursor.id] : [];
+
         let result;
         if (teacher) {
-          result = await db.prepare("SELECT * FROM workshop_pets WHERE teacher_id=? AND status='active' ORDER BY created_at DESC LIMIT 50").bind(teacher.teacher_id).all();
+          const sql = `SELECT * FROM workshop_pets WHERE teacher_id=? AND status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
+          result = await db.prepare(sql).bind(teacher.teacher_id, ...params, limit + 1).all();
         } else {
-          result = await db.prepare("SELECT * FROM workshop_pets WHERE status='active' ORDER BY created_at DESC LIMIT 50").all();
+          const sql = `SELECT * FROM workshop_pets WHERE status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
+          result = await db.prepare(sql).bind(...params, limit + 1).all();
         }
-        return new Response(JSON.stringify(result.results), { headers: cors });
+
+        const hasMore = result.results.length > limit;
+        const items = hasMore ? result.results.slice(0, limit) : result.results;
+        let nextCursor = null;
+        if (hasMore && items.length > 0) {
+          nextCursor = btoa(JSON.stringify({ id: items[items.length - 1].id }));
+        }
+
+        return new Response(JSON.stringify({ items, hasMore, nextCursor }), { headers: cors });
       }
 
       // POST /api/workshop/pets — teacher uploads a generated pet (FormData or JSON)

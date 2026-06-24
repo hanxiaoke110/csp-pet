@@ -219,7 +219,8 @@ function Dashboard() {
   }
   async function loadWorkshopPets() {
     const d = await api('/api/workshop/pets');
-    if (Array.isArray(d)) { setWorkshopPets(d); }
+    if (d.items) { setWorkshopPets(d.items); }
+    else if (Array.isArray(d)) { setWorkshopPets(d); }
   }
 
   // ── Actions ──
