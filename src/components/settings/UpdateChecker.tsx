@@ -10,10 +10,11 @@ function isMac(): boolean {
 function buildUrls(version: string) {
   const short = version.replace(/\./g, '');
   const base = `https://gitee.com/hanliuliu110/csp-pet/releases/download/v${version}`;
+  const encodedName = encodeURIComponent(`CSP 学习助手_${version}`);
   return {
     'macOS Apple Silicon': `${base}/csp-v${short}-arm.dmg`,
-    'macOS Intel': `${base}/csp-v${short}-intel.dmg`,
-    'Windows 64位': `${base}/csp-v${short}-win.exe`,
+    'macOS Intel': `${base}/${encodedName}_x64.dmg`,
+    'Windows 64位': `${base}/${encodedName}_x64-setup.exe`,
   };
 }
 
