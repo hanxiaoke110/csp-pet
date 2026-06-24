@@ -7,6 +7,11 @@ const ACTIVE_WISH_LIMIT = 3;  // max active wishes per student — freed when te
 const CLEANUP_PROTECT_DAYS = 7;
 const CLEANUP_MIN_KEEP = 20;
 
+// Rate limiting
+const RATE_WISH_POST = 5;       // 5 wishes per minute per device
+const RATE_VOTE_POST = 10;      // 10 votes per minute per device
+const RATE_WINDOW_SEC = 60;
+
 // ── 敏感词黑名单 ──
 const BAD_WORDS = [
   '色情','裸体','裸聊','性交','淫秽','色诱','约炮','嫖娼','卖淫','色情片','成人','激情',
@@ -144,7 +149,28 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
+  // Performance indexes
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_device_status ON wishes(device_hash, status)`); } catch {}
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_class_status ON wishes(class_code, status)`); } catch {}
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_votes_wish ON votes(wish_id)`); } catch {}
+  // Rate limit table
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, count INTEGER DEFAULT 0, reset_at TEXT)`); } catch {}
   _schemaEnsured = true;
+
+// Rate limit check — simple sliding window via D1
+async function checkRateLimit(db, key, maxCount, windowSec) {
+  const now = new Date().toISOString();
+  const row = await db.prepare('SELECT count, reset_at FROM rate_limits WHERE key=?').bind(key).first();
+  if (!row || row.reset_at < now) {
+    // New window
+    const resetAt = new Date(Date.now() + windowSec * 1000).toISOString();
+    await db.prepare('INSERT OR REPLACE INTO rate_limits (key, count, reset_at) VALUES (?, 1, ?)').bind(key, resetAt).run();
+    return true;
+  }
+  if (row.count >= maxCount) return false;
+  await db.prepare('UPDATE rate_limits SET count = count + 1 WHERE key=?').bind(key).run();
+  return true;
+}
 }
 
 // ── Periodic cleanup (runs once per request, cached) ──
@@ -181,6 +207,16 @@ export default {
       'Content-Type': 'application/json',
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+    // Health check
+    if (path === '/api/health') {
+      try {
+        await db.prepare('SELECT 1').first();
+        return new Response(JSON.stringify({ ok: true, db: true }), { headers: cors });
+      } catch (e) {
+        return new Response(JSON.stringify({ ok: false, db: false, error: e.message }), { status: 500, headers: cors });
+      }
+    }
 
     try {
       // ═══ TEACHER AUTH ═══
@@ -389,6 +425,9 @@ export default {
         if (!display_name || display_name.length < 1 || display_name.length > 20) return new Response(JSON.stringify({ error: '昵称需1-20字' }), { status: 400, headers: cors });
         if (phone && !/^1[3-9]\d{9}$/.test(phone)) return new Response(JSON.stringify({ error: '手机号格式不正确' }), { status: 400, headers: cors });
 
+        // Rate limit
+        if (!await checkRateLimit(db, `wish:${device_hash}`, RATE_WISH_POST, RATE_WINDOW_SEC)) return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
+
         // Require class_code for submission
         if (!class_code) return new Response(JSON.stringify({ error: '请先在设置中绑定班级码' }), { status: 400, headers: cors });
 
@@ -428,6 +467,9 @@ export default {
 
         if (!wish_id || !device_hash) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
         if (!class_code) return new Response(JSON.stringify({ error: '请先在设置中绑定班级码' }), { status: 400, headers: cors });
+
+        // Rate limit
+        if (!await checkRateLimit(db, `vote:${device_hash}`, RATE_VOTE_POST, RATE_WINDOW_SEC)) return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
 
         // Validate class and student status
         const clsVote = await db.prepare("SELECT * FROM classes WHERE class_code=? AND status='active'").bind(class_code).first();
