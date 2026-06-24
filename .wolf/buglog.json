@@ -1,6 +1,41 @@
 {
   "bugs": [
     {
+      "date": "2026-06-24",
+      "error_message": "v1.7.0 CI 构建全部失败：Cannot find module 'dompurify'",
+      "root_cause": "src/utils/markdown.ts 引入了 dompurify，但依赖只加在根目录 package.json，CI 的 npm ci 使用 csp-desktop-pet/package.json 找不到",
+      "fix": "在 csp-desktop-pet/package.json 中添加 dompurify + @types/dompurify",
+      "tags": ["ci", "build", "dependencies", "package.json"]
+    },
+    {
+      "date": "2026-06-24",
+      "error_message": "v1.7.0 macOS 更新显示 404 / 页面不存在",
+      "root_cause": "两重问题：(1) UpdateChecker.tsx buildUrls 硬编码 csp-v170-arm.dmg 格式，但 Gitee 上传时用了中文原始文件名；(2) Gitee releases/download 有两次 302 跳转，Tauri macOS updater 无法处理",
+      "fix": "上传安装包时用 filename= 参数对齐 csp-v170-arm/intel/win 命名规则，修复 update.json 签名",
+      "tags": ["release", "gitee", "update", "macos", "naming"]
+    },
+    {
+      "date": "2026-06-24",
+      "error_message": "v1.7.0 安装后版本号仍显示 v1.6.4",
+      "root_cause": "发版时只更新了 package.json (v1.7.0)，忘更新 src-tauri/tauri.conf.json（仍是 1.6.4）。getVersion() 读的是 tauri.conf.json",
+      "fix": "tauri.conf.json 同步更新到 1.7.1，重新打 tag 触发 CI 构建",
+      "tags": ["release", "version", "tauri.conf.json", "display"]
+    },
+    {
+      "date": "2026-06-24",
+      "error_message": "Gitee 附件配额满（1GB），无法上传新安装包",
+      "root_cause": "旧版本 v1.5.2、v1.6.0 Release 附件未清理，加上 v1.7.0 文件超配额",
+      "fix": "删除旧 Release（v1.5.2、v1.6.0），释放空间后重新上传",
+      "tags": ["gitee", "quota", "release", "cleanup"]
+    },
+    {
+      "date": "2026-06-24",
+      "error_message": "update.json 签名格式错误，CI 生成的签名被截取/混入说明文字",
+      "root_cause": "CI signer 输出包含 'Your file was signed successfully...' 等多余文字，直接复制整个字符串作为签名，Tauri updater 无法验证",
+      "fix": "从 CI 输出中提取 'Public signature:' 之后的纯 base64 签名，去除所有说明文字",
+      "tags": ["release", "signing", "update.json", "ci"]
+    },
+    {
       "date": "2026-05-29",
       "error_message": "Gitee Release CI 创建失败：target_commitish is missing",
       "root_cause": "Gitee API POST /repos/:owner/:repo/releases 要求 target_commitish 字段，但 release.yml 中未传递此参数",
