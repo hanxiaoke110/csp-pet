@@ -448,6 +448,11 @@ export default {
           }
         }
 
+        // Backward compat: no cursor → return plain array
+        if (!cursorRaw) {
+          return new Response(JSON.stringify(result.results.slice(0, limit)), { headers: cors });
+        }
+
         return new Response(JSON.stringify({ items, hasMore, nextCursor }), { headers: cors });
       }
 
@@ -932,37 +937,36 @@ export default {
         return new Response(JSON.stringify({ success: true, key }), { headers: cors });
       }
 
-      // GET /api/workshop/pets — list pets with cursor pagination
+      // GET /api/workshop/pets — list pets, cursor pagination when param present
       if (path === '/api/workshop/pets' && request.method === 'GET') {
         const teacher = await checkTeacher(request, db);
         const limit = Math.min(parseInt(url.searchParams.get('limit') || '30'), 100);
         const cursorRaw = url.searchParams.get('cursor') || '';
+
         let cursor = null;
         if (cursorRaw) { try { cursor = JSON.parse(atob(decodeURIComponent(cursorRaw))); } catch {} }
 
         const cursorClause = cursor && cursor.id ? 'AND id < ?' : '';
-        const params = cursor && cursor.id ? [cursor.id] : [];
+        const cursorParams = cursor && cursor.id ? [cursor.id] : [];
 
         let result;
         if (teacher) {
           const sql = `SELECT * FROM workshop_pets WHERE teacher_id=? AND status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
-          result = await db.prepare(sql).bind(teacher.teacher_id, ...params, limit + 1).all();
+          result = await db.prepare(sql).bind(teacher.teacher_id, ...cursorParams, limit + 1).all();
         } else {
           const sql = `SELECT * FROM workshop_pets WHERE status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
-          result = await db.prepare(sql).bind(...params, limit + 1).all();
+          result = await db.prepare(sql).bind(...cursorParams, limit + 1).all();
         }
 
-        // Return plain array for backward compat if no cursor used
+        // Backward compat: no cursor → return plain array
         if (!cursorRaw) {
           return new Response(JSON.stringify(result.results.slice(0, limit)), { headers: cors });
         }
 
         const hasMore = result.results.length > limit;
         const items = hasMore ? result.results.slice(0, limit) : result.results;
-        let nextCursor = null;
-        if (hasMore && items.length > 0) {
-          nextCursor = btoa(JSON.stringify({ id: items[items.length - 1].id }));
-        }
+        const nextCursor = (hasMore && items.length > 0)
+          ? btoa(JSON.stringify({ id: items[items.length - 1].id })) : null;
 
         return new Response(JSON.stringify({ items, hasMore, nextCursor }), { headers: cors });
       }
