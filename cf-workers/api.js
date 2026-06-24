@@ -952,6 +952,11 @@ export default {
           result = await db.prepare(sql).bind(...params, limit + 1).all();
         }
 
+        // Return plain array for backward compat if no cursor used
+        if (!cursorRaw) {
+          return new Response(JSON.stringify(result.results.slice(0, limit)), { headers: cors });
+        }
+
         const hasMore = result.results.length > limit;
         const items = hasMore ? result.results.slice(0, limit) : result.results;
         let nextCursor = null;
