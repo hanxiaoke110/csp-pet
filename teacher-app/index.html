@@ -308,6 +308,7 @@ function Dashboard() {
                 } }, '🔑 重置密码'),
                 React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:11 }, onClick:e=>{e.stopPropagation();if(!confirm('删除老师 '+t.name+'？这将同时删除其所有班级。'))return;api('/admin/teachers/'+t.teacher_id,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadAdminTeachers())).catch(()=>toast('网络错误','error'))} }, '🗑 删除'),
               ),
+            ),
           ),
           PERM_DEFS.length > 0 && React.createElement('div', { style:{ display:'flex', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid #f1f5f9', flexWrap:'wrap' }, onClick:e=>e.stopPropagation() },
             PERM_DEFS.map(p => {
