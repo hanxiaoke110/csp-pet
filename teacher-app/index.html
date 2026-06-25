@@ -219,8 +219,7 @@ function Dashboard() {
   }
   async function loadWorkshopPets() {
     const d = await api('/api/workshop/pets');
-    if (d.items) { setWorkshopPets(d.items); }
-    else if (Array.isArray(d)) { setWorkshopPets(d); }
+    if (Array.isArray(d)) { setWorkshopPets(d); }
   }
 
   // ── Actions ──
@@ -298,8 +297,17 @@ function Dashboard() {
             React.createElement('div', { style:{ textAlign:'right' } },
               React.createElement('div', { style:{ fontSize:13, fontWeight:600 } }, '📋 ',t.class_count,' 班级'),
               React.createElement('div', { style:{ fontSize:12, color:'#64748b' } }, '👥 ',t.student_count,' 学生'),
-              React.createElement('button', { className:'btn btn-danger btn-sm', style:{ marginTop:6 }, onClick:e=>{e.stopPropagation();if(!confirm('删除老师 '+t.name+'？这将同时删除其所有班级。'))return;api('/admin/teachers/'+t.teacher_id,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadAdminTeachers())).catch(()=>toast('网络错误','error'))} }, '🗑 删除'),
-            ),
+              React.createElement('div', { style:{ display:'flex', gap:4, marginTop:6, justifyContent:'flex-end' } },
+                React.createElement('button', { className:'btn btn-outline btn-sm', style:{ fontSize:11 }, onClick:e=>{
+                  e.stopPropagation();
+                  const pw = prompt('为 '+t.name+' 设置新密码（至少6位）：');
+                  if (!pw) return; if (pw.length < 6) { toast('密码至少6位','error'); return; }
+                  api('/admin/teachers/'+t.teacher_id+'/reset-password', { method:'POST', body:JSON.stringify({ password:pw }) })
+                    .then(d => d.error ? toast(d.error,'error') : toast('✅ '+t.name+' 密码已重置'))
+                    .catch(() => toast('网络错误','error'));
+                } }, '🔑 重置密码'),
+                React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:11 }, onClick:e=>{e.stopPropagation();if(!confirm('删除老师 '+t.name+'？这将同时删除其所有班级。'))return;api('/admin/teachers/'+t.teacher_id,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadAdminTeachers())).catch(()=>toast('网络错误','error'))} }, '🗑 删除'),
+              ),
           ),
           PERM_DEFS.length > 0 && React.createElement('div', { style:{ display:'flex', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid #f1f5f9', flexWrap:'wrap' }, onClick:e=>e.stopPropagation() },
             PERM_DEFS.map(p => {

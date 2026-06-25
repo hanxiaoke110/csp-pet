@@ -706,6 +706,17 @@ export default {
         return new Response(JSON.stringify({ success: true, permissions: perms }), { headers: cors });
       }
 
+      // Admin: reset teacher password
+      if (path.startsWith('/admin/teachers/') && path.endsWith('/reset-password') && request.method === 'POST') {
+        if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+        const teacherId = path.split('/')[3];
+        const { password } = await request.json();
+        if (!password || password.length < 6) return new Response(JSON.stringify({ error: '密码至少6位' }), { status: 400, headers: cors });
+        const pwHash = await hashPassword(password);
+        await db.prepare('UPDATE teachers SET password_hash=? WHERE teacher_id=?').bind(pwHash, teacherId).run();
+        return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+
       // Admin: add class for any teacher
       if (path === '/admin/classes' && request.method === 'POST') {
         if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
