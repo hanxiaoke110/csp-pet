@@ -735,8 +735,8 @@
       "C. abc+d**",
       "D. *a*+bcd"
     ],
-    "correctIndex": 3,
-    "explanation": "",
+    "correctIndex": 1,
+    "explanation": "中缀 a*(b+c)*d → 后缀：先算b+c得bc+，再a*(bc+)得abc+*，最后(abc+*)*d得abc+*d*。B正确。D是前缀表达式（波兰式）。",
     "difficulty": 2,
     "questionType": "choice",
     "hasImage": false
