@@ -156,8 +156,9 @@ async function ensureSchema(db) {
   // Rate limit table
   try { await db.exec(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, count INTEGER DEFAULT 0, reset_at TEXT)`); } catch {}
   _schemaEnsured = true;
+}
 
-// Rate limit check — simple sliding window via D1
+// ── Rate limit check — simple sliding window via D1 ──
 async function checkRateLimit(db, key, maxCount, windowSec) {
   const now = new Date().toISOString();
   const row = await db.prepare('SELECT count, reset_at FROM rate_limits WHERE key=?').bind(key).first();
@@ -170,7 +171,6 @@ async function checkRateLimit(db, key, maxCount, windowSec) {
   if (row.count >= maxCount) return false;
   await db.prepare('UPDATE rate_limits SET count = count + 1 WHERE key=?').bind(key).run();
   return true;
-}
 }
 
 // ── Periodic cleanup (runs once per request, cached) ──
