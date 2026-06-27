@@ -119,8 +119,8 @@
       "C. static",
       "D. mutable"
     ],
-    "correctIndex": 0,
-    "explanation": "",
+    "correctIndex": 1,
+    "explanation": "const 声明常量，值初始化后不可修改。unsigned 是无符号整数，static 是静态变量，mutable 允许 const 成员函数中修改成员变量。",
     "difficulty": 2,
     "questionType": "choice",
     "hasImage": false
