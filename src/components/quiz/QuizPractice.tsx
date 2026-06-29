@@ -11,6 +11,7 @@ interface QuizQuestion {
   year: number;
   knowledgePoint: string;
   difficulty: number;
+  level?: number;
   question: string;
   code?: string;
   options: string[];
@@ -59,6 +60,8 @@ export default function QuizPractice() {
   const [loading, setLoading] = useState(true);
   const [superAnswers, setSuperAnswers] = useState<number[]>([]);
   const [kpResults, setKpResults] = useState<Map<string, { correct: number; total: number }>>(new Map());
+  const [levelFilter, setLevelFilter] = useState<number | 'all'>('all');
+  const [sourceFilter, setSourceFilter] = useState<string | 'all'>('all');
 
   const quizStore = useQuizStore();
   const addCoins = usePetStore(s => s.addCoins);
@@ -120,9 +123,19 @@ export default function QuizPractice() {
       const superQs = questionBank.filter(q => q.source === 'super_challenge');
       setQuestions(shuffle(superQs).slice(0, 1));
     } else {
-      // Random CSP exam questions
-      const examQs = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
-      setQuestions(shuffle(examQs).slice(0, m === 'free' ? 15 : 5));
+      // Random CSP/GESP exam questions with optional filters
+      let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+      if (sourceFilter !== 'all') {
+        pool = pool.filter(q => q.source === sourceFilter);
+      }
+      if (levelFilter !== 'all') {
+        pool = pool.filter(q => q.level === levelFilter);
+      }
+      if (pool.length === 0) {
+        // Fallback to all exam questions if filter leaves nothing
+        pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+      }
+      setQuestions(shuffle(pool).slice(0, m === 'free' ? 15 : 5));
     }
   };
 
@@ -257,6 +270,55 @@ export default function QuizPractice() {
       <div className="quiz-practice">
         <h2>📝 选择题练习</h2>
         <p className="quiz-subtitle">完成选择题练习获得经验和金币，答错自动记录到月度复盘</p>
+
+        <div className="quiz-filter-bar">
+          <div className="quiz-filter-group">
+            <span className="quiz-filter-label">等级</span>
+            <div className="quiz-filter-options">
+              {(['all', 1, 2, 3, 4] as const).map(lv => (
+                <button
+                  key={String(lv)}
+                  className={`quiz-filter-btn ${levelFilter === lv ? 'active' : ''}`}
+                  onClick={() => setLevelFilter(lv)}
+                >
+                  {lv === 'all' ? '全部' : `GESP ${lv}级`}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="quiz-filter-group">
+            <span className="quiz-filter-label">来源</span>
+            <div className="quiz-filter-options">
+              {[
+                { key: 'all', label: '全部' },
+                { key: 'gesp', label: 'GESP' },
+                { key: 'csp_exam', label: 'CSP' },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  className={`quiz-filter-btn ${sourceFilter === key ? 'active' : ''}`}
+                  onClick={() => setSourceFilter(key)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="quiz-filter-hint">
+          {(() => {
+            if (!questionBank) return '加载题库中...';
+            let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+            if (sourceFilter !== 'all') pool = pool.filter(q => q.source === sourceFilter);
+            if (levelFilter !== 'all') pool = pool.filter(q => q.level === levelFilter);
+            const parts: string[] = [];
+            if (levelFilter !== 'all') parts.push(`GESP ${levelFilter}级`);
+            if (sourceFilter !== 'all') parts.push(sourceFilter === 'gesp' ? 'GESP' : 'CSP');
+            const scope = parts.length > 0 ? parts.join(' · ') : '全部';
+            return `当前练习范围：${scope}，共 ${pool.length} 道题`;
+          })()}
+        </p>
 
         <div className="quiz-mode-cards">
           <div className="quiz-mode-card">

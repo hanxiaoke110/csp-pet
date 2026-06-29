@@ -19,7 +19,6 @@ export function WorkshopShop() {
   const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
   const [filter, setFilter] = useState<'all' | 'rare' | 'legendary'>('all');
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
-  // Cursor pagination
   const [hasMore, setHasMore] = useState(false);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -31,10 +30,10 @@ export function WorkshopShop() {
     if (cursor) url += '&cursor=' + encodeURIComponent(cursor);
     fetch(url)
       .then(r => r.json()).then(d => {
-        const items = d.items || d;
-        if (isLoadMore) setPets(prev => [...prev, ...(Array.isArray(items) ? items : [])]);
-        else setPets(Array.isArray(items) ? items : []);
-        setHasMore(!!d.hasMore); setNextCursor(d.nextCursor || null);
+        const items = Array.isArray(d) ? d : (d.items || []);
+        if (isLoadMore) setPets(prev => [...prev, ...items]);
+        else setPets(items);
+        if (!Array.isArray(d)) { setHasMore(!!d.hasMore); setNextCursor(d.nextCursor); }
       })
       .catch(() => {}).finally(() => { setLoading(false); setLoadingMore(false); });
   };
