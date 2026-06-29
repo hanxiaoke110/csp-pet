@@ -59,6 +59,7 @@
 - **绝不**: 在非 `csp-desktop-pet` 的 `package.json` 加依赖——CI 的 `npm ci` 只看子项目自己的 `package.json`
 - **绝不**: 许愿列表用 OFFSET 分页——大表全扫。用游标分页：热门 `(votes, id)` 新的 `(id)`
 - **绝不**: 盲目给 Worker 加限流用 KV——D1 建个 rate_limits 表更轻量，带 reset_at 滑动窗口
+- **绝不**: 改 API 返回格式（比如数组→{items}）不做向后兼容——线上还有旧版 App，格式一变全挂。加 cursor 参数时才返回新格式，无 cursor 保持旧格式
 
 ## 2026-06-02/03 许愿墙 + 班级系统新增
 

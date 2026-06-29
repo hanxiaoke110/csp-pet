@@ -71,7 +71,8 @@ csp学习助手（师+生）/
 ├── docs/superpowers/specs/      # 设计文档
 │   ├── cf-config.md             # Cloudflare 配置
 │   ├── csp-roadmap.md            # 升级路线图
-│   └── 2026-06-02-wish-wall-design.md  # 许愿墙方案
+│   ├── 2026-06-02-wish-wall-design.md  # 许愿墙方案
+│   └── 2026-06-29-智子试炼场-design.md  # 智子试炼场（宠物回合制地牢战斗）
 │
 └── .wolf/                       # 项目记忆 (OpenWolf)
     ├── anatomy.md               # 本文档
@@ -102,9 +103,10 @@ Students  →  api.cspstudy.top (CF Worker + D1)
 - 兑换码：Web App → POST /api/codes/exc|camp → 与 Chrome 插件算法一致
 - 月度清理：懒触发 (GET /api/wishes 首次访问当月)
 
-### src-dungeon/ — 潜龙闭关・学霸副本攻略（2026-06-13 新增）
+### src-dungeon/ — 潜龙闭关・学霸副本攻略（2026-06-13 新增，2026-06-29 升级为「智子试炼场」）
 
 独立 Web 应用，CSP-J 初赛沉浸式闯关游戏，部署到 `dungeon.cspstudy.top`。
+2026-06-29 升级方向：将原「答题扣 HP」战斗改为「宠物回合制对战 + 编程题驱动技能释放」。
 
 ```
 src-dungeon/
@@ -124,7 +126,7 @@ src-dungeon/
 │   │   ├── RegisterScreen.tsx     # 2步注册（班级码+流派选择）
 │   │   ├── DungeonMap.tsx         # 世界地图（8节点）
 │   │   ├── DungeonEntrance.tsx    # 副本入口（关卡列表+Boss）
-│   │   ├── BattleScreen.tsx       # 核心战斗（HP/连击/暴击/特效）
+│   │   ├── BattleScreen.tsx       # 核心战斗（智子试炼场：宠物回合制）
 │   │   ├── RewardScreen.tsx       # 结算画面（EXP/金币/评级）
 │   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 4维度）
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
