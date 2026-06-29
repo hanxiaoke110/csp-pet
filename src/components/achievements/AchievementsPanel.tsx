@@ -147,8 +147,9 @@ export default function AchievementsPanel() {
             <div className="ach-grid">
               {items.map(a => {
                 const result = a.check();
-                const unlocked = result.unlocked;
                 const isClaimed = claimed.has(a.id);
+                // Once claimed, always treat as unlocked so hidden achievements don't revert to ???
+                const unlocked = result.unlocked || isClaimed;
                 return (
                   <div key={a.id} className={`ach-card ${unlocked ? 'unlocked' : 'locked'}`}>
                     <div className="ach-icon">{unlocked ? a.icon : '🔒'}</div>
