@@ -4,6 +4,14 @@ export type PetAnimation = 'idle' | 'walk' | 'sleep' | 'celebrate' | 'think' | '
 export type RenderType = '2d';
 export type PetTier = 'legendary' | 'rare' | 'common';
 
+export interface BattleStats {
+  maxHp: number;
+  currentHp: number;
+  attack: number;
+  defense: number;
+  speed: number;
+}
+
 export const ELEMENT_EMOJI: Record<PetElement, string> = {
   earth: '🟫', fire: '🔴', wind: '🟢', water: '🔵', light: '🌟',
 };
@@ -47,6 +55,8 @@ export interface OwnedPet {
   lastFedAt: string | null;
   obtainedAt: string;
   updatedAt?: string;
+  battle?: BattleStats;
+  expPool?: number;
 }
 
 export interface ShopItem {
@@ -261,3 +271,17 @@ export function getPetTier(speciesId: string): PetTier {
   if (speciesId.startsWith('workshop-') || speciesId.startsWith('ws-')) return 'rare';
   return PET_TIERS[speciesId] || 'common';
 }
+
+export const PET_BASE_STATS: Record<string, Omit<BattleStats, 'currentHp'>> = {
+  capi:   { maxHp: 80,  attack: 12, defense: 8,  speed: 8 },
+  boba:   { maxHp: 70,  attack: 10, defense: 7,  speed: 12 },
+  'bubu-2': { maxHp: 75, attack: 14, defense: 6,  speed: 10 },
+  miga:   { maxHp: 65,  attack: 11, defense: 6,  speed: 14 },
+  default:{ maxHp: 70,  attack: 11, defense: 7,  speed: 10 },
+};
+
+export const TIER_MULTIPLIERS: Record<PetTier, number> = {
+  common: 1.0,
+  rare: 1.3,
+  legendary: 1.6,
+};
