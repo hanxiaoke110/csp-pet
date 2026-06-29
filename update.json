@@ -1,19 +1,19 @@
 {
-  "version": "v1.6.4",
-  "notes": "v1.6.4: SQLite三级恢复防白屏 + DevTools + 工坊去重/定价/编辑 + 班级绑定四必填 + 成就改名卡修复 + 许愿排序",
-  "pub_date": "2026-06-14T10:00:00Z",
+  "version": "1.7.2",
+  "notes": "v1.7.2: 数据持久化修复+题库修正+限流+工坊优化",
+  "pub_date": "2026-06-27T04:49:41Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3pSZlVLM09aKzNRSnZ6d3k2eUlJNENtQUVJVWZIWUZyaDZ4bVlwMndUNUFvKy81OWp4QzRXQTIvek1hTlAzTFFwRG1xQ3RuMjlLVDhlYXhOUVBteUFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxNDMyOTMxCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuNF9hYXJjaDY0LmRtZworT25VNXZWWk1FaVU2ZXB1OThBbWZJb2JKRVVjekhNbEM1QVdzd2JJOFVhWXBHeG45bll2aDJTaWFjV3Y0dGZDMW1STll0R0xKRm9zWGswMTFUUVRDZz09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP._1.6.4_aarch64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3pMWmlkbTR1MmxEZWthV241QmxwOGY2UFpmSXlZcDZJaCtoQ0E1bFpsblJwM3hQSmVjczRiTnMvZjFUcEFkeENtUTU5QUNtMFlERVNRV2lVUUFxOHdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyNTM0MTE4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuMl9hYXJjaDY0LmRtZwpRWTV6UDZtbnVIVlMvb0tlaTVxZEFnYkhZWWhuK05jamZnNlFaRmdScG1pcWVzMCtySGtEekJFZ3RzWWFXZzZCdUVqSHp2R3RIOCtYd1dXUURYdVVCQT09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.2/csp-v172-arm.dmg"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzE4Y2NaNmFWNEhEVThyZ1EvbjZhOE1nUGtzeXJFbkdOS0hubWFMSzNQRWlGNVF2UXY0ZnQyTzBKWFptWDB5WHdnMW5Xam5abnNTWnhyWG9jOVo3endJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxNDMyOTMyCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuNF94NjQuZG1nCnlSU1I0ckp1a2dzdWRYVlF0NG9lU0NCUVVJSGh3UTBYakFDWGY2V1RzMGZQOW42Qk1vR1dFdi9QbzRmbGdhdThqSTNQdjROb1pReEtxbUU0bWNTS0N3PT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP._1.6.4_x64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzlKbysxSHRpVmdXZE9rU2s1aE1TZ1c1blpxOS82ZGNsZ09TVkk2QndCSzIyYWEvbXdSMm5UaTR0ZWxoMkduK25GcU9qQ1QwYnVCZ1gza2lNQ3RVZFE0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyNTM0MTIwCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuMl94NjQuZG1nClFQdlBPVElIdFJ1a3hkOHhoSE53bU1rNHIzcEp2VWxYelh6Z0dTQ3YvS1ZaWEFRZU9ZMzdkUkw1SUVadStIeEZzRysxbUxSK1l0K3hFQ0V5c1JIVkFnPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.2/csp-v172-intel.dmg"
     },
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzEzOTI3bXBmcVdONnNMNXVhaFlLQXZmM0Q5UmkzTVdlRnM2Tm00dTdOK3h0NW5BNml6SHpRSStqNEVyRGphak1FeEI4dWFpMzIvaFhYVXBWVnUxMFFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgxNDMyOTMzCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjYuNF94NjQtc2V0dXAuZXhlCllnTFRGNkxUdVo3OEhGMkYxNmFJdFk5NGwyWjBxTDRrTERJakJNVTFPOWRCZnhiRzljaE5oVk1udkpYRFFqbkV3d1VxUTFMRlFCTFhRMDE1M2hoVkF3PT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.6.0/CSP._1.6.4_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzY5OWgxd2NGMnc5UmtRc3piSDZvdm90T0tOVmh4OUJlbklubXJob2JEaHlCYjJDWUhHd04vSDJmZ0h2QkcrUDY3TitXd1M2Yk84UDN6TjFtZ3VXR0EwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyNTM0MTIxCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuMl94NjQtc2V0dXAuZXhlCmc3T3RYZ2pHYXAzNGZ4U1hzQ0VJbytrVVBzNGlDNFA4cFNlTlhzYVJtalI2eVFNNFh0bEtQeEV4YWlObFlrdU5jQU1FQ2JwK2h1R2pmdFYrM1BrMURnPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.2/csp-v172-win.exe"
     }
   }
 }
