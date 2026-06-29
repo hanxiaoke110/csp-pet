@@ -1449,7 +1449,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据结构-图",
-    "question": "下列流程图，属于计算机的哪种程序结构？（ ）\n\n（流程图描述：开始 → 一个菱形判断框，判断条件是否成立 → 成立走一个分支执行语句块A，不成立走另一个分支执行语句块B → 两个分支汇合 → 结束）",
+    "question": "下列流程图，属于计算机的哪种程序结构？（ ）。\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2023-03-2-02.svg)",
     "options": [
       "A. 顺序结构",
       "B. 循环结构",
@@ -1457,7 +1457,7 @@
       "D. 数据结构"
     ],
     "correctIndex": 2,
-    "explanation": "流程图设置了两个分支，符合分支结构（if-else）的特征。",
+    "explanation": "流程图中有菱形判断框，根据条件是否成立分别执行语句块A或语句块B，属于分支结构。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": true,
@@ -2025,7 +2025,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据结构-图",
-    "question": "能够实现下面流程图功能的伪代码是（ ）。（流程图：条件为\"否\"时执行语句块并回到判断，条件为\"是\"时退出）",
+    "question": "能够实现下面流程图功能的伪代码是（ ）。\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2023-06-2-02.svg)",
     "options": [
       "A. if条件判断then语句块",
       "B. if条件判断then什么也不做else语句块",
@@ -2033,7 +2033,7 @@
       "D. while not条件判断do语句块"
     ],
     "correctIndex": 3,
-    "explanation": "条件为否时循环，对应while not条件判断。",
+    "explanation": "流程图中条件为\"否\"时返回继续执行语句块，条件为\"是\"时退出，属于循环结构（do-while 型）。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": true,
@@ -4640,7 +4640,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "数据结构-图",
-    "question": "判断闰年的流程图中菱形框应填入（ ）。\n\n（流程图描述：输入年份yr → 菱形判断框 → 根据判断条件决定是否闰年。年份yr输入2024判定为闰年。）",
+    "question": "判断闰年的流程图中菱形框应填入（ ）。\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
     "options": [
       "A. (yr%400==0)||(yr%4==0)",
       "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
@@ -4648,7 +4648,7 @@
       "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
     ],
     "correctIndex": 1,
-    "explanation": "闰年规则：能被400整除，或能被4整除但不能被100整除。",
+    "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": true,
