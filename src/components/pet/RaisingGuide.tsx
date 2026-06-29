@@ -97,8 +97,7 @@ export default function RaisingGuide() {
 
       <Section title="🎁 收集奖励" icon="🎁">
         <p>🌈 集齐地火风水<strong>四系</strong>各 1 只 → +200g + 改名卡</p>
-        <p>⭐ 拥有 <strong>10 只</strong> → +150g</p>
-        <p>👑 获得<strong>首只传说</strong> → +100g</p>
+        <p>⭐ 拥有 <strong>8 只</strong> → +150g</p>
       </Section>
 
       <Section title="🏕️ 集训模式" icon="🏕️">
