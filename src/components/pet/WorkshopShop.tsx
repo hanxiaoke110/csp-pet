@@ -15,23 +15,42 @@ export function WorkshopShop() {
   const startHatching = useHatchStore(s => s.startHatching);
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [buyingId, setBuyingId] = useState<string | null>(null);
   const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
   const [filter, setFilter] = useState<'all' | 'rare' | 'legendary'>('all');
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
+  const [hasMore, setHasMore] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
-    fetch(WORKSHOP_API + '/api/workshop/pets')
-      .then(r => r.json()).then(d => { if (Array.isArray(d)) setPets(d); })
-      .catch(() => {}).finally(() => setLoading(false));
-  }, []);
+  const loadPets = (cursor?: string | null) => {
+    const isLoadMore = !!cursor;
+    if (isLoadMore) setLoadingMore(true); else setLoading(true);
+    let url = WORKSHOP_API + '/api/workshop/pets?limit=30';
+    if (cursor) url += '&cursor=' + encodeURIComponent(cursor);
+    fetch(url)
+      .then(r => r.json()).then(d => {
+        const items = Array.isArray(d) ? d : (d.items || []);
+        if (isLoadMore) setPets(prev => [...prev, ...items]);
+        else setPets(items);
+        if (!Array.isArray(d)) { setHasMore(!!d.hasMore); setNextCursor(d.nextCursor); }
+      })
+      .catch(() => {}).finally(() => { setLoading(false); setLoadingMore(false); });
+  };
+
+  useEffect(() => { loadPets(); }, []);
 
   const handleBuy = async (pet: any) => {
+    if (buyingId) return; // Prevent double-click
     if (isOwned('workshop-' + pet.id)) { alert('已经拥有这只精灵了'); return; }
     if (coins < (pet.price || 200)) { alert('金币不足'); return; }
+    setBuyingId(pet.id);
+    try {
     if (!await downloadSprites(pet)) return;
     spendCoins(pet.price || 200);
     const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
     setPendingHatch({ pet, rarity });
+    } finally { setBuyingId(null); }
   };
 
   const downloadSprites = async (pet: any): Promise<boolean> => {
@@ -102,13 +121,26 @@ export function WorkshopShop() {
               {pet.tier === 'legendary' ? '👑 传说' : pet.tier === 'rare' ? '✨ 稀有' : '⭐ 普通'}
             </div>
             <button className="shop-card-buy" style={{ width: '100%' }}
-              disabled={coins < (pet.price || 200) || isOwned('workshop-' + pet.id)}
+              disabled={buyingId !== null || coins < (pet.price || 200) || isOwned('workshop-' + pet.id)}
               onClick={() => handleBuy(pet)}>
-              {isOwned('workshop-' + pet.id) ? '已拥有' : '🪙 ' + (pet.price || 200)}
+              {isOwned('workshop-' + pet.id) ? '已拥有' : buyingId === pet.id ? '下载中...' : '🪙 ' + (pet.price || 200)}
             </button>
           </div>
         ))}
       </div>}
+      {hasMore && (
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <button onClick={() => loadPets(nextCursor)} disabled={loadingMore} style={{
+            padding: '10px 32px', fontSize: 13, fontWeight: 600,
+            background: loadingMore ? '#f1f5f9' : '#fff',
+            color: loadingMore ? '#94a3b8' : '#FF8C00',
+            border: `1px solid ${loadingMore ? '#e2e8f0' : '#fed7aa'}`,
+            borderRadius: 10, cursor: loadingMore ? 'not-allowed' : 'pointer',
+          }}>
+            {loadingMore ? '加载中...' : '加载更多'}
+          </button>
+        </div>
+      )}
       {pendingHatch && <HatchConfirmModal
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}

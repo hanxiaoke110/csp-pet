@@ -41,6 +41,8 @@ export function setProblemStatus(problemId: string, status: ProblemStatus): void
   // Debounced fire-and-forget save
   if (saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    sqliteSetFireAndForget('problem_status', JSON.stringify(cache));
+    const json = JSON.stringify(cache);
+    sqliteSetFireAndForget('problem_status', json);
+    try { localStorage.setItem('csp_problem_status', json); } catch {}
   }, 300);
 }

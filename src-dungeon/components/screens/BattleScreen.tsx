@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { getStageQuestions, getBossQuestions } from '../../utils/questionLoader';
 import { getRankName } from '../../utils/gameLogic';
-import { reportAnswer } from '../../utils/api';
 import FableCard from '../shared/FableCard';
 import fables from '../../data/fables.json';
 import type { Question, DungeonDefinition } from '../../types/dungeon';
@@ -65,11 +64,6 @@ export default function BattleScreen() {
 
     const result = store.answerQuestion(optionIndex);
     const startTime = Date.now();
-
-    // Report to server (fire and forget)
-    if (currentQuestion) {
-      reportAnswer(currentQuestion.id, dungeonId || '', result.correct, 0).catch(() => {});
-    }
 
     // Visual effects
     if (result.correct) {

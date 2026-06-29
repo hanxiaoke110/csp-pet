@@ -19,7 +19,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   const showShopToast = (msg: string) => { setShopToast(msg); setTimeout(() => setShopToast(null), 3000); };
   const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha'; title: string; desc: string; price: number } | null>(null);
   const renameCards = usePetStore(s => s.renameCards);
-  const rollGacha = usePetStore(s => s._rollGacha);
+  const doGacha = usePetStore(s => s.doGacha);
   const gachaPulls = usePetStore(s => s.gachaDailyPulls);
   const buyRenameCard = usePetStore(s => s.buyRenameCard);
   const addEgg = useHatchStore(s => s.addEgg);
@@ -162,9 +162,9 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <h4>灵犀抽卡</h4>
             <p>随机获得一只宠物<br />每 100 抽必出稀有+</p>
             <div className="special-stock">今日剩余：{5 - gachaPulls} 次</div>
-            <button className="shop-card-buy" disabled={coins < 200 || gachaPulls >= 5}
-              onClick={() => setActionConfirm({ type: 'gacha', title: '灵犀抽卡', desc: '随机获得一只灵犀智子\n每 100 抽必出稀有+', price: 200 })}>
-              🎯 单抽 200g
+            <button className="shop-card-buy" disabled={coins < 150 || gachaPulls >= 5}
+              onClick={() => setActionConfirm({ type: 'gacha', title: '灵犀抽卡', desc: '随机获得精灵/食物/许愿票/改名卡\n每 100 抽保底传说', price: 150 })}>
+              🎯 单抽 150g
             </button>
           </div>
         </div>
@@ -295,10 +295,18 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                       showShopToast('金币不足，无法购买。');
                     }
                   } else {
-                    const r = rollGacha();
+                    const r = doGacha();
                     if (!r) { showShopToast('抽卡失败，请检查金币或今日次数。'); }
-                    else if (r.rarity === 'refund') { showShopToast('该池精灵已集齐，金币已退还。'); }
-                    else { setPendingHatch({ speciesId: r.item.speciesId!, petName: (r as any).autoName, rarity: r.rarity as HatchRarity }); }
+                    else if (r.type === 'food') {
+                      const label = r.foodType === 'premium' ? '🍖 高级食物' : '🍞 普通食物';
+                      showShopToast(`${label} 已放入背包！`);
+                    } else if (r.type === 'wishTicket') {
+                      showShopToast('🎫 许愿票 +1 已到账！');
+                    } else if (r.type === 'renameCard') {
+                      showShopToast('📝 改名卡已放入背包！');
+                    } else {
+                      setPendingHatch({ speciesId: r.item.speciesId!, petName: (r as any).autoName, rarity: r.rarity as HatchRarity });
+                    }
                   }
                   setActionConfirm(null);
                 }}>

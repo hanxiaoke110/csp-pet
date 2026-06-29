@@ -78,7 +78,7 @@ export default function PetWindow() {
       }
     };
     const onMU = () => {
-      if (isDragging.current) lastDragTime.current = Date.now();
+      if (isDragging.current) { lastDragTime.current = Date.now(); savePosition(); }
       startX = startY = 0;
     };
     document.addEventListener('mousedown', onMD);
@@ -152,12 +152,28 @@ export default function PetWindow() {
     getCurrentWindow().setSize(new LogicalSize(winSz, winSz)).catch(() => {});
   }, [winSz]);
 
-  // ─── Save default position on mount ───
+  // ─── Save & restore position ───
   useEffect(() => {
     getCurrentWindow().outerPosition().then(p => {
+      const saved = localStorage.getItem('csp_pet_pos');
+      if (saved) {
+        try {
+          const { x, y } = JSON.parse(saved);
+          getCurrentWindow().setPosition(new PhysicalPosition(x, y)).catch(() => {});
+          defaultPos.current = { x, y };
+          return;
+        } catch {}
+      }
       defaultPos.current = { x: p.x, y: p.y };
     }).catch(() => {});
   }, []);
+
+  // Save position on drag end
+  const savePosition = () => {
+    getCurrentWindow().outerPosition().then(p => {
+      localStorage.setItem('csp_pet_pos', JSON.stringify({ x: p.x, y: p.y }));
+    }).catch(() => {});
+  };
 
   // ─── Roaming ───
   useEffect(() => {

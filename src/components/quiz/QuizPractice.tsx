@@ -11,7 +11,9 @@ interface QuizQuestion {
   year: number;
   knowledgePoint: string;
   difficulty: number;
+  level?: number;
   question: string;
+  code?: string;
   options: string[];
   correctIndex: number;
   explanation: string;
@@ -58,6 +60,8 @@ export default function QuizPractice() {
   const [loading, setLoading] = useState(true);
   const [superAnswers, setSuperAnswers] = useState<number[]>([]);
   const [kpResults, setKpResults] = useState<Map<string, { correct: number; total: number }>>(new Map());
+  const [levelFilter, setLevelFilter] = useState<number | 'all'>('all');
+  const [sourceFilter, setSourceFilter] = useState<string | 'all'>('all');
 
   const quizStore = useQuizStore();
   const addCoins = usePetStore(s => s.addCoins);
@@ -119,9 +123,19 @@ export default function QuizPractice() {
       const superQs = questionBank.filter(q => q.source === 'super_challenge');
       setQuestions(shuffle(superQs).slice(0, 1));
     } else {
-      // Random CSP exam questions
-      const examQs = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
-      setQuestions(shuffle(examQs).slice(0, m === 'free' ? 15 : 5));
+      // Random CSP/GESP exam questions with optional filters
+      let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+      if (sourceFilter !== 'all') {
+        pool = pool.filter(q => q.source === sourceFilter);
+      }
+      if (levelFilter !== 'all') {
+        pool = pool.filter(q => q.level === levelFilter);
+      }
+      if (pool.length === 0) {
+        // Fallback to all exam questions if filter leaves nothing
+        pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+      }
+      setQuestions(shuffle(pool).slice(0, m === 'free' ? 15 : 5));
     }
   };
 
@@ -150,8 +164,8 @@ export default function QuizPractice() {
         });
       }
 
-      // Reward (per question for non-super modes)
-      if (mode !== 'super' && reward.exp > 0) {
+      // Reward (per question for non-weekly/non-extra modes — those reward on completion only)
+      if (mode !== 'super' && mode !== 'weekly' && mode !== 'extra' && reward.exp > 0) {
         const activePetId = usePetStore.getState().activePetId;
         if (activePetId) addExp(activePetId, reward.exp);
         const mult = usePetStore.getState().getRewardMultiplier();
@@ -194,9 +208,29 @@ export default function QuizPractice() {
       quizStore.recordKpResults(kpArray);
       if (mode === 'weekly') {
         quizStore.completeWeeklyTask(finalResults.correct === 5);
+        // Reward on completion (not per-question — prevents exploit by leaving mid-task)
+        const reward = getReward();
+        const correct = finalResults.correct;
+        if (reward.exp > 0 && correct > 0) {
+          const activePetId = usePetStore.getState().activePetId;
+          if (activePetId) addExp(activePetId, reward.exp * correct);
+          const mult = usePetStore.getState().getRewardMultiplier();
+          addCoins(Math.floor(reward.coins * correct * mult));
+        }
         usePetStore.getState().claimPendingRewards();
       }
-      if (mode === 'extra') quizStore.completeExtraChallenge();
+      if (mode === 'extra') {
+        quizStore.completeExtraChallenge();
+        // Reward on completion
+        const reward = getReward();
+        const correct = finalResults.correct;
+        if (reward.exp > 0 && correct > 0) {
+          const activePetId = usePetStore.getState().activePetId;
+          if (activePetId) addExp(activePetId, reward.exp * correct);
+          const mult = usePetStore.getState().getRewardMultiplier();
+          addCoins(Math.floor(reward.coins * correct * mult));
+        }
+      }
       if (mode === 'review') quizStore.completeMonthlyReview(finalResults.correct, finalResults.total);
       if (mode === 'super') {
         quizStore.completeSuperChallenge(finalResults.correct);
@@ -236,6 +270,55 @@ export default function QuizPractice() {
       <div className="quiz-practice">
         <h2>📝 选择题练习</h2>
         <p className="quiz-subtitle">完成选择题练习获得经验和金币，答错自动记录到月度复盘</p>
+
+        <div className="quiz-filter-bar">
+          <div className="quiz-filter-group">
+            <span className="quiz-filter-label">等级</span>
+            <div className="quiz-filter-options">
+              {(['all', 1, 2, 3, 4] as const).map(lv => (
+                <button
+                  key={String(lv)}
+                  className={`quiz-filter-btn ${levelFilter === lv ? 'active' : ''}`}
+                  onClick={() => setLevelFilter(lv)}
+                >
+                  {lv === 'all' ? '全部' : `GESP ${lv}级`}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="quiz-filter-group">
+            <span className="quiz-filter-label">来源</span>
+            <div className="quiz-filter-options">
+              {[
+                { key: 'all', label: '全部' },
+                { key: 'gesp', label: 'GESP' },
+                { key: 'csp_exam', label: 'CSP' },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  className={`quiz-filter-btn ${sourceFilter === key ? 'active' : ''}`}
+                  onClick={() => setSourceFilter(key)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="quiz-filter-hint">
+          {(() => {
+            if (!questionBank) return '加载题库中...';
+            let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+            if (sourceFilter !== 'all') pool = pool.filter(q => q.source === sourceFilter);
+            if (levelFilter !== 'all') pool = pool.filter(q => q.level === levelFilter);
+            const parts: string[] = [];
+            if (levelFilter !== 'all') parts.push(`GESP ${levelFilter}级`);
+            if (sourceFilter !== 'all') parts.push(sourceFilter === 'gesp' ? 'GESP' : 'CSP');
+            const scope = parts.length > 0 ? parts.join(' · ') : '全部';
+            return `当前练习范围：${scope}，共 ${pool.length} 道题`;
+          })()}
+        </p>
 
         <div className="quiz-mode-cards">
           <div className="quiz-mode-card">
@@ -551,6 +634,7 @@ export default function QuizPractice() {
       </div>
 
       <div className="quiz-question-card">
+        {q.code && <pre className="code-block"><code>{q.code}</code></pre>}
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderText(q.question)} />
 
         <div className="quiz-options">

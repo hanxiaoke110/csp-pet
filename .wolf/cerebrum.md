@@ -5,6 +5,8 @@
 - 大幅度改动前先和用户确认方案
 - macOS 未签名 DMG 需 `xattr -cr` 后才能打开
 - 发版流程：改版本号 → push + tag → 同时推 Gitee → CI 构建 → 手动上传 Gitee
+- **发版时 `package.json` 和 `src-tauri/tauri.conf.json` 两个文件都要更新版本号！**
+- Gitee 手动上传安装包时用 `filename=` 对齐 `csp-v${short}-${arch}.${ext}` 命名规则
 - 独立查询（跨文件搜索、GitHub 查资料、多文件探索）优先用 Agent subagent，不占主 context
 
 ## Learnings
@@ -24,6 +26,9 @@
 - 版本号用 `@tauri-apps/api/app` 的 `getVersion()`，不要用不存在的 `/version` 接口
 - Gitee 仓库附件总配额 1GB，不发版时清理旧 Release
 - 新增精灵需要同时做：spritesheet → Gitee + preview → public/ + pet.ts 配置，缺一不可
+- **Gitee 上传安装包必须对齐 UpdateChecker.buildUrls 命名规则**：`csp-v${short}-arm.dmg`、`csp-v${short}-intel.dmg`、`csp-v${short}-win.exe`，否则旧版 App 手动下载链接 404
+- **CI 的 `npm ci` 只装 `csp-desktop-pet/package.json` 的依赖**，如果根目录 `package.json` 有额外依赖，必须同步到子项目
+- **CI 生成的 `update.json` 签名需要提取**：从 CI output 中取 "Public signature:" 之后的纯 base64，去掉说明文字，再写入 Gitee
 
 ## Do-Not-Repeat
 - **绝不**: 将 C++ 代码塞进 quiz options 数组 — 应放在 `code` 字段，选项用简短标签
@@ -49,6 +54,11 @@
 
 - **绝不**: 在版本发布说明中出现"防篡改"等字眼——统一写"修复部分已知问题"
 - **绝不**: 硬编码任何密码/密钥在前端代码——统一用教练端生成＋学生端校验
+- **绝不**: Gitee 上传安装包时用中文原始文件名——必须用 `filename=csp-v${short}-${arch}.${ext}` 格式，否则 UpdateChecker 的下载链接 404
+- **绝不**: 发版只改 `package.json` 不改 `tauri.conf.json`——版本号显示会错，且 CI 构建的文件名也会错
+- **绝不**: 在非 `csp-desktop-pet` 的 `package.json` 加依赖——CI 的 `npm ci` 只看子项目自己的 `package.json`
+- **绝不**: 许愿列表用 OFFSET 分页——大表全扫。用游标分页：热门 `(votes, id)` 新的 `(id)`
+- **绝不**: 盲目给 Worker 加限流用 KV——D1 建个 rate_limits 表更轻量，带 reset_at 滑动窗口
 
 ## 2026-06-02/03 许愿墙 + 班级系统新增
 

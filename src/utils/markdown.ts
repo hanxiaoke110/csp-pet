@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 export function escapeHtml(text: string): string {
   if (!text) return '';
   return text
@@ -31,7 +33,7 @@ export function renderCodeText(text: string): { __html: string } {
   // Inline code
   html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
 
-  return { __html: html };
+  return { __html: DOMPurify.sanitize(html) };
 }
 
 // Full markdown rendering for AI coach & course content
@@ -57,5 +59,5 @@ export function renderMarkdown(text: string): string {
   html = html.replace(/\n/g, '<br>');
   html = '<p>' + html + '</p>';
   html = html.replace(/<p><pre>/g, '<pre>').replace(/<\/pre><\/p>/g, '</pre>');
-  return html;
+  return DOMPurify.sanitize(html);
 }

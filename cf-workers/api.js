@@ -3,8 +3,14 @@
 // 功能：许愿墙 + 教师管理 + 班级系统 + 兑换码生成
 
 const MONTHLY_SUBMIT_LIMIT = 3;
+const ACTIVE_WISH_LIMIT = 3;  // max active wishes per student — freed when teacher deletes/completes
 const CLEANUP_PROTECT_DAYS = 7;
 const CLEANUP_MIN_KEEP = 20;
+
+// Rate limiting
+const RATE_WISH_POST = 5;       // 5 wishes per minute per device
+const RATE_VOTE_POST = 10;      // 10 votes per minute per device
+const RATE_WINDOW_SEC = 60;
 
 // ── 敏感词黑名单 ──
 const BAD_WORDS = [
@@ -55,13 +61,23 @@ async function serverDecrypt(encBase64, env) {
 // ── Auth ──
 function checkAdmin(request, env) {
   const token = request.headers.get('X-Admin-Token') || '';
-  return token === (env.ADMIN_TOKEN || 'csp-admin-2024');
+  if (!env.ADMIN_TOKEN) return false;
+  return token === env.ADMIN_TOKEN;
 }
 async function checkTeacher(request, db) {
   const token = request.headers.get('X-Teacher-Token') || '';
   if (!token) return null;
-  const t = await db.prepare('SELECT teacher_id, phone, name, token FROM teachers WHERE token=?').bind(token).first();
+  const t = await db.prepare('SELECT teacher_id, phone, name, token, permissions FROM teachers WHERE token=?').bind(token).first();
   return t || null;
+}
+
+function safeParsePermissions(raw) {
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch { return []; }
+}
+
+function hasPermission(teacher, perm) {
+  return safeParsePermissions(teacher?.permissions).includes(perm);
 }
 
 // ── Hash (matches Chrome extension algorithm) ──
@@ -116,13 +132,13 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS generated_codes (code TEXT PRIMARY KEY, type TEXT, teacher_id TEXT, level TEXT, created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, title TEXT, description TEXT, teacher_id TEXT, teacher_name TEXT, submitter TEXT DEFAULT 'teacher', status TEXT DEFAULT 'open', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS workshop_pets (id TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT, name TEXT, element TEXT, style TEXT, description TEXT, tier TEXT, price INTEGER, pet_json TEXT, spritesheet_url TEXT, thumbnail_url TEXT, status TEXT DEFAULT 'active', created_at TEXT)`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS quiz_errors (id INTEGER PRIMARY KEY AUTOINCREMENT, question_id TEXT, knowledge_point TEXT, class_code TEXT, device_hash TEXT, created_at TEXT, UNIQUE(question_id, device_hash))`); } catch {}
   try { await db.exec(`ALTER TABLE feedback ADD COLUMN submitter TEXT DEFAULT 'teacher'`); } catch {}
   // Migrations for existing tables
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN phone_enc TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN class_code TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN real_name_enc TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE votes ADD COLUMN class_code TEXT DEFAULT ''`); } catch {}
+  try { await db.exec(`ALTER TABLE teachers ADD COLUMN permissions TEXT DEFAULT '[]'`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN teacher_id TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN label TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN status TEXT DEFAULT 'active'`); } catch {}
@@ -132,29 +148,41 @@ async function ensureSchema(db) {
   // ── Dungeon tables ──
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, question_id TEXT NOT NULL, dungeon_id TEXT NOT NULL, was_correct INTEGER DEFAULT 0, time_spent_ms INTEGER DEFAULT 0, season TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
-  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_dungeon_attempts_dh ON dungeon_attempts(device_hash, created_at)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_daily_tasks (device_hash TEXT NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, stages_cleared INTEGER DEFAULT 0, bosses_defeated INTEGER DEFAULT 0, all_done INTEGER DEFAULT 0, claimed INTEGER DEFAULT 0, PRIMARY KEY (device_hash, date))`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_broadcasts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT DEFAULT '', display_name TEXT DEFAULT '', school TEXT DEFAULT 'cultivation', message TEXT NOT NULL, broadcast_type TEXT DEFAULT 'dungeon_clear', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  // Performance indexes
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_device_status ON wishes(device_hash, status)`); } catch {}
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_class_status ON wishes(class_code, status)`); } catch {}
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_votes_wish ON votes(wish_id)`); } catch {}
+  // Rate limit table
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, count INTEGER DEFAULT 0, reset_at TEXT)`); } catch {}
   _schemaEnsured = true;
 }
 
-// ── Lazy monthly cleanup ──
-let _cleanupChecked = '';
-async function maybeCleanup(db) {
-  const thisMonth = getMonthKey();
-  if (_cleanupChecked === thisMonth) return; // Instance cache
-  const last = await db.prepare("SELECT value FROM meta WHERE key='last_cleanup'").first();
-  if (last && last.value === thisMonth) { _cleanupChecked = thisMonth; return; }
-  await db.prepare(`UPDATE wishes SET status='archived' WHERE status='active' AND votes=0 AND created_at < datetime('now','-${CLEANUP_PROTECT_DAYS} days')`).run();
-  const cnt = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE status='active'").first();
-  if (cnt && cnt.c > CLEANUP_MIN_KEEP) {
-    const n = Math.floor(cnt.c * 0.2);
-    if (n > 0) await db.prepare(`UPDATE wishes SET status='archived' WHERE id IN (SELECT id FROM wishes WHERE status='active' AND created_at < datetime('now','-${CLEANUP_PROTECT_DAYS} days') ORDER BY votes ASC, created_at ASC LIMIT ?)`).bind(n).run();
+// ── Rate limit check — simple sliding window via D1 ──
+async function checkRateLimit(db, key, maxCount, windowSec) {
+  const now = new Date().toISOString();
+  const row = await db.prepare('SELECT count, reset_at FROM rate_limits WHERE key=?').bind(key).first();
+  if (!row || row.reset_at < now) {
+    // New window
+    const resetAt = new Date(Date.now() + windowSec * 1000).toISOString();
+    await db.prepare('INSERT OR REPLACE INTO rate_limits (key, count, reset_at) VALUES (?, 1, ?)').bind(key, resetAt).run();
+    return true;
   }
-  await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('last_cleanup', ?)").bind(thisMonth).run();
-  _cleanupChecked = thisMonth;
+  if (row.count >= maxCount) return false;
+  await db.prepare('UPDATE rate_limits SET count = count + 1 WHERE key=?').bind(key).run();
+  return true;
+}
+
+// ── Periodic cleanup (runs once per request, cached) ──
+let _lastCleanup = '';
+async function maybeCleanup(db) {
+  const today = new Date().toISOString().slice(0, 10);
+  if (_lastCleanup === today) return;
+  // Clean votes older than 6 months
+  try { await db.prepare("DELETE FROM votes WHERE created_at < datetime('now', '-6 months')").run(); } catch {}
+  // Clean soft-deleted wishes older than 3 months
+  try { await db.prepare("DELETE FROM wishes WHERE status='deleted' AND created_at < datetime('now', '-3 months')").run(); } catch {}
+  _lastCleanup = today;
 }
 
 // ── Password hashing (simple SHA-256) ──
@@ -180,6 +208,16 @@ export default {
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
 
+    // Health check
+    if (path === '/api/health') {
+      try {
+        await db.prepare('SELECT 1').first();
+        return new Response(JSON.stringify({ ok: true, db: true }), { headers: cors });
+      } catch (e) {
+        return new Response(JSON.stringify({ ok: false, db: false, error: e.message }), { status: 500, headers: cors });
+      }
+    }
+
     try {
       // ═══ TEACHER AUTH ═══
       if (path === '/api/teacher/register' && request.method === 'POST') {
@@ -199,7 +237,7 @@ export default {
         const pwHash = await hashPassword(password);
         const token = randomChars(32);
         await db.prepare('INSERT INTO teachers (teacher_id, phone, password_hash, name, token, created_at) VALUES (?,?,?,?,?,datetime("now"))').bind(teacherId, phone, pwHash, name, token).run();
-        return new Response(JSON.stringify({ success: true, teacher_id: teacherId, token, name }), { headers: cors });
+        return new Response(JSON.stringify({ success: true, teacher_id: teacherId, token, name, permissions: [] }), { headers: cors });
       }
 
       if (path === '/api/teacher/login' && request.method === 'POST') {
@@ -213,7 +251,7 @@ export default {
         // Rotate token
         const token = randomChars(32);
         await db.prepare('UPDATE teachers SET token=? WHERE teacher_id=?').bind(token, t.teacher_id).run();
-        return new Response(JSON.stringify({ success: true, teacher_id: t.teacher_id, token, name: t.name }), { headers: cors });
+        return new Response(JSON.stringify({ success: true, teacher_id: t.teacher_id, token, name: t.name, permissions: safeParsePermissions(t.permissions) }), { headers: cors });
       }
 
       // ═══ CLASS MANAGEMENT (teacher auth) ═══
@@ -295,6 +333,16 @@ export default {
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
+      // ═══ QIANLONG CODE (permission-gated) ═══
+      if (path === '/api/codes/qianlong' && request.method === 'POST') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+        if (!hasPermission(teacher, 'qianlong')) return new Response(JSON.stringify({ error: '无权限，请联系管理员开通' }), { status: 403, headers: cors });
+        const code = 'QL-' + randomChars(8).toUpperCase();
+        await db.prepare('INSERT INTO generated_codes (code, type, teacher_id, level, created_at) VALUES (?,"qianlong",?,?,datetime("now"))').bind(code, teacher.teacher_id, '').run();
+        return new Response(JSON.stringify({ code }), { headers: cors });
+      }
+
       // ═══ CODE GENERATION (teacher auth) ═══
       const EXC_SECRET = 'csp-coach-2025';
       const CAMP_SECRET = 'csp-camp-2025';
@@ -335,36 +383,84 @@ export default {
 
         const sort = url.searchParams.get('sort') || 'hot';
         const classCode = url.searchParams.get('class_code') || '';
-        const order = sort === 'new' ? 'created_at DESC' : 'votes DESC, created_at ASC';
         const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
+        const cursorRaw = url.searchParams.get('cursor') || '';
 
-        let result;
+        // Parse cursor for pagination
+        let cursor = null;
+        if (cursorRaw) {
+          try { cursor = JSON.parse(atob(decodeURIComponent(cursorRaw))); } catch {}
+        }
+
+        // Build the WHERE and ORDER
+        const statusFilter = "status IN ('active','completed')";
+        let orderClause, cursorClause = '';
+        const params = [];
+
+        if (sort === 'new') {
+          orderClause = 'id DESC';
+          if (cursor && cursor.id) {
+            cursorClause = 'AND id < ?';
+            params.push(cursor.id);
+          }
+        } else {
+          orderClause = 'votes DESC, id DESC';
+          if (cursor && cursor.votes !== undefined && cursor.id) {
+            cursorClause = 'AND (votes < ? OR (votes = ? AND id < ?))';
+            params.push(cursor.votes, cursor.votes, cursor.id);
+          }
+        }
+
+        // Collect class codes
+        let codes = [];
         if (classCode) {
-          // Teacher-level isolation: find teacher and show all their classes' wishes
           const cls = await db.prepare("SELECT teacher_id FROM classes WHERE class_code=? AND status='active'").bind(classCode).first();
           if (cls) {
             const classCodes = await db.prepare("SELECT class_code FROM classes WHERE teacher_id=? AND status='active'").bind(cls.teacher_id).all();
-            const codes = classCodes.results.map(r => r.class_code);
-            if (codes.length > 0) {
-              const placeholders = codes.map(() => '?').join(',');
-              result = await db.prepare(`SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE status IN ('active','completed') AND class_code IN (${placeholders}) ORDER BY ${order} LIMIT ?`).bind(...codes, limit).all();
-            } else {
-              result = { results: [] };
-            }
-          } else {
-            result = { results: [] };
+            codes = classCodes.results.map(r => r.class_code);
           }
-        } else {
-          // No class code — show all wishes (backward compat)
-          result = await db.prepare(`SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE status IN ('active','completed') ORDER BY ${order} LIMIT ?`).bind(limit).all();
         }
-        return new Response(JSON.stringify(result.results), { headers: cors });
+
+        let result;
+        if (codes.length > 0) {
+          const ph = codes.map(() => '?').join(',');
+          const sql = `SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE ${statusFilter} AND class_code IN (${ph}) ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(...codes, ...params, limit + 1).all();
+        } else if (classCode) {
+          result = { results: [] };
+        } else {
+          // No class code — all wishes (backward compat)
+          const sql = `SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE ${statusFilter} ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(...params, limit + 1).all();
+        }
+
+        const hasMore = result.results.length > limit;
+        const items = hasMore ? result.results.slice(0, limit) : result.results;
+
+        // Build next cursor
+        let nextCursor = null;
+        if (hasMore && items.length > 0) {
+          const last = items[items.length - 1];
+          if (sort === 'new') {
+            nextCursor = btoa(JSON.stringify({ id: last.id }));
+          } else {
+            nextCursor = btoa(JSON.stringify({ votes: last.votes, id: last.id }));
+          }
+        }
+
+        // Backward compat: no cursor → return plain array
+        if (!cursorRaw) {
+          return new Response(JSON.stringify(result.results.slice(0, limit)), { headers: cors });
+        }
+
+        return new Response(JSON.stringify({ items, hasMore, nextCursor }), { headers: cors });
       }
 
       if (path === '/api/wishes/my-stats' && request.method === 'GET') {
         const device_hash = url.searchParams.get('device_hash') || '';
         const count = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status IN ('active','archived') AND created_at >= datetime('now','start of month')").bind(device_hash).first();
-        return new Response(JSON.stringify({ monthlySubmitted: count ? count.c : 0, monthlyLimit: MONTHLY_SUBMIT_LIMIT }), { headers: cors });
+        const activeNow = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status='active'").bind(device_hash).first();
+        return new Response(JSON.stringify({ monthlySubmitted: count ? count.c : 0, monthlyLimit: MONTHLY_SUBMIT_LIMIT, activeWishes: activeNow ? activeNow.c : 0, activeLimit: ACTIVE_WISH_LIMIT }), { headers: cors });
       }
 
       if (path === '/api/wishes' && request.method === 'POST') {
@@ -375,6 +471,9 @@ export default {
         if (!content || content.length < 2 || content.length > 60) return new Response(JSON.stringify({ error: '内容需2-60字' }), { status: 400, headers: cors });
         if (!display_name || display_name.length < 1 || display_name.length > 20) return new Response(JSON.stringify({ error: '昵称需1-20字' }), { status: 400, headers: cors });
         if (phone && !/^1[3-9]\d{9}$/.test(phone)) return new Response(JSON.stringify({ error: '手机号格式不正确' }), { status: 400, headers: cors });
+
+        // Rate limit
+        if (!await checkRateLimit(db, `wish:${device_hash}`, RATE_WISH_POST, RATE_WINDOW_SEC)) return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
 
         // Require class_code for submission
         if (!class_code) return new Response(JSON.stringify({ error: '请先在设置中绑定班级码' }), { status: 400, headers: cors });
@@ -394,6 +493,10 @@ export default {
         const monthly = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status IN ('active','archived') AND created_at >= datetime('now','start of month')").bind(device_hash).first();
         if (monthly && monthly.c >= MONTHLY_SUBMIT_LIMIT) return new Response(JSON.stringify({ error: `本月已提交${MONTHLY_SUBMIT_LIMIT}条，下个月再来吧` }), { status: 429, headers: cors });
 
+        // Active wish cap — freed when teacher deletes or completes a wish
+        const activeCount = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status='active'").bind(device_hash).first();
+        if (activeCount && activeCount.c >= ACTIVE_WISH_LIMIT) return new Response(JSON.stringify({ error: `你已有${ACTIVE_WISH_LIMIT}条活跃许愿，等老师实现或删除后再提交新愿望吧` }), { status: 429, headers: cors });
+
         const encName = real_name ? await serverEncrypt(real_name, env) : '';
         const encPhone = phone ? await serverEncrypt(phone, env) : '';
 
@@ -412,6 +515,9 @@ export default {
         if (!wish_id || !device_hash) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
         if (!class_code) return new Response(JSON.stringify({ error: '请先在设置中绑定班级码' }), { status: 400, headers: cors });
 
+        // Rate limit
+        if (!await checkRateLimit(db, `vote:${device_hash}`, RATE_VOTE_POST, RATE_WINDOW_SEC)) return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
+
         // Validate class and student status
         const clsVote = await db.prepare("SELECT * FROM classes WHERE class_code=? AND status='active'").bind(class_code).first();
         if (!clsVote) return new Response(JSON.stringify({ error: '班级已关闭，请联系老师' }), { status: 400, headers: cors });
@@ -428,7 +534,10 @@ export default {
         // Atomic insert to prevent race-condition duplicate votes
         try {
           await db.prepare('INSERT INTO votes (wish_id, device_hash, class_code) VALUES (?,?,?)').bind(wish_id, device_hash, class_code).run();
-          await db.prepare('UPDATE wishes SET votes=votes+1 WHERE id=?').bind(wish_id).run();
+          // Defer UPDATE to prevent wish-level write-lock contention under load
+          ctx.waitUntil((async () => {
+            try { await db.prepare('UPDATE wishes SET votes=votes+1 WHERE id=?').bind(wish_id).run(); } catch {}
+          })());
         } catch (e) {
           if (e.message && e.message.includes('UNIQUE')) return new Response(JSON.stringify({ error: '你已经投过票了' }), { status: 400, headers: cors });
           throw e;
@@ -478,6 +587,7 @@ export default {
         }
 
         await db.prepare('UPDATE wishes SET status=? WHERE id=?').bind('deleted', id).run();
+        await db.prepare('DELETE FROM votes WHERE wish_id=?').bind(id).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -530,7 +640,7 @@ export default {
       // GET /admin/teachers — list all teachers with stats
       if (path === '/admin/teachers' && request.method === 'GET') {
         if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
-        const teachers = await db.prepare('SELECT teacher_id, phone, name, created_at FROM teachers ORDER BY created_at DESC').all();
+        const teachers = await db.prepare('SELECT teacher_id, phone, name, permissions, created_at FROM teachers ORDER BY created_at DESC').all();
         const result = await Promise.all(teachers.results.map(async (t) => {
           const classes = await db.prepare("SELECT COUNT(*) as c FROM classes WHERE teacher_id=? AND status='active'").bind(t.teacher_id).first();
           const students = await db.prepare("SELECT COUNT(*) as c FROM class_students cs JOIN classes c ON cs.class_code=c.class_code WHERE c.teacher_id=? AND cs.status='active'").bind(t.teacher_id).first();
@@ -577,6 +687,33 @@ export default {
         const teacherId = path.split('/')[3];
         await db.prepare("UPDATE classes SET status='deleted' WHERE teacher_id=?").bind(teacherId).run();
         await db.prepare('DELETE FROM teachers WHERE teacher_id=?').bind(teacherId).run();
+        return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+
+      // Admin: toggle teacher permission
+      if (path.startsWith('/admin/teachers/') && path.endsWith('/permissions') && request.method === 'POST') {
+        if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+        const parts = path.split('/'); // /admin/teachers/:id/permissions
+        const teacherId = parts[3];
+        const { permission } = await request.json();
+        if (!permission) return new Response(JSON.stringify({ error: '缺少permission' }), { status: 400, headers: cors });
+        const t = await db.prepare('SELECT permissions FROM teachers WHERE teacher_id=?').bind(teacherId).first();
+        if (!t) return new Response(JSON.stringify({ error: '老师不存在' }), { status: 404, headers: cors });
+        const perms = safeParsePermissions(t.permissions);
+        const idx = perms.indexOf(permission);
+        if (idx >= 0) perms.splice(idx, 1); else perms.push(permission);
+        await db.prepare('UPDATE teachers SET permissions=? WHERE teacher_id=?').bind(JSON.stringify(perms), teacherId).run();
+        return new Response(JSON.stringify({ success: true, permissions: perms }), { headers: cors });
+      }
+
+      // Admin: reset teacher password
+      if (path.startsWith('/admin/teachers/') && path.endsWith('/reset-password') && request.method === 'POST') {
+        if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+        const teacherId = path.split('/')[3];
+        const { password } = await request.json();
+        if (!password || password.length < 6) return new Response(JSON.stringify({ error: '密码至少6位' }), { status: 400, headers: cors });
+        const pwHash = await hashPassword(password);
+        await db.prepare('UPDATE teachers SET password_hash=? WHERE teacher_id=?').bind(pwHash, teacherId).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -732,52 +869,8 @@ export default {
           if (!wish) return new Response(JSON.stringify({ error: '无权操作' }), { status: 403, headers: cors });
         }
         await db.prepare("UPDATE wishes SET status='completed' WHERE id=?").bind(id).run();
+        await db.prepare('DELETE FROM votes WHERE wish_id=?').bind(id).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
-      }
-
-  try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_quiz_errors_unique ON quiz_errors(question_id, device_hash)`); } catch {}
-
-      // ═══ QUIZ ANALYTICS ═══
-      // POST /api/quiz/error — report a wrong answer
-      if (path === '/api/quiz/error' && request.method === 'POST') {
-        const { question_id, knowledge_point, class_code } = await request.json();
-        if (!question_id || !knowledge_point || !class_code) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
-        // Try insert, ignore if duplicate (same student same question)
-        try {
-          await db.prepare('INSERT OR IGNORE INTO quiz_errors (question_id, knowledge_point, class_code, created_at) VALUES (?,?,?,datetime("now"))').bind(question_id, knowledge_point, class_code).run();
-        } catch {}
-        return new Response(JSON.stringify({ success: true }), { headers: cors });
-      }
-
-      // GET /api/quiz/analytics — teacher views class error stats
-      if (path === '/api/quiz/analytics' && request.method === 'GET') {
-        const teacher = await checkTeacher(request, db);
-        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        const month = url.searchParams.get('month') || new Date().toISOString().slice(0, 7); // YYYY-MM
-
-        // Get all class codes for this teacher
-        const filterClass = url.searchParams.get('class_code') || '';
-        const classes = await db.prepare("SELECT class_code, label FROM classes WHERE teacher_id=? AND status='active'").bind(teacher.teacher_id).all();
-        let codes = classes.results.map(c => c.class_code);
-        if (filterClass && codes.includes(filterClass)) codes = [filterClass]; // Filter to specific class
-        if (codes.length === 0) return new Response(JSON.stringify({ by_kp: [], by_student: [], classes: classes.results }), { headers: cors });
-
-        const ph = codes.map(() => '?').join(',');
-        // Knowledge point ranking
-        const kpRows = await db.prepare(`SELECT knowledge_point, COUNT(*) as count FROM quiz_errors WHERE class_code IN (${ph}) AND created_at LIKE ? GROUP BY knowledge_point ORDER BY count DESC LIMIT 30`).bind(...codes, month + '%').all();
-
-        // Student detail for a specific KP
-        const kp = url.searchParams.get('kp') || '';
-        let studentRows = { results: [] };
-        if (kp) {
-          studentRows = await db.prepare(`SELECT qe.question_id, qe.knowledge_point, qe.class_code, qe.created_at, cs.student_name FROM quiz_errors qe LEFT JOIN class_students cs ON qe.class_code=cs.class_code WHERE qe.class_code IN (${ph}) AND qe.knowledge_point=? AND qe.created_at LIKE ? ORDER BY qe.created_at DESC LIMIT 100`).bind(...codes, kp, month + '%').all();
-        }
-
-        return new Response(JSON.stringify({
-          by_kp: kpRows.results,
-          by_student: studentRows.results,
-          classes: classes.results,
-        }), { headers: cors });
       }
 
       // ═══ WORKSHOP ═══
@@ -839,7 +932,7 @@ export default {
         ]);
         if (hourCount >= 5) return new Response(JSON.stringify({ error: '每小时最多上传5只精灵' }), { status: 429, headers: cors });
         if (dayCount >= 20) return new Response(JSON.stringify({ error: '每天最多上传20只精灵' }), { status: 429, headers: cors });
-        if (totalCount >= 50) return new Response(JSON.stringify({ error: '每位教师最多50只精灵' }), { status: 429, headers: cors });
+        if (totalCount >= 20) return new Response(JSON.stringify({ error: '每位教师最多20只精灵' }), { status: 429, headers: cors });
         // Size limit: 5MB to prevent abuse
         if (binary.length > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过5MB' }), { status: 400, headers: cors });
         const key = `workshop/${teacher.teacher_id}/${filename || Date.now() + '.png'}`;
@@ -855,16 +948,38 @@ export default {
         return new Response(JSON.stringify({ success: true, key }), { headers: cors });
       }
 
-      // GET /api/workshop/pets — list pets (with optional teacher filter)
+      // GET /api/workshop/pets — list pets, cursor pagination when param present
       if (path === '/api/workshop/pets' && request.method === 'GET') {
         const teacher = await checkTeacher(request, db);
+        const limit = Math.min(parseInt(url.searchParams.get('limit') || '30'), 100);
+        const cursorRaw = url.searchParams.get('cursor') || '';
+
+        let cursor = null;
+        if (cursorRaw) { try { cursor = JSON.parse(atob(decodeURIComponent(cursorRaw))); } catch {} }
+
+        const cursorClause = cursor && cursor.id ? 'AND id < ?' : '';
+        const cursorParams = cursor && cursor.id ? [cursor.id] : [];
+
         let result;
         if (teacher) {
-          result = await db.prepare("SELECT * FROM workshop_pets WHERE teacher_id=? AND status='active' ORDER BY created_at DESC LIMIT 50").bind(teacher.teacher_id).all();
+          const sql = `SELECT * FROM workshop_pets WHERE teacher_id=? AND status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
+          result = await db.prepare(sql).bind(teacher.teacher_id, ...cursorParams, limit + 1).all();
         } else {
-          result = await db.prepare("SELECT * FROM workshop_pets WHERE status='active' ORDER BY created_at DESC LIMIT 50").all();
+          const sql = `SELECT * FROM workshop_pets WHERE status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
+          result = await db.prepare(sql).bind(...cursorParams, limit + 1).all();
         }
-        return new Response(JSON.stringify(result.results), { headers: cors });
+
+        // Backward compat: no cursor → return plain array
+        if (!cursorRaw) {
+          return new Response(JSON.stringify(result.results.slice(0, limit)), { headers: cors });
+        }
+
+        const hasMore = result.results.length > limit;
+        const items = hasMore ? result.results.slice(0, limit) : result.results;
+        const nextCursor = (hasMore && items.length > 0)
+          ? btoa(JSON.stringify({ id: items[items.length - 1].id })) : null;
+
+        return new Response(JSON.stringify({ items, hasMore, nextCursor }), { headers: cors });
       }
 
       // POST /api/workshop/pets — teacher uploads a generated pet (FormData or JSON)
@@ -1062,7 +1177,8 @@ export default {
         const dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(player.device_hash).all();
         const badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(player.device_hash).all();
         const today = new Date().toISOString().slice(0,10);
-        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(player.device_hash, today).first();
+        // Daily tasks removed — return stub for client compatibility
+        const tasks = { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 };
         // Update login streak and last login
         const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
         const streakUpdate = player.last_login_date === yesterday ? player.login_streak + 1 :
@@ -1120,41 +1236,17 @@ export default {
         return new Response(JSON.stringify({ success: true, player }), { headers: cors });
       }
 
-      // ── GET /api/dungeon/status ──
-      if (path === '/api/dungeon/status' && request.method === 'GET') {
-        const dh = url.searchParams.get('device_hash') || '';
-        if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
-        const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(dh).first();
-        if (!player) return new Response(JSON.stringify({ success: false, error: '未注册' }), { headers: cors });
-        if (player.status !== 'active') return new Response(JSON.stringify({ success: false, error: '你的修炼权限已被暂停，请联系你的老师恢复' }), { headers: cors });
-        const dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(dh).all();
-        const badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(dh).all();
-        const today = new Date().toISOString().slice(0,10);
-        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(dh, today).first();
-        return new Response(JSON.stringify({
-          success: true,
-          player,
-          dungeons: dungeons.results,
-          badges: (badges.results || []).map(b => b.badge_id),
-          dailyTasks: tasks || { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 },
-        }), { headers: cors });
-      }
-
-      // ── POST /api/dungeon/report ──
-      if (path === '/api/dungeon/report' && request.method === 'POST') {
-        const body = await request.json();
-        const { device_hash, question_id, dungeon_id, was_correct, time_spent_ms } = body;
-        if (!device_hash || !question_id) return new Response(JSON.stringify({ error: '缺少参数' }), { status: 400, headers: cors });
-        await db.prepare('INSERT INTO dungeon_attempts (device_hash, question_id, dungeon_id, was_correct, time_spent_ms, season) VALUES (?,?,?,?,?,?)')
-          .bind(device_hash, question_id, dungeon_id || '', was_correct ? 1 : 0, time_spent_ms || 0, '2026-autumn').run();
-        return new Response(JSON.stringify({ success: true }), { headers: cors });
-      }
-
       // ── POST /api/dungeon/sync ──
       if (path === '/api/dungeon/sync' && request.method === 'POST') {
         const body = await request.json();
         const { device_hash, class_code, display_name, player_level, exp, gold, rank_tier, rank_points, total_answered, total_correct, current_streak, max_streak, login_streak, school } = body;
         if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        // Dedup: skip if last sync was < 5 seconds ago (prevents 200-student wave from serializing on D1 write lock)
+        const lastSync = await db.prepare("SELECT updated_at FROM dungeon_players WHERE device_hash=?").bind(device_hash).first();
+        if (lastSync && lastSync.updated_at) {
+          const elapsed = Date.now() - new Date(lastSync.updated_at + 'Z').getTime();
+          if (elapsed < 5000) return new Response(JSON.stringify({ success: true, synced: false, reason: 'too_frequent' }), { headers: cors });
+        }
         const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(school) ? school : 'cultivation';
         await db.prepare(`UPDATE dungeon_players SET
           player_level=?, exp=?, gold=?, rank_tier=?, rank_points=?,
@@ -1214,49 +1306,6 @@ export default {
         }), { headers: cors });
       }
 
-      // ── GET /api/dungeon/daily-tasks ──
-      if (path === '/api/dungeon/daily-tasks' && request.method === 'GET') {
-        const dh = url.searchParams.get('device_hash') || '';
-        if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
-        const today = new Date().toISOString().slice(0,10);
-        let tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(dh, today).first();
-        if (!tasks) {
-          await db.prepare('INSERT OR IGNORE INTO dungeon_daily_tasks (device_hash, date) VALUES (?,?)').bind(dh, today).run();
-          tasks = { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 };
-        }
-        return new Response(JSON.stringify({ success: true, tasks }), { headers: cors });
-      }
-
-      // ── POST /api/dungeon/claim-daily ──
-      if (path === '/api/dungeon/claim-daily' && request.method === 'POST') {
-        const body = await request.json();
-        const { device_hash } = body;
-        if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
-        const today = new Date().toISOString().slice(0,10);
-        const tasks = await db.prepare('SELECT * FROM dungeon_daily_tasks WHERE device_hash=? AND date=?').bind(device_hash, today).first();
-        if (!tasks) return new Response(JSON.stringify({ error: '今日还没有完成任务' }), { status: 400, headers: cors });
-        if (tasks.claimed) return new Response(JSON.stringify({ error: '今日奖励已领取' }), { status: 400, headers: cors });
-        const rewards = { exp: 0, gold: 0 };
-        if (tasks.questions_done >= 5) { rewards.exp += 50; rewards.gold += 30; }
-        if (tasks.stages_cleared >= 1) { rewards.exp += 100; rewards.gold += 50; }
-        if (tasks.bosses_defeated >= 1) { rewards.exp += 200; rewards.gold += 100; }
-        if (tasks.all_done) { rewards.gold += 100; }
-        await db.prepare('UPDATE dungeon_daily_tasks SET claimed=1 WHERE device_hash=? AND date=?').bind(device_hash, today).run();
-        // Update player
-        const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
-        if (player) {
-          await db.prepare('UPDATE dungeon_players SET exp=exp+?, gold=gold+?, updated_at=datetime(\'now\') WHERE device_hash=?')
-            .bind(rewards.exp, rewards.gold, device_hash).run();
-        }
-        return new Response(JSON.stringify({ success: true, rewards }), { headers: cors });
-      }
-
-      // ── GET /api/dungeon/broadcasts ──
-      if (path === '/api/dungeon/broadcasts' && request.method === 'GET') {
-        const broadcasts = await db.prepare('SELECT * FROM dungeon_broadcasts ORDER BY created_at DESC LIMIT 20').all();
-        return new Response(JSON.stringify({ success: true, broadcasts: broadcasts.results || [] }), { headers: cors });
-      }
-
       // ── Teacher: GET /api/dungeon/teacher/students ──
       if (path === '/api/dungeon/teacher/students' && request.method === 'GET') {
         const teacher = await checkTeacher(request, db);
@@ -1310,39 +1359,15 @@ export default {
         return new Response(JSON.stringify({ success: true, message: '学生已恢复使用' }), { headers: cors });
       }
 
-      // ── Teacher: GET /api/dungeon/teacher/analytics ──
-      if (path === '/api/dungeon/teacher/analytics' && request.method === 'GET') {
-        const teacher = await checkTeacher(request, db);
-        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        const cc = url.searchParams.get('class_code') || '';
-        if (!cc) return new Response(JSON.stringify({ error: '请指定班级码' }), { status: 400, headers: cors });
-        // Verify ownership
-        const cls = await db.prepare('SELECT * FROM classes WHERE class_code=? AND teacher_id=?').bind(cc, teacher.teacher_id).first();
-        if (!cls) return new Response(JSON.stringify({ error: '无权查看该班级' }), { status: 403, headers: cors });
-        const total = await db.prepare('SELECT COUNT(*) as c FROM dungeon_players WHERE class_code=?').bind(cc).first();
-        const active = await db.prepare('SELECT COUNT(*) as c FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
-        const avgQuestions = await db.prepare('SELECT AVG(total_answered) as avg_q FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
-        const avgCorrect = await db.prepare('SELECT AVG(total_correct) as avg_c FROM dungeon_players WHERE class_code=? AND status=\'active\'').bind(cc).first();
-        // Weak knowledge points (most wrong answers)
-        const weakKPs = await db.prepare(`SELECT question_id, COUNT(*) as wrong_count FROM dungeon_attempts
-          WHERE device_hash IN (SELECT device_hash FROM dungeon_players WHERE class_code=?)
-          AND was_correct=0 GROUP BY question_id ORDER BY wrong_count DESC LIMIT 10`).bind(cc).all();
-        return new Response(JSON.stringify({
-          success: true,
-          analytics: {
-            totalStudents: total?.c || 0,
-            activeStudents: active?.c || 0,
-            avgQuestionsAnswered: Math.round(avgQuestions?.avg_q || 0),
-            avgCorrectRate: avgCorrect?.avg_c ? Math.round((avgCorrect.avg_c / (avgQuestions?.avg_q || 1)) * 100) : 0,
-            weakKPs: weakKPs.results || [],
-          }
-        }), { headers: cors });
-      }
-
       return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: cors });
     } catch (e) {
       console.error('API Error:', e.message || String(e));
       return new Response(JSON.stringify({ error: '服务器错误，请稍后重试' }), { status: 500, headers: cors });
     }
+  },
+
+  // Cron trigger — keeps Worker warm, no-op
+  async scheduled(event, env, ctx) {
+    try { await env.DB.prepare('SELECT 1').first(); } catch {}
   },
 };

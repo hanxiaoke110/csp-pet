@@ -55,7 +55,7 @@ async function apiCall<T>(
 
 // ── API functions ──
 import type {
-  StatusResponse, ReportResponse, LeaderboardResponse,
+  LeaderboardResponse,
   LeaderboardType, LeaderboardScope, RegisterResponse,
 } from '../types/dungeon';
 
@@ -71,23 +71,8 @@ export async function registerPlayer(
   });
 }
 
-export async function getStatus(): Promise<StatusResponse> {
-  return apiCall<StatusResponse>('/api/dungeon/status');
-}
-
 export async function syncProgress(playerData: Record<string, unknown>): Promise<{ success: boolean }> {
   return apiCall('/api/dungeon/sync', 'POST', playerData);
-}
-
-export async function reportAnswer(
-  questionId: string, dungeonId: string, wasCorrect: boolean, timeSpentMs: number
-): Promise<ReportResponse> {
-  return apiCall<ReportResponse>('/api/dungeon/report', 'POST', {
-    question_id: questionId,
-    dungeon_id: dungeonId,
-    was_correct: wasCorrect,
-    time_spent_ms: timeSpentMs,
-  });
 }
 
 export async function getLeaderboard(
@@ -96,18 +81,6 @@ export async function getLeaderboard(
   return apiCall<LeaderboardResponse>(
     `/api/dungeon/leaderboard?scope=${scope}&type=${type}`
   );
-}
-
-export async function getDailyTasks(): Promise<{ success: boolean; tasks: Record<string, unknown> }> {
-  return apiCall('/api/dungeon/daily-tasks');
-}
-
-export async function claimDailyReward(): Promise<{ success: boolean; rewards: Record<string, number> }> {
-  return apiCall('/api/dungeon/claim-daily', 'POST');
-}
-
-export async function getBroadcasts(): Promise<{ success: boolean; broadcasts: Record<string, unknown>[] }> {
-  return apiCall('/api/dungeon/broadcasts');
 }
 
 export async function loginPlayer(realName: string, phone: string): Promise<{
