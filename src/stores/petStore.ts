@@ -24,6 +24,7 @@ interface PetState {
 
   // Rename
   renameCards: number;
+  addRenameCards: (amount: number) => void;
   buyRenameCard: () => boolean;
   renamePet: (petId: string, newName: string) => string;
 
@@ -334,6 +335,11 @@ export const usePetStore = create<PetState>((set, get) => ({
     const mult = get().getRewardMultiplier();
     get().addCoins(Math.floor(pendingCoins * mult));
     set({ pendingExp: 0, pendingCoins: 0 });
+    get().save();
+  },
+
+  addRenameCards: (amount: number) => {
+    set(s => ({ renameCards: s.renameCards + amount }));
     get().save();
   },
 

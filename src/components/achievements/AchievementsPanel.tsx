@@ -28,8 +28,6 @@ const REWARDS: Record<string, { coins: number; renameCards?: number }> = {
   'hidden-triple': { coins: 100, renameCards: 1 }, 'hidden-name': { coins: 50 },
   'hidden-3perfect': { coins: 80 }, 'hidden-starve': { coins: 20 },
   'hidden-ai-csp': { coins: 30 }, 'hidden-perfect-review': { coins: 100 },
-  // Collection milestones
-  'collection-common10': { coins: 150 }, 'collection-firstLegendary': { coins: 100 },
 };
 
 const CATEGORIES: Record<string, { label: string; color: string }> = {
@@ -101,7 +99,7 @@ export default function AchievementsPanel() {
     if (!reward) return;
     const store = usePetStore.getState();
     store.addCoins(reward.coins);
-    if (reward.renameCards) { store.renameCards += reward.renameCards; store.save(); }
+    if (reward.renameCards) { store.addRenameCards(reward.renameCards); }
     const next = new Set(claimed);
     next.add(achId);
     setClaimed(next);
