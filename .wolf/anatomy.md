@@ -132,6 +132,8 @@ src-dungeon/
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
 ├── utils/
 │   ├── gameLogic.ts               # 数值公式（~200行）
+│   ├── combatLogic.ts             # 智子试炼场：宠物战斗数值（元素克制/伤害/先手）
+│   ├── combatLogic.test.ts        # combatLogic 单元测试（vitest）
 │   ├── api.ts                     # API 客户端
 │   └── questionLoader.ts          # 3级题目加载
 ```

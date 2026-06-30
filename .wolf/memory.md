@@ -1,3 +1,46 @@
+## 2026-06-30 — 智子试炼场 Task 2：战斗数值逻辑模块
+
+### 改动文件
+- `src-dungeon/utils/combatLogic.ts` — 新增战斗数值逻辑
+- `src-dungeon/utils/combatLogic.test.ts` — 对应单元测试
+- `package.json` — 新增 `test` / `test:watch` 脚本
+- `package-lock.json` — 安装 `vitest` 依赖
+
+### 新增内容
+- `CombatPet` 接口：maxHp / currentHp / attack / defense / speed / element / level
+- `ELEMENT_ADVANTAGE` 元素克制表：火→风→地→水→火循环克制，光系无克制
+- `getElementMultiplier(attacker, defender)`：查询克制倍率（1.5 / 0.7 / 1.0）
+- `calculateDamage(attacker, defender, skillMultiplier, answerQuality)`：基础伤害 = attack × skillMultiplier − defense，再乘元素倍率与答题质量，最低 1
+- `calculateStats(base, tierMultiplier, level)`：按品级与等级计算 HP/攻击/防御/速度（HP/攻/防 每级 1.1，速度 每级 1.05）
+- `determineFirstAttacker(player, enemy)`：速度高者先攻，相等时玩家优先
+
+### 验证
+- `npm test -- src-dungeon/utils/combatLogic.test.ts`：5 个测试全部通过
+- `npx tsc --noEmit`：通过（tsconfig 当前仅包含 `src`，src-dungeon 其他文件存在既有类型错误，待后续 Task 统一修复）
+
+### 说明
+- 项目此前未安装 vitest，本次作为 devDependency 添加
+- 任务给出的 `calculateStats` 返回类型缺少 `level`，已在返回对象中补上 `level` 以通过类型检查
+
+---
+
+## 2026-06-29 — 智子试炼场 Task 1：扩展宠物类型定义
+
+### 改动文件
+`src/types/pet.ts`
+
+### 新增内容
+- `BattleStats` 接口：maxHp / currentHp / attack / defense / speed
+- `OwnedPet` 接口新增可选字段：`battle?: BattleStats` 和 `expPool?: number`
+- `PET_BASE_STATS` 基础属性表：capi、boba、bubu-2、miga、default
+- `TIER_MULTIPLIERS` 品级系数：common 1.0 / rare 1.3 / legendary 1.6
+
+### 验证
+- `npx tsc --noEmit` 通过
+- Commit SHA: `b9fe87a`
+
+---
+
 ## 2026-06-29 — 智子试炼场设计方案确认
 
 ### 背景
