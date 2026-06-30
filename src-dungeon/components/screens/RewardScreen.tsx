@@ -13,9 +13,17 @@ export default function RewardScreen() {
   const dungeon = dungeons.find(d => d.id === dungeonId);
 
   if (!battle) {
+    // 无结算快照（刷新/直链进入）：提供返回入口，避免卡死
     return (
-      <div className="loading-screen">
-        <div className="loading-title">⚔️ 准备结算...</div>
+      <div className="loading-screen" style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
+        <div className="loading-title">⚔️ 没有可结算的战斗</div>
+        <button
+          className="pixel-btn"
+          onClick={() => { navigate(`/dungeon/${dungeonId}`); setView('dungeon-preview'); }}
+          style={{ fontSize: '14px' }}
+        >
+          返回副本 →
+        </button>
       </div>
     );
   }

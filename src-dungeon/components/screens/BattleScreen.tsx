@@ -141,11 +141,6 @@ export default function BattleScreen() {
 
   const dungeon = dungeons.find(d => d.id === dungeonId) as DungeonDefinition | undefined;
   const isBoss = !stageId || stageId === 'boss';
-  // Boss 战没有对应 stage 记录（dungeons.json 的 stages 用 dungeon-XX-stage-YY 命名），
-  // 因此 Boss 战构造一个虚拟 stage，让 generateEnemyPet 走 isBoss fallback 分支。
-  const stage: DungeonStage | undefined = isBoss
-    ? { id: 'boss', name: 'Boss 战', description: '', questionIds: [], requiredCorrect: 0, hp: 5 }
-    : dungeon?.stages.find(s => s.id === stageId);
   const isUnlocked = useDungeonStore(s => s.isDungeonUnlocked);
 
   // UI state
@@ -162,13 +157,17 @@ export default function BattleScreen() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [showElementGuide, setShowElementGuide] = useState(false);
 
-  // Derived combat pets
+  // Derived combat pets —— 依赖只用稳定值（dungeonId/stageId/isBoss），避免每帧重算导致敌方元素跳变
   const [playerPet, enemyPet] = useMemo(() => {
     const rawPet = loadActivePetFromStorage();
     const playerPet = makeCombatPet(rawPet);
+    // Boss 战无对应 stage 记录，构造虚拟 stage 走 isBoss fallback 分支
+    const stage: DungeonStage | undefined = isBoss
+      ? { id: 'boss', name: 'Boss 战', description: '', questionIds: [], requiredCorrect: 0, hp: 5 }
+      : dungeon?.stages.find(s => s.id === stageId);
     const enemyPet = dungeon && stage ? generateEnemyPet(dungeon, stage, isBoss) : null;
     return [playerPet, enemyPet] as [CombatPet, CombatPet | null];
-  }, [dungeon, stage, isBoss]);
+  }, [dungeonId, stageId, isBoss, dungeon]);
 
   // Guard: redirect if dungeon is locked
   useEffect(() => {
@@ -250,10 +249,8 @@ export default function BattleScreen() {
         });
         store.finalizeBattle(dungeonId!, isBoss);
         setIsEnemyAttacking(false);
-        setTimeout(() => {
-          navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
-          store.setView('reward');
-        }, 800);
+        navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
+        store.setView('reward');
         return;
       }
 
@@ -273,10 +270,8 @@ export default function BattleScreen() {
         });
         store.finalizeBattle(dungeonId!, isBoss);
         setIsEnemyAttacking(false);
-        setTimeout(() => {
-          navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
-          store.setView('reward');
-        }, 800);
+        navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
+        store.setView('reward');
         return;
       } else {
         // New player turn: reduce all cooldowns by 1

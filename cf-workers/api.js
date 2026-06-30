@@ -13,6 +13,12 @@ const RATE_VOTE_POST = 10;      // 10 votes per minute per device
 const RATE_WINDOW_SEC = 60;
 
 // ── 敏感词黑名单 ──
+
+// 合法副本白名单（report-battle / sync 校验用，防止伪造 dungeon_id 刷金币）
+const VALID_DUNGEON_IDS = new Set([
+  'dungeon-01','dungeon-02','dungeon-03','dungeon-04',
+  'dungeon-05','dungeon-06','dungeon-07','dungeon-08',
+]);
 const BAD_WORDS = [
   '色情','裸体','裸聊','性交','淫秽','色诱','约炮','嫖娼','卖淫','色情片','成人','激情',
   '杀人','杀死','砍死','炸死','枪毙','自杀','割腕','跳楼','虐杀','打死','弄死','灭口',
@@ -152,6 +158,8 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN earned_reward INTEGER DEFAULT 0`); } catch {}
   try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN is_win INTEGER DEFAULT 0`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
+  // 防重放：同 device+dungeon+stage 的胜利奖励只发一次（DB 级兜底，防 TOCTOU 竞态）
+  try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_dungeon_attempts_win ON dungeon_attempts(device_hash, dungeon_id, stage_id) WHERE is_win = 1 AND earned_reward > 0`); } catch {}
   // Performance indexes
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_device_status ON wishes(device_hash, status)`); } catch {}
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_class_status ON wishes(class_code, status)`); } catch {}
@@ -1316,6 +1324,10 @@ export default {
         if (!await checkRateLimit(db, `rb:${device_hash}`, 1, 10)) {
           return new Response(JSON.stringify({ error: '请求过于频繁' }), { status: 429, headers: cors });
         }
+        // 校验 dungeon_id 属于合法副本白名单（防伪造 dungeon_id 刷金币）
+        if (!VALID_DUNGEON_IDS.has(dungeon_id)) {
+          return new Response(JSON.stringify({ error: '无效的副本' }), { status: 400, headers: cors });
+        }
         // 校验 stage_id 格式：dungeon-XX-stage-YY 或 'boss'，且 dungeon_id 与 stage 前缀匹配
         const sid = String(stage_id);
         const isBossStage = sid === 'boss';
@@ -1328,37 +1340,46 @@ export default {
         const answered = Math.max(0, parseInt(questions_answered) || 0);
         const correct = Math.max(0, parseInt(correct_count) || 0);
 
-        // 防重放：胜利时检查本场是否已发过奖励（同 device+dungeon+stage 的胜利记录）
-        const existingWinRow = await db.prepare("SELECT id, earned_reward FROM dungeon_attempts WHERE device_hash=? AND dungeon_id=? AND stage_id=? AND is_win=1 ORDER BY id DESC LIMIT 1")
-          .bind(device_hash, dungeon_id, sid).first();
-        const alreadyRewarded = existingWinRow && existingWinRow.earned_reward > 0;
-
         // 服务端按固定规则计算奖励（不信任客户端 earned_reward）
+        const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         let reward = 0;
-        if (winFlag && !alreadyRewarded) {
-          const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        if (winFlag) {
           reward = rand(10, 20); // 胜利基础
           if (isBossStage) reward += rand(15, 30); // Boss 额外
           if (validRating === 'S') reward += rand(10, 15);
           else if (validRating === 'SS') reward += rand(15, 20);
         }
 
-        // 写战斗记录
-        await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
-          VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
-          .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
-
-        // 更新玩家金币与答题统计（仅胜利且未重复发奖时加金币；统计始终累加但受速率限制保护）
+        // 原子防重放：胜利时用唯一索引兜底。若同 device+dungeon+stage 已有发奖记录，
+        // 此次 INSERT 因违反 idx_dungeon_attempts_win 失败 → meta.changes=0 → 不发金币、不计数。
+        // 失败时（is_win=0）无唯一约束，正常记录。
+        let rewardInserted = true;
         if (winFlag && reward > 0) {
+          const ins = await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+            VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
+            .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+          rewardInserted = ins.meta && ins.meta.changes > 0;
+        } else {
+          // 失败或 reward=0：直接写记录（不触发唯一索引，因 earned_reward=0）
+          await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+            VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
+            .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+          rewardInserted = false;
+        }
+
+        const actualReward = rewardInserted ? reward : 0;
+
+        // 更新玩家金币与答题统计：仅首次胜利发奖时加金币；统计始终累加但受速率限制保护
+        if (rewardInserted) {
           await db.prepare("UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
-            .bind(reward, answered, correct, device_hash).run();
+            .bind(actualReward, answered, correct, device_hash).run();
         } else {
           await db.prepare("UPDATE dungeon_players SET total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
             .bind(answered, correct, device_hash).run();
         }
 
         // 更新副本通关状态（仅首次胜利推进）
-        if (winFlag && !existingWinRow) {
+        if (winFlag && rewardInserted) {
           const progress = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dungeon_id).first();
           if (progress) {
             const totalStages = progress.total_stages || 5;
@@ -1374,7 +1395,7 @@ export default {
               .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
           }
         }
-        return new Response(JSON.stringify({ success: true, gold_added: reward }), { headers: cors });
+        return new Response(JSON.stringify({ success: true, gold_added: actualReward }), { headers: cors });
       }
 
       // ── GET /api/dungeon/leaderboard ──

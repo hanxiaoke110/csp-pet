@@ -256,18 +256,24 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     // 保留结算前快照供 RewardScreen 展示
     const snapshot = { ...battle };
 
-    // 1. 通关奖励（首通倍率）
+    // 1. 通关奖励（首通倍率）——同步累加到快照，避免结算页少报
     if (battle.isWon) {
       const isFirstClear = !get()._firstClears[dungeonId];
       const mult = isFirstClear ? FIRST_CLEAR_MULTIPLIER : 1;
       const earnsRewards = get().currentBattleEarnsRewards;
+      let clearExp = 0;
+      let clearGold = 0;
       if (isBoss) {
-        get().addExp(BOSS_CLEAR_EXP * mult);
-        if (earnsRewards) get().addGold(BOSS_CLEAR_GOLD * mult);
+        clearExp = BOSS_CLEAR_EXP * mult;
+        clearGold = earnsRewards ? BOSS_CLEAR_GOLD * mult : 0;
       } else {
-        get().addExp(STAGE_CLEAR_EXP * mult);
-        if (earnsRewards) get().addGold(STAGE_CLEAR_GOLD * mult);
+        clearExp = STAGE_CLEAR_EXP * mult;
+        clearGold = earnsRewards ? STAGE_CLEAR_GOLD * mult : 0;
       }
+      get().addExp(clearExp);
+      if (clearGold > 0) get().addGold(clearGold);
+      snapshot.expEarned += clearExp;
+      snapshot.goldEarned += clearGold;
       if (isFirstClear) {
         set((s) => ({ _firstClears: { ...s._firstClears, [dungeonId]: true } }));
       }

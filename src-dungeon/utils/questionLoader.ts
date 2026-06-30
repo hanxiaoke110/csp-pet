@@ -181,6 +181,9 @@ export function pickQuestionsByTag(
 
   const keywords = tagMap[tag];
   const matched = allQuestions.filter(q =>
+    q.type === 'choice' &&
+    Array.isArray(q.options) && q.options.length >= 4 &&
+    typeof q.correctIndex === 'number' &&
     keywords.some(kw =>
       (q.knowledgePoint?.includes(kw)) ||
       (q.question?.includes(kw))
