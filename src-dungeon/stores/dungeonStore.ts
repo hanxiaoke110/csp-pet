@@ -304,7 +304,8 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     get().checkAndAwardBadges();
     get().saveToLocalStorage();
 
-    // 4. 服务端同步：上报战斗结果（写 dungeon_attempts + 服务端发金币）+ 同步玩家信息
+    // 4. 服务端同步：上报战斗结果（写 dungeon_attempts + 服务端发金币）+ 增量同步当前副本进度
+    //    优化：只同步本场变化的副本，避免全量 8 个 dungeon_progress 的写放大（6000人规模下省 80% 写次数）
     const stageIdForReport = battle.stageId;
     const totalAnswered = battle.correctCount + battle.wrongCount;
     import('../utils/api').then(({ reportBattle, syncProgress }) => {
@@ -317,18 +318,16 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         correct_count: battle.correctCount,
       }).catch(() => {});
       const s = get();
+      // 仅同步本场副本的进度（report-battle 已在服务端推进通关状态，这里只补 best_score/best_rating）
+      const changedDp = s.dungeonProgress.find(dp => dp.dungeonId === dungeonId);
       syncProgress({
-        player_level: s.player.playerLevel, exp: s.player.exp, gold: s.player.gold,
-        rank_tier: s.player.rankTier, rank_points: s.player.rankPoints,
-        total_answered: s.player.totalAnswered, total_correct: s.player.totalCorrect,
-        current_streak: s.player.currentStreak, max_streak: s.player.maxStreak,
-        login_streak: s.player.loginStreak, school: s.player.school,
-        dungeon_progress: s.dungeonProgress.map(dp => ({
-          dungeonId: dp.dungeonId, status: dp.status, completedStages: dp.completedStages,
-          totalStages: dp.totalStages, bossDefeated: dp.bossDefeated,
-          bestScore: dp.bestScore, bestRating: dp.bestRating,
-        })),
-        badges: s.earnedBadges,
+        display_name: s.player.displayName,
+        school: s.player.school,
+        dungeon_progress: changedDp ? [{
+          dungeonId: changedDp.dungeonId, status: changedDp.status, completedStages: changedDp.completedStages,
+          totalStages: changedDp.totalStages, bossDefeated: changedDp.bossDefeated,
+          bestScore: changedDp.bestScore, bestRating: changedDp.bestRating,
+        }] : [],
       }).catch(() => {});
     });
 
