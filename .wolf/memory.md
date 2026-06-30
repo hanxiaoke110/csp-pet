@@ -1,3 +1,30 @@
+## 2026-06-30 — 智子试炼场 Task 6：宠物手动升级与战斗属性初始化
+
+### 改动文件
+- `src/stores/petStore.ts` — 新增经验池手动升级与战斗属性初始化方法
+
+### 新增内容
+- `PetState` 接口扩展：
+  - `addExpToPool(amount)` — 向全局经验池添加经验
+  - `canLevelUp(petId)` — 检查经验池是否足够某宠物升级
+  - `levelUp(petId)` — 手动升级指定宠物，升级后回满 HP 并重算 battle 属性
+  - `ensureBattleStats(pet)` — 为没有 battle 字段的宠物补齐战斗属性
+- 新增 import：
+  - `PET_BASE_STATS`、`TIER_MULTIPLIERS`、`getPetTier` 来自 `../types/pet`
+  - `calculateStats` 来自 `../../src-dungeon/utils/combatLogic`
+- `load()` 加载宠物后自动调用 `ensureBattleStats`，保证旧数据兼容
+- `save()` 已持久化 `expPool`
+
+### 验证
+- `npx tsc --noEmit`：通过
+- Commit SHA: `641fe79`
+
+### 说明
+- `calculateStats` 返回对象包含 `level`，已解构剔除以符合 `BattleStats` 类型
+- 手动升级仅暴露方法，UI 按钮在后续 Task 中实现
+
+---
+
 ## 2026-06-30 — 智子试炼场 Task 3：技能定义与知识点标签
 
 ### 改动文件
@@ -770,3 +797,98 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - 答错→守关者讲寓言（先体验后命名）→加入错题本→弱点+1
 - 同知识点错3次→触发疗伤：必须连续答对3题才能继续
 - 疗伤中再错→换寓言角度重新讲
+
+---
+
+## 2026-06-30 — 智子试炼场 Task 7：重写 BattleScreen 为宠物回合制战斗
+
+### 改动文件
+- `src-dungeon/components/screens/BattleScreen.tsx` — 完全重写：从「答题扣 HP」改为「选技能 → 答题 → 释放技能」回合制
+- `src-dungeon/components/screens/SkillTooltip.tsx` — 新增技能悬浮提示组件
+
+### 新增内容
+- 战斗初始化：
+  - 从 `localStorage` 读取桌面宠物数据，取出出战宠物并补齐 `battle` 属性
+  - 根据副本/关卡生成敌方宠物（Boss 关为传说级，普通关为稀有级）
+  - 用 `determineFirstAttacker` 按速度决定先手
+  - 初始化 `battleState` 的 `enemyHp/enemyMaxHp/currentTurn/roundCount/skillUsages/usedSkillIds`
+- 玩家回合：
+  - 底部展示 4 个技能按钮，禁用冷却中或次数用尽的技能
+  - 点击技能后用 `pickQuestionsByTag` 抽取 1 道对应知识点题目
+  - 答题后按 `calculateDamage(player, enemy, skill.multiplier, isCorrect ? 1.0 : 0.6)` 计算伤害
+  - 更新敌方 HP、技能使用次数与冷却、玩家连击与奖励
+- 敌方回合：
+  - 自动以 1.0 倍率/满答题质量攻击
+  - 玩家 HP ≤ 0 则战斗失败；否则进入下一玩家回合并减少所有技能冷却 1 回合
+- 战斗结束：
+  - 胜利按 `getStageClearRating` 评级，跳转 RewardScreen
+  - 失败评级 D，同样跳转 RewardScreen
+- 复用原有题目渲染、选项前缀剥离、寓言卡、错题本与弱点的逻辑
+- 使用简单 `BattlePetSprite` 占位（元素 emoji）避免依赖 Tauri 的 PetSprite
+
+### 验证
+- `npx tsc --noEmit`：通过（tsconfig 仅包含 `src`）
+- `npm run build:dungeon`：构建成功
+- 目标文件 `BattleScreen.tsx` / `SkillTooltip.tsx` 单独 TypeScript 检查无错误
+- src-dungeon 其他既有类型错误未处理（按任务要求可忽略）
+
+### 说明
+- 未改动 `dungeonStore.startBattle`：BattleScreen 自行通过 `useDungeonStore.setState` 初始化战斗态，避免与旧流程冲突
+- 未直接导入 `src/stores/petStore.ts`（含 Tauri 依赖），改为读取 `localStorage['csp_pet_data']`
+- 当前地牢 JSON 中 `DungeonStage.enemyPet` 为空，使用动态生成敌方宠物作为兜底
+
+---
+
+## 2026-06-30 — 智子试炼场 Task 4：扩展地牢类型定义
+
+### 改动文件
+- `src-dungeon/types/dungeon.ts` — 扩展战斗状态与关卡类型，新增敌方宠物配置与技能使用记录
+
+### 新增内容
+- 新增 import：
+  - `PetElement`, `PetTier` 来自 `../../src/types/pet`
+  - `KnowledgeTag` 来自 `../data/skills`（后续 Task 5 使用，已加 `@ts-ignore` 避免当前未使用报错）
+- `EnemyPetConfig` 接口：`speciesId / displayName / level / tier / element / maxHpBoost?`
+- `SkillUsage` 接口：`skillId / usedCount / cooldownRemaining`
+- `DungeonStage` 扩展：`enemyPet?: EnemyPetConfig`
+- `BattleState` 扩展：
+  - `enemyHp`, `enemyMaxHp`
+  - `currentTurn: 'player' | 'enemy'`
+  - `roundCount`
+  - `skillUsages: SkillUsage[]`
+  - `usedSkillIds: string[]`
+
+### 验证
+- `npx tsc --noEmit`：通过（项目 tsconfig 当前仅包含 `src`）
+- 所有现有字段保留，无删除/重命名
+
+### 说明
+- 类型扩展为 Task 5 战斗逻辑与地牢配置做准备
+- `KnowledgeTag` 的 import 用 `// @ts-ignore — 后续 Task 5 将使用 KnowledgeTag 扩展技能相关类型` 注释，避免 `noUnusedLocals` 报错
+
+---
+
+## 2026-06-30 — 智子试炼场 Task 5：按技能知识点标签抽取题目
+
+### 改动文件
+- `src-dungeon/utils/questionLoader.ts` — 新增按技能标签选题函数
+
+### 新增内容
+- 新增 import：`import type { KnowledgeTag } from '../data/skills';`
+- 新增函数 `pickQuestionsByTag(allQuestions, tag, count)`：
+  - 按 `KnowledgeTag` 映射到一组中文/英文关键词
+  - 匹配 `question.knowledgePoint` 或 `question.question` 字段包含任一关键词的题目
+  - 对匹配结果随机洗牌后取前 `count` 道，匹配不足则全取
+- 标签关键词映射：
+  - `grammar`: 语法 / 变量 / 数据类型 / 运算符
+  - `control-flow`: 分支 / 循环 / if / for / while
+  - `data-structure`: 数组 / 字符串 / 栈 / 队列 / 树 / 结构
+  - `algorithm`: 枚举 / 递归 / 排序 / 贪心 / 搜索 / 算法
+
+### 验证
+- `npx tsc --noEmit`：通过（无新增错误）
+- 保留现有 `loadQuestionBank` / `getStageQuestions` / `getBossQuestions` 逻辑不变
+
+### 说明
+- 用于战斗系统根据玩家选择的技能，抽取对应知识点的编程题驱动技能释放
+- 不影响原有按副本/关卡映射的选题逻辑

@@ -34,7 +34,7 @@ csp学习助手（师+生）/
 │   │   │   ├── oj/OJTraining.tsx
 │   │   │   └── settings/SettingsPage.tsx  # 设置 (AI配置+班级绑定+学习数据+集训)
 │   │   ├── stores/
-│   │   │   ├── petStore.ts      # 宠物数据 (Zustand + localStorage)
+│   │   │   ├── petStore.ts      # 宠物数据 (Zustand + localStorage)，含经验池与战斗属性初始化
 │   │   │   ├── quizStore.ts     # 选择题数据
 │   │   │   ├── hatchStore.ts    # 孵化数据
 │   │   │   ├── courseStore.ts   # 课程数据
@@ -114,7 +114,7 @@ src-dungeon/
 ├── main.tsx                       # React 入口
 ├── App.tsx                        # 路由（HashRouter）+ 3级数据加载
 ├── App.css                        # 像素 RPG 主题样式（~250行）
-├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API等）
+├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API/智子战斗等）
 ├── stores/dungeonStore.ts         # Zustand 核心状态管理（~270行）
 ├── data/
 │   ├── dungeons.json              # 8 副本定义（40 关卡）
@@ -128,7 +128,8 @@ src-dungeon/
 │   │   ├── RegisterScreen.tsx     # 2步注册（班级码+流派选择）
 │   │   ├── DungeonMap.tsx         # 世界地图（8节点）
 │   │   ├── DungeonEntrance.tsx    # 副本入口（关卡列表+Boss）
-│   │   ├── BattleScreen.tsx       # 核心战斗（智子试炼场：宠物回合制）
+│   │   ├── BattleScreen.tsx       # 核心战斗（智子试炼场：宠物回合制答题驱动）
+│   │   ├── SkillTooltip.tsx       # 技能悬浮提示
 │   │   ├── RewardScreen.tsx       # 结算画面（EXP/金币/评级）
 │   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 4维度）
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
@@ -137,7 +138,7 @@ src-dungeon/
 │   ├── combatLogic.ts             # 智子试炼场：宠物战斗数值（元素克制/伤害/先手）
 │   ├── combatLogic.test.ts        # combatLogic 单元测试（vitest）
 │   ├── api.ts                     # API 客户端
-│   └── questionLoader.ts          # 3级题目加载
+│   └── questionLoader.ts          # 3级题目加载 + 按技能标签选题
 ```
 
 ### API 端点（cf-workers/api.js 新增 ~280行）
