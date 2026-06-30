@@ -304,32 +304,34 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     get().checkAndAwardBadges();
     get().saveToLocalStorage();
 
-    // 4. 服务端同步：上报战斗结果（写 dungeon_attempts + 服务端发金币）+ 增量同步当前副本进度
-    //    优化：只同步本场变化的副本，避免全量 8 个 dungeon_progress 的写放大（6000人规模下省 80% 写次数）
+    // 4. 服务端同步：仅胜利时上报（失败不上报，省 D1 写次数；失败不影响排行榜/进度/金币）。
+    //    胜利才 sync 当前副本进度（通关状态变化时才写，普通关打完不写）。
     const stageIdForReport = battle.stageId;
     const totalAnswered = battle.correctCount + battle.wrongCount;
-    import('../utils/api').then(({ reportBattle, syncProgress }) => {
-      reportBattle({
-        dungeon_id: dungeonId,
-        stage_id: stageIdForReport,
-        is_win: battle.isWon,
-        rating: battle.rating,
-        questions_answered: totalAnswered,
-        correct_count: battle.correctCount,
-      }).catch(() => {});
-      const s = get();
-      // 仅同步本场副本的进度（report-battle 已在服务端推进通关状态，这里只补 best_score/best_rating）
-      const changedDp = s.dungeonProgress.find(dp => dp.dungeonId === dungeonId);
-      syncProgress({
-        display_name: s.player.displayName,
-        school: s.player.school,
-        dungeon_progress: changedDp ? [{
-          dungeonId: changedDp.dungeonId, status: changedDp.status, completedStages: changedDp.completedStages,
-          totalStages: changedDp.totalStages, bossDefeated: changedDp.bossDefeated,
-          bestScore: changedDp.bestScore, bestRating: changedDp.bestRating,
-        }] : [],
-      }).catch(() => {});
-    });
+    if (battle.isWon) {
+      import('../utils/api').then(({ reportBattle, syncProgress }) => {
+        reportBattle({
+          dungeon_id: dungeonId,
+          stage_id: stageIdForReport,
+          is_win: true,
+          rating: battle.rating,
+          questions_answered: totalAnswered,
+          correct_count: battle.correctCount,
+        }).catch(() => {});
+        const s = get();
+        // 仅同步本场副本的进度（report-battle 已在服务端推进通关状态，这里只补 best_score/best_rating）
+        const changedDp = s.dungeonProgress.find(dp => dp.dungeonId === dungeonId);
+        syncProgress({
+          display_name: s.player.displayName,
+          school: s.player.school,
+          dungeon_progress: changedDp ? [{
+            dungeonId: changedDp.dungeonId, status: changedDp.status, completedStages: changedDp.completedStages,
+            totalStages: changedDp.totalStages, bossDefeated: changedDp.bossDefeated,
+            bestScore: changedDp.bestScore, bestRating: changedDp.bestRating,
+          }] : [],
+        }).catch(() => {});
+      });
+    }
 
     // 5. Web 端专属宠物经验写回（仅 Web 端生效，零后端写入；桌面端 webPet 为空自动跳过）
     if (snapshot.expEarned > 0) {

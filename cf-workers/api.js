@@ -204,7 +204,41 @@ async function maybeCleanup(db) {
   try { await db.prepare("DELETE FROM votes WHERE created_at < datetime('now', '-6 months')").run(); } catch {}
   // Clean soft-deleted wishes older than 3 months
   try { await db.prepare("DELETE FROM wishes WHERE status='deleted' AND created_at < datetime('now', '-3 months')").run(); } catch {}
+  // Clean 过期的 rate_limits（reset_at 早于现在）
+  try { await db.prepare("DELETE FROM rate_limits WHERE reset_at < datetime('now')").run(); } catch {}
   _lastCleanup = today;
+}
+
+// ── 写额度软熔断（免费套餐 D1 每日 10 万写，保命用）──
+// 用 meta 表记当日写计数。接近阈值时降级：优先保 reportBattle（发金币/进度），暂停 sync/wishes 等非核心写。
+const DAILY_WRITE_BUDGET = 90000;        // 触发降级的阈值（留 1 万余量给核心写）
+let _writeBudgetCache = { day: '', count: 0, ts: 0 };
+
+async function getWriteBudget(db) {
+  const today = new Date().toISOString().slice(0, 10);
+  const now = Date.now();
+  // 60s 内缓存，避免每次写都读 meta
+  if (_writeBudgetCache.day === today && now - _writeBudgetCache.ts < 60000) {
+    return { exceeded: _writeBudgetCache.count >= DAILY_WRITE_BUDGET, count: _writeBudgetCache.count };
+  }
+  try {
+    const row = await db.prepare("SELECT value FROM meta WHERE key=?").bind('writes_' + today).first();
+    const count = row ? parseInt(row.value) || 0 : 0;
+    _writeBudgetCache = { day: today, count, ts: now };
+    return { exceeded: count >= DAILY_WRITE_BUDGET, count };
+  } catch {
+    return { exceeded: false, count: 0 };
+  }
+}
+
+// 记一次写（仅在核心写路径调用，避免每次写都 +1 反而浪费额度）
+async function incrWriteBudget(db) {
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    await db.prepare("INSERT INTO meta (key, value) VALUES (?, 1) ON CONFLICT(key) DO UPDATE SET value = value + 1")
+      .bind('writes_' + today).run();
+    _writeBudgetCache = { day: today, count: _writeBudgetCache.count + 1, ts: Date.now() };
+  } catch { /* ignore */ }
 }
 
 // ── Password hashing (simple SHA-256) ──
@@ -1264,6 +1298,11 @@ export default {
         const body = await request.json();
         const { device_hash } = body;
         if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        // 写额度软熔断：接近 D1 每日上限时，跳过 sync（非核心），保 reportBattle
+        const budget = await getWriteBudget(db);
+        if (budget.exceeded) {
+          return new Response(JSON.stringify({ success: true, synced: false, reason: 'daily_write_budget' }), { headers: cors });
+        }
         // Dedup: skip if last sync was < 5 seconds ago (prevents 200-student wave from serializing on D1 write lock)
         const lastSync = await db.prepare("SELECT updated_at FROM dungeon_players WHERE device_hash=?").bind(device_hash).first();
         if (lastSync && lastSync.updated_at) {
@@ -1410,6 +1449,8 @@ export default {
               .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
           }
         }
+        // 记一次核心写（用于 sync 端点感知当日写量做熔断；reportBattle 自身不熔断，保发金币）
+        if (rewardInserted) await incrWriteBudget(db);
         return new Response(JSON.stringify({ success: true, gold_added: actualReward }), { headers: cors });
       }
 
