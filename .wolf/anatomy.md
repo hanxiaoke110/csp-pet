@@ -1,6 +1,6 @@
 # anatomy.md — CSP 学习助手项目结构
 
-> 最后更新：2026-06-12
+> 最后更新：2026-06-30
 
 ## 项目目录
 
@@ -118,8 +118,10 @@ src-dungeon/
 ├── stores/dungeonStore.ts         # Zustand 核心状态管理（~270行）
 ├── data/
 │   ├── dungeons.json              # 8 副本定义（40 关卡）
+│   ├── fables.json                # 13 篇 CSP 知识点寓言
+│   ├── question-mapping.json      # 240 题 → 副本/关卡映射
 │   ├── schools.json               # 5 流派 × 8 段位
-│   └── question-mapping.json      # 240 题 → 副本/关卡映射
+│   └── skills.ts                  # 4 技能定义与 CSP 知识点标签
 ├── components/
 │   ├── screens/
 │   │   ├── TitleScreen.tsx        # 标题画面

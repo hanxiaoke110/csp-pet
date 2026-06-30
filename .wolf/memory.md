@@ -1,3 +1,24 @@
+## 2026-06-30 — 智子试炼场 Task 3：技能定义与知识点标签
+
+### 改动文件
+- `src-dungeon/data/skills.ts` — 新增技能定义数据
+
+### 新增内容
+- `KnowledgeTag` 类型：`'grammar' | 'control-flow' | 'data-structure' | 'algorithm'`
+- `SkillDefinition` 接口：`id / name / knowledgeTag / knowledgeLabel / multiplier / cooldown / maxUsesPerBattle / description`
+- 4 个技能定义：
+  - 语法射线（grammar / 语法基础）：倍率 1.0，无冷却，无次数限制
+  - 循环火球（control-flow / 流程控制）：倍率 1.2，冷却 1 回合
+  - 数组护盾（data-structure / 数据结构）：倍率 1.4，冷却 2 回合
+  - 递归爆发（algorithm / 算法思维）：倍率 1.8，冷却 3 回合，每关限用 2 次
+- `getSkillById(id)` 查询辅助函数
+
+### 说明
+- 中文标签面向儿童，知识点标签用于后续题目类型匹配与战斗逻辑
+- 冷却与次数限制由战斗系统消费，本文件仅做静态定义
+
+---
+
 ## 2026-06-30 — 智子试炼场 Task 2：战斗数值逻辑模块
 
 ### 改动文件
