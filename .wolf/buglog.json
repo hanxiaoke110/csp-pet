@@ -721,6 +721,18 @@
         "data-corruption",
         "options"
       ]
+    },
+    {
+      "date": "2026-06-30",
+      "error_message": "npm run build:dungeon failed: Unexpected ',' in BattleScreen.tsx:274",
+      "root_cause": "Subagent implementation of BattleScreen dropped the handleSelectSkill useCallback declaration; the function body started immediately after a useEffect hook, causing a syntax error.",
+      "fix": "Inserted the missing 'const handleSelectSkill = useCallback((skillId: string) => {' declaration before the function body.",
+      "tags": [
+        "智子试炼场",
+        "BattleScreen",
+        "syntax",
+        "build"
+      ]
     }
   ]
 }

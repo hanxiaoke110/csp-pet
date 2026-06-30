@@ -252,6 +252,8 @@ export default function BattleScreen() {
       setShowTutorial(true);
     }
   }, [battle?.dungeonId, battle?.stageId]);
+
+  const handleSelectSkill = useCallback((skillId: string) => {
     if (!battle || battle.currentTurn !== 'player' || currentQuestion) return;
     const skill = getSkillById(skillId);
     if (!skill) return;
