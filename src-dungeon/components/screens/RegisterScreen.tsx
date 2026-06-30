@@ -69,7 +69,7 @@ export default function RegisterScreen() {
         // Sync to server (fire and forget)
         import('../../utils/api').then(({ syncProgress }) => {
           syncProgress({
-            player_level: resp.player.player_level || 1, exp: 0, gold: 0,
+            player_level: resp.player.playerLevel || 1, exp: 0, gold: 0,
             rank_tier: 1, rank_points: 0,
             total_answered: 0, total_correct: 0,
             current_streak: 0, max_streak: 0,

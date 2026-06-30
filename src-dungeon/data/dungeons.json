@@ -4,20 +4,93 @@
     "name": "天机阁",
     "subtitle": "计算机基础",
     "icon": "🏰",
-    "description": "天机阁是潜龙秘境的入口，收藏着关于计算机世界的古老典籍。守阁长老「玄机子」会考校你对计算机根基的理解——从硬件组成到网络原理，从数据表示到操作系统。",
+    "description": "天机阁是潜龙秘境的入口，收藏着关于计算机世界的古老典籍。CPU、内存、网络、操作系统，是这里的灵脉。只有根基扎实者，才能推开下一扇门。",
+    "bgImage": "/dungeon-bg/dungeon-01-bg.png",
     "guardianName": "玄机子",
-    "guardianLine": "年轻人，计算机乃万物之基。且让我看看你的根基是否扎实！",
-    "bossName": "天机守护兽·二进制巨像",
+    "guardianLine": "欢迎你，代码修行者！天机阁是智子大人亲手搭建的数字根基。CPU、内存、网络、操作系统，是这里的灵脉。让我看看你的根基是否扎实！",
+    "bossName": "蓝屏幽魂",
+    "bossLine": "吾乃蓝屏幽魂，天机阁之主——你的程序，下一秒就要未响应！",
     "bossDescription": "由最古老的ENIAC残骸组成的机械巨像，每一拳都带着电子管的轰鸣。",
     "color": "#10b981",
     "requiredDungeon": null,
     "unlockLevel": 1,
     "stages": [
-      { "id": "dungeon-01-stage-01", "name": "初识天机", "description": "计算机发展史与基础概念", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-01-stage-02", "name": "数据秘境", "description": "数据表示与存储单位", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-01-stage-03", "name": "网络长廊", "description": "网络基础与域名/IP", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-01-stage-04", "name": "系统迷宫", "description": "操作系统与文件管理", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-01-stage-05", "name": "天机试炼", "description": "计算机基础综合挑战", "questionIds": [], "requiredCorrect": 4, "hp": 2 }
+      {
+        "id": "dungeon-01-stage-01",
+        "name": "初识天机",
+        "description": "计算机发展史与基础概念",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "glitch-bot",
+          "displayName": "蓝屏幽魂·小卒",
+          "level": 1,
+          "tier": "common",
+          "element": "water"
+        }
+      },
+      {
+        "id": "dungeon-01-stage-02",
+        "name": "数据秘境",
+        "description": "数据表示与存储单位",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "glitch-bot",
+          "displayName": "蓝屏幽魂·学徒",
+          "level": 1,
+          "tier": "common",
+          "element": "water"
+        }
+      },
+      {
+        "id": "dungeon-01-stage-03",
+        "name": "网络长廊",
+        "description": "网络基础与域名/IP",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "glitch-bot",
+          "displayName": "蓝屏幽魂·侍从",
+          "level": 2,
+          "tier": "common",
+          "element": "water"
+        }
+      },
+      {
+        "id": "dungeon-01-stage-04",
+        "name": "系统迷宫",
+        "description": "操作系统与文件管理",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "glitch-bot",
+          "displayName": "蓝屏幽魂·卫兵",
+          "level": 2,
+          "tier": "common",
+          "element": "water"
+        }
+      },
+      {
+        "id": "dungeon-01-stage-05",
+        "name": "天机试炼",
+        "description": "计算机基础综合挑战",
+        "questionIds": [],
+        "requiredCorrect": 4,
+        "hp": 2,
+        "enemyPet": {
+          "speciesId": "glitch-bot",
+          "displayName": "蓝屏幽魂",
+          "level": 3,
+          "tier": "rare",
+          "element": "water",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 10,
     "bossPassScore": 60
@@ -27,20 +100,93 @@
     "name": "数术殿",
     "subtitle": "进制转换与编码",
     "icon": "🔢",
-    "description": "数术殿中悬浮着古老的数字图腾。二进制、八进制、十六进制——不同的数是不同的语言。殿主「算无穷」将引导你穿越数字的迷宫。",
+    "description": "数术殿中悬浮着古老的数字图腾。二进制、八进制、十六进制——不同的数是这座殿堂的不同语言。殿主算无穷将引导你穿越数字的迷宫。",
+    "bgImage": "/dungeon-bg/dungeon-02-bg.png",
     "guardianName": "算无穷",
-    "guardianLine": "数字是宇宙的语言！二进制是计算机的母语！你——准备好了吗？",
-    "bossName": "数术守护兽·浮点误差之蛇",
+    "guardianLine": "数字是宇宙的语言，二进制是计算机的母语！0 和 1 之间藏着万千世界。少年，准备好迎接数术的试炼了吗？",
+    "bossName": "进位魔·乱码君",
+    "bossLine": "哈哈哈哈！我在二进制里加一位，在十六进制里藏一行——你的答案，马上就会变成乱码！",
     "bossDescription": "一条由浮点数误差构成的数据巨蛇，每次攻击都会造成精度丢失——但你的答案必须绝对精确！",
     "color": "#f59e0b",
     "requiredDungeon": "dungeon-01",
     "unlockLevel": 1,
     "stages": [
-      { "id": "dungeon-02-stage-01", "name": "二进制之门", "description": "二进制基础与运算", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-02-stage-02", "name": "八荒六合", "description": "八进制与十六进制", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-02-stage-03", "name": "编码秘术", "description": "原码/反码/补码/ASCII", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-02-stage-04", "name": "压缩之道", "description": "哈夫曼编码与信息熵", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-02-stage-05", "name": "数术终考", "description": "进制与编码综合挑战", "questionIds": [], "requiredCorrect": 4, "hp": 2 }
+      {
+        "id": "dungeon-02-stage-01",
+        "name": "二进制之门",
+        "description": "二进制基础与运算",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "brassprout",
+          "displayName": "铜芽机关·初阶",
+          "level": 2,
+          "tier": "common",
+          "element": "earth"
+        }
+      },
+      {
+        "id": "dungeon-02-stage-02",
+        "name": "八荒六合",
+        "description": "八进制与十六进制",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "df-maixiaoshu",
+          "displayName": "麦小鼠·零号",
+          "level": 2,
+          "tier": "common",
+          "element": "earth"
+        }
+      },
+      {
+        "id": "dungeon-02-stage-03",
+        "name": "编码秘术",
+        "description": "原码/反码/补码/ASCII",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "brassprout",
+          "displayName": "铜芽机关·精钢",
+          "level": 3,
+          "tier": "rare",
+          "element": "earth"
+        }
+      },
+      {
+        "id": "dungeon-02-stage-04",
+        "name": "压缩之道",
+        "description": "哈夫曼编码与信息熵",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "df-maixiaoshu",
+          "displayName": "麦小鼠·改型",
+          "level": 3,
+          "tier": "rare",
+          "element": "earth"
+        }
+      },
+      {
+        "id": "dungeon-02-stage-05",
+        "name": "数术终考",
+        "description": "进制与编码综合挑战",
+        "questionIds": [],
+        "requiredCorrect": 4,
+        "hp": 2,
+        "enemyPet": {
+          "speciesId": "df-maixiaoshu",
+          "displayName": "麦小鼠·数术之王",
+          "level": 5,
+          "tier": "legendary",
+          "element": "earth",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 10,
     "bossPassScore": 60
@@ -50,20 +196,93 @@
     "name": "灵码洞",
     "subtitle": "程序设计基础",
     "icon": "💻",
-    "description": "灵码洞的石壁上刻满了 C++ 符咒。在这里，变量是灵力，函数是法术，指针是空间裂隙。洞主「语法尊者」将以最刁钻的语法陷阱考验你。",
+    "description": "灵码洞的石壁上刻满了 C++ 符咒。在这里，变量是灵力，函数是法术，指针是空间裂隙。洞主语法尊者将以最刁钻的语法陷阱考验你。",
+    "bgImage": "/dungeon-bg/dungeon-03-bg.png",
     "guardianName": "语法尊者",
-    "guardianLine": "C++ 是神之语言！每一个分号都是一道符咒——少了一个，便是万劫不复！",
-    "bossName": "灵码守护兽·段错误之龙",
+    "guardianLine": "C++ 是神之语言！每一个分号都是一道符咒，每一个变量都是一缕灵力。少了一个分号，便是万劫不复！",
+    "bossName": "段错误·NULL 之影",
+    "bossLine": "指针所指，皆为空无。你的代码再华丽，也逃不过段错误的一击——接受 NULL 的审判吧！",
     "bossDescription": "一头因为数组越界而从虚空中诞生的小龙。它吐出的不是火焰——是指针！",
     "color": "#3b82f6",
     "requiredDungeon": "dungeon-02",
     "unlockLevel": 2,
     "stages": [
-      { "id": "dungeon-03-stage-01", "name": "变量之源", "description": "数据类型与变量声明", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-03-stage-02", "name": "运算符祭坛", "description": "运算符与表达式", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-03-stage-03", "name": "控制之流", "description": "分支与循环结构", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-03-stage-04", "name": "指针裂隙", "description": "指针/引用/内存管理", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-03-stage-05", "name": "语法终考", "description": "程序设计基础综合挑战", "questionIds": [], "requiredCorrect": 4, "hp": 2 }
+      {
+        "id": "dungeon-03-stage-01",
+        "name": "变量之源",
+        "description": "数据类型与变量声明",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "boolet",
+          "displayName": "子弹精灵·小火",
+          "level": 3,
+          "tier": "common",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-03-stage-02",
+        "name": "运算符祭坛",
+        "description": "运算符与表达式",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "boo",
+          "displayName": "火焰幽灵·小焰",
+          "level": 3,
+          "tier": "common",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-03-stage-03",
+        "name": "控制之流",
+        "description": "分支与循环结构",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "boolet",
+          "displayName": "子弹精灵·爆裂",
+          "level": 4,
+          "tier": "rare",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-03-stage-04",
+        "name": "指针裂隙",
+        "description": "指针/引用/内存管理",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "boo",
+          "displayName": "火焰幽灵·炽焰",
+          "level": 4,
+          "tier": "rare",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-03-stage-05",
+        "name": "语法终考",
+        "description": "程序设计基础综合挑战",
+        "questionIds": [],
+        "requiredCorrect": 4,
+        "hp": 2,
+        "enemyPet": {
+          "speciesId": "boolet",
+          "displayName": "子弹精灵·炎魔",
+          "level": 6,
+          "tier": "legendary",
+          "element": "fire",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 10,
     "bossPassScore": 60
@@ -73,20 +292,93 @@
     "name": "万木林",
     "subtitle": "数据结构",
     "icon": "🌳",
-    "description": "万木林的每一棵树都是一棵二叉树，每一条河流都是一个队列，每一块石头都是一个栈。林主「结构真君」精通从线性到非线性的所有数据结构奥义。",
+    "description": "万木林的每一棵树都是一棵二叉树，每一条河流都是一个队列，每一块石头都是一个栈。林主结构真君精通从线性到非线性的所有数据结构奥义。",
+    "bgImage": "/dungeon-bg/dungeon-04-bg.png",
     "guardianName": "结构真君",
-    "guardianLine": "程序 = 数据结构 + 算法！数据结构不通，则万法不通！",
-    "bossName": "万木守护兽·哈希冲突之蛛",
+    "guardianLine": "程序 = 数据结构 + 算法！数组是大地，链表是藤蔓，二叉树是参天古木。数据结构不通，则万法不通！",
+    "bossName": "越界虫·数组吞噬者",
+    "bossLine": "数组的边界？在我的胃里不存在！你越界一步，我就吞掉一个下标——今天，你将是第 n+1 个！",
     "bossDescription": "一只用链表解决哈希冲突的蜘蛛，八条腿上挂着八个桶。它会用链地址法困住每一个粗心的挑战者。",
     "color": "#8b5cf6",
     "requiredDungeon": "dungeon-03",
     "unlockLevel": 3,
     "stages": [
-      { "id": "dungeon-04-stage-01", "name": "线性之道", "description": "数组/链表/栈/队列", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-04-stage-02", "name": "树之迷宫", "description": "二叉树/遍历/性质", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-04-stage-03", "name": "图之疆域", "description": "图的存储与遍历", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-04-stage-04", "name": "高级结界", "description": "哈希表/堆/线段树等", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-04-stage-05", "name": "数据结构终考", "description": "数据结构综合挑战", "questionIds": [], "requiredCorrect": 4, "hp": 2 }
+      {
+        "id": "dungeon-04-stage-01",
+        "name": "线性之道",
+        "description": "数组/链表/栈/队列",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "capi",
+          "displayName": "森林卡皮·土灵",
+          "level": 4,
+          "tier": "rare",
+          "element": "earth"
+        }
+      },
+      {
+        "id": "dungeon-04-stage-02",
+        "name": "树之迷宫",
+        "description": "二叉树/遍历/性质",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "miga",
+          "displayName": "风灵米伽",
+          "level": 4,
+          "tier": "rare",
+          "element": "wind"
+        }
+      },
+      {
+        "id": "dungeon-04-stage-03",
+        "name": "图之疆域",
+        "description": "图的存储与遍历",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "capi",
+          "displayName": "森林卡皮·守护者",
+          "level": 5,
+          "tier": "rare",
+          "element": "earth"
+        }
+      },
+      {
+        "id": "dungeon-04-stage-04",
+        "name": "高级结界",
+        "description": "哈希表/堆/线段树等",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "miga",
+          "displayName": "风灵米伽·疾风",
+          "level": 5,
+          "tier": "rare",
+          "element": "wind"
+        }
+      },
+      {
+        "id": "dungeon-04-stage-05",
+        "name": "数据结构终考",
+        "description": "数据结构综合挑战",
+        "questionIds": [],
+        "requiredCorrect": 4,
+        "hp": 2,
+        "enemyPet": {
+          "speciesId": "capi",
+          "displayName": "森林卡皮·万木之主",
+          "level": 7,
+          "tier": "legendary",
+          "element": "earth",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 10,
     "bossPassScore": 60
@@ -96,20 +388,93 @@
     "name": "算法塔",
     "subtitle": "算法基础",
     "icon": "🔍",
-    "description": "算法塔高耸入云，每一层都铭刻着一种算法。从冒泡排序到快速排序，从线性查找到二分查找——塔主「算法天尊」在塔顶等候着真正的算法高手。",
+    "description": "算法塔高耸入云，每一层都铭刻着一种算法。从冒泡排序到快速排序，从线性查找到二分查找——塔主算法天尊在塔顶等候着真正的算法高手。",
+    "bgImage": "/dungeon-bg/dungeon-05-bg.png",
     "guardianName": "算法天尊",
-    "guardianLine": "算法是程序的灵魂！没有灵魂的代码，不过是一具行尸走肉！",
-    "bossName": "算法守护兽·NP完全之龙",
+    "guardianLine": "算法是程序的灵魂！没有灵魂的代码，不过是一具行尸走肉。登上塔顶，让时间复杂度为你臣服！",
+    "bossName": "超时魔·TLE 君王",
+    "bossLine": "你的算法太慢了！在 O(n²) 的深渊里，每一秒都是 TLE 的诅咒——我，就是时间限制本身！",
     "bossDescription": "没有人知道这条龙是否存在——除非你能在多项式时间内证明它。传说只有理解了时间复杂度的人才能看到它的真身。",
     "color": "#ef4444",
     "requiredDungeon": "dungeon-04",
     "unlockLevel": 4,
     "stages": [
-      { "id": "dungeon-05-stage-01", "name": "排序之章", "description": "各种排序算法与比较", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-05-stage-02", "name": "查找之章", "description": "二分查找与哈希查找", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-05-stage-03", "name": "递推之门", "description": "递推与递归", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-05-stage-04", "name": "贪心与动规", "description": "贪心算法与动态规划入门", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-05-stage-05", "name": "算法终考", "description": "算法基础综合挑战", "questionIds": [], "requiredCorrect": 4, "hp": 2 }
+      {
+        "id": "dungeon-05-stage-01",
+        "name": "排序之章",
+        "description": "各种排序算法与比较",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "wukong",
+          "displayName": "齐天小圣·火眼",
+          "level": 5,
+          "tier": "rare",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-05-stage-02",
+        "name": "查找之章",
+        "description": "二分查找与哈希查找",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "sky-dragon",
+          "displayName": "翔天云龙",
+          "level": 5,
+          "tier": "rare",
+          "element": "wind"
+        }
+      },
+      {
+        "id": "dungeon-05-stage-03",
+        "name": "递推之门",
+        "description": "递推与递归",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "wukong",
+          "displayName": "齐天小圣·斗战",
+          "level": 6,
+          "tier": "rare",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-05-stage-04",
+        "name": "贪心与动规",
+        "description": "贪心算法与动态规划入门",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "sky-dragon",
+          "displayName": "翔天云龙·破风",
+          "level": 6,
+          "tier": "rare",
+          "element": "wind"
+        }
+      },
+      {
+        "id": "dungeon-05-stage-05",
+        "name": "算法终考",
+        "description": "算法基础综合挑战",
+        "questionIds": [],
+        "requiredCorrect": 4,
+        "hp": 2,
+        "enemyPet": {
+          "speciesId": "wukong",
+          "displayName": "齐天大圣·算法天尊",
+          "level": 8,
+          "tier": "legendary",
+          "element": "fire",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 10,
     "bossPassScore": 60
@@ -119,20 +484,93 @@
     "name": "天算台",
     "subtitle": "数学基础",
     "icon": "📐",
-    "description": "天算台悬浮在星辰之间，这里是数学的圣殿。排列组合是通往天算台的阶梯，数论是解密星辰的钥匙。台主「数论圣者」出题从不留情。",
+    "description": "天算台悬浮在星辰之间，这里是数学的圣殿。排列组合是通往天算台的阶梯，数论是解密星辰的钥匙。台主数论圣者出题从不留情。",
+    "bgImage": "/dungeon-bg/dungeon-06-bg.png",
     "guardianName": "数论圣者",
-    "guardianLine": "数学是科学的皇后，也是信息学的基石。算不出来？那就好好回去学排列组合！",
-    "bossName": "天算守护兽·组合爆炸之凤",
+    "guardianLine": "数学是科学的皇后，也是信息学的基石。算不出排列组合，就看不清天算台上的星光！",
+    "bossName": "概率云·WA 雷神",
+    "bossLine": "我掌管所有 WA 的雷电！概率云里，没有 100% 的安全——你的答案，下一刻就会被雷劈成 Wrong Answer！",
     "bossDescription": "一只拥有 N! 根羽毛的凤凰。它的攻击方式是把所有可能性都枚举一遍——但你不用，你只需要找到最优解。",
     "color": "#ec4899",
     "requiredDungeon": "dungeon-05",
     "unlockLevel": 5,
     "stages": [
-      { "id": "dungeon-06-stage-01", "name": "排列之门", "description": "排列组合基础", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-06-stage-02", "name": "容斥原理", "description": "容斥与计数技巧", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-06-stage-03", "name": "数论基础", "description": "素数/GCD/快速幂", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-06-stage-04", "name": "概率与期望", "description": "概率基础与期望值", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-06-stage-05", "name": "数学终考", "description": "数学基础综合挑战", "questionIds": [], "requiredCorrect": 4, "hp": 2 }
+      {
+        "id": "dungeon-06-stage-01",
+        "name": "排列之门",
+        "description": "排列组合基础",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "ayaka",
+          "displayName": "冰霜白鹭·水舞",
+          "level": 6,
+          "tier": "rare",
+          "element": "water"
+        }
+      },
+      {
+        "id": "dungeon-06-stage-02",
+        "name": "容斥原理",
+        "description": "容斥与计数技巧",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "little-blue-star",
+          "displayName": "星光小蓝·微光",
+          "level": 6,
+          "tier": "rare",
+          "element": "light"
+        }
+      },
+      {
+        "id": "dungeon-06-stage-03",
+        "name": "数论基础",
+        "description": "素数/GCD/快速幂",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "ayaka",
+          "displayName": "白鹭公主·霜华",
+          "level": 7,
+          "tier": "legendary",
+          "element": "water"
+        }
+      },
+      {
+        "id": "dungeon-06-stage-04",
+        "name": "概率与期望",
+        "description": "概率基础与期望值",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "little-blue-star",
+          "displayName": "星光小蓝·天算",
+          "level": 7,
+          "tier": "legendary",
+          "element": "light"
+        }
+      },
+      {
+        "id": "dungeon-06-stage-05",
+        "name": "数学终考",
+        "description": "数学基础综合挑战",
+        "questionIds": [],
+        "requiredCorrect": 4,
+        "hp": 2,
+        "enemyPet": {
+          "speciesId": "little-blue-star",
+          "displayName": "星光小蓝·组合凤凰",
+          "level": 9,
+          "tier": "legendary",
+          "element": "light",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 10,
     "bossPassScore": 60
@@ -143,19 +581,92 @@
     "subtitle": "CSP-J 历年真题集训",
     "icon": "⚔️",
     "description": "真题战场是前辈们留下的试炼之地，2019年至2024年的所有CSP-J初赛真题都在这里静候挑战者。没有花哨的技巧——只有最纯粹的实战！",
+    "bgImage": "/dungeon-bg/dungeon-07-bg.png",
     "guardianName": "战场老兵·洛谷之魂",
-    "guardianLine": "真题是最好的老师！把每一道真题做透，胜过刷一百道模拟题！",
-    "bossName": "真题守护兽·时间压力之影",
+    "guardianLine": "真题是最好的老师！把每一道真题做透，胜过刷一百道模拟题。战场上，没有侥幸，只有实力！",
+    "bossName": "真题守护者·退役战神",
+    "bossLine": "我守护过无数届 CSP 真题。每一道题都是我的战友——小子，让我看看你有没有资格继承这份荣耀！",
     "bossDescription": "一个由考试倒计时凝聚而成的阴影。它会让你感受到真实的考场压力——时间紧迫，心跳加速，手心冒汗。战胜它，你就战胜了考场恐惧。",
     "color": "#f97316",
     "requiredDungeon": "dungeon-06",
     "unlockLevel": 5,
     "stages": [
-      { "id": "dungeon-07-stage-01", "name": "2019年真题", "description": "CSP-J 2019 初赛真题", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-07-stage-02", "name": "2020年真题", "description": "CSP-J 2020 初赛真题", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-07-stage-03", "name": "2021年真题", "description": "CSP-J 2021 初赛真题", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-07-stage-04", "name": "2022年真题", "description": "CSP-J 2022 初赛真题", "questionIds": [], "requiredCorrect": 3, "hp": 3 },
-      { "id": "dungeon-07-stage-05", "name": "2023年真题", "description": "CSP-J 2023 初赛真题", "questionIds": [], "requiredCorrect": 3, "hp": 3 }
+      {
+        "id": "dungeon-07-stage-01",
+        "name": "2019年真题",
+        "description": "CSP-J 2019 初赛真题",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "itachi",
+          "displayName": "暗部鼬·真题守卫",
+          "level": 7,
+          "tier": "rare",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-07-stage-02",
+        "name": "2020年真题",
+        "description": "CSP-J 2020 初赛真题",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "sasuke",
+          "displayName": "雷鸟佐助·战场之魂",
+          "level": 7,
+          "tier": "rare",
+          "element": "wind"
+        }
+      },
+      {
+        "id": "dungeon-07-stage-03",
+        "name": "2021年真题",
+        "description": "CSP-J 2021 初赛真题",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "itachi",
+          "displayName": "暗部鼬·时间之影",
+          "level": 8,
+          "tier": "rare",
+          "element": "fire"
+        }
+      },
+      {
+        "id": "dungeon-07-stage-04",
+        "name": "2022年真题",
+        "description": "CSP-J 2022 初赛真题",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "sasuke",
+          "displayName": "佐助·轮回眼",
+          "level": 8,
+          "tier": "legendary",
+          "element": "wind"
+        }
+      },
+      {
+        "id": "dungeon-07-stage-05",
+        "name": "2023年真题",
+        "description": "CSP-J 2023 初赛真题",
+        "questionIds": [],
+        "requiredCorrect": 3,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "itachi",
+          "displayName": "鼬·月读真影",
+          "level": 10,
+          "tier": "legendary",
+          "element": "fire",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 15,
     "bossPassScore": 60
@@ -166,19 +677,92 @@
     "subtitle": "综合模拟终极考验",
     "icon": "🐉",
     "description": "潜龙觉醒——秘境的终极试炼！系统将从所有题目中随机抽取，难度呈阶梯分布。击败这一关，你不只是在知识上达标——你的龙魂将彻底觉醒！整个秘境都将见证你的飞升。",
+    "bgImage": "/dungeon-bg/dungeon-08-bg.png",
     "guardianName": "秘境守护者·第一代潜龙",
-    "guardianLine": "我曾经是第一届CSP-J的满分选手。现在，让我看看——你配不配得上「潜龙」之名！",
-    "bossName": "终极守护兽·全知算法龙",
+    "guardianLine": "我曾经是第一届 CSP-J 的满分选手。现在，让我看看——你配不配得上「潜龙」之名！",
+    "bossName": "综合大魔王·Bug 之源",
+    "bossLine": "所有 Bug 的源头，就是我！段错误、TLE、WA、MLE——你想飞升？先在我的 Debug 之海里活下来吧！",
     "bossDescription": "潜龙秘境的最终Boss。它掌握了从计算机基础到数学的所有知识。它不会手下留情——因为真正的龙，需要在火焰中诞生。",
     "color": "#dc2626",
     "requiredDungeon": "dungeon-07",
     "unlockLevel": 6,
     "stages": [
-      { "id": "dungeon-08-stage-01", "name": "基础综合", "description": "计算机基础+进制+语法混合", "questionIds": [], "requiredCorrect": 5, "hp": 3 },
-      { "id": "dungeon-08-stage-02", "name": "数据结构综合", "description": "数据结构全范围随机题", "questionIds": [], "requiredCorrect": 5, "hp": 3 },
-      { "id": "dungeon-08-stage-03", "name": "算法数学综合", "description": "算法+数学全范围随机题", "questionIds": [], "requiredCorrect": 5, "hp": 3 },
-      { "id": "dungeon-08-stage-04", "name": "终极模拟", "description": "25题全真模拟（限时60分钟）", "questionIds": [], "requiredCorrect": 15, "hp": 5 },
-      { "id": "dungeon-08-stage-05", "name": "龙魂觉醒", "description": "最终试炼（全部随机+最高难度）", "questionIds": [], "requiredCorrect": 20, "hp": 3 }
+      {
+        "id": "dungeon-08-stage-01",
+        "name": "基础综合",
+        "description": "计算机基础+进制+语法混合",
+        "questionIds": [],
+        "requiredCorrect": 5,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "yuanshi-tianzun",
+          "displayName": "元始天尊·初降",
+          "level": 8,
+          "tier": "legendary",
+          "element": "light"
+        }
+      },
+      {
+        "id": "dungeon-08-stage-02",
+        "name": "数据结构综合",
+        "description": "数据结构全范围随机题",
+        "questionIds": [],
+        "requiredCorrect": 5,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "liudao-ban",
+          "displayName": "六道斑·潜龙",
+          "level": 8,
+          "tier": "legendary",
+          "element": "light"
+        }
+      },
+      {
+        "id": "dungeon-08-stage-03",
+        "name": "算法数学综合",
+        "description": "算法+数学全范围随机题",
+        "questionIds": [],
+        "requiredCorrect": 5,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "yuanshi-tianzun",
+          "displayName": "元始天尊·大道",
+          "level": 9,
+          "tier": "legendary",
+          "element": "light"
+        }
+      },
+      {
+        "id": "dungeon-08-stage-04",
+        "name": "终极模拟",
+        "description": "25题全真模拟（限时60分钟）",
+        "questionIds": [],
+        "requiredCorrect": 15,
+        "hp": 5,
+        "enemyPet": {
+          "speciesId": "liudao-ban",
+          "displayName": "六道斑·轮回",
+          "level": 9,
+          "tier": "legendary",
+          "element": "light"
+        }
+      },
+      {
+        "id": "dungeon-08-stage-05",
+        "name": "龙魂觉醒",
+        "description": "最终试炼（全部随机+最高难度）",
+        "questionIds": [],
+        "requiredCorrect": 20,
+        "hp": 3,
+        "enemyPet": {
+          "speciesId": "yuanshi-tianzun",
+          "displayName": "元始天尊·全知 algorithm 龙",
+          "level": 10,
+          "tier": "legendary",
+          "element": "light",
+          "maxHpBoost": 1.5
+        }
+      }
     ],
     "bossQuestionCount": 25,
     "bossPassScore": 70

@@ -148,6 +148,9 @@ async function ensureSchema(db) {
   // ── Dungeon tables ──
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, stage_id TEXT NOT NULL, correct_count INTEGER DEFAULT 0, total_count INTEGER DEFAULT 0, rating TEXT DEFAULT 'D', is_win INTEGER DEFAULT 0, earned_reward INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN earned_reward INTEGER DEFAULT 0`); } catch {}
+  try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN is_win INTEGER DEFAULT 0`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
   // Performance indexes
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_device_status ON wishes(device_hash, status)`); } catch {}
@@ -203,7 +206,7 @@ export default {
     const cors = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Token, X-Teacher-Token',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Token, X-Teacher-Token, X-Device-Hash',
       'Content-Type': 'application/json',
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
@@ -1237,9 +1240,10 @@ export default {
       }
 
       // ── POST /api/dungeon/sync ──
+      // 安全：只接受客户端可合理提供的非敏感字段；经济/段位字段禁止直接写入。
       if (path === '/api/dungeon/sync' && request.method === 'POST') {
         const body = await request.json();
-        const { device_hash, class_code, display_name, player_level, exp, gold, rank_tier, rank_points, total_answered, total_correct, current_streak, max_streak, login_streak, school } = body;
+        const { device_hash } = body;
         if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
         // Dedup: skip if last sync was < 5 seconds ago (prevents 200-student wave from serializing on D1 write lock)
         const lastSync = await db.prepare("SELECT updated_at FROM dungeon_players WHERE device_hash=?").bind(device_hash).first();
@@ -1247,16 +1251,32 @@ export default {
           const elapsed = Date.now() - new Date(lastSync.updated_at + 'Z').getTime();
           if (elapsed < 5000) return new Response(JSON.stringify({ success: true, synced: false, reason: 'too_frequent' }), { headers: cors });
         }
-        const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(school) ? school : 'cultivation';
-        await db.prepare(`UPDATE dungeon_players SET
-          player_level=?, exp=?, gold=?, rank_tier=?, rank_points=?,
-          total_answered=?, total_correct=?, current_streak=?, max_streak=?,
-          login_streak=?, school=?, updated_at=datetime('now')
-          WHERE device_hash=?`)
-          .bind(player_level||1, exp||0, gold||0, rank_tier||1, rank_points||0,
-                total_answered||0, total_correct||0, current_streak||0, max_streak||0,
-                login_streak||0, validSchool, device_hash).run();
-        // Sync dungeon progress
+        // 白名单：仅允许修改非敏感字段
+        const allowedFields = ['display_name', 'total_answered', 'total_correct', 'current_streak', 'max_streak', 'login_streak', 'last_login_date', 'school'];
+        const sets = [];
+        const values = [];
+        for (const f of allowedFields) {
+          if (body[f] !== undefined) {
+            if (f === 'school') {
+              const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(body.school) ? body.school : 'cultivation';
+              sets.push('school=?');
+              values.push(validSchool);
+            } else if (f === 'display_name') {
+              const dn = String(body.display_name);
+              if (dn.length < 1 || dn.length > 8) return new Response(JSON.stringify({ error: '昵称需1-8字' }), { status: 400, headers: cors });
+              sets.push('display_name=?');
+              values.push(dn);
+            } else {
+              sets.push(`${f}=?`);
+              values.push(body[f]);
+            }
+          }
+        }
+        if (sets.length > 0) {
+          values.push(device_hash);
+          await db.prepare(`UPDATE dungeon_players SET ${sets.join(',')}, updated_at=datetime('now') WHERE device_hash=?`).bind(...values).run();
+        }
+        // Sync dungeon progress (non-economy)
         if (body.dungeon_progress && Array.isArray(body.dungeon_progress)) {
           for (const dp of body.dungeon_progress) {
             await db.prepare(`INSERT OR REPLACE INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
@@ -1274,34 +1294,139 @@ export default {
         return new Response(JSON.stringify({ success: true, synced: true }), { headers: cors });
       }
 
+      // ── POST /api/dungeon/report-battle ──
+      // 战斗结束后上报：服务端校验、写 dungeon_attempts、赢时由服务端加金币。
+      if (path === '/api/dungeon/report-battle' && request.method === 'POST') {
+        const body = await request.json();
+        const { device_hash, class_code, dungeon_id, stage_id, is_win, rating, earned_reward, questions_answered, correct_count } = body;
+        if (!device_hash || !class_code || !dungeon_id || !stage_id) {
+          return new Response(JSON.stringify({ error: '缺少必要参数' }), { status: 400, headers: cors });
+        }
+        // 校验 device_hash 与 class_code 匹配
+        const player = await db.prepare("SELECT * FROM dungeon_players WHERE device_hash=? AND class_code=? AND status='active'").bind(device_hash, class_code).first();
+        if (!player) {
+          return new Response(JSON.stringify({ error: '设备与班级不匹配' }), { status: 403, headers: cors });
+        }
+        const winFlag = is_win ? 1 : 0;
+        // 仅当胜利时按服务端 earned_reward 数值加金币；客户端不能任意修改金币。
+        const reward = winFlag ? Math.max(0, parseInt(earned_reward) || 0) : 0;
+        const answered = Math.max(0, parseInt(questions_answered) || 0);
+        const correct = Math.max(0, parseInt(correct_count) || 0);
+        // 写战斗记录
+        await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+          VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
+          .bind(device_hash, dungeon_id, stage_id, correct, answered, rating || 'D', winFlag, reward).run();
+        // 更新玩家金币与答题统计
+        if (winFlag && reward > 0) {
+          await db.prepare("UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
+            .bind(reward, answered, correct, device_hash).run();
+        } else {
+          await db.prepare("UPDATE dungeon_players SET total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
+            .bind(answered, correct, device_hash).run();
+        }
+        // 更新副本通关状态（避免重复计数同一关卡胜利）
+        const existingWin = await db.prepare("SELECT COUNT(*) as c FROM dungeon_attempts WHERE device_hash=? AND dungeon_id=? AND stage_id=? AND is_win=1").bind(device_hash, dungeon_id, stage_id).first();
+        const isNewWin = winFlag && (!existingWin || existingWin.c === 0);
+        if (isNewWin) {
+          const progress = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dungeon_id).first();
+          if (progress) {
+            const totalStages = progress.total_stages || 5;
+            const newCompleted = Math.min(totalStages, (progress.completed_stages || 0) + 1);
+            const isBoss = String(stage_id).toLowerCase().includes('boss');
+            const bossDefeated = isBoss ? 1 : (progress.boss_defeated || 0);
+            const status = (bossDefeated || newCompleted >= totalStages) ? 'cleared' : 'unlocked';
+            const score = correct * 10;
+            const bestScore = Math.max(progress.best_score || 0, score);
+            const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
+            const bestRating = rating && (!progress.best_rating || (ratingOrder[rating]||0) > (ratingOrder[progress.best_rating]||0))
+              ? rating : (progress.best_rating || 'D');
+            await db.prepare(`UPDATE dungeon_progress SET status=?, completed_stages=?, current_stage_id=?, boss_defeated=?, best_score=?, best_rating=?, updated_at=datetime('now') WHERE device_hash=? AND dungeon_id=?`)
+              .bind(status, newCompleted, stage_id, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
+          }
+        }
+        return new Response(JSON.stringify({ success: true, gold_added: reward }), { headers: cors });
+      }
+
       // ── GET /api/dungeon/leaderboard ──
       if (path === '/api/dungeon/leaderboard' && request.method === 'GET') {
         const scope = url.searchParams.get('scope') || 'class';
         const type = url.searchParams.get('type') || 'power';
         const cc = url.searchParams.get('class_code') || '';
-        const dh = url.searchParams.get('device_hash') || '';
-        let orderBy = 'rank_points DESC';
-        if (type === 'streak') orderBy = 'max_streak DESC';
-        else if (type === 'conquest') orderBy = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') DESC';
-        else if (type === 'badge') orderBy = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) DESC';
-        let query, params;
-        if (scope === 'class' && cc) {
-          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
-          params = [cc];
-        } else {
-          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;
-          params = [];
+        const dh = request.headers.get('X-Device-Hash') || url.searchParams.get('device_hash') || '';
+        const VALID_TYPES = ['power', 'streak', 'conquest', 'badge', 'wins', 'ss_count', 'progress', 'warrior'];
+        if (!VALID_TYPES.includes(type)) {
+          return new Response(JSON.stringify({ error: '无效的排行榜类型' }), { status: 400, headers: cors });
         }
+
+        // 班级榜必须校验查看者属于该班级
+        if (scope === 'class') {
+          if (!cc) return new Response(JSON.stringify({ error: '缺少班级码' }), { status: 400, headers: cors });
+          if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 403, headers: cors });
+          const viewer = await db.prepare("SELECT class_code FROM dungeon_players WHERE device_hash=? AND status='active'").bind(dh).first();
+          if (!viewer || viewer.class_code !== cc) {
+            return new Response(JSON.stringify({ error: '无权查看该班级排行榜' }), { status: 403, headers: cors });
+          }
+        }
+
+        let query, params;
+        const classFilter = (scope === 'class' && cc) ? 'AND p.class_code = ?' : '';
+
+        if (type === 'wins' || type === 'ss_count' || type === 'warrior') {
+          const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString();
+          let whereExtra = '';
+          if (type === 'wins') whereExtra = 'AND a.is_win = 1';
+          else if (type === 'ss_count') whereExtra = "AND a.rating = 'SS'";
+          const selectValue = type === 'warrior'
+            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.rating = 'S' THEN 1 END) * 15) as value"
+            : 'COUNT(*) as value';
+          query = `SELECT a.device_hash, p.display_name, p.school, p.rank_tier, ${selectValue}
+                   FROM dungeon_attempts a
+                   JOIN dungeon_players p ON a.device_hash = p.device_hash
+                   WHERE p.status = 'active' ${classFilter} ${whereExtra} AND a.created_at >= ?
+                   GROUP BY a.device_hash
+                   ORDER BY value DESC
+                   LIMIT 50`;
+          params = (scope === 'class' && cc) ? [cc, thirtyDaysAgo] : [thirtyDaysAgo];
+        } else if (type === 'progress') {
+          query = `SELECT dp.device_hash, p.display_name, p.school, p.rank_tier, COUNT(DISTINCT dp.dungeon_id) as value
+                   FROM dungeon_progress dp
+                   JOIN dungeon_players p ON dp.device_hash = p.device_hash
+                   WHERE p.status = 'active' ${classFilter} AND dp.status = 'cleared'
+                   GROUP BY dp.device_hash
+                   ORDER BY value DESC
+                   LIMIT 50`;
+          params = (scope === 'class' && cc) ? [cc] : [];
+        } else {
+          let orderBy = 'rank_points DESC';
+          let selectValue = 'rank_points as value';
+          if (type === 'streak') { orderBy = 'max_streak DESC'; selectValue = 'max_streak as value'; }
+          else if (type === 'conquest') {
+            orderBy = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') DESC';
+            selectValue = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') as value';
+          } else if (type === 'badge') {
+            orderBy = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) DESC';
+            selectValue = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) as value';
+          }
+          if (scope === 'class' && cc) {
+            query = `SELECT device_hash, display_name, school, rank_tier, ${selectValue} FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
+            params = [cc];
+          } else {
+            query = `SELECT device_hash, display_name, school, rank_tier, ${selectValue} FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;
+            params = [];
+          }
+        }
+
         const entries = await db.prepare(query).bind(...params).all();
-        // Find player rank
+        const sanitizeEntry = (e) => ({ display_name: e.display_name, school: e.school, rank_tier: e.rank_tier, value: e.value });
+        // Find player rank (device_hash only used internally)
         let playerEntry = null;
         if (dh && entries.results) {
           const idx = entries.results.findIndex(e => e.device_hash === dh);
-          if (idx >= 0) playerEntry = { ...entries.results[idx], rank: idx + 1 };
+          if (idx >= 0) playerEntry = { rank: idx + 1, ...sanitizeEntry(entries.results[idx]) };
         }
         return new Response(JSON.stringify({
           success: true, scope, type,
-          entries: (entries.results || []).map((e, i) => ({ ...e, rank: i + 1 })),
+          entries: (entries.results || []).map((e, i) => ({ rank: i + 1, ...sanitizeEntry(e) })),
           playerEntry,
         }), { headers: cors });
       }

@@ -11,6 +11,16 @@ import {
   BOSS_CLEAR_EXP, BOSS_CLEAR_GOLD, STAGE_CLEAR_EXP, STAGE_CLEAR_GOLD,
 } from '../utils/gameLogic';
 
+// ── Week start helper ──
+function getWeekStart(): string {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(now.setDate(diff));
+  monday.setHours(0, 0, 0, 0);
+  return monday.toISOString();
+}
+
 // ── Default player ──
 function defaultPlayer(): PlayerState {
   return {
@@ -58,6 +68,14 @@ interface DungeonState {
   loading: boolean;
   error: string | null;
 
+  // Weekly challenge limit
+  weeklyChallenges: {
+    used: number;
+    limit: number;
+    resetAt: string; // ISO 周一开始
+  };
+  currentBattleEarnsRewards: boolean;
+
   // Actions
   setView: (v: DungeonState['view']) => void;
   setLoading: (l: boolean) => void;
@@ -81,12 +99,18 @@ interface DungeonState {
   isDungeonUnlocked: (dungeonId: string) => boolean;
 
   // Battle
-  startBattle: (dungeonId: string, stageId: string, questions: Question[], isBoss: boolean) => void;
   answerQuestion: (answerIndex: number) => { correct: boolean; finished: boolean; won: boolean };
   finishBattle: () => BattleState | null;
 
+  // First-clear tracking
+  _firstClears: Record<string, boolean>;
+
   // Badges
   checkAndAwardBadges: () => string[];
+
+  // Weekly challenge limit
+  canEarnRewards: () => boolean;
+  useChallenge: () => void;
 
   // Weak points & healing
   addWeakPoint: (kp: string) => void;
@@ -118,6 +142,8 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   view: 'title',
   loading: true,
   error: null,
+  weeklyChallenges: { used: 0, limit: 5, resetAt: '' },
+  currentBattleEarnsRewards: true,
   // Track if this dungeon has been cleared before (for first-clear bonus)
   _firstClears: {} as Record<string, boolean>,
 
@@ -219,27 +245,6 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     return reqProgress?.status === 'cleared';
   },
 
-  startBattle: (dungeonId, stageId, questions, isBoss) => {
-    // Use stage-specific HP from dungeon definition, default to 3 for normal, 5 for boss
-    const dungeon = get().dungeons.find(d => d.id === dungeonId);
-    const stage = dungeon?.stages.find(s => s.id === stageId);
-    const hp = isBoss ? 5 : (stage?.hp || 3);
-    set({
-      view: isBoss ? 'boss' : 'battle',
-      battle: {
-        dungeonId, stageId,
-        questions, currentQuestionIndex: 0,
-        hp, maxHp: hp,
-        correctCount: 0, wrongCount: 0,
-        comboCount: 0,
-        startTime: Date.now(),
-        isBoss, isFinished: false, isWon: false,
-        expEarned: 0, goldEarned: 0,
-        rating: 'D',
-      }
-    });
-  },
-
   answerQuestion: (answerIndex) => {
     const { battle, player } = get();
     if (!battle || battle.isFinished) {
@@ -265,7 +270,9 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     // Record in player stats
     get().recordAnswer(isCorrect);
     get().addExp(rewards.exp);
-    get().addGold(rewards.gold);
+    if (get().currentBattleEarnsRewards) {
+      get().addGold(rewards.gold);
+    }
     get().addRankPoints(isCorrect ? (critical ? 20 : 10) : 0);
     get().checkRankUp();
 
@@ -293,7 +300,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       isFinished,
       isWon,
       expEarned: battle.expEarned + rewards.exp,
-      goldEarned: battle.goldEarned + rewards.gold,
+      goldEarned: battle.goldEarned + (get().currentBattleEarnsRewards ? rewards.gold : 0),
       rating,
     };
 
@@ -309,12 +316,21 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     if (battle.isWon) {
       const isFirstClear = !get()._firstClears[battle.dungeonId];
       const mult = isFirstClear ? FIRST_CLEAR_MULTIPLIER : 1;
-      if (battle.isBoss) {
-        get().addExp(BOSS_CLEAR_EXP * mult);
-        get().addGold(BOSS_CLEAR_GOLD * mult);
+      if (get().currentBattleEarnsRewards) {
+        if (battle.isBoss) {
+          get().addExp(BOSS_CLEAR_EXP * mult);
+          get().addGold(BOSS_CLEAR_GOLD * mult);
+        } else {
+          get().addExp(STAGE_CLEAR_EXP * mult);
+          get().addGold(STAGE_CLEAR_GOLD * mult);
+        }
       } else {
-        get().addExp(STAGE_CLEAR_EXP * mult);
-        get().addGold(STAGE_CLEAR_GOLD * mult);
+        // Practice mode: keep EXP but no gold
+        if (battle.isBoss) {
+          get().addExp(BOSS_CLEAR_EXP * mult);
+        } else {
+          get().addExp(STAGE_CLEAR_EXP * mult);
+        }
       }
       if (isFirstClear) {
         set((s) => ({ _firstClears: { ...s._firstClears, [battle.dungeonId]: true } }));
@@ -343,7 +359,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       }).catch(() => {});
     });
 
-    set({ battle: null });
+    set({ battle: null, currentBattleEarnsRewards: true });
     return battle;
   },
 
@@ -405,6 +421,28 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     return newBadges;
   },
 
+  // ── Weekly challenge limit ──
+  canEarnRewards: () => {
+    const state = get();
+    return state.weeklyChallenges.used < state.weeklyChallenges.limit;
+  },
+
+  useChallenge: () => {
+    const state = get();
+    const currentWeekStart = getWeekStart();
+    if (state.weeklyChallenges.resetAt !== currentWeekStart) {
+      set({
+        weeklyChallenges: { used: 0, limit: 5, resetAt: currentWeekStart },
+      });
+    }
+    set((st) => ({
+      weeklyChallenges: {
+        ...st.weeklyChallenges,
+        used: st.weeklyChallenges.used + 1,
+      },
+    }));
+  },
+
   // ── Weak Points & Healing ──
   addWeakPoint: (kp) => set((s) => {
     const wp = { ...s.weakPoints };
@@ -445,7 +483,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   },
 
   saveToLocalStorage: () => {
-    const { player, dungeonProgress, earnedBadges, weakPoints, mistakeNotebook, _firstClears } = get();
+    const { player, dungeonProgress, earnedBadges, weakPoints, mistakeNotebook, _firstClears, weeklyChallenges } = get();
     try {
       localStorage.setItem('dungeon_player', JSON.stringify(player));
       localStorage.setItem('dungeon_progress', JSON.stringify(dungeonProgress));
@@ -453,6 +491,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       localStorage.setItem('dungeon_weakpoints', JSON.stringify(weakPoints));
       localStorage.setItem('dungeon_mistakes', JSON.stringify(mistakeNotebook));
       localStorage.setItem('dungeon_first_clears', JSON.stringify(_firstClears));
+      localStorage.setItem('dungeon_weekly_challenges', JSON.stringify(weeklyChallenges));
     } catch { /* ignore */ }
   },
 
@@ -464,6 +503,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       const wp = localStorage.getItem('dungeon_weakpoints');
       const mn = localStorage.getItem('dungeon_mistakes');
       const fc = localStorage.getItem('dungeon_first_clears');
+      const wc = localStorage.getItem('dungeon_weekly_challenges');
 
       if (playerRaw) {
         const raw = JSON.parse(playerRaw);
@@ -497,8 +537,17 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       if (wp) set({ weakPoints: JSON.parse(wp) });
       if (mn) set({ mistakeNotebook: JSON.parse(mn) });
       if (fc) set({ _firstClears: JSON.parse(fc) });
+      if (wc) {
+        const parsed = JSON.parse(wc);
+        const currentWeekStart = getWeekStart();
+        if (parsed.resetAt === currentWeekStart) {
+          set({ weeklyChallenges: parsed });
+        } else {
+          set({ weeklyChallenges: { used: 0, limit: 5, resetAt: currentWeekStart } });
+        }
+      }
 
-      return !!(player || progress);
+      return !!(playerRaw || progress);
     } catch {
       return false;
     }

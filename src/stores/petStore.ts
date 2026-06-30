@@ -2,8 +2,9 @@ import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
 import type { OwnedPet } from '../types/pet';
-import { STARTER_PETS, getPetConfig, ALL_SHOP_ITEMS, PET_TIERS } from '../types/pet';
+import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS } from '../types/pet';
 import type { ShopItem } from '../types/pet';
+import { calculateStats } from '../../src-dungeon/utils/combatLogic';
 import { validatePetName } from '../utils/validateName';
 import { useHatchStore } from './hatchStore';
 
@@ -68,6 +69,10 @@ interface PetState {
 
   // Experience pool
   allocateExpFromPool: (petId: string, amount: number) => void;
+  addExpToPool: (amount: number) => void;
+  canLevelUp: (petId: string) => boolean;
+  levelUp: (petId: string) => void;
+  ensureBattleStats: (pet: OwnedPet) => OwnedPet;
 
   // Collection rewards
   checkCollectionRewards: () => void;
@@ -610,6 +615,63 @@ export const usePetStore = create<PetState>((set, get) => ({
     get().save();
   },
 
+  addExpToPool: (amount: number) => {
+    set(state => ({ expPool: state.expPool + amount }));
+    get().save();
+  },
+
+  canLevelUp: (petId: string): boolean => {
+    const pet = get().ownedPets.find(p => p.petId === petId);
+    if (!pet) return false;
+    return get().expPool >= pet.expToNext;
+  },
+
+  levelUp: (petId: string) => {
+    const pet = get().ownedPets.find(p => p.petId === petId);
+    if (!pet || !get().canLevelUp(petId)) return;
+
+    const needed = pet.expToNext;
+    const newLevel = pet.level + 1;
+    const newExpToNext = Math.floor(needed * 1.3);
+
+    const speciesId = pet.speciesId;
+    const base = PET_BASE_STATS[speciesId] || PET_BASE_STATS.default;
+    const tier = getPetTier(speciesId);
+    const stats = calculateStats(base, TIER_MULTIPLIERS[tier], newLevel);
+    const { level, ...baseStats } = stats;
+
+    set(state => ({
+      expPool: state.expPool - needed,
+      ownedPets: state.ownedPets.map(p =>
+        p.petId === petId
+          ? {
+              ...p,
+              level: newLevel,
+              exp: 0,
+              expToNext: newExpToNext,
+              battle: {
+                ...baseStats,
+                currentHp: baseStats.maxHp,
+              },
+            }
+          : p
+      ),
+    }));
+    get().save();
+  },
+
+  ensureBattleStats: (pet: OwnedPet): OwnedPet => {
+    if (pet.battle) return pet;
+    const base = PET_BASE_STATS[pet.speciesId] || PET_BASE_STATS.default;
+    const tier = getPetTier(pet.speciesId);
+    const stats = calculateStats(base, TIER_MULTIPLIERS[tier], pet.level);
+    const { level, ...baseStats } = stats;
+    return {
+      ...pet,
+      battle: { ...baseStats, currentHp: baseStats.maxHp },
+    };
+  },
+
   // Collection rewards now handled by AchievementsPanel manual claim
   checkCollectionRewards: () => {},
 
@@ -634,8 +696,10 @@ export const usePetStore = create<PetState>((set, get) => ({
           const config = getPetConfig(p.speciesId);
           return { ...p, renderType: config?.renderType || '2d', modelPath: config?.modelPath || '' };
         });
+        // Ensure every loaded pet has battle stats for 智子试炼场
+        const loadedPets = migrated.map((p: any) => get().ensureBattleStats(p));
         set({
-          ownedPets: migrated,
+          ownedPets: loadedPets,
           activePetId: data.activePetId || null,
           coins: data.coins ?? 200,
           foods: data.foods || { basic: 3 },
