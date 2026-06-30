@@ -865,7 +865,38 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 
 ---
 
-## 2026-06-30 — 智子试炼场 Task 7：重写 BattleScreen 为宠物回合制战斗
+## 2026-06-30 — 智子试炼场 Task 11：每周 5 次挑战限制
+
+### 改动文件
+- `src-dungeon/stores/dungeonStore.ts` — 新增周挑战次数限制状态与战斗奖励控制
+- `cf-workers/api.js` — 新增 `dungeon_attempts` 表并含 `earned_reward` 字段
+
+### 新增内容
+- `weeklyChallenges` 状态：`{ used, limit, resetAt }`，按周重置（resetAt 为当周周一 00:00:00 ISO）
+- `getWeekStart()`：计算本周周一零点 ISO 字符串
+- `canEarnRewards()`：当周已用次数小于 5 时返回 true
+- `useChallenge()`：跨周自动重置 used，并递增一次已用次数
+- `currentBattleEarnsRewards`：标记当前战斗是否处于奖励模式
+- 战斗流程集成：
+  - `startBattle` 时先判断 `canEarnRewards()`，若可奖励则调用 `useChallenge()` 扣次数，并记录 `currentBattleEarnsRewards`
+  - `answerQuestion` 中：EXP、连击、段位分正常累计；仅当 `currentBattleEarnsRewards` 为 true 时才加金币
+  - `finishBattle` 中：通关 EXP 照给，金币通关奖励仅在奖励模式下发放；战斗结束后重置 `currentBattleEarnsRewards`
+- 本地持久化：`saveToLocalStorage` / `loadFromLocalStorage` 读写 `dungeon_weekly_challenges`；加载时若跨周则自动重置
+- Worker 表结构：`dungeon_attempts` 新增 `earned_reward INTEGER DEFAULT 0`，并补 `ALTER TABLE` 迁移
+
+### 验证
+- `npx tsc --noEmit`：通过（tsconfig 仅包含 `src`）
+- `node --check cf-workers/api.js`：通过
+- `npx vitest run src-dungeon/utils/combatLogic.test.ts`：5 个测试通过
+
+### 说明
+- 周挑战次数与现有签到/每日系统完全独立
+- 次数用完后仍可正常战斗、累计 EXP 与段位分，仅金币奖励归零
+- 未新增 `/api/dungeon/report` 端点（当前代码无此端点），仅确保表结构预留 `earned_reward`
+
+---
+
+
 
 ### 改动文件
 - `src-dungeon/components/screens/BattleScreen.tsx` — 完全重写：从「答题扣 HP」改为「选技能 → 答题 → 释放技能」回合制

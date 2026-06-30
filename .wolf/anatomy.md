@@ -161,3 +161,5 @@ src-dungeon/
 ### D1 新表（6张）
 
 dungeon_players, dungeon_progress, dungeon_attempts, dungeon_badges, dungeon_daily_tasks, dungeon_broadcasts
+
+- `dungeon_attempts` 含 `earned_reward INTEGER DEFAULT 0`，用于标记该次挑战是否发放金币奖励
