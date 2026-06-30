@@ -1,6 +1,13 @@
 {
   "bugs": [
     {
+      "date": "2026-06-30",
+      "error_message": "智子试炼场后端安全与数据问题：POST /api/dungeon/sync 完全信任客户端写入 player_level/exp/gold/rank_tier/rank_points；dungeon_attempts 表从未写入；排行榜返回 device_hash；班级排行榜未验证查看者是否属于该班级",
+      "root_cause": "sync 端点未做字段白名单，直接 UPDATE 客户端提供的经济敏感字段；缺少战斗结果上报端点，dungeon_attempts 无 INSERT；leaderboard SQL 直接返回 device_hash/class_code；class scope 仅校验 class_code 参数存在",
+      "fix": "sync 改为仅允许非敏感白名单字段（display_name/total_answered/total_correct/current_streak/max_streak/login_streak/last_login_date/school）；新增 POST /api/dungeon/report-battle，服务端校验 device_hash 与 class_code 匹配后写入 dungeon_attempts，胜利时由服务端加金币并更新 dungeon_progress；leaderboard 统一返回 {rank,display_name,school,rank_tier,value}；class scope 从 X-Device-Hash 头或 device_hash 查询参数校验设备归属；CORS 增加 X-Device-Hash",
+      "tags": ["智子试炼场", "security", "api", "d1", "privacy"]
+    },
+    {
       "date": "2026-06-24",
       "error_message": "v1.7.0 CI 构建全部失败：Cannot find module 'dompurify'",
       "root_cause": "src/utils/markdown.ts 引入了 dompurify，但依赖只加在根目录 package.json，CI 的 npm ci 使用 csp-desktop-pet/package.json 找不到",

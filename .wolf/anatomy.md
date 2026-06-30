@@ -147,9 +147,9 @@ src-dungeon/
 |------|------|
 | POST /api/dungeon/register | 注册（4字段+流派，缺一不可） |
 | GET /api/dungeon/status | 获取完整状态 |
-| POST /api/dungeon/sync | 同步进度 |
-| POST /api/dungeon/report | 上报答题 |
-| GET /api/dungeon/leaderboard | 排行榜（scope+type参数） |
+| POST /api/dungeon/sync | 同步进度（仅允许非敏感字段，禁止客户端写金币/等级/经验/段位） |
+| POST /api/dungeon/report-battle | 战斗结束后上报（服务端校验、写 dungeon_attempts、赢时服务端加金币） |
+| GET /api/dungeon/leaderboard | 排行榜（scope+type参数，班级榜需验证设备归属） |
 | GET/POST /api/dungeon/daily-tasks | 每日任务 |
 | POST /api/dungeon/claim-daily | 领取每日奖励 |
 | GET /api/dungeon/broadcasts | 全服广播 |

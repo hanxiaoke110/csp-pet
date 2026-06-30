@@ -1028,7 +1028,40 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 
 ---
 
-## 2026-06-30 — 智子试炼场 Task 5：按技能知识点标签抽取题目
+## 2026-06-30 — 智子试炼场后端安全与数据修复
+
+### 改动文件
+- `cf-workers/api.js`
+
+### 修复内容
+1. **POST /api/dungeon/sync 安全加固**
+   - 禁止客户端直接写入 `player_level`、`exp`、`gold`、`rank_tier`、`rank_points`
+   - 仅允许白名单字段：`display_name`、`total_answered`、`total_correct`、`current_streak`、`max_streak`、`login_streak`、`last_login_date`、`school`
+   - `display_name` 加 1-8 字长度校验
+
+2. **新增 POST /api/dungeon/report-battle**
+   - 接收：`device_hash`、`class_code`、`dungeon_id`、`stage_id`、`is_win`、`rating`、`earned_reward`、`questions_answered`、`correct_count`
+   - 服务端校验 `device_hash` 与 `class_code` 匹配
+   - 写入 `dungeon_attempts` 表
+   - 胜利时由服务端按 `earned_reward` 增加金币（客户端不能任意改金币）
+   - 更新 `dungeon_players` 的 `total_answered` / `total_correct`
+   - 更新 `dungeon_progress` 通关状态，避免同一关卡胜利重复计数
+
+3. **排行榜隐私与权限**
+   - 返回条目移除 `device_hash` / `class_code`，统一返回 `{ rank, display_name, school, rank_tier, value }`
+   - `scope=class` 时从 `X-Device-Hash` 头或 `device_hash` 查询参数获取设备标识
+   - 验证请求者 `device_hash` 属于目标 `class_code`，否则返回 403
+   - CORS `Access-Control-Allow-Headers` 增加 `X-Device-Hash`
+
+### 验证
+- `node --check cf-workers/api.js`：通过
+
+### 说明
+- 未改动现有 `/api/dungeon/report`（当前代码无此端点）
+- 未破坏原有 4 维排行榜逻辑，仅统一返回格式并移除敏感字段
+- 前端 BattleScreen 调用 `report-battle` 可在后续 Task 接入
+
+---
 
 ### 改动文件
 - `src-dungeon/utils/questionLoader.ts` — 新增按技能标签选题函数
