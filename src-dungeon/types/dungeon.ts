@@ -1,5 +1,9 @@
 // 潜龙闭关・学霸副本攻略 — 类型定义
 
+import type { PetElement, PetTier } from '../../src/types/pet';
+// @ts-ignore — 后续 Task 5 将使用 KnowledgeTag 扩展技能相关类型
+import type { KnowledgeTag } from '../data/skills';
+
 // ── 修行流派 ──
 export type School = 'cultivation' | 'tactical' | 'star' | 'minecraft' | 'code' | 'dream';
 
@@ -12,6 +16,23 @@ export interface SchoolDefinition {
   themeColor: string;      // UI 主题色
   bgGradient: string;      // 背景渐变
   ranks: string[];         // 8 段位称号
+}
+
+// ── 敌方宠物配置（智子试炼场） ──
+export interface EnemyPetConfig {
+  speciesId: string;
+  displayName: string;
+  level: number;
+  tier: PetTier;
+  element: PetElement;
+  maxHpBoost?: number;
+}
+
+// ── 技能使用记录（智子试炼场） ──
+export interface SkillUsage {
+  skillId: string;
+  usedCount: number;
+  cooldownRemaining: number;
 }
 
 // ── 玩家状态 ──
@@ -64,6 +85,7 @@ export interface DungeonStage {
   questionIds: string[];         // 引用 csp-exam-bank 题号
   requiredCorrect: number;       // 需要答对的题目数
   hp: number;                    // 容错次数
+  enemyPet?: EnemyPetConfig;     // 智子试炼场敌方宠物配置
 }
 
 // ── 副本进度 ──
@@ -178,6 +200,12 @@ export interface BattleState {
   expEarned: number;
   goldEarned: number;
   rating: string;              // D/C/B/A/S/SS
+  enemyHp: number;
+  enemyMaxHp: number;
+  currentTurn: 'player' | 'enemy';
+  roundCount: number;
+  skillUsages: SkillUsage[];
+  usedSkillIds: string[];
 }
 
 // ── API 响应 ──
