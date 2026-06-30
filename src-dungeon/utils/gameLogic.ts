@@ -86,6 +86,47 @@ export function rollCritical(): boolean {
   return Math.random() < 0.1; // 10% chance
 }
 
+export function randomGold(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function calculateBattleRewards(
+  isWin: boolean,
+  isFirstClear: boolean,
+  isBoss: boolean,
+  rating: ClearRating | string
+): { gold: number; breakdown: string[] } {
+  if (!isWin) return { gold: 0, breakdown: ['失败，无奖励'] };
+
+  const breakdown: string[] = [];
+  let gold = randomGold(10, 20);
+  breakdown.push(`胜利奖励 ${gold} 金币`);
+
+  if (isFirstClear) {
+    const bonus = gold * 2;
+    gold += bonus;
+    breakdown.push(`首次通关 ×2：+${bonus} 金币`);
+  }
+
+  if (isBoss) {
+    const bonus = randomGold(15, 30);
+    gold += bonus;
+    breakdown.push(`Boss 奖励：+${bonus} 金币`);
+  }
+
+  if (rating === 'S') {
+    const bonus = randomGold(10, 15);
+    gold += bonus;
+    breakdown.push(`S 评级奖励：+${bonus} 金币`);
+  } else if (rating === 'SS') {
+    const bonus = randomGold(15, 20);
+    gold += bonus;
+    breakdown.push(`SS 评级奖励：+${bonus} 金币`);
+  }
+
+  return { gold, breakdown };
+}
+
 // ── Boss 评级 ──
 export function calculateBossRating(scorePercent: number, timeSeconds: number): string {
   if (scorePercent >= 100 && timeSeconds < 180) return 'SS';
