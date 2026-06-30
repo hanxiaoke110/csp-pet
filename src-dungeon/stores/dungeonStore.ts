@@ -99,9 +99,11 @@ interface DungeonState {
   isDungeonUnlocked: (dungeonId: string) => boolean;
 
   // Battle
-  startBattle: (dungeonId: string, stageId: string, questions: Question[], isBoss: boolean) => void;
   answerQuestion: (answerIndex: number) => { correct: boolean; finished: boolean; won: boolean };
   finishBattle: () => BattleState | null;
+
+  // First-clear tracking
+  _firstClears: Record<string, boolean>;
 
   // Badges
   checkAndAwardBadges: () => string[];
@@ -241,34 +243,6 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     // Check required dungeon is cleared
     const reqProgress = dungeonProgress.find(dp => dp.dungeonId === dungeon.requiredDungeon);
     return reqProgress?.status === 'cleared';
-  },
-
-  startBattle: (dungeonId, stageId, questions, isBoss) => {
-    // Determine if this battle is eligible for rewards; consume a weekly slot if so
-    const earnsRewards = get().canEarnRewards();
-    if (earnsRewards) {
-      get().useChallenge();
-    }
-
-    // Use stage-specific HP from dungeon definition, default to 3 for normal, 5 for boss
-    const dungeon = get().dungeons.find(d => d.id === dungeonId);
-    const stage = dungeon?.stages.find(s => s.id === stageId);
-    const hp = isBoss ? 5 : (stage?.hp || 3);
-    set({
-      view: isBoss ? 'boss' : 'battle',
-      currentBattleEarnsRewards: earnsRewards,
-      battle: {
-        dungeonId, stageId,
-        questions, currentQuestionIndex: 0,
-        hp, maxHp: hp,
-        correctCount: 0, wrongCount: 0,
-        comboCount: 0,
-        startTime: Date.now(),
-        isBoss, isFinished: false, isWon: false,
-        expEarned: 0, goldEarned: 0,
-        rating: 'D',
-      }
-    });
   },
 
   answerQuestion: (answerIndex) => {
@@ -573,7 +547,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         }
       }
 
-      return !!(player || progress);
+      return !!(playerRaw || progress);
     } catch {
       return false;
     }

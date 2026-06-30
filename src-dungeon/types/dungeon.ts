@@ -219,6 +219,7 @@ export interface ApiResponse<T = unknown> {
 
 export interface RegisterResponse {
   success: boolean;
+  error?: string;
   player: PlayerState;
 }
 

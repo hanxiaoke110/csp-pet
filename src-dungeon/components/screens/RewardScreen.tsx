@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { getRankName } from '../../utils/gameLogic';
+import type { DungeonProgress } from '../../types/dungeon';
 
 export default function RewardScreen() {
   const { dungeonId } = useParams<{ dungeonId: string }>();
@@ -11,19 +12,28 @@ export default function RewardScreen() {
   const setView = useDungeonStore(s => s.setView);
 
   const dungeon = dungeons.find(d => d.id === dungeonId);
-  const won = battle?.isWon ?? false;
-  const expEarned = battle?.expEarned ?? 0;
-  const goldEarned = battle?.goldEarned ?? 0;
-  const rating = battle?.rating ?? 'D';
-  const totalAnswered = (battle?.correctCount ?? 0) + (battle?.wrongCount ?? 0);
+
+  if (!battle) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-title">⚔️ 准备结算...</div>
+      </div>
+    );
+  }
+
+  const won = battle.isWon;
+  const expEarned = battle.expEarned;
+  const goldEarned = battle.goldEarned;
+  const rating = battle.rating;
+  const totalAnswered = battle.correctCount + battle.wrongCount;
   const accuracy = totalAnswered > 0
     ? Math.round((battle.correctCount / totalAnswered) * 100)
     : 0;
-  const remainingHpRatio = battle?.maxHp > 0
+  const remainingHpRatio = battle.maxHp > 0
     ? Math.round((battle.hp / battle.maxHp) * 100)
     : 0;
-  const uniqueSkillCount = battle?.usedSkillIds?.length ?? 0;
-  const roundCount = battle?.roundCount ?? 0;
+  const uniqueSkillCount = battle.usedSkillIds.length;
+  const roundCount = battle.roundCount;
   const rankName = getRankName(player.school, player.rankTier);
 
   const handleContinue = () => {
@@ -44,7 +54,8 @@ export default function RewardScreen() {
           } else {
             const newCompleted = Math.min(p.completedStages + 1, p.totalStages);
             const allStagesDone = newCompleted >= p.totalStages;
-            return { ...p, completedStages: newCompleted, status: allStagesDone ? 'cleared' : 'in_progress' };
+            const status: DungeonProgress['status'] = allStagesDone ? 'cleared' : 'in_progress';
+            return { ...p, completedStages: newCompleted, status };
           }
         });
         useDungeonStore.setState({ dungeonProgress: newProgress });

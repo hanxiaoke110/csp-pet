@@ -4,7 +4,7 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById } from '../../data/skills';
 import { pickQuestionsByTag } from '../../utils/questionLoader';
 import { calculateDamage, determineFirstAttacker, calculateStats } from '../../utils/combatLogic';
-import { calculateAnswerReward, rollCritical, getRankName, getStageClearRating } from '../../utils/gameLogic';
+import { calculateAnswerReward, rollCritical, getRankName, calculateBattleRating } from '../../utils/gameLogic';
 import { SkillTooltip } from './SkillTooltip';
 import { TutorialOverlay } from './TutorialOverlay';
 import { ElementGuide } from './ElementGuide';
@@ -12,7 +12,7 @@ import FableCard from '../shared/FableCard';
 import fables from '../../data/fables.json';
 import type { Question, DungeonDefinition, DungeonStage, SkillUsage } from '../../types/dungeon';
 import type { OwnedPet, PetElement, PetTier } from '../../../src/types/pet';
-import { ELEMENT_EMOJI, getPetTier, PET_BASE_STATS, TIER_MULTIPLIERS } from '../../../src/types/pet';
+import { ELEMENT_EMOJI, getPetTier, getPetConfig, PET_BASE_STATS, TIER_MULTIPLIERS } from '../../../src/types/pet';
 import type { CombatPet } from '../../utils/combatLogic';
 
 // ─── Helpers ───
@@ -77,6 +77,22 @@ function makeCombatPet(pet: OwnedPet): CombatPet {
 }
 
 function generateEnemyPet(dungeon: DungeonDefinition, stage: DungeonStage, isBoss: boolean): CombatPet {
+  if (stage.enemyPet) {
+    const cfg = stage.enemyPet;
+    const speciesBase = PET_BASE_STATS[cfg.speciesId] || PET_BASE_STATS.default;
+    const stats = calculateStats(speciesBase, TIER_MULTIPLIERS[cfg.tier], cfg.level);
+    const { level, ...baseStats } = stats;
+    const maxHp = Math.floor(baseStats.maxHp * (cfg.maxHpBoost ?? 1));
+    return {
+      ...baseStats,
+      maxHp,
+      currentHp: maxHp,
+      element: cfg.element,
+      level: cfg.level,
+    };
+  }
+
+  // Fallback: random enemy when stage has no config
   const level = isBoss ? 5 : 3;
   const tier: PetTier = isBoss ? 'legendary' : 'rare';
   const elements: PetElement[] = ['fire', 'wind', 'earth', 'water'];
@@ -169,8 +185,14 @@ export default function BattleScreen() {
       cooldownRemaining: 0,
     }));
 
+    const earnsRewards = store.canEarnRewards();
+    if (earnsRewards) {
+      store.useChallenge();
+    }
+
     useDungeonStore.setState({
       view: isBoss ? 'boss' : 'battle',
+      currentBattleEarnsRewards: earnsRewards,
       battle: {
         dungeonId,
         stageId: stageId || 'boss',
@@ -196,7 +218,7 @@ export default function BattleScreen() {
         usedSkillIds: [],
       },
     });
-  }, [dungeonId, stageId, playerPet, enemyPet, isBoss, battle]);
+  }, [dungeonId, stageId, playerPet, enemyPet, isBoss, battle, store]);
 
   // Enemy turn
   useEffect(() => {
@@ -204,6 +226,35 @@ export default function BattleScreen() {
 
     setIsEnemyAttacking(true);
     const timer = setTimeout(() => {
+      // 50-round cap: resolve before enemy attacks
+      if (battle.roundCount >= 50) {
+        const playerRatio = battle.hp / battle.maxHp;
+        const enemyRatio = battle.enemyHp / battle.enemyMaxHp;
+        const capWon = playerRatio >= enemyRatio;
+        const totalQuestions = Math.max(1, battle.correctCount + battle.wrongCount);
+        const expectedRounds = isBoss ? 30 : 20;
+        const capRating = capWon
+          ? calculateBattleRating(battle.correctCount, totalQuestions, playerRatio, battle.usedSkillIds, battle.roundCount, expectedRounds)
+          : 'D';
+        useDungeonStore.setState({
+          battle: {
+            ...battle,
+            isFinished: true,
+            isWon: capWon,
+            rating: capRating,
+          },
+        });
+        store.saveToLocalStorage();
+        const newBadges = store.checkAndAwardBadges();
+        if (newBadges.length > 0) store.saveToLocalStorage();
+        setIsEnemyAttacking(false);
+        setTimeout(() => {
+          navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
+          store.setView('reward');
+        }, 800);
+        return;
+      }
+
       const damage = calculateDamage(enemyPet, playerPet, 1.0, 1.0);
       const newHp = Math.max(0, battle.hp - damage);
       setLogMessages(prev => [...prev.slice(-4), `🐲 ${isBoss ? dungeon?.bossName : dungeon?.guardianName} 发动攻击，造成 ${damage} 点伤害！`]);
@@ -292,7 +343,9 @@ export default function BattleScreen() {
     const rewards = calculateAnswerReward(isCorrect, newCombo, critical);
 
     store.addExp(rewards.exp);
-    store.addGold(rewards.gold);
+    if (store.currentBattleEarnsRewards) {
+      store.addGold(rewards.gold);
+    }
     store.addRankPoints(isCorrect ? (critical ? 20 : 10) : 0);
     store.checkRankUp();
 
@@ -341,20 +394,23 @@ export default function BattleScreen() {
 
     setTimeout(() => {
       if (newEnemyHp <= 0) {
-        const totalAnswered = battle.correctCount + (isCorrect ? 1 : 0);
-        const totalQuestions = Math.max(1, totalAnswered + battle.wrongCount + (isCorrect ? 0 : 1));
-        const rating = getStageClearRating(totalAnswered, totalQuestions, battle.hp);
+        const newCorrectCount = battle.correctCount + (isCorrect ? 1 : 0);
+        const newWrongCount = battle.wrongCount + (isCorrect ? 0 : 1);
+        const totalQuestions = Math.max(1, newCorrectCount + newWrongCount);
+        const remainingHpRatio = battle.hp / battle.maxHp;
+        const expectedRounds = isBoss ? 30 : 20;
+        const rating = calculateBattleRating(newCorrectCount, totalQuestions, remainingHpRatio, newUsedSkillIds, battle.roundCount, expectedRounds);
         useDungeonStore.setState({
           battle: {
             ...battle,
             enemyHp: 0,
-            correctCount: battle.correctCount + (isCorrect ? 1 : 0),
-            wrongCount: battle.wrongCount + (isCorrect ? 0 : 1),
+            correctCount: newCorrectCount,
+            wrongCount: newWrongCount,
             comboCount: newCombo,
             isFinished: true,
             isWon: true,
             expEarned: battle.expEarned + rewards.exp,
-            goldEarned: battle.goldEarned + rewards.gold,
+            goldEarned: battle.goldEarned + (store.currentBattleEarnsRewards ? rewards.gold : 0),
             rating,
             skillUsages: newSkillUsages,
             usedSkillIds: newUsedSkillIds,
@@ -366,15 +422,54 @@ export default function BattleScreen() {
         navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
         store.setView('reward');
       } else {
+        const newCorrectCount = battle.correctCount + (isCorrect ? 1 : 0);
+        const newWrongCount = battle.wrongCount + (isCorrect ? 0 : 1);
+
+        // 50-round cap: judge by remaining HP ratio
+        if (battle.roundCount >= 50) {
+          const playerRatio = battle.hp / battle.maxHp;
+          const enemyRatio = newEnemyHp / battle.enemyMaxHp;
+          const capWon = playerRatio >= enemyRatio;
+          const totalQuestions = Math.max(1, newCorrectCount + newWrongCount);
+          const expectedRounds = isBoss ? 30 : 20;
+          const capRating = capWon
+            ? calculateBattleRating(newCorrectCount, totalQuestions, playerRatio, newUsedSkillIds, battle.roundCount, expectedRounds)
+            : 'D';
+          useDungeonStore.setState({
+            battle: {
+              ...battle,
+              enemyHp: newEnemyHp,
+              correctCount: newCorrectCount,
+              wrongCount: newWrongCount,
+              comboCount: newCombo,
+              isFinished: true,
+              isWon: capWon,
+              expEarned: battle.expEarned + rewards.exp,
+              goldEarned: battle.goldEarned + (store.currentBattleEarnsRewards ? rewards.gold : 0),
+              rating: capRating,
+              skillUsages: newSkillUsages,
+              usedSkillIds: newUsedSkillIds,
+            },
+          });
+          store.saveToLocalStorage();
+          const newBadges = store.checkAndAwardBadges();
+          if (newBadges.length > 0) store.saveToLocalStorage();
+          setTimeout(() => {
+            navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
+            store.setView('reward');
+          }, 800);
+          return;
+        }
+
         useDungeonStore.setState({
           battle: {
             ...battle,
             enemyHp: newEnemyHp,
-            correctCount: battle.correctCount + (isCorrect ? 1 : 0),
-            wrongCount: battle.wrongCount + (isCorrect ? 0 : 1),
+            correctCount: newCorrectCount,
+            wrongCount: newWrongCount,
             comboCount: newCombo,
             expEarned: battle.expEarned + rewards.exp,
-            goldEarned: battle.goldEarned + rewards.gold,
+            goldEarned: battle.goldEarned + (store.currentBattleEarnsRewards ? rewards.gold : 0),
             currentTurn: 'enemy',
             skillUsages: newSkillUsages,
             usedSkillIds: newUsedSkillIds,
@@ -655,7 +750,7 @@ export default function BattleScreen() {
                     <button
                       className="pixel-btn"
                       disabled={disabled}
-                      onClick={() => handleSkillClick(skill.id)}
+                      onClick={() => handleSelectSkill(skill.id)}
                       style={{
                         width: '100%',
                         padding: '12px',
