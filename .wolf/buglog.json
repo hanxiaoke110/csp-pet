@@ -8,6 +8,13 @@
       "tags": ["智子试炼场", "security", "api", "d1", "privacy"]
     },
     {
+      "date": "2026-06-30",
+      "error_message": "src-dungeon 类型检查失败：BattleScreen/dungeonStore/RewardScreen 多处类型错误与战斗逻辑未按设计实现",
+      "root_cause": "1) BattleScreen 未读取 stage.enemyPet、未校验周奖励限制、使用旧评级函数、未实现 50 回合上限；2) dungeonStore 未在接口声明 _firstClears、startBattle 返回的 BattleState 缺少新字段、loadFromLocalStorage 使用了未定义变量；3) RewardScreen 未对 battle 做空值保护、status 被推断为 string",
+      "fix": "在 BattleScreen 中读取 stage.enemyPet 生成敌方宠物，初始化时调用 canEarnRewards/useChallenge，使用 calculateBattleRating，并在回合数达到 50 时按 HP 比例判定胜负；删除 dungeonStore 中未使用的 startBattle，补全 _firstClears 类型，修正 loadFromLocalStorage 变量名；为 RewardScreen 增加 battle 空值保护并显式声明 status 联合类型；顺手修复 RegisterScreen 的 player_level 字段名",
+      "tags": ["智子试炼场", "typescript", "battle", "src-dungeon", "type-error"]
+    },
+    {
       "date": "2026-06-24",
       "error_message": "v1.7.0 CI 构建全部失败：Cannot find module 'dompurify'",
       "root_cause": "src/utils/markdown.ts 引入了 dompurify，但依赖只加在根目录 package.json，CI 的 npm ci 使用 csp-desktop-pet/package.json 找不到",

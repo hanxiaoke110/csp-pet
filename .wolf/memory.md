@@ -1085,3 +1085,44 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 ### 说明
 - 用于战斗系统根据玩家选择的技能，抽取对应知识点的编程题驱动技能释放
 - 不影响原有按副本/关卡映射的选题逻辑
+
+---
+
+## 2026-06-30 — 智子试炼场 Task 14：修复 src-dungeon 类型错误与战斗逻辑
+
+### 改动文件
+- `src-dungeon/components/screens/BattleScreen.tsx` — 敌方宠物配置读取、周奖励限制生效、新评级算法、50 回合上限
+- `src-dungeon/components/screens/RewardScreen.tsx` — `battle` 空值保护、`status` 联合类型显式声明
+- `src-dungeon/components/screens/RegisterScreen.tsx` — `resp.player.player_level` 修正为 `resp.player.playerLevel`
+- `src-dungeon/stores/dungeonStore.ts` — 删除未使用的 `startBattle`、补全 `_firstClears` 类型、修复 `loadFromLocalStorage` 变量名
+- `src-dungeon/types/dungeon.ts` — `RegisterResponse` 增加可选 `error` 字段
+- `tsconfig.dungeon.json` — 已存在，用于独立检查 `src-dungeon`
+
+### 战斗逻辑修复
+1. **敌方宠物配置生效**
+   - `generateEnemyPet()` 优先读取 `stage.enemyPet`
+   - `speciesId` 决定基础属性表（`PET_BASE_STATS`），`tier`/`level`/`element` 使用配置值
+   - `maxHpBoost` 乘以最大 HP；无配置时保留原有随机兜底
+2. **每周 5 次奖励限制生效**
+   - 战斗初始化时调用 `store.canEarnRewards()` / `store.useChallenge()`
+   - 设置 `currentBattleEarnsRewards`；`handleAnswer` 仅在奖励模式下加金币并累计 `goldEarned`
+3. **评级使用新算法**
+   - 胜利与 50 回合判胜时调用 `calculateBattleRating(...)`
+   - `expectedRounds`：普通关 20，Boss 关 30
+4. **50 回合上限**
+   - 玩家回合与敌方回合开始时若 `roundCount >= 50`，按剩余 HP 比例判定胜负
+   - 玩家 HP 比例 >= 敌方 HP 比例则胜利，否则失败
+
+### 类型修复
+- `BattleScreen` 移除未使用的 `getStageClearRating` 导入，新增 `calculateBattleRating` 与 `getPetConfig` 导入
+- `dungeonStore.ts` 的 `DungeonState` 接口移除 `startBattle`、新增 `_firstClears: Record<string, boolean>`
+- `loadFromLocalStorage` 返回语句使用 `playerRaw` / `progress` 正确变量名
+- `RewardScreen` 顶部增加 `if (!battle) return null;` 保护
+
+### 验证
+- `npx tsc -p tsconfig.dungeon.json --noEmit`：通过（含 RegisterScreen 既有错误已顺手修复）
+- `npm test`：5/5 通过
+- `npm run build:dungeon`：构建成功
+
+### 提交
+- Commit message: `fix(智子试炼场): 修复 src-dungeon 类型错误与战斗逻辑`

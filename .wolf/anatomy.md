@@ -1,6 +1,6 @@
 # anatomy.md — CSP 学习助手项目结构
 
-> 最后更新：2026-06-30
+> 最后更新：2026-06-30（智子试炼场战斗逻辑修复后）
 
 ## 项目目录
 
@@ -114,8 +114,9 @@ src-dungeon/
 ├── main.tsx                       # React 入口
 ├── App.tsx                        # 路由（HashRouter）+ 3级数据加载
 ├── App.css                        # 像素 RPG 主题样式（~250行）
+├── tsconfig.dungeon.json         # 独立 TypeScript 配置，用于类型检查 src-dungeon
 ├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API/智子战斗等）
-├── stores/dungeonStore.ts         # Zustand 核心状态管理（~270行）
+├── stores/dungeonStore.ts         # Zustand 核心状态管理（~560行）
 ├── data/
 │   ├── dungeons.json              # 8 副本定义（40 关卡，每关含 enemyPet 敌方宠物配置，副本含 bgImage / guardianLine / bossLine 剧情字段）
 │   ├── fables.json                # 13 篇 CSP 知识点寓言
