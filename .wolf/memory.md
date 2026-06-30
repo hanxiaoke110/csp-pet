@@ -1,3 +1,68 @@
+## 2026-06-30 — 智子试炼场 Task 10：实现 S/SS 战斗评级计算
+
+### 改动文件
+- `src-dungeon/utils/gameLogic.ts` — 新增 `calculateBattleRating` 函数
+
+### 新增内容
+- `calculateBattleRating(correctCount, totalQuestions, remainingHpRatio, usedSkillIds, roundCount, expectedRounds)`：
+  - 计算准确率 `accuracy = correctCount / totalQuestions`
+  - 计算本局使用过的独特技能数 `uniqueSkills = new Set(usedSkillIds).size`
+  - **SS**：准确率 100% + 剩余 HP ≥ 70% + 独特技能 ≥ 4 + 回合数 ≤ 预期回合
+  - **S**：准确率 ≥ 80% + 剩余 HP ≥ 50% + 独特技能 ≥ 3
+  - **A**：准确率 ≥ 70% + 剩余 HP ≥ 30%
+  - **B**：准确率 ≥ 60%
+  - 否则 **C**（类型保留 `D`，但当前函数不会返回 `D`）
+
+### 说明
+- 函数返回类型为已有的 `ClearRating`（`'D' | 'C' | 'B' | 'A' | 'S' | 'SS'`），与 `getStageClearRating` 保持一致
+- 未改动文件中其他现有函数
+
+---
+
+## 2026-06-30 — 智子试炼场 Task 9：随机金币奖励计算
+
+### 改动文件
+- `src-dungeon/utils/gameLogic.ts` — 新增 `randomGold` 与 `calculateBattleRewards` 函数
+
+### 函数说明
+- `randomGold(min, max)`：闭区间随机整数
+- `calculateBattleRewards(isWin, isFirstClear, isBoss, rating)`：
+  - 失败返回 `0` 与 `['失败，无奖励']`
+  - 胜利基础奖励 10–20 金币
+  - 首次通关额外 ×2（基于基础值）
+  - Boss 战额外 15–30 金币
+  - S/SS 评级分别额外奖励 10–15 / 15–20 金币
+
+---
+
+## 2026-06-30 — 智子试炼场 Task 8：为 8 副本 40 关配置敌方宠物
+
+### 改动文件
+- `src-dungeon/data/dungeons.json` — 为每个 stage 添加 `enemyPet` 字段
+
+### 配置规则
+- 副本 1（天机阁）：water / glitch-bot，等级 1–2，普通
+- 副本 2（数术殿）：earth / brassprout、df-maixiaoshu，等级 2–3，普通/稀有
+- 副本 3（灵码洞）：fire / boolet、boo，等级 3–4，普通/稀有
+- 副本 4（万木林）：earth/wind / capi、miga，等级 4–5，稀有
+- 副本 5（算法塔）：fire/wind / wukong、sky-dragon，等级 5–6，稀有
+- 副本 6（天算台）：water/light / ayaka、little-blue-star，等级 6–7，稀有/传说
+- 副本 7（真题战场）：mixed / itachi、sasuke，等级 7–8，稀有/传说
+- 副本 8（潜龙觉醒）：mixed / yuanshi-tianzun、liudao-ban，等级 8–10，传说
+
+### Boss 关（每副本第 5 关）
+- 等级比普通关高 1–2 级
+- 品级提升一级（普通→稀有，稀有→传说）
+- 添加 `maxHpBoost: 1.5`
+
+### 验证
+- `python3 -m json.tool src-dungeon/data/dungeons.json`：JSON 格式有效
+- 脚本校验所有 `speciesId` 存在于 `src/types/pet.ts` 的 `PETDEX_PETS` 或 `STARTER_PETS`
+- 所有 `element` 与 `tier` 枚举值合法
+- Commit SHA: `5ab7578cd036d881c8900dca5355f0dd16f52e26`
+
+---
+
 ## 2026-06-30 — 智子试炼场 Task 6：宠物手动升级与战斗属性初始化
 
 ### 改动文件

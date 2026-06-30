@@ -117,7 +117,7 @@ src-dungeon/
 ├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API/智子战斗等）
 ├── stores/dungeonStore.ts         # Zustand 核心状态管理（~270行）
 ├── data/
-│   ├── dungeons.json              # 8 副本定义（40 关卡）
+│   ├── dungeons.json              # 8 副本定义（40 关卡，每关含 enemyPet 敌方宠物配置）
 │   ├── fables.json                # 13 篇 CSP 知识点寓言
 │   ├── question-mapping.json      # 240 题 → 副本/关卡映射
 │   ├── schools.json               # 5 流派 × 8 段位
@@ -134,7 +134,7 @@ src-dungeon/
 │   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 4维度）
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
 ├── utils/
-│   ├── gameLogic.ts               # 数值公式（~200行）
+│   ├── gameLogic.ts               # 数值公式（~230行）
 │   ├── combatLogic.ts             # 智子试炼场：宠物战斗数值（元素克制/伤害/先手）
 │   ├── combatLogic.test.ts        # combatLogic 单元测试（vitest）
 │   ├── api.ts                     # API 客户端

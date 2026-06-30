@@ -137,6 +137,29 @@ export function calculateBossRating(scorePercent: number, timeSeconds: number): 
   return 'D';
 }
 
+// ── 智子试炼场战斗评级 ──
+export function calculateBattleRating(
+  correctCount: number,
+  totalQuestions: number,
+  remainingHpRatio: number,
+  usedSkillIds: string[],
+  roundCount: number,
+  expectedRounds: number
+): ClearRating {
+  const accuracy = totalQuestions > 0 ? correctCount / totalQuestions : 0;
+  const uniqueSkills = new Set(usedSkillIds).size;
+
+  if (accuracy === 1 && remainingHpRatio >= 0.7 && uniqueSkills >= 4 && roundCount <= expectedRounds) {
+    return 'SS';
+  }
+  if (accuracy >= 0.8 && remainingHpRatio >= 0.5 && uniqueSkills >= 3) {
+    return 'S';
+  }
+  if (accuracy >= 0.7 && remainingHpRatio >= 0.3) return 'A';
+  if (accuracy >= 0.6) return 'B';
+  return 'C';
+}
+
 // ── 徽章检测 ──
 export interface BadgeCheckContext {
   totalCorrect: number;
