@@ -117,7 +117,7 @@ src-dungeon/
 ├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API/智子战斗等）
 ├── stores/dungeonStore.ts         # Zustand 核心状态管理（~270行）
 ├── data/
-│   ├── dungeons.json              # 8 副本定义（40 关卡，每关含 enemyPet 敌方宠物配置）
+│   ├── dungeons.json              # 8 副本定义（40 关卡，每关含 enemyPet 敌方宠物配置，副本含 bgImage / guardianLine / bossLine 剧情字段）
 │   ├── fables.json                # 13 篇 CSP 知识点寓言
 │   ├── question-mapping.json      # 240 题 → 副本/关卡映射
 │   ├── schools.json               # 5 流派 × 8 段位

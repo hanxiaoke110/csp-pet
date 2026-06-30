@@ -1,4 +1,38 @@
-## 2026-06-30 — 智子试炼场 Task 12：扩展班级排行榜维度
+## 2026-06-30 — 智子试炼场 Task 13：副本背景图与剧情引入
+
+### 改动文件
+- `src-dungeon/data/dungeons.json` — 为 8 个副本添加 `bgImage`、重写 `guardianLine`、新增 `bossLine`、按任务命名规范更新 `bossName`
+- `src-dungeon/components/screens/DungeonEntrance.tsx` — 副本入口展示背景图、守关 NPC 对白、Boss 登场台词
+- `src-dungeon/types/dungeon.ts` — `DungeonDefinition` 新增可选 `bgImage` 与必填 `bossLine`
+
+### 新增字段
+- `bgImage?: string`：副本背景图路径，如 `/dungeon-bg/dungeon-01-bg.png`，缺省时用 `color` 渐变兜底
+- `bossLine: string`：Boss 登场台词，与 `guardianLine` 共同构成副本剧情引入
+
+### 剧情文案
+按「中二热血、适合中国中小学生」风格重写 8 副本 NPC 开场白与 Boss 登场台词：
+1. 天机阁（计算机基础）— 玄机子 / 蓝屏幽魂
+2. 数术殿（进制转换与编码）— 算无穷 / 进位魔·乱码君
+3. 灵码洞（C++ 程序设计基础）— 语法尊者 / 段错误·NULL 之影
+4. 万木林（数据结构）— 结构真君 / 越界虫·数组吞噬者
+5. 算法塔（算法）— 算法天尊 / 超时魔·TLE 君王
+6. 天算台（数学逻辑）— 数论圣者 / 概率云·WA 雷神
+7. 真题战场（CSP-J/S 历年真题）— 战场老兵·洛谷之魂 / 真题守护者·退役战神
+8. 潜龙觉醒（综合模拟大挑战）— 秘境守护者·第一代潜龙 / 综合大魔王·Bug 之源
+
+### UI 变更
+- `DungeonEntrance` 根节点使用 `bgImage` + 暗色渐变遮罩作为背景，无图时回退到主题色渐变
+- 新增 NPC 对白框（🛡️ 守关者）与 Boss 对白框（👹 Boss，红色边框）
+- 原有副本标题、描述、进度条、关卡列表、Boss 战入口全部保留
+
+### 验证
+- `npx tsc --noEmit`：通过
+- `npm run build:dungeon`：构建成功
+- 未创建实际 PNG 文件，背景图路径作为占位，等待后续美术素材
+
+---
+
+
 
 ### 改动文件
 - `src-dungeon/types/dungeon.ts` — 扩展 `LeaderboardType` 类型

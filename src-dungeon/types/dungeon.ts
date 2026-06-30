@@ -67,9 +67,11 @@ export interface DungeonDefinition {
   icon: string;                  // emoji
   description: string;           // 风味文字
   guardianName: string;          // 守关 NPC 名字
-  guardianLine: string;          // NPC 对话
+  guardianLine: string;          // NPC 开场白
   bossName: string;              // Boss 名字
+  bossLine: string;              // Boss 登场台词
   bossDescription: string;       // Boss 描述
+  bgImage?: string;              // 副本背景图路径（可选，缺省用 color 渐变）
   color: string;                 // 主题色
   requiredDungeon: string | null; // 前置副本 id，null=无需前置
   unlockLevel: number;           // 所需玩家等级

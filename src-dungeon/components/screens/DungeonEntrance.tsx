@@ -49,12 +49,19 @@ export default function DungeonEntrance() {
     navigate(`/battle/${dungeonId}/boss`);
   };
 
+  const bgStyle = dungeon.bgImage
+    ? {
+        backgroundImage: `linear-gradient(180deg, rgba(10,10,10,0.7), rgba(10,10,10,0.9)), url(${dungeon.bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }
+    : {
+        background: `linear-gradient(180deg, ${dungeon.color}11, #0a0a0a)`,
+      };
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: `linear-gradient(180deg, ${dungeon.color}11, #0a0a0a)`,
-      padding: '20px',
-    }}>
+    <div style={{ minHeight: '100vh', padding: '20px', ...bgStyle }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         {/* Back */}
         <button className="pixel-btn" onClick={() => navigate('/map')} style={{ marginBottom: '16px', fontSize: '12px' }}>
@@ -97,8 +104,14 @@ export default function DungeonEntrance() {
 
         {/* Guardian NPC */}
         <div className="dialog-box" style={{ marginBottom: '20px' }}>
-          <div className="dialog-speaker">{dungeon.guardianName}</div>
+          <div className="dialog-speaker">🛡️ {dungeon.guardianName}</div>
           <div className="dialog-text">{dungeon.guardianLine}</div>
+        </div>
+
+        {/* Boss dialog */}
+        <div className="dialog-box" style={{ marginBottom: '20px', borderColor: 'var(--hp-red)' }}>
+          <div className="dialog-speaker" style={{ color: 'var(--hp-red)' }}>👹 {dungeon.bossName}</div>
+          <div className="dialog-text">{dungeon.bossLine}</div>
         </div>
 
         {/* Stages */}
