@@ -19,6 +19,17 @@ const VALID_DUNGEON_IDS = new Set([
   'dungeon-01','dungeon-02','dungeon-03','dungeon-04',
   'dungeon-05','dungeon-06','dungeon-07','dungeon-08',
 ]);
+
+// 合法徽章白名单（sync 校验用，防止伪造 badge_id 刷徽章榜）
+const VALID_BADGE_IDS = new Set([
+  'first_blood','apprentice','marathon','sharpshooter','combo_master','unstoppable',
+  'perfectionist','speed_demon','time_lord','first_clear','dungeon_crawler','dungeon_master',
+  'all_clear','flawless','immortal_dragon','supreme_dragon','rising_star','dragon_warrior',
+  'dragon_lord','dragon_god','dedicated','devoted','immortal_dedication',
+]);
+
+// 单场战斗答题数上界（防刷答题统计）
+const MAX_BATTLE_QUESTIONS = 50;
 const BAD_WORDS = [
   '色情','裸体','裸聊','性交','淫秽','色诱','约炮','嫖娼','卖淫','色情片','成人','激情',
   '杀人','杀死','砍死','炸死','枪毙','自杀','割腕','跳楼','虐杀','打死','弄死','灭口',
@@ -1301,9 +1312,10 @@ export default {
                     dp.currentStageId||null, dp.bossDefeated?1:0, bestScore, bestRating).run();
           }
         }
-        // Sync badges
+        // Sync badges：仅接受合法 badge_id，防伪造 id 刷徽章榜
         if (body.badges && Array.isArray(body.badges)) {
           for (const bid of body.badges) {
+            if (typeof bid !== 'string' || !VALID_BADGE_IDS.has(bid)) continue;
             await db.prepare('INSERT OR IGNORE INTO dungeon_badges (device_hash, badge_id) VALUES (?,?)').bind(device_hash, bid).run();
           }
         }
@@ -1341,8 +1353,10 @@ export default {
         }
         const winFlag = is_win ? 1 : 0;
         const validRating = ['SS','S','A','B','C','D'].includes(rating) ? rating : 'D';
-        const answered = Math.max(0, parseInt(questions_answered) || 0);
-        const correct = Math.max(0, parseInt(correct_count) || 0);
+        // 答题统计加上界 + correct<=answered 校验，防刷答题统计
+        let answered = Math.max(0, Math.min(MAX_BATTLE_QUESTIONS, parseInt(questions_answered) || 0));
+        let correct = Math.max(0, Math.min(MAX_BATTLE_QUESTIONS, parseInt(correct_count) || 0));
+        if (correct > answered) correct = answered;
 
         // 服务端按固定规则计算奖励（不信任客户端 earned_reward）
         const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -1372,13 +1386,11 @@ export default {
 
         const actualReward = rewardInserted ? reward : 0;
 
-        // 更新玩家金币与答题统计：仅首次胜利发奖时加金币；统计始终累加但受速率限制保护
+        // 更新玩家金币与答题统计：仅首次胜利发奖时才加金币与累加统计。
+        // 失败/重复胜利不累加统计，彻底杜绝刷答题统计（受速率限制 + INSERT OR IGNORE 双重保护）。
         if (rewardInserted) {
           await db.prepare("UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
             .bind(actualReward, answered, correct, device_hash).run();
-        } else {
-          await db.prepare("UPDATE dungeon_players SET total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
-            .bind(answered, correct, device_hash).run();
         }
 
         // 更新副本通关状态（仅首次胜利推进）
