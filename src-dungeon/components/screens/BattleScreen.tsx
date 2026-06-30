@@ -14,10 +14,16 @@ import type { Question, DungeonDefinition, DungeonStage, SkillUsage } from '../.
 import type { OwnedPet, PetElement, PetTier } from '../../../src/types/pet';
 import { ELEMENT_EMOJI, getPetTier, getPetConfig, PET_BASE_STATS, TIER_MULTIPLIERS } from '../../../src/types/pet';
 import type { CombatPet } from '../../utils/combatLogic';
+import { loadWebPet } from '../../utils/webPet';
 
 // ─── Helpers ───
 
 function loadActivePetFromStorage(): OwnedPet {
+  // 优先读 Web 专属宠物（Web 端注册时赠送，localStorage 存储）
+  const webPet = loadWebPet();
+  if (webPet) return webPet;
+
+  // 桌面 App 同源场景：读桌宠数据
   try {
     const raw = localStorage.getItem('csp_pet_data');
     if (raw) {

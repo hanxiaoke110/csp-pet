@@ -332,7 +332,24 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       }).catch(() => {});
     });
 
-    // 5. 清空 battle，保留结算快照供 RewardScreen 展示（结算已落地，关窗不再丢失）
+    // 5. Web 端专属宠物经验写回（仅 Web 端生效，零后端写入；桌面端 webPet 为空自动跳过）
+    if (snapshot.expEarned > 0) {
+      import('../utils/webPet').then(({ loadWebPet, saveWebPet }) => {
+        const webPet = loadWebPet();
+        if (!webPet) return;
+        let level = webPet.level;
+        let remaining = (webPet.exp || 0) + snapshot.expEarned;
+        let expToNext = webPet.expToNext || 100;
+        while (remaining >= expToNext && level < 100) {
+          remaining -= expToNext;
+          level += 1;
+          expToNext = Math.floor(expToNext * 1.3);
+        }
+        saveWebPet({ ...webPet, level, exp: remaining, expToNext });
+      }).catch(() => {});
+    }
+
+    // 6. 清空 battle，保留结算快照供 RewardScreen 展示（结算已落地，关窗不再丢失）
     set({ battle: null, lastBattleResult: snapshot, currentBattleEarnsRewards: true });
     return snapshot;
   },
