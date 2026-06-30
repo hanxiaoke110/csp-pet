@@ -5,9 +5,9 @@ import type {
   BattleState, BadgeDefinition, DailyTasks, School,
 } from '../types/dungeon';
 import {
-  getLevelFromExp, calculateAnswerReward, rollCritical,
-  getRankTier, calculateBossRating, getStageClearRating, expToNextLevel,
-  RANK_POINTS_THRESHOLDS, FIRST_CLEAR_MULTIPLIER, DAILY_FIRST_WIN_MULTIPLIER,
+  getLevelFromExp,
+  getRankTier, expToNextLevel,
+  RANK_POINTS_THRESHOLDS, FIRST_CLEAR_MULTIPLIER,
   BOSS_CLEAR_EXP, BOSS_CLEAR_GOLD, STAGE_CLEAR_EXP, STAGE_CLEAR_GOLD,
 } from '../utils/gameLogic';
 
@@ -61,6 +61,8 @@ interface DungeonState {
 
   // Battle
   battle: BattleState | null;
+  // 上一场战斗的结算快照（finalizeBattle 写入，RewardScreen 读取展示）
+  lastBattleResult: BattleState | null;
   weakPoints: Record<string, number>;     // knowledgePoint → errorCount
   mistakeNotebook: string[];              // question IDs that were answered wrong
   healing: { knowledgePoint: string; requiredCorrect: number; currentCorrect: number } | null;
@@ -99,8 +101,10 @@ interface DungeonState {
   isDungeonUnlocked: (dungeonId: string) => boolean;
 
   // Battle
-  answerQuestion: (answerIndex: number) => { correct: boolean; finished: boolean; won: boolean };
   finishBattle: () => BattleState | null;
+  // 在战斗结束瞬间结算：发通关奖励 + 更新进度 + 首通标记 + 徽章 + 存档 + 服务端同步。
+  // 返回结算前的 battle 快照供 RewardScreen 展示（battle 随后被清空）。
+  finalizeBattle: (dungeonId: string, isBoss: boolean) => BattleState | null;
 
   // First-clear tracking
   _firstClears: Record<string, boolean>;
@@ -136,6 +140,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   earnedBadges: [],
   dailyTasks: { date: '', questionsDone: 0, stagesCleared: 0, bossesDefeated: 0, allDone: false, claimed: false },
   battle: null,
+  lastBattleResult: null,
   weakPoints: {},
   mistakeNotebook: [],
   healing: null,
@@ -245,104 +250,66 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     return reqProgress?.status === 'cleared';
   },
 
-  answerQuestion: (answerIndex) => {
-    const { battle, player } = get();
-    if (!battle || battle.isFinished) {
-      return { correct: false, finished: true, won: false };
-    }
-
-    const question = battle.questions[battle.currentQuestionIndex];
-    if (!question) {
-      return { correct: false, finished: true, won: false };
-    }
-
-    const correctIndex = question.correctIndex ?? 0;
-    const isCorrect = answerIndex === correctIndex;
-
-    // Update battle state
-    const newHp = isCorrect ? battle.hp : battle.hp - 1;
-    const newCombo = isCorrect ? battle.comboCount + 1 : 0;
-    const critical = isCorrect ? rollCritical() : false;
-
-    // Calculate rewards
-    const rewards = calculateAnswerReward(isCorrect, newCombo, critical);
-
-    // Record in player stats
-    get().recordAnswer(isCorrect);
-    get().addExp(rewards.exp);
-    if (get().currentBattleEarnsRewards) {
-      get().addGold(rewards.gold);
-    }
-    get().addRankPoints(isCorrect ? (critical ? 20 : 10) : 0);
-    get().checkRankUp();
-
-    const nextIndex = battle.currentQuestionIndex + 1;
-    const allAnswered = nextIndex >= battle.questions.length;
-    const hpDepleted = newHp <= 0;
-
-    // Check if battle is over
-    const totalQuestions = battle.questions.length;
-    const isWon = allAnswered && !hpDepleted &&
-      (battle.correctCount + (isCorrect ? 1 : 0)) >= Math.ceil(totalQuestions * 0.6);
-
-    const isFinished = allAnswered || hpDepleted;
-    const rating = isFinished
-      ? getStageClearRating(battle.correctCount + (isCorrect ? 1 : 0), totalQuestions, newHp)
-      : 'D';
-
-    const newBattle: BattleState = {
-      ...battle,
-      hp: newHp,
-      correctCount: battle.correctCount + (isCorrect ? 1 : 0),
-      wrongCount: battle.wrongCount + (isCorrect ? 0 : 1),
-      comboCount: newCombo,
-      currentQuestionIndex: nextIndex,
-      isFinished,
-      isWon,
-      expEarned: battle.expEarned + rewards.exp,
-      goldEarned: battle.goldEarned + (get().currentBattleEarnsRewards ? rewards.gold : 0),
-      rating,
-    };
-
-    set({ battle: newBattle });
-    return { correct: isCorrect, finished: isFinished, won: isWon };
-  },
-
-  finishBattle: () => {
+  finalizeBattle: (dungeonId, isBoss) => {
     const { battle } = get();
     if (!battle) return null;
+    // 保留结算前快照供 RewardScreen 展示
+    const snapshot = { ...battle };
 
-    // Award stage/boss clear bonuses
+    // 1. 通关奖励（首通倍率）
     if (battle.isWon) {
-      const isFirstClear = !get()._firstClears[battle.dungeonId];
+      const isFirstClear = !get()._firstClears[dungeonId];
       const mult = isFirstClear ? FIRST_CLEAR_MULTIPLIER : 1;
-      if (get().currentBattleEarnsRewards) {
-        if (battle.isBoss) {
-          get().addExp(BOSS_CLEAR_EXP * mult);
-          get().addGold(BOSS_CLEAR_GOLD * mult);
-        } else {
-          get().addExp(STAGE_CLEAR_EXP * mult);
-          get().addGold(STAGE_CLEAR_GOLD * mult);
-        }
+      const earnsRewards = get().currentBattleEarnsRewards;
+      if (isBoss) {
+        get().addExp(BOSS_CLEAR_EXP * mult);
+        if (earnsRewards) get().addGold(BOSS_CLEAR_GOLD * mult);
       } else {
-        // Practice mode: keep EXP but no gold
-        if (battle.isBoss) {
-          get().addExp(BOSS_CLEAR_EXP * mult);
-        } else {
-          get().addExp(STAGE_CLEAR_EXP * mult);
-        }
+        get().addExp(STAGE_CLEAR_EXP * mult);
+        if (earnsRewards) get().addGold(STAGE_CLEAR_GOLD * mult);
       }
       if (isFirstClear) {
-        set((s) => ({ _firstClears: { ...s._firstClears, [battle.dungeonId]: true } }));
+        set((s) => ({ _firstClears: { ...s._firstClears, [dungeonId]: true } }));
       }
     }
 
-    // Check rank up after battle rewards
+    // 2. 更新副本进度（在徽章检查之前，避免读 stale progress）
+    if (battle.isWon) {
+      set((s) => {
+        const progress = s.dungeonProgress;
+        const dp = progress.find(p => p.dungeonId === dungeonId);
+        if (!dp) return {};
+        const newProgress = progress.map(p => {
+          if (p.dungeonId !== dungeonId) return p;
+          if (isBoss) {
+            return { ...p, bossDefeated: true, bestScore: Math.max(p.bestScore, battle.correctCount), bestRating: battle.rating };
+          }
+          const newCompleted = Math.min(p.completedStages + 1, p.totalStages);
+          const allStagesDone = newCompleted >= p.totalStages;
+          const status: DungeonProgress['status'] = allStagesDone ? 'cleared' : 'in_progress';
+          return { ...p, completedStages: newCompleted, status };
+        });
+        return { dungeonProgress: newProgress };
+      });
+    }
+
+    // 3. 段位重算 + 徽章检查（此时 progress 已更新）
     get().checkRankUp();
+    get().checkAndAwardBadges();
     get().saveToLocalStorage();
 
-    // Sync to server (fire and forget)
-    import('../utils/api').then(({ syncProgress }) => {
+    // 4. 服务端同步：上报战斗结果（写 dungeon_attempts + 服务端发金币）+ 同步玩家信息
+    const stageIdForReport = battle.stageId;
+    const totalAnswered = battle.correctCount + battle.wrongCount;
+    import('../utils/api').then(({ reportBattle, syncProgress }) => {
+      reportBattle({
+        dungeon_id: dungeonId,
+        stage_id: stageIdForReport,
+        is_win: battle.isWon,
+        rating: battle.rating,
+        questions_answered: totalAnswered,
+        correct_count: battle.correctCount,
+      }).catch(() => {});
       const s = get();
       syncProgress({
         player_level: s.player.playerLevel, exp: s.player.exp, gold: s.player.gold,
@@ -359,6 +326,14 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       }).catch(() => {});
     });
 
+    // 5. 清空 battle，保留结算快照供 RewardScreen 展示（结算已落地，关窗不再丢失）
+    set({ battle: null, lastBattleResult: snapshot, currentBattleEarnsRewards: true });
+    return snapshot;
+  },
+
+  finishBattle: () => {
+    // 兼容旧调用：仅清空 battle。结算已由 finalizeBattle 完成。
+    const { battle } = get();
     set({ battle: null, currentBattleEarnsRewards: true });
     return battle;
   },

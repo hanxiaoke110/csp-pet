@@ -75,6 +75,25 @@ export async function syncProgress(playerData: Record<string, unknown>): Promise
   return apiCall('/api/dungeon/sync', 'POST', playerData);
 }
 
+// 战斗结束上报：服务端校验、写 dungeon_attempts、按固定规则发金币。前端不传 earned_reward（服务端自算）。
+export async function reportBattle(payload: {
+  dungeon_id: string;
+  stage_id: string;
+  is_win: boolean;
+  rating: string;
+  questions_answered: number;
+  correct_count: number;
+}): Promise<{ success: boolean; gold_added: number }> {
+  return apiCall('/api/dungeon/report-battle', 'POST', {
+    dungeon_id: payload.dungeon_id,
+    stage_id: payload.stage_id,
+    is_win: payload.is_win ? 1 : 0,
+    rating: payload.rating,
+    questions_answered: payload.questions_answered,
+    correct_count: payload.correct_count,
+  });
+}
+
 export async function getLeaderboard(
   scope: LeaderboardScope, type: LeaderboardType
 ): Promise<LeaderboardResponse> {

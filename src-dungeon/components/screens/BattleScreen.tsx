@@ -140,8 +140,12 @@ export default function BattleScreen() {
   const questionBank = store.questionBank;
 
   const dungeon = dungeons.find(d => d.id === dungeonId) as DungeonDefinition | undefined;
-  const stage = dungeon?.stages.find(s => s.id === stageId);
   const isBoss = !stageId || stageId === 'boss';
+  // Boss 战没有对应 stage 记录（dungeons.json 的 stages 用 dungeon-XX-stage-YY 命名），
+  // 因此 Boss 战构造一个虚拟 stage，让 generateEnemyPet 走 isBoss fallback 分支。
+  const stage: DungeonStage | undefined = isBoss
+    ? { id: 'boss', name: 'Boss 战', description: '', questionIds: [], requiredCorrect: 0, hp: 5 }
+    : dungeon?.stages.find(s => s.id === stageId);
   const isUnlocked = useDungeonStore(s => s.isDungeonUnlocked);
 
   // UI state
@@ -244,9 +248,7 @@ export default function BattleScreen() {
             rating: capRating,
           },
         });
-        store.saveToLocalStorage();
-        const newBadges = store.checkAndAwardBadges();
-        if (newBadges.length > 0) store.saveToLocalStorage();
+        store.finalizeBattle(dungeonId!, isBoss);
         setIsEnemyAttacking(false);
         setTimeout(() => {
           navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
@@ -269,6 +271,13 @@ export default function BattleScreen() {
             rating: 'D',
           },
         });
+        store.finalizeBattle(dungeonId!, isBoss);
+        setIsEnemyAttacking(false);
+        setTimeout(() => {
+          navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
+          store.setView('reward');
+        }, 800);
+        return;
       } else {
         // New player turn: reduce all cooldowns by 1
         const newSkillUsages = battle.skillUsages.map(su => ({
@@ -345,8 +354,8 @@ export default function BattleScreen() {
     store.addExp(rewards.exp);
     if (store.currentBattleEarnsRewards) {
       store.addGold(rewards.gold);
+      store.addRankPoints(isCorrect ? (critical ? 20 : 10) : 0);
     }
-    store.addRankPoints(isCorrect ? (critical ? 20 : 10) : 0);
     store.checkRankUp();
 
     // Damage calculation
@@ -388,7 +397,7 @@ export default function BattleScreen() {
     setLogMessages(prev => [
       ...prev.slice(-4),
       isCorrect
-        ? `✅ 回答正确！${skill?.name || '攻击'} 造成 ${damage} 点伤害${critical ? '（暴击！）' : ''}`
+        ? `✅ 回答正确！${skill?.name || '攻击'} 造成 ${damage} 点伤害${critical ? '（暴击！EXP 翻倍）' : ''}`
         : `❌ 回答错误，${skill?.name || '攻击'} 只造成 ${damage} 点伤害`,
     ]);
 
@@ -416,9 +425,8 @@ export default function BattleScreen() {
             usedSkillIds: newUsedSkillIds,
           },
         });
-        store.saveToLocalStorage();
-        const newBadges = store.checkAndAwardBadges();
-        if (newBadges.length > 0) store.saveToLocalStorage();
+        // 结算（发通关奖励 + 更新进度 + 徽章 + 存档 + 服务端同步）在跳转前完成，关窗不丢
+        store.finalizeBattle(dungeonId!, isBoss);
         navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
         store.setView('reward');
       } else {
@@ -451,9 +459,7 @@ export default function BattleScreen() {
               usedSkillIds: newUsedSkillIds,
             },
           });
-          store.saveToLocalStorage();
-          const newBadges = store.checkAndAwardBadges();
-          if (newBadges.length > 0) store.saveToLocalStorage();
+          store.finalizeBattle(dungeonId!, isBoss);
           setTimeout(() => {
             navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
             store.setView('reward');
@@ -661,10 +667,11 @@ export default function BattleScreen() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {(currentQuestion.options || []).map((option, idx) => {
+                const correctIdx = currentQuestion.correctIndex ?? 0;
                 const optionLabel = String.fromCharCode(65 + idx);
                 let optionClass = 'pixel-btn option-btn';
                 if (submitted) {
-                  if (idx === currentQuestion.correctIndex) optionClass += ' option-correct';
+                  if (idx === correctIdx) optionClass += ' option-correct';
                   else if (idx === selectedOption) optionClass += ' option-wrong';
                   else optionClass += ' option-dimmed';
                 } else if (idx === selectedOption) {
@@ -688,8 +695,8 @@ export default function BattleScreen() {
                     <span style={{
                       fontFamily: 'var(--pixel-font)',
                       fontSize: '12px',
-                      color: submitted && idx === currentQuestion.correctIndex ? 'var(--hp-green)' :
-                             submitted && idx === selectedOption && idx !== currentQuestion.correctIndex ? 'var(--hp-red)' :
+                      color: submitted && idx === correctIdx ? 'var(--hp-green)' :
+                             submitted && idx === selectedOption && idx !== correctIdx ? 'var(--hp-red)' :
                              'var(--text-dim)',
                       minWidth: '20px',
                     }}>
@@ -703,7 +710,7 @@ export default function BattleScreen() {
               })}
             </div>
 
-            {submitted && activeFable && selectedOption !== currentQuestion.correctIndex && (
+            {submitted && activeFable && selectedOption !== (currentQuestion.correctIndex ?? 0) && (
               <FableCard fable={activeFable} onClose={() => setActiveFable(null)} />
             )}
 
@@ -711,11 +718,11 @@ export default function BattleScreen() {
               <div style={{
                 marginTop: '16px',
                 padding: '12px',
-                background: selectedOption === currentQuestion.correctIndex ? 'rgba(0,255,65,0.08)' : 'rgba(255,51,51,0.08)',
-                border: `2px solid ${selectedOption === currentQuestion.correctIndex ? 'var(--hp-green)' : 'var(--hp-red)'}`,
+                background: selectedOption === (currentQuestion.correctIndex ?? 0) ? 'rgba(0,255,65,0.08)' : 'rgba(255,51,51,0.08)',
+                border: `2px solid ${selectedOption === (currentQuestion.correctIndex ?? 0) ? 'var(--hp-green)' : 'var(--hp-red)'}`,
               }}>
-                <strong style={{ color: selectedOption === currentQuestion.correctIndex ? 'var(--hp-green)' : 'var(--hp-red)' }}>
-                  {selectedOption === currentQuestion.correctIndex ? '✅ 回答正确！' : '❌ 回答错误'}
+                <strong style={{ color: selectedOption === (currentQuestion.correctIndex ?? 0) ? 'var(--hp-green)' : 'var(--hp-red)' }}>
+                  {selectedOption === (currentQuestion.correctIndex ?? 0) ? '✅ 回答正确！' : '❌ 回答错误'}
                 </strong>
                 <div style={{ marginTop: '6px', color: 'var(--text-dim)' }}>
                   {currentQuestion.explanation}

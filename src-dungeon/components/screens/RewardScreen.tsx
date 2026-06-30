@@ -1,12 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { getRankName } from '../../utils/gameLogic';
-import type { DungeonProgress } from '../../types/dungeon';
 
 export default function RewardScreen() {
   const { dungeonId } = useParams<{ dungeonId: string }>();
   const navigate = useNavigate();
-  const battle = useDungeonStore(s => s.battle);
+  const battle = useDungeonStore(s => s.lastBattleResult);
   const player = useDungeonStore(s => s.player);
   const dungeons = useDungeonStore(s => s.dungeons);
   const setView = useDungeonStore(s => s.setView);
@@ -37,31 +36,7 @@ export default function RewardScreen() {
   const rankName = getRankName(player.school, player.rankTier);
 
   const handleContinue = () => {
-    const store = useDungeonStore.getState();
-    // Save battle data before nullifying
-    const battleData = { ...store.battle };
-    store.finishBattle();
-    if (won) {
-      // Update dungeon progress
-      const progress = store.dungeonProgress;
-      const dp = progress.find(p => p.dungeonId === dungeonId);
-      if (dp) {
-        const newProgress = progress.map(p => {
-          if (p.dungeonId !== dungeonId) return p;
-          const isBossBattle = !battleData?.stageId || battleData?.stageId === 'boss';
-          if (isBossBattle) {
-            return { ...p, bossDefeated: true, bestScore: Math.max(p.bestScore, battleData?.correctCount || 0), bestRating: rating };
-          } else {
-            const newCompleted = Math.min(p.completedStages + 1, p.totalStages);
-            const allStagesDone = newCompleted >= p.totalStages;
-            const status: DungeonProgress['status'] = allStagesDone ? 'cleared' : 'in_progress';
-            return { ...p, completedStages: newCompleted, status };
-          }
-        });
-        useDungeonStore.setState({ dungeonProgress: newProgress });
-        useDungeonStore.getState().saveToLocalStorage();
-      }
-    }
+    // 结算与进度更新已在 finalizeBattle（战斗结束时）完成，这里只负责导航。
     navigate(`/dungeon/${dungeonId}`);
     setView('dungeon-preview');
   };

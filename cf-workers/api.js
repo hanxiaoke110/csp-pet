@@ -1251,8 +1251,8 @@ export default {
           const elapsed = Date.now() - new Date(lastSync.updated_at + 'Z').getTime();
           if (elapsed < 5000) return new Response(JSON.stringify({ success: true, synced: false, reason: 'too_frequent' }), { headers: cors });
         }
-        // 白名单：仅允许修改非敏感字段
-        const allowedFields = ['display_name', 'total_answered', 'total_correct', 'current_streak', 'max_streak', 'login_streak', 'last_login_date', 'school'];
+        // 白名单：仅允许修改昵称与流派；统计/经济/段位字段禁止直接写入（由 report-battle 累加）
+        const allowedFields = ['display_name', 'school'];
         const sets = [];
         const values = [];
         for (const f of allowedFields) {
@@ -1266,9 +1266,6 @@ export default {
               if (dn.length < 1 || dn.length > 8) return new Response(JSON.stringify({ error: '昵称需1-8字' }), { status: 400, headers: cors });
               sets.push('display_name=?');
               values.push(dn);
-            } else {
-              sets.push(`${f}=?`);
-              values.push(body[f]);
             }
           }
         }
@@ -1276,13 +1273,21 @@ export default {
           values.push(device_hash);
           await db.prepare(`UPDATE dungeon_players SET ${sets.join(',')}, updated_at=datetime('now') WHERE device_hash=?`).bind(...values).run();
         }
-        // Sync dungeon progress (non-economy)
+        // Sync dungeon progress：仅更新 best_score/best_rating（取较大值），通关状态由 report-battle 权威写入
         if (body.dungeon_progress && Array.isArray(body.dungeon_progress)) {
           for (const dp of body.dungeon_progress) {
-            await db.prepare(`INSERT OR REPLACE INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
-              VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))`)
-              .bind(device_hash, dp.dungeonId, dp.status, dp.completedStages||0, dp.totalStages||5,
-                    dp.currentStageId||null, dp.bossDefeated?1:0, dp.bestScore||0, dp.bestRating||'D').run();
+            const existing = await db.prepare('SELECT best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
+            const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
+            const newScore = dp.bestScore || 0;
+            const newRating = dp.bestRating || 'D';
+            const bestScore = Math.max(existing?.best_score || 0, newScore);
+            const bestRating = (!existing?.best_rating || (ratingOrder[newRating]||0) > (ratingOrder[existing.best_rating]||0))
+              ? newRating : (existing?.best_rating || 'D');
+            await db.prepare(`INSERT INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
+              VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))
+              ON CONFLICT(device_hash, dungeon_id) DO UPDATE SET best_score=excluded.best_score, best_rating=excluded.best_rating, updated_at=datetime('now')`)
+              .bind(device_hash, dp.dungeonId, 'locked', dp.completedStages||0, dp.totalStages||5,
+                    dp.currentStageId||null, dp.bossDefeated?1:0, bestScore, bestRating).run();
           }
         }
         // Sync badges
@@ -1295,10 +1300,10 @@ export default {
       }
 
       // ── POST /api/dungeon/report-battle ──
-      // 战斗结束后上报：服务端校验、写 dungeon_attempts、赢时由服务端加金币。
+      // 战斗结束后上报：服务端校验、写 dungeon_attempts、赢时由服务端按固定规则计算金币（不信任客户端金额）。
       if (path === '/api/dungeon/report-battle' && request.method === 'POST') {
         const body = await request.json();
-        const { device_hash, class_code, dungeon_id, stage_id, is_win, rating, earned_reward, questions_answered, correct_count } = body;
+        const { device_hash, class_code, dungeon_id, stage_id, is_win, rating, questions_answered, correct_count } = body;
         if (!device_hash || !class_code || !dungeon_id || !stage_id) {
           return new Response(JSON.stringify({ error: '缺少必要参数' }), { status: 400, headers: cors });
         }
@@ -1307,16 +1312,43 @@ export default {
         if (!player) {
           return new Response(JSON.stringify({ error: '设备与班级不匹配' }), { status: 403, headers: cors });
         }
+        // 速率限制：同设备 10s 内只允许一次战斗上报，防重放刷金币
+        if (!await checkRateLimit(db, `rb:${device_hash}`, 1, 10)) {
+          return new Response(JSON.stringify({ error: '请求过于频繁' }), { status: 429, headers: cors });
+        }
+        // 校验 stage_id 格式：dungeon-XX-stage-YY 或 'boss'，且 dungeon_id 与 stage 前缀匹配
+        const sid = String(stage_id);
+        const isBossStage = sid === 'boss';
+        const stageMatch = sid === 'boss' || sid.startsWith(dungeon_id + '-stage-');
+        if (!stageMatch) {
+          return new Response(JSON.stringify({ error: '关卡与副本不匹配' }), { status: 400, headers: cors });
+        }
         const winFlag = is_win ? 1 : 0;
-        // 仅当胜利时按服务端 earned_reward 数值加金币；客户端不能任意修改金币。
-        const reward = winFlag ? Math.max(0, parseInt(earned_reward) || 0) : 0;
+        const validRating = ['SS','S','A','B','C','D'].includes(rating) ? rating : 'D';
         const answered = Math.max(0, parseInt(questions_answered) || 0);
         const correct = Math.max(0, parseInt(correct_count) || 0);
+
+        // 防重放：胜利时检查本场是否已发过奖励（同 device+dungeon+stage 的胜利记录）
+        const existingWinRow = await db.prepare("SELECT id, earned_reward FROM dungeon_attempts WHERE device_hash=? AND dungeon_id=? AND stage_id=? AND is_win=1 ORDER BY id DESC LIMIT 1")
+          .bind(device_hash, dungeon_id, sid).first();
+        const alreadyRewarded = existingWinRow && existingWinRow.earned_reward > 0;
+
+        // 服务端按固定规则计算奖励（不信任客户端 earned_reward）
+        let reward = 0;
+        if (winFlag && !alreadyRewarded) {
+          const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+          reward = rand(10, 20); // 胜利基础
+          if (isBossStage) reward += rand(15, 30); // Boss 额外
+          if (validRating === 'S') reward += rand(10, 15);
+          else if (validRating === 'SS') reward += rand(15, 20);
+        }
+
         // 写战斗记录
         await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
           VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
-          .bind(device_hash, dungeon_id, stage_id, correct, answered, rating || 'D', winFlag, reward).run();
-        // 更新玩家金币与答题统计
+          .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+
+        // 更新玩家金币与答题统计（仅胜利且未重复发奖时加金币；统计始终累加但受速率限制保护）
         if (winFlag && reward > 0) {
           await db.prepare("UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
             .bind(reward, answered, correct, device_hash).run();
@@ -1324,24 +1356,22 @@ export default {
           await db.prepare("UPDATE dungeon_players SET total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
             .bind(answered, correct, device_hash).run();
         }
-        // 更新副本通关状态（避免重复计数同一关卡胜利）
-        const existingWin = await db.prepare("SELECT COUNT(*) as c FROM dungeon_attempts WHERE device_hash=? AND dungeon_id=? AND stage_id=? AND is_win=1").bind(device_hash, dungeon_id, stage_id).first();
-        const isNewWin = winFlag && (!existingWin || existingWin.c === 0);
-        if (isNewWin) {
+
+        // 更新副本通关状态（仅首次胜利推进）
+        if (winFlag && !existingWinRow) {
           const progress = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dungeon_id).first();
           if (progress) {
             const totalStages = progress.total_stages || 5;
-            const newCompleted = Math.min(totalStages, (progress.completed_stages || 0) + 1);
-            const isBoss = String(stage_id).toLowerCase().includes('boss');
-            const bossDefeated = isBoss ? 1 : (progress.boss_defeated || 0);
+            const newCompleted = isBossStage ? totalStages : Math.min(totalStages, (progress.completed_stages || 0) + 1);
+            const bossDefeated = isBossStage ? 1 : (progress.boss_defeated || 0);
             const status = (bossDefeated || newCompleted >= totalStages) ? 'cleared' : 'unlocked';
             const score = correct * 10;
             const bestScore = Math.max(progress.best_score || 0, score);
             const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
-            const bestRating = rating && (!progress.best_rating || (ratingOrder[rating]||0) > (ratingOrder[progress.best_rating]||0))
-              ? rating : (progress.best_rating || 'D');
+            const bestRating = (!progress.best_rating || (ratingOrder[validRating]||0) > (ratingOrder[progress.best_rating]||0))
+              ? validRating : (progress.best_rating || 'D');
             await db.prepare(`UPDATE dungeon_progress SET status=?, completed_stages=?, current_stage_id=?, boss_defeated=?, best_score=?, best_rating=?, updated_at=datetime('now') WHERE device_hash=? AND dungeon_id=?`)
-              .bind(status, newCompleted, stage_id, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
+              .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
           }
         }
         return new Response(JSON.stringify({ success: true, gold_added: reward }), { headers: cors });
