@@ -1,3 +1,33 @@
+## 2026-06-30 — 智子试炼场 Task 12：扩展班级排行榜维度
+
+### 改动文件
+- `src-dungeon/types/dungeon.ts` — 扩展 `LeaderboardType` 类型
+- `cf-workers/api.js` — 新增排行榜类型校验与 4 条 SQL 查询分支，补 `dungeon_attempts.is_win` 字段
+- `src-dungeon/components/screens/LeaderboardScreen.tsx` — 新增 4 个排行榜 Tab 与对应数值显示
+
+### 新增内容
+- `LeaderboardType` 新增 `'wins' | 'ss_count' | 'progress' | 'warrior'`
+- Worker `/api/dungeon/leaderboard`：
+  - 增加 `VALID_TYPES` 校验，非法类型返回 400
+  - `wins`：近 30 天 `is_win = 1` 的尝试次数
+  - `ss_count`：近 30 天 `rating = 'SS'` 的尝试次数
+  - `progress`：已通关（`status='cleared'`）的不同副本数
+  - `warrior`：近 30 天加权积分（胜场×10 + SS×30 + S×15）
+  - 新类型同时支持 `class` 与 `global` 作用域；class 作用域通过 `JOIN dungeon_players` 过滤班级码
+- `ensureSchema`：
+  - `dungeon_attempts` 建表语句增加 `is_win INTEGER DEFAULT 0`
+  - 增加 `ALTER TABLE dungeon_attempts ADD COLUMN is_win INTEGER DEFAULT 0` 迁移
+
+### 前端展示
+- LeaderboardScreen tabs 扩展为 8 个：战力/连击/征服/成就/试炼胜场/无伤通关/征服进度/班级战神
+- `getTypeValue` 为新类型返回 `value` 字段的展示文本
+
+### 验证
+- `node --check cf-workers/api.js`：通过
+- 目标文件单独类型检查无新增错误（src-dungeon 既有类型错误未处理）
+
+---
+
 ## 2026-06-30 — 智子试炼场 Task 10：实现 S/SS 战斗评级计算
 
 ### 改动文件

@@ -131,7 +131,7 @@ src-dungeon/
 │   │   ├── BattleScreen.tsx       # 核心战斗（智子试炼场：宠物回合制答题驱动）
 │   │   ├── SkillTooltip.tsx       # 技能悬浮提示
 │   │   ├── RewardScreen.tsx       # 结算画面（EXP/金币/评级）
-│   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 4维度）
+│   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 8维度）
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
 ├── utils/
 │   ├── gameLogic.ts               # 数值公式（~230行）

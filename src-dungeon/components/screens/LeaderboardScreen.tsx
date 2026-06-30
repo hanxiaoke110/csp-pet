@@ -31,6 +31,10 @@ export default function LeaderboardScreen() {
     { key: 'streak', label: '连击榜', icon: '⚡' },
     { key: 'conquest', label: '征服榜', icon: '🎯' },
     { key: 'badge', label: '成就榜', icon: '🏅' },
+    { key: 'wins', label: '试炼胜场', icon: '⚔️' },
+    { key: 'ss_count', label: '无伤通关', icon: '🛡️' },
+    { key: 'progress', label: '征服进度', icon: '🗺️' },
+    { key: 'warrior', label: '班级战神', icon: '👑' },
   ];
 
   const getTypeValue = (entry: LeaderboardEntry, t: LeaderboardType): string => {
@@ -39,6 +43,10 @@ export default function LeaderboardScreen() {
       case 'streak': return `${(entry as any).max_streak || 0} 连击`;
       case 'conquest': return `${entry.rankTier}段`;
       case 'badge': return `${(entry as any).total_correct || 0} 题`;
+      case 'wins': return `${entry.value || 0} 胜`;
+      case 'ss_count': return `${entry.value || 0} 次`;
+      case 'progress': return `${entry.value || 0} 副本`;
+      case 'warrior': return `${entry.value || 0} 分`;
       default: return '';
     }
   };

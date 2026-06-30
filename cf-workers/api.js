@@ -148,8 +148,9 @@ async function ensureSchema(db) {
   // ── Dungeon tables ──
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, stage_id TEXT NOT NULL, correct_count INTEGER DEFAULT 0, total_count INTEGER DEFAULT 0, rating TEXT DEFAULT 'D', earned_reward INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, stage_id TEXT NOT NULL, correct_count INTEGER DEFAULT 0, total_count INTEGER DEFAULT 0, rating TEXT DEFAULT 'D', is_win INTEGER DEFAULT 0, earned_reward INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN earned_reward INTEGER DEFAULT 0`); } catch {}
+  try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN is_win INTEGER DEFAULT 0`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
   // Performance indexes
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_device_status ON wishes(device_hash, status)`); } catch {}
@@ -1282,18 +1283,53 @@ export default {
         const type = url.searchParams.get('type') || 'power';
         const cc = url.searchParams.get('class_code') || '';
         const dh = url.searchParams.get('device_hash') || '';
-        let orderBy = 'rank_points DESC';
-        if (type === 'streak') orderBy = 'max_streak DESC';
-        else if (type === 'conquest') orderBy = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') DESC';
-        else if (type === 'badge') orderBy = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) DESC';
-        let query, params;
-        if (scope === 'class' && cc) {
-          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
-          params = [cc];
-        } else {
-          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;
-          params = [];
+        const VALID_TYPES = ['power', 'streak', 'conquest', 'badge', 'wins', 'ss_count', 'progress', 'warrior'];
+        if (!VALID_TYPES.includes(type)) {
+          return new Response(JSON.stringify({ error: '无效的排行榜类型' }), { status: 400, headers: cors });
         }
+
+        let query, params;
+        const classFilter = (scope === 'class' && cc) ? 'AND p.class_code = ?' : '';
+
+        if (type === 'wins' || type === 'ss_count' || type === 'warrior') {
+          const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString();
+          let whereExtra = '';
+          if (type === 'wins') whereExtra = 'AND a.is_win = 1';
+          else if (type === 'ss_count') whereExtra = "AND a.rating = 'SS'";
+          const selectValue = type === 'warrior'
+            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.rating = 'S' THEN 1 END) * 15) as value"
+            : 'COUNT(*) as value';
+          query = `SELECT a.device_hash, p.display_name, p.school, p.rank_tier, p.class_code, ${selectValue}
+                   FROM dungeon_attempts a
+                   JOIN dungeon_players p ON a.device_hash = p.device_hash
+                   WHERE p.status = 'active' ${classFilter} ${whereExtra} AND a.created_at >= ?
+                   GROUP BY a.device_hash
+                   ORDER BY value DESC
+                   LIMIT 50`;
+          params = (scope === 'class' && cc) ? [cc, thirtyDaysAgo] : [thirtyDaysAgo];
+        } else if (type === 'progress') {
+          query = `SELECT dp.device_hash, p.display_name, p.school, p.rank_tier, p.class_code, COUNT(DISTINCT dp.dungeon_id) as value
+                   FROM dungeon_progress dp
+                   JOIN dungeon_players p ON dp.device_hash = p.device_hash
+                   WHERE p.status = 'active' ${classFilter} AND dp.status = 'cleared'
+                   GROUP BY dp.device_hash
+                   ORDER BY value DESC
+                   LIMIT 50`;
+          params = (scope === 'class' && cc) ? [cc] : [];
+        } else {
+          let orderBy = 'rank_points DESC';
+          if (type === 'streak') orderBy = 'max_streak DESC';
+          else if (type === 'conquest') orderBy = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') DESC';
+          else if (type === 'badge') orderBy = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) DESC';
+          if (scope === 'class' && cc) {
+            query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
+            params = [cc];
+          } else {
+            query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;
+            params = [];
+          }
+        }
+
         const entries = await db.prepare(query).bind(...params).all();
         // Find player rank
         let playerEntry = null;

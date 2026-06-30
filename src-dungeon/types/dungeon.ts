@@ -147,7 +147,7 @@ export interface BadgeDefinition {
 }
 
 // ── 排行榜 ──
-export type LeaderboardType = 'power' | 'streak' | 'conquest' | 'badge';
+export type LeaderboardType = 'power' | 'streak' | 'conquest' | 'badge' | 'wins' | 'ss_count' | 'progress' | 'warrior';
 export type LeaderboardScope = 'class' | 'global';
 
 export interface LeaderboardEntry {
