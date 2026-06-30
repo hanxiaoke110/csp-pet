@@ -6,6 +6,8 @@ import { pickQuestionsByTag } from '../../utils/questionLoader';
 import { calculateDamage, determineFirstAttacker, calculateStats } from '../../utils/combatLogic';
 import { calculateAnswerReward, rollCritical, getRankName, getStageClearRating } from '../../utils/gameLogic';
 import { SkillTooltip } from './SkillTooltip';
+import { TutorialOverlay } from './TutorialOverlay';
+import { ElementGuide } from './ElementGuide';
 import FableCard from '../shared/FableCard';
 import fables from '../../data/fables.json';
 import type { Question, DungeonDefinition, DungeonStage, SkillUsage } from '../../types/dungeon';
@@ -137,6 +139,8 @@ export default function BattleScreen() {
   const [logMessages, setLogMessages] = useState<string[]>([]);
   const [isEnemyAttacking, setIsEnemyAttacking] = useState(false);
   const [hoveredSkillId, setHoveredSkillId] = useState<string | null>(null);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [showElementGuide, setShowElementGuide] = useState(false);
 
   // Derived combat pets
   const [playerPet, enemyPet] = useMemo(() => {
@@ -236,7 +240,18 @@ export default function BattleScreen() {
     return () => clearTimeout(timer);
   }, [battle?.currentTurn, battle?.isFinished, enemyPet, playerPet, dungeon, isBoss]);
 
-  const handleSkillClick = useCallback((skillId: string) => {
+  const handleCloseTutorial = useCallback(() => {
+    setShowTutorial(false);
+    localStorage.setItem('zhizi_tutorial_seen', 'true');
+  }, []);
+
+  useEffect(() => {
+    if (!battle || battle.isFinished) return;
+    const seen = localStorage.getItem('zhizi_tutorial_seen') === 'true';
+    if (!seen) {
+      setShowTutorial(true);
+    }
+  }, [battle?.dungeonId, battle?.stageId]);
     if (!battle || battle.currentTurn !== 'player' || currentQuestion) return;
     const skill = getSkillById(skillId);
     if (!skill) return;
@@ -419,10 +434,17 @@ export default function BattleScreen() {
             {battle.comboCount}
           </span>
         </div>
+        <button
+          className="pixel-btn"
+          onClick={() => setShowElementGuide(true)}
+          style={{ padding: '6px 10px', fontSize: '11px', marginLeft: 'auto' }}
+        >
+          📖 元素手册
+        </button>
       </div>
 
       {/* Battle area */}
-      <div style={{ flex: 1, padding: '20px', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
+      <div className="battle-arena" style={{ flex: 1, padding: '20px', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
         {/* First-round dialog */}
         {battle.roundCount === 1 && (
           <div className="dialog-box" style={{ marginBottom: '20px', animation: 'fadeIn 0.5s ease' }}>
@@ -494,7 +516,7 @@ export default function BattleScreen() {
 
         {/* Question panel */}
         {currentQuestion && (
-          <div className={`pixel-card ${shakeClass}`} style={{
+          <div className={`pixel-card question-panel ${shakeClass}`} style={{
             borderColor: showEffect === 'correct' ? 'var(--hp-green)' :
                          showEffect === 'critical' ? 'var(--crit-yellow)' :
                          showEffect === 'wrong' ? 'var(--hp-red)' : 'var(--border-pixel)',
@@ -608,7 +630,7 @@ export default function BattleScreen() {
 
         {/* Skill buttons */}
         {!currentQuestion && battle.currentTurn === 'player' && !battle.isFinished && (
-          <div>
+          <div className="skill-bar">
             <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginBottom: '10px' }}>
               选择一个技能（答对题目即可完整释放，答错也有 60% 伤害）：
             </div>
@@ -722,6 +744,8 @@ export default function BattleScreen() {
           opacity: 0.5;
         }
       `}</style>
+      {showTutorial && <TutorialOverlay onClose={handleCloseTutorial} />}
+      {showElementGuide && <ElementGuide onClose={() => setShowElementGuide(false)} />}
     </div>
   );
 }

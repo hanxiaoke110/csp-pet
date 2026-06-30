@@ -15,6 +15,15 @@ export default function RewardScreen() {
   const expEarned = battle?.expEarned ?? 0;
   const goldEarned = battle?.goldEarned ?? 0;
   const rating = battle?.rating ?? 'D';
+  const totalAnswered = (battle?.correctCount ?? 0) + (battle?.wrongCount ?? 0);
+  const accuracy = totalAnswered > 0
+    ? Math.round((battle.correctCount / totalAnswered) * 100)
+    : 0;
+  const remainingHpRatio = battle?.maxHp > 0
+    ? Math.round((battle.hp / battle.maxHp) * 100)
+    : 0;
+  const uniqueSkillCount = battle?.usedSkillIds?.length ?? 0;
+  const roundCount = battle?.roundCount ?? 0;
   const rankName = getRankName(player.school, player.rankTier);
 
   const handleContinue = () => {
@@ -106,6 +115,21 @@ export default function RewardScreen() {
                        rating === 'A' ? 'var(--exp-blue)' : 'var(--text-light)',
                 fontFamily: 'var(--pixel-font)', fontSize: '14px',
               }}>{rating}</strong>
+            </div>
+
+            {/* Rating breakdown */}
+            <div className="rating-breakdown" style={{
+              background: 'rgba(0,0,0,0.2)',
+              border: '2px solid var(--border-pixel)',
+              padding: '12px',
+              marginBottom: '16px',
+              textAlign: 'left',
+              fontSize: '12px',
+            }}>
+              <p>正确率：{accuracy}%</p>
+              <p>剩余 HP：{remainingHpRatio}%</p>
+              <p>使用技能种类：{uniqueSkillCount}/4</p>
+              <p>战斗回合：{roundCount}</p>
             </div>
 
             {/* Progress */}
