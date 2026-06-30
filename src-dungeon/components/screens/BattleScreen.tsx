@@ -455,10 +455,8 @@ export default function BattleScreen() {
             },
           });
           store.finalizeBattle(dungeonId!, isBoss);
-          setTimeout(() => {
-            navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
-            store.setView('reward');
-          }, 800);
+          navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
+          store.setView('reward');
           return;
         }
 

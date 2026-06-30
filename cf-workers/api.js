@@ -1284,10 +1284,13 @@ export default {
         // Sync dungeon progress：仅更新 best_score/best_rating（取较大值），通关状态由 report-battle 权威写入
         if (body.dungeon_progress && Array.isArray(body.dungeon_progress)) {
           for (const dp of body.dungeon_progress) {
+            // 白名单校验：仅接受合法副本 id，防伪造 dungeonId 写脏数据
+            if (!dp.dungeonId || !VALID_DUNGEON_IDS.has(dp.dungeonId)) continue;
             const existing = await db.prepare('SELECT best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
             const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
-            const newScore = dp.bestScore || 0;
-            const newRating = dp.bestRating || 'D';
+            // bestScore 设上界（单场最多答对题数×10），防客户端注水
+            const newScore = Math.min(10000, Math.max(0, dp.bestScore || 0));
+            const newRating = ['SS','S','A','B','C','D'].includes(dp.bestRating) ? dp.bestRating : 'D';
             const bestScore = Math.max(existing?.best_score || 0, newScore);
             const bestRating = (!existing?.best_rating || (ratingOrder[newRating]||0) > (ratingOrder[existing.best_rating]||0))
               ? newRating : (existing?.best_rating || 'D');
@@ -1328,10 +1331,11 @@ export default {
         if (!VALID_DUNGEON_IDS.has(dungeon_id)) {
           return new Response(JSON.stringify({ error: '无效的副本' }), { status: 400, headers: cors });
         }
-        // 校验 stage_id 格式：dungeon-XX-stage-YY 或 'boss'，且 dungeon_id 与 stage 前缀匹配
+        // 校验 stage_id：必须为 'boss' 或 dungeon-XX-stage-0[1-5]（严格枚举，防伪造后缀绕过唯一索引）
         const sid = String(stage_id);
         const isBossStage = sid === 'boss';
-        const stageMatch = sid === 'boss' || sid.startsWith(dungeon_id + '-stage-');
+        const stageRegex = new RegExp('^' + dungeon_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '-stage-0[1-5]$');
+        const stageMatch = sid === 'boss' || stageRegex.test(sid);
         if (!stageMatch) {
           return new Response(JSON.stringify({ error: '关卡与副本不匹配' }), { status: 400, headers: cors });
         }
@@ -1350,21 +1354,20 @@ export default {
           else if (validRating === 'SS') reward += rand(15, 20);
         }
 
-        // 原子防重放：胜利时用唯一索引兜底。若同 device+dungeon+stage 已有发奖记录，
-        // 此次 INSERT 因违反 idx_dungeon_attempts_win 失败 → meta.changes=0 → 不发金币、不计数。
-        // 失败时（is_win=0）无唯一约束，正常记录。
-        let rewardInserted = true;
+        // 原子防重放：胜利时用 INSERT OR IGNORE + 部分唯一索引兜底。
+        // 若同 device+dungeon+stage 已有发奖记录，INSERT OR IGNORE 静默跳过 → meta.changes=0 → 不发金币。
+        // 失败时（is_win=0, earned_reward=0）不触发唯一索引，正常记录。
+        let rewardInserted = false;
         if (winFlag && reward > 0) {
-          const ins = await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+          const ins = await db.prepare(`INSERT OR IGNORE INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
             VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
             .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
-          rewardInserted = ins.meta && ins.meta.changes > 0;
+          rewardInserted = !!(ins.meta && ins.meta.changes > 0);
         } else {
           // 失败或 reward=0：直接写记录（不触发唯一索引，因 earned_reward=0）
           await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
             VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
             .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
-          rewardInserted = false;
         }
 
         const actualReward = rewardInserted ? reward : 0;

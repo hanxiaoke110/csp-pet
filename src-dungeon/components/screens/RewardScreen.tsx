@@ -12,8 +12,8 @@ export default function RewardScreen() {
 
   const dungeon = dungeons.find(d => d.id === dungeonId);
 
-  if (!battle) {
-    // 无结算快照（刷新/直链进入）：提供返回入口，避免卡死
+  // 无结算快照，或快照与当前 dungeonId 不符（陈旧快照/回退导航）：提供返回入口，避免卡死或误展示
+  if (!battle || battle.dungeonId !== dungeonId) {
     return (
       <div className="loading-screen" style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
         <div className="loading-title">⚔️ 没有可结算的战斗</div>
@@ -44,7 +44,8 @@ export default function RewardScreen() {
   const rankName = getRankName(player.school, player.rankTier);
 
   const handleContinue = () => {
-    // 结算与进度更新已在 finalizeBattle（战斗结束时）完成，这里只负责导航。
+    // 结算与进度更新已在 finalizeBattle（战斗结束时）完成，这里清空快照并导航。
+    useDungeonStore.setState({ lastBattleResult: null });
     navigate(`/dungeon/${dungeonId}`);
     setView('dungeon-preview');
   };
