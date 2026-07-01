@@ -54,7 +54,7 @@ export default function HealingScreen() {
       const shuffled = [...matchedQs].sort(() => Math.random() - 0.5).slice(0, 5);
       setQuestions(shuffled.length > 0 ? shuffled : questionBank.slice(0, 3));
     }
-  }, [healing, questionBank.length]);
+  }, [healing, questionBank.length, questionMapping]);
 
   if (!healing) return null;
 
@@ -212,8 +212,15 @@ export default function HealingScreen() {
         )}
 
         {!healed && !currentQuestion && (
-          <div className="loading-screen">
+          <div className="loading-screen" style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
             <div className="loading-title">🩹 准备疗伤题...</div>
+            <button
+              className="pixel-btn"
+              onClick={() => { store.clearHealing(); navigate('/map'); }}
+              style={{ fontSize: '14px' }}
+            >
+              返回地图 →
+            </button>
           </div>
         )}
       </div>

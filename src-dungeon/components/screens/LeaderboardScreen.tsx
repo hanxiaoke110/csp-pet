@@ -17,14 +17,28 @@ export default function LeaderboardScreen() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [playerEntry, setPlayerEntry] = useState<LeaderboardEntry | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
+    // 班级榜需要 class_code，未注册/未绑班时提示而非静默吞错
+    if (scope === 'class' && !player.classCode) {
+      setError('请先注册并加入班级后查看班级榜');
+      setEntries([]);
+      setPlayerEntry(null);
+      setLoading(false);
+      return;
+    }
     getLeaderboard(scope, type).then(resp => {
       setEntries(resp.entries || []);
       setPlayerEntry(resp.playerEntry);
-    }).catch(() => {}).finally(() => setLoading(false));
-  }, [scope, type]);
+    }).catch((e) => {
+      setError(e instanceof Error ? e.message : '排行榜加载失败，请稍后重试');
+      setEntries([]);
+      setPlayerEntry(null);
+    }).finally(() => setLoading(false));
+  }, [scope, type, player.classCode]);
 
   const tabs: { key: LeaderboardType; label: string; icon: string }[] = [
     { key: 'power', label: '战力榜', icon: '🏆' },
@@ -196,7 +210,12 @@ export default function LeaderboardScreen() {
                 </div>
               );
             })}
-            {entries.length === 0 && (
+            {error && (
+              <div style={{ textAlign: 'center', padding: '40px', color: 'var(--hp-red)', fontSize: '13px' }}>
+                ⚠️ {error}
+              </div>
+            )}
+            {!error && entries.length === 0 && (
               <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-dim)' }}>
                 暂无排行数据
               </div>

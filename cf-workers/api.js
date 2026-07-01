@@ -1374,8 +1374,8 @@ export default {
         if (!player) {
           return new Response(JSON.stringify({ error: '设备与班级不匹配' }), { status: 403, headers: cors });
         }
-        // 速率限制：同设备 10s 内只允许一次战斗上报，防重放刷金币
-        if (!await checkRateLimit(db, `rb:${device_hash}`, 1, 10)) {
+        // 速率限制：同设备 3s 内只允许一次战斗上报（防刷；3s 间隔允许合法连闯多关，防重放由唯一索引兜底）
+        if (!await checkRateLimit(db, `rb:${device_hash}`, 1, 3)) {
           return new Response(JSON.stringify({ error: '请求过于频繁' }), { status: 429, headers: cors });
         }
         // 校验 dungeon_id 属于合法副本白名单（防伪造 dungeon_id 刷金币）

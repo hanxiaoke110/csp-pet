@@ -198,6 +198,7 @@ export default function RegisterScreen() {
   }
 
   // ── Step 2: Choose school ──
+  if (step === 'school') {
   return (
     <div style={{
       minHeight: '100vh', background: 'linear-gradient(180deg, #0a0015, #1a0a2e, #0a0a0a)',
@@ -273,6 +274,7 @@ export default function RegisterScreen() {
       </div>
     </div>
   );
+  }
 
   // ── Step 3: Choose starter pet ──
   return (

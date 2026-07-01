@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById } from '../../data/skills';
@@ -160,6 +160,8 @@ export default function BattleScreen() {
   const [logMessages, setLogMessages] = useState<string[]>([]);
   const [isEnemyAttacking, setIsEnemyAttacking] = useState(false);
   const [hoveredSkillId, setHoveredSkillId] = useState<string | null>(null);
+  // 答题效果定时器引用：切关卡/卸载时清理，避免旧定时器覆盖新战斗
+  const answerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showElementGuide, setShowElementGuide] = useState(false);
 
@@ -175,12 +177,26 @@ export default function BattleScreen() {
     return [playerPet, enemyPet] as [CombatPet, CombatPet | null];
   }, [dungeonId, stageId, isBoss, dungeon]);
 
-  // Guard: redirect if dungeon is locked
+  // Guard: redirect if dungeon is locked or player not registered (防幽灵玩家)
   useEffect(() => {
     if (dungeonId && !isUnlocked(dungeonId)) {
       navigate('/map');
+      return;
     }
-  }, [dungeonId]);
+    if (!player.classCode || !player.deviceHash) {
+      navigate('/register');
+    }
+  }, [dungeonId, player.classCode, player.deviceHash]);
+
+  // 卸载时清理答题定时器，避免旧定时器覆盖新战斗
+  useEffect(() => {
+    return () => {
+      if (answerTimerRef.current) {
+        clearTimeout(answerTimerRef.current);
+        answerTimerRef.current = null;
+      }
+    };
+  }, []);
 
   // Initialize battle state
   useEffect(() => {
@@ -402,7 +418,8 @@ export default function BattleScreen() {
         : `❌ 回答错误，${skill?.name || '攻击'} 只造成 ${damage} 点伤害`,
     ]);
 
-    setTimeout(() => {
+    if (answerTimerRef.current) clearTimeout(answerTimerRef.current);
+    answerTimerRef.current = setTimeout(() => {
       if (newEnemyHp <= 0) {
         const newCorrectCount = battle.correctCount + (isCorrect ? 1 : 0);
         const newWrongCount = battle.wrongCount + (isCorrect ? 0 : 1);

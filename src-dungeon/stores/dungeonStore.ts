@@ -158,27 +158,36 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
 
   initPlayer: (data) => set((s) => {
     // Normalize snake_case (from server) to camelCase (client)
+    // 注意：player_level/exp/rank_tier/rank_points/streak 服务端从不更新（report-battle 不写，sync 白名单禁写），
+    // 登录返回的是陈旧值。这些字段是「客户端权威」（战斗在客户端算），故保留客户端值，不用服务端覆盖。
+    // gold/total_answered/total_correct 服务端是权威（防刷），取 max(服务端, 客户端) 避免登录缩水。
+    const srv = (k1: string, k2: string) => (data as any)[k1] ?? (data as any)[k2] ?? (data as any)[k2.replace(/_([a-z])/g, (_, c) => c.toUpperCase())];
+    const srvGold = srv('gold', 'gold') ?? 0;
+    const srvTotalAnswered = srv('total_answered', 'totalAnswered') ?? 0;
+    const srvTotalCorrect = srv('total_correct', 'totalCorrect') ?? 0;
     const p: PlayerState = {
       ...s.player,
-      deviceHash: (data as any).device_hash || (data as any).deviceHash || data.deviceHash || s.player.deviceHash,
-      classCode: (data as any).class_code || (data as any).classCode || data.classCode || s.player.classCode,
-      displayName: (data as any).display_name || (data as any).displayName || data.displayName || s.player.displayName,
-      realName: (data as any).real_name || (data as any).realName || data.realName || s.player.realName,
-      phone: (data as any).phone || data.phone || s.player.phone,
-      status: (data as any).status || data.status || s.player.status,
-      school: (data as any).school || data.school || s.player.school,
-      rankTier: (data as any).rank_tier || (data as any).rankTier || data.rankTier || s.player.rankTier,
-      rankPoints: (data as any).rank_points || (data as any).rankPoints || data.rankPoints || s.player.rankPoints,
-      playerLevel: (data as any).player_level || (data as any).playerLevel || data.playerLevel || s.player.playerLevel,
-      exp: (data as any).exp || data.exp || s.player.exp,
-      gold: (data as any).gold || data.gold || s.player.gold,
-      totalAnswered: (data as any).total_answered || (data as any).totalAnswered || data.totalAnswered || s.player.totalAnswered,
-      totalCorrect: (data as any).total_correct || (data as any).totalCorrect || data.totalCorrect || s.player.totalCorrect,
-      currentStreak: (data as any).current_streak || (data as any).currentStreak || data.currentStreak || s.player.currentStreak,
-      maxStreak: (data as any).max_streak || (data as any).maxStreak || data.maxStreak || s.player.maxStreak,
-      loginStreak: (data as any).login_streak || (data as any).loginStreak || data.loginStreak || s.player.loginStreak,
-      lastLoginDate: (data as any).last_login_date || (data as any).lastLoginDate || data.lastLoginDate || s.player.lastLoginDate,
-      season: (data as any).season || data.season || s.player.season,
+      deviceHash: srv('device_hash', 'deviceHash') || s.player.deviceHash,
+      classCode: srv('class_code', 'classCode') || s.player.classCode,
+      displayName: srv('display_name', 'displayName') || s.player.displayName,
+      realName: srv('real_name', 'realName') || s.player.realName,
+      phone: srv('phone', 'phone') || s.player.phone,
+      status: srv('status', 'status') || s.player.status,
+      school: srv('school', 'school') || s.player.school,
+      // 客户端权威字段：保留客户端值（服务端是陈旧默认值）
+      rankTier: s.player.rankTier,
+      rankPoints: s.player.rankPoints,
+      playerLevel: s.player.playerLevel,
+      exp: s.player.exp,
+      currentStreak: s.player.currentStreak,
+      maxStreak: s.player.maxStreak,
+      loginStreak: srv('login_streak', 'loginStreak') || s.player.loginStreak,
+      lastLoginDate: srv('last_login_date', 'lastLoginDate') || s.player.lastLoginDate,
+      // 服务端权威字段：取较大值，避免登录缩水
+      gold: Math.max(srvGold, s.player.gold || 0),
+      totalAnswered: Math.max(srvTotalAnswered, s.player.totalAnswered || 0),
+      totalCorrect: Math.max(srvTotalCorrect, s.player.totalCorrect || 0),
+      season: srv('season', 'season') || s.player.season,
       expToNext: s.player.expToNext,
     };
     return { player: p };
@@ -423,6 +432,12 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   // ── Weekly challenge limit ──
   canEarnRewards: () => {
     const state = get();
+    const currentWeekStart = getWeekStart();
+    // 跨周重置：若已跨周，先重置 used=0 再判断（修复 useChallenge 不会被调用导致永不重置的死锁）
+    if (state.weeklyChallenges.resetAt !== currentWeekStart) {
+      set({ weeklyChallenges: { used: 0, limit: 5, resetAt: currentWeekStart } });
+      return true;
+    }
     return state.weeklyChallenges.used < state.weeklyChallenges.limit;
   },
 
