@@ -390,15 +390,6 @@ export default {
       }
 
       // ═══ QIANLONG CODE (permission-gated) ═══
-      if (path === '/api/codes/qianlong' && request.method === 'POST') {
-        const teacher = await checkTeacher(request, db);
-        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        if (!hasPermission(teacher, 'qianlong')) return new Response(JSON.stringify({ error: '无权限，请联系管理员开通' }), { status: 403, headers: cors });
-        const code = 'QL-' + randomChars(8).toUpperCase();
-        await db.prepare('INSERT INTO generated_codes (code, type, teacher_id, level, created_at) VALUES (?,"qianlong",?,?,datetime("now"))').bind(code, teacher.teacher_id, '').run();
-        return new Response(JSON.stringify({ code }), { headers: cors });
-      }
-
       // ═══ CODE GENERATION (teacher auth) ═══
       const EXC_SECRET = 'csp-coach-2025';
       const CAMP_SECRET = 'csp-camp-2025';
