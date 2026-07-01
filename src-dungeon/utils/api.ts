@@ -85,6 +85,7 @@ export async function syncProgress(playerData: Record<string, unknown>): Promise
 }
 
 // 战斗结束上报：服务端校验、写 dungeon_attempts、按固定规则发金币。前端不传 earned_reward（服务端自算）。
+// 同时同步客户端权威的等级/段位/连胜字段到服务端（供跨设备登录恢复）。
 export async function reportBattle(payload: {
   dungeon_id: string;
   stage_id: string;
@@ -92,6 +93,12 @@ export async function reportBattle(payload: {
   rating: string;
   questions_answered: number;
   correct_count: number;
+  player_level?: number;
+  exp?: number;
+  rank_tier?: number;
+  rank_points?: number;
+  current_streak?: number;
+  max_streak?: number;
 }): Promise<{ success: boolean; gold_added: number }> {
   return apiCall('/api/dungeon/report-battle', 'POST', {
     dungeon_id: payload.dungeon_id,
@@ -100,6 +107,12 @@ export async function reportBattle(payload: {
     rating: payload.rating,
     questions_answered: payload.questions_answered,
     correct_count: payload.correct_count,
+    player_level: payload.player_level,
+    exp: payload.exp,
+    rank_tier: payload.rank_tier,
+    rank_points: payload.rank_points,
+    current_streak: payload.current_streak,
+    max_streak: payload.max_streak,
   });
 }
 

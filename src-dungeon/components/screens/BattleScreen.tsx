@@ -98,9 +98,9 @@ function generateEnemyPet(dungeon: DungeonDefinition, stage: DungeonStage, isBos
     };
   }
 
-  // Fallback: random enemy when stage has no config
-  const level = isBoss ? 5 : 3;
-  const tier: PetTier = isBoss ? 'legendary' : 'rare';
+  // Fallback: random enemy when stage has no config（Boss 用 rare+level3 保证低等级可战胜，避免平衡墙）
+  const level = isBoss ? 3 : 2;
+  const tier: PetTier = isBoss ? 'rare' : 'common';
   const elements: PetElement[] = ['fire', 'wind', 'earth', 'water'];
   const element = elements[Math.floor(Math.random() * elements.length)];
   const base = PET_BASE_STATS.default;
@@ -202,6 +202,17 @@ export default function BattleScreen() {
   useEffect(() => {
     if (!dungeonId || !enemyPet) return;
     if (battle && battle.dungeonId === dungeonId && battle.stageId === (stageId || 'boss')) return;
+
+    // 防跳关：非 Boss 战时，已通关的关（stage index < completedStages）不允许重打，跳回副本入口
+    if (!isBoss && dungeon && stageId) {
+      const stageIdx = dungeon.stages.findIndex(s => s.id === stageId);
+      const dp = store.getDungeonProgress(dungeonId);
+      if (dp && stageIdx >= 0 && stageIdx < dp.completedStages) {
+        navigate(`/dungeon/${dungeonId}`);
+        store.setView('dungeon-preview');
+        return;
+      }
+    }
 
     const firstTurn = determineFirstAttacker(playerPet, enemyPet);
     const skillUsages: SkillUsage[] = SKILLS.map(s => ({
@@ -319,12 +330,13 @@ export default function BattleScreen() {
 
   const handleCloseTutorial = useCallback(() => {
     setShowTutorial(false);
-    localStorage.setItem('zhizi_tutorial_seen', 'true');
+    try { localStorage.setItem('zhizi_tutorial_seen', 'true'); } catch { /* ignore */ }
   }, []);
 
   useEffect(() => {
     if (!battle || battle.isFinished) return;
-    const seen = localStorage.getItem('zhizi_tutorial_seen') === 'true';
+    let seen = false;
+    try { seen = localStorage.getItem('zhizi_tutorial_seen') === 'true'; } catch { /* ignore */ }
     if (!seen) {
       setShowTutorial(true);
     }
@@ -516,6 +528,25 @@ export default function BattleScreen() {
         <div className="loading-bar-container">
           <div className="loading-bar-fill" />
         </div>
+      </div>
+    );
+  }
+
+  // 题库加载失败兜底：题库为空时无法答题，给逃生出口避免永久卡死
+  if (!questionBank || questionBank.length === 0) {
+    return (
+      <div className="loading-screen" style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
+        <div className="loading-title">⚠️ 题库加载失败</div>
+        <div style={{ color: 'var(--text-dim)', fontSize: '12px', textAlign: 'center', maxWidth: '300px' }}>
+          请检查网络后刷新页面，或稍后再试
+        </div>
+        <button
+          className="pixel-btn"
+          onClick={() => { navigate(`/dungeon/${dungeonId}`); store.setView('dungeon-preview'); }}
+          style={{ fontSize: '14px' }}
+        >
+          返回副本 →
+        </button>
       </div>
     );
   }

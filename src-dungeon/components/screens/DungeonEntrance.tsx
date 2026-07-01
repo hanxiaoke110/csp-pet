@@ -7,6 +7,7 @@ export default function DungeonEntrance() {
   const navigate = useNavigate();
   const dungeons = useDungeonStore(s => s.dungeons);
   const progress = useDungeonStore(s => s.dungeonProgress);
+  const player = useDungeonStore(s => s.player);
   const isUnlocked = useDungeonStore(s => s.isDungeonUnlocked);
   const setView = useDungeonStore(s => s.setView);
 
@@ -23,13 +24,20 @@ export default function DungeonEntrance() {
   }
 
   if (!isUnlocked(dungeon.id)) {
+    // 区分真实卡点：等级不足 vs 前置未通关
+    const levelLocked = player.playerLevel < dungeon.unlockLevel;
+    const reqDungeon = dungeon.requiredDungeon
+      ? dungeons.find(d => d.id === dungeon.requiredDungeon)
+      : null;
+    const reqCleared = reqDungeon ? (progress.find(p => p.dungeonId === reqDungeon.id)?.status === 'cleared') : true;
+    const reasons: string[] = [];
+    if (levelLocked) reasons.push(`等级需达到 Lv.${dungeon.unlockLevel}（当前 Lv.${player.playerLevel}）`);
+    if (reqDungeon && !reqCleared) reasons.push(`需先通关「${reqDungeon.name}」`);
     return (
       <div className="loading-screen">
         <div className="loading-title">🔒 副本封印中</div>
         <p style={{ color: 'var(--text-dim)' }}>
-          {dungeon.requiredDungeon
-            ? `需先通关「${dungeons.find(d => d.id === dungeon.requiredDungeon)?.name || '?'}」`
-            : '等级不足'}
+          {reasons.length > 0 ? reasons.join('，') : '条件未满足'}
         </p>
         <button className="pixel-btn" onClick={() => navigate('/map')}>返回地图</button>
       </div>

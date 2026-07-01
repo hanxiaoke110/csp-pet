@@ -231,13 +231,13 @@ async function getWriteBudget(db) {
   }
 }
 
-// 记一次写（仅在核心写路径调用，避免每次写都 +1 反而浪费额度）
-async function incrWriteBudget(db) {
+// 记一次写（按实际写次数累加，让熔断计数更接近真实写量）
+async function incrWriteBudget(db, count = 1) {
   const today = new Date().toISOString().slice(0, 10);
   try {
-    await db.prepare("INSERT INTO meta (key, value) VALUES (?, 1) ON CONFLICT(key) DO UPDATE SET value = value + 1")
-      .bind('writes_' + today).run();
-    _writeBudgetCache = { day: today, count: _writeBudgetCache.count + 1, ts: Date.now() };
+    await db.prepare("INSERT INTO meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = value + ?")
+      .bind('writes_' + today, count, count).run();
+    _writeBudgetCache = { day: today, count: _writeBudgetCache.count + count, ts: Date.now() };
   } catch { /* ignore */ }
 }
 
@@ -1352,20 +1352,28 @@ export default {
           }
         }
         // Sync badges：仅接受合法 badge_id，防伪造 id 刷徽章榜
+        let badgeWrites = 0;
         if (body.badges && Array.isArray(body.badges)) {
           for (const bid of body.badges) {
             if (typeof bid !== 'string' || !VALID_BADGE_IDS.has(bid)) continue;
             await db.prepare('INSERT OR IGNORE INTO dungeon_badges (device_hash, badge_id) VALUES (?,?)').bind(device_hash, bid).run();
+            badgeWrites++;
           }
+        }
+        // 记写次数（sync 至少 2 写：players + progress），让熔断计数接近真实
+        if (sets.length > 0 || (body.dungeon_progress && body.dungeon_progress.length > 0) || badgeWrites > 0) {
+          await incrWriteBudget(db, 2 + (body.dungeon_progress ? body.dungeon_progress.length : 0) + badgeWrites);
         }
         return new Response(JSON.stringify({ success: true, synced: true }), { headers: cors });
       }
 
       // ── POST /api/dungeon/report-battle ──
       // 战斗结束后上报：服务端校验、写 dungeon_attempts、赢时由服务端按固定规则计算金币（不信任客户端金额）。
+      // 同时同步客户端权威的等级/段位/连胜字段到服务端（供跨设备登录恢复），加上界防刷。
       if (path === '/api/dungeon/report-battle' && request.method === 'POST') {
         const body = await request.json();
-        const { device_hash, class_code, dungeon_id, stage_id, is_win, rating, questions_answered, correct_count } = body;
+        const { device_hash, class_code, dungeon_id, stage_id, is_win, rating, questions_answered, correct_count,
+                player_level, exp, rank_tier, rank_points, current_streak, max_streak } = body;
         if (!device_hash || !class_code || !dungeon_id || !stage_id) {
           return new Response(JSON.stringify({ error: '缺少必要参数' }), { status: 400, headers: cors });
         }
@@ -1426,10 +1434,19 @@ export default {
         const actualReward = rewardInserted ? reward : 0;
 
         // 更新玩家金币与答题统计：仅首次胜利发奖时才加金币与累加统计。
+        // 同步客户端权威的等级/段位/连胜字段（加上界防刷），供跨设备登录恢复。
         // 失败/重复胜利不累加统计，彻底杜绝刷答题统计（受速率限制 + INSERT OR IGNORE 双重保护）。
         if (rewardInserted) {
-          await db.prepare("UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?, updated_at=datetime('now') WHERE device_hash=?")
-            .bind(actualReward, answered, correct, device_hash).run();
+          // 防刷上界：等级≤100，段位≤8，经验/段位分/连胜合理上限
+          const lv = Math.max(1, Math.min(100, parseInt(player_level) || 1));
+          const expVal = Math.max(0, Math.min(999999, parseInt(exp) || 0));
+          const rt = Math.max(1, Math.min(8, parseInt(rank_tier) || 1));
+          const rp = Math.max(0, Math.min(999999, parseInt(rank_points) || 0));
+          const cs = Math.max(0, Math.min(9999, parseInt(current_streak) || 0));
+          const ms = Math.max(0, Math.min(9999, parseInt(max_streak) || 0));
+          await db.prepare(`UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?,
+                            player_level=?, exp=?, rank_tier=?, rank_points=?, current_streak=?, max_streak=?, updated_at=datetime('now') WHERE device_hash=?`)
+            .bind(actualReward, answered, correct, lv, expVal, rt, rp, cs, ms, device_hash).run();
         }
 
         // 更新副本通关状态（仅首次胜利推进）
@@ -1449,8 +1466,8 @@ export default {
               .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
           }
         }
-        // 记一次核心写（用于 sync 端点感知当日写量做熔断；reportBattle 自身不熔断，保发金币）
-        if (rewardInserted) await incrWriteBudget(db);
+        // 记写次数（reportBattle 约 5 次写：rate_limits/attempts/players/progress/meta），让熔断计数接近真实
+        if (rewardInserted) await incrWriteBudget(db, 5);
         return new Response(JSON.stringify({ success: true, gold_added: actualReward }), { headers: cors });
       }
 

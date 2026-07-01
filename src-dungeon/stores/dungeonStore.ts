@@ -158,13 +158,9 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
 
   initPlayer: (data) => set((s) => {
     // Normalize snake_case (from server) to camelCase (client)
-    // 注意：player_level/exp/rank_tier/rank_points/streak 服务端从不更新（report-battle 不写，sync 白名单禁写），
-    // 登录返回的是陈旧值。这些字段是「客户端权威」（战斗在客户端算），故保留客户端值，不用服务端覆盖。
-    // gold/total_answered/total_correct 服务端是权威（防刷），取 max(服务端, 客户端) 避免登录缩水。
+    // 服务端现在通过 report-battle 同步了等级/段位/连胜/金币/统计，是权威来源（防刷）。
+    // 登录时用服务端值恢复；仅当服务端字段缺失时回退客户端值（兼容旧数据）。
     const srv = (k1: string, k2: string) => (data as any)[k1] ?? (data as any)[k2] ?? (data as any)[k2.replace(/_([a-z])/g, (_, c) => c.toUpperCase())];
-    const srvGold = srv('gold', 'gold') ?? 0;
-    const srvTotalAnswered = srv('total_answered', 'totalAnswered') ?? 0;
-    const srvTotalCorrect = srv('total_correct', 'totalCorrect') ?? 0;
     const p: PlayerState = {
       ...s.player,
       deviceHash: srv('device_hash', 'deviceHash') || s.player.deviceHash,
@@ -174,19 +170,18 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       phone: srv('phone', 'phone') || s.player.phone,
       status: srv('status', 'status') || s.player.status,
       school: srv('school', 'school') || s.player.school,
-      // 客户端权威字段：保留客户端值（服务端是陈旧默认值）
-      rankTier: s.player.rankTier,
-      rankPoints: s.player.rankPoints,
-      playerLevel: s.player.playerLevel,
-      exp: s.player.exp,
-      currentStreak: s.player.currentStreak,
-      maxStreak: s.player.maxStreak,
+      rankTier: srv('rank_tier', 'rankTier') || s.player.rankTier,
+      rankPoints: srv('rank_points', 'rankPoints') || s.player.rankPoints,
+      playerLevel: srv('player_level', 'playerLevel') || s.player.playerLevel,
+      exp: srv('exp', 'exp') || s.player.exp,
+      // 金币/统计以服务端为准（防刷权威）
+      gold: srv('gold', 'gold') ?? s.player.gold,
+      totalAnswered: srv('total_answered', 'totalAnswered') ?? s.player.totalAnswered,
+      totalCorrect: srv('total_correct', 'totalCorrect') ?? s.player.totalCorrect,
+      currentStreak: srv('current_streak', 'currentStreak') || s.player.currentStreak,
+      maxStreak: srv('max_streak', 'maxStreak') || s.player.maxStreak,
       loginStreak: srv('login_streak', 'loginStreak') || s.player.loginStreak,
       lastLoginDate: srv('last_login_date', 'lastLoginDate') || s.player.lastLoginDate,
-      // 服务端权威字段：取较大值，避免登录缩水
-      gold: Math.max(srvGold, s.player.gold || 0),
-      totalAnswered: Math.max(srvTotalAnswered, s.player.totalAnswered || 0),
-      totalCorrect: Math.max(srvTotalCorrect, s.player.totalCorrect || 0),
       season: srv('season', 'season') || s.player.season,
       expToNext: s.player.expToNext,
     };
@@ -318,6 +313,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     const stageIdForReport = battle.stageId;
     const totalAnswered = battle.correctCount + battle.wrongCount;
     if (battle.isWon) {
+      const s0 = get();
       import('../utils/api').then(({ reportBattle, syncProgress }) => {
         reportBattle({
           dungeon_id: dungeonId,
@@ -326,6 +322,13 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
           rating: battle.rating,
           questions_answered: totalAnswered,
           correct_count: battle.correctCount,
+          // 同步客户端权威字段到服务端（供跨设备登录恢复）
+          player_level: s0.player.playerLevel,
+          exp: s0.player.exp,
+          rank_tier: s0.player.rankTier,
+          rank_points: s0.player.rankPoints,
+          current_streak: s0.player.currentStreak,
+          max_streak: s0.player.maxStreak,
         }).catch(() => {});
         const s = get();
         // 仅同步本场副本的进度（report-battle 已在服务端推进通关状态，这里只补 best_score/best_rating）
@@ -510,15 +513,10 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   },
 
   loadFromLocalStorage: () => {
+    // 每个 key 独立 try-catch，单个损坏不影响其他存档
+    let hasAny = false;
     try {
       const playerRaw = localStorage.getItem('dungeon_player');
-      const progress = localStorage.getItem('dungeon_progress');
-      const badges = localStorage.getItem('dungeon_badges');
-      const wp = localStorage.getItem('dungeon_weakpoints');
-      const mn = localStorage.getItem('dungeon_mistakes');
-      const fc = localStorage.getItem('dungeon_first_clears');
-      const wc = localStorage.getItem('dungeon_weekly_challenges');
-
       if (playerRaw) {
         const raw = JSON.parse(playerRaw);
         // Normalize snake_case (server) to camelCase (client)
@@ -545,12 +543,31 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
           lastLoginDate: raw.last_login_date || raw.lastLoginDate || '',
           season: raw.season || '2026-autumn',
         }});
+        hasAny = true;
       }
-      if (progress) set({ dungeonProgress: JSON.parse(progress) });
+    } catch { /* ignore player */ }
+    try {
+      const progress = localStorage.getItem('dungeon_progress');
+      if (progress) { set({ dungeonProgress: JSON.parse(progress) }); hasAny = true; }
+    } catch { /* ignore progress */ }
+    try {
+      const badges = localStorage.getItem('dungeon_badges');
       if (badges) set({ earnedBadges: JSON.parse(badges) });
+    } catch { /* ignore badges */ }
+    try {
+      const wp = localStorage.getItem('dungeon_weakpoints');
       if (wp) set({ weakPoints: JSON.parse(wp) });
+    } catch { /* ignore weakpoints */ }
+    try {
+      const mn = localStorage.getItem('dungeon_mistakes');
       if (mn) set({ mistakeNotebook: JSON.parse(mn) });
+    } catch { /* ignore mistakes */ }
+    try {
+      const fc = localStorage.getItem('dungeon_first_clears');
       if (fc) set({ _firstClears: JSON.parse(fc) });
+    } catch { /* ignore firstClears */ }
+    try {
+      const wc = localStorage.getItem('dungeon_weekly_challenges');
       if (wc) {
         const parsed = JSON.parse(wc);
         const currentWeekStart = getWeekStart();
@@ -560,11 +577,9 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
           set({ weeklyChallenges: { used: 0, limit: 5, resetAt: currentWeekStart } });
         }
       }
+    } catch { /* ignore weekly */ }
 
-      return !!(playerRaw || progress);
-    } catch {
-      return false;
-    }
+    return hasAny;
   },
 }));
 
