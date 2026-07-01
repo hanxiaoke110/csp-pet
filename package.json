@@ -7,7 +7,7 @@
     "dev": "vite",
     "dev:dungeon": "vite --open /src-dungeon/index.html",
     "build": "tsc && vite build",
-    "build:dungeon": "vite build --outDir dist-dungeon",
+    "build:dungeon": "vite build --config vite.config.dungeon.ts",
     "preview": "vite preview",
     "tauri": "tauri",
     "test": "vitest run",
