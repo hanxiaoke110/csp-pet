@@ -10,6 +10,16 @@
   <body>
     <div id="root"></div>
     <script>
+      // Block right-click context menu and DevTools shortcuts in production
+      document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
+      document.addEventListener('keydown', function(e) {
+        // Block F12, Ctrl+Shift+I/J/C, Ctrl+U
+        if (e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.code === 'KeyI' || e.code === 'KeyJ' || e.code === 'KeyC')) ||
+            (e.ctrlKey && (e.key === 'U' || e.code === 'KeyU'))) {
+          e.preventDefault(); return false;
+        }
+      });
       // Catch JS errors before React mounts (helps diagnose white screen)
       window.addEventListener('error', function(e) {
         var div = document.createElement('div');

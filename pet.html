@@ -29,6 +29,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Block right-click context menu and DevTools shortcuts in production
+      document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.code === 'KeyI' || e.code === 'KeyJ' || e.code === 'KeyC')) ||
+            (e.ctrlKey && (e.key === 'U' || e.code === 'KeyU'))) {
+          e.preventDefault(); return false;
+        }
+      });
+    </script>
     <script type="module" src="/src/pet.tsx"></script>
   </body>
 </html>
