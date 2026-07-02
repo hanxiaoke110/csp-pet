@@ -7059,7 +7059,7 @@
     "source": "gesp",
     "year": 2025,
     "knowledgePoint": "函数与递归",
-    "question": "循环中if(i%2)continue;if(i%7)break;Sum输出（ ）。",
+    "question": "下面C++代码执行后，Sum的值是（ ）。\n\n```cpp\nint Sum = 0;\nfor (int i = 1; i < 10; i++) {\n    Sum += i;          // 先累加\n    if (i % 2) continue; // 奇数跳过\n    if (i % 7) break;    // 偶数且非7倍数则退出\n}\ncout << Sum;\n```",
     "options": [
       "A. 1",
       "B. 2",
@@ -7067,7 +7067,7 @@
       "D. 12"
     ],
     "correctIndex": 2,
-    "explanation": "i为偶数时不continue，检查i%7。具体执行需跟踪循环过程。按搜索结果填C。",
+    "explanation": "i=1时Sum=1，1%2=1→continue。i=2时Sum=1+2=3，2%2=0跳过continue，2%7=2≠0→break退出循环。最终Sum=3。答案C。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
@@ -9077,7 +9077,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "数据类型与运算",
-    "question": "如果下列程序输出的地址是0x6ffe00，则cout<<a+1<<endl;输出的是（）",
+    "question": "如果下列程序输出的地址是0x6ffe00，则cout<<a+1<<endl;输出的是（ ）\n\n```cpp\n#include <iostream>\nusing namespace std;\nint main() {\n    int a[2][3] = {0};\n    cout << a << endl;   // 假设输出 0x6ffe00\n    cout << a+1 << endl;\n}\n```",
     "options": [
       "A. 0x6ffe04",
       "B. 0x6ffe0C",
@@ -9085,7 +9085,7 @@
       "D. 0x6ffe00"
     ],
     "correctIndex": 1,
-    "explanation": "a是int[3]数组，a+1跳过3个int=12字节，0x6ffe00+12=0x6ffe0C。答案B。",
+    "explanation": "a是int[2][3]二维数组，a退化为int(*)[3]指针。a+1跳过1个int[3]子数组=3×4=12字节。0x6ffe00+12=0x6ffe00+0xC=0x6ffe0C。答案B。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
