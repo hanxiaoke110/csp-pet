@@ -17,20 +17,38 @@ export default function LeaderboardScreen() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [playerEntry, setPlayerEntry] = useState<LeaderboardEntry | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
+    // 班级榜需要 class_code，未注册/未绑班时提示而非静默吞错
+    if (scope === 'class' && !player.classCode) {
+      setError('请先注册并加入班级后查看班级榜');
+      setEntries([]);
+      setPlayerEntry(null);
+      setLoading(false);
+      return;
+    }
     getLeaderboard(scope, type).then(resp => {
       setEntries(resp.entries || []);
       setPlayerEntry(resp.playerEntry);
-    }).catch(() => {}).finally(() => setLoading(false));
-  }, [scope, type]);
+    }).catch((e) => {
+      setError(e instanceof Error ? e.message : '排行榜加载失败，请稍后重试');
+      setEntries([]);
+      setPlayerEntry(null);
+    }).finally(() => setLoading(false));
+  }, [scope, type, player.classCode]);
 
   const tabs: { key: LeaderboardType; label: string; icon: string }[] = [
     { key: 'power', label: '战力榜', icon: '🏆' },
     { key: 'streak', label: '连击榜', icon: '⚡' },
     { key: 'conquest', label: '征服榜', icon: '🎯' },
     { key: 'badge', label: '成就榜', icon: '🏅' },
+    { key: 'wins', label: '试炼胜场', icon: '⚔️' },
+    { key: 'ss_count', label: '无伤通关', icon: '🛡️' },
+    { key: 'progress', label: '征服进度', icon: '🗺️' },
+    { key: 'warrior', label: '班级战神', icon: '👑' },
   ];
 
   const getTypeValue = (entry: LeaderboardEntry, t: LeaderboardType): string => {
@@ -39,6 +57,10 @@ export default function LeaderboardScreen() {
       case 'streak': return `${(entry as any).max_streak || 0} 连击`;
       case 'conquest': return `${entry.rankTier}段`;
       case 'badge': return `${(entry as any).total_correct || 0} 题`;
+      case 'wins': return `${entry.value || 0} 胜`;
+      case 'ss_count': return `${entry.value || 0} 次`;
+      case 'progress': return `${entry.value || 0} 副本`;
+      case 'warrior': return `${entry.value || 0} 分`;
       default: return '';
     }
   };
@@ -188,7 +210,12 @@ export default function LeaderboardScreen() {
                 </div>
               );
             })}
-            {entries.length === 0 && (
+            {error && (
+              <div style={{ textAlign: 'center', padding: '40px', color: 'var(--hp-red)', fontSize: '13px' }}>
+                ⚠️ {error}
+              </div>
+            )}
+            {!error && entries.length === 0 && (
               <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-dim)' }}>
                 暂无排行数据
               </div>

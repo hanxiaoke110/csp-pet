@@ -89,7 +89,6 @@ const TIERS = [{ key:'common', label:'⭐ 普通', price:150 },{ key:'rare', lab
 
 // Permission definitions — add new features here, Admin + Teacher UI auto-pickup
 const PERM_DEFS = [
-  { key:'qianlong', icon:'🐉', label:'潜龙计划' },
   // { key:'summer2026', icon:'☀️', label:'暑期集训' },  ← 未来功能示例
 ];
 
@@ -991,38 +990,10 @@ function MyPetsPanel({ pets, onRefresh }) {
 }
 
 function QianLongPanel() {
-  const [result, setResult] = React.useState(null);
-  const [genLoading, setGenLoading] = React.useState(false);
-  const LINK = 'https://qianlong.cspstudy.top'; // 待替换为实际链接
-
-  const generate = async () => {
-    setGenLoading(true);
-    const d = await api('/api/codes/qianlong', { method:'POST' });
-    if (d.error) { toast(d.error,'error'); setGenLoading(false); return; }
-    setResult(d.code);
-    setGenLoading(false);
-    navigator.clipboard.writeText(d.code).catch(()=>{});
-  };
-
+  // 潜龙计划验证码功能已删除（半成品：只能生成无法验证，学生端无入口，浪费 D1 写额度）
   return React.createElement('div', { className:'card' },
-    React.createElement('h3', null, '🐉 潜龙计划 — 验证码'),
-    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:14 } }, '生成验证码发给学生，学生在潜龙计划页面输入后使用。'),
-    React.createElement('button', { className:'btn btn-primary', onClick:generate, disabled:genLoading },
-      genLoading ? '生成中...' : '🎲 生成潜龙验证码'),
-    result && React.createElement('div', { style:{ background:'#f8fafc', borderRadius:8, padding:12, marginTop:12 } },
-      React.createElement('div', { style:{ fontSize:12, fontWeight:600, marginBottom:6, display:'flex', justifyContent:'space-between' } },
-        React.createElement('span', null, '验证码已自动复制'),
-        React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(result); toast('已复制'); } }, '📋 复制'),
-      ),
-      React.createElement('code', { style:{ display:'block', background:'#fff', padding:'10px 14px', borderRadius:8, fontSize:16, fontFamily:'monospace', fontWeight:700, letterSpacing:2, border:'1px solid #e2e8f0', wordBreak:'break-all', textAlign:'center' } }, result),
-      React.createElement('div', { style:{ marginTop:12, padding:'10px 14px', background:'#fffbeb', borderRadius:8, border:'1px solid #fde68a' } },
-        React.createElement('div', { style:{ fontSize:12, fontWeight:600, color:'#92400e', marginBottom:4 } }, '📎 学生入口链接'),
-        React.createElement('div', { style:{ display:'flex', gap:8, alignItems:'center' } },
-          React.createElement('code', { style:{ flex:1, padding:'8px 10px', background:'#fff', borderRadius:6, fontSize:12, fontFamily:'monospace', border:'1px solid #e2e8f0', wordBreak:'break-all' } }, LINK),
-          React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(LINK); toast('链接已复制'); } }, '📋 复制'),
-        ),
-      ),
-    ),
+    React.createElement('h3', null, '🐉 潜龙计划'),
+    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8' } }, '该功能已下线。'),
   );
 }
 

@@ -5,43 +5,47 @@ import { getRankName } from '../../utils/gameLogic';
 export default function RewardScreen() {
   const { dungeonId } = useParams<{ dungeonId: string }>();
   const navigate = useNavigate();
-  const battle = useDungeonStore(s => s.battle);
+  const battle = useDungeonStore(s => s.lastBattleResult);
   const player = useDungeonStore(s => s.player);
   const dungeons = useDungeonStore(s => s.dungeons);
   const setView = useDungeonStore(s => s.setView);
 
   const dungeon = dungeons.find(d => d.id === dungeonId);
-  const won = battle?.isWon ?? false;
-  const expEarned = battle?.expEarned ?? 0;
-  const goldEarned = battle?.goldEarned ?? 0;
-  const rating = battle?.rating ?? 'D';
+
+  // 无结算快照，或快照与当前 dungeonId 不符（陈旧快照/回退导航）：提供返回入口，避免卡死或误展示
+  if (!battle || battle.dungeonId !== dungeonId) {
+    return (
+      <div className="loading-screen" style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
+        <div className="loading-title">⚔️ 没有可结算的战斗</div>
+        <button
+          className="pixel-btn"
+          onClick={() => { navigate(`/dungeon/${dungeonId}`); setView('dungeon-preview'); }}
+          style={{ fontSize: '14px' }}
+        >
+          返回副本 →
+        </button>
+      </div>
+    );
+  }
+
+  const won = battle.isWon;
+  const expEarned = battle.expEarned;
+  const goldEarned = battle.goldEarned;
+  const rating = battle.rating;
+  const totalAnswered = battle.correctCount + battle.wrongCount;
+  const accuracy = totalAnswered > 0
+    ? Math.round((battle.correctCount / totalAnswered) * 100)
+    : 0;
+  const remainingHpRatio = battle.maxHp > 0
+    ? Math.round((battle.hp / battle.maxHp) * 100)
+    : 0;
+  const uniqueSkillCount = battle.usedSkillIds.length;
+  const roundCount = battle.roundCount;
   const rankName = getRankName(player.school, player.rankTier);
 
   const handleContinue = () => {
-    const store = useDungeonStore.getState();
-    // Save battle data before nullifying
-    const battleData = { ...store.battle };
-    store.finishBattle();
-    if (won) {
-      // Update dungeon progress
-      const progress = store.dungeonProgress;
-      const dp = progress.find(p => p.dungeonId === dungeonId);
-      if (dp) {
-        const newProgress = progress.map(p => {
-          if (p.dungeonId !== dungeonId) return p;
-          const isBossBattle = !battleData?.stageId || battleData?.stageId === 'boss';
-          if (isBossBattle) {
-            return { ...p, bossDefeated: true, bestScore: Math.max(p.bestScore, battleData?.correctCount || 0), bestRating: rating };
-          } else {
-            const newCompleted = Math.min(p.completedStages + 1, p.totalStages);
-            const allStagesDone = newCompleted >= p.totalStages;
-            return { ...p, completedStages: newCompleted, status: allStagesDone ? 'cleared' : 'in_progress' };
-          }
-        });
-        useDungeonStore.setState({ dungeonProgress: newProgress });
-        useDungeonStore.getState().saveToLocalStorage();
-      }
-    }
+    // 结算与进度更新已在 finalizeBattle（战斗结束时）完成，这里清空快照并导航。
+    useDungeonStore.setState({ lastBattleResult: null });
     navigate(`/dungeon/${dungeonId}`);
     setView('dungeon-preview');
   };
@@ -106,6 +110,21 @@ export default function RewardScreen() {
                        rating === 'A' ? 'var(--exp-blue)' : 'var(--text-light)',
                 fontFamily: 'var(--pixel-font)', fontSize: '14px',
               }}>{rating}</strong>
+            </div>
+
+            {/* Rating breakdown */}
+            <div className="rating-breakdown" style={{
+              background: 'rgba(0,0,0,0.2)',
+              border: '2px solid var(--border-pixel)',
+              padding: '12px',
+              marginBottom: '16px',
+              textAlign: 'left',
+              fontSize: '12px',
+            }}>
+              <p>正确率：{accuracy}%</p>
+              <p>剩余 HP：{remainingHpRatio}%</p>
+              <p>使用技能种类：{uniqueSkillCount}/4</p>
+              <p>战斗回合：{roundCount}</p>
             </div>
 
             {/* Progress */}

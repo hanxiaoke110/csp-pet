@@ -13,6 +13,23 @@ const RATE_VOTE_POST = 10;      // 10 votes per minute per device
 const RATE_WINDOW_SEC = 60;
 
 // ── 敏感词黑名单 ──
+
+// 合法副本白名单（report-battle / sync 校验用，防止伪造 dungeon_id 刷金币）
+const VALID_DUNGEON_IDS = new Set([
+  'dungeon-01','dungeon-02','dungeon-03','dungeon-04',
+  'dungeon-05','dungeon-06','dungeon-07','dungeon-08',
+]);
+
+// 合法徽章白名单（sync 校验用，防止伪造 badge_id 刷徽章榜）
+const VALID_BADGE_IDS = new Set([
+  'first_blood','apprentice','marathon','sharpshooter','combo_master','unstoppable',
+  'perfectionist','speed_demon','time_lord','first_clear','dungeon_crawler','dungeon_master',
+  'all_clear','flawless','immortal_dragon','supreme_dragon','rising_star','dragon_warrior',
+  'dragon_lord','dragon_god','dedicated','devoted','immortal_dedication',
+]);
+
+// 单场战斗答题数上界（防刷答题统计）
+const MAX_BATTLE_QUESTIONS = 50;
 const BAD_WORDS = [
   '色情','裸体','裸聊','性交','淫秽','色诱','约炮','嫖娼','卖淫','色情片','成人','激情',
   '杀人','杀死','砍死','炸死','枪毙','自杀','割腕','跳楼','虐杀','打死','弄死','灭口',
@@ -148,7 +165,12 @@ async function ensureSchema(db) {
   // ── Dungeon tables ──
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, stage_id TEXT NOT NULL, correct_count INTEGER DEFAULT 0, total_count INTEGER DEFAULT 0, rating TEXT DEFAULT 'D', is_win INTEGER DEFAULT 0, earned_reward INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN earned_reward INTEGER DEFAULT 0`); } catch {}
+  try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN is_win INTEGER DEFAULT 0`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
+  // 防重放：同 device+dungeon+stage 的胜利奖励只发一次（DB 级兜底，防 TOCTOU 竞态）
+  try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_dungeon_attempts_win ON dungeon_attempts(device_hash, dungeon_id, stage_id) WHERE is_win = 1 AND earned_reward > 0`); } catch {}
   // Performance indexes
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_device_status ON wishes(device_hash, status)`); } catch {}
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_class_status ON wishes(class_code, status)`); } catch {}
@@ -182,7 +204,41 @@ async function maybeCleanup(db) {
   try { await db.prepare("DELETE FROM votes WHERE created_at < datetime('now', '-6 months')").run(); } catch {}
   // Clean soft-deleted wishes older than 3 months
   try { await db.prepare("DELETE FROM wishes WHERE status='deleted' AND created_at < datetime('now', '-3 months')").run(); } catch {}
+  // Clean 过期的 rate_limits（reset_at 早于现在）
+  try { await db.prepare("DELETE FROM rate_limits WHERE reset_at < datetime('now')").run(); } catch {}
   _lastCleanup = today;
+}
+
+// ── 写额度软熔断（免费套餐 D1 每日 10 万写，保命用）──
+// 用 meta 表记当日写计数。接近阈值时降级：优先保 reportBattle（发金币/进度），暂停 sync/wishes 等非核心写。
+const DAILY_WRITE_BUDGET = 90000;        // 触发降级的阈值（留 1 万余量给核心写）
+let _writeBudgetCache = { day: '', count: 0, ts: 0 };
+
+async function getWriteBudget(db) {
+  const today = new Date().toISOString().slice(0, 10);
+  const now = Date.now();
+  // 60s 内缓存，避免每次写都读 meta
+  if (_writeBudgetCache.day === today && now - _writeBudgetCache.ts < 60000) {
+    return { exceeded: _writeBudgetCache.count >= DAILY_WRITE_BUDGET, count: _writeBudgetCache.count };
+  }
+  try {
+    const row = await db.prepare("SELECT value FROM meta WHERE key=?").bind('writes_' + today).first();
+    const count = row ? parseInt(row.value) || 0 : 0;
+    _writeBudgetCache = { day: today, count, ts: now };
+    return { exceeded: count >= DAILY_WRITE_BUDGET, count };
+  } catch {
+    return { exceeded: false, count: 0 };
+  }
+}
+
+// 记一次写（按实际写次数累加，让熔断计数更接近真实写量）
+async function incrWriteBudget(db, count = 1) {
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    await db.prepare("INSERT INTO meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = value + ?")
+      .bind('writes_' + today, count, count).run();
+    _writeBudgetCache = { day: today, count: _writeBudgetCache.count + count, ts: Date.now() };
+  } catch { /* ignore */ }
 }
 
 // ── Password hashing (simple SHA-256) ──
@@ -203,7 +259,7 @@ export default {
     const cors = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Token, X-Teacher-Token',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Token, X-Teacher-Token, X-Device-Hash',
       'Content-Type': 'application/json',
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
@@ -334,15 +390,6 @@ export default {
       }
 
       // ═══ QIANLONG CODE (permission-gated) ═══
-      if (path === '/api/codes/qianlong' && request.method === 'POST') {
-        const teacher = await checkTeacher(request, db);
-        if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
-        if (!hasPermission(teacher, 'qianlong')) return new Response(JSON.stringify({ error: '无权限，请联系管理员开通' }), { status: 403, headers: cors });
-        const code = 'QL-' + randomChars(8).toUpperCase();
-        await db.prepare('INSERT INTO generated_codes (code, type, teacher_id, level, created_at) VALUES (?,"qianlong",?,?,datetime("now"))').bind(code, teacher.teacher_id, '').run();
-        return new Response(JSON.stringify({ code }), { headers: cors });
-      }
-
       // ═══ CODE GENERATION (teacher auth) ═══
       const EXC_SECRET = 'csp-coach-2025';
       const CAMP_SECRET = 'csp-camp-2025';
@@ -1237,41 +1284,182 @@ export default {
       }
 
       // ── POST /api/dungeon/sync ──
+      // 安全：只接受客户端可合理提供的非敏感字段；经济/段位字段禁止直接写入。
       if (path === '/api/dungeon/sync' && request.method === 'POST') {
         const body = await request.json();
-        const { device_hash, class_code, display_name, player_level, exp, gold, rank_tier, rank_points, total_answered, total_correct, current_streak, max_streak, login_streak, school } = body;
+        const { device_hash } = body;
         if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
+        // 写额度软熔断：接近 D1 每日上限时，跳过 sync（非核心），保 reportBattle
+        const budget = await getWriteBudget(db);
+        if (budget.exceeded) {
+          return new Response(JSON.stringify({ success: true, synced: false, reason: 'daily_write_budget' }), { headers: cors });
+        }
         // Dedup: skip if last sync was < 5 seconds ago (prevents 200-student wave from serializing on D1 write lock)
         const lastSync = await db.prepare("SELECT updated_at FROM dungeon_players WHERE device_hash=?").bind(device_hash).first();
         if (lastSync && lastSync.updated_at) {
           const elapsed = Date.now() - new Date(lastSync.updated_at + 'Z').getTime();
           if (elapsed < 5000) return new Response(JSON.stringify({ success: true, synced: false, reason: 'too_frequent' }), { headers: cors });
         }
-        const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(school) ? school : 'cultivation';
-        await db.prepare(`UPDATE dungeon_players SET
-          player_level=?, exp=?, gold=?, rank_tier=?, rank_points=?,
-          total_answered=?, total_correct=?, current_streak=?, max_streak=?,
-          login_streak=?, school=?, updated_at=datetime('now')
-          WHERE device_hash=?`)
-          .bind(player_level||1, exp||0, gold||0, rank_tier||1, rank_points||0,
-                total_answered||0, total_correct||0, current_streak||0, max_streak||0,
-                login_streak||0, validSchool, device_hash).run();
-        // Sync dungeon progress
+        // 白名单：仅允许修改昵称与流派；统计/经济/段位字段禁止直接写入（由 report-battle 累加）
+        const allowedFields = ['display_name', 'school'];
+        const sets = [];
+        const values = [];
+        for (const f of allowedFields) {
+          if (body[f] !== undefined) {
+            if (f === 'school') {
+              const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(body.school) ? body.school : 'cultivation';
+              sets.push('school=?');
+              values.push(validSchool);
+            } else if (f === 'display_name') {
+              const dn = String(body.display_name);
+              if (dn.length < 1 || dn.length > 8) return new Response(JSON.stringify({ error: '昵称需1-8字' }), { status: 400, headers: cors });
+              sets.push('display_name=?');
+              values.push(dn);
+            }
+          }
+        }
+        if (sets.length > 0) {
+          values.push(device_hash);
+          await db.prepare(`UPDATE dungeon_players SET ${sets.join(',')}, updated_at=datetime('now') WHERE device_hash=?`).bind(...values).run();
+        }
+        // Sync dungeon progress：仅更新 best_score/best_rating（取较大值），通关状态由 report-battle 权威写入
         if (body.dungeon_progress && Array.isArray(body.dungeon_progress)) {
           for (const dp of body.dungeon_progress) {
-            await db.prepare(`INSERT OR REPLACE INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
-              VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))`)
-              .bind(device_hash, dp.dungeonId, dp.status, dp.completedStages||0, dp.totalStages||5,
-                    dp.currentStageId||null, dp.bossDefeated?1:0, dp.bestScore||0, dp.bestRating||'D').run();
+            // 白名单校验：仅接受合法副本 id，防伪造 dungeonId 写脏数据
+            if (!dp.dungeonId || !VALID_DUNGEON_IDS.has(dp.dungeonId)) continue;
+            const existing = await db.prepare('SELECT best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
+            const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
+            // bestScore 设上界（单场最多答对题数×10），防客户端注水
+            const newScore = Math.min(10000, Math.max(0, dp.bestScore || 0));
+            const newRating = ['SS','S','A','B','C','D'].includes(dp.bestRating) ? dp.bestRating : 'D';
+            const bestScore = Math.max(existing?.best_score || 0, newScore);
+            const bestRating = (!existing?.best_rating || (ratingOrder[newRating]||0) > (ratingOrder[existing.best_rating]||0))
+              ? newRating : (existing?.best_rating || 'D');
+            await db.prepare(`INSERT INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
+              VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))
+              ON CONFLICT(device_hash, dungeon_id) DO UPDATE SET best_score=excluded.best_score, best_rating=excluded.best_rating, updated_at=datetime('now')`)
+              .bind(device_hash, dp.dungeonId, 'locked', dp.completedStages||0, dp.totalStages||5,
+                    dp.currentStageId||null, dp.bossDefeated?1:0, bestScore, bestRating).run();
           }
         }
-        // Sync badges
+        // Sync badges：仅接受合法 badge_id，防伪造 id 刷徽章榜
+        let badgeWrites = 0;
         if (body.badges && Array.isArray(body.badges)) {
           for (const bid of body.badges) {
+            if (typeof bid !== 'string' || !VALID_BADGE_IDS.has(bid)) continue;
             await db.prepare('INSERT OR IGNORE INTO dungeon_badges (device_hash, badge_id) VALUES (?,?)').bind(device_hash, bid).run();
+            badgeWrites++;
           }
         }
+        // 记写次数（sync 至少 2 写：players + progress），让熔断计数接近真实
+        if (sets.length > 0 || (body.dungeon_progress && body.dungeon_progress.length > 0) || badgeWrites > 0) {
+          await incrWriteBudget(db, 2 + (body.dungeon_progress ? body.dungeon_progress.length : 0) + badgeWrites);
+        }
         return new Response(JSON.stringify({ success: true, synced: true }), { headers: cors });
+      }
+
+      // ── POST /api/dungeon/report-battle ──
+      // 战斗结束后上报：服务端校验、写 dungeon_attempts、赢时由服务端按固定规则计算金币（不信任客户端金额）。
+      // 同时同步客户端权威的等级/段位/连胜字段到服务端（供跨设备登录恢复），加上界防刷。
+      if (path === '/api/dungeon/report-battle' && request.method === 'POST') {
+        const body = await request.json();
+        const { device_hash, class_code, dungeon_id, stage_id, is_win, rating, questions_answered, correct_count,
+                player_level, exp, rank_tier, rank_points, current_streak, max_streak } = body;
+        if (!device_hash || !class_code || !dungeon_id || !stage_id) {
+          return new Response(JSON.stringify({ error: '缺少必要参数' }), { status: 400, headers: cors });
+        }
+        // 校验 device_hash 与 class_code 匹配
+        const player = await db.prepare("SELECT * FROM dungeon_players WHERE device_hash=? AND class_code=? AND status='active'").bind(device_hash, class_code).first();
+        if (!player) {
+          return new Response(JSON.stringify({ error: '设备与班级不匹配' }), { status: 403, headers: cors });
+        }
+        // 速率限制：同设备 3s 内只允许一次战斗上报（防刷；3s 间隔允许合法连闯多关，防重放由唯一索引兜底）
+        if (!await checkRateLimit(db, `rb:${device_hash}`, 1, 3)) {
+          return new Response(JSON.stringify({ error: '请求过于频繁' }), { status: 429, headers: cors });
+        }
+        // 校验 dungeon_id 属于合法副本白名单（防伪造 dungeon_id 刷金币）
+        if (!VALID_DUNGEON_IDS.has(dungeon_id)) {
+          return new Response(JSON.stringify({ error: '无效的副本' }), { status: 400, headers: cors });
+        }
+        // 校验 stage_id：必须为 'boss' 或 dungeon-XX-stage-0[1-5]（严格枚举，防伪造后缀绕过唯一索引）
+        const sid = String(stage_id);
+        const isBossStage = sid === 'boss';
+        const stageRegex = new RegExp('^' + dungeon_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '-stage-0[1-5]$');
+        const stageMatch = sid === 'boss' || stageRegex.test(sid);
+        if (!stageMatch) {
+          return new Response(JSON.stringify({ error: '关卡与副本不匹配' }), { status: 400, headers: cors });
+        }
+        const winFlag = is_win ? 1 : 0;
+        const validRating = ['SS','S','A','B','C','D'].includes(rating) ? rating : 'D';
+        // 答题统计加上界 + correct<=answered 校验，防刷答题统计
+        let answered = Math.max(0, Math.min(MAX_BATTLE_QUESTIONS, parseInt(questions_answered) || 0));
+        let correct = Math.max(0, Math.min(MAX_BATTLE_QUESTIONS, parseInt(correct_count) || 0));
+        if (correct > answered) correct = answered;
+
+        // 服务端按固定规则计算奖励（不信任客户端 earned_reward）
+        const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        let reward = 0;
+        if (winFlag) {
+          reward = rand(10, 20); // 胜利基础
+          if (isBossStage) reward += rand(15, 30); // Boss 额外
+          if (validRating === 'S') reward += rand(10, 15);
+          else if (validRating === 'SS') reward += rand(15, 20);
+        }
+
+        // 原子防重放：胜利时用 INSERT OR IGNORE + 部分唯一索引兜底。
+        // 若同 device+dungeon+stage 已有发奖记录，INSERT OR IGNORE 静默跳过 → meta.changes=0 → 不发金币。
+        // 失败时（is_win=0, earned_reward=0）不触发唯一索引，正常记录。
+        let rewardInserted = false;
+        if (winFlag && reward > 0) {
+          const ins = await db.prepare(`INSERT OR IGNORE INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+            VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
+            .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+          rewardInserted = !!(ins.meta && ins.meta.changes > 0);
+        } else {
+          // 失败或 reward=0：直接写记录（不触发唯一索引，因 earned_reward=0）
+          await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+            VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
+            .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+        }
+
+        const actualReward = rewardInserted ? reward : 0;
+
+        // 更新玩家金币与答题统计：仅首次胜利发奖时才加金币与累加统计。
+        // 同步客户端权威的等级/段位/连胜字段（加上界防刷），供跨设备登录恢复。
+        // 失败/重复胜利不累加统计，彻底杜绝刷答题统计（受速率限制 + INSERT OR IGNORE 双重保护）。
+        if (rewardInserted) {
+          // 防刷上界：等级≤100，段位≤8，经验/段位分/连胜合理上限
+          const lv = Math.max(1, Math.min(100, parseInt(player_level) || 1));
+          const expVal = Math.max(0, Math.min(999999, parseInt(exp) || 0));
+          const rt = Math.max(1, Math.min(8, parseInt(rank_tier) || 1));
+          const rp = Math.max(0, Math.min(999999, parseInt(rank_points) || 0));
+          const cs = Math.max(0, Math.min(9999, parseInt(current_streak) || 0));
+          const ms = Math.max(0, Math.min(9999, parseInt(max_streak) || 0));
+          await db.prepare(`UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?,
+                            player_level=?, exp=?, rank_tier=?, rank_points=?, current_streak=?, max_streak=?, updated_at=datetime('now') WHERE device_hash=?`)
+            .bind(actualReward, answered, correct, lv, expVal, rt, rp, cs, ms, device_hash).run();
+        }
+
+        // 更新副本通关状态（仅首次胜利推进）
+        if (winFlag && rewardInserted) {
+          const progress = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dungeon_id).first();
+          if (progress) {
+            const totalStages = progress.total_stages || 5;
+            const newCompleted = isBossStage ? totalStages : Math.min(totalStages, (progress.completed_stages || 0) + 1);
+            const bossDefeated = isBossStage ? 1 : (progress.boss_defeated || 0);
+            const status = (bossDefeated || newCompleted >= totalStages) ? 'cleared' : 'unlocked';
+            const score = correct * 10;
+            const bestScore = Math.max(progress.best_score || 0, score);
+            const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
+            const bestRating = (!progress.best_rating || (ratingOrder[validRating]||0) > (ratingOrder[progress.best_rating]||0))
+              ? validRating : (progress.best_rating || 'D');
+            await db.prepare(`UPDATE dungeon_progress SET status=?, completed_stages=?, current_stage_id=?, boss_defeated=?, best_score=?, best_rating=?, updated_at=datetime('now') WHERE device_hash=? AND dungeon_id=?`)
+              .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
+          }
+        }
+        // 记写次数（reportBattle 约 5 次写：rate_limits/attempts/players/progress/meta），让熔断计数接近真实
+        if (rewardInserted) await incrWriteBudget(db, 5);
+        return new Response(JSON.stringify({ success: true, gold_added: actualReward }), { headers: cors });
       }
 
       // ── GET /api/dungeon/leaderboard ──
@@ -1279,29 +1467,81 @@ export default {
         const scope = url.searchParams.get('scope') || 'class';
         const type = url.searchParams.get('type') || 'power';
         const cc = url.searchParams.get('class_code') || '';
-        const dh = url.searchParams.get('device_hash') || '';
-        let orderBy = 'rank_points DESC';
-        if (type === 'streak') orderBy = 'max_streak DESC';
-        else if (type === 'conquest') orderBy = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') DESC';
-        else if (type === 'badge') orderBy = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) DESC';
-        let query, params;
-        if (scope === 'class' && cc) {
-          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
-          params = [cc];
-        } else {
-          query = `SELECT device_hash, display_name, school, rank_tier, rank_points, class_code, max_streak, total_correct FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;
-          params = [];
+        const dh = request.headers.get('X-Device-Hash') || url.searchParams.get('device_hash') || '';
+        const VALID_TYPES = ['power', 'streak', 'conquest', 'badge', 'wins', 'ss_count', 'progress', 'warrior'];
+        if (!VALID_TYPES.includes(type)) {
+          return new Response(JSON.stringify({ error: '无效的排行榜类型' }), { status: 400, headers: cors });
         }
+
+        // 班级榜必须校验查看者属于该班级
+        if (scope === 'class') {
+          if (!cc) return new Response(JSON.stringify({ error: '缺少班级码' }), { status: 400, headers: cors });
+          if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 403, headers: cors });
+          const viewer = await db.prepare("SELECT class_code FROM dungeon_players WHERE device_hash=? AND status='active'").bind(dh).first();
+          if (!viewer || viewer.class_code !== cc) {
+            return new Response(JSON.stringify({ error: '无权查看该班级排行榜' }), { status: 403, headers: cors });
+          }
+        }
+
+        let query, params;
+        const classFilter = (scope === 'class' && cc) ? 'AND p.class_code = ?' : '';
+
+        if (type === 'wins' || type === 'ss_count' || type === 'warrior') {
+          const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString();
+          let whereExtra = '';
+          if (type === 'wins') whereExtra = 'AND a.is_win = 1';
+          else if (type === 'ss_count') whereExtra = "AND a.rating = 'SS'";
+          const selectValue = type === 'warrior'
+            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.rating = 'S' THEN 1 END) * 15) as value"
+            : 'COUNT(*) as value';
+          query = `SELECT a.device_hash, p.display_name, p.school, p.rank_tier, ${selectValue}
+                   FROM dungeon_attempts a
+                   JOIN dungeon_players p ON a.device_hash = p.device_hash
+                   WHERE p.status = 'active' ${classFilter} ${whereExtra} AND a.created_at >= ?
+                   GROUP BY a.device_hash
+                   ORDER BY value DESC
+                   LIMIT 50`;
+          params = (scope === 'class' && cc) ? [cc, thirtyDaysAgo] : [thirtyDaysAgo];
+        } else if (type === 'progress') {
+          query = `SELECT dp.device_hash, p.display_name, p.school, p.rank_tier, COUNT(DISTINCT dp.dungeon_id) as value
+                   FROM dungeon_progress dp
+                   JOIN dungeon_players p ON dp.device_hash = p.device_hash
+                   WHERE p.status = 'active' ${classFilter} AND dp.status = 'cleared'
+                   GROUP BY dp.device_hash
+                   ORDER BY value DESC
+                   LIMIT 50`;
+          params = (scope === 'class' && cc) ? [cc] : [];
+        } else {
+          let orderBy = 'rank_points DESC';
+          let selectValue = 'rank_points as value';
+          if (type === 'streak') { orderBy = 'max_streak DESC'; selectValue = 'max_streak as value'; }
+          else if (type === 'conquest') {
+            orderBy = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') DESC';
+            selectValue = '(SELECT COUNT(*) FROM dungeon_progress dp2 WHERE dp2.device_hash=dungeon_players.device_hash AND dp2.status=\'cleared\') as value';
+          } else if (type === 'badge') {
+            orderBy = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) DESC';
+            selectValue = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) as value';
+          }
+          if (scope === 'class' && cc) {
+            query = `SELECT device_hash, display_name, school, rank_tier, ${selectValue} FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
+            params = [cc];
+          } else {
+            query = `SELECT device_hash, display_name, school, rank_tier, ${selectValue} FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;
+            params = [];
+          }
+        }
+
         const entries = await db.prepare(query).bind(...params).all();
-        // Find player rank
+        const sanitizeEntry = (e) => ({ display_name: e.display_name, school: e.school, rank_tier: e.rank_tier, value: e.value });
+        // Find player rank (device_hash only used internally)
         let playerEntry = null;
         if (dh && entries.results) {
           const idx = entries.results.findIndex(e => e.device_hash === dh);
-          if (idx >= 0) playerEntry = { ...entries.results[idx], rank: idx + 1 };
+          if (idx >= 0) playerEntry = { rank: idx + 1, ...sanitizeEntry(entries.results[idx]) };
         }
         return new Response(JSON.stringify({
           success: true, scope, type,
-          entries: (entries.results || []).map((e, i) => ({ ...e, rank: i + 1 })),
+          entries: (entries.results || []).map((e, i) => ({ rank: i + 1, ...sanitizeEntry(e) })),
           playerEntry,
         }), { headers: cors });
       }

@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { registerPlayer, getStoredHash, getStoredClassCode } from '../../utils/api';
+import { initWebPet, WEB_STARTER_OPTIONS } from '../../utils/webPet';
+import { ELEMENT_EMOJI } from '../../../src/types/pet';
 import schoolsData from '../../data/schools.json';
 import type { School, SchoolDefinition } from '../../types/dungeon';
 
 const schools = schoolsData as SchoolDefinition[];
 
-type Step = 'class' | 'school';
+type Step = 'class' | 'school' | 'pet';
 
 export default function RegisterScreen() {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ export default function RegisterScreen() {
   const [realName, setRealName] = useState('');
   const [phone, setPhone] = useState('');
   const [selectedSchool, setSelectedSchool] = useState<School>('cultivation');
+  const [selectedPetSpecies, setSelectedPetSpecies] = useState<string>('capi');
   const [validating, setValidating] = useState(false);
   const [classInfo, setClassInfo] = useState<{ label: string; teacherName: string } | null>(null);
   const [error, setError] = useState('');
@@ -64,12 +67,14 @@ export default function RegisterScreen() {
       );
       if (resp.success) {
         localStorage.setItem('csp_class_code', classCode.trim());
+        // Web 端赠送战斗伙伴（localStorage 存储，零后端写入）
+        initWebPet(selectedPetSpecies);
         store.initPlayer(resp.player);
         store.saveToLocalStorage();
         // Sync to server (fire and forget)
         import('../../utils/api').then(({ syncProgress }) => {
           syncProgress({
-            player_level: resp.player.player_level || 1, exp: 0, gold: 0,
+            player_level: resp.player.playerLevel || 1, exp: 0, gold: 0,
             rank_tier: 1, rank_points: 0,
             total_answered: 0, total_correct: 0,
             current_streak: 0, max_streak: 0,
@@ -193,6 +198,7 @@ export default function RegisterScreen() {
   }
 
   // ── Step 2: Choose school ──
+  if (step === 'school') {
   return (
     <div style={{
       minHeight: '100vh', background: 'linear-gradient(180deg, #0a0015, #1a0a2e, #0a0a0a)',
@@ -248,11 +254,10 @@ export default function RegisterScreen() {
 
         <button
           className="pixel-btn primary"
-          onClick={handleRegister}
-          disabled={registering}
+          onClick={() => setStep('pet')}
           style={{ width: '100%', fontSize: '16px', padding: '14px' }}
         >
-          {registering ? '🏰 正在进入秘境...' : '🏰 进入秘境'}
+          下一步：选择伙伴 →
         </button>
 
         <button
@@ -265,6 +270,78 @@ export default function RegisterScreen() {
 
         <p style={{ color: 'var(--text-dim)', fontSize: '10px', textAlign: 'center', marginTop: '16px' }}>
           ⚠️ 选定后每赛季可更换1次 · 不同流派同榜竞技
+        </p>
+      </div>
+    </div>
+  );
+  }
+
+  // ── Step 3: Choose starter pet ──
+  return (
+    <div style={{
+      minHeight: '100vh', background: 'linear-gradient(180deg, #0a0015, #1a0a2e, #0a0a0a)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
+    }}>
+      <div style={{ maxWidth: '550px', width: '100%' }}>
+        <h2 style={{
+          fontFamily: 'var(--pixel-font)', fontSize: '14px', color: 'var(--gold)',
+          textAlign: 'center', marginBottom: '20px',
+        }}>
+          🐾 选择你的战斗伙伴
+        </h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+          {WEB_STARTER_OPTIONS.map(pet => (
+            <div
+              key={pet.speciesId}
+              onClick={() => setSelectedPetSpecies(pet.speciesId)}
+              style={{
+                cursor: 'pointer',
+                padding: '16px',
+                background: selectedPetSpecies === pet.speciesId ? 'rgba(255,215,0,0.12)' : 'var(--bg-card)',
+                border: selectedPetSpecies === pet.speciesId ? '3px solid var(--gold)' : '2px solid var(--border-pixel)',
+                textAlign: 'center',
+                transition: 'all 0.15s',
+              }}
+            >
+              <div style={{ fontSize: '36px' }}>{ELEMENT_EMOJI[pet.element]}</div>
+              <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-light)', marginTop: '6px' }}>
+                {pet.petName}
+              </div>
+              <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '4px' }}>
+                {pet.speciesId === 'capi' ? '地·佛系肉盾' :
+                 pet.speciesId === 'boba' ? '水·灵动' :
+                 pet.speciesId === 'bubu-2' ? '火·强攻' : '风·迅捷'}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {error && (
+          <div style={{ color: 'var(--hp-red)', fontSize: '12px', marginBottom: '12px', padding: '8px', background: 'rgba(255,51,51,0.1)', border: '1px solid var(--hp-red)' }}>
+            ⚠️ {error}
+          </div>
+        )}
+
+        <button
+          className="pixel-btn primary"
+          onClick={handleRegister}
+          disabled={registering}
+          style={{ width: '100%', fontSize: '16px', padding: '14px' }}
+        >
+          {registering ? '🏰 正在进入秘境...' : '🏰 进入秘境'}
+        </button>
+
+        <button
+          className="pixel-btn"
+          onClick={() => setStep('school')}
+          style={{ width: '100%', marginTop: '8px', fontSize: '12px' }}
+        >
+          ← 返回选择流派
+        </button>
+
+        <p style={{ color: 'var(--text-dim)', fontSize: '10px', textAlign: 'center', marginTop: '16px' }}>
+          🐾 伙伴会随战斗获得经验升级，等级越高战力越强
         </p>
       </div>
     </div>

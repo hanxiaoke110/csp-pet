@@ -1,5 +1,6 @@
 // 潜龙闭关 — 题目加载器（3级缓存）
 import type { Question, DungeonDefinition } from '../types/dungeon';
+import type { KnowledgeTag } from '../data/skills';
 
 const CACHE_PREFIX = 'dungeon_';
 const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
@@ -163,4 +164,33 @@ export function getBossQuestions(
   return shuffled.slice(0, count)
     .map(id => bank.find(q => q.id === id))
     .filter(Boolean) as Question[];
+}
+
+// ── Pick questions by skill knowledge tag ──
+export function pickQuestionsByTag(
+  allQuestions: Question[],
+  tag: KnowledgeTag,
+  count: number
+): Question[] {
+  const tagMap: Record<KnowledgeTag, string[]> = {
+    'grammar': ['语法', '变量', '数据类型', '运算符'],
+    'control-flow': ['分支', '循环', 'if', 'for', 'while'],
+    'data-structure': ['数组', '字符串', '栈', '队列', '树', '结构'],
+    'algorithm': ['枚举', '递归', '排序', '贪心', '搜索', '算法'],
+  };
+
+  const keywords = tagMap[tag];
+  const matched = allQuestions.filter(q =>
+    q.type === 'choice' &&
+    Array.isArray(q.options) && q.options.length >= 4 &&
+    typeof q.correctIndex === 'number' &&
+    keywords.some(kw =>
+      (q.knowledgePoint?.includes(kw)) ||
+      (q.question?.includes(kw))
+    )
+  );
+
+  // 随机抽取 count 道，不足则全取
+  const shuffled = [...matched].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
 }

@@ -26,6 +26,18 @@ export default class ErrorBoundary extends Component<Props, State> {
           <p style={{ fontSize: 14, color: '#94a3b8', maxWidth: 320, textAlign: 'center' }}>
             请重启应用，数据不会丢失。
           </p>
+          {this.state.error && (
+            <details style={{ maxWidth: 480, width: '100%', marginTop: 8 }}>
+              <summary style={{ fontSize: 12, color: '#64748b', cursor: 'pointer' }}>查看错误详情</summary>
+              <pre style={{
+                fontSize: 11, color: '#dc2626', background: '#fef2f2', padding: 10,
+                borderRadius: 6, marginTop: 8, whiteSpace: 'pre-wrap', wordBreak: 'break-all',
+                maxHeight: 200, overflow: 'auto',
+              }}>
+                {this.state.error}
+              </pre>
+            </details>
+          )}
           <button
             onClick={() => window.location.reload()}
             style={{

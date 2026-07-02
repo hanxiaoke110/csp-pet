@@ -3,12 +3,17 @@
 const API_BASE = 'https://api.cspstudy.top';
 
 function getDeviceHash(): string {
-  let hash = localStorage.getItem('csp_device_hash');
-  if (!hash) {
-    hash = 'dh-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    localStorage.setItem('csp_device_hash', hash);
+  try {
+    let hash = localStorage.getItem('csp_device_hash');
+    if (!hash) {
+      hash = 'dh-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('csp_device_hash', hash);
+    }
+    return hash;
+  } catch {
+    // 隐私模式等 localStorage 不可用时，回退到内存随机值
+    return 'dh-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
-  return hash;
 }
 
 export function getStoredHash(): string {
@@ -16,7 +21,11 @@ export function getStoredHash(): string {
 }
 
 export function getStoredClassCode(): string {
-  return localStorage.getItem('csp_class_code') || '';
+  try {
+    return localStorage.getItem('csp_class_code') || '';
+  } catch {
+    return '';
+  }
 }
 
 async function apiCall<T>(
@@ -73,6 +82,38 @@ export async function registerPlayer(
 
 export async function syncProgress(playerData: Record<string, unknown>): Promise<{ success: boolean }> {
   return apiCall('/api/dungeon/sync', 'POST', playerData);
+}
+
+// 战斗结束上报：服务端校验、写 dungeon_attempts、按固定规则发金币。前端不传 earned_reward（服务端自算）。
+// 同时同步客户端权威的等级/段位/连胜字段到服务端（供跨设备登录恢复）。
+export async function reportBattle(payload: {
+  dungeon_id: string;
+  stage_id: string;
+  is_win: boolean;
+  rating: string;
+  questions_answered: number;
+  correct_count: number;
+  player_level?: number;
+  exp?: number;
+  rank_tier?: number;
+  rank_points?: number;
+  current_streak?: number;
+  max_streak?: number;
+}): Promise<{ success: boolean; gold_added: number }> {
+  return apiCall('/api/dungeon/report-battle', 'POST', {
+    dungeon_id: payload.dungeon_id,
+    stage_id: payload.stage_id,
+    is_win: payload.is_win ? 1 : 0,
+    rating: payload.rating,
+    questions_answered: payload.questions_answered,
+    correct_count: payload.correct_count,
+    player_level: payload.player_level,
+    exp: payload.exp,
+    rank_tier: payload.rank_tier,
+    rank_points: payload.rank_points,
+    current_streak: payload.current_streak,
+    max_streak: payload.max_streak,
+  });
 }
 
 export async function getLeaderboard(

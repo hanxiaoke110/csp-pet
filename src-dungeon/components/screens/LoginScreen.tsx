@@ -48,9 +48,11 @@ export default function LoginScreen() {
         expToNext: expToNextLevel(p.player_level || p.playerLevel || 1),
       });
 
-      // Restore dungeon progress
+      // Restore dungeon progress（与服务端合并取较优，防 reportBattle 失败导致进度缩水）
       if (resp.dungeons && resp.dungeons.length > 0) {
-        const progress: DungeonProgress[] = (resp.dungeons as any[]).map((d: any) => ({
+        const ratingOrder: Record<string, number> = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
+        const statusRank: Record<string, number> = { 'locked':0, 'unlocked':1, 'in_progress':2, 'cleared':3 };
+        const serverProgress: DungeonProgress[] = (resp.dungeons as any[]).map((d: any) => ({
           dungeonId: d.dungeon_id || d.dungeonId,
           status: d.status || 'locked',
           completedStages: d.completed_stages || d.completedStages || 0,
@@ -60,7 +62,22 @@ export default function LoginScreen() {
           bestScore: d.best_score || d.bestScore || 0,
           bestRating: d.best_rating || d.bestRating || 'D',
         }));
-        useDungeonStore.setState({ dungeonProgress: progress });
+        const localProgress = useDungeonStore.getState().dungeonProgress;
+        // 合并：每个副本取服务端与本地较优者
+        const merged = serverProgress.map(sp => {
+          const lp = localProgress.find(p => p.dungeonId === sp.dungeonId);
+          if (!lp) return sp;
+          const pickStatus = (statusRank[lp.status]||0) >= (statusRank[sp.status]||0) ? lp.status : sp.status;
+          return {
+            ...sp,
+            status: pickStatus as DungeonProgress['status'],
+            completedStages: Math.max(sp.completedStages, lp.completedStages),
+            bossDefeated: sp.bossDefeated || lp.bossDefeated,
+            bestScore: Math.max(sp.bestScore, lp.bestScore),
+            bestRating: (ratingOrder[lp.bestRating]||0) >= (ratingOrder[sp.bestRating]||0) ? lp.bestRating : sp.bestRating,
+          };
+        });
+        useDungeonStore.setState({ dungeonProgress: merged });
       }
 
       // Restore badges

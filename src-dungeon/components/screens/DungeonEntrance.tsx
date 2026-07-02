@@ -7,6 +7,7 @@ export default function DungeonEntrance() {
   const navigate = useNavigate();
   const dungeons = useDungeonStore(s => s.dungeons);
   const progress = useDungeonStore(s => s.dungeonProgress);
+  const player = useDungeonStore(s => s.player);
   const isUnlocked = useDungeonStore(s => s.isDungeonUnlocked);
   const setView = useDungeonStore(s => s.setView);
 
@@ -23,13 +24,20 @@ export default function DungeonEntrance() {
   }
 
   if (!isUnlocked(dungeon.id)) {
+    // 区分真实卡点：等级不足 vs 前置未通关
+    const levelLocked = player.playerLevel < dungeon.unlockLevel;
+    const reqDungeon = dungeon.requiredDungeon
+      ? dungeons.find(d => d.id === dungeon.requiredDungeon)
+      : null;
+    const reqCleared = reqDungeon ? (progress.find(p => p.dungeonId === reqDungeon.id)?.status === 'cleared') : true;
+    const reasons: string[] = [];
+    if (levelLocked) reasons.push(`等级需达到 Lv.${dungeon.unlockLevel}（当前 Lv.${player.playerLevel}）`);
+    if (reqDungeon && !reqCleared) reasons.push(`需先通关「${reqDungeon.name}」`);
     return (
       <div className="loading-screen">
         <div className="loading-title">🔒 副本封印中</div>
         <p style={{ color: 'var(--text-dim)' }}>
-          {dungeon.requiredDungeon
-            ? `需先通关「${dungeons.find(d => d.id === dungeon.requiredDungeon)?.name || '?'}」`
-            : '等级不足'}
+          {reasons.length > 0 ? reasons.join('，') : '条件未满足'}
         </p>
         <button className="pixel-btn" onClick={() => navigate('/map')}>返回地图</button>
       </div>
@@ -49,12 +57,19 @@ export default function DungeonEntrance() {
     navigate(`/battle/${dungeonId}/boss`);
   };
 
+  const bgStyle = dungeon.bgImage
+    ? {
+        backgroundImage: `linear-gradient(180deg, rgba(10,10,10,0.7), rgba(10,10,10,0.9)), url(${dungeon.bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }
+    : {
+        background: `linear-gradient(180deg, ${dungeon.color}11, #0a0a0a)`,
+      };
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: `linear-gradient(180deg, ${dungeon.color}11, #0a0a0a)`,
-      padding: '20px',
-    }}>
+    <div style={{ minHeight: '100vh', padding: '20px', ...bgStyle }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         {/* Back */}
         <button className="pixel-btn" onClick={() => navigate('/map')} style={{ marginBottom: '16px', fontSize: '12px' }}>
@@ -97,8 +112,14 @@ export default function DungeonEntrance() {
 
         {/* Guardian NPC */}
         <div className="dialog-box" style={{ marginBottom: '20px' }}>
-          <div className="dialog-speaker">{dungeon.guardianName}</div>
+          <div className="dialog-speaker">🛡️ {dungeon.guardianName}</div>
           <div className="dialog-text">{dungeon.guardianLine}</div>
+        </div>
+
+        {/* Boss dialog */}
+        <div className="dialog-box" style={{ marginBottom: '20px', borderColor: 'var(--hp-red)' }}>
+          <div className="dialog-speaker" style={{ color: 'var(--hp-red)' }}>👹 {dungeon.bossName}</div>
+          <div className="dialog-text">{dungeon.bossLine}</div>
         </div>
 
         {/* Stages */}

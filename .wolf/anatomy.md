@@ -1,6 +1,6 @@
 # anatomy.md — CSP 学习助手项目结构
 
-> 最后更新：2026-06-12
+> 最后更新：2026-06-30（智子试炼场战斗逻辑修复后）
 
 ## 项目目录
 
@@ -34,7 +34,7 @@ csp学习助手（师+生）/
 │   │   │   ├── oj/OJTraining.tsx
 │   │   │   └── settings/SettingsPage.tsx  # 设置 (AI配置+班级绑定+学习数据+集训)
 │   │   ├── stores/
-│   │   │   ├── petStore.ts      # 宠物数据 (Zustand + localStorage)
+│   │   │   ├── petStore.ts      # 宠物数据 (Zustand + localStorage)，含经验池与战斗属性初始化
 │   │   │   ├── quizStore.ts     # 选择题数据
 │   │   │   ├── hatchStore.ts    # 孵化数据
 │   │   │   ├── courseStore.ts   # 课程数据
@@ -71,7 +71,8 @@ csp学习助手（师+生）/
 ├── docs/superpowers/specs/      # 设计文档
 │   ├── cf-config.md             # Cloudflare 配置
 │   ├── csp-roadmap.md            # 升级路线图
-│   └── 2026-06-02-wish-wall-design.md  # 许愿墙方案
+│   ├── 2026-06-02-wish-wall-design.md  # 许愿墙方案
+│   └── 2026-06-29-智子试炼场-design.md  # 智子试炼场（宠物回合制地牢战斗）
 │
 └── .wolf/                       # 项目记忆 (OpenWolf)
     ├── anatomy.md               # 本文档
@@ -102,9 +103,10 @@ Students  →  api.cspstudy.top (CF Worker + D1)
 - 兑换码：Web App → POST /api/codes/exc|camp → 与 Chrome 插件算法一致
 - 月度清理：懒触发 (GET /api/wishes 首次访问当月)
 
-### src-dungeon/ — 潜龙闭关・学霸副本攻略（2026-06-13 新增）
+### src-dungeon/ — 潜龙闭关・学霸副本攻略（2026-06-13 新增，2026-06-29 升级为「智子试炼场」）
 
 独立 Web 应用，CSP-J 初赛沉浸式闯关游戏，部署到 `dungeon.cspstudy.top`。
+2026-06-29 升级方向：将原「答题扣 HP」战斗改为「宠物回合制对战 + 编程题驱动技能释放」。
 
 ```
 src-dungeon/
@@ -112,26 +114,32 @@ src-dungeon/
 ├── main.tsx                       # React 入口
 ├── App.tsx                        # 路由（HashRouter）+ 3级数据加载
 ├── App.css                        # 像素 RPG 主题样式（~250行）
-├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API等）
-├── stores/dungeonStore.ts         # Zustand 核心状态管理（~270行）
+├── tsconfig.dungeon.json         # 独立 TypeScript 配置，用于类型检查 src-dungeon
+├── types/dungeon.ts               # 所有 TS 类型（Player/Dungeon/Badge/API/智子战斗等）
+├── stores/dungeonStore.ts         # Zustand 核心状态管理（~560行）
 ├── data/
-│   ├── dungeons.json              # 8 副本定义（40 关卡）
+│   ├── dungeons.json              # 8 副本定义（40 关卡，每关含 enemyPet 敌方宠物配置，副本含 bgImage / guardianLine / bossLine 剧情字段）
+│   ├── fables.json                # 13 篇 CSP 知识点寓言
+│   ├── question-mapping.json      # 240 题 → 副本/关卡映射
 │   ├── schools.json               # 5 流派 × 8 段位
-│   └── question-mapping.json      # 240 题 → 副本/关卡映射
+│   └── skills.ts                  # 4 技能定义与 CSP 知识点标签
 ├── components/
 │   ├── screens/
 │   │   ├── TitleScreen.tsx        # 标题画面
 │   │   ├── RegisterScreen.tsx     # 2步注册（班级码+流派选择）
 │   │   ├── DungeonMap.tsx         # 世界地图（8节点）
 │   │   ├── DungeonEntrance.tsx    # 副本入口（关卡列表+Boss）
-│   │   ├── BattleScreen.tsx       # 核心战斗（HP/连击/暴击/特效）
+│   │   ├── BattleScreen.tsx       # 核心战斗（智子试炼场：宠物回合制答题驱动）
+│   │   ├── SkillTooltip.tsx       # 技能悬浮提示
 │   │   ├── RewardScreen.tsx       # 结算画面（EXP/金币/评级）
-│   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 4维度）
+│   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 8维度）
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
 ├── utils/
-│   ├── gameLogic.ts               # 数值公式（~200行）
+│   ├── gameLogic.ts               # 数值公式（~230行）
+│   ├── combatLogic.ts             # 智子试炼场：宠物战斗数值（元素克制/伤害/先手）
+│   ├── combatLogic.test.ts        # combatLogic 单元测试（vitest）
 │   ├── api.ts                     # API 客户端
-│   └── questionLoader.ts          # 3级题目加载
+│   └── questionLoader.ts          # 3级题目加载 + 按技能标签选题
 ```
 
 ### API 端点（cf-workers/api.js 新增 ~280行）
@@ -140,9 +148,9 @@ src-dungeon/
 |------|------|
 | POST /api/dungeon/register | 注册（4字段+流派，缺一不可） |
 | GET /api/dungeon/status | 获取完整状态 |
-| POST /api/dungeon/sync | 同步进度 |
-| POST /api/dungeon/report | 上报答题 |
-| GET /api/dungeon/leaderboard | 排行榜（scope+type参数） |
+| POST /api/dungeon/sync | 同步进度（仅允许非敏感字段，禁止客户端写金币/等级/经验/段位） |
+| POST /api/dungeon/report-battle | 战斗结束后上报（服务端校验、写 dungeon_attempts、赢时服务端加金币） |
+| GET /api/dungeon/leaderboard | 排行榜（scope+type参数，班级榜需验证设备归属） |
 | GET/POST /api/dungeon/daily-tasks | 每日任务 |
 | POST /api/dungeon/claim-daily | 领取每日奖励 |
 | GET /api/dungeon/broadcasts | 全服广播 |
@@ -154,3 +162,5 @@ src-dungeon/
 ### D1 新表（6张）
 
 dungeon_players, dungeon_progress, dungeon_attempts, dungeon_badges, dungeon_daily_tasks, dungeon_broadcasts
+
+- `dungeon_attempts` 含 `earned_reward INTEGER DEFAULT 0`，用于标记该次挑战是否发放金币奖励
