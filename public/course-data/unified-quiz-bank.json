@@ -949,7 +949,7 @@
       "A. 10",
       "B. 15",
       "C. 30",
-      "D. 20 由1，1，2，2，3这五个数字组成不同的三位数有（ ）种。"
+      "D. 20"
     ],
     "correctIndex": 1,
     "explanation": "6人分3队不区分队序：C(6,2)×C(4,2)×C(2,2)/3!=15×6×1/6=15。答案B(15)。",
@@ -11327,5 +11327,23 @@
     "hasImage": false,
     "code": "void bubbleSortWithFlag(vector<int> &nums) {\n    ________________ // 在此处填入代码\n    for (int j = 0; j < i; j++) {\n        if (nums[j] > nums[j + 1]) {\n            swap(nums[j], nums[j + 1]);\n            ___________________________ // 在此处填入代码\n            }\n        }\n    if (!flag) break;",
     "level": 4
+  },
+  "csp-j-2021-012": {
+    "id": "csp-j-2021-012",
+    "source": "csp_exam",
+    "year": 2021,
+    "knowledgePoint": "组合数学",
+    "question": "由1，1，2，2，3这五个数字组成不同的三位数有（ ）种。",
+    "options": [
+      "A. 18",
+      "B. 15",
+      "C. 12",
+      "D. 24"
+    ],
+    "correctIndex": 0,
+    "explanation": "分两类：①三个数字都不同(1,2,3)：3!=6种；②两个相同一个不同：两1一2/两1一3/两2一1/两2一3共4种组合，每种3种排法，共12种。总计6+12=18。答案A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false
   }
 }
