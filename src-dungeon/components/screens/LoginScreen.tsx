@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { loginPlayer } from '../../utils/api';
-import { expToNextLevel, getRankTier } from '../../utils/gameLogic';
+import { expToNextLevel } from '../../utils/gameLogic';
 import type { DungeonProgress } from '../../types/dungeon';
 
 export default function LoginScreen() {

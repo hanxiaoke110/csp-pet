@@ -1,9 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { listen, emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWindow, LogicalSize } from '@tauri-apps/api/window';
 import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
+import { MemoryRouter } from 'react-router-dom';
 import AppShell from './components/layout/AppShell';
 import CourseList from './components/courses/CourseList';
 import AIChat from './components/ai/AIChat';
@@ -14,6 +15,7 @@ import OJTraining from './components/oj/OJTraining';
 import ExamTraining from './components/exam/ExamTraining';
 import SettingsPage from './components/settings/SettingsPage';
 import AdminPage from './components/admin/AdminPage';
+import DungeonEmbed, { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/DungeonEmbed';
 import { useCourseStore } from './stores/courseStore';
 import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
@@ -188,10 +190,50 @@ function ChangelogModal() {
     </div>
   );
 }
+// 主应用布局：侧边栏 + 路由出口 + 里程碑提示（地牢页面不经过此布局，全屏沉浸）
+function AppLayout() {
+  const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { count } = (e as CustomEvent).detail;
+      const badges: Record<number, string> = { 5: '🌟 学习新星', 20: '💪 坚持不懈', 50: '🔥 小有成就', 100: '👑 百题大王' };
+      const badge = badges[count] || '';
+      setToast(`${badge}！已完成 ${count} 道题的验证！`);
+      setTimeout(() => setToast(null), 4000);
+    };
+    window.addEventListener('csp-milestone', handler);
+    return () => window.removeEventListener('csp-milestone', handler);
+  }, []);
+
+  return (
+    <>
+      <PetActionHandler />
+      <WelcomeModal />
+      <ChangelogModal />
+      <AppShell>
+        <Outlet />
+        {toast && <div className="milestone-toast">{toast}</div>}
+      </AppShell>
+    </>
+  );
+}
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  // 顶层路由切换：进/出地牢时整体在 BrowserRouter 与 MemoryRouter 间二选一，避免 Router 嵌套。
+  // 必须放在所有 early return 之前，保持 hooks 调用顺序稳定。
+  const [routePath, setRoutePath] = useState(() => window.location.pathname);
+  useEffect(() => {
+    const update = () => setRoutePath(window.location.pathname);
+    window.addEventListener('popstate', update);
+    window.addEventListener(APP_ROUTE_CHANGE_EVENT, update);
+    return () => {
+      window.removeEventListener('popstate', update);
+      window.removeEventListener(APP_ROUTE_CHANGE_EVENT, update);
+    };
+  }, []);
   const loadConfig = useAIStore(s => s.loadConfig);
   const petLoaded = usePetStore(s => s.load);
 
@@ -249,18 +291,7 @@ function App() {
     return () => { if (hungerTimer) clearInterval(hungerTimer); };
   }, []);
 
-  // Milestone toast listener
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const { count } = (e as CustomEvent).detail;
-      const badges: Record<number, string> = { 5: '🌟 学习新星', 20: '💪 坚持不懈', 50: '🔥 小有成就', 100: '👑 百题大王' };
-      const badge = badges[count] || '';
-      setToast(`${badge}！已完成 ${count} 道题的验证！`);
-      setTimeout(() => setToast(null), 4000);
-    };
-    window.addEventListener('csp-milestone', handler);
-    return () => window.removeEventListener('csp-milestone', handler);
-  }, []);
+  // Milestone toast listener — moved to AppLayout (only active in main app, not dungeon)
 
   useEffect(() => {
     loadConfig();
@@ -415,13 +446,20 @@ function App() {
     );
   }
 
+  // 智子试炼场：全屏 MemoryRouter，与 BrowserRouter 平级不嵌套
+  if (routePath.startsWith('/dungeon')) {
+    return (
+      <MemoryRouter>
+        <DungeonEmbed />
+      </MemoryRouter>
+    );
+  }
+
   return (
     <BrowserRouter>
-      <PetActionHandler />
-      <WelcomeModal />
-      <ChangelogModal />
-      <AppShell>
-        <Routes>
+      <Routes>
+        {/* 主应用：侧边栏 + 内容区 */}
+        <Route element={<AppLayout />}>
           <Route path="/" element={<Navigate to="/courses" replace />} />
           <Route path="/courses" element={<CourseList />} />
           <Route path="/ai-coach" element={<AIChat />} />
@@ -432,9 +470,10 @@ function App() {
           <Route path="/oj-training" element={<OJTraining />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/admin" element={<AdminPage />} />
-        </Routes>
-        {toast && <div className="milestone-toast">{toast}</div>}
-      </AppShell>
+          {/* 兜底：未知路径回课程页 */}
+          <Route path="*" element={<Navigate to="/courses" replace />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

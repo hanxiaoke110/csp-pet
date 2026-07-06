@@ -1,0 +1,166 @@
+/* 智子试炼场 · Phaser 战斗场景 CSS 覆盖层 */
+
+.battle-question-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 100;
+  padding: 20px;
+}
+
+.battle-question-card {
+  width: 100%;
+  max-width: 560px;
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+  border: 4px solid #4a4a6a;
+  box-shadow:
+    inset -2px -2px 0 0 rgba(0, 0, 0, 0.4),
+    inset 2px 2px 0 0 rgba(255, 255, 255, 0.05),
+    0 0 40px rgba(0, 0, 0, 0.6);
+  padding: 24px;
+  animation: battleCardPopIn 0.25s ease;
+}
+
+@keyframes battleCardPopIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.battle-question-banner {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 12px;
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+}
+
+.battle-question-text {
+  font-size: 15px;
+  color: #e0e0e0;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+}
+
+.battle-question-code {
+  background: #0a0a12;
+  border: 2px solid #2a2a3a;
+  border-radius: 0;
+  padding: 12px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.battle-question-code code {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #aaddff;
+}
+
+.battle-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.battle-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #16213e;
+  border: 3px solid #4a4a6a;
+  color: #e0e0e0;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.battle-option-btn:hover:not(:disabled) {
+  background: #1e2a4a;
+  border-color: #ffd700;
+  transform: translateX(4px);
+}
+
+.battle-option-btn:disabled {
+  cursor: default;
+}
+
+.battle-option-btn.correct {
+  background: rgba(34, 136, 51, 0.3);
+  border-color: #44cc44;
+}
+
+.battle-option-btn.wrong {
+  background: rgba(204, 51, 51, 0.3);
+  border-color: #ff4444;
+}
+
+.battle-option-btn.disabled {
+  opacity: 0.5;
+}
+
+.battle-option-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #0a0a12;
+  border: 2px solid #4a4a6a;
+  font-weight: bold;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.battle-answer-feedback {
+  margin-top: 16px;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  border: 2px solid;
+}
+
+.battle-answer-feedback.correct {
+  color: #44cc44;
+  background: rgba(34, 136, 51, 0.15);
+  border-color: #44cc44;
+}
+
+.battle-answer-feedback.wrong {
+  color: #ff4444;
+  background: rgba(204, 51, 51, 0.15);
+  border-color: #ff4444;
+}
+
+/* 错题寓言弹窗 */
+.battle-fable-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 110;
+  padding: 20px;
+}
+
+.battle-fable-card {
+  max-width: 480px;
+  width: 100%;
+  background: #1a1a2e;
+  border: 4px solid #4a4a6a;
+  padding: 20px;
+}
+
+.battle-fable-card .pixel-btn {
+  width: 100%;
+  margin-top: 16px;
+}

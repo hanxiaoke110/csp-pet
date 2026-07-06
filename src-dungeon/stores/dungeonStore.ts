@@ -7,7 +7,7 @@ import type {
 import {
   getLevelFromExp,
   getRankTier, expToNextLevel,
-  RANK_POINTS_THRESHOLDS, FIRST_CLEAR_MULTIPLIER,
+  FIRST_CLEAR_MULTIPLIER,
   BOSS_CLEAR_EXP, BOSS_CLEAR_GOLD, STAGE_CLEAR_EXP, STAGE_CLEAR_GOLD,
 } from '../utils/gameLogic';
 
@@ -86,6 +86,7 @@ interface DungeonState {
   // Player
   initPlayer: (data: Partial<PlayerState>) => void;
   setSchool: (school: School) => void;
+  setClassCode: (classCode: string) => void;
   addExp: (amount: number) => void;
   addGold: (amount: number) => void;
   addRankPoints: (amount: number) => void;
@@ -189,6 +190,10 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   }),
 
   setSchool: (school) => set((s) => ({ player: { ...s.player, school } })),
+
+  // 换班级码时调用：仅更新本地 classCode 字段并存档，进度/金币/段位全部保留（数据按 device_hash 继承）。
+  // 服务端 class_code + teacher_id 由 syncProgress 同步（sync 端点已支持 class_code 白名单）。
+  setClassCode: (classCode) => set((s) => ({ player: { ...s.player, classCode } })),
 
   addExp: (amount) => set((s) => {
     const totalExp = (s.player.exp || 0) + amount;

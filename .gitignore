@@ -28,3 +28,6 @@ src-tauri/target
 # Raw art source files (not for build)
 pet素材/
 .env
+
+# Agent local config
+.claude/

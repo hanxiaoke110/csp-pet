@@ -1300,8 +1300,9 @@ export default {
           const elapsed = Date.now() - new Date(lastSync.updated_at + 'Z').getTime();
           if (elapsed < 5000) return new Response(JSON.stringify({ success: true, synced: false, reason: 'too_frequent' }), { headers: cors });
         }
-        // 白名单：仅允许修改昵称与流派；统计/经济/段位字段禁止直接写入（由 report-battle 累加）
-        const allowedFields = ['display_name', 'school'];
+        // 白名单：仅允许修改昵称、流派、班级码；统计/经济/段位字段禁止直接写入（由 report-battle 累加）
+        // class_code 用于换班级时同步归属（数据按 device_hash 继承，class_code 仅作准入凭证+班级榜过滤）
+        const allowedFields = ['display_name', 'school', 'class_code'];
         const sets = [];
         const values = [];
         for (const f of allowedFields) {
@@ -1315,6 +1316,13 @@ export default {
               if (dn.length < 1 || dn.length > 8) return new Response(JSON.stringify({ error: '昵称需1-8字' }), { status: 400, headers: cors });
               sets.push('display_name=?');
               values.push(dn);
+            } else if (f === 'class_code') {
+              // 换班级码：校验新班级码合法且活跃，同时同步 teacher_id（新老师才能在地牢面板看到该学生）
+              const newCode = String(body.class_code);
+              const cls = await db.prepare("SELECT class_code, teacher_id FROM classes WHERE class_code=? AND status='active'").bind(newCode).first();
+              if (!cls) return new Response(JSON.stringify({ error: '班级码无效或已失效' }), { status: 400, headers: cors });
+              sets.push('class_code=?', 'teacher_id=?');
+              values.push(newCode, cls.teacher_id);
             }
           }
         }
@@ -1581,6 +1589,8 @@ export default {
         const cls = await db.prepare('SELECT * FROM classes WHERE class_code=? AND teacher_id=?').bind(student.class_code, teacher.teacher_id).first();
         if (!cls) return new Response(JSON.stringify({ error: '无权操作该学生' }), { status: 403, headers: cors });
         await db.prepare('UPDATE dungeon_players SET status=\'inactive\', updated_at=datetime(\'now\') WHERE device_hash=?').bind(device_hash).run();
+        // 同步暂停 class_students：否则桌面 validate 仍通过，学生能进地牢但 report-battle 403（进得去打不了）
+        try { await db.prepare("UPDATE class_students SET status='removed' WHERE device_hash=?").bind(device_hash).run(); } catch {}
         return new Response(JSON.stringify({ success: true, message: '学生已暂停使用' }), { headers: cors });
       }
 
@@ -1596,6 +1606,8 @@ export default {
         const cls = await db.prepare('SELECT * FROM classes WHERE class_code=? AND teacher_id=?').bind(student.class_code, teacher.teacher_id).first();
         if (!cls) return new Response(JSON.stringify({ error: '无权操作该学生' }), { status: 403, headers: cors });
         await db.prepare('UPDATE dungeon_players SET status=\'active\', updated_at=datetime(\'now\') WHERE device_hash=?').bind(device_hash).run();
+        // 同步恢复 class_students
+        try { await db.prepare("UPDATE class_students SET status='active' WHERE device_hash=? AND class_code=?").bind(device_hash, student.class_code).run(); } catch {}
         return new Response(JSON.stringify({ success: true, message: '学生已恢复使用' }), { headers: cors });
       }
 

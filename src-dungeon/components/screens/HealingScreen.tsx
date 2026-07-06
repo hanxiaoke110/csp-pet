@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
-import { getStageQuestions } from '../../utils/questionLoader';
 import fables from '../../data/fables.json';
 import FableCard from '../shared/FableCard';
 import type { Question } from '../../types/dungeon';
@@ -36,7 +35,7 @@ export default function HealingScreen() {
     if (questionBank.length > 0 && Object.keys(questionMapping).length > 0) {
       // Find questions matching the weak KP across all dungeons
       const matchingIds: string[] = [];
-      for (const [dungeonId, stages] of Object.entries(questionMapping)) {
+      for (const [, stages] of Object.entries(questionMapping)) {
         for (const stageIds of Object.values(stages)) {
           for (const qid of stageIds as string[]) {
             const q = questionBank.find(bq => bq.id === qid);

@@ -1,8 +1,6 @@
 // 潜龙闭关・学霸副本攻略 — 类型定义
 
 import type { PetElement, PetTier } from '../../src/types/pet';
-// @ts-ignore — 后续 Task 5 将使用 KnowledgeTag 扩展技能相关类型
-import type { KnowledgeTag } from '../data/skills';
 
 // ── 修行流派 ──
 export type School = 'cultivation' | 'tactical' | 'star' | 'minecraft' | 'code' | 'dream';
@@ -208,6 +206,30 @@ export interface BattleState {
   roundCount: number;
   skillUsages: SkillUsage[];
   usedSkillIds: string[];
+  // Phaser 战斗新增
+  energy: number;              // 当前能量
+  maxEnergy: number;           // 能量上限
+  shield: number;              // 当前护盾值
+  enemyIntent: EnemyIntent | null; // 敌方下回合意图
+  burnStacks: BurnStack[];     // 灼烧层数
+}
+
+// Phaser 战斗新增：敌方意图
+export type EnemyIntentType = 'attack' | 'heavy' | 'defend';
+
+export interface EnemyIntent {
+  type: EnemyIntentType;
+  power: number;               // 攻击倍率或减伤比例
+  label?: string;              // 显示文本
+  icon?: string;               // 显示图标
+  color?: string;              // 显示颜色
+}
+
+// Phaser 战斗新增：灼烧层数
+export interface BurnStack {
+  damage: number;
+  turnsRemaining: number;
+  sourceSkillId?: string;
 }
 
 // ── API 响应 ──

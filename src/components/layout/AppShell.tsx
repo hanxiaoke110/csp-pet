@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import RedeemCode from '../courses/RedeemCode';
+import { navigateToMainApp } from '../../../src-dungeon/DungeonEmbed';
 
 interface Props { children: ReactNode; }
 
@@ -125,6 +126,14 @@ export default function AppShell({ children }: Props) {
         <NavLink to="/oj-training" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           💻 OJ 训练
         </NavLink>
+        {/* 智子试炼场：全屏地牢，需整体切换到 MemoryRouter，用 pushState 触发顶层路由二选一 */}
+        <button
+          className="nav-item"
+          style={{ background: 'none', cursor: 'pointer', fontSize: 14, border: 'none', width: '100%', textAlign: 'left', fontFamily: 'inherit' }}
+          onClick={() => navigateToMainApp('/dungeon')}
+        >
+          ⚔️ 智子试炼场
+        </button>
 
         <div className="sidebar-section">挑战</div>
 

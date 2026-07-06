@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useDungeonStore } from './stores/dungeonStore';
 import { loadQuestionBank, loadDungeons, loadQuestionMapping } from './utils/questionLoader';
 import { getStoredClassCode } from './utils/api';
-import type { DungeonDefinition, Question, DungeonProgress } from './types/dungeon';
+import type { DungeonProgress } from './types/dungeon';
 
 // Screen imports (will be created in later phases)
 import TitleScreen from './components/screens/TitleScreen';
@@ -15,11 +15,9 @@ import RewardScreen from './components/screens/RewardScreen';
 import LeaderboardScreen from './components/screens/LeaderboardScreen';
 import ProfileScreen from './components/screens/ProfileScreen';
 import HealingScreen from './components/screens/HealingScreen';
-import LoginScreen from './components/screens/LoginScreen';
 
-function AppContent() {
+export function AppContent() {
   const store = useDungeonStore();
-  const [initDone, setInitDone] = useState(false);
 
   // Initialize: load data + restore state
   useEffect(() => {
@@ -29,6 +27,21 @@ function AppContent() {
 
         // Restore player progress from localStorage
         const hasLocal = store.loadFromLocalStorage();
+
+        // 换班级码检测：本地 dungeon_player.classCode 与桌面当前 csp_class_code 不一致时，
+        // 更新本地 classCode（进度/金币/段位全保留，数据按 device_hash 继承），并异步 sync 到服务端。
+        // 不调 register（已 active 会 409）；sync 端点已支持 class_code 白名单 + 班级码合法性校验 + teacher_id 同步。
+        if (hasLocal) {
+          const localCc = useDungeonStore.getState().player.classCode;
+          const desktopCc = getStoredClassCode();
+          if (desktopCc && localCc && localCc !== desktopCc) {
+            useDungeonStore.getState().setClassCode(desktopCc);
+            useDungeonStore.getState().saveToLocalStorage();
+            import('./utils/api').then(({ syncProgress }) => {
+              syncProgress({ class_code: desktopCc }).catch(() => {});
+            }).catch(() => {});
+          }
+        }
 
         // Load dungeons (bundled, fast)
         const dungeons = await loadDungeons();
@@ -66,7 +79,6 @@ function AppContent() {
           store.setQuestionMapping(mapping);
         }).catch(() => {});
 
-        setInitDone(true);
         store.setLoading(false);
       } catch (err) {
         store.setError(err instanceof Error ? err.message : '加载失败');
@@ -111,7 +123,7 @@ function AppContent() {
       <Route path="/leaderboard" element={<LeaderboardScreen />} />
       <Route path="/profile" element={<ProfileScreen />} />
       <Route path="/healing" element={<HealingScreen />} />
-      <Route path="/login" element={<LoginScreen />} />
+      {/* /login 已废弃：桌面端复用班级绑定身份，无换设备登录场景。文件保留备用。 */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

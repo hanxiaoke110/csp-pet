@@ -84,7 +84,7 @@ export default function DungeonMap() {
         maxWidth: '900px',
         margin: '0 auto',
       }}>
-        {dungeons.map((dungeon, index) => {
+        {dungeons.map((dungeon) => {
           const dp = getDungeonStatus(dungeon.id);
           const unlocked = isUnlocked(dungeon.id);
           const cleared = dp?.status === 'cleared';
