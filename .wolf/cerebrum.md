@@ -10,6 +10,7 @@
 - 独立查询（跨文件搜索、GitHub 查资料、多文件探索）优先用 Agent subagent，不占主 context
 
 ## Learnings
+- 当需求本质是“游戏化功能”而非普通 Web 页面时，应在早期主动提出引擎/框架选型（如 Phaser.js、Godot、Canvas 等），不要默认只用 React DOM 实现
 - 统一题库选项格式：选项存储时应包含 "A. " 前缀，渲染代码通过 `/^[A-D][.、]\s*/` 去除前缀并单独显示字母标签
 - 含 C++ 代码的选择题应将代码放在 `code` 字段（渲染为 `<pre><code>`），选项使用简短标签如 "A. 程序A" / "B. 程序B"
 - Tauri v2 插件必须三层配齐：Capability 权限 + Scope 范围 + Rust 端 `.plugin()` 注册

@@ -2,6 +2,13 @@
   "bugs": [
     {
       "date": "2026-07-01",
+      "error_message": "npx tsc --noEmit 报 17 处 noUnusedLocals/noUnusedParameters 错误，全部位于 src-dungeon/（未使用的 import/局部变量/类字段/map 回调参数）",
+      "root_cause": "智子试炼场多次重构升级后遗留未使用代码：删功能未清 import；initDone/firstTurn/skill/dh/hasClassCode/elementColor 声明后从未读取；BattleScene.dungeonTitle 类字段只赋值不读取；ELEMENT_COLORS 常量仅被未使用变量引用。连带：删 initDone 使 useState import 失效；删 firstTurn 使 determineFirstAttacker import 失效；删 dh 使 getStoredHash import 失效；删 hasClassCode 使 getStoredClassCode import 失效；删 elementColor 使 ELEMENT_COLORS 常量失效",
+      "fix": "仅删未使用代码不改逻辑：App.tsx 删 initDone 状态+setInitDone 调用+连带 useState import，删 DungeonDefinition/Question type import(保留 DungeonProgress)；BattleScreen 删 firstTurn/skill 局部变量+连带 determineFirstAttacker import+SkillSelectResult type import；DungeonMap 删 map 回调 index 参数；HealingScreen 删 getStageQuestions import+dungeonId 解构(改 [, stages])；LoginScreen 删 getRankTier import；RegisterScreen 删 dh 变量+连带 getStoredHash import；TitleScreen 删 hasClassCode+连带 getStoredClassCode import；BattlePhaserGame 删 BattleEndResult type import；PetSprite 删 elementColor+连带 ELEMENT_COLORS 常量；BattleScene 删 INITIAL_ENERGY 常量+dungeonTitle 类字段，this.dungeonTitle=this.add.text(...) 改为独立 this.add.text(...) 调用(保留标题显示且不产生新未使用局部)；dungeonStore 删 RANK_POINTS_THRESHOLDS import；types/dungeon 删 KnowledgeTag type import。修复后 npx tsc --noEmit 退出码 0",
+      "tags": ["智子试炼场", "typescript", "src-dungeon", "noUnusedLocals", "cleanup"]
+    },
+    {
+      "date": "2026-07-01",
       "error_message": "智子试炼场跨设备登录丢失等级/段位/连胜/进度；power/streak 排行榜恒为 0；金币 max 策略可被 localStorage 篡改；题库加载失败战斗永久卡死；Boss 战低等级不可战胜；completedStages 无去重可跳关；localStorage 单 try 包裹单损坏连累全部",
       "root_cause": "1) 服务端 dungeon_players 不存 player_level/exp/rank_tier/rank_points/streak，登录返回陈旧默认值覆盖客户端；2) initPlayer 用 Math.max(server,client) 合并 gold，客户端可篡改；3) reportBattle 失败被 .catch 吞，服务端进度落后但登录全量覆盖；4) incrWriteBudget 只在 rewardInserted 计 1 次，实际 5 次写，熔断少计；5) fallback Boss 用 legendary+level5+default 基础属性，低等级伤害为 1；6) BattleScreen init 不校验已通关关卡；7) loadFromLocalStorage 单 try 包 7 个 key",
       "fix": "report-battle 同步等级/段位/连胜字段到服务端(加上界防刷)；initPlayer 用服务端值恢复(金币以服务端为准)；LoginScreen 进度合并取较优；BattleScreen 加题库空检查+返回按钮；incrWriteBudget 按实际写次数累加；fallback Boss 改 rare+level3；init 校验已通关关卡跳回入口；loadFromLocalStorage 每 key 独立 try-catch；zhizi_tutorial_seen 加 try-catch；DungeonEntrance 锁定提示同时检查等级+前置",

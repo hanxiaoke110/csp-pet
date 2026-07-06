@@ -107,6 +107,8 @@ Students  →  api.cspstudy.top (CF Worker + D1)
 
 独立 Web 应用，CSP-J 初赛沉浸式闯关游戏，部署到 `dungeon.cspstudy.top`。
 2026-06-29 升级方向：将原「答题扣 HP」战斗改为「宠物回合制对战 + 编程题驱动技能释放」。
+2026-07-01 再次升级：BattleScreen 引入 Phaser.js 渲染卡牌战斗场景，能量/护盾/敌方意图/连击buff 机制落地。
+2026-07-01 清理：修复 src-dungeon 全部 noUnusedLocals/noUnusedParameters 错误（12 文件，仅删未使用 import/局部变量/类字段，逻辑零改动；BattleScene.dungeonTitle 字段删除后 add.text 改独立调用保留标题显示）。
 
 ```
 src-dungeon/
@@ -129,14 +131,34 @@ src-dungeon/
 │   │   ├── RegisterScreen.tsx     # 2步注册（班级码+流派选择）
 │   │   ├── DungeonMap.tsx         # 世界地图（8节点）
 │   │   ├── DungeonEntrance.tsx    # 副本入口（关卡列表+Boss）
-│   │   ├── BattleScreen.tsx       # 核心战斗（智子试炼场：宠物回合制答题驱动）
+│   │   ├── BattleScreen.tsx       # 核心战斗：React 外壳 + Phaser Canvas 卡牌回合制
+│   │   ├── BattleScreen.css       # 题目覆盖层样式
 │   │   ├── SkillTooltip.tsx       # 技能悬浮提示
 │   │   ├── RewardScreen.tsx       # 结算画面（EXP/金币/评级）
 │   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 8维度）
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
+│   └── shared/
+│       └── FableCard.tsx          # 知识点寓言卡片
+├── phaser/                        # Phaser.js 战斗场景（2026-07-01 新增）
+│   ├── BattlePhaserGame.ts        # Phaser.Game 实例管理
+│   ├── types.ts                   # Phaser 战斗内部类型
+│   ├── scenes/
+│   │   └── BattleScene.ts         # 主战斗场景（布局/动画/回合逻辑）
+│   ├── entities/
+│   │   ├── PetSprite.ts           # 宠物精灵（受击/攻击/庆祝/倒下动画）
+│   │   ├── HealthBar.ts           # 血条
+│   │   ├── EnergyOrb.ts           # 能量球
+│   │   ├── Card.ts                # 技能卡牌
+│   │   ├── CardHand.ts            # 手牌管理
+│   │   ├── TurnIndicator.ts       # 回合指示器
+│   │   ├── ComboCounter.ts        # 连击计数器
+│   │   ├── IntentBubble.ts        # 敌方意图气泡
+│   │   └── DamageText.ts          # 伤害飘字
+│   └── effects/
+│       └── (预留特效管理器)
 ├── utils/
 │   ├── gameLogic.ts               # 数值公式（~230行）
-│   ├── combatLogic.ts             # 智子试炼场：宠物战斗数值（元素克制/伤害/先手）
+│   ├── combatLogic.ts             # 智子试炼场：宠物战斗数值（元素克制/伤害/先手/能量/护盾/意图/灼烧）
 │   ├── combatLogic.test.ts        # combatLogic 单元测试（vitest）
 │   ├── api.ts                     # API 客户端
 │   └── questionLoader.ts          # 3级题目加载 + 按技能标签选题
