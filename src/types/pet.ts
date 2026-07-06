@@ -165,6 +165,7 @@ const PETDEX_PETS: PetSpecies[] = [
   { speciesId: 'steve-mc', name: 'Steve', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/steve-mc.json', description: '经典Minecraft史蒂夫，挖矿打盹骑猪', price: 200 },
   { speciesId: 'akaza', name: '猗窝座', element: 'fire', renderType: '2d', modelPath: '/pet-sprites/2d/akaza.json', description: '鬼灭之刃 Q版武斗风', price: 200 },
   { speciesId: 'tendou-alice', name: '天童爱丽丝', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/tendou-alice.json', description: '蔚蓝档案 萌系女仆光环', price: 200 },
+  { speciesId: 'hina', name: '空崎日奈', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/hina.json', description: '蔚蓝档案 风纪委员长，银发粉瞳', price: 200 },
   { speciesId: 'df-maixiaoshu', name: '麦小鼠', element: 'earth', renderType: '2d', modelPath: '/pet-sprites/2d/df-maixiaoshu.json', description: '机械守护鼠，可爱金属伙伴', price: 200 },
   { speciesId: 'gojo-satoru', name: '五条悟', element: 'wind', renderType: '2d', modelPath: '/pet-sprites/2d/gojo-satoru.json', description: '白毛眼罩咒术师，苍蓝能量', price: 200 },
   { speciesId: 'capvolt-electric', name: '皮卡丘·电', element: 'light', renderType: '2d', modelPath: '/pet-sprites/2d/capvolt-electric.json', description: '电气鼠电属性，十万伏特', price: 200 },
@@ -285,3 +286,4 @@ export const TIER_MULTIPLIERS: Record<PetTier, number> = {
   rare: 1.3,
   legendary: 1.6,
 };
+
