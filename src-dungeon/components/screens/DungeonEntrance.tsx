@@ -59,10 +59,11 @@ export default function DungeonEntrance() {
 
   const bgStyle = dungeon.bgImage
     ? {
-        backgroundImage: `linear-gradient(180deg, rgba(10,10,10,0.7), rgba(10,10,10,0.9)), url(${dungeon.bgImage})`,
+        backgroundImage: `linear-gradient(180deg, ${dungeon.color}88, rgba(10,10,10,0.92)), url(${dungeon.bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
+        imageRendering: 'pixelated' as const,
       }
     : {
         background: `linear-gradient(180deg, ${dungeon.color}11, #0a0a0a)`,
