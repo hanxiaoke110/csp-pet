@@ -11,6 +11,14 @@ interface SpriteMeta { frameWidth: number; frameHeight: number; maxFrames: numbe
 interface SpriteData { img: HTMLImageElement; meta: SpriteMeta; }
 
 const ANIM_ORDER = ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhappy'];
+// csp 动画名 → Petdex 等非 csp 包的可能别名（按优先级），用于 animOrder 里没有 csp 名时回退
+const ANIM_ALIASES: Record<string, string[]> = {
+  walk: ['running', 'running-right', 'running-left'],
+  sleep: ['waiting'],
+  celebrate: ['waving'],
+  think: ['review'],
+  unhappy: ['failed'],
+};
 
 // ─── 2D sprite sheet cache ───
 const spriteCache = new Map<string, SpriteData>();
@@ -181,9 +189,18 @@ export default function PetSprite({
 
   const anim = currentAnim;
   const spr = spriteRef.current;
-  const frames = spr?.meta.anims[anim] || 6;
-  const duration = spr?.meta.durations?.[anim] || 1100;
-  const rowIdx = ANIM_ORDER.indexOf(anim);
+  const order = spr?.meta.animOrder || ANIM_ORDER;
+  // 解析动画：pet 自有 animOrder 优先；csp 名不在则查别名（Petdex running/waving 等）；都没有回退 idle
+  let resolvedAnim = order.indexOf(anim) >= 0 ? anim : '';
+  if (!resolvedAnim) {
+    for (const alias of (ANIM_ALIASES[anim] || [])) {
+      if (order.indexOf(alias) >= 0) { resolvedAnim = alias; break; }
+    }
+  }
+  if (!resolvedAnim) resolvedAnim = order.indexOf('idle') >= 0 ? 'idle' : order[0];
+  const frames = spr?.meta.anims[resolvedAnim] || 6;
+  const duration = spr?.meta.durations?.[resolvedAnim] || 1100;
+  const rowIdx = order.indexOf(resolvedAnim);
   const displayH = Math.round(sz * (spr?.meta.frameHeight || 208) / (spr?.meta.frameWidth || 192));
 
   return (

@@ -209,29 +209,29 @@ export function createAchievements(
       }},
 
     // === 🌟 隐藏成就 ===
-    { id: 'hidden-triple', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
+    { id: 'hidden-triple', name: '三位一体', description: '签到、超级完美、额外挑战各完成 1 次', category: 'hidden', icon: '🎯', hidden: true,
       check: () => {
         try {
           const ci = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
           return { unlocked: (ci.streak || 0) >= 1 && superCompletions >= 1 && extraChallengeCount >= 1 };
         } catch { return { unlocked: false }; }
       }},
-    { id: 'hidden-name', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
+    { id: 'hidden-name', name: '代码之魂', description: '给智子起名包含「C++」「编程」或「代码」', category: 'hidden', icon: '💻', hidden: true,
       check: () => ({
         unlocked: ownedPets.some(p =>
           (p.petName || '').includes('C++') || (p.petName || '').includes('编程') || (p.petName || '').includes('代码')
         ),
       })},
-    { id: 'hidden-3perfect', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
+    { id: 'hidden-3perfect', name: '三连完美', description: '一周内 3 次完美通关', category: 'hidden', icon: '🏅', hidden: true,
       check: () => ({ unlocked: weeklyPerfects >= 3 }) },
-    { id: 'hidden-starve', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
+    { id: 'hidden-starve', name: '饿坏了', description: '让智子的饱食度降到 0', category: 'hidden', icon: '🤤', hidden: true,
       check: () => ({ unlocked: ownedPets.some(p => (p.hunger ?? 100) <= 0) }) },
-    { id: 'hidden-ai-csp', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
+    { id: 'hidden-ai-csp', name: '勤学好问', description: '向 AI 提问 CSP-J 相关问题', category: 'hidden', icon: '🤔', hidden: true,
       check: () => {
         try { return { unlocked: localStorage.getItem('csp_asked_cspj') === 'true' }; }
         catch { return { unlocked: false }; }
       }},
-    { id: 'hidden-perfect-review', name: '???', description: '???', category: 'hidden', icon: '❓', hidden: true,
+    { id: 'hidden-perfect-review', name: '复盘满分', description: '月度复盘全对', category: 'hidden', icon: '💯', hidden: true,
       check: () => ({ unlocked: lastReviewTotal > 0 && lastReviewCorrect === lastReviewTotal }) },
   ];
 }

@@ -65,8 +65,8 @@ export default function RaisingGuide() {
       </Section>
 
       <Section title="🎰 抽卡" icon="🎰">
-        <p>单抽 <strong>200g</strong>，每日限 5 次。</p>
-        <p>传说 1% · 稀有 10% · 保底 <strong>{ms.pityThreshold}</strong> 抽必出传说。</p>
+        <p>单抽 <strong>150g</strong>，每日限 5 次。</p>
+        <p>传说 4% · 稀有 8% · 保底 <strong>{ms.pityThreshold}</strong> 抽必出传说。</p>
         <p>达成<strong>化神</strong>（Lv.15）后保底减半至 50 抽。</p>
       </Section>
 

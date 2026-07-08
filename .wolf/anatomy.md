@@ -164,3 +164,20 @@ src-dungeon/
 dungeon_players, dungeon_progress, dungeon_attempts, dungeon_badges, dungeon_daily_tasks, dungeon_broadcasts
 
 - `dungeon_attempts` 含 `earned_reward INTEGER DEFAULT 0`，用于标记该次挑战是否发放金币奖励
+
+### 精灵工坊 + 教师上限（2026-07-07 新增/完善）
+
+**主后端**：`csp-pet-gitee/cf-workers/api.js`（~1640 行，根 anatomy 早期标 csp-desktop-pet ~670 行已过时）。学生桌面 App 与教师后台都消费它。
+
+**两个管理 UI（勿混淆）**：
+- `teacher-app/index.html` — **管理员/教师 Web 后台主 UI**（单 HTML + CDN React，无构建）。标签页：👥教师管理/💡许愿管理/🎫兑换码/💬需求收集/📦精灵工坊/📚我的精灵。编辑交互统一 prompt()/confirm() + toast()。**管理功能改这里**
+- `src/components/admin/AdminPage.tsx` — 学生桌面 App `/admin` 路由的**许愿墙精简页**（仅看许愿）。勿在此加管理功能
+
+**端点**：
+- `POST /api/workshop/upload` — 图片上传 R2，速率限制 5/h、20/d + 总数上限校验
+- `POST /api/workshop/pets` — 创建精灵记录（FormData/JSON 两分支），两分支 INSERT 前都有总数上限校验（修了 FormData 内联上传绕过漏洞）
+- `GET/POST /admin/settings` — 全局默认精灵上限 `pet_limit_default`（meta 表，默认 20，POST 校验 ≥1 + 失效缓存）
+- `POST /admin/teachers/:id/max-pets` — 教师独立上限（body `{max_pets}`：null 恢复默认 / ≥1 整数）
+- `GET /admin/teachers` — 返回含 `max_pets`(可空) + `pet_count` + class_count + student_count
+
+**上限解析**：`getTeacherPetLimit(db, teacher)` = 教师独立 `teachers.max_pets` > 全局 `meta.pet_limit_default` > 20（`_petLimitCache` 60s 内存缓存）。`checkTeacher` 的 SELECT 已含 `max_pets`（不加则独立上限永不生效）
