@@ -35,7 +35,8 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' ||
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.code === 'KeyI' || e.code === 'KeyJ' || e.code === 'KeyC')) ||
-            (e.ctrlKey && (e.key === 'U' || e.code === 'KeyU'))) {
+            (e.ctrlKey && (e.key === 'U' || e.code === 'KeyU')) ||
+            (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'U' || e.code === 'KeyI' || e.code === 'KeyJ' || e.code === 'KeyC' || e.code === 'KeyU'))) {
           e.preventDefault(); return false;
         }
       });

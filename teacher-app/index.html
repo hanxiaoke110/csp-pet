@@ -69,10 +69,21 @@ function toast(msg, type='success') {
 }
 
 async function api(path, opts={}) {
-  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+  const isForm = opts.body instanceof FormData;
+  const headers = { ...(isForm ? {} : { 'Content-Type': 'application/json' }), ...opts.headers };
   if (state._adminToken) headers['X-Admin-Token'] = state._adminToken;
   else if (state.token) headers['X-Teacher-Token'] = state.token;
-  const resp = await fetch(`${API}${path}`, { ...opts, headers });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), opts.timeout || 15000);
+  let resp;
+  try {
+    resp = await fetch(`${API}${path}`, { ...opts, headers, signal: controller.signal });
+  } catch (err) {
+    const aborted = err && err.name === 'AbortError';
+    return { error: aborted ? '请求超时，请检查网络后重试' : '网络连接失败，请检查 api.cspstudy.top 是否可访问' };
+  } finally {
+    clearTimeout(timer);
+  }
   if (!resp.ok) {
     try { const err = await resp.json(); return { error: err.error || `请求失败 (${resp.status})` }; }
     catch { return { error: `请求失败 (${resp.status})` }; }
@@ -108,7 +119,20 @@ function LoginPage() {
     setLoading(true);
     if (isAdmin) {
       if (!adminToken) { toast('请输入管理密码','error'); setLoading(false); return; }
-      const resp = await fetch(`${API}/admin/wishes`, { headers: { 'X-Admin-Token': adminToken } });
+      let resp;
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 15000);
+        try {
+          resp = await fetch(`${API}/api/admin/settings`, { headers: { 'X-Admin-Token': adminToken }, signal: controller.signal });
+        } finally {
+          clearTimeout(timer);
+        }
+      } catch (err) {
+        toast(err && err.name === 'AbortError' ? '请求超时，请检查网络后重试' : '网络连接失败，请检查 api.cspstudy.top 是否可访问','error');
+        setLoading(false);
+        return;
+      }
       if (!resp.ok) { toast(resp.status===401?'管理密码错误':'网络错误','error'); setLoading(false); return; }
       state._adminToken = adminToken; state.token = '';
       state.teacher = { teacher_id: 'admin', name: '管理员' };
@@ -175,11 +199,13 @@ function Dashboard() {
   const [subSelected, setSubSelected] = React.useState(null);
   const [wishes, setWishes] = React.useState([]);
   const [workshopPets, setWorkshopPets] = React.useState([]);
+  const [petLimitDefault, setPetLimitDefault] = React.useState(20);
+  const [petLimitInput, setPetLimitInput] = React.useState('');
 
   const isAdmin = !!state._adminToken;
 
   React.useEffect(() => {
-    if (tab === 'teachers') isAdmin ? loadAdminTeachers() : loadClasses();
+    if (tab === 'teachers') { isAdmin ? loadAdminTeachers() : loadClasses(); if (isAdmin) loadPetLimit(); }
     if (tab === 'wishes') loadWishes();
     if (tab === 'workshop-my') loadWorkshopPets();
     setSelected(null); setSubData([]); setSubSelected(null);
@@ -187,8 +213,36 @@ function Dashboard() {
 
   // ── Data loaders ──
   async function loadAdminTeachers() {
-    setLoading(true); const d = await api('/admin/teachers');
+    setLoading(true); const d = await api('/api/admin/teachers');
     if (Array.isArray(d)) setData(d); setLoading(false); render();
+  }
+  async function loadPetLimit() {
+    const d = await api('/api/admin/settings');
+    if (d && !d.error && Number.isInteger(d.pet_limit_default)) { setPetLimitDefault(d.pet_limit_default); setPetLimitInput(String(d.pet_limit_default)); }
+    render();
+  }
+  async function savePetLimit() {
+    const n = parseInt(petLimitInput, 10);
+    if (!Number.isInteger(n) || n < 1) { toast('上限必须为 ≥1 的整数','error'); return; }
+    const d = await api('/api/admin/settings', { method:'POST', body:JSON.stringify({ pet_limit_default:n }) });
+    if (d.error) toast(d.error,'error'); else { setPetLimitDefault(n); setPetLimitInput(String(n)); toast('✅ 全局默认上限已更新为 '+n); }
+  }
+  async function editMaxPets(t) {
+    const cur = t.max_pets != null ? String(t.max_pets) : '全局默认('+petLimitDefault+')';
+    const input = prompt(`为 ${t.name} 设置精灵上限（当前：${cur}）\n输入 ≥1 的整数；留空恢复全局默认：`, t.max_pets != null ? String(t.max_pets) : '');
+    if (input === null) return; // 取消
+    const trimmed = input.trim();
+    let body;
+    if (trimmed === '') {
+      if (!confirm(`确认让 ${t.name} 恢复使用全局默认（${petLimitDefault}）？`)) return;
+      body = { max_pets: null };
+    } else {
+      const n = parseInt(trimmed, 10);
+      if (!Number.isInteger(n) || n < 1) { toast('上限必须为 ≥1 的整数','error'); return; }
+      body = { max_pets: n };
+    }
+    const d = await api('/api/admin/teachers/'+t.teacher_id+'/max-pets', { method:'POST', body:JSON.stringify(body) });
+    if (d.error) toast(d.error,'error'); else { toast('✅ '+t.name+' 上限已更新'); loadAdminTeachers(); }
   }
   async function loadClasses() {
     setLoading(true); const d = await api('/api/classes');
@@ -202,18 +256,18 @@ function Dashboard() {
   }
   async function loadAdminClasses(teacherId) {
     setLoading(true); setSelected(teacherId);
-    const d = await api(`/admin/classes?teacher_id=${teacherId}`);
+    const d = await api(`/api/admin/classes?teacher_id=${teacherId}`);
     if (Array.isArray(d)) setSubData(d); setLoading(false); render();
   }
   async function loadWishes() {
     setLoading(true);
-    if (isAdmin) { const d = await api('/admin/teachers'); if (Array.isArray(d)) setData(d); }
-    else { const d = await api('/admin/wishes'); if (Array.isArray(d)) setWishes(d); }
+    if (isAdmin) { const d = await api('/api/admin/teachers'); if (Array.isArray(d)) setData(d); }
+    else { const d = await api('/api/admin/wishes'); if (Array.isArray(d)) setWishes(d); }
     setLoading(false); render();
   }
   async function loadTeacherWishes(teacherId) {
     setLoading(true); setSelected(teacherId);
-    const d = await api(`/admin/wishes/by-teacher?teacher_id=${teacherId}`);
+    const d = await api(`/api/admin/wishes/by-teacher?teacher_id=${teacherId}`);
     if (Array.isArray(d)) setWishes(d); setLoading(false); render();
   }
   async function loadWorkshopPets() {
@@ -226,13 +280,13 @@ function Dashboard() {
     const phone = prompt('手机号：'); if (!phone) return;
     const password = prompt('密码（至少6位）：'); if (!password||password.length<6) return toast('密码至少6位','error');
     const name = prompt('姓名：'); if (!name) return;
-    const d = await api('/admin/teachers', { method:'POST', body:JSON.stringify({ phone, password, name }) });
+    const d = await api('/api/admin/teachers', { method:'POST', body:JSON.stringify({ phone, password, name }) });
     d.error ? toast(d.error,'error') : (toast('老师已添加'), loadAdminTeachers());
   }
   async function addClass(teacherId) {
     const label = prompt('班级名称：'); if (!label) return;
     const tid = teacherId || (prompt('老师ID：')); if (!tid) return;
-    const d = await api(isAdmin?'/admin/classes':'/api/classes', { method:'POST', body:JSON.stringify({ teacher_id:tid, label }) });
+    const d = await api(isAdmin?'/api/admin/classes':'/api/classes', { method:'POST', body:JSON.stringify({ teacher_id:tid, label }) });
     d.error ? toast(d.error,'error') : (toast('班级已创建'), isAdmin ? loadAdminClasses(tid) : loadClasses());
   }
   function getTabs() {
@@ -286,6 +340,12 @@ function Dashboard() {
 
       // ── Admin: Teacher List ──
       isAdmin && !selected && React.createElement('div', null,
+        React.createElement('div', { className:'card', style:{ marginBottom:12, display:'flex', alignItems:'center', gap:12, flexWrap:'wrap' } },
+          React.createElement('span', { style:{ fontSize:13, fontWeight:600, color:'#334155' } }, '🎯 全局默认精灵上限：'),
+          React.createElement('input', { className:'input', type:'number', min:1, style:{ width:100 }, value:petLimitInput, onChange:e=>setPetLimitInput(e.target.value), onKeyDown:e=>e.key==='Enter'&&savePetLimit() }),
+          React.createElement('button', { className:'btn btn-primary btn-sm', onClick:savePetLimit }, '💾 保存'),
+          React.createElement('span', { style:{ fontSize:11, color:'#94a3b8' } }, '未单独设置的教师使用此值'),
+        ),
         React.createElement('div', { className:'row', style:{ marginBottom:16 } },
           React.createElement('span', { style:{ fontSize:13, color:'#64748b' } }, `共 ${data.length} 位老师`),
           React.createElement('button', { className:'btn btn-primary', onClick:addTeacher }, '+ 添加老师'),
@@ -296,16 +356,18 @@ function Dashboard() {
             React.createElement('div', { style:{ textAlign:'right' } },
               React.createElement('div', { style:{ fontSize:13, fontWeight:600 } }, '📋 ',t.class_count,' 班级'),
               React.createElement('div', { style:{ fontSize:12, color:'#64748b' } }, '👥 ',t.student_count,' 学生'),
+              React.createElement('div', { style:{ fontSize:12, color: t.max_pets!=null ? '#FF8C00' : '#94a3b8', fontWeight: t.max_pets!=null ? 600 : 400, marginTop:2 } }, '🎯 ', t.max_pets!=null ? ('上限 '+t.max_pets) : ('默认('+petLimitDefault+')'), ' · 🐾 已上传 ', t.pet_count||0, ' 只'),
               React.createElement('div', { style:{ display:'flex', gap:4, marginTop:6, justifyContent:'flex-end' } },
+                React.createElement('button', { className:'btn btn-outline btn-sm', style:{ fontSize:11 }, onClick:e=>{ e.stopPropagation(); editMaxPets(t); } }, '✏️ 上限'),
                 React.createElement('button', { className:'btn btn-outline btn-sm', style:{ fontSize:11 }, onClick:e=>{
                   e.stopPropagation();
                   const pw = prompt('为 '+t.name+' 设置新密码（至少6位）：');
                   if (!pw) return; if (pw.length < 6) { toast('密码至少6位','error'); return; }
-                  api('/admin/teachers/'+t.teacher_id+'/reset-password', { method:'POST', body:JSON.stringify({ password:pw }) })
+                  api('/api/admin/teachers/'+t.teacher_id+'/reset-password', { method:'POST', body:JSON.stringify({ password:pw }) })
                     .then(d => d.error ? toast(d.error,'error') : toast('✅ '+t.name+' 密码已重置'))
                     .catch(() => toast('网络错误','error'));
                 } }, '🔑 重置密码'),
-                React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:11 }, onClick:e=>{e.stopPropagation();if(!confirm('删除老师 '+t.name+'？这将同时删除其所有班级。'))return;api('/admin/teachers/'+t.teacher_id,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadAdminTeachers())).catch(()=>toast('网络错误','error'))} }, '🗑 删除'),
+                React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:11 }, onClick:e=>{e.stopPropagation();if(!confirm('删除老师 '+t.name+'？这将同时删除其所有班级。'))return;api('/api/admin/teachers/'+t.teacher_id,{method:'DELETE'}).then(d=>d.error?toast(d.error,'error'):(toast('已删除'),loadAdminTeachers())).catch(()=>toast('网络错误','error'))} }, '🗑 删除'),
               ),
             ),
           ),
@@ -316,7 +378,7 @@ function Dashboard() {
               return React.createElement('label', { key:p.key, style:{ fontSize:12, cursor:'pointer', display:'flex', alignItems:'center', gap:4, padding:'4px 10px', borderRadius:6, background: on ? '#f0fdf4' : '#f8fafc', border: on ? '1px solid #bbf7d0' : '1px solid #e2e8f0', userSelect:'none' } },
                 React.createElement('input', { type:'checkbox', checked:on, style:{ accentColor:'#16a34a' }, onChange:async (e) => {
                   e.stopPropagation();
-                  const d = await api('/admin/teachers/'+t.teacher_id+'/permissions', { method:'POST', body:JSON.stringify({ permission:p.key }) });
+                  const d = await api('/api/admin/teachers/'+t.teacher_id+'/permissions', { method:'POST', body:JSON.stringify({ permission:p.key }) });
                   if (d.error) toast(d.error,'error'); else loadAdminTeachers();
                 }}),
                 p.icon, ' ', p.label,
@@ -363,7 +425,7 @@ function Dashboard() {
             ),
             s.status==='active' && React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
               if(!confirm('移除该学生？')) return;
-              const d = await api('/admin/students/remove', { method:'POST', body:JSON.stringify({ class_code:subSelected, device_hash:s.device_hash }) });
+              const d = await api('/api/admin/students/remove', { method:'POST', body:JSON.stringify({ class_code:subSelected, device_hash:s.device_hash }) });
               d.error ? toast(d.error,'error') : (toast('已移除'), loadStudents(subSelected));
             }}, '移除'),
           ),
@@ -444,12 +506,12 @@ function Dashboard() {
             ),
             React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
               if(!confirm('删除？')) return;
-              await api(`/admin/wishes/${w.id}`, { method:'DELETE' });
+              await api(`/api/admin/wishes/${w.id}`, { method:'DELETE' });
               toast('已删除'); loadTeacherWishes(selected);
             }}, '🗑'),
             w.status==='active' && React.createElement('button', { className:'btn btn-primary btn-sm', style:{ marginLeft:4 }, onClick:async()=>{
               if(!confirm('标记为已实现？')) return;
-              const d = await api(`/admin/wishes/complete/${w.id}`, { method:'POST' });
+              const d = await api(`/api/admin/wishes/complete/${w.id}`, { method:'POST' });
               d.error ? toast(d.error,'error') : (toast('✅ 已标记'), loadTeacherWishes(selected));
             }}, '✅ 实现'),
             w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600, marginLeft:4 } }, '✅ 已实现'),
@@ -474,12 +536,12 @@ function Dashboard() {
             ),
             React.createElement('button', { className:'btn btn-danger btn-sm', onClick:async()=>{
               if(!confirm('删除？')) return;
-              await api(`/admin/wishes/${w.id}`, { method:'DELETE' });
+              await api(`/api/admin/wishes/${w.id}`, { method:'DELETE' });
               toast('已删除'); loadWishes();
             }}, '🗑'),
             w.status==='active' && React.createElement('button', { className:'btn btn-primary btn-sm', style:{ marginLeft:4 }, onClick:async()=>{
               if(!confirm('标记为已实现？')) return;
-              const d = await api(`/admin/wishes/complete/${w.id}`, { method:'POST' });
+              const d = await api(`/api/admin/wishes/complete/${w.id}`, { method:'POST' });
               d.error ? toast(d.error,'error') : (toast('✅ 已标记'), loadWishes());
             }}, '✅ 实现'),
             w.status==='completed' && React.createElement('span', { style:{ fontSize:11, background:'#fef3c7', color:'#d97706', padding:'2px 8px', borderRadius:4, fontWeight:600, marginLeft:4 } }, '✅ 已实现'),
@@ -695,7 +757,7 @@ function FeedbackPanel() {
 
   async function toggleFeedbackStatus(id, currentStatus) {
     const next = currentStatus === 'open' ? 'processed' : currentStatus === 'processed' ? 'closed' : 'open';
-    const d = await api(`/admin/feedback/${id}`, { method:'PATCH', body:JSON.stringify({ status: next }) });
+    const d = await api(`/api/admin/feedback/${id}`, { method:'PATCH', body:JSON.stringify({ status: next }) });
     if (d.error) { toast(d.error,'error'); return; }
     toast('状态已更新');
     loadItems();
@@ -741,14 +803,14 @@ function FeedbackPanel() {
             isAdmin && React.createElement('button', { className:'btn btn-outline btn-sm', style:{ marginLeft:8, fontSize:10 }, onClick:()=>toggleFeedbackStatus(item.id, item.status) }, '🔄'),
             isAdmin && React.createElement('button', { className:'btn btn-danger btn-sm', style:{ marginLeft:4, fontSize:10 }, onClick:async()=>{
               if(!confirm('删除这条反馈？')) return;
-              const d = await api('/admin/feedback/'+item.id, { method:'DELETE' });
+              const d = await api('/api/admin/feedback/'+item.id, { method:'DELETE' });
               d.error ? toast(d.error,'error') : (toast('已删除'), loadItems());
             }}, '🗑'),
           ),
           !isAdmin && React.createElement('div', { style:{ textAlign:'right', marginTop:4 } },
             React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:10 }, onClick:async()=>{
               if(!confirm('删除这条学生反馈？')) return;
-              const d = await api(`/admin/feedback/${item.id}`, { method:'DELETE' });
+              const d = await api(`/api/admin/feedback/${item.id}`, { method:'DELETE' });
               d.error ? toast(d.error,'error') : (toast('已删除'), loadStudentFeedback());
             }}, '🗑 删除'),
           ),
@@ -770,14 +832,14 @@ function FeedbackPanel() {
             isAdmin && React.createElement('button', { className:'btn btn-outline btn-sm', style:{ marginLeft:8, fontSize:10 }, onClick:()=>toggleFeedbackStatus(item.id, item.status) }, '🔄'),
             isAdmin && React.createElement('button', { className:'btn btn-danger btn-sm', style:{ marginLeft:4, fontSize:10 }, onClick:async()=>{
               if(!confirm('删除这条反馈？')) return;
-              const d = await api('/admin/feedback/'+item.id, { method:'DELETE' });
+              const d = await api('/api/admin/feedback/'+item.id, { method:'DELETE' });
               d.error ? toast(d.error,'error') : (toast('已删除'), loadItems());
             }}, '🗑'),
           ),
           !isAdmin && React.createElement('div', { style:{ textAlign:'right', marginTop:4 } },
             React.createElement('button', { className:'btn btn-danger btn-sm', style:{ fontSize:10 }, onClick:async()=>{
               if(!confirm('删除这条反馈？')) return;
-              const d = await api(`/admin/feedback/${item.id}`, { method:'DELETE' });
+              const d = await api(`/api/admin/feedback/${item.id}`, { method:'DELETE' });
               d.error ? toast(d.error,'error') : (toast('已删除'), loadItems());
             }}, '🗑 删除'),
           ),
@@ -806,7 +868,8 @@ function ImportPanel({ onCreated }) {
     if (!file) return;
     try {
       const zip = await JSZip.loadAsync(file);
-      const jsonFile = zip.file("pet.json");
+      // 支持 pet.json 在根目录或子目录（Petdex 包常嵌套在 <name>/ 下）
+      const jsonFile = zip.file("pet.json") || (zip.file(/(?:^|\/)pet\.json$/i) || [])[0];
       if (!jsonFile) { toast("压缩包缺少 pet.json","error"); return; }
       const petMeta = JSON.parse(await jsonFile.async("text"));
       let ssFile = null;
@@ -815,6 +878,26 @@ function ImportPanel({ onCreated }) {
       });
       if (!ssFile) { toast("压缩包缺少 spritesheet","error"); return; }
       const ssBlob = await ssFile.async("blob");
+      // 读 validation.json 提取真实动画元数据（Petdex 包有 cells: state/row/column/used）
+      let valAnims = null, valAnimOrder = null;
+      const valFile = zip.file("validation.json") || (zip.file(/(?:^|\/)validation\.json$/i) || [])[0];
+      if (valFile) {
+        try {
+          const val = JSON.parse(await valFile.async("text"));
+          if (Array.isArray(val.cells)) {
+            const rows = {};
+            for (const c of val.cells) {
+              if (c.row == null || !c.state) continue;
+              if (!rows[c.row]) rows[c.row] = { state: c.state, used: 0 };
+              if (c.used) rows[c.row].used++;
+            }
+            const sortedRows = Object.keys(rows).sort(function(a,b){ return (+a)-(+b); });
+            valAnimOrder = sortedRows.map(function(r){ return rows[r].state; });
+            valAnims = {};
+            sortedRows.forEach(function(r){ valAnims[rows[r].state] = rows[r].used || 6; });
+          }
+        } catch {}
+      }
       if (petMeta.displayName) setName(petMeta.displayName);
       if (petMeta.description) setDesc(petMeta.description);
       const elemHints = { "火":"fire","焰":"fire", "水":"water","冰":"water","海":"water", "风":"wind","气":"wind", "地":"earth","岩":"earth","土":"earth","草":"earth", "电":"light","雷":"light","光":"light","暗":"light" };
@@ -834,7 +917,20 @@ function ImportPanel({ onCreated }) {
         var ctx = tc.getContext("2d");
         ctx.drawImage(img, 0, 0, Math.min(img.width, 192), Math.min(img.height, 208), 0, 0, 200, 200);
         setThumbUrl(tc.toDataURL("image/png"));
-        setPetJsonData({ anims: petMeta.anims || { idle: [0,5] }, frameWidth: 192, frameHeight: 208, animsOrder: petMeta.animsOrder || ["idle"], durations: petMeta.durations || { idle: 750 } });
+        // animOrder/anims 优先用 validation.json 的真实数据（Petdex 9 行），其次 pet.json，最后 7 动画回退
+        var animOrder = valAnimOrder || petMeta.animOrder || ["idle", "walk", "sleep", "celebrate", "think", "eat", "unhappy"];
+        var anims = valAnims || petMeta.anims || { idle: 6, walk: 8, sleep: 6, celebrate: 4, think: 6, eat: 5, unhappy: 8 };
+        var defaultDurations = { idle: 1100, walk: 1060, sleep: 1010, celebrate: 700, think: 1030, eat: 840, unhappy: 1220 };
+        var durations = {};
+        animOrder.forEach(function(a){ durations[a] = (petMeta.durations && petMeta.durations[a]) || defaultDurations[a] || 1000; });
+        setPetJsonData({
+          frameWidth: petMeta.frameWidth || 192,
+          frameHeight: petMeta.frameHeight || 208,
+          maxFrames: petMeta.maxFrames || 8,
+          anims: anims,
+          animOrder: animOrder,
+          durations: durations
+        });
         setImported(true);
         setTimeout(function() { render(); }, 0);
       };
@@ -849,10 +945,16 @@ function ImportPanel({ onCreated }) {
     if (!name.trim()) { toast("请输入名字","error"); return; }
     setSubmitting(true);
     try {
-      const ssResp = await api("/api/workshop/upload", { method:"POST", body:JSON.stringify({ image: resultUrl, filename: (name.trim()||"pet") + "-spritesheet.png" }) });
+      // data URL → Blob，用 FormData 上传（避开 JSON base64 + Worker atob 重 CPU，且省 33% 体积）
+      async function dataUrlToBlob(d) { return await (await fetch(d)).blob(); }
+      const ssForm = new FormData();
+      ssForm.append('file', await dataUrlToBlob(resultUrl), (name.trim()||"pet") + "-spritesheet.png");
+      const ssResp = await api("/api/workshop/upload", { method:"POST", body: ssForm, timeout: 60000 });
       if (ssResp.error) { toast("上传失败: "+ssResp.error,"error"); setSubmitting(false); return; }
-      const thumbResp = await api("/api/workshop/upload", { method:"POST", body:JSON.stringify({ image: thumbUrl || resultUrl, filename: (name.trim()||"pet") + "-thumb.png" }) });
-      if (thumbResp.error) { toast("缩略图上传失败","error"); setSubmitting(false); return; }
+      const thumbForm = new FormData();
+      thumbForm.append('file', await dataUrlToBlob(thumbUrl || resultUrl), (name.trim()||"pet") + "-thumb.png");
+      const thumbResp = await api("/api/workshop/upload", { method:"POST", body: thumbForm, timeout: 60000 });
+      if (thumbResp.error) { toast("缩略图上传失败: "+thumbResp.error,"error"); setSubmitting(false); return; }
       const tierData = TIERS.find(function(t){ return t.key===tier; });
       const d = await api("/api/workshop/pets", { method:"POST", body:JSON.stringify({ name: name.trim(), element: element, style: style, description: desc.trim(), tier: tierData.key, price: tierData.price, spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData), creator_name: creatorName || '' }) });
       if (d.error) { toast(d.error,"error"); setSubmitting(false); return; }

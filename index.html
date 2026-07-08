@@ -13,10 +13,11 @@
       // Block right-click context menu and DevTools shortcuts in production
       document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
       document.addEventListener('keydown', function(e) {
-        // Block F12, Ctrl+Shift+I/J/C, Ctrl+U
+        // Block F12, Ctrl+Shift+I/J/C, Ctrl+U, Cmd+Option+I/J/C/U (macOS DevTools)
         if (e.key === 'F12' ||
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.code === 'KeyI' || e.code === 'KeyJ' || e.code === 'KeyC')) ||
-            (e.ctrlKey && (e.key === 'U' || e.code === 'KeyU'))) {
+            (e.ctrlKey && (e.key === 'U' || e.code === 'KeyU')) ||
+            (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'U' || e.code === 'KeyI' || e.code === 'KeyJ' || e.code === 'KeyC' || e.code === 'KeyU'))) {
           e.preventDefault(); return false;
         }
       });

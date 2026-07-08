@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import { emit } from '@tauri-apps/api/event';
@@ -62,6 +62,7 @@ export default function QuizPractice() {
   const [kpResults, setKpResults] = useState<Map<string, { correct: number; total: number }>>(new Map());
   const [levelFilter, setLevelFilter] = useState<number | 'all'>('all');
   const [sourceFilter, setSourceFilter] = useState<string | 'all'>('all');
+  const freeStreakRef = useRef(0); // 自由练习连续答对计数（学霸时刻成就）
 
   const quizStore = useQuizStore();
   const addCoins = usePetStore(s => s.addCoins);
@@ -111,6 +112,7 @@ export default function QuizPractice() {
     setSubmitted(false);
     setResults({ correct: 0, total: 0, done: false });
     setKpResults(new Map());
+    freeStreakRef.current = 0;
 
     if (!questionBank) return;
 
@@ -147,6 +149,11 @@ export default function QuizPractice() {
 
     if (selected === q.correctIndex) {
       quizStore.recordAnswer(true);
+      // 自由练习连续答对 -> 记录 max 到 localStorage（学霸时刻成就）
+      if (mode === 'free') {
+        freeStreakRef.current += 1;
+        try { const prev = parseInt(localStorage.getItem('csp_free_streak') || '0'); if (freeStreakRef.current > prev) localStorage.setItem('csp_free_streak', String(freeStreakRef.current)); } catch {}
+      }
       const newResults = { ...results, correct: results.correct + 1, total: results.total + 1 };
       setResults(newResults);
 
@@ -178,6 +185,7 @@ export default function QuizPractice() {
       }
     } else {
       setResults(r => ({ ...r, total: r.total + 1 }));
+      if (mode === 'free') freeStreakRef.current = 0;
       // Pet reacts to wrong answer
       emit('pet-anim', { anim: 'unhappy', duration: 2000 }).catch(() => {});
       const lines = ['没关系，再看看！💡', '差一点点，再想想~', '别灰心，错题才是进步的阶梯！'];

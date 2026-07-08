@@ -84,8 +84,28 @@ function checkAdmin(request, env) {
 async function checkTeacher(request, db) {
   const token = request.headers.get('X-Teacher-Token') || '';
   if (!token) return null;
-  const t = await db.prepare('SELECT teacher_id, phone, name, token, permissions FROM teachers WHERE token=?').bind(token).first();
+  const t = await db.prepare('SELECT teacher_id, phone, name, token, permissions, max_pets FROM teachers WHERE token=?').bind(token).first();
   return t || null;
+}
+
+// ── Pet upload total limit: per-teacher override > global default (meta) > 20 ──
+// 60s 内存缓存，避免每次上传/创建都读 meta（项目在意 D1 用量）
+let _petLimitCache = { val: null, ts: 0 };
+async function getGlobalPetLimit(db) {
+  const now = Date.now();
+  if (_petLimitCache.val != null && now - _petLimitCache.ts < 60000) return _petLimitCache.val;
+  let v = 20;
+  try {
+    const row = await db.prepare("SELECT value FROM meta WHERE key='pet_limit_default'").first();
+    if (row && row.value) { const n = parseInt(row.value, 10); if (Number.isInteger(n) && n >= 1) v = n; }
+  } catch {}
+  _petLimitCache = { val: v, ts: now };
+  return v;
+}
+async function getTeacherPetLimit(db, teacher) {
+  // 教师独立上限优先；已设值时跳过 meta 读取
+  if (teacher && teacher.max_pets != null && Number.isInteger(teacher.max_pets) && teacher.max_pets >= 1) return teacher.max_pets;
+  return getGlobalPetLimit(db);
 }
 
 function safeParsePermissions(raw) {
@@ -136,8 +156,16 @@ function getDateDashed() {
 
 // ── Schema migration (cached per instance) ──
 let _schemaEnsured = false;
+// Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
+// (1 meta read ~0.25s instead of ~6s) once the version is recorded.
+const SCHEMA_VERSION = 3;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
+  // Fast path: schema already at current version → skip all migrations (1 round-trip)
+  try {
+    const v = await db.prepare("SELECT value FROM meta WHERE key='schema_version'").first();
+    if (v && v.value && (parseInt(v.value, 10) || 0) >= SCHEMA_VERSION) { _schemaEnsured = true; return; }
+  } catch {} // meta table may not exist on a fresh DB → fall through to full migrations
   // Core tables (CREATE IF NOT EXISTS for fresh deployments)
   try { await db.exec(`CREATE TABLE IF NOT EXISTS wishes (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, display_name TEXT, real_name_enc TEXT DEFAULT '', phone_enc TEXT DEFAULT '', device_hash TEXT, votes INTEGER DEFAULT 0, status TEXT DEFAULT 'active', created_at TEXT DEFAULT (datetime('now')), class_code TEXT DEFAULT '')`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS votes (id INTEGER PRIMARY KEY AUTOINCREMENT, wish_id INTEGER, device_hash TEXT, class_code TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
@@ -156,6 +184,12 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN real_name_enc TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE votes ADD COLUMN class_code TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE teachers ADD COLUMN permissions TEXT DEFAULT '[]'`); } catch {}
+  try { await db.exec(`ALTER TABLE teachers ADD COLUMN max_pets INTEGER DEFAULT NULL`); } catch {}
+  // Pet upload limit: global default (meta) + per-teacher override (teachers.max_pets)
+  try { await db.exec(`INSERT OR IGNORE INTO meta(key,value) VALUES('pet_limit_default','20')`); } catch {}
+  // Workshop pet slug: R2 storage key (workshop/${slug}/...), must be globally unique to prevent素材覆盖
+  try { await db.exec(`ALTER TABLE workshop_pets ADD COLUMN slug TEXT`); } catch {}
+  try { await db.exec(`UPDATE workshop_pets SET slug = json_extract(pet_json, '$.slug') WHERE slug IS NULL AND pet_json IS NOT NULL AND pet_json != ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN teacher_id TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN label TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN status TEXT DEFAULT 'active'`); } catch {}
@@ -177,6 +211,8 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_votes_wish ON votes(wish_id)`); } catch {}
   // Rate limit table
   try { await db.exec(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, count INTEGER DEFAULT 0, reset_at TEXT)`); } catch {}
+  // Record schema version so future cold starts skip these ~25 statements
+  try { await db.exec(`INSERT OR REPLACE INTO meta(key,value) VALUES('schema_version','${SCHEMA_VERSION}')`); } catch {}
   _schemaEnsured = true;
 }
 
@@ -252,7 +288,10 @@ async function hashPassword(pw) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const path = url.pathname;
+    let path = url.pathname;
+    // Admin API alias: some networks/extensions treat bare /admin/* paths specially.
+    // Keep legacy /admin/* working, and expose /api/admin/* for the teacher web app.
+    if (path.startsWith('/api/admin/')) path = path.replace(/^\/api\/admin/, '/admin');
     const db = env.DB;
     await ensureSchema(db);
 
@@ -606,16 +645,16 @@ export default {
           const codes = classes.results.map(r => r.class_code);
           if (codes.length > 0) {
             const ph = codes.map(() => '?').join(',');
-            result = await db.prepare(`SELECT w.*, c.label as class_label FROM wishes w LEFT JOIN classes c ON w.class_code=c.class_code WHERE w.class_code IN (${ph}) ORDER BY w.votes DESC, w.created_at ASC LIMIT 200`).bind(...codes).all();
+            result = await db.prepare(`SELECT w.*, c.label as class_label FROM wishes w LEFT JOIN classes c ON w.class_code=c.class_code WHERE w.class_code IN (${ph}) AND w.status != 'deleted' ORDER BY w.votes DESC, w.created_at ASC LIMIT 200`).bind(...codes).all();
           } else {
             result = { results: [] };
           }
         } else {
           // Legacy admin sees all
-          result = await db.prepare('SELECT w.*, c.label as class_label FROM wishes w LEFT JOIN classes c ON w.class_code=c.class_code ORDER BY w.votes DESC, w.created_at ASC LIMIT 200').all();
+          result = await db.prepare(`SELECT w.*, c.label as class_label FROM wishes w LEFT JOIN classes c ON w.class_code=c.class_code WHERE w.status != 'deleted' ORDER BY w.votes DESC, w.created_at ASC LIMIT 200`).all();
         }
 
-        const wishes = await Promise.all(result.results.map(async (w) => ({ ...w, real_name: await serverDecrypt(w.real_name_enc || '', env), phone: await serverDecrypt(w.phone_enc || '', env) })));
+        const wishes = await Promise.all(result.results.slice(0, 30).map(async (w) => ({ ...w, real_name: await serverDecrypt(w.real_name_enc || '', env), phone: await serverDecrypt(w.phone_enc || '', env) })));
         return new Response(JSON.stringify(wishes), { headers: cors });
       }
 
@@ -684,14 +723,34 @@ export default {
       }
 
       // ═══ SUPER ADMIN ENDPOINTS ═══
+      // GET /admin/settings — global pet upload limit default
+      if (path === '/admin/settings' && request.method === 'GET') {
+        if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+        const pet_limit_default = await getGlobalPetLimit(db);
+        return new Response(JSON.stringify({ pet_limit_default }), { headers: cors });
+      }
+
+      // POST /admin/settings — update global pet upload limit default
+      if (path === '/admin/settings' && request.method === 'POST') {
+        if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+        const { pet_limit_default } = await request.json();
+        if (!Number.isInteger(pet_limit_default) || pet_limit_default < 1) {
+          return new Response(JSON.stringify({ error: '上限必须为 ≥1 的整数' }), { status: 400, headers: cors });
+        }
+        await db.prepare("INSERT OR REPLACE INTO meta(key,value) VALUES('pet_limit_default',?)").bind(String(pet_limit_default)).run();
+        _petLimitCache = { val: null, ts: 0 }; // 失效缓存
+        return new Response(JSON.stringify({ success: true, pet_limit_default }), { headers: cors });
+      }
+
       // GET /admin/teachers — list all teachers with stats
       if (path === '/admin/teachers' && request.method === 'GET') {
         if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
-        const teachers = await db.prepare('SELECT teacher_id, phone, name, permissions, created_at FROM teachers ORDER BY created_at DESC').all();
+        const teachers = await db.prepare('SELECT teacher_id, phone, name, permissions, max_pets, created_at FROM teachers ORDER BY created_at DESC').all();
         const result = await Promise.all(teachers.results.map(async (t) => {
           const classes = await db.prepare("SELECT COUNT(*) as c FROM classes WHERE teacher_id=? AND status='active'").bind(t.teacher_id).first();
           const students = await db.prepare("SELECT COUNT(*) as c FROM class_students cs JOIN classes c ON cs.class_code=c.class_code WHERE c.teacher_id=? AND cs.status='active'").bind(t.teacher_id).first();
-          return { ...t, class_count: classes?.c || 0, student_count: students?.c || 0 };
+          const pets = await db.prepare("SELECT COUNT(*) as c FROM workshop_pets WHERE teacher_id=? AND status='active'").bind(t.teacher_id).first();
+          return { ...t, max_pets: t.max_pets ?? null, pet_count: pets?.c || 0, class_count: classes?.c || 0, student_count: students?.c || 0 };
         }));
         return new Response(JSON.stringify(result), { headers: cors });
       }
@@ -764,6 +823,20 @@ export default {
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
+      // Admin: set per-teacher pet upload limit (null = restore global default)
+      if (path.startsWith('/admin/teachers/') && path.endsWith('/max-pets') && request.method === 'POST') {
+        if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+        const teacherId = path.split('/')[3];
+        const { max_pets } = await request.json();
+        if (max_pets !== null && !(Number.isInteger(max_pets) && max_pets >= 1)) {
+          return new Response(JSON.stringify({ error: '上限必须为 null 或 ≥1 的整数' }), { status: 400, headers: cors });
+        }
+        const exists = await db.prepare('SELECT teacher_id FROM teachers WHERE teacher_id=?').bind(teacherId).first();
+        if (!exists) return new Response(JSON.stringify({ error: '老师不存在' }), { status: 404, headers: cors });
+        await db.prepare('UPDATE teachers SET max_pets=? WHERE teacher_id=?').bind(max_pets, teacherId).run();
+        return new Response(JSON.stringify({ success: true, max_pets }), { headers: cors });
+      }
+
       // Admin: add class for any teacher
       if (path === '/admin/classes' && request.method === 'POST') {
         if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
@@ -801,8 +874,8 @@ export default {
         const codes = classes.results.map(r => r.class_code);
         if (codes.length === 0) return new Response(JSON.stringify([]), { headers: cors });
         const ph = codes.map(() => '?').join(',');
-        const result = await db.prepare(`SELECT w.*, c.label as class_label FROM wishes w LEFT JOIN classes c ON w.class_code=c.class_code WHERE w.class_code IN (${ph}) ORDER BY w.votes DESC, w.created_at ASC LIMIT 200`).bind(...codes).all();
-        const wishes = await Promise.all(result.results.map(async (w) => ({ ...w, real_name: await serverDecrypt(w.real_name_enc || '', env), phone: await serverDecrypt(w.phone_enc || '', env) })));
+        const result = await db.prepare(`SELECT w.*, c.label as class_label FROM wishes w LEFT JOIN classes c ON w.class_code=c.class_code WHERE w.class_code IN (${ph}) AND w.status != 'deleted' ORDER BY w.votes DESC, w.created_at ASC LIMIT 200`).bind(...codes).all();
+        const wishes = await Promise.all(result.results.slice(0, 30).map(async (w) => ({ ...w, real_name: await serverDecrypt(w.real_name_enc || '', env), phone: await serverDecrypt(w.phone_enc || '', env) })));
         return new Response(JSON.stringify(wishes), { headers: cors });
       }
 
@@ -968,7 +1041,7 @@ export default {
           binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
         }
 
-        // Rate-limit: 5/h, 20/d, 50 total per teacher
+        // Rate-limit: 5/h, 20/d; total = per-teacher max_pets or global pet_limit_default
         const now = new Date().toISOString();
         const hourAgo = new Date(Date.now() - 3600000).toISOString();
         const dayAgo = new Date(Date.now() - 86400000).toISOString();
@@ -979,7 +1052,8 @@ export default {
         ]);
         if (hourCount >= 5) return new Response(JSON.stringify({ error: '每小时最多上传5只精灵' }), { status: 429, headers: cors });
         if (dayCount >= 20) return new Response(JSON.stringify({ error: '每天最多上传20只精灵' }), { status: 429, headers: cors });
-        if (totalCount >= 20) return new Response(JSON.stringify({ error: '每位教师最多20只精灵' }), { status: 429, headers: cors });
+        const teacherLimit = await getTeacherPetLimit(db, teacher);
+        if (totalCount >= teacherLimit) return new Response(JSON.stringify({ error: `您最多可拥有 ${teacherLimit} 只精灵` }), { status: 429, headers: cors });
         // Size limit: 5MB to prevent abuse
         if (binary.length > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: '图片不能超过5MB' }), { status: 400, headers: cors });
         const key = `workshop/${teacher.teacher_id}/${filename || Date.now() + '.png'}`;
@@ -1065,6 +1139,9 @@ export default {
 
           const id = 'ws-' + randomChars(10);
           const slug = (() => { try { return JSON.parse(pet_json_str).slug || id; } catch { return id; } })();
+          // Global slug uniqueness: slug is the R2 storage key (workshop/${slug}/), collision overwrites素材
+          const slugDup = await db.prepare("SELECT id, teacher_name FROM workshop_pets WHERE slug=? AND status='active'").bind(slug).first();
+          if (slugDup) return new Response(JSON.stringify({ error: `精灵标识「${slug}」已被 ${slugDup.teacher_name || '其他老师'} 使用，请重新生成精灵` }), { status: 409, headers: cors });
 
           // Upload spritesheet + pet_json to KV
           if (spritesheet_file && spritesheet_file instanceof File) {
@@ -1086,13 +1163,18 @@ export default {
             thumbnail_url = spritesheet_url; // Workshop UI generates thumbnails client-side
           }
 
+          // Total count limit: per-teacher max_pets or global pet_limit_default
+          const totalCountFd = await db.prepare("SELECT COUNT(*) c FROM workshop_pets WHERE teacher_id=? AND status='active'").bind(teacher.teacher_id).first("c");
+          const teacherLimitFd = await getTeacherPetLimit(db, teacher);
+          if (totalCountFd >= teacherLimitFd) return new Response(JSON.stringify({ error: `您最多可拥有 ${teacherLimitFd} 只精灵` }), { status: 429, headers: cors });
+
           // Dedup: global name uniqueness across all teachers
           const dupCheck = await db.prepare("SELECT id, teacher_name FROM workshop_pets WHERE name=? AND status='active'").bind(name).first();
           if (dupCheck) return new Response(JSON.stringify({ error: `精灵名「${name}」已被 ${dupCheck.teacher_name || '其他老师'} 使用，请换个名字` }), { status: 409, headers: cors });
 
           await db.prepare(
-            'INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))'
-          ).bind(id, teacher.teacher_id, creator_name, name, element, style, description, tier, price, pet_json_str, spritesheet_url || '', thumbnail_url || '').run();
+            'INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, slug, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))'
+          ).bind(id, teacher.teacher_id, creator_name, name, slug, element, style, description, tier, price, pet_json_str, spritesheet_url || '', thumbnail_url || '').run();
 
           return new Response(JSON.stringify({ success: true, id }), { headers: cors });
         }
@@ -1102,13 +1184,22 @@ export default {
         ({ name, element, style, description, tier, pet_json: pet_json_str, spritesheet_url, thumbnail_url, creator_name } = body);
         if (!name || !element || !tier) return new Response(JSON.stringify({ error: '缺少必填字段' }), { status: 400, headers: cors });
 
-        // Dedup: same teacher + same name
-        const dupCheck2 = await db.prepare("SELECT id FROM workshop_pets WHERE teacher_id=? AND name=? AND status='active'").bind(teacher.teacher_id, name).first();
-        if (dupCheck2) return new Response(JSON.stringify({ error: `同名精灵「${name}」已存在，请先删除旧的再上传` }), { status: 409, headers: cors });
+        // Total count limit: per-teacher max_pets or global pet_limit_default
+        const totalCountJson = await db.prepare("SELECT COUNT(*) c FROM workshop_pets WHERE teacher_id=? AND status='active'").bind(teacher.teacher_id).first("c");
+        const teacherLimitJson = await getTeacherPetLimit(db, teacher);
+        if (totalCountJson >= teacherLimitJson) return new Response(JSON.stringify({ error: `您最多可拥有 ${teacherLimitJson} 只精灵` }), { status: 429, headers: cors });
+
+        // Dedup: global name uniqueness across all teachers
+        const dupCheck2 = await db.prepare("SELECT id, teacher_name FROM workshop_pets WHERE name=? AND status='active'").bind(name).first();
+        if (dupCheck2) return new Response(JSON.stringify({ error: `精灵名「${name}」已被 ${dupCheck2.teacher_name || '其他老师'} 使用，请换个名字` }), { status: 409, headers: cors });
         const id = 'ws-' + randomChars(10);
+        const slugJson = (() => { try { return JSON.parse(pet_json_str || '{}').slug || id; } catch { return id; } })();
+        // Global slug uniqueness (R2 storage key)
+        const slugDupJson = await db.prepare("SELECT id FROM workshop_pets WHERE slug=? AND status='active'").bind(slugJson).first();
+        if (slugDupJson) return new Response(JSON.stringify({ error: `精灵标识「${slugJson}」已被使用，请重新生成精灵` }), { status: 409, headers: cors });
         const displayTeacher = creator_name || teacher.name;
         const price = parseInt(body.price) || (tier === 'legendary' ? 500 : tier === 'rare' ? 260 : 150);
-        await db.prepare('INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))').bind(id, teacher.teacher_id, displayTeacher, name, element, style||'', description||'', tier, price, pet_json_str||'', spritesheet_url||'', thumbnail_url||'').run();
+        await db.prepare('INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, slug, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))').bind(id, teacher.teacher_id, displayTeacher, name, slugJson, element, style||'', description||'', tier, price, pet_json_str||'', spritesheet_url||'', thumbnail_url||'').run();
         return new Response(JSON.stringify({ success: true, id }), { headers: cors });
       }
 
