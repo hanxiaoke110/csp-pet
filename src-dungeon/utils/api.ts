@@ -65,7 +65,7 @@ async function apiCall<T>(
 // ── API functions ──
 import type {
   LeaderboardResponse,
-  LeaderboardType, LeaderboardScope, RegisterResponse,
+  LeaderboardType, LeaderboardScope, LeaderboardEntry, RegisterResponse,
 } from '../types/dungeon';
 
 export async function registerPlayer(
@@ -119,9 +119,24 @@ export async function reportBattle(payload: {
 export async function getLeaderboard(
   scope: LeaderboardScope, type: LeaderboardType
 ): Promise<LeaderboardResponse> {
-  return apiCall<LeaderboardResponse>(
+  const resp = await apiCall<LeaderboardResponse>(
     `/api/dungeon/leaderboard?scope=${scope}&type=${type}`
   );
+  // 后端返回 snake_case（display_name/rank_tier），前端用 camelCase，这里做转换
+  const convert = (e: any): LeaderboardEntry => ({
+    rank: e.rank,
+    displayName: e.display_name ?? e.displayName ?? '',
+    school: e.school,
+    rankTier: e.rank_tier ?? e.rankTier ?? 1,
+    rankPoints: e.rank_points ?? e.rankPoints ?? e.value ?? 0,
+    classCode: e.class_code ?? e.classCode ?? '',
+    value: e.value ?? 0,
+  });
+  return {
+    ...resp,
+    entries: (resp.entries || []).map(convert),
+    playerEntry: resp.playerEntry ? convert(resp.playerEntry) : null,
+  };
 }
 
 export async function loginPlayer(realName: string, phone: string): Promise<{

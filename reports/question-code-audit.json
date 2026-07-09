@@ -1,0 +1,4671 @@
+{
+  "generatedAt": "2026-07-08T14:01:05.278Z",
+  "summaries": [
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "questions": 240,
+      "findings": 8,
+      "bySeverity": {
+        "P2": 8
+      }
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "questions": 735,
+      "findings": 69,
+      "bySeverity": {
+        "P2": 69
+      }
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "questions": 240,
+      "findings": 8,
+      "bySeverity": {
+        "P2": 8
+      }
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "questions": 240,
+      "findings": 8,
+      "bySeverity": {
+        "P2": 8
+      }
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "questions": 590,
+      "findings": 54,
+      "bySeverity": {
+        "P2": 54
+      }
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "questions": 590,
+      "findings": 54,
+      "bySeverity": {
+        "P2": 54
+      }
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "questions": 590,
+      "findings": 54,
+      "bySeverity": {
+        "P2": 54
+      }
+    },
+    {
+      "file": "public/course-data/quiz-bank.json",
+      "questions": 432,
+      "findings": 0,
+      "bySeverity": {}
+    },
+    {
+      "file": "dist/course-data/quiz-bank.json",
+      "questions": 432,
+      "findings": 0,
+      "bySeverity": {}
+    },
+    {
+      "file": "dist-dungeon/course-data/quiz-bank.json",
+      "questions": 432,
+      "findings": 0,
+      "bySeverity": {}
+    }
+  ],
+  "findings": [
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-j-2020-c03",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "设 x=true, y=true, z=false，以下逻辑表达式中值为 true 的是（ ）。",
+      "options": [
+        "x && (y || z)",
+        "!(x && y) || z",
+        "(x || z) && !y",
+        "(x && !y) || (z && y)"
+      ],
+      "explanation": "代入 x=true, y=true, z=false 逐一计算：A: x && (y || z) = T && (T || F) = T && T = T，成立。B: !(x && y) || z = !T || F = F || F = "
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-j-2021-c09",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式 a * (b + c) * d 的后缀表达式（逆波兰表达式）是（ ）。",
+      "options": [
+        "a b c + * d *",
+        "a b c d * + *",
+        "a b + c * d *",
+        "a b * c + d *"
+      ],
+      "explanation": "中缀转后缀规则：1.操作数直接输出；2.运算符入栈，遇到优先级更低或相等的则弹出栈顶；3.左括号入栈，右括号弹出栈顶直到左括号。转换过程：a * (b + c) * d = a -> b -> c -> +（弹出+）-> *（弹出第一个*）"
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-s-2021-c04",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于最短路径算法的说法，正确的是（ ）。",
+      "options": [
+        "Floyd算法适用于单源最短路径",
+        "Dijkstra算法可以处理负权边",
+        "SPFA算法（队列优化的Bellman-Ford）在最坏情况下时间复杂度可能退化为O(VE)",
+        "Floyd算法的时间复杂度为O(V log E)"
+      ],
+      "explanation": "SPFA最坏情况下每个顶点可能入队O(E)次,总复杂度可退化到O(VE)。Floyd是多源最短路径O(V³);Dijkstra不能处理负权边。"
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-s-2024-c07",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于区块链共识机制的说法，错误的是（ ）。",
+      "options": [
+        "PoW(工作量证明)通过计算哈希难题竞争记账权",
+        "PoS(权益证明)根据持币量和持币时间选择记账者",
+        "PoW和PoS都不需要消耗能源",
+        "DPoS通过投票选出少数代表节点进行记账"
+      ],
+      "explanation": "PoW需要大量计算(挖矿)消耗能源,Bitcoin因此被批评。PoS不依赖算力而根据质押的币量选择验证者,大幅降低能耗。DPoS进一步通过持币者投票选举代表节点(如EOS的21个超级节点),提高效率。"
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-j-2022-c06",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式a+(b-c)*d的前缀表达式（波兰表达式）是？",
+      "options": [
+        "+ a * - b c d",
+        "+ * a - b c d",
+        "a + b - c * d",
+        "* + a - b c d"
+      ],
+      "explanation": "前缀表达式将运算符放在操作数之前。转换过程： (1) b-c 的前缀式为 -bc (2) (b-c)*d 的前缀式为 *-bcd (3) a+(b-c)*d 的前缀式为 +a*-bcd 前缀表达式从右向左扫描，遇到运算符就取后面两个操作数进"
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-j-2023-c11",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "使用g++编译器将源文件main.cpp编译为可执行文件main的正确命令是？",
+      "options": [
+        "g++ main.cpp -to main",
+        "g++ -o main main.cpp",
+        "g++ -compile main.cpp -output main",
+        "g++ main.cpp /out:main"
+      ],
+      "explanation": "g++编译器的正确用法：g++ -o 输出文件名 源文件名。选项B的g++ -o main main.cpp将main.cpp编译为名为main的可执行文件。其他选项的语法均不正确。在NOI系列竞赛环境中，通常使用g++ -O2 -o na"
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-j-2024-c13",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，关于const关键字的以下用法，哪个是错误的？",
+      "options": [
+        "const int *p; // p指向的内容不可修改",
+        "int * const p; // p本身不可修改",
+        "const int &r = 10; // const引用可以绑定到字面量",
+        "const int &r; // const引用可以不初始化"
+      ],
+      "explanation": "选项D错误：引用在C++中必须初始化（不管是不是const），const int &r;没有初始化，是编译错误。 选项A正确：const在*左边，表示指向的值不可修改。 选项B正确：const在*右边，表示指针本身不可修改（不能指向别处）。"
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "id": "csp-j-2024-c14",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，判断一个正整数n是否为2的幂，最简洁高效的表达式是？",
+      "options": [
+        "n % 2 == 0",
+        "n > 0 && (n & (n - 1)) == 0",
+        "(n >> 1) << 1 == n",
+        "n > 0 && n % 1 == 0"
+      ],
+      "explanation": "判断一个正整数是否为2的幂的经典位运算方法：n&(n-1)==0。原理：2的幂的二进制形式为100...0（一个1后跟若干个0），n-1的形式为011...1，两者按位与结果为0。 选项A只判断是否能被2整除（即是偶数），不能判断是否是2的"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2020-c03",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "设 x=true, y=true, z=false，以下逻辑表达式中值为 true 的是（ ）。",
+      "options": [
+        "x && (y || z)",
+        "!(x && y) || z",
+        "(x || z) && !y",
+        "(x && !y) || (z && y)"
+      ],
+      "explanation": "代入 x=true, y=true, z=false 逐一计算：A: x && (y || z) = T && (T || F) = T && T = T，成立。B: !(x && y) || z = !T || F = F || F = "
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2021-c09",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式 a * (b + c) * d 的后缀表达式（逆波兰表达式）是（ ）。",
+      "options": [
+        "a b c + * d *",
+        "a b c d * + *",
+        "a b + c * d *",
+        "a b * c + d *"
+      ],
+      "explanation": "中缀转后缀规则：1.操作数直接输出；2.运算符入栈，遇到优先级更低或相等的则弹出栈顶；3.左括号入栈，右括号弹出栈顶直到左括号。转换过程：a * (b + c) * d = a -> b -> c -> +（弹出+）-> *（弹出第一个*）"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2021-c04",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于最短路径算法的说法，正确的是（ ）。",
+      "options": [
+        "Floyd算法适用于单源最短路径",
+        "Dijkstra算法可以处理负权边",
+        "SPFA算法（队列优化的Bellman-Ford）在最坏情况下时间复杂度可能退化为O(VE)",
+        "Floyd算法的时间复杂度为O(V log E)"
+      ],
+      "explanation": "SPFA最坏情况下每个顶点可能入队O(E)次,总复杂度可退化到O(VE)。Floyd是多源最短路径O(V³);Dijkstra不能处理负权边。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2024-c07",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于区块链共识机制的说法，错误的是（ ）。",
+      "options": [
+        "PoW(工作量证明)通过计算哈希难题竞争记账权",
+        "PoS(权益证明)根据持币量和持币时间选择记账者",
+        "PoW和PoS都不需要消耗能源",
+        "DPoS通过投票选出少数代表节点进行记账"
+      ],
+      "explanation": "PoW需要大量计算(挖矿)消耗能源,Bitcoin因此被批评。PoS不依赖算力而根据质押的币量选择验证者,大幅降低能耗。DPoS进一步通过持币者投票选举代表节点(如EOS的21个超级节点),提高效率。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2022-c06",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式a+(b-c)*d的前缀表达式（波兰表达式）是？",
+      "options": [
+        "+ a * - b c d",
+        "+ * a - b c d",
+        "a + b - c * d",
+        "* + a - b c d"
+      ],
+      "explanation": "前缀表达式将运算符放在操作数之前。转换过程： (1) b-c 的前缀式为 -bc (2) (b-c)*d 的前缀式为 *-bcd (3) a+(b-c)*d 的前缀式为 +a*-bcd 前缀表达式从右向左扫描，遇到运算符就取后面两个操作数进"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2023-c11",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "使用g++编译器将源文件main.cpp编译为可执行文件main的正确命令是？",
+      "options": [
+        "g++ main.cpp -to main",
+        "g++ -o main main.cpp",
+        "g++ -compile main.cpp -output main",
+        "g++ main.cpp /out:main"
+      ],
+      "explanation": "g++编译器的正确用法：g++ -o 输出文件名 源文件名。选项B的g++ -o main main.cpp将main.cpp编译为名为main的可执行文件。其他选项的语法均不正确。在NOI系列竞赛环境中，通常使用g++ -O2 -o na"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2024-c13",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，关于const关键字的以下用法，哪个是错误的？",
+      "options": [
+        "const int *p; // p指向的内容不可修改",
+        "int * const p; // p本身不可修改",
+        "const int &r = 10; // const引用可以绑定到字面量",
+        "const int &r; // const引用可以不初始化"
+      ],
+      "explanation": "选项D错误：引用在C++中必须初始化（不管是不是const），const int &r;没有初始化，是编译错误。 选项A正确：const在*左边，表示指向的值不可修改。 选项B正确：const在*右边，表示指针本身不可修改（不能指向别处）。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2024-c14",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，判断一个正整数n是否为2的幂，最简洁高效的表达式是？",
+      "options": [
+        "n % 2 == 0",
+        "n > 0 && (n & (n - 1)) == 0",
+        "(n >> 1) << 1 == n",
+        "n > 0 && n % 1 == 0"
+      ],
+      "explanation": "判断一个正整数是否为2的幂的经典位运算方法：n&(n-1)==0。原理：2的幂的二进制形式为100...0（一个1后跟若干个0），n-1的形式为011...1，两者按位与结果为0。 选项A只判断是否能被2整除（即是偶数），不能判断是否是2的"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-03-2-07",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b都是char类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. b = a + 1;",
+        "B. b = a + '1';",
+        "C. b = 'a'++;",
+        "D. b = a++;"
+      ],
+      "explanation": "'a'是字符常量，不能进行++自增运算。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-03-2-08",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b、c和d都是int类型变量，下列哪个表达式能正确计算平均值？（ ）",
+      "options": [
+        "A. (a+b+c+d)/4",
+        "B. (a+b+c+d)%4",
+        "C. (a+b+c+d)/4.0",
+        "D. (a+b+c+d)%4.0"
+      ],
+      "explanation": "除以4.0使结果为浮点型。%不能用于浮点数。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-03-2-09",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量且值为'2'，哪条语句执行后a的值不会变为'3'？（ ）",
+      "options": [
+        "A. a = a + 1;",
+        "B. a + 1;",
+        "C. a = 1 + a;",
+        "D. ++a;"
+      ],
+      "explanation": "B中的a+1结果未赋值，a不变。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-03-2-11",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0或b等于0\"的是（ ）。",
+      "options": [
+        "A. (!a)||(!b)",
+        "B. (a==b==0)",
+        "C. (a==0)&&(b==0)",
+        "D. (a==0)-(b==0)==0"
+      ],
+      "explanation": "!a当a=0时为1,!b当b=0时为1,||表示\"或\"。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-03-2-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是小写字母\"的是（ ）。",
+      "options": [
+        "A. a<=a<=z",
+        "B. a-'a'<='z'-'a'",
+        "C. 'a'<=a<='z'",
+        "D. a>='a'&&a<='z'"
+      ],
+      "explanation": "D正确用&&结合比较。C++不支持连续比较。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-1-07",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b和c都是int类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a = (b == c);",
+        "B. b = 5.5;",
+        "C. c = a + b + c;",
+        "D. a + c = b + c;"
+      ],
+      "explanation": "赋值号=左侧必须是变量，不能是表达式a+c。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-1-08",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果用int类型变量a表达正方形边长，哪个表达式不能计算面积？（ ）",
+      "options": [
+        "A. a * a",
+        "B. 1 * a * a",
+        "C. a ^ 2",
+        "D. a * 2 * a / 2"
+      ],
+      "explanation": "C++中^是按位异或，不是乘方。a^2不能正确计算面积。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-1-11",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0且b等于0\"的是（ ）。",
+      "options": [
+        "A. (a==b==0)",
+        "B. !(a||b)",
+        "C. (a+b==0)",
+        "D. (a==0)+(b==0)"
+      ],
+      "explanation": "a||b只有当a和b都为0时才为false(0)，!(a||b)才为true(1)。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-1-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b为int类型变量，值分别为7和2，哪个表达式计算结果不是3.5？（ ）",
+      "options": [
+        "A. 0.0 + a / b",
+        "B. (a+0.0)/b",
+        "C. (0.0+a)/b",
+        "D. a/(0.0+b)"
+      ],
+      "explanation": "A先算整数除法a/b=7/2=3，再加0.0得3.0。B/C/D均有浮点数参与得3.5。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-2-07",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为int类型，b为char类型，哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a=a+1.0;",
+        "B. a=(int)(b-'0');",
+        "C. b=(char)(a+'0');",
+        "D. (int)b=a;"
+      ],
+      "explanation": "强制转换(int)b产生临时值（右值），不能放在赋值号左边。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-2-09",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下哪个循环语句会无限次执行？（ ）",
+      "options": [
+        "A. `for(int a=0;a;a++);`",
+        "B. `for(bool b=false;b<=true;b++);`",
+        "C. `for(char c='A';c<'z';c++);`",
+        "D. `for(double d=0.0;d<10.0;d+=0.001);`"
+      ],
+      "explanation": "bool类型b++后b变为true(1)，再++还是true(1)，始终<=true。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-2-11",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于1且b等于1\"的是（ ）。",
+      "options": [
+        "A. (a==b)&&(b==1)",
+        "B. (a&&b)",
+        "C. (a==b==1)",
+        "D. (a*b==1)"
+      ],
+      "explanation": "A正确：a==b且b==1。B当a=2,b=3也为真。D当a=-1,b=-1也成立。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-06-2-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是数字\"的是（ ）。",
+      "options": [
+        "A. '0'<=a&&a<='9'",
+        "B. '1'<=a&&a<='0'",
+        "C. '0'<=a<='9'",
+        "D. '1'<=a<='0'"
+      ],
+      "explanation": "A正确判断a的ASCII码在'0'和'9'之间。C中连续比较语义不正确。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-09-1-05",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "int类型变量x、y、z值分别为2、4、6，表达式值为真的是（ ）。",
+      "options": [
+        "A. x>y||x>z",
+        "B. x!=z-y",
+        "C. z>y+x",
+        "D. x<y||!x<z"
+      ],
+      "explanation": "x<y为真(1)，逻辑或短路直接为真。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-09-1-06",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对int类型变量a、b、c，下列语句不符合C++语法是（ ）。",
+      "options": [
+        "A. c+=5;",
+        "B. b=c%2.5;",
+        "C. a=(b=3,c=4,b+c);",
+        "D. a-=a=(b=6)/(c=2);"
+      ],
+      "explanation": "%运算符的操作数必须是整数，2.5是浮点数。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-09-2-05",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++表达式int(-123.123/10)的值是（ ）。",
+      "options": [
+        "A. -124",
+        "B. -123",
+        "C. -13",
+        "D. -12"
+      ],
+      "explanation": "-123.123/10=-12.3123，int强制转换截断小数得-12。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-03-1-11",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列哪个语句可以将变量a的值增加1？（ ）",
+      "options": [
+        "A. a = 1;",
+        "B. a++;",
+        "C. a == 1;",
+        "D. a > 1;"
+      ],
+      "explanation": "a++是自增运算符，将a的值增加1。A重新赋值为1；C是比较。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-12-1-05",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对下面C++代码描述正确的是（ ）。",
+      "options": [
+        "A. 如果N<=2输出0",
+        "B. 如果N>=2输出N-1",
+        "C. 如果N>=2输出N",
+        "D. 以上均不正确"
+      ],
+      "explanation": "当N>=2时循环执行N-1次，输出N-1。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-12-1-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "定义变量char c;，对c赋值的语句不符合语法的是（ ）。",
+      "options": [
+        "A. c=(char)66;",
+        "B. c=(char)(66);",
+        "C. c=char(66);",
+        "D. c=char 66;"
+      ],
+      "explanation": "A/B是C风格强转（合法），C是C++函数风格（合法），D缺少括号语法错误。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-03-1-11",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "整型变量int x的赋值语句不正确的是（ ）。",
+      "options": [
+        "A. x=10;",
+        "B. x=10+5;",
+        "C. x=3.14;",
+        "D. x=3.16 int;"
+      ],
+      "explanation": "D语法错误：3.16 int不是合法表达式。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-03-1-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++语言中可以完成数据输入的语句是（ ）。",
+      "options": [
+        "A. cout语句",
+        "B. scanf语句",
+        "C. printf语句",
+        "D. <<语句"
+      ],
+      "explanation": "scanf用于输入，cout和printf用于输出。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-1-07",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式9/4-6%(6-2)*10的值是（ ）。",
+      "options": [
+        "A. -17.75",
+        "B. -18",
+        "C. -14",
+        "D. -12.75"
+      ],
+      "explanation": "括号6-2=4;6%4=2;2*10=20;9/4=2;2-20=-18。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-1-11",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "求1~N之间所有奇数之和，描述错误的是（ ）。",
+      "options": [
+        "A. 输入10输出11 25",
+        "B. 输入5输出6 9",
+        "C. 将i+=1移到if前行同样能实现",
+        "D. 删除if并将i+=1改为i+=2同样能实现"
+      ],
+      "explanation": "将i+=1移到if前会导致i从2开始，丢失1的累加。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-2-02",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
+      "options": [
+        "A. (yr%400==0)||(yr%4==0)",
+        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
+        "C. (yr%400==0)&&(yr%4==0)",
+        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
+      ],
+      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-09-1-03",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中下列表达式错误的是（ ）。",
+      "options": [
+        "A. cout<<\"Hello,GESP!\"<<endl;",
+        "B. cout<<'Hello,GESP!'<<endl;",
+        "C. cout<<\"\"\"Hello,GESP!\"\"\"<<endl;",
+        "D. cout<<\"Hello,GESP!'<<endl;"
+      ],
+      "explanation": "D中双引号和单引号不配对，编译失败。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-09-1-14",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "求连续输入的正五位数的百位数之和，描述错误的是（ ）。",
+      "options": [
+        "A. 输入23221等Sum值是10",
+        "B. 输入四位数也能运行",
+        "C. 将L6改为M=(M%1000/100)同样能实现",
+        "D. 将L6改为M=(M%100/10)同样能实现"
+      ],
+      "explanation": "M%100/10取的是十位而非百位。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-09-2-13",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于while(1)说法错误的是（ ）。",
+      "options": [
+        "A. 写法错误",
+        "B. 是无限循环",
+        "C. 需要break退出",
+        "D. 等价于while(true)"
+      ],
+      "explanation": "while(1)写法合法，1为真所以无限循环。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-1-13",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "使正方形周长增加4的语句是（ ）。",
+      "options": [
+        "A. a=4;",
+        "B. a+=4;",
+        "C. a=a+4;",
+        "D. ++a;"
+      ],
+      "explanation": "周长=4a，++a使边长增1，周长增4。A/B/C都是增加4个单位边长长的太多。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-2-08",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出0~100能被7整除但不能被3整除，不能填入的代码是（ ）。",
+      "options": [
+        "A. i%7==0&&i%3!=0",
+        "B. !(i%7)&&i%3!=0",
+        "C. i%7&&i%3",
+        "D. i%7==0&&!(i%3==0)"
+      ],
+      "explanation": "C表示不能被7整除且不能被3整除，与要求相反。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-2-11",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "九九乘法表程序说法错误的是（ ）。",
+      "options": [
+        "A. 将L1 printf移到L2效果相同",
+        "B. 改为printf(\"%c\",'\\n')效果相同",
+        "C. Lie*Hang>9改为Lie*Hang>=10效果相同",
+        "D. 改为Hang*Lie>9效果相同"
+      ],
+      "explanation": "L1的printf移到L2位置会导致每行中间就换行，效果不同。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-2-13",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出N~M之间孪生素数横线i<_____应填（ ）。",
+      "options": [
+        "A. M-2",
+        "B. M-1",
+        "C. M",
+        "D. M+1"
+      ],
+      "explanation": "孪生素数需检查i和i+2，i最大到M-2，但用i<M-1可以确保i+2<=M。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-2-14",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "打印三角形星号横线应填入（ ）。",
+      "options": [
+        "A. (height-i),(2*i)",
+        "B. (height),(2*i)",
+        "C. (height-i),(2*i+1)",
+        "D. (height-i-1),(2*i+1)"
+      ],
+      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-2-15",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "a=10,b=20,c=30输出30则横线不能填入（ ）。",
+      "options": [
+        "A. max(max(a,b),c)",
+        "B. min(a+b,c)",
+        "C. sqrt(a+b+c)",
+        "D. (a+b+c)/2"
+      ],
+      "explanation": "sqrt(60)约等于7.746不等于30。A/B/D都得30。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-1-05",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于break语句描述正确的是（ ）。",
+      "options": [
+        "A. break可以单独用在if中",
+        "B. break只能用在for中",
+        "C. break必须用在循环或switch中",
+        "D. break不能用在while中"
+      ],
+      "explanation": "break必须用在循环（for/while/do-while）或switch语句中。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-1-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断\"能被2整除且除以7余数为2\"的逻辑表达式正确的是（ ）。",
+      "options": [
+        "A. i%2==0||i%7==2",
+        "B. i%2==0&&i%7==2",
+        "C. !(i%2)||i%7==2",
+        "D. i/2==0&&i%7==2"
+      ],
+      "explanation": "能被2整除：i%2==0；除以7余数为2：i%7==2。用&&连接。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-1-14",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于for循环和continue描述正确的是（ ）。",
+      "options": [
+        "A. continue跳出循环",
+        "B. continue跳过本次循环剩余语句",
+        "C. continue不能在for中使用",
+        "D. continue等价于break"
+      ],
+      "explanation": "continue跳过本次循环剩余语句继续下一次迭代。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-2-04",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "彩球排列规律：每组5红3绿2蓝（共10个），用N%10判断颜色。说法正确的是（ ）。",
+      "options": [
+        "A. 将最后一个else if修改为else效果相同",
+        "B. 条件改为remainder<=5会包含0逻辑不同",
+        "C. 6<=remainder<=8不是合法C++写法",
+        "D. 应该用取余而非除法"
+      ],
+      "explanation": "最后一个else if的条件覆盖所有剩余情况，改为else效果相同。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-2-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
+      "options": [
+        "A. 4可以分解为2+2",
+        "B. 程序需要验证到1000",
+        "C. 每个偶数只需找一组解",
+        "D. break应移到if外"
+      ],
+      "explanation": "break正确位置在if内，找到一组解即退出。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-2-14",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "生成1~10之间的随机整数正确的是（ ）。",
+      "options": [
+        "A. rand()%10",
+        "B. rand()%11",
+        "C. rand()%10+1",
+        "D. rand()%9+2"
+      ],
+      "explanation": "rand()%10生成0-9，加1得1-10。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-2-15",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断两个float变量a、b是否近似相等（差值<=0.000001）正确的是（ ）。",
+      "options": [
+        "A. a-b<=0.000001",
+        "B. a==b",
+        "C. abs(b-a)<=0.000001",
+        "D. b-a<=0.000001&&a-b<=0.000001"
+      ],
+      "explanation": "需取绝对值abs(b-a)判断差值是否在误差范围内。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-1-10",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "求M天后是星期几两处横线分别应填入（ ）。",
+      "options": [
+        "A. (N+M)/7和D==0",
+        "B. (N+M)%7和D==0",
+        "C. (N+M)/7和D<=0",
+        "D. (N+M)%7和D=0"
+      ],
+      "explanation": "用取余计算星期，余数为0为星期日。B中==才是比较。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-2-04",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "取正整数第3位数（百位）横线填入（ ）。",
+      "options": [
+        "A. N%1000/100",
+        "B. N/100%10",
+        "C. N%100/10",
+        "D. N/10%10"
+      ],
+      "explanation": "N%1000保留后三位，/100取百位。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-2-06",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "星期六后第N天的星期计算横线填（ ）。",
+      "options": [
+        "A. (N+1)%7",
+        "B. N%7+6",
+        "C. (N-1)%7",
+        "D. (N+6)%7"
+      ],
+      "explanation": "星期六对应6（0=周日），(6+N)%7=(N+6)%7。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-2-13",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断正整数位数的while循环横线填入（ ）。",
+      "options": [
+        "A. N!=0;N/=10",
+        "B. N>0;N%=10",
+        "C. N>=0;N-=10",
+        "D. N>0;N/=10"
+      ],
+      "explanation": "N>0为循环条件，N/=10去除最后一位。A中N!=0对负数也成立。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-12-4-08",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列C++语句执⾏以后结果是true的是（ ）。",
+      "options": [
+        "A. 3&&false",
+        "B. 5&&2",
+        "C. 101&&000",
+        "D. 4&true"
+      ],
+      "explanation": "A:3&&false=0✗；B:5&&2=1(true)✓；C:101&&000=0✗（000为0）；D:4&true=4&1=0✗。答案B。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-3-14",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯可以正确输出 They're planning a party for their friend's birthday. 的C++语句是？ （ ）",
+      "options": [
+        "A. `cout << 'They\\'re planning a party for their friend'\\s birthday.\" << endl;`",
+        "B. `cout << \"They\\'re planning a party for their friend's birthday.'<< endl;`",
+        "C. `cout << 'They're planning a party for their friend's birthday.'<< endl;`",
+        "D. `cout << \"They\\'re planning a party for their friend\\'s birthday.\" << endl;`"
+      ],
+      "explanation": "字符串含单引号'，需用双引号包裹并转义单引号。D选项cout<<\"They\\'re...friend\\'s...\"正确转义了单引号。答案D。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-4-06",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++中，关于⽂件路径说法错误的是（）",
+      "options": [
+        "A. \"GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件相同⽬录中的 GESP.txt ⽂件",
+        "B. \"../data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件上⼀级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "C. \"./data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件同级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "D. \"GESP.txt\"是绝对路径"
+      ],
+      "explanation": "D说法错误。\"GESP.txt\"是相对路径（相对于当前工作目录），不是绝对路径。绝对路径需以/或盘符开头。答案D。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-4-07",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于直接插入排序，下列说法错误的是（）",
+      "options": [
+        "A. 插入排序的最好情况是数组已经有序，此时只需要进行 n-1 次比较，时间复杂度为 O(n)",
+        "B. 最坏情况是数组逆序排序，此时需要进行 n(n-1)/2 次比较以及 n(n-1)/2 次赋值操作（插入），时间复杂度为 O(n²)",
+        "C. 平均来说插入排序算法的复杂度为 O(n²)",
+        "D. 空间复杂度上，直接插入法是就地排序，空间复杂度为 O(n)"
+      ],
+      "explanation": "直接插入排序的空间复杂度是 O(1)（就地排序，只需要常数个额外空间），不是 O(n)。其他选项均正确。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-09-3-05",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯说法正确的是（ ）",
+      "options": [
+        "A. （22&01）==（22&&01）成立",
+        "B. (23|11)==30",
+        "C. (23|10)==31",
+        "D. (23|01)==31"
+      ],
+      "explanation": "按位或运算：23=10111，10=01010，23|10=11111=31✓。B选项23|11=11111=31也对但题库标C。实际C(23|10=31)和D(23|01=23≠31)中C正确。答案C。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-3-05",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯逻辑运算中，正确的是（ ）",
+      "options": [
+        "A. 5&&3==0",
+        "B. 5|3==8",
+        "C. 5||3==11",
+        "D. 5&3==0001"
+      ],
+      "explanation": "5&3：5=101,3=011,按位与=001=1。D选项5&3==0001正确。A:5&&3=1≠0✗；B:5|3=7≠8✗；C:5||3=1≠11✗。答案D。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-4-01",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的语句中，（ ）正确定义了⼀个计算浮点数 的平⽅( )的函数,并成功调⽤该函数。",
+      "options": [
+        "A. `1 float square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "B. `1 square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "C. `1 void square(float x) { 2 return x * x; 3 } 4 area = square(2.0);`",
+        "D. 1 void square(float x) { 2 x * x; 3 return; 4 } 5 area = square(2);"
+      ],
+      "explanation": "A正确定义了返回float的square函数并调用。B无返回类型；C用void却有return；D用void无返回值。答案A。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-4-09",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯代码采⽤递推算法来计算斐波那契数列 ，则横线上应填写（ ）。",
+      "options": [
+        "A. 1 result = f1 + f2; 2 f1 = f2; 3 f2 = result;",
+        "B. 1 result += f1 + f2; 2 f1 = f2; 3 f2 = result;",
+        "C. 1 result += f1 + f2; 2 f2 = result; 3 f1 = f2;",
+        "D. 1 result = f1 + f2; 2 f2 = result; 3 f1 = f2;"
+      ],
+      "explanation": "斐波那契递推：result=f1+f2; f1=f2; f2=result; 正确更新前两项。答案A。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-4-10",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯关于排序算法（冒泡排序、插⼊排序和选择排序）的描述中，不正确的是（ ）。",
+      "options": [
+        "A. 冒泡排序基于元素交换实现，需借助临时变量，共涉及3个单元操作；而插入排序基于元素赋值实现，仅需1个单元操作。因此冒泡排序的计算开销通常比插入排序更高。",
+        "B. 选择排序在任何情况下的时间复杂度都为O(n²)。",
+        "C. 冒泡排序在任何情况下的时间复杂度都为O(n²)。",
+        "D. 如果给定数据部分有序，插入排序通常比选择排序效率更高。"
+      ],
+      "explanation": "C说法错误。冒泡排序在最好情况（已排序）下时间复杂度为O(n)，只需一轮比较无交换。答案C。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-4-01",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于下述代码，说法错误的是（ ）。",
+      "options": [
+        "A. 函数multiply的定义应该放到函数main之前。",
+        "B. `函数声明int multiply(int x, int y);中明确指定了函数multiply()的返回值为整数类型。`",
+        "C. 在main函数中，函数multiply通过multiply(a, b)被调⽤，其中a和b是定义在main函数中的变 量，它们作为实参传递给了multipl",
+        "D. 运⾏上述代码，将输出The result is: 20。"
+      ],
+      "explanation": "A说法错误。multiply可以定义在main之后，只需在main前声明即可（代码已有声明）。答案A。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-4-06",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的描述中，（ ）正确定义⼀个名为Person的结构体并正确初始化了⼀个Person结构体的变量p。",
+      "options": [
+        "A. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p(\"Yang\", 10);`",
+        "B. 1 struct Person { 2 string name, 3 int age; 4 }; 5 Person p; 6 p.name = \"Yang",
+        "C. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = { \"Yang\", 10 }",
+        "D. 1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = new Person(\"Yan"
+      ],
+      "explanation": "C正确：struct定义后用列表初始化Person p={\"Yang\",10}。A无构造函数不能直接初始化；B语法错；D用new错误。答案C。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-4-09",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯（ ）正确定义了⼆维数组。",
+      "options": [
+        "A. `int arr[3,4];`",
+        "B. `int arr[3][4];`",
+        "C. `int arr(3,4);`",
+        "D. `int a[3-4];`"
+      ],
+      "explanation": "B正确：int arr[3][4]是C++二维数组的正确语法。答案B。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-03-4-10",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "⼩杨正在爬楼梯，需要爬 阶才能到达楼顶。如果每次可以爬 个或 个台阶，下⾯代码采⽤递推算法来计算 ⼀共有多少种不同的⽅法可以爬到楼顶，则横线上应填写（ ）。",
+      "options": [
+        "A. 1 res += f1 + f2; 2 f1 = f2; 3 f2 = res;",
+        "B. 1 res = f1 + f2; 2 f1 = f2; 3 f2 = res;",
+        "C. 1 res += f1 + f2; 2 f2 = res; 3 f1 = f2;",
+        "D. 1 res = f1 + f2; 2 f2 = res; 3 f1 = f2;"
+      ],
+      "explanation": "爬楼梯递推：res=f1+f2; f1=f2; f2=res; 正确计算斐波那契式递推。答案B。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-3-10",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如何正确定义⼀个长度为5的整型数组( )",
+      "options": [
+        "A. `int array = new int[5];`",
+        "B. array int[5];",
+        "C. int[] array = {1,2,3,4,5};",
+        "D. `int array[5];`"
+      ],
+      "explanation": "C++定义数组：int array[5];。A/B/C语法错误。答案D。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-4-01",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，声明⼀个指向整型变量的指针的正确语法是（ ）。",
+      "options": [
+        "A. int* ptr;",
+        "B. *int ptr;",
+        "C. `int ptr*;`",
+        "D. ptr int;"
+      ],
+      "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-4-02",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的函数接收⼀个 ⾏ 列的⼆维数组并输出其中元素，则横线上不能填写（ ）。 1 void printArray(________) {",
+      "options": [
+        "A. int arr[3][4]",
+        "B. int arr[][4]",
+        "C. int (*arr)[4]",
+        "D. int** arr"
+      ],
+      "explanation": "int** arr不能直接作为int arr[3][4]的参数，二维数组参数需指定列数或用指向数组的指针。答案D。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-4-15",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "为了提高冒泡排序的效率，如果某轮\"冒泡\"中没有执行任何交换操作，说明数组已经完成排序，可直接返回结果，则两条横线上分别应该填写（ ）。",
+      "options": [
+        "A. 1 flag = false; 2 flag = false;",
+        "B. 1 flag = false; 2 flag = true;",
+        "C. 1 flag = true; 2 flag = false;",
+        "D. 1 flag = true; 2 flag = true;"
+      ],
+      "explanation": "优化冒泡：flag=false(假设有序)→有交换则flag=true→本轮结束若flag=false则已有序。横线1设flag=false，横线2(有交换时)设flag=true。答案B。"
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-j-2020-c03",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "设 x=true, y=true, z=false，以下逻辑表达式中值为 true 的是（ ）。",
+      "options": [
+        "x && (y || z)",
+        "!(x && y) || z",
+        "(x || z) && !y",
+        "(x && !y) || (z && y)"
+      ],
+      "explanation": "代入 x=true, y=true, z=false 逐一计算：A: x && (y || z) = T && (T || F) = T && T = T，成立。B: !(x && y) || z = !T || F = F || F = "
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-j-2021-c09",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式 a * (b + c) * d 的后缀表达式（逆波兰表达式）是（ ）。",
+      "options": [
+        "a b c + * d *",
+        "a b c d * + *",
+        "a b + c * d *",
+        "a b * c + d *"
+      ],
+      "explanation": "中缀转后缀规则：1.操作数直接输出；2.运算符入栈，遇到优先级更低或相等的则弹出栈顶；3.左括号入栈，右括号弹出栈顶直到左括号。转换过程：a * (b + c) * d = a -> b -> c -> +（弹出+）-> *（弹出第一个*）"
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-s-2021-c04",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于最短路径算法的说法，正确的是（ ）。",
+      "options": [
+        "Floyd算法适用于单源最短路径",
+        "Dijkstra算法可以处理负权边",
+        "SPFA算法（队列优化的Bellman-Ford）在最坏情况下时间复杂度可能退化为O(VE)",
+        "Floyd算法的时间复杂度为O(V log E)"
+      ],
+      "explanation": "SPFA最坏情况下每个顶点可能入队O(E)次,总复杂度可退化到O(VE)。Floyd是多源最短路径O(V³);Dijkstra不能处理负权边。"
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-s-2024-c07",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于区块链共识机制的说法，错误的是（ ）。",
+      "options": [
+        "PoW(工作量证明)通过计算哈希难题竞争记账权",
+        "PoS(权益证明)根据持币量和持币时间选择记账者",
+        "PoW和PoS都不需要消耗能源",
+        "DPoS通过投票选出少数代表节点进行记账"
+      ],
+      "explanation": "PoW需要大量计算(挖矿)消耗能源,Bitcoin因此被批评。PoS不依赖算力而根据质押的币量选择验证者,大幅降低能耗。DPoS进一步通过持币者投票选举代表节点(如EOS的21个超级节点),提高效率。"
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-j-2022-c06",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式a+(b-c)*d的前缀表达式（波兰表达式）是？",
+      "options": [
+        "+ a * - b c d",
+        "+ * a - b c d",
+        "a + b - c * d",
+        "* + a - b c d"
+      ],
+      "explanation": "前缀表达式将运算符放在操作数之前。转换过程： (1) b-c 的前缀式为 -bc (2) (b-c)*d 的前缀式为 *-bcd (3) a+(b-c)*d 的前缀式为 +a*-bcd 前缀表达式从右向左扫描，遇到运算符就取后面两个操作数进"
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-j-2023-c11",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "使用g++编译器将源文件main.cpp编译为可执行文件main的正确命令是？",
+      "options": [
+        "g++ main.cpp -to main",
+        "g++ -o main main.cpp",
+        "g++ -compile main.cpp -output main",
+        "g++ main.cpp /out:main"
+      ],
+      "explanation": "g++编译器的正确用法：g++ -o 输出文件名 源文件名。选项B的g++ -o main main.cpp将main.cpp编译为名为main的可执行文件。其他选项的语法均不正确。在NOI系列竞赛环境中，通常使用g++ -O2 -o na"
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-j-2024-c13",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，关于const关键字的以下用法，哪个是错误的？",
+      "options": [
+        "const int *p; // p指向的内容不可修改",
+        "int * const p; // p本身不可修改",
+        "const int &r = 10; // const引用可以绑定到字面量",
+        "const int &r; // const引用可以不初始化"
+      ],
+      "explanation": "选项D错误：引用在C++中必须初始化（不管是不是const），const int &r;没有初始化，是编译错误。 选项A正确：const在*左边，表示指向的值不可修改。 选项B正确：const在*右边，表示指针本身不可修改（不能指向别处）。"
+    },
+    {
+      "file": "dist/course-data/csp-exam-bank.json",
+      "id": "csp-j-2024-c14",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，判断一个正整数n是否为2的幂，最简洁高效的表达式是？",
+      "options": [
+        "n % 2 == 0",
+        "n > 0 && (n & (n - 1)) == 0",
+        "(n >> 1) << 1 == n",
+        "n > 0 && n % 1 == 0"
+      ],
+      "explanation": "判断一个正整数是否为2的幂的经典位运算方法：n&(n-1)==0。原理：2的幂的二进制形式为100...0（一个1后跟若干个0），n-1的形式为011...1，两者按位与结果为0。 选项A只判断是否能被2整除（即是偶数），不能判断是否是2的"
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-j-2020-c03",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "设 x=true, y=true, z=false，以下逻辑表达式中值为 true 的是（ ）。",
+      "options": [
+        "x && (y || z)",
+        "!(x && y) || z",
+        "(x || z) && !y",
+        "(x && !y) || (z && y)"
+      ],
+      "explanation": "代入 x=true, y=true, z=false 逐一计算：A: x && (y || z) = T && (T || F) = T && T = T，成立。B: !(x && y) || z = !T || F = F || F = "
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-j-2021-c09",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式 a * (b + c) * d 的后缀表达式（逆波兰表达式）是（ ）。",
+      "options": [
+        "a b c + * d *",
+        "a b c d * + *",
+        "a b + c * d *",
+        "a b * c + d *"
+      ],
+      "explanation": "中缀转后缀规则：1.操作数直接输出；2.运算符入栈，遇到优先级更低或相等的则弹出栈顶；3.左括号入栈，右括号弹出栈顶直到左括号。转换过程：a * (b + c) * d = a -> b -> c -> +（弹出+）-> *（弹出第一个*）"
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-s-2021-c04",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于最短路径算法的说法，正确的是（ ）。",
+      "options": [
+        "Floyd算法适用于单源最短路径",
+        "Dijkstra算法可以处理负权边",
+        "SPFA算法（队列优化的Bellman-Ford）在最坏情况下时间复杂度可能退化为O(VE)",
+        "Floyd算法的时间复杂度为O(V log E)"
+      ],
+      "explanation": "SPFA最坏情况下每个顶点可能入队O(E)次,总复杂度可退化到O(VE)。Floyd是多源最短路径O(V³);Dijkstra不能处理负权边。"
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-s-2024-c07",
+      "type": "choice",
+      "group": "S",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于区块链共识机制的说法，错误的是（ ）。",
+      "options": [
+        "PoW(工作量证明)通过计算哈希难题竞争记账权",
+        "PoS(权益证明)根据持币量和持币时间选择记账者",
+        "PoW和PoS都不需要消耗能源",
+        "DPoS通过投票选出少数代表节点进行记账"
+      ],
+      "explanation": "PoW需要大量计算(挖矿)消耗能源,Bitcoin因此被批评。PoS不依赖算力而根据质押的币量选择验证者,大幅降低能耗。DPoS进一步通过持币者投票选举代表节点(如EOS的21个超级节点),提高效率。"
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-j-2022-c06",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式a+(b-c)*d的前缀表达式（波兰表达式）是？",
+      "options": [
+        "+ a * - b c d",
+        "+ * a - b c d",
+        "a + b - c * d",
+        "* + a - b c d"
+      ],
+      "explanation": "前缀表达式将运算符放在操作数之前。转换过程： (1) b-c 的前缀式为 -bc (2) (b-c)*d 的前缀式为 *-bcd (3) a+(b-c)*d 的前缀式为 +a*-bcd 前缀表达式从右向左扫描，遇到运算符就取后面两个操作数进"
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-j-2023-c11",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "使用g++编译器将源文件main.cpp编译为可执行文件main的正确命令是？",
+      "options": [
+        "g++ main.cpp -to main",
+        "g++ -o main main.cpp",
+        "g++ -compile main.cpp -output main",
+        "g++ main.cpp /out:main"
+      ],
+      "explanation": "g++编译器的正确用法：g++ -o 输出文件名 源文件名。选项B的g++ -o main main.cpp将main.cpp编译为名为main的可执行文件。其他选项的语法均不正确。在NOI系列竞赛环境中，通常使用g++ -O2 -o na"
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-j-2024-c13",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，关于const关键字的以下用法，哪个是错误的？",
+      "options": [
+        "const int *p; // p指向的内容不可修改",
+        "int * const p; // p本身不可修改",
+        "const int &r = 10; // const引用可以绑定到字面量",
+        "const int &r; // const引用可以不初始化"
+      ],
+      "explanation": "选项D错误：引用在C++中必须初始化（不管是不是const），const int &r;没有初始化，是编译错误。 选项A正确：const在*左边，表示指向的值不可修改。 选项B正确：const在*右边，表示指针本身不可修改（不能指向别处）。"
+    },
+    {
+      "file": "dist-dungeon/course-data/csp-exam-bank.json",
+      "id": "csp-j-2024-c14",
+      "type": "choice",
+      "group": "J",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，判断一个正整数n是否为2的幂，最简洁高效的表达式是？",
+      "options": [
+        "n % 2 == 0",
+        "n > 0 && (n & (n - 1)) == 0",
+        "(n >> 1) << 1 == n",
+        "n > 0 && n % 1 == 0"
+      ],
+      "explanation": "判断一个正整数是否为2的幂的经典位运算方法：n&(n-1)==0。原理：2的幂的二进制形式为100...0（一个1后跟若干个0），n-1的形式为011...1，两者按位与结果为0。 选项A只判断是否能被2整除（即是偶数），不能判断是否是2的"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2021-009",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式a*(b+c)*d的后缀表达式为（ ），其中“*”和“+”是运算符。",
+      "options": [
+        "A. **a+bcd",
+        "B. abc+*d*",
+        "C. abc+d**",
+        "D. *a*+bcd"
+      ],
+      "explanation": "中缀 a*(b+c)*d → 后缀：先算b+c得bc+，再a*(bc+)得abc+*，最后(abc+*)*d得abc+*d*。B正确。D是前缀表达式（波兰式）。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2022-006",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对表达式a+(b-c)*d的前缀表达式为（ ），其中+、-、*是运算符。",
+      "options": [
+        "A. *+a-bcd",
+        "B. +a*-bcd",
+        "C. abc-d*+",
+        "D. abc-+d"
+      ],
+      "explanation": "a+(b-c)*d前缀表达式：+a*-bcd。答案B。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2023-008",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "后缀表达式“623+-382/+*2^3+”对应的中级表达式是（ ）。",
+      "options": [
+        "A. ((6-(2+3))*(3+8/2))^2+3",
+        "B. 6-2+3*3+8/2^2+3",
+        "C. (6-(2+3))*((3+8/2)^2)+3",
+        "D. 6-((2+3)*(3+8/2))^2+3"
+      ],
+      "explanation": "后缀转中缀：623+- → (6-(2+3))；382/+ → (3+8/2)；* → ((6-(2+3))*(3+8/2))；2^3 → ((6-(2+3))*((3+8/2)^2))；+3 → ((6-(2+3))*((3+8/2)^2"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2024-007",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下哪个不是 C++ 中的循环语句？（ ）",
+      "options": [
+        "A. for",
+        "B. while",
+        "C. do-while",
+        "D. repeat-until"
+      ],
+      "explanation": "repeat-until不是C++循环语句（是Pascal的）。for/while/do-while是。答案D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b都是char类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. b = a + 1;",
+        "B. b = a + '1';",
+        "C. b = 'a'++;",
+        "D. b = a++;"
+      ],
+      "explanation": "'a'是字符常量，不能进行++自增运算。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b、c和d都是int类型变量，下列哪个表达式能正确计算平均值？（ ）",
+      "options": [
+        "A. (a+b+c+d)/4",
+        "B. (a+b+c+d)%4",
+        "C. (a+b+c+d)/4.0",
+        "D. (a+b+c+d)%4.0"
+      ],
+      "explanation": "除以4.0使结果为浮点型。%不能用于浮点数。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量且值为'2'，哪条语句执行后a的值不会变为'3'？（ ）",
+      "options": [
+        "A. a = a + 1;",
+        "B. a + 1;",
+        "C. a = 1 + a;",
+        "D. ++a;"
+      ],
+      "explanation": "B中的a+1结果未赋值，a不变。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0或b等于0\"的是（ ）。",
+      "options": [
+        "A. (!a)||(!b)",
+        "B. (a==b==0)",
+        "C. (a==0)&&(b==0)",
+        "D. (a==0)-(b==0)==0"
+      ],
+      "explanation": "!a当a=0时为1,!b当b=0时为1,||表示\"或\"。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是小写字母\"的是（ ）。",
+      "options": [
+        "A. a<=a<=z",
+        "B. a-'a'<='z'-'a'",
+        "C. 'a'<=a<='z'",
+        "D. a>='a'&&a<='z'"
+      ],
+      "explanation": "D正确用&&结合比较。C++不支持连续比较。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b和c都是int类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a = (b == c);",
+        "B. b = 5.5;",
+        "C. c = a + b + c;",
+        "D. a + c = b + c;"
+      ],
+      "explanation": "赋值号=左侧必须是变量，不能是表达式a+c。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果用int类型变量a表达正方形边长，哪个表达式不能计算面积？（ ）",
+      "options": [
+        "A. a * a",
+        "B. 1 * a * a",
+        "C. a ^ 2",
+        "D. a * 2 * a / 2"
+      ],
+      "explanation": "C++中^是按位异或，不是乘方。a^2不能正确计算面积。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0且b等于0\"的是（ ）。",
+      "options": [
+        "A. (a==b==0)",
+        "B. !(a||b)",
+        "C. (a+b==0)",
+        "D. (a==0)+(b==0)"
+      ],
+      "explanation": "a||b只有当a和b都为0时才为false(0)，!(a||b)才为true(1)。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b为int类型变量，值分别为7和2，哪个表达式计算结果不是3.5？（ ）",
+      "options": [
+        "A. 0.0 + a / b",
+        "B. (a+0.0)/b",
+        "C. (0.0+a)/b",
+        "D. a/(0.0+b)"
+      ],
+      "explanation": "A先算整数除法a/b=7/2=3，再加0.0得3.0。B/C/D均有浮点数参与得3.5。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为int类型，b为char类型，哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a=a+1.0;",
+        "B. a=(int)(b-'0');",
+        "C. b=(char)(a+'0');",
+        "D. (int)b=a;"
+      ],
+      "explanation": "强制转换(int)b产生临时值（右值），不能放在赋值号左边。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下哪个循环语句会无限次执行？（ ）",
+      "options": [
+        "A. `for(int a=0;a;a++);`",
+        "B. `for(bool b=false;b<=true;b++);`",
+        "C. `for(char c='A';c<'z';c++);`",
+        "D. `for(double d=0.0;d<10.0;d+=0.001);`"
+      ],
+      "explanation": "bool类型b++后b变为true(1)，再++还是true(1)，始终<=true。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于1且b等于1\"的是（ ）。",
+      "options": [
+        "A. (a==b)&&(b==1)",
+        "B. (a&&b)",
+        "C. (a==b==1)",
+        "D. (a*b==1)"
+      ],
+      "explanation": "A正确：a==b且b==1。B当a=2,b=3也为真。D当a=-1,b=-1也成立。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是数字\"的是（ ）。",
+      "options": [
+        "A. '0'<=a&&a<='9'",
+        "B. '1'<=a&&a<='0'",
+        "C. '0'<=a<='9'",
+        "D. '1'<=a<='0'"
+      ],
+      "explanation": "A正确判断a的ASCII码在'0'和'9'之间。C中连续比较语义不正确。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-1-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "int类型变量x、y、z值分别为2、4、6，表达式值为真的是（ ）。",
+      "options": [
+        "A. x>y||x>z",
+        "B. x!=z-y",
+        "C. z>y+x",
+        "D. x<y||!x<z"
+      ],
+      "explanation": "x<y为真(1)，逻辑或短路直接为真。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-1-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对int类型变量a、b、c，下列语句不符合C++语法是（ ）。",
+      "options": [
+        "A. c+=5;",
+        "B. b=c%2.5;",
+        "C. a=(b=3,c=4,b+c);",
+        "D. a-=a=(b=6)/(c=2);"
+      ],
+      "explanation": "%运算符的操作数必须是整数，2.5是浮点数。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-2-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++表达式int(-123.123/10)的值是（ ）。",
+      "options": [
+        "A. -124",
+        "B. -123",
+        "C. -13",
+        "D. -12"
+      ],
+      "explanation": "-123.123/10=-12.3123，int强制转换截断小数得-12。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列哪个语句可以将变量a的值增加1？（ ）",
+      "options": [
+        "A. a = 1;",
+        "B. a++;",
+        "C. a == 1;",
+        "D. a > 1;"
+      ],
+      "explanation": "a++是自增运算符，将a的值增加1。A重新赋值为1；C是比较。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "定义变量char c;，对c赋值的语句不符合语法的是（ ）。",
+      "options": [
+        "A. c=(char)66;",
+        "B. c=(char)(66);",
+        "C. c=char(66);",
+        "D. c=char 66;"
+      ],
+      "explanation": "A/B是C风格强转（合法），C是C++函数风格（合法），D缺少括号语法错误。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "整型变量int x的赋值语句不正确的是（ ）。",
+      "options": [
+        "A. x=10;",
+        "B. x=10+5;",
+        "C. x=3.14;",
+        "D. x=3.16 int;"
+      ],
+      "explanation": "D语法错误：3.16 int不是合法表达式。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++语言中可以完成数据输入的语句是（ ）。",
+      "options": [
+        "A. cout语句",
+        "B. scanf语句",
+        "C. printf语句",
+        "D. <<语句"
+      ],
+      "explanation": "scanf用于输入，cout和printf用于输出。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-1-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式9/4-6%(6-2)*10的值是（ ）。",
+      "options": [
+        "A. -17.75",
+        "B. -18",
+        "C. -14",
+        "D. -12.75"
+      ],
+      "explanation": "括号6-2=4;6%4=2;2*10=20;9/4=2;2-20=-18。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-2-02",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
+      "options": [
+        "A. (yr%400==0)||(yr%4==0)",
+        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
+        "C. (yr%400==0)&&(yr%4==0)",
+        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
+      ],
+      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-1-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中下列表达式错误的是（ ）。",
+      "options": [
+        "A. cout<<\"Hello,GESP!\"<<endl;",
+        "B. cout<<'Hello,GESP!'<<endl;",
+        "C. cout<<\"\"\"Hello,GESP!\"\"\"<<endl;",
+        "D. cout<<\"Hello,GESP!'<<endl;"
+      ],
+      "explanation": "D中双引号和单引号不配对，编译失败。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-2-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于while(1)说法错误的是（ ）。",
+      "options": [
+        "A. 写法错误",
+        "B. 是无限循环",
+        "C. 需要break退出",
+        "D. 等价于while(true)"
+      ],
+      "explanation": "while(1)写法合法，1为真所以无限循环。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出0~100能被7整除但不能被3整除，不能填入的代码是（ ）。",
+      "options": [
+        "A. i%7==0&&i%3!=0",
+        "B. !(i%7)&&i%3!=0",
+        "C. i%7&&i%3",
+        "D. i%7==0&&!(i%3==0)"
+      ],
+      "explanation": "C表示不能被7整除且不能被3整除，与要求相反。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "九九乘法表程序说法错误的是（ ）。",
+      "options": [
+        "A. 将L1 printf移到L2效果相同",
+        "B. 改为printf(\"%c\",'\\n')效果相同",
+        "C. Lie*Hang>9改为Lie*Hang>=10效果相同",
+        "D. 改为Hang*Lie>9效果相同"
+      ],
+      "explanation": "L1的printf移到L2位置会导致每行中间就换行，效果不同。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出N~M之间孪生素数横线i<_____应填（ ）。",
+      "options": [
+        "A. M-2",
+        "B. M-1",
+        "C. M",
+        "D. M+1"
+      ],
+      "explanation": "孪生素数需检查i和i+2，i最大到M-2，但用i<M-1可以确保i+2<=M。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "打印三角形星号横线应填入（ ）。",
+      "options": [
+        "A. (height-i),(2*i)",
+        "B. (height),(2*i)",
+        "C. (height-i),(2*i+1)",
+        "D. (height-i-1),(2*i+1)"
+      ],
+      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "a=10,b=20,c=30输出30则横线不能填入（ ）。",
+      "options": [
+        "A. max(max(a,b),c)",
+        "B. min(a+b,c)",
+        "C. sqrt(a+b+c)",
+        "D. (a+b+c)/2"
+      ],
+      "explanation": "sqrt(60)约等于7.746不等于30。A/B/D都得30。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于break语句描述正确的是（ ）。",
+      "options": [
+        "A. break可以单独用在if中",
+        "B. break只能用在for中",
+        "C. break必须用在循环或switch中",
+        "D. break不能用在while中"
+      ],
+      "explanation": "break必须用在循环（for/while/do-while）或switch语句中。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断\"能被2整除且除以7余数为2\"的逻辑表达式正确的是（ ）。",
+      "options": [
+        "A. i%2==0||i%7==2",
+        "B. i%2==0&&i%7==2",
+        "C. !(i%2)||i%7==2",
+        "D. i/2==0&&i%7==2"
+      ],
+      "explanation": "能被2整除：i%2==0；除以7余数为2：i%7==2。用&&连接。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于for循环和continue描述正确的是（ ）。",
+      "options": [
+        "A. continue跳出循环",
+        "B. continue跳过本次循环剩余语句",
+        "C. continue不能在for中使用",
+        "D. continue等价于break"
+      ],
+      "explanation": "continue跳过本次循环剩余语句继续下一次迭代。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "彩球排列规律：每组5红3绿2蓝（共10个），用N%10判断颜色。说法正确的是（ ）。",
+      "options": [
+        "A. 将最后一个else if修改为else效果相同",
+        "B. 条件改为remainder<=5会包含0逻辑不同",
+        "C. 6<=remainder<=8不是合法C++写法",
+        "D. 应该用取余而非除法"
+      ],
+      "explanation": "最后一个else if的条件覆盖所有剩余情况，改为else效果相同。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
+      "options": [
+        "A. 4可以分解为2+2",
+        "B. 程序需要验证到1000",
+        "C. 每个偶数只需找一组解",
+        "D. break应移到if外"
+      ],
+      "explanation": "break正确位置在if内，找到一组解即退出。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "生成1~10之间的随机整数正确的是（ ）。",
+      "options": [
+        "A. rand()%10",
+        "B. rand()%11",
+        "C. rand()%10+1",
+        "D. rand()%9+2"
+      ],
+      "explanation": "rand()%10生成0-9，加1得1-10。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断两个float变量a、b是否近似相等（差值<=0.000001）正确的是（ ）。",
+      "options": [
+        "A. a-b<=0.000001",
+        "B. a==b",
+        "C. abs(b-a)<=0.000001",
+        "D. b-a<=0.000001&&a-b<=0.000001"
+      ],
+      "explanation": "需取绝对值abs(b-a)判断差值是否在误差范围内。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "取正整数第3位数（百位）横线填入（ ）。",
+      "options": [
+        "A. N%1000/100",
+        "B. N/100%10",
+        "C. N%100/10",
+        "D. N/10%10"
+      ],
+      "explanation": "N%1000保留后三位，/100取百位。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-2-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "星期六后第N天的星期计算横线填（ ）。",
+      "options": [
+        "A. (N+1)%7",
+        "B. N%7+6",
+        "C. (N-1)%7",
+        "D. (N+6)%7"
+      ],
+      "explanation": "星期六对应6（0=周日），(6+N)%7=(N+6)%7。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-4-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列C++语句执⾏以后结果是true的是（ ）。",
+      "options": [
+        "A. 3&&false",
+        "B. 5&&2",
+        "C. 101&&000",
+        "D. 4&true"
+      ],
+      "explanation": "A:3&&false=0✗；B:5&&2=1(true)✓；C:101&&000=0✗（000为0）；D:4&true=4&1=0✗。答案B。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-3-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯可以正确输出 They're planning a party for their friend's birthday. 的C++语句是？ （ ）",
+      "options": [
+        "A. `cout << 'They\\'re planning a party for their friend'\\s birthday.\" << endl;`",
+        "B. `cout << \"They\\'re planning a party for their friend's birthday.'<< endl;`",
+        "C. `cout << 'They're planning a party for their friend's birthday.'<< endl;`",
+        "D. `cout << \"They\\'re planning a party for their friend\\'s birthday.\" << endl;`"
+      ],
+      "explanation": "字符串含单引号'，需用双引号包裹并转义单引号。D选项cout<<\"They\\'re...friend\\'s...\"正确转义了单引号。答案D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++中，关于⽂件路径说法错误的是（）",
+      "options": [
+        "A. \"GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件相同⽬录中的 GESP.txt ⽂件",
+        "B. \"../data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件上⼀级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "C. \"./data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件同级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "D. \"GESP.txt\"是绝对路径"
+      ],
+      "explanation": "D说法错误。\"GESP.txt\"是相对路径（相对于当前工作目录），不是绝对路径。绝对路径需以/或盘符开头。答案D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-4-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于直接插入排序，下列说法错误的是（）",
+      "options": [
+        "A. 插入排序的最好情况是数组已经有序，此时只需要进行 n-1 次比较，时间复杂度为 O(n)",
+        "B. 最坏情况是数组逆序排序，此时需要进行 n(n-1)/2 次比较以及 n(n-1)/2 次赋值操作（插入），时间复杂度为 O(n²)",
+        "C. 平均来说插入排序算法的复杂度为 O(n²)",
+        "D. 空间复杂度上，直接插入法是就地排序，空间复杂度为 O(n)"
+      ],
+      "explanation": "直接插入排序的空间复杂度是 O(1)（就地排序，只需要常数个额外空间），不是 O(n)。其他选项均正确。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯说法正确的是（ ）",
+      "options": [
+        "A. （22&01）==（22&&01）成立",
+        "B. (23|11)==30",
+        "C. (23|10)==31",
+        "D. (23|01)==31"
+      ],
+      "explanation": "按位或运算：23=10111，10=01010，23|10=11111=31✓。B选项23|11=11111=31也对但题库标C。实际C(23|10=31)和D(23|01=23≠31)中C正确。答案C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯逻辑运算中，正确的是（ ）",
+      "options": [
+        "A. 5&&3==0",
+        "B. 5|3==8",
+        "C. 5||3==11",
+        "D. 5&3==0001"
+      ],
+      "explanation": "5&3：5=101,3=011,按位与=001=1。D选项5&3==0001正确。A:5&&3=1≠0✗；B:5|3=7≠8✗；C:5||3=1≠11✗。答案D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的语句中，（ ）正确定义了⼀个计算浮点数 的平⽅( )的函数,并成功调⽤该函数。",
+      "options": [
+        "A. `1 float square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "B. `1 square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "C. `1 void square(float x) { 2 return x * x; 3 } 4 area = square(2.0);`",
+        "D. 1 void square(float x) { 2 x * x; 3 return; 4 } 5 area = square(2);"
+      ],
+      "explanation": "A正确定义了返回float的square函数并调用。B无返回类型；C用void却有return；D用void无返回值。答案A。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-4-10",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯关于排序算法（冒泡排序、插⼊排序和选择排序）的描述中，不正确的是（ ）。",
+      "options": [
+        "A. 冒泡排序基于元素交换实现，需借助临时变量，共涉及3个单元操作；而插入排序基于元素赋值实现，仅需1个单元操作。因此冒泡排序的计算开销通常比插入排序更高。",
+        "B. 选择排序在任何情况下的时间复杂度都为O(n²)。",
+        "C. 冒泡排序在任何情况下的时间复杂度都为O(n²)。",
+        "D. 如果给定数据部分有序，插入排序通常比选择排序效率更高。"
+      ],
+      "explanation": "C说法错误。冒泡排序在最好情况（已排序）下时间复杂度为O(n)，只需一轮比较无交换。答案C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的描述中，（ ）正确定义⼀个名为Person的结构体并正确初始化了⼀个Person结构体的变量p。",
+      "options": [
+        "A. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p(\"Yang\", 10);`",
+        "B. 1 struct Person { 2 string name, 3 int age; 4 }; 5 Person p; 6 p.name = \"Yang",
+        "C. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = { \"Yang\", 10 }",
+        "D. 1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = new Person(\"Yan"
+      ],
+      "explanation": "C正确：struct定义后用列表初始化Person p={\"Yang\",10}。A无构造函数不能直接初始化；B语法错；D用new错误。答案C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-4-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯（ ）正确定义了⼆维数组。",
+      "options": [
+        "A. `int arr[3,4];`",
+        "B. `int arr[3][4];`",
+        "C. `int arr(3,4);`",
+        "D. `int a[3-4];`"
+      ],
+      "explanation": "B正确：int arr[3][4]是C++二维数组的正确语法。答案B。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-3-10",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如何正确定义⼀个长度为5的整型数组( )",
+      "options": [
+        "A. `int array = new int[5];`",
+        "B. array int[5];",
+        "C. int[] array = {1,2,3,4,5};",
+        "D. `int array[5];`"
+      ],
+      "explanation": "C++定义数组：int array[5];。A/B/C语法错误。答案D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，声明⼀个指向整型变量的指针的正确语法是（ ）。",
+      "options": [
+        "A. int* ptr;",
+        "B. *int ptr;",
+        "C. `int ptr*;`",
+        "D. ptr int;"
+      ],
+      "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2021-009",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式a*(b+c)*d的后缀表达式为（ ），其中“*”和“+”是运算符。",
+      "options": [
+        "A. **a+bcd",
+        "B. abc+*d*",
+        "C. abc+d**",
+        "D. *a*+bcd"
+      ],
+      "explanation": "中缀 a*(b+c)*d → 后缀：先算b+c得bc+，再a*(bc+)得abc+*，最后(abc+*)*d得abc+*d*。B正确。D是前缀表达式（波兰式）。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2022-006",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对表达式a+(b-c)*d的前缀表达式为（ ），其中+、-、*是运算符。",
+      "options": [
+        "A. *+a-bcd",
+        "B. +a*-bcd",
+        "C. abc-d*+",
+        "D. abc-+d"
+      ],
+      "explanation": "a+(b-c)*d前缀表达式：+a*-bcd。答案B。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2023-008",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "后缀表达式“623+-382/+*2^3+”对应的中级表达式是（ ）。",
+      "options": [
+        "A. ((6-(2+3))*(3+8/2))^2+3",
+        "B. 6-2+3*3+8/2^2+3",
+        "C. (6-(2+3))*((3+8/2)^2)+3",
+        "D. 6-((2+3)*(3+8/2))^2+3"
+      ],
+      "explanation": "后缀转中缀：623+- → (6-(2+3))；382/+ → (3+8/2)；* → ((6-(2+3))*(3+8/2))；2^3 → ((6-(2+3))*((3+8/2)^2))；+3 → ((6-(2+3))*((3+8/2)^2"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2024-007",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下哪个不是 C++ 中的循环语句？（ ）",
+      "options": [
+        "A. for",
+        "B. while",
+        "C. do-while",
+        "D. repeat-until"
+      ],
+      "explanation": "repeat-until不是C++循环语句（是Pascal的）。for/while/do-while是。答案D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b都是char类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. b = a + 1;",
+        "B. b = a + '1';",
+        "C. b = 'a'++;",
+        "D. b = a++;"
+      ],
+      "explanation": "'a'是字符常量，不能进行++自增运算。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b、c和d都是int类型变量，下列哪个表达式能正确计算平均值？（ ）",
+      "options": [
+        "A. (a+b+c+d)/4",
+        "B. (a+b+c+d)%4",
+        "C. (a+b+c+d)/4.0",
+        "D. (a+b+c+d)%4.0"
+      ],
+      "explanation": "除以4.0使结果为浮点型。%不能用于浮点数。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量且值为'2'，哪条语句执行后a的值不会变为'3'？（ ）",
+      "options": [
+        "A. a = a + 1;",
+        "B. a + 1;",
+        "C. a = 1 + a;",
+        "D. ++a;"
+      ],
+      "explanation": "B中的a+1结果未赋值，a不变。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0或b等于0\"的是（ ）。",
+      "options": [
+        "A. (!a)||(!b)",
+        "B. (a==b==0)",
+        "C. (a==0)&&(b==0)",
+        "D. (a==0)-(b==0)==0"
+      ],
+      "explanation": "!a当a=0时为1,!b当b=0时为1,||表示\"或\"。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是小写字母\"的是（ ）。",
+      "options": [
+        "A. a<=a<=z",
+        "B. a-'a'<='z'-'a'",
+        "C. 'a'<=a<='z'",
+        "D. a>='a'&&a<='z'"
+      ],
+      "explanation": "D正确用&&结合比较。C++不支持连续比较。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b和c都是int类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a = (b == c);",
+        "B. b = 5.5;",
+        "C. c = a + b + c;",
+        "D. a + c = b + c;"
+      ],
+      "explanation": "赋值号=左侧必须是变量，不能是表达式a+c。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果用int类型变量a表达正方形边长，哪个表达式不能计算面积？（ ）",
+      "options": [
+        "A. a * a",
+        "B. 1 * a * a",
+        "C. a ^ 2",
+        "D. a * 2 * a / 2"
+      ],
+      "explanation": "C++中^是按位异或，不是乘方。a^2不能正确计算面积。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0且b等于0\"的是（ ）。",
+      "options": [
+        "A. (a==b==0)",
+        "B. !(a||b)",
+        "C. (a+b==0)",
+        "D. (a==0)+(b==0)"
+      ],
+      "explanation": "a||b只有当a和b都为0时才为false(0)，!(a||b)才为true(1)。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b为int类型变量，值分别为7和2，哪个表达式计算结果不是3.5？（ ）",
+      "options": [
+        "A. 0.0 + a / b",
+        "B. (a+0.0)/b",
+        "C. (0.0+a)/b",
+        "D. a/(0.0+b)"
+      ],
+      "explanation": "A先算整数除法a/b=7/2=3，再加0.0得3.0。B/C/D均有浮点数参与得3.5。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为int类型，b为char类型，哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a=a+1.0;",
+        "B. a=(int)(b-'0');",
+        "C. b=(char)(a+'0');",
+        "D. (int)b=a;"
+      ],
+      "explanation": "强制转换(int)b产生临时值（右值），不能放在赋值号左边。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下哪个循环语句会无限次执行？（ ）",
+      "options": [
+        "A. `for(int a=0;a;a++);`",
+        "B. `for(bool b=false;b<=true;b++);`",
+        "C. `for(char c='A';c<'z';c++);`",
+        "D. `for(double d=0.0;d<10.0;d+=0.001);`"
+      ],
+      "explanation": "bool类型b++后b变为true(1)，再++还是true(1)，始终<=true。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于1且b等于1\"的是（ ）。",
+      "options": [
+        "A. (a==b)&&(b==1)",
+        "B. (a&&b)",
+        "C. (a==b==1)",
+        "D. (a*b==1)"
+      ],
+      "explanation": "A正确：a==b且b==1。B当a=2,b=3也为真。D当a=-1,b=-1也成立。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是数字\"的是（ ）。",
+      "options": [
+        "A. '0'<=a&&a<='9'",
+        "B. '1'<=a&&a<='0'",
+        "C. '0'<=a<='9'",
+        "D. '1'<=a<='0'"
+      ],
+      "explanation": "A正确判断a的ASCII码在'0'和'9'之间。C中连续比较语义不正确。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-1-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "int类型变量x、y、z值分别为2、4、6，表达式值为真的是（ ）。",
+      "options": [
+        "A. x>y||x>z",
+        "B. x!=z-y",
+        "C. z>y+x",
+        "D. x<y||!x<z"
+      ],
+      "explanation": "x<y为真(1)，逻辑或短路直接为真。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-1-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对int类型变量a、b、c，下列语句不符合C++语法是（ ）。",
+      "options": [
+        "A. c+=5;",
+        "B. b=c%2.5;",
+        "C. a=(b=3,c=4,b+c);",
+        "D. a-=a=(b=6)/(c=2);"
+      ],
+      "explanation": "%运算符的操作数必须是整数，2.5是浮点数。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-2-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++表达式int(-123.123/10)的值是（ ）。",
+      "options": [
+        "A. -124",
+        "B. -123",
+        "C. -13",
+        "D. -12"
+      ],
+      "explanation": "-123.123/10=-12.3123，int强制转换截断小数得-12。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列哪个语句可以将变量a的值增加1？（ ）",
+      "options": [
+        "A. a = 1;",
+        "B. a++;",
+        "C. a == 1;",
+        "D. a > 1;"
+      ],
+      "explanation": "a++是自增运算符，将a的值增加1。A重新赋值为1；C是比较。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "定义变量char c;，对c赋值的语句不符合语法的是（ ）。",
+      "options": [
+        "A. c=(char)66;",
+        "B. c=(char)(66);",
+        "C. c=char(66);",
+        "D. c=char 66;"
+      ],
+      "explanation": "A/B是C风格强转（合法），C是C++函数风格（合法），D缺少括号语法错误。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "整型变量int x的赋值语句不正确的是（ ）。",
+      "options": [
+        "A. x=10;",
+        "B. x=10+5;",
+        "C. x=3.14;",
+        "D. x=3.16 int;"
+      ],
+      "explanation": "D语法错误：3.16 int不是合法表达式。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++语言中可以完成数据输入的语句是（ ）。",
+      "options": [
+        "A. cout语句",
+        "B. scanf语句",
+        "C. printf语句",
+        "D. <<语句"
+      ],
+      "explanation": "scanf用于输入，cout和printf用于输出。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-1-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式9/4-6%(6-2)*10的值是（ ）。",
+      "options": [
+        "A. -17.75",
+        "B. -18",
+        "C. -14",
+        "D. -12.75"
+      ],
+      "explanation": "括号6-2=4;6%4=2;2*10=20;9/4=2;2-20=-18。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-2-02",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
+      "options": [
+        "A. (yr%400==0)||(yr%4==0)",
+        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
+        "C. (yr%400==0)&&(yr%4==0)",
+        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
+      ],
+      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-1-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中下列表达式错误的是（ ）。",
+      "options": [
+        "A. cout<<\"Hello,GESP!\"<<endl;",
+        "B. cout<<'Hello,GESP!'<<endl;",
+        "C. cout<<\"\"\"Hello,GESP!\"\"\"<<endl;",
+        "D. cout<<\"Hello,GESP!'<<endl;"
+      ],
+      "explanation": "D中双引号和单引号不配对，编译失败。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-2-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于while(1)说法错误的是（ ）。",
+      "options": [
+        "A. 写法错误",
+        "B. 是无限循环",
+        "C. 需要break退出",
+        "D. 等价于while(true)"
+      ],
+      "explanation": "while(1)写法合法，1为真所以无限循环。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出0~100能被7整除但不能被3整除，不能填入的代码是（ ）。",
+      "options": [
+        "A. i%7==0&&i%3!=0",
+        "B. !(i%7)&&i%3!=0",
+        "C. i%7&&i%3",
+        "D. i%7==0&&!(i%3==0)"
+      ],
+      "explanation": "C表示不能被7整除且不能被3整除，与要求相反。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "九九乘法表程序说法错误的是（ ）。",
+      "options": [
+        "A. 将L1 printf移到L2效果相同",
+        "B. 改为printf(\"%c\",'\\n')效果相同",
+        "C. Lie*Hang>9改为Lie*Hang>=10效果相同",
+        "D. 改为Hang*Lie>9效果相同"
+      ],
+      "explanation": "L1的printf移到L2位置会导致每行中间就换行，效果不同。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出N~M之间孪生素数横线i<_____应填（ ）。",
+      "options": [
+        "A. M-2",
+        "B. M-1",
+        "C. M",
+        "D. M+1"
+      ],
+      "explanation": "孪生素数需检查i和i+2，i最大到M-2，但用i<M-1可以确保i+2<=M。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "打印三角形星号横线应填入（ ）。",
+      "options": [
+        "A. (height-i),(2*i)",
+        "B. (height),(2*i)",
+        "C. (height-i),(2*i+1)",
+        "D. (height-i-1),(2*i+1)"
+      ],
+      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "a=10,b=20,c=30输出30则横线不能填入（ ）。",
+      "options": [
+        "A. max(max(a,b),c)",
+        "B. min(a+b,c)",
+        "C. sqrt(a+b+c)",
+        "D. (a+b+c)/2"
+      ],
+      "explanation": "sqrt(60)约等于7.746不等于30。A/B/D都得30。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于break语句描述正确的是（ ）。",
+      "options": [
+        "A. break可以单独用在if中",
+        "B. break只能用在for中",
+        "C. break必须用在循环或switch中",
+        "D. break不能用在while中"
+      ],
+      "explanation": "break必须用在循环（for/while/do-while）或switch语句中。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断\"能被2整除且除以7余数为2\"的逻辑表达式正确的是（ ）。",
+      "options": [
+        "A. i%2==0||i%7==2",
+        "B. i%2==0&&i%7==2",
+        "C. !(i%2)||i%7==2",
+        "D. i/2==0&&i%7==2"
+      ],
+      "explanation": "能被2整除：i%2==0；除以7余数为2：i%7==2。用&&连接。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于for循环和continue描述正确的是（ ）。",
+      "options": [
+        "A. continue跳出循环",
+        "B. continue跳过本次循环剩余语句",
+        "C. continue不能在for中使用",
+        "D. continue等价于break"
+      ],
+      "explanation": "continue跳过本次循环剩余语句继续下一次迭代。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "彩球排列规律：每组5红3绿2蓝（共10个），用N%10判断颜色。说法正确的是（ ）。",
+      "options": [
+        "A. 将最后一个else if修改为else效果相同",
+        "B. 条件改为remainder<=5会包含0逻辑不同",
+        "C. 6<=remainder<=8不是合法C++写法",
+        "D. 应该用取余而非除法"
+      ],
+      "explanation": "最后一个else if的条件覆盖所有剩余情况，改为else效果相同。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
+      "options": [
+        "A. 4可以分解为2+2",
+        "B. 程序需要验证到1000",
+        "C. 每个偶数只需找一组解",
+        "D. break应移到if外"
+      ],
+      "explanation": "break正确位置在if内，找到一组解即退出。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "生成1~10之间的随机整数正确的是（ ）。",
+      "options": [
+        "A. rand()%10",
+        "B. rand()%11",
+        "C. rand()%10+1",
+        "D. rand()%9+2"
+      ],
+      "explanation": "rand()%10生成0-9，加1得1-10。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断两个float变量a、b是否近似相等（差值<=0.000001）正确的是（ ）。",
+      "options": [
+        "A. a-b<=0.000001",
+        "B. a==b",
+        "C. abs(b-a)<=0.000001",
+        "D. b-a<=0.000001&&a-b<=0.000001"
+      ],
+      "explanation": "需取绝对值abs(b-a)判断差值是否在误差范围内。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "取正整数第3位数（百位）横线填入（ ）。",
+      "options": [
+        "A. N%1000/100",
+        "B. N/100%10",
+        "C. N%100/10",
+        "D. N/10%10"
+      ],
+      "explanation": "N%1000保留后三位，/100取百位。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-2-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "星期六后第N天的星期计算横线填（ ）。",
+      "options": [
+        "A. (N+1)%7",
+        "B. N%7+6",
+        "C. (N-1)%7",
+        "D. (N+6)%7"
+      ],
+      "explanation": "星期六对应6（0=周日），(6+N)%7=(N+6)%7。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-4-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列C++语句执⾏以后结果是true的是（ ）。",
+      "options": [
+        "A. 3&&false",
+        "B. 5&&2",
+        "C. 101&&000",
+        "D. 4&true"
+      ],
+      "explanation": "A:3&&false=0✗；B:5&&2=1(true)✓；C:101&&000=0✗（000为0）；D:4&true=4&1=0✗。答案B。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-3-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯可以正确输出 They're planning a party for their friend's birthday. 的C++语句是？ （ ）",
+      "options": [
+        "A. `cout << 'They\\'re planning a party for their friend'\\s birthday.\" << endl;`",
+        "B. `cout << \"They\\'re planning a party for their friend's birthday.'<< endl;`",
+        "C. `cout << 'They're planning a party for their friend's birthday.'<< endl;`",
+        "D. `cout << \"They\\'re planning a party for their friend\\'s birthday.\" << endl;`"
+      ],
+      "explanation": "字符串含单引号'，需用双引号包裹并转义单引号。D选项cout<<\"They\\'re...friend\\'s...\"正确转义了单引号。答案D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++中，关于⽂件路径说法错误的是（）",
+      "options": [
+        "A. \"GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件相同⽬录中的 GESP.txt ⽂件",
+        "B. \"../data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件上⼀级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "C. \"./data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件同级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "D. \"GESP.txt\"是绝对路径"
+      ],
+      "explanation": "D说法错误。\"GESP.txt\"是相对路径（相对于当前工作目录），不是绝对路径。绝对路径需以/或盘符开头。答案D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-4-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于直接插入排序，下列说法错误的是（）",
+      "options": [
+        "A. 插入排序的最好情况是数组已经有序，此时只需要进行 n-1 次比较，时间复杂度为 O(n)",
+        "B. 最坏情况是数组逆序排序，此时需要进行 n(n-1)/2 次比较以及 n(n-1)/2 次赋值操作（插入），时间复杂度为 O(n²)",
+        "C. 平均来说插入排序算法的复杂度为 O(n²)",
+        "D. 空间复杂度上，直接插入法是就地排序，空间复杂度为 O(n)"
+      ],
+      "explanation": "直接插入排序的空间复杂度是 O(1)（就地排序，只需要常数个额外空间），不是 O(n)。其他选项均正确。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯说法正确的是（ ）",
+      "options": [
+        "A. （22&01）==（22&&01）成立",
+        "B. (23|11)==30",
+        "C. (23|10)==31",
+        "D. (23|01)==31"
+      ],
+      "explanation": "按位或运算：23=10111，10=01010，23|10=11111=31✓。B选项23|11=11111=31也对但题库标C。实际C(23|10=31)和D(23|01=23≠31)中C正确。答案C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯逻辑运算中，正确的是（ ）",
+      "options": [
+        "A. 5&&3==0",
+        "B. 5|3==8",
+        "C. 5||3==11",
+        "D. 5&3==0001"
+      ],
+      "explanation": "5&3：5=101,3=011,按位与=001=1。D选项5&3==0001正确。A:5&&3=1≠0✗；B:5|3=7≠8✗；C:5||3=1≠11✗。答案D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的语句中，（ ）正确定义了⼀个计算浮点数 的平⽅( )的函数,并成功调⽤该函数。",
+      "options": [
+        "A. `1 float square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "B. `1 square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "C. `1 void square(float x) { 2 return x * x; 3 } 4 area = square(2.0);`",
+        "D. 1 void square(float x) { 2 x * x; 3 return; 4 } 5 area = square(2);"
+      ],
+      "explanation": "A正确定义了返回float的square函数并调用。B无返回类型；C用void却有return；D用void无返回值。答案A。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-4-10",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯关于排序算法（冒泡排序、插⼊排序和选择排序）的描述中，不正确的是（ ）。",
+      "options": [
+        "A. 冒泡排序基于元素交换实现，需借助临时变量，共涉及3个单元操作；而插入排序基于元素赋值实现，仅需1个单元操作。因此冒泡排序的计算开销通常比插入排序更高。",
+        "B. 选择排序在任何情况下的时间复杂度都为O(n²)。",
+        "C. 冒泡排序在任何情况下的时间复杂度都为O(n²)。",
+        "D. 如果给定数据部分有序，插入排序通常比选择排序效率更高。"
+      ],
+      "explanation": "C说法错误。冒泡排序在最好情况（已排序）下时间复杂度为O(n)，只需一轮比较无交换。答案C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的描述中，（ ）正确定义⼀个名为Person的结构体并正确初始化了⼀个Person结构体的变量p。",
+      "options": [
+        "A. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p(\"Yang\", 10);`",
+        "B. 1 struct Person { 2 string name, 3 int age; 4 }; 5 Person p; 6 p.name = \"Yang",
+        "C. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = { \"Yang\", 10 }",
+        "D. 1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = new Person(\"Yan"
+      ],
+      "explanation": "C正确：struct定义后用列表初始化Person p={\"Yang\",10}。A无构造函数不能直接初始化；B语法错；D用new错误。答案C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-4-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯（ ）正确定义了⼆维数组。",
+      "options": [
+        "A. `int arr[3,4];`",
+        "B. `int arr[3][4];`",
+        "C. `int arr(3,4);`",
+        "D. `int a[3-4];`"
+      ],
+      "explanation": "B正确：int arr[3][4]是C++二维数组的正确语法。答案B。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-3-10",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如何正确定义⼀个长度为5的整型数组( )",
+      "options": [
+        "A. `int array = new int[5];`",
+        "B. array int[5];",
+        "C. int[] array = {1,2,3,4,5};",
+        "D. `int array[5];`"
+      ],
+      "explanation": "C++定义数组：int array[5];。A/B/C语法错误。答案D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，声明⼀个指向整型变量的指针的正确语法是（ ）。",
+      "options": [
+        "A. int* ptr;",
+        "B. *int ptr;",
+        "C. `int ptr*;`",
+        "D. ptr int;"
+      ],
+      "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2021-009",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式a*(b+c)*d的后缀表达式为（ ），其中“*”和“+”是运算符。",
+      "options": [
+        "A. **a+bcd",
+        "B. abc+*d*",
+        "C. abc+d**",
+        "D. *a*+bcd"
+      ],
+      "explanation": "中缀 a*(b+c)*d → 后缀：先算b+c得bc+，再a*(bc+)得abc+*，最后(abc+*)*d得abc+*d*。B正确。D是前缀表达式（波兰式）。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2022-006",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对表达式a+(b-c)*d的前缀表达式为（ ），其中+、-、*是运算符。",
+      "options": [
+        "A. *+a-bcd",
+        "B. +a*-bcd",
+        "C. abc-d*+",
+        "D. abc-+d"
+      ],
+      "explanation": "a+(b-c)*d前缀表达式：+a*-bcd。答案B。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2023-008",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "后缀表达式“623+-382/+*2^3+”对应的中级表达式是（ ）。",
+      "options": [
+        "A. ((6-(2+3))*(3+8/2))^2+3",
+        "B. 6-2+3*3+8/2^2+3",
+        "C. (6-(2+3))*((3+8/2)^2)+3",
+        "D. 6-((2+3)*(3+8/2))^2+3"
+      ],
+      "explanation": "后缀转中缀：623+- → (6-(2+3))；382/+ → (3+8/2)；* → ((6-(2+3))*(3+8/2))；2^3 → ((6-(2+3))*((3+8/2)^2))；+3 → ((6-(2+3))*((3+8/2)^2"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "csp-j-2024-007",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下哪个不是 C++ 中的循环语句？（ ）",
+      "options": [
+        "A. for",
+        "B. while",
+        "C. do-while",
+        "D. repeat-until"
+      ],
+      "explanation": "repeat-until不是C++循环语句（是Pascal的）。for/while/do-while是。答案D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b都是char类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. b = a + 1;",
+        "B. b = a + '1';",
+        "C. b = 'a'++;",
+        "D. b = a++;"
+      ],
+      "explanation": "'a'是字符常量，不能进行++自增运算。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b、c和d都是int类型变量，下列哪个表达式能正确计算平均值？（ ）",
+      "options": [
+        "A. (a+b+c+d)/4",
+        "B. (a+b+c+d)%4",
+        "C. (a+b+c+d)/4.0",
+        "D. (a+b+c+d)%4.0"
+      ],
+      "explanation": "除以4.0使结果为浮点型。%不能用于浮点数。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量且值为'2'，哪条语句执行后a的值不会变为'3'？（ ）",
+      "options": [
+        "A. a = a + 1;",
+        "B. a + 1;",
+        "C. a = 1 + a;",
+        "D. ++a;"
+      ],
+      "explanation": "B中的a+1结果未赋值，a不变。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0或b等于0\"的是（ ）。",
+      "options": [
+        "A. (!a)||(!b)",
+        "B. (a==b==0)",
+        "C. (a==0)&&(b==0)",
+        "D. (a==0)-(b==0)==0"
+      ],
+      "explanation": "!a当a=0时为1,!b当b=0时为1,||表示\"或\"。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是小写字母\"的是（ ）。",
+      "options": [
+        "A. a<=a<=z",
+        "B. a-'a'<='z'-'a'",
+        "C. 'a'<=a<='z'",
+        "D. a>='a'&&a<='z'"
+      ],
+      "explanation": "D正确用&&结合比较。C++不支持连续比较。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a、b和c都是int类型变量，下列哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a = (b == c);",
+        "B. b = 5.5;",
+        "C. c = a + b + c;",
+        "D. a + c = b + c;"
+      ],
+      "explanation": "赋值号=左侧必须是变量，不能是表达式a+c。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果用int类型变量a表达正方形边长，哪个表达式不能计算面积？（ ）",
+      "options": [
+        "A. a * a",
+        "B. 1 * a * a",
+        "C. a ^ 2",
+        "D. a * 2 * a / 2"
+      ],
+      "explanation": "C++中^是按位异或，不是乘方。a^2不能正确计算面积。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于0且b等于0\"的是（ ）。",
+      "options": [
+        "A. (a==b==0)",
+        "B. !(a||b)",
+        "C. (a+b==0)",
+        "D. (a==0)+(b==0)"
+      ],
+      "explanation": "a||b只有当a和b都为0时才为false(0)，!(a||b)才为true(1)。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b为int类型变量，值分别为7和2，哪个表达式计算结果不是3.5？（ ）",
+      "options": [
+        "A. 0.0 + a / b",
+        "B. (a+0.0)/b",
+        "C. (0.0+a)/b",
+        "D. a/(0.0+b)"
+      ],
+      "explanation": "A先算整数除法a/b=7/2=3，再加0.0得3.0。B/C/D均有浮点数参与得3.5。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为int类型，b为char类型，哪个语句不符合C++语法？（ ）",
+      "options": [
+        "A. a=a+1.0;",
+        "B. a=(int)(b-'0');",
+        "C. b=(char)(a+'0');",
+        "D. (int)b=a;"
+      ],
+      "explanation": "强制转换(int)b产生临时值（右值），不能放在赋值号左边。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下哪个循环语句会无限次执行？（ ）",
+      "options": [
+        "A. `for(int a=0;a;a++);`",
+        "B. `for(bool b=false;b<=true;b++);`",
+        "C. `for(char c='A';c<'z';c++);`",
+        "D. `for(double d=0.0;d<10.0;d+=0.001);`"
+      ],
+      "explanation": "bool类型b++后b变为true(1)，再++还是true(1)，始终<=true。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a和b均为int类型变量，能正确判断\"a等于1且b等于1\"的是（ ）。",
+      "options": [
+        "A. (a==b)&&(b==1)",
+        "B. (a&&b)",
+        "C. (a==b==1)",
+        "D. (a*b==1)"
+      ],
+      "explanation": "A正确：a==b且b==1。B当a=2,b=3也为真。D当a=-1,b=-1也成立。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-06-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如果a为char类型变量，能正确判断\"a是数字\"的是（ ）。",
+      "options": [
+        "A. '0'<=a&&a<='9'",
+        "B. '1'<=a&&a<='0'",
+        "C. '0'<=a<='9'",
+        "D. '1'<=a<='0'"
+      ],
+      "explanation": "A正确判断a的ASCII码在'0'和'9'之间。C中连续比较语义不正确。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-1-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "int类型变量x、y、z值分别为2、4、6，表达式值为真的是（ ）。",
+      "options": [
+        "A. x>y||x>z",
+        "B. x!=z-y",
+        "C. z>y+x",
+        "D. x<y||!x<z"
+      ],
+      "explanation": "x<y为真(1)，逻辑或短路直接为真。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-1-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "对int类型变量a、b、c，下列语句不符合C++语法是（ ）。",
+      "options": [
+        "A. c+=5;",
+        "B. b=c%2.5;",
+        "C. a=(b=3,c=4,b+c);",
+        "D. a-=a=(b=6)/(c=2);"
+      ],
+      "explanation": "%运算符的操作数必须是整数，2.5是浮点数。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-2-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++表达式int(-123.123/10)的值是（ ）。",
+      "options": [
+        "A. -124",
+        "B. -123",
+        "C. -13",
+        "D. -12"
+      ],
+      "explanation": "-123.123/10=-12.3123，int强制转换截断小数得-12。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-03-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列哪个语句可以将变量a的值增加1？（ ）",
+      "options": [
+        "A. a = 1;",
+        "B. a++;",
+        "C. a == 1;",
+        "D. a > 1;"
+      ],
+      "explanation": "a++是自增运算符，将a的值增加1。A重新赋值为1；C是比较。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "定义变量char c;，对c赋值的语句不符合语法的是（ ）。",
+      "options": [
+        "A. c=(char)66;",
+        "B. c=(char)(66);",
+        "C. c=char(66);",
+        "D. c=char 66;"
+      ],
+      "explanation": "A/B是C风格强转（合法），C是C++函数风格（合法），D缺少括号语法错误。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-1-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "整型变量int x的赋值语句不正确的是（ ）。",
+      "options": [
+        "A. x=10;",
+        "B. x=10+5;",
+        "C. x=3.14;",
+        "D. x=3.16 int;"
+      ],
+      "explanation": "D语法错误：3.16 int不是合法表达式。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++语言中可以完成数据输入的语句是（ ）。",
+      "options": [
+        "A. cout语句",
+        "B. scanf语句",
+        "C. printf语句",
+        "D. <<语句"
+      ],
+      "explanation": "scanf用于输入，cout和printf用于输出。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-1-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式9/4-6%(6-2)*10的值是（ ）。",
+      "options": [
+        "A. -17.75",
+        "B. -18",
+        "C. -14",
+        "D. -12.75"
+      ],
+      "explanation": "括号6-2=4;6%4=2;2*10=20;9/4=2;2-20=-18。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-2-02",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
+      "options": [
+        "A. (yr%400==0)||(yr%4==0)",
+        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
+        "C. (yr%400==0)&&(yr%4==0)",
+        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
+      ],
+      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-1-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中下列表达式错误的是（ ）。",
+      "options": [
+        "A. cout<<\"Hello,GESP!\"<<endl;",
+        "B. cout<<'Hello,GESP!'<<endl;",
+        "C. cout<<\"\"\"Hello,GESP!\"\"\"<<endl;",
+        "D. cout<<\"Hello,GESP!'<<endl;"
+      ],
+      "explanation": "D中双引号和单引号不配对，编译失败。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-2-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于while(1)说法错误的是（ ）。",
+      "options": [
+        "A. 写法错误",
+        "B. 是无限循环",
+        "C. 需要break退出",
+        "D. 等价于while(true)"
+      ],
+      "explanation": "while(1)写法合法，1为真所以无限循环。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出0~100能被7整除但不能被3整除，不能填入的代码是（ ）。",
+      "options": [
+        "A. i%7==0&&i%3!=0",
+        "B. !(i%7)&&i%3!=0",
+        "C. i%7&&i%3",
+        "D. i%7==0&&!(i%3==0)"
+      ],
+      "explanation": "C表示不能被7整除且不能被3整除，与要求相反。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-11",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "九九乘法表程序说法错误的是（ ）。",
+      "options": [
+        "A. 将L1 printf移到L2效果相同",
+        "B. 改为printf(\"%c\",'\\n')效果相同",
+        "C. Lie*Hang>9改为Lie*Hang>=10效果相同",
+        "D. 改为Hang*Lie>9效果相同"
+      ],
+      "explanation": "L1的printf移到L2位置会导致每行中间就换行，效果不同。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "输出N~M之间孪生素数横线i<_____应填（ ）。",
+      "options": [
+        "A. M-2",
+        "B. M-1",
+        "C. M",
+        "D. M+1"
+      ],
+      "explanation": "孪生素数需检查i和i+2，i最大到M-2，但用i<M-1可以确保i+2<=M。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "打印三角形星号横线应填入（ ）。",
+      "options": [
+        "A. (height-i),(2*i)",
+        "B. (height),(2*i)",
+        "C. (height-i),(2*i+1)",
+        "D. (height-i-1),(2*i+1)"
+      ],
+      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-2-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "a=10,b=20,c=30输出30则横线不能填入（ ）。",
+      "options": [
+        "A. max(max(a,b),c)",
+        "B. min(a+b,c)",
+        "C. sqrt(a+b+c)",
+        "D. (a+b+c)/2"
+      ],
+      "explanation": "sqrt(60)约等于7.746不等于30。A/B/D都得30。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于break语句描述正确的是（ ）。",
+      "options": [
+        "A. break可以单独用在if中",
+        "B. break只能用在for中",
+        "C. break必须用在循环或switch中",
+        "D. break不能用在while中"
+      ],
+      "explanation": "break必须用在循环（for/while/do-while）或switch语句中。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断\"能被2整除且除以7余数为2\"的逻辑表达式正确的是（ ）。",
+      "options": [
+        "A. i%2==0||i%7==2",
+        "B. i%2==0&&i%7==2",
+        "C. !(i%2)||i%7==2",
+        "D. i/2==0&&i%7==2"
+      ],
+      "explanation": "能被2整除：i%2==0；除以7余数为2：i%7==2。用&&连接。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-1-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于for循环和continue描述正确的是（ ）。",
+      "options": [
+        "A. continue跳出循环",
+        "B. continue跳过本次循环剩余语句",
+        "C. continue不能在for中使用",
+        "D. continue等价于break"
+      ],
+      "explanation": "continue跳过本次循环剩余语句继续下一次迭代。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "彩球排列规律：每组5红3绿2蓝（共10个），用N%10判断颜色。说法正确的是（ ）。",
+      "options": [
+        "A. 将最后一个else if修改为else效果相同",
+        "B. 条件改为remainder<=5会包含0逻辑不同",
+        "C. 6<=remainder<=8不是合法C++写法",
+        "D. 应该用取余而非除法"
+      ],
+      "explanation": "最后一个else if的条件覆盖所有剩余情况，改为else效果相同。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
+      "options": [
+        "A. 4可以分解为2+2",
+        "B. 程序需要验证到1000",
+        "C. 每个偶数只需找一组解",
+        "D. break应移到if外"
+      ],
+      "explanation": "break正确位置在if内，找到一组解即退出。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "生成1~10之间的随机整数正确的是（ ）。",
+      "options": [
+        "A. rand()%10",
+        "B. rand()%11",
+        "C. rand()%10+1",
+        "D. rand()%9+2"
+      ],
+      "explanation": "rand()%10生成0-9，加1得1-10。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-2-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "判断两个float变量a、b是否近似相等（差值<=0.000001）正确的是（ ）。",
+      "options": [
+        "A. a-b<=0.000001",
+        "B. a==b",
+        "C. abs(b-a)<=0.000001",
+        "D. b-a<=0.000001&&a-b<=0.000001"
+      ],
+      "explanation": "需取绝对值abs(b-a)判断差值是否在误差范围内。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "取正整数第3位数（百位）横线填入（ ）。",
+      "options": [
+        "A. N%1000/100",
+        "B. N/100%10",
+        "C. N%100/10",
+        "D. N/10%10"
+      ],
+      "explanation": "N%1000保留后三位，/100取百位。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-2-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "星期六后第N天的星期计算横线填（ ）。",
+      "options": [
+        "A. (N+1)%7",
+        "B. N%7+6",
+        "C. (N-1)%7",
+        "D. (N+6)%7"
+      ],
+      "explanation": "星期六对应6（0=周日），(6+N)%7=(N+6)%7。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-4-08",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列C++语句执⾏以后结果是true的是（ ）。",
+      "options": [
+        "A. 3&&false",
+        "B. 5&&2",
+        "C. 101&&000",
+        "D. 4&true"
+      ],
+      "explanation": "A:3&&false=0✗；B:5&&2=1(true)✓；C:101&&000=0✗（000为0）；D:4&true=4&1=0✗。答案B。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-3-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯可以正确输出 They're planning a party for their friend's birthday. 的C++语句是？ （ ）",
+      "options": [
+        "A. `cout << 'They\\'re planning a party for their friend'\\s birthday.\" << endl;`",
+        "B. `cout << \"They\\'re planning a party for their friend's birthday.'<< endl;`",
+        "C. `cout << 'They're planning a party for their friend's birthday.'<< endl;`",
+        "D. `cout << \"They\\'re planning a party for their friend\\'s birthday.\" << endl;`"
+      ],
+      "explanation": "字符串含单引号'，需用双引号包裹并转义单引号。D选项cout<<\"They\\'re...friend\\'s...\"正确转义了单引号。答案D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "C++中，关于⽂件路径说法错误的是（）",
+      "options": [
+        "A. \"GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件相同⽬录中的 GESP.txt ⽂件",
+        "B. \"../data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件上⼀级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "C. \"./data/GESP.txt\"：指定与当前⼯作⽬录中的程序⽂件同级⽬录下的 data ⽬录中的 GESP.txt ⽂件",
+        "D. \"GESP.txt\"是绝对路径"
+      ],
+      "explanation": "D说法错误。\"GESP.txt\"是相对路径（相对于当前工作目录），不是绝对路径。绝对路径需以/或盘符开头。答案D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-4-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于直接插入排序，下列说法错误的是（）",
+      "options": [
+        "A. 插入排序的最好情况是数组已经有序，此时只需要进行 n-1 次比较，时间复杂度为 O(n)",
+        "B. 最坏情况是数组逆序排序，此时需要进行 n(n-1)/2 次比较以及 n(n-1)/2 次赋值操作（插入），时间复杂度为 O(n²)",
+        "C. 平均来说插入排序算法的复杂度为 O(n²)",
+        "D. 空间复杂度上，直接插入法是就地排序，空间复杂度为 O(n)"
+      ],
+      "explanation": "直接插入排序的空间复杂度是 O(1)（就地排序，只需要常数个额外空间），不是 O(n)。其他选项均正确。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯说法正确的是（ ）",
+      "options": [
+        "A. （22&01）==（22&&01）成立",
+        "B. (23|11)==30",
+        "C. (23|10)==31",
+        "D. (23|01)==31"
+      ],
+      "explanation": "按位或运算：23=10111，10=01010，23|10=11111=31✓。B选项23|11=11111=31也对但题库标C。实际C(23|10=31)和D(23|01=23≠31)中C正确。答案C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯逻辑运算中，正确的是（ ）",
+      "options": [
+        "A. 5&&3==0",
+        "B. 5|3==8",
+        "C. 5||3==11",
+        "D. 5&3==0001"
+      ],
+      "explanation": "5&3：5=101,3=011,按位与=001=1。D选项5&3==0001正确。A:5&&3=1≠0✗；B:5|3=7≠8✗；C:5||3=1≠11✗。答案D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的语句中，（ ）正确定义了⼀个计算浮点数 的平⽅( )的函数,并成功调⽤该函数。",
+      "options": [
+        "A. `1 float square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "B. `1 square(float x) { 2 return x * x; 3 } 4 float area = square(2);`",
+        "C. `1 void square(float x) { 2 return x * x; 3 } 4 area = square(2.0);`",
+        "D. 1 void square(float x) { 2 x * x; 3 return; 4 } 5 area = square(2);"
+      ],
+      "explanation": "A正确定义了返回float的square函数并调用。B无返回类型；C用void却有return；D用void无返回值。答案A。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-4-10",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯关于排序算法（冒泡排序、插⼊排序和选择排序）的描述中，不正确的是（ ）。",
+      "options": [
+        "A. 冒泡排序基于元素交换实现，需借助临时变量，共涉及3个单元操作；而插入排序基于元素赋值实现，仅需1个单元操作。因此冒泡排序的计算开销通常比插入排序更高。",
+        "B. 选择排序在任何情况下的时间复杂度都为O(n²)。",
+        "C. 冒泡排序在任何情况下的时间复杂度都为O(n²)。",
+        "D. 如果给定数据部分有序，插入排序通常比选择排序效率更高。"
+      ],
+      "explanation": "C说法错误。冒泡排序在最好情况（已排序）下时间复杂度为O(n)，只需一轮比较无交换。答案C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯的描述中，（ ）正确定义⼀个名为Person的结构体并正确初始化了⼀个Person结构体的变量p。",
+      "options": [
+        "A. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p(\"Yang\", 10);`",
+        "B. 1 struct Person { 2 string name, 3 int age; 4 }; 5 Person p; 6 p.name = \"Yang",
+        "C. `1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = { \"Yang\", 10 }",
+        "D. 1 struct Person { 2 string name; 3 int age; 4 }; 5 Person p = new Person(\"Yan"
+      ],
+      "explanation": "C正确：struct定义后用列表初始化Person p={\"Yang\",10}。A无构造函数不能直接初始化；B语法错；D用new错误。答案C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-03-4-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下⾯（ ）正确定义了⼆维数组。",
+      "options": [
+        "A. `int arr[3,4];`",
+        "B. `int arr[3][4];`",
+        "C. `int arr(3,4);`",
+        "D. `int a[3-4];`"
+      ],
+      "explanation": "B正确：int arr[3][4]是C++二维数组的正确语法。答案B。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-3-10",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "如何正确定义⼀个长度为5的整型数组( )",
+      "options": [
+        "A. `int array = new int[5];`",
+        "B. array int[5];",
+        "C. int[] array = {1,2,3,4,5};",
+        "D. `int array[5];`"
+      ],
+      "explanation": "C++定义数组：int array[5];。A/B/C语法错误。答案D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "在C++中，声明⼀个指向整型变量的指针的正确语法是（ ）。",
+      "options": [
+        "A. int* ptr;",
+        "B. *int ptr;",
+        "C. `int ptr*;`",
+        "D. ptr int;"
+      ],
+      "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
+    }
+  ]
+}

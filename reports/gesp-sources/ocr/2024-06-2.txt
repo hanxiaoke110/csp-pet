@@ -1,0 +1,397 @@
+
+--- page 1 ---
+SU FAS                                                      cS as
+ GESP CCF编程能力等级认证
+cE                              Grade Examination of Software Programming
+2024 4F 06 A
+1 单选题 (每题2分，共 30 分)
+MS 123 45 678 9 10 1 12 13 14 15
+答案 CBAAACDBCC DD A BD
+第1题 小杨父母带他到某培训机构给他报名参加CCF组织的GESP认证考试的第1级，那他可以选择的认证语言有几
+Ae ( )
+口A.1
+口 B.2
+口 c.3
+口 D.4
+第2题 下面流程图在yr输入2024时，可以判定yr代表半年，并输出 2月是29天 ，则图中菱形框中应该填入 ( ) 。
+|
+————
+|                |
+2月是            2月是
+28天             29天
+OO
+|
+OA. (yr%4e0e==0) || (yr%4==0)
+OC B. (yr%4ee==8) || (yr%4==8 && yr%1661=6)
+OC. (yr%400==0) && (yr%4==0)
+OD. (yr%4@0==0) && (yr%4==0 && yr%100!=0)
+第3题 在C++中，下列不可做变量的是( )。
+
+
+--- page 2 ---
+OC A. five-Star
+O B. five_star
+O C. fiveStar
+© D. _fiveStar
+第4题 在C++中, 5 for(int i=0; i<10; i++) BURMIAATE( )o
+COA. for(int i=@; i<10; i+=1)
+OC B. for(int i=1; i<=10; i++)
+OC. for(int i=10; i>@; i--)
+OD. for(int i=10; i<1; i++)
+第5题 在C++中，cout << (5 % 2 8&5 % 3) HHH).
+OAl
+0 B.2
+O C. true
+OC D. false
+第6题 6.执行下面的C++代码时输入 1. WUTC) 6
+
+了 int month;
+
+2
+
+3 cin >> month;
+
+4
+
+5 switch(month){
+
+6     case 1:
+
+7        cout << “Jan "3
+
+8     case 3:
+
+9        cout << "Mar "3
+
+10         break;
+
+11      default:
+
+12         ;
+
+13 |}
+0 A. Jan
+OC B. Mar
+© C. Jan Mar
+口 D. 以上均不对
+第7题 执行下面C++代码后，有关说法错误的是 ( ) 。
+
+
+--- page 3 ---
+1 int a, b;
+2 cin >> a >> b;
+3 if (a && b)
+4     cout << "1";
+5 else if (!(a || b))
+6     cout << "2";
+7 else if (a || b)
+8     cout << "3";
+9 else
+10     cout << "4";
+OC A 如果先后输入1和1，则将输出1
+口 B. 如果先后输入0和1或者1和0，则将输出3
+O C. 如果先后输入0和0，则将输出2
+OD. 如果先后输入0和0，则将输出4
+第8题 某货币由5元，2元和1元组成。输入金额 (假设为正整数) ，计算出最少数量。为实现其功能，横线处应填
+入代码是 ( ) 。
+ int N;
+2 cin >>N;
+3
+4 int M5,M2,M1;
+5 MS =N/ 53
+6 M2 =             3
+7 M1 =             3
+8 printf("5*%d+2*%d+1*%d", MS, M2, M1);
+口 A. 第1横线处应填入: N /72
+第2横线处应填入: N - M5 - M2
+口 B. 第1横线处应填入: (N - M5 * 5)12
+第2横线处应填入: N-MS*S-M2*2
+CO C. 第1横线处应填入: N- M5* 512
+第2横线处应填入: N-MS*S-M2*2
+CO Dz 第1横线处应填入: N-M5* 5)12
+第2横线处应填入: N - M5 - M2
+第9题 下面C++代码执行后的输出是 ( ) 。
+1 int loopCount = @;
+2 for (int i=@; i < 10; i++)
+3     for (int j=1; j < i; j++)
+4         loopCount += 1;
+5 cout << loopCount;
+口 A.55
+
+
+--- page 4 ---
+口 B.45
+口 c.36
+口 D.28
+第10题 下面C++代码执行后的输出是 (    de
+1 int loopCount = @;
+2 for (int i=@; i < 10; i++){
+3     for (int j=0; j < i; j++)
+4        if (i * j % 2)
+5           break;
+6     loopCount += 1;
+7}
+8 cout << loopCount;
+口 A.25
+口 B.16
+口 c.10
+口D.9
+第世题 假设下面C++代码执行过程中仅输入正负整数或0，有关说法错误的是 ( ) 。
+1 int N,Sum = @;
+2 cin >> Ni
+3 while (N){
+4      Sum += N;
+5     cin >> N3
+6 }
+7 cout << Sum;
+OC A 执行上面代码如果输入0，将终止循环
+OB. 执行上面代码能实现所有非0整数的求和
+口 C. 执行上面代码第一次输入0，最后将输出0
+口 D. 执行上面代码将陷入死循环，可将 while (N) 改为while (N==0)
+第12 题 执行下面的C++代码，有关说法正确的是 (，) 【质数是指仅能被1和它本身整除的正整数】。
+1 int N;
+2 cin >> N;
+3 bool Flag = true;
+4 for ( int i = 2; i < Nj it+){
+5     if (i * i > N)
+6        break;
+7     if (N% i == 6){
+8         Flag = false;
+9        break;
+10     }
+11 |}
+12 if (Flag)
+
+
+--- page 5 ---
+13     cout << N << "是质数"<<_ endl;
+14 else
+15     cout << N << "不是质数"<<_ endl;
+CO A. 如果输入正整数，上面代码能正确判断N是否为质数
+口 B.如果输入整数，上面代码能正确判断N是否为质数
+CO C. 如果输入大于等于0的整数，上面代码能正确判断N是否质数
+口 D.如将 Flag = true 修改为Flag = N>=2? true:false 则能判断所有整数包括负整数、0、正整数是否为质
+数
+第13 题 下面C++代码用于实现如下图所示的效果，其有关说法正确的是 ( ) 。
+1
+24
+3 6 9
+48 12 16
+5 10 15 20 25
+1 for (int i = 1; i < 63 it+){ /AL1L
+2     for (int j = 1; j < i441; j++) //L2
+3       cout << i*j << " "5
+4     cout << endl;
+5}
+O A. 当前代码能实现预期效果，无需调整代码
+口 B.如果 cout << endl; 移到循环L2内部，则可实现预期效果
+口 C. 如果 cout << endl; 移到循环L1外部，则可实现预期效果
+口 D.删除 cout << endl; 行，则可实现预期效果
+第14题 下面C++代码执行后，输出是 ( ) 。
+1 int cnt1 = 6，cnt2 = @;
+2 for (int i = 0; i < 10; i++){
+3     if (i % 2 == @)
+4        continue;
+5      if (i % 2)
+6         cnt1 += 1;
+7     else if (i % 3 == @)
+8         cnt2 += 1;
+9
+10 cout << cntl <<" "<< cnt2;
+口 A.52
+口 B.50
+口 c.02
+口 D.00
+
+
+--- page 6 ---
+第15题 在下面的C++代码中，N必须是小于10大于1的整数，M为正整数 (大于0) 。如果M被N整除则M为幸运
+数，如果M中含有N且能被N整除，则为超级幸运数，和否则不是幸运数。程序用于判断M是否为幸运数或超级幸运数
+或非幸运数。阅读下面代码，有关说法正确的是 ( ) 。
+
+1 int N, M;
+
+2 cout << “请输入幸运数字: "5
+
+3 cin >> N;
+
+4 cout “<“请输入正整数: ";
+
+5 cin >> M;
+
+6
+
+7 bool Lucky;
+
+8 if (M%N == @)
+
+9      Lucky = true;
+
+10 else
+
+11      Lucky = false;
+
+12 while (M){
+
+13     if (M % 10 == N && Lucky){
+
+14       printf("%d是%d的超级幸运数!"，M，N) ;
+
+15        break;
+
+16     }
+
+17     M /= 10;
+
+18 |}
+
+19 if (M == @)
+
+20     if (Lucky)
+
+21       printf("%d是%d的幸运数!"，M，N) ;
+
+22     else
+
+23       printf("%d非%d的幸运数!"，M，N) ;
+口 A. 如果N输入3，M输入36则将输出: 36是3的超级幸运数!
+口 B. 如果N输入>，M输入21则将输出: 21是7的幸运数!
+口 .如果N输入8，M输入36则将输出: 36非8的超级幸运数!
+口 D. 如果N输入3，M输入63则将输出: 63是3的超级幸运数!
+2 判断题 (每题2分，共20 分)
+
+题号12345678 9 10
+BR xx x Vx xx V VV
+
+第1题 执行C++代码 cout << “9 +' 1 ; 的输出为10。( )
+第2题 C++表达式 -12 % 10 的值为2 (  )
+第3题 C++表达式 int(12.56) 的值为3。 ( )
+第4题 C++的整型变量N被赋值为10，则语句 cout << N/ 3 << "-" << N% 3执行后输出是3-1。( )
+第5题 在C++代码中，不可以将变量命名为scanf，因为scanf是C++语言的关键字。 ( )
+第6题 下面C++代码执行后将导致死循环。 ( )
+
+ for (int i = 0; i < 10; i++)
+
+2     continue;
+
+
+--- page 7 ---
+第7题 下面C++代码执行后将输出10。 ( )
+1 int cnt = @;
+2 for (int i = 0; i < 10; i++)
+3     for (int j = 0; j < i; j++){
+4        cnt += 1;
+5        break;
+6     了
+7 cout << cnt;
+第8题 下面C++代码执行后，将输出5。 (〈 )
+1 int cnt = @;
+2 for (int i = 1; i < 53 i++)
+3     for (int j = i; j < 53 j +=i)
+4    if (i * j % 2 == @)
+5            cnt += 1;
+6 cout << cnt;
+第9题 下面C++代码能实现正整数各位数字之和。 ( )
+1 int N,Sum = @;
+2 cin >> Ni
+3 while (N){
+4     Sum += N % 10;
+5     N /= 10;
+6 }
+7 cout << Sum;
+第 10 题 GESP测试是对认证者的编程能力进行等级认证，同一级别的能力基本上与编程语言无关。 ( )
+3 ”编程题 (每题 25 分，共 50 分)
+。 试题名称: 平方之和
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+3.1.1 题面描述
+AAA ne PIERRE ul, az,.…,an，他想知道对于所有的4(1 <i<门，是否存在两个正整数 > 和Y满足
+EZXE+YXY=Ajo
+3.1.2 ”输入格式
+第一行包含一个正整数m，代表正整数数量。
+之后味行，每行包含一个正整数，代表 aio
+
+
+--- page 8 ---
+3.1.3 ”输出格式
+对于每个正整数 w，如果存在两个正整数"和?满足zxz+yxy= ou，输出 Yes，否则输出 Noo
+3.1.4 样例1
+ 2
+2 5
+3 4
+1 Yes
+2 No
+3.1.5 EOLA
+对于第一个正整数，存在1x1+2x2=5，因此答案为 Yes。
+3.1.6 “数据范围
+SPREE. PIER 1 <n < 10,1 <a; < 10°,
+工 #include<bits/stdc++.h>
+2 using namespace std;
+3 bool check(int x){
+4     int y = sqrt(x);
+5     return y*y==x;
+6 }
+7 int main(){
+8     int t;
+9        cin>>t;
+10        while(t--){
+11         int n;
+12             cin>>n;
+13         int f1=0;
+14         for(int i=1;i*i<njit++){
+15            int j=n-i*i;
+16                  if (check(j))f1=1;
+17             }
+18             if (#1) cout<<"Yes\n";
+19         else cout<<"No\n";
+20        }
+21 |}
+3.2 ”编程题2
+。 试题名称: 计数
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+
+
+--- page 9 ---
+3.2.1 Mmm
+小杨认为自己的幸运数是正整数太〈注: RIEL Sk <9) 。小杨想知道，对于从工到半 的所有正整数中, 大出现了
+多少次。
+3.2.2 ”输入格式
+第一行包含一个正整数 mn。
+第二行包含一个正整数
+3.2.3 ”输出格式
+输出从1到浆的所有正整数中, 灰出现的次数。
+3.2.4 FEI
+1 25
+2 2
+19
+3.2.5 ”样例解释
+从1到 25 中，2 出现的正整数有 2, 12, 20, 21, 22, 23, 24, 25，一共出现了9 次。
+3.2.6 ”数据范围
+对于全部数据，保证有1<m< 1000,1 << k <9.
+3.2.7 “参考程序
+工 #include <iostream>
+2 using namespace std;
+3
+4 int check(int x, int y) {
+5     int cnt = @;
+6     while (x > @) {
+7         int tmp = x % 10;
+8        if (tmp == y) {
+9            cnt++;
+10         }
+11         x =x / 10;
+12      }
+13     return cnt;
+14 |}
+15
+16 int main() {
+17     int n, k;
+18     cin >> n >> kj
+19     int ans = @;
+20     for (int i = 1; i <= ni i++) {
+21        ans += check(i, k);
+22      }
+23     cout << ans << endl;
+24     return @;
+25 |}

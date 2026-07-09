@@ -104,18 +104,20 @@ export interface DungeonProgress {
 export interface Question {
   id: string;
   year: number;
-  group: 'J' | 'S';
+  group: 'J' | 'S' | 'GESP';
   type: 'choice' | 'reading' | 'fillBlank';
   knowledgePoint: string;
   difficulty: number;
   question: string;
   code?: string | null;
   image?: string | null;
+  codeImage?: string | null;
   options?: string[];
   correctIndex?: number;
   subQuestions?: SubQuestion[];
   blanks?: Blank[];
   explanation?: string;
+  level?: number;  // GESP 1-4 级
 }
 
 export interface SubQuestion {

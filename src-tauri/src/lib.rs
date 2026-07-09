@@ -12,9 +12,11 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
     if let Some(w) = app.get_webview_window("pet") {
         if w.is_visible().unwrap_or(true) {
             let _ = w.hide();
+            let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": false }));
             "hidden".into()
         } else {
             let _ = w.show();
+            let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": true }));
             "shown".into()
         }
     } else {
@@ -26,6 +28,7 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
 fn show_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
         let _ = w.show();
+        let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": true }));
     }
 }
 
@@ -33,6 +36,7 @@ fn show_pet_window(app: tauri::AppHandle) {
 fn hide_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
         let _ = w.hide();
+        let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": false }));
     }
 }
 
@@ -68,6 +72,13 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_http::init())
+        // 记住主窗口尺寸/位置：启动阶段同步恢复，消除「先大后小」闪烁。
+        // pet 窗口由 PetWindow.tsx 自行管理位置，排除避免双重恢复导致跳动。
+        .plugin(
+            tauri_plugin_window_state::Builder::default()
+                .with_denylist(&["pet"])
+                .build(),
+        )
         .setup(|app| {
             let app_data_dir = app.path().app_data_dir()
                 .map_err(|e| e.to_string())?;
@@ -126,6 +137,20 @@ pub fn run() {
                 let _ = pet.set_maximizable(false);
             }
 
+            // 兜底：main 窗口 visible:false 由 window-state 插件在 on_window_ready 恢复尺寸后 show。
+            // 若插件 restore_state 中途报错（错误被 let _ = 吞）导致 show 未调用，
+            // 1.5s 后强制 show，防止窗口卡死隐藏。
+            let app_handle = app.handle().clone();
+            std::thread::spawn(move || {
+                std::thread::sleep(std::time::Duration::from_millis(1500));
+                if let Some(w) = app_handle.get_webview_window("main") {
+                    if !w.is_visible().unwrap_or(true) {
+                        let _ = w.show();
+                        let _ = w.set_focus();
+                    }
+                }
+            });
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -174,6 +199,9 @@ pub fn run() {
                             api.prevent_close();
                             if let Some(window) = app_handle.get_webview_window(&label) {
                                 let _ = window.hide();
+                                if label == "pet" {
+                                    let _ = app_handle.emit("pet-window-visibility", serde_json::json!({ "visible": false }));
+                                }
                             }
                         }
                     }

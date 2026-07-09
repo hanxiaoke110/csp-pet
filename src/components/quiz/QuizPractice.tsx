@@ -3,7 +3,13 @@ import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import { emit } from '@tauri-apps/api/event';
 import { renderCodeText } from '../../utils/markdown';
+import { loadExcludedQuestionIds } from '../../utils/excludedQuestions';
 import { useNavigate } from 'react-router-dom';
+import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
+
+// 月度复盘单次奖励封顶（金币/经验）
+const MONTHLY_REVIEW_COIN_CAP = 300;
+const MONTHLY_REVIEW_EXP_CAP = 400;
 
 interface QuizQuestion {
   id: string;
@@ -14,6 +20,8 @@ interface QuizQuestion {
   level?: number;
   question: string;
   code?: string;
+  image?: string | null;
+  codeImage?: string | null;
   options: string[];
   correctIndex: number;
   explanation: string;
@@ -23,21 +31,31 @@ type Mode = 'weekly' | 'extra' | 'free' | 'review' | 'super';
 
 let questionBank: QuizQuestion[] | null = null;
 
+function isUsableBank(bank: QuizQuestion[]): boolean {
+  return bank.some(q => q.source === 'csp_exam' || q.source === 'gesp' || q.source === 'super_challenge');
+}
+
 async function loadBank(): Promise<QuizQuestion[]> {
   if (questionBank) return questionBank;
+  // 读取统一排除配置（单一数据源 /course-data/excluded-question-ids.json），失败降级为空集
+  const excluded = await loadExcludedQuestionIds();
+  const filterExcluded = (bank: QuizQuestion[]) => bank.filter(q => !excluded.has(q.id));
   // Try remote quiz bank from localStorage first
   try {
     const cached = localStorage.getItem('csp_quiz_bank');
     if (cached) {
       const data = JSON.parse(cached);
-      questionBank = Object.values(data) as QuizQuestion[];
-      if (questionBank.length > 0) return questionBank;
+      const cachedBank = Object.values(data) as QuizQuestion[];
+      if (cachedBank.length > 0 && isUsableBank(cachedBank)) {
+        questionBank = filterExcluded(cachedBank);
+        return questionBank;
+      }
     }
   } catch {}
   // Fallback to bundled quiz bank
   const resp = await fetch('/course-data/unified-quiz-bank.json');
   const data = await resp.json();
-  questionBank = Object.values(data) as QuizQuestion[];
+  questionBank = filterExcluded(Object.values(data) as QuizQuestion[]);
   return questionBank!;
 }
 
@@ -48,6 +66,31 @@ function shuffle<T>(arr: T[]): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function resolveQuizImage(src?: string | null): string | null {
+  if (!src) return null;
+  if (/^https?:\/\//.test(src)) return src;
+  return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
+}
+
+function QuizImage({ src }: { src?: string | null }) {
+  const resolved = resolveQuizImage(src);
+  const [errored, setErrored] = useState(false);
+  if (!resolved) return null;
+  if (errored) {
+    return (
+      <div className="quiz-image-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 80, color: '#94a3b8', fontSize: 13, background: '#f8fafc', borderRadius: 8, flexDirection: 'column', gap: 6, maxWidth: 620, boxSizing: 'border-box', padding: 12 }}>
+        <span>🖼️ 图片加载失败，请稍后重试</span>
+        <span style={{ fontSize: 11, wordBreak: 'break-all' }}>{resolved}</span>
+      </div>
+    );
+  }
+  return (
+    <div className="quiz-image-wrap">
+      <img className="quiz-image" src={resolved} alt="" loading="lazy" onError={() => setErrored(true)} />
+    </div>
+  );
 }
 
 export default function QuizPractice() {
@@ -63,12 +106,18 @@ export default function QuizPractice() {
   const [levelFilter, setLevelFilter] = useState<number | 'all'>('all');
   const [sourceFilter, setSourceFilter] = useState<string | 'all'>('all');
   const freeStreakRef = useRef(0); // 自由练习连续答对计数（学霸时刻成就）
+  const [classGate, setClassGate] = useState<{ title: string; description: string; message?: string } | null>(null);
+
+  // 月度复盘单次奖励封顶追踪（session 级，不持久化）
+  const reviewSessionCoins = useRef(0);
+  const reviewSessionExp = useRef(0);
 
   const quizStore = useQuizStore();
   const addCoins = usePetStore(s => s.addCoins);
   const addExp = usePetStore(s => s.addExp);
   const hasPet = usePetStore(s => s.ownedPets.length > 0);
   const navigate = useNavigate();
+  const classAccess = useClassAccess();
 
   // Gate: must have a pet first
   if (!hasPet) {
@@ -105,7 +154,8 @@ export default function QuizPractice() {
     return { exp: 50, coins: 30, label: '👑 完美通关！' };
   };
 
-  const startMode = (m: Mode) => {
+  const startMode = async (m: Mode) => {
+    setClassGate(null);
     setMode(m);
     setCurrentIdx(0);
     setSelected(null);
@@ -113,20 +163,33 @@ export default function QuizPractice() {
     setResults({ correct: 0, total: 0, done: false });
     setKpResults(new Map());
     freeStreakRef.current = 0;
+    setQuestions([]);
+    setLoading(true);
 
-    if (!questionBank) return;
+    // 重置月度复盘 session 计数
+    if (m === 'review') {
+      reviewSessionCoins.current = 0;
+      reviewSessionExp.current = 0;
+    }
+
+    let bank: QuizQuestion[] = [];
+    try {
+      bank = await loadBank();
+    } finally {
+      setLoading(false);
+    }
 
     if (m === 'review') {
       // Use error pool
       const errorIds = new Set(quizStore.errors.map(e => e.questionId));
-      const reviewQs = questionBank.filter(q => errorIds.has(q.id));
+      const reviewQs = bank.filter(q => errorIds.has(q.id));
       setQuestions(shuffle(reviewQs));
     } else if (m === 'super') {
-      const superQs = questionBank.filter(q => q.source === 'super_challenge');
+      const superQs = bank.filter(q => q.source === 'super_challenge');
       setQuestions(shuffle(superQs).slice(0, 1));
     } else {
       // Random CSP/GESP exam questions with optional filters
-      let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+      let pool = bank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
       if (sourceFilter !== 'all') {
         pool = pool.filter(q => q.source === sourceFilter);
       }
@@ -135,10 +198,24 @@ export default function QuizPractice() {
       }
       if (pool.length === 0) {
         // Fallback to all exam questions if filter leaves nothing
-        pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+        pool = bank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
       }
       setQuestions(shuffle(pool).slice(0, m === 'free' ? 15 : 5));
     }
+  };
+
+  const startRestrictedMode = async (m: 'review' | 'super') => {
+    const label = m === 'review' ? '月度复盘' : '超级挑战';
+    const result = await classAccess.ensure();
+    if (result.ok) {
+      startMode(m);
+      return;
+    }
+    setClassGate({
+      title: `${label}需要班级码`,
+      description: `${label}属于班级专属挑战，需要先绑定老师提供的班级码。普通自由练习仍可直接使用。`,
+      message: result.message,
+    });
   };
 
   const handleSubmit = () => {
@@ -174,9 +251,31 @@ export default function QuizPractice() {
       // Reward (per question for non-weekly/non-extra modes — those reward on completion only)
       if (mode !== 'super' && mode !== 'weekly' && mode !== 'extra' && reward.exp > 0) {
         const activePetId = usePetStore.getState().activePetId;
-        if (activePetId) addExp(activePetId, reward.exp);
         const mult = usePetStore.getState().getRewardMultiplier();
-        addCoins(Math.floor(reward.coins * mult));
+
+        if (mode === 'free') {
+          // 自由练习：每日前 N 题有奖励（方案A），超出可继续做题但不发奖
+          if (quizStore.canRewardFreePractice()) {
+            if (activePetId) addExp(activePetId, reward.exp);
+            addCoins(Math.floor(reward.coins * mult));
+            quizStore.recordFreeReward();
+          }
+        } else if (mode === 'review') {
+          // 月度复盘：单次金币/经验封顶，超出部分只清错题不发奖
+          const remainingCoins = Math.max(0, MONTHLY_REVIEW_COIN_CAP - reviewSessionCoins.current);
+          const remainingExp = Math.max(0, MONTHLY_REVIEW_EXP_CAP - reviewSessionExp.current);
+          if (remainingCoins > 0 || remainingExp > 0) {
+            const giveCoins = Math.min(Math.floor(reward.coins * mult), remainingCoins);
+            const giveExp = Math.min(reward.exp, remainingExp);
+            if (giveCoins > 0) addCoins(giveCoins);
+            if (activePetId && giveExp > 0) addExp(activePetId, giveExp);
+            reviewSessionCoins.current += giveCoins;
+            reviewSessionExp.current += giveExp;
+          }
+        } else {
+          if (activePetId) addExp(activePetId, reward.exp);
+          addCoins(Math.floor(reward.coins * mult));
+        }
       }
 
       // In review mode, remove from errors
@@ -274,6 +373,18 @@ export default function QuizPractice() {
 
   // --- Mode selection screen ---
   if (!mode) {
+    // 班级码门禁未通过（月度复盘 / 超级挑战）：展示提示，不进入答题
+    if (classGate) {
+      return (
+        <ClassAccessRequired
+          title={classGate.title}
+          description={classGate.description}
+          message={classGate.message}
+          onBind={() => navigate('/settings')}
+          onBack={() => setClassGate(null)}
+        />
+      );
+    }
     return (
       <div className="quiz-practice">
         <h2>📝 选择题练习</h2>
@@ -373,7 +484,7 @@ export default function QuizPractice() {
             <div className="mode-header">
               <span className="mode-icon">📚</span>
               <span className="mode-title">月度复盘</span>
-              <span className="mode-badge mode-review">+20 EXP +15 金币/题</span>
+              <span className="mode-badge mode-review">+20 EXP +15 金币/题 · 单次封顶300金币</span>
             </div>
             <p className="mode-desc">
               {(() => {
@@ -386,7 +497,7 @@ export default function QuizPractice() {
             <button
               className="mode-btn mode-btn-review"
               disabled={!quizStore.canDoMonthlyReview().allowed}
-              onClick={() => startMode('review')}
+              onClick={() => startRestrictedMode('review')}
             >
               {quizStore.canDoMonthlyReview().allowed ? `开始复盘 (${quizStore.errorCount()}题)` : '已锁定'}
             </button>
@@ -396,9 +507,11 @@ export default function QuizPractice() {
             <div className="mode-header">
               <span className="mode-icon">🏋️</span>
               <span className="mode-title">自由练习</span>
-              <span className="mode-badge mode-free">+3 EXP +3 金币/题</span>
+              <span className="mode-badge mode-free">+3 EXP +3 金币/题 · 每日前30题有奖</span>
             </div>
-            <p className="mode-desc">不限次数，微薄奖励，随时练习保持手感</p>
+            <p className="mode-desc">
+              不限次数，今日剩余奖励题数 {quizStore.freeRewardRemaining()}/30，超出可继续做题但不发奖
+            </p>
             <button className="mode-btn" onClick={() => startMode('free')}>
               开始练习
             </button>
@@ -421,7 +534,7 @@ export default function QuizPractice() {
             <button
               className="mode-btn mode-btn-super"
               disabled={!quizStore.canDoSuperChallenge()}
-              onClick={() => startMode('super')}
+              onClick={() => startRestrictedMode('super')}
             >
               {quizStore.canDoSuperChallenge() ? '⚡ 开始挑战' : '已完成'}
             </button>
@@ -582,6 +695,7 @@ export default function QuizPractice() {
         </div>
         <div className="quiz-question-card">
           {q.code && <pre className="code-block"><code>{q.code}</code></pre>}
+          <QuizImage src={q.image || q.codeImage} />
           <div className="quiz-q-body" dangerouslySetInnerHTML={renderText(q.question)} />
         </div>
         <div className="quiz-question-card" style={{ marginTop: 16 }}>
@@ -626,8 +740,27 @@ export default function QuizPractice() {
   }
 
   // --- Regular answering screen ---
-  if (loading || questions.length === 0) {
+  if (loading) {
     return <div className="quiz-practice"><div className="loading-spinner" /><p>加载题目中...</p></div>;
+  }
+
+  if (questions.length === 0) {
+    const emptyText: Record<Mode, string> = {
+      weekly: '当前筛选条件下没有可用题目。',
+      extra: '当前额外挑战没有可用题目。',
+      free: '当前筛选条件下没有可用练习题。',
+      review: '当前错题已清空，暂无可复盘题目。',
+      super: '当前超级挑战题库为空。',
+    };
+    return (
+      <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
+        <h2>暂无题目</h2>
+        <p className="quiz-subtitle">{emptyText[mode]}</p>
+        <button className="mode-btn mode-btn-back" onClick={() => setMode(null)}>
+          返回选择
+        </button>
+      </div>
+    );
   }
 
   const q = questions[currentIdx];
@@ -639,10 +772,21 @@ export default function QuizPractice() {
         <span className="quiz-mode-label">{modeLabel[mode]}</span>
         <span className="quiz-progress">{currentIdx + 1}/{questions.length}</span>
         <span className="quiz-kp">{q.knowledgePoint}</span>
+        {mode === 'free' && (
+          <span className="quiz-kp" style={{ marginLeft: 'auto' }}>
+            今日奖励 {quizStore.freeRewardRemaining()}/30
+          </span>
+        )}
+        {mode === 'review' && (
+          <span className="quiz-kp" style={{ marginLeft: 'auto' }}>
+            已获 {reviewSessionCoins.current}/{MONTHLY_REVIEW_COIN_CAP} 金币
+          </span>
+        )}
       </div>
 
       <div className="quiz-question-card">
         {q.code && <pre className="code-block"><code>{q.code}</code></pre>}
+        <QuizImage src={q.image || q.codeImage} />
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderText(q.question)} />
 
         <div className="quiz-options">

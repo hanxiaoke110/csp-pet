@@ -52,11 +52,12 @@ export default function LeaderboardScreen() {
   ];
 
   const getTypeValue = (entry: LeaderboardEntry, t: LeaderboardType): string => {
+    // 后端所有类型都返回 value 作为排序值，这里统一用它显示
     switch (t) {
-      case 'power': return `${entry.rankPoints} 分`;
-      case 'streak': return `${(entry as any).max_streak || 0} 连击`;
-      case 'conquest': return `${entry.rankTier}段`;
-      case 'badge': return `${(entry as any).total_correct || 0} 题`;
+      case 'power': return `${entry.value || 0} 分`;
+      case 'streak': return `${entry.value || 0} 连击`;
+      case 'conquest': return `${entry.rankTier || 1}段`;
+      case 'badge': return `${entry.value || 0} 题`;
       case 'wins': return `${entry.value || 0} 胜`;
       case 'ss_count': return `${entry.value || 0} 次`;
       case 'progress': return `${entry.value || 0} 副本`;

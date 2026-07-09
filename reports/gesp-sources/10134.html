@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+  2024年3月GESP认证真题-CCF-GESP编程能力等级认证
+</title>
+      <script src="/101/js/1.11.3jquery.min.js"></script>
+      <script src="/101/js/swiper-bundle.min.js"></script>
+      <script src="/101/js/appIndex.js"></script>
+     
+      <link rel="stylesheet" href="/101/css/share.min.css">
+      <link rel="stylesheet" href="/101/css/reset.css">
+      <link rel="stylesheet" href="/101/css/index_app.css">
+        <link rel="stylesheet" href="/101/css/swiper-bundle.min.css" />
+
+</head>
+
+<body>
+      <head> 
+       <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    
+     <script src="/101/js/1.11.3jquery.min.js"></script>
+    <link rel="stylesheet" href="/101/css/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/101/css/reset.css">
+    <link rel="stylesheet" href="/101/css/index_app.css">
+
+    <style>
+.yyui_menu1 li { float:left; position:relative;} /*这一级是导航*/
+.yyui_menu1 li a { display:block; line-height:35px; text-decoration:none; }
+.yyui_menu1 li ul { position:absolute; float:left; width:150px; display:none;  z-index:9999;} /*这是第二级菜单*/
+.yyui_menu1 li ul li{ margin:0px!important;} /*这是第二级菜单*/
+.yyui_menu1 li ul ul{ top:-50px;left:150px;} /*从第三级菜单开始,所有的子级菜单都相对偏移*/ 
+
+
+
+      .iframe:hover{
+        z-index:1000;
+      }
+      .nav:hover{
+           z-index:1000;
+      }
+      .iframe{
+        overflow:hidden;
+         z-index:5;
+      }
+
+.cd-accordion-menu ul {
+  display: none;
+}
+
+.cd-accordion-menu input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+}
+.cd-accordion-menu label, .cd-accordion-menu a {
+  position: relative;
+  display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  color: #ffffff;
+  font-size: 1.6rem;
+      height: 5.8125rem;
+  text-align: center;
+    line-height: 6rem;
+    border-bottom: 1px solid #DDDDDD;
+    font-size: 2rem;
+    font-family: PingFang-SC-Bold, PingFang-SC;
+    font-weight: bold;
+    color: #333333; 
+}
+.no-touch .cd-accordion-menu label:hover, .no-touch .cd-accordion-menu a:hover {
+  background: #52565d;
+}
+.cd-accordion-menu label::after{
+  /* icons */
+  content: '';
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.cd-accordion-menu label {
+  cursor: pointer;
+}
+.cd-accordion-menu label::after {
+  background-image: url('https://gesp.ccf.org.cn/101/images/downSharp.png');
+     background-size: contain;
+}
+.cd-accordion-menu label::after {
+    position: relative;
+    top: calc(50% - 1.5rem);
+  left: 18px;
+  background-position: 0 0;
+  -webkit-transform: translateY(-50%) rotate(-90deg);
+  -moz-transform: translateY(-50%) rotate(-90deg);
+  -ms-transform: translateY(-50%) rotate(-90deg);
+  -o-transform: translateY(-50%) rotate(-90deg);
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+.cd-accordion-menu input[type=checkbox]:checked + label::after {
+  /* rotate arrow */
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.cd-accordion-menu input[type=checkbox]:checked + label + ul,
+.cd-accordion-menu input[type=checkbox]:checked + label:nth-of-type(n) + ul {
+  display: block;
+}
+
+
+@media only screen and (min-width: 600px) {
+  .cd-accordion-menu label, .cd-accordion-menu a {
+    padding: 24px 24px 24px 82px;
+    font-size: 1.9rem;
+  }
+  .cd-accordion-menu label::after {
+    left: 24px;
+  }
+
+  .cd-accordion-menu ul label,
+  .cd-accordion-menu ul a {
+    padding-left: 106px;
+  }
+  .cd-accordion-menu ul label::after {
+    left: 48px;
+  }
+
+  .cd-accordion-menu ul ul label,
+  .cd-accordion-menu ul ul a {
+    padding-left: 130px;
+  }
+  .cd-accordion-menu ul ul label::after {
+    left: 72px;
+  }
+
+  .cd-accordion-menu ul ul ul label,
+  .cd-accordion-menu ul ul ul a {
+    padding-left: 154px;
+  }
+  .cd-accordion-menu ul ul ul label::after {
+    left: 96px;
+  }
+
+}
+.cd-accordion-menu.animated label::after {
+  /* this class is used if you're using jquery to animate the accordion */
+  -webkit-transition: -webkit-transform 0.3s;
+  -moz-transition: -moz-transform 0.3s;
+  transition: transform 0.3s;
+}
+      .has-children ul li a {
+        border:none!important;
+      }
+.has-children{border-bottom:1px solid #DDDDDD;}
+
+     .has-children ul  {
+    background-color: #F6F7F9;}
+
+         .searchAll {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 19px;
+           width:20px;
+            cursor: pointer;
+        }
+      
+        .searchAllInput {
+            display: none;
+            position: absolute;
+            left: -20px;
+            top: 34px;
+            width: 440px;
+            height: 72px;
+            background: #FFFFFF;
+            box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            z-index: 99999999999;
+            align-items: center;
+            justify-content: center;
+        }
+        .searchAll:hover .searchAllInput{
+          display:flex;
+        }
+        .searchAllInput input {
+            width: 400px;
+            height: 44px;
+            background: #FFFFFF;
+            border-radius: 4px;
+            border: 1px solid #E8E8E9;
+            padding: 0 46px;
+            box-sizing: border-box;
+        }
+        .searchAllInput img{
+            position: absolute;
+            top: 28px;
+            left: 36px;
+            width: 19px!important;
+            height: 19px!important;
+        }
+
+        .searchAll img {
+            width: 19px;
+            height: 19px;
+        }
+      .searchAllInputs {
+            height: 72px;
+            background: #FFFFFF;
+            box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            z-index: 99999999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        padding:0 20px;
+        }
+
+        .searchAllInputs input {
+          width:100%;
+            height: 44px;
+            background: #FFFFFF;
+            border-radius: 4px;
+            border: 1px solid #E8E8E9;
+            padding: 0 46px;
+            box-sizing: border-box;
+        }
+        .searchAllInputs img{
+            position: absolute;
+            top: 28px;
+            left: 36px;
+            width: 19px!important;
+            height: 19px!important;
+        }
+
+        .searchAll img {
+            width: 19px;
+            height: 19px;
+        }
+</style>
+
+</head>
+
+<div class="menus">
+        <div class="menuBox">
+<ul class="cd-accordion-menu animated">
+
+   <!--<div class="searchAllInputs">
+                            <img src="https://gesp.ccf.org.cn/101/images/searchH.png" alt="" >
+                            <input type="text" id="word1111" placeholder="请输入要搜索的信息"/>
+                        </div>-->
+   <li>
+                        <a href="https://gesp.ccf.org.cn/cms/api/search?tid=35"><img src="https://gesp.ccf.org.cn/101/images/searchH.png" width="20px"  height="19px" alt="" srcset=""></a>
+                       
+                    </li>
+   <li class="nav2"><a href="/101/index.html" title="首页" target="_blank">首页</a></li>
+
+ 	<div class="has-children">
+			<input type="checkbox" name="group-2" id="group-2">
+			<label for="group-2">关于GESP</label>
+                           	<ul>
+				<li><a href="/101/1004/10004.html" target="_top">简介</a></li>
+                        					<li><a href="/101/1018/index.html" target="_top">条例规定</a></li>
+                      						<li><a href="/101/1019/index.html" target="_top">新闻动态</a></li>
+                              		<li><a href="/101/1002/index.html" target="_top">通知公告</a></li>
+                    				</ul>
+                             
+                            
+		</div>
+		<div class="has-children">
+			<input type="checkbox" name="group-3" id="group-3">
+			<label for="group-3">组织机构</label>
+
+			<ul>
+        <li><a href="/101/1030/index.html" target="_top">认证委员会</a></li>
+        <li><a href="/101/1014/index.html">组织委员会</a></li>
+                        					<li><a href="/101/1015/index.html" target="_top">技术委员会</a></li>
+                      						<li><a href="/101/1016/index.html" target="_top">特派员</a></li>
+                              	<li><a href="/101/1020/index.html" target="_top">命题委员会</a></li>
+        <li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_service_org_seach" target="_top">认证服务中心</a></li>
+          <li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_org_seach" target="_top">考点</a></li>
+                    				</ul>
+    </div>
+
+                               <!-- <div class="has-children">
+			<input type="checkbox" name="group-4" id="group-4">
+			<label for="group-4">合作机构</label>
+
+			<ul>
+				
+					
+          <li class="has-children">
+					<input type="checkbox" name="sub-group-3" id="sub-group-3">              						
+          <label for="sub-group-3">合作申请</label>
+            <ul>
+					    <li><a href="https://gespreg.ccf.org.cn/gesp/examorg/index.action" target="_top">认证服务中心申请</a></li>
+              <li><a href="https://gespreg.ccf.org.cn/gesp/org/edit_org.action" target="_top">考点申请</a></li>
+              <li><a href="https://gespreg.ccf.org.cn/gesp/exam_teacher/index.action" target="_top">推荐老师申请</a></li>
+            </ul>
+                                        
+                                  </div>-->
+                                  <div class="has-children">
+                                    	<input type="checkbox" name="group-5" id="group-5">
+			<label for="group-5">认证资料</label>
+                            <ul>
+				<li><a href="/101/1008/10012.html" target="_top">认证大纲</a></li>
+        <li><a href="/101/1010/index.html" target="_top">真题及解析</a></li>
+                              <li><a href="/101/1022/10088.html" target="_top">样题</a></li>
+                              <li><a href="https://gesp.ccf.org.cn/101/1002/10032.html" target="_top">软件下载</a></li>
+                              <li><a href="https://gesp.ccf.org.cn/101/1031/index.html" target="_top">资料下载</a></li>
+                    				</ul>
+                                  </div>
+                                     <div class="has-children">
+			<input type="checkbox" name="group-6" id="group-6">
+			<label for="group-6">报名与查询</label>
+                            <ul>
+                      						<li><a href="https://gespreg.ccf.org.cn/gesp/index.action" target="_top">认证报名</a></li>
+                        					<li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=personal_score" target="_top">成绩查询</a></li>
+                      						<li><a href="https://gespreg.ccf.org.cn/gesp/cms/check_cert_report.action" target="_top">证书查询</a></li>
+                              
+                    				</ul></div>
+                                       <li  ><a href="/101/1011/index.html" title="常见问题" target="_top"  >常见问题</a></li>
+                                  <li ><a href="/101/1007/index.html" title="联系我们" target="_top" >联系我们</a></li> 
+  <iframe class="iframes" src="https://gespreg.ccf.org.cn/gesp/frame/top_login_phone.action" style="position: absolute;z-index: 8;width:200px;"  frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+
+<!--<li style="
+    text-align: center;
+    line-height: 6rem;
+    border-bottom:none;
+    font-size: 2rem;
+    font-family: PingFang-SC-Bold, PingFang-SC;
+    font-weight: bold;"><a href="https://passport.ccf.org.cn/sso/?from=aHR0cHM6Ly9nZXNwLmNjZi5vcmcuY24v&source=5TWwzT" target="_blank" style="display: inline; border-bottom:none;" >登录</a>
+  / <a href="https://web.ccf.org.cn/CCF/apply/user!reg.action?source=5TWwzT&amp;url=https://gesp.ccf.org.cn" target="_blank" style="display: inline; border-bottom:none;">注册</a>
+                </li>  -->                         
+</ul>
+
+  
+		<!--<div class="has-children">
+			<input type="checkbox" name="group-2" id="group-2">
+			<label for="group-2">一级菜单</label>
+			<ul>
+				<li><a href="#0">二级菜单</a></li>
+				<li><a href="#0">二级菜单</a></li>
+			</ul>
+		</div>
+		<div class="has-children">
+			<input type="checkbox" name="group-4" id="group-4">
+			<label for="group-4">一级菜单</label>
+
+			<ul>
+				<li class="has-children">
+					<input type="checkbox" name="sub-group-3" id="sub-group-3">
+					<label for="sub-group-3">二级菜单</label>
+
+					<ul>
+						<li><a href="#0">三级菜单</a></li>
+						<li><a href="#0">三级菜单</a></li>
+					</ul>
+				</li>
+				<li><a href="#0">二级菜单</a></li>
+				<li><a href="#0">二级菜单</a></li>
+			</ul>
+		</div>
+  			<li><a href="#0">一级菜单</a></li>
+	</ul>-->
+
+          
+         <!--   
+     
+          <ul> 
+               <li class="nav2"><a href="/101/index.html" title="首页" target="_blank">首页</a></li>
+               <div  class="stateNav2 about">
+                    <li class="close" onclick="openMenu('about')"  >关于GESP<span class="menuAll menuAlls" ></span></li>
+                    <li class="open" onclick="closeMenu('about')" >关于GESP<span class="menuAll menuAlls" ></span></li>
+                    <li class="nav2Item"><a href="#" title="简介" target="_top">简介</a></li>
+                    <li class="nav2Item"><a  href="#" title="条例规定" target="_top">条例规定</a></li>
+                    <li class="nav2Item"><a  href="#" title="新闻动态" target="_top">新闻动态</a></li>
+                    <li class="nav2Item"><a  href="#" title="技术规则" target="_top">技术规则</a></li>
+              </div>
+              <div class="stateNav2 organization">
+                    <li class="close"   onclick="openMenu('organization')">组织机构<span class="menuAll menuAlls" ></span></li>
+                    <li class="open"   onclick="closeMenu('organization')">组织机构<span class="menuAll menuAlls"></span></li>
+                    <li class="nav2Item"><a href="#" title="组织委员会" target="_top">组织委员会</a></li>
+                    <li class="nav2Item"><a  href="#" title="技术委员会" target="_top">技术委员会</a></li>
+                    <li class="nav2Item"><a  href="#" title="特派员" target="_top">特派员</a></li>
+                    <li class="nav2Item"><a  href="#" title="命题委员会" target="_top">命题委员会</a></li>
+              </div>
+                 <div class="stateNav2 cooperate">
+                    <li class="close"   onclick="openMenu('cooperate')">合作机构<span class="menuAll menuAlls"></span></li>
+                    <li class="open"  onclick="closeMenu('cooperate')">合作机构<span class="menuAll menuAlls"></span></li>
+                    <li class="nav2Item"><a href="#" title="认证服务中心" target="_top">认证服务中心</a></li>
+                    <li class="nav2Item"><a  href="#" title="考点" target="_top">考点</a></li>
+                    <li class="nav2Item"><a  href="#" title="合作申请" target="_top">合作申请</a></li>
+              </div>     
+              <div class="stateNav2 authentication" >
+                    <li class="close"  onclick="openMenu('authentication')">认证资料<span class="menuAll menuAlls"></span></li>
+                    <li class="open" onclick="closeMenu('authentication')">认证资料<span class="menuAll menuAlls"></span></li>
+                    <li class="nav2Item"><a href="#" title="认证大纲" target="_top">认证大纲</a></li>
+                    <li class="nav2Item"><a  href="#" title="认证样题" target="_top">认证样题</a></li>
+                    <li class="nav2Item"><a  href="#" title="真题及解析" target="_top">真题及解析</a></li>
+              </div>
+              <div class="stateNav2 sign ">
+                    <li class="close"   onclick="openMenu('sign')">报名与查询<span class="menuAll menuAlls"></span></li>
+                    <li class="open"   onclick="closeMenu('sign')">报名与查询<span class="menuAll menuAlls"></span></li>
+                    <li class="nav2Item"><a href="#" title="认证报名" target="_top">认证报名</a></li>
+                    <li class="nav2Item"><a  href="#" title="成绩查询" target="_top">成绩查询</a></li>
+                    <li class="nav2Item"><a  href="#" title="证书查询" target="_top">证书查询</a></li>
+                    <li class="nav2Item"><a  href="#" title="模拟测试" target="_top">模拟测试</a></li>
+              </div>
+               <li class="nav2"><a href="#" title="常见问题" target="_top">常见问题</a></li>
+              <li class="nav2"><a href="/101/1007/index.html" title="联系我们" target="_top">联系我们</a></li>
+              
+
+
+        
+               <li class="nav2"><a href="/101/index.html" title="首页" target="_blank">首页</a></li>
+               <li  class="nav2"><a href="/101/1018/index.html" title="条例规定" target="_top">条例规定1</a></li>             
+              <li class="nav2"><a href="/101/1002/index.html" title="通知公告" target="_top" >通知公告</a></li>
+              <li class="nav2"><a href="/101/1019/index.html" title="认证动态" target="_top" >认证动态</a></li>
+              <li class="nav2"><a href="/101/1013/index.html" title="组织机构" target="_top" >组织机构</a></li>
+              <li class="nav2"><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_service_org_seach" title="服务中心" target="_top">服务中心</a></li>
+              <li class="nav2"><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_org_seach" title="服务中心" target="_top">考点</a></li>
+              <li class="nav2"><a href="/101/1008/index.html" title="认证指南" target="_top">认证指南</a></li>
+              <li class="nav2"><a href="/101/1007/index.html" title="联系我们" target="_top">联系我们</a></li>
+              
+              <iframe src="https://gespreg.ccf.org.cn/gesp/frame/top_login_phone.action" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" height="" width="158px"></iframe>
+               <div style="display:none;"> <li>
+                   <a href="https://passport.ccf.org.cn/sso/?from=aHR0cHM6Ly9nZXNwLmNjZi5vcmcuY24v&source=5TWwzT" target="_blank">登录</a>
+                   
+                </li>
+                <li>
+                    <a href="https://web.ccf.org.cn/CCF/apply/user!reg.action?source=5TWwzT&amp;url=https://gesp.ccf.org.cn" target="_blank">注册</a>
+                </li></div>
+            </ul> -->
+            
+        </div>
+    </div>
+
+<!-- <div class=""> -->
+<script>
+    var iframeheight="";
+
+  //头部搜索内容回显
+  var LocString = String(window.document.location.href);
+  function getQueryStr(str) {
+    var rs = new RegExp("(^|)" + str + "=([^&]*)(&|$)", "gi").exec(LocString), tmp;
+    if (tmp = rs) {
+      return tmp[2];
+    }
+    return "";
+    
+  }
+  function doSearch1(newPage){
+    var word = $("#word").val();
+    if(newPage == null){
+      newPage = 1;
+    }
+    window.location.href = "/cms/api/search?tid=35&word=" + word +"&pageNo="+newPage;
+  }
+</script>
+        <div class="headMain ">
+            <div class="headBox">
+                <img src="/101/images/logo20231.png" alt="" srcset="">
+                <div class="appAll appAlls"></div>
+                <!-- <img class="appAll" src="/101/images/appAll.png" alt="" srcset=""> -->
+                <div class="pcRight center">
+                   <div class="searchAll">
+                        <img src="https://gesp.ccf.org.cn/101/images/searchB.png" width="20px"  height="19px" alt="" srcset="">
+                        <div class="searchAllInput ds">
+                            <img src="https://gesp.ccf.org.cn/101/images/searchH.png" alt=""  onclick="doSearch1()">
+                            <input type="text" id="word" placeholder="请输入要搜索的信息"/>
+                        
+                        </div>
+                    </div>
+                    <div class="nav">
+                        <div class="menu fhNav  nav nav3  yyui_menu1">
+                            <div class="bottomLine" style="width: 40px;left: 12px;"></div>
+                            <ul class="inner-nav clear">
+<!--                            <li   class="liBtn liBtns selectedNav"><a href="/101/index.html" title="首页" target="_top"  >首页</a></li>
+                             <li  class="liBtn "><a href="#" title="关于GESP" target="_top" >关于GESP</a>
+                            <ul class="selse">
+                      						<li ><a href="/101/1004/10004.html">简介</a></li>
+                        					<li><a href="/101/1018/index.html">条例规定</a></li>
+                      						<li><a href="/101/1019/index.html">新闻动态</a></li>
+                              	
+                    				</ul></li>
+
+                              
+                                <li  class="liBtn "><a href="#" title="组织机构" target="_top" >组织机构</a>
+                            <ul class="selse">
+                      						<li><a href="#">组织委员会</a></li>
+                        					<li><a href="#">技术委员会</a></li>
+                      						<li><a href="#">特派员</a></li>
+                              	
+                    				</ul></li>
+
+                                 <li  class="liBtn "><a href="#" title="合作机构" target="_top" >合作机构</a>
+                            <ul class="selse">
+                      						<li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_service_org_seach" target="_top">认证服务中心</a></li>
+                        					<li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_org_seach" target="_top">考点</a></li>
+                      						<li><a href="#">合作申请</a></li>
+                    				</ul></li>
+                                     <li  class="liBtn "><a href="#" title="认证资料" target="_top" >认证资料</a>
+                            <ul class="selse">
+                      						<li><a href="https://gesp.ccf.org.cn/101/1008/index.html">认证大纲</a></li>
+                        				
+                      						<li><a href="/101/1010/index.html">真题及解析</a></li>
+                    				</ul></li>
+                                      <li  class="liBtn "><a href="#" title="报名与查询" target="_top" >报名与查询</a>
+                            <ul class="selse">
+                      						<li><a href="https://gespreg.ccf.org.cn/gesp/index.action" target="_top">认证报名</a></li>
+                        					<li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=personal_score" target="_top">成绩查询</a></li>
+                      						<li><a href="https://gespreg.ccf.org.cn/gesp/cms/check_cert_report.action" target="_top">证书查询</a></li>
+                              
+                    				</ul></li>
+                                       <li   class="liBtn liBtns selectedNav"><a href="/101/1011/index.html" title="常见问题" target="_top"  >常见问题</a></li>
+                                  <li class="liBtn "><a href="/101/1007/index.html" title="联系我们" target="_top" >联系我们</a></li>  -->
+                              
+
+                               <!--  <li   class="liBtn liBtns selectedNav"><a href="/101/index.html" title="首页" target="_top"  >首页</a></li>
+                            <li  class="liBtn "><a href="/101/1018/index.html" title="条例规定" target="_top" >条例规定</a></li>
+                              <li  class="liBtn "><a href="/101/1002/index.html" title="通知公告" target="_top" >通知公告</a></li>
+                              <li  class="liBtn "><a href="/101/1019/index.html" title="认证动态" target="_top" >认证动态</a></li>
+                            <li  class="liBtn "><a href="/101/1013/index.html" title="组织机构" target="_top" >组织机构</a></li>
+                            <li class="liBtn "><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_service_org_seach" title="服务中心" target="_top" >服务中心</a></li>
+                            <li class="liBtn  liBtns"><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_org_seach" title="服务中心" target="_top" >考点</a></li>
+                            <li  class="liBtn "><a href="/101/1008/index.html" title="认证指南" target="_top" >认证指南</a></li>
+                            <li class="liBtn "><a href="/101/1007/index.html" title="联系我们" target="_top" >联系我们</a></li>-->
+                                  <li   class="liBtn liBtns selectedNav"><a href="/101/index.html" title="首页" target="_top"  >首页</a></li>
+                             <li  class="liBtn "><a  title="关于GESP" target="_top" >关于GESP</a>
+                            <ul class="selse">
+                                  <li><a href="/101/1004/10004.html" target="_top">简介</a></li>
+                        					<li><a href="/101/1018/index.html" target="_top">条例规定</a></li>
+                      						<li><a href="/101/1019/index.html" target="_top">新闻动态</a></li>
+                              		<li><a href="/101/1002/index.html" target="_top">通知公告</a></li>
+                    				</ul>
+                             
+                             </li>
+
+                              
+                                <li  class="liBtn"><a style="cursor:pointer" title="组织机构" target="_top" >组织机构</a>
+                                    <ul class="selse">
+                                      <li><a href="/101/1030/index.html" target="_top">认证委员会</a></li>
+                      						 <li><a href="/101/1014/index.html" target="_top">组织委员会</a></li>
+                        					<li><a href="/101/1015/index.html" target="_top">技术委员会</a></li>
+                      						<li><a href="/101/1016/index.html" target="_top">特派员</a></li>
+                              	  <li><a href="/101/1020/index.html" target="_top">命题委员会</a></li>
+                                      <li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_service_org_seach" target="_top">认证服务中心</a></li>
+                        					<li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_org_seach" target="_top">考点</a></li>
+                    				</ul>
+                                </li>
+<!--
+                                 <li  class="liBtn "><a style="cursor:pointer" title="合作机构" target="_top" >合作机构</a>
+                            <ul class="one selse">
+                                           <li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_service_org_seach" target="_top">认证服务中心</a></li>
+                        					<li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=exam_org_seach" target="_top">考点</a></li>
+                      						<li><a style="cursor:pointer" class="more">合作申请</a>
+                                        
+                                            <ul class="two selse">
+                                                      <li><a href="https://gespreg.ccf.org.cn/gesp/examorg/index.action" target="_top">认证服务中心申请</a></li>
+                                                      <li><a href="https://gespreg.ccf.org.cn/gesp/org/edit_org.action" target="_top">考点申请</a></li>
+                                                    <li><a href="https://gespreg.ccf.org.cn/gesp/exam_teacher/index.action" target="_top">推荐老师申请</a></li>  
+                                            </ul>
+                                        
+                                  </ul></li>-->
+                                     <li  class="liBtn "><a style="cursor:pointer" title="认证资料" target="_top" >认证资料</a>
+                            <ul class="selse">
+                      						<li><a href="/101/1008/10012.html" target="_top">认证大纲</a></li>
+                        				
+                      						<li><a href="/101/1010/index.html" target="_top">真题及解析</a></li>
+                              <li><a href="/101/1022/10088.html" target="_top">样题</a></li>
+                              <li><a href="https://gesp.ccf.org.cn/101/1002/10032.html" target="_top">软件下载</a></li>
+                               <li><a href="https://gesp.ccf.org.cn/101/1031/index.html" target="_top">资料下载</a></li>
+                    				</ul></li>
+                                      <li  class="liBtn "><a style="cursor:pointer" title="报名与查询" target="_top" >报名与查询</a>
+                            <ul class="selse">
+                      						<li><a href="https://gespreg.ccf.org.cn/gesp/index.action" target="_top">认证报名</a></li>
+                        					<li><a href="https://gespreg.ccf.org.cn/gesp/show.action?code=personal_score" target="_top">成绩查询</a></li>
+                      						<li><a href="https://gespreg.ccf.org.cn/gesp/cms/check_cert_report.action" target="_top">证书查询</a></li>
+                              
+                    				</ul></li>
+                                       <li   class="liBtn liBtns selectedNav"><a href="/101/1011/index.html" title="常见问题" target="_top"  >常见问题</a></li>
+                                  <li class="liBtn "><a href="/101/1007/index.html" title="联系我们" target="_top" >联系我们</a></li> 
+                            </ul>
+
+                        </div>
+                    </div>
+
+
+
+                  
+                  <div class="iframe">
+                  <iframe class="iframes" src="https://gespreg.ccf.org.cn/gesp/frame/top_login_pc.action" style="position: absolute;z-index: 8;height: 217px;" width="180px;" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+
+                  </div>
+                    <div class="btns" style="display:none">
+                      <<button><a href="https://passport.ccf.org.cn/sso/?from=aHR0cHM6Ly9nZXNwLmNjZi5vcmcuY24v&source=5TWwzT" target="_blank">登录1</a></button>
+                    <button><a href="https://web.ccf.org.cn/CCF/apply/user!reg.action?source=5TWwzT&amp;url=https://gesp.ccf.org.cn" target="_blank">注册</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+<script src="/101/js/jquery.min.js"></script>
+        <script src="/101/js/nav.js"></script>
+            <script src="/101/js/swiper-bundle.min.js"></script>
+    <script src="/101/js/appIndex.js"></script>
+  <script>
+    let menu = false
+    let menuItem = false
+
+    $('.appAll').on('click', function () {
+        if (menu == false) {
+          console.log("打开")
+               window.parent.postMessage(100, '*');
+
+            $('.appAll').css("background-image", "url('https://gesp.ccf.org.cn/101/images/false.png')")
+            $('.appAlls').css("background-image", "url('https://gesp.ccf.org.cn/101/images/false.png')")
+            $('.menus').css("display", "flex")
+           $('stateNav2').removeClass("open");
+           $('.stateNav2   .close').css("display", "block")
+           $('.stateNav2   .open').css("display", "none")
+            menu = true
+        } else {
+          console.log("关闭")
+            window.parent.postMessage(290, '*');
+            $('.appAll').css("background-image", "url('https://gesp.ccf.org.cn/101/images/true.png')")
+            $('.appAlls').css("background-image", "url('https://gesp.ccf.org.cn/101/images/true.png')")
+            $('.menus').css("display", "none")
+           $('stateNav2').removeClass("open");
+           $('.stateNav2   .close').css("display", "block")
+           $('.stateNav2   .open').css("display", "none")
+            menu = false
+        }
+    })
+    $('.searchAll').hover( function () {
+           //$('.searchAllInput').css("display", "flex")
+        var iframe = $('.iframe');
+      // 设置父元素的 z-index 为 1000
+      iframe.parent().parent().css('z-index', '1000');
+    })
+
+    
+      $('.searchAll input').focus( function () {
+          $('.searchAllInput').css("display", "flex")
+    })
+    $('.searchAll input').blur(function () {  
+      $('.searchAllInput').removeAttr('style')
+    })
+      $('.searchAll input').blur( function () {
+          // $('.searchAllInput').css("display", "none")
+   var iframe = $('.iframe');
+
+          $(".iframe .iframes").css('z-index', '5');
+       $(".iframe ").css('z-index', '5');
+    })
+    
+
+
+
+function openMenu(a) { 
+            $('.'+a).addClass("open");
+            $('.'+a+'  .close').css("display", "none")
+            $('.'+a+'  .open').css("display", "block")
+}
+   function closeMenu(a) { 
+         $('.'+a).removeClass("open");
+         $('.'+a+'   .close').css("display", "block")
+         $('.'+a+'   .open').css("display", "none")
+} 
+   
+      $('.nav2').on('click', function () {
+         $('stateNav2').removeClass("open");
+         $('.stateNav2   .close').css("display", "block")
+         $('.stateNav2   .open').css("display", "none")
+    })
+
+ 
+
+    
+
+yyui_menu('.yyui_menu1');
+
+    //需要调用js的效果有：选项卡、无限级下拉菜单
+
+$(document).ready(function(){
+	//选项卡tab
+	$(".yyui_tab_title , .yyui_tab_title_this ").click(function(){
+		$(this).siblings('li').attr('class','yyui_tab_title');
+		$(this).attr('class','yyui_tab_title_this');
+		//alert($(this).index()); 选项卡序号编号从0开始
+		$(this).parent().siblings('div').attr('class','yyui_tab_content');
+		$(this).parent().siblings('div').eq($(this).index()).attr('class','yyui_tab_content_this');
+	});
+}); 
+function yyui_menu(ulclass){
+	$(document).ready(function(){
+		$(ulclass+' li').hover(function(){
+			$(this).children("ul").show(); //mouseover
+		},function(){
+			$(this).children("ul").hide(); //mouseout
+		});
+	});
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var input = document.getElementById('word'); // 获取输入框元素
+ 
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') { // 检查按下的是否是回车键
+            // 调用你想要执行的函数
+            handleEnterPress();
+        }
+    });
+});
+ 
+function handleEnterPress() {
+
+     var word = $("#word").val();
+    window.location.href = "/cms/api/search?tid=35&word=" + word +"&pageNo=1";
+}
+
+jQuery(document).ready(function(){
+	var accordionsMenu = $('.cd-accordion-menu');
+
+	if( accordionsMenu.length > 0 ) {
+		
+		accordionsMenu.each(function(){
+			var accordion = $(this);
+			//detect change in the input[type="checkbox"] value
+			accordion.on('change', 'input[type="checkbox"]', function(){
+				var checkbox = $(this);
+				console.log(checkbox.prop('checked'));
+				( checkbox.prop('checked') ) ? checkbox.siblings('ul').attr('style', 'display:none;').slideDown(300) : checkbox.siblings('ul').attr('style', 'display:block;').slideUp(300);
+			});
+		});
+	}
+});
+    
+
+// });
+  </script>
+<script>
+$(document).ready(function() {
+  var iframe = $('.iframe');
+
+
+    // 绑定鼠标移入事件
+  iframe.on('mouseover', function() {
+      // 设置父元素的 z-index 为 1000
+      iframe.parent().parent().css('z-index', '1000');
+      // 设置 center div 的 z-index 为 800
+ 
+  });
+   $(".nav").mouseover(function(){
+      iframe.parent().parent().css('z-index', '1000');
+  });
+  // 绑定鼠标移出事件
+  $(".iframe").mouseout(function(){
+      $(".iframe .iframes").css('z-index', '5');
+       $(".iframe ").css('z-index', '5');
+  });
+    $(".nav").mouseout(function(){
+      $(".iframe .iframes").css('z-index', '5');
+       $(".iframe ").css('z-index', '5');
+       iframe.parent().parent().css('z-index', '800');
+  });
+  
+  iframe.on('mouseout', function() {
+      // 设置父元素的 z-index 为 800    
+      iframe.parent().parent().css('z-index', '800');
+      // 设置 center div 的 z-index 为 1000
+  });
+});
+</script>
+
+    <div class="center">
+
+
+        <div class="boxWidth">
+            <!-- 面包屑 -->
+            <div class="breadBox">
+               <span>当前位置：<a href="/101/index.html">首页</a> > </span><span  class="breadBoxText"><a href="/101/1010/index.html">真题解析</a></span>
+            </div>
+            <!-- 通知公告 -->
+            <div class="gespaBox">
+                <div class="indexNoticeDetails">
+                   <div class="title">2024年3月GESP认证真题</div>
+                    <div class="titleSmall">
+
+                       <p>2024-03-16</p>
+                    <p>访问量：<span id="visitNum"></span>
+            <script>
+              $.post('/cms/api/visit/getVisits', { t:3, oid: '10134' }, function (res) {
+                $("#visitNum").html(res.data);
+              })
+            </script>
+                    </p>
+                    <p> <span class="share">分享：               
+              
+              
+              
+              </span>
+                    </p>
+                    </div>
+                    <div class="detailslLine"></div>
+                    <div class="detailsP">
+                        <p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++一级真题" href="https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf">GESP 3月认证C++一级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++二级真题" href="https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf">GESP 3月认证C++二级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++三级真题" href="https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf">GESP 3月认证C++三级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++四级真题" href="https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf">GESP 3月认证C++四级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++五级真题" href="https://gesp.ccf.org.cn/101/attach/1602047172411424.pdf">GESP 3月认证C++五级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++六级真题" href="https://gesp.ccf.org.cn/101/attach/1602047203868704.pdf">GESP 3月认证C++六级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++七级真题" href="https://gesp.ccf.org.cn/101/attach/1602047231131680.pdf">GESP 3月认证C++七级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证C++八级真题" href="https://gesp.ccf.org.cn/101/attach/1602047270977568.pdf">GESP 3月认证C++八级真题</a></span></p>
+<p>&nbsp;</p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证 Python一级真题" href="https://gesp.ccf.org.cn/101/attach/1602047390515232.pdf">GESP 3月认证 Python一级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证 Python二级真题" href="https://gesp.ccf.org.cn/101/attach/1602047428263968.pdf">GESP 3月认证 Python二级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证 Python三级真题" href="https://gesp.ccf.org.cn/101/attach/1602047457624096.pdf">GESP 3月认证 Python三级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证 Python四级真题" href="https://gesp.ccf.org.cn/101/attach/1602047491178528.pdf">GESP 3月认证 Python四级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证 Python五级真题" href="https://gesp.ccf.org.cn/101/attach/1602047526830112.pdf">GESP 3月认证 Python五级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证 Python八级真题" href="https://gesp.ccf.org.cn/101/attach/1602047556190240.pdf">GESP 3月认证 Python八级真题</a></span></p>
+<p>&nbsp;</p>
+<p><a title="GESP 3月认证图形化编程 一级真题" href="https://gesp.ccf.org.cn/101/attach/1602361812320288.pdf"><span style="color: rgb(45, 194, 107);">GESP 3月认证图形化编程 一级真题</span></a></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证图形化编程 二级真题" href="https://gesp.ccf.org.cn/101/attach/1602361860554784.pdf">GESP 3月认证图形化编程 二级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证图形化编程 三级真题" href="https://gesp.ccf.org.cn/101/attach/1602361908789280.pdf">GESP 3月认证图形化编程 三级真题</a></span></p>
+<p><span style="color: rgb(45, 194, 107);"><a style="color: rgb(45, 194, 107);" title="GESP 3月认证图形化编程 四级真题" href="https://gesp.ccf.org.cn/cms/api/news/downloadFile?id=1610176046039072">GESP 3月认证图形化编程 四级真题</a></span></p>   </div>
+
+                </div>
+            </div>
+
+
+              <!-- 底部 -->
+                 
+    <link rel="stylesheet" href="/101/css/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/101/css/reset.css">
+    <link rel="stylesheet" href="/101/css/index_app.css">
+
+<div class="foot">
+  <main>
+      <div class="">版权所有：中国计算机学会 </div>
+      <!--<div class="">技术支持：北京中科辅龙信息技术有限公司</div>-->
+  </main>
+  <main>
+     
+    <div class=""><a target="_blank" href="https://beian.miit.gov.cn/#/Integrated/index"> 京ICP备13000930号-4</a></div>
+      <div class=""><a target="_blank" href="https://beian.miit.gov.cn/#/Integrated/index"> <img src="/101/images/gh2022.png" width="20" height="20" alt="" style="border: none;
+vertical-align: middle;">京公网安备 11010802032778号</a>
+      
+      </div>
+   
+  </main>
+</div>
+        </div>
+
+    </div>
+   
+</body>
+ <script type="text/javascript" src="/cms/api/visit/stat.js"></script><script>if(window.fl_stat)fl_stat(3,'10,134');</script>
+      <script type="text/javascript" src="/101/js/jquery.share.min.js"></script><script>$('.share').share({sites: ['weibo','wechat', 'qq']});</script>
+       <script src="/101/js/swiper-bundle.min.js"></script>
+    <script src="/101/js/appIndex.js"></script>
+                            <script type="text/javascript">
+
+// 移动端适配
+(function (doc, win) {
+    var docEl = doc.documentElement, //根元素html
+        //判断窗口有没有orientationchange这个方法，有就赋值给一个变量，没有就返回resize方法。
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        recalc = function () {
+            var clientWidth = docEl.clientWidth;
+            if (!clientWidth) return;
+            //把document的fontSize大小设置成跟窗口成一定比例的大小，从而实现响应式效果。
+            if (clientWidth >= 640) {
+                clientWidth = 640;
+            }
+            docEl.style.fontSize = 16 * (clientWidth / 750) + 'px';
+            // console.log(clientWidth);
+            // console.log(docEl.style.fontSize);
+        };
+    recalc();
+    if (!doc.addEventListener) return;
+    win.addEventListener(resizeEvt, recalc, false); //addEventListener事件方法接受三个参数：第一个是事件名称比如点击事件onclick，第二个是要执行的函数，第三个是布尔值
+    doc.addEventListener('DOMContentLoaded', recalc, false) //绑定浏览器缩放与加载时间
+})(document, window);
+
+</script> 
+</html>

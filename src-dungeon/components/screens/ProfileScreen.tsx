@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useDungeonStore } from '../../stores/dungeonStore';
-import { getRankName } from '../../utils/gameLogic';
+import { getRankName, getSchoolPassive } from '../../utils/gameLogic';
 import schoolsData from '../../data/schools.json';
+import type { School, SchoolDefinition } from '../../types/dungeon';
 
 const BADGE_RARITY_STARS: Record<string, { stars: string; color: string; label: string }> = {
   common:    { stars: '⭐',        color: '#999',     label: '普通' },
@@ -39,16 +41,22 @@ const BADGE_DEFS: Record<string, { name: string; desc: string; rarity: string; i
 
 export default function ProfileScreen() {
   const navigate = useNavigate();
+  const [changingSchool, setChangingSchool] = useState(false);
   const player = useDungeonStore(s => s.player);
   const earnedBadges = useDungeonStore(s => s.earnedBadges);
   const progress = useDungeonStore(s => s.dungeonProgress);
   const weakPoints = useDungeonStore(s => s.weakPoints);
   const mistakeNotebook = useDungeonStore(s => s.mistakeNotebook);
   const startHealing = useDungeonStore(s => s.startHealing);
+  const setSchool = useDungeonStore(s => s.setSchool);
+  const saveToLocalStorage = useDungeonStore(s => s.saveToLocalStorage);
 
   const rankName = getRankName(player.school, player.rankTier);
-  const schools = schoolsData as any[];
-  const school = schools.find((s: any) => s.id === player.school);
+  const schools = schoolsData as SchoolDefinition[];
+  const school = schools.find(s => s.id === player.school);
+  const passive = getSchoolPassive(player.school);
+  const schoolChangeKey = `dungeon_school_changed_${player.season || 'default'}`;
+  const hasChangedSchool = localStorage.getItem(schoolChangeKey) === 'true';
   const accuracy = player.totalAnswered > 0
     ? Math.round((player.totalCorrect / player.totalAnswered) * 100)
     : 0;
@@ -65,6 +73,14 @@ export default function ProfileScreen() {
   });
 
   const rarityOrder = ['mythic', 'legendary', 'epic', 'rare', 'common'];
+
+  const changeSchool = (nextSchool: School) => {
+    if (nextSchool === player.school || hasChangedSchool) return;
+    setSchool(nextSchool);
+    localStorage.setItem(schoolChangeKey, 'true');
+    saveToLocalStorage();
+    setChangingSchool(false);
+  };
 
   return (
     <div style={{
@@ -90,6 +106,27 @@ export default function ProfileScreen() {
               <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '2px' }}>
                 {player.realName} · {player.classCode}
               </div>
+            </div>
+          </div>
+          <button
+            className="pixel-btn"
+            onClick={() => setChangingSchool(true)}
+            style={{ width: '100%', marginBottom: '12px', fontSize: '11px' }}
+          >
+            更换流派
+          </button>
+
+          <div className="pixel-card" style={{
+            padding: '10px 12px',
+            marginBottom: '12px',
+            borderColor: school?.themeColor || 'var(--gold)',
+            background: 'rgba(255,255,255,0.04)',
+          }}>
+            <div style={{ fontSize: 11, color: school?.themeColor || 'var(--gold)', fontWeight: 700 }}>
+              被动：{passive.name}
+            </div>
+            <div style={{ fontSize: 10, color: 'var(--text-dim)', marginTop: 4, lineHeight: 1.5 }}>
+              {passive.description}
             </div>
           </div>
 
@@ -257,6 +294,84 @@ export default function ProfileScreen() {
             <div style={{ fontSize: '32px', marginBottom: '8px' }}>🏅</div>
             <div>还没有获得任何徽章</div>
             <div style={{ fontSize: '11px', marginTop: '4px' }}>去打副本吧！</div>
+          </div>
+        )}
+
+        {changingSchool && (
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 100002,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: 20, background: 'rgba(0,0,0,0.78)',
+          }}>
+            <div className="pixel-card pixel-border-gold" style={{
+              width: 'min(560px, calc(100vw - 40px))',
+              maxHeight: 'calc(100vh - 40px)',
+              overflowY: 'auto',
+            }}>
+              <div style={{
+                fontFamily: 'var(--pixel-font)',
+                fontSize: 13,
+                color: 'var(--gold)',
+                marginBottom: 8,
+              }}>
+                更换修行流派
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: 14 }}>
+                每赛季可更换 1 次。更换后段位积分、等级、副本进度都会保留，同时改变称号体系、流派外观和轻量被动效果。
+              </div>
+              {hasChangedSchool && (
+                <div style={{
+                  padding: '10px 12px',
+                  marginBottom: 12,
+                  border: '1px solid var(--hp-red)',
+                  color: 'var(--hp-red)',
+                  background: 'rgba(255,51,51,0.1)',
+                  fontSize: 12,
+                }}>
+                  本赛季已经更换过流派。
+                </div>
+              )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {schools.map(next => {
+                  const selected = next.id === player.school;
+                  const nextPassive = getSchoolPassive(next.id);
+                  return (
+                    <button
+                      key={next.id}
+                      disabled={selected || hasChangedSchool}
+                      onClick={() => changeSchool(next.id)}
+                      className="pixel-card"
+                      style={{
+                        textAlign: 'left',
+                        cursor: selected || hasChangedSchool ? 'default' : 'pointer',
+                        opacity: hasChangedSchool && !selected ? 0.45 : 1,
+                        borderColor: selected ? next.themeColor : 'var(--border-pixel)',
+                        background: selected ? next.bgGradient : 'var(--bg-card)',
+                        color: 'inherit',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <span style={{ fontSize: 26 }}>{next.icon}</span>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontWeight: 700, color: next.themeColor }}>
+                            {next.name} · {next.subtitle}{selected ? ' · 当前' : ''}
+                          </div>
+                          <div style={{ fontSize: 11, color: next.themeColor, marginTop: 4, fontWeight: 700 }}>
+                            被动：{nextPassive.name} · {nextPassive.description}
+                          </div>
+                          <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4, lineHeight: 1.5 }}>
+                            {next.description.slice(0, 70)}...
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+              <button className="pixel-btn" onClick={() => setChangingSchool(false)} style={{ width: '100%', marginTop: 14 }}>
+                关闭
+              </button>
+            </div>
           </div>
         )}
       </div>

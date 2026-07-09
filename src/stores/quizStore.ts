@@ -42,6 +42,9 @@ export interface QuizState {
   // Free practice stats
   totalPractice: number;
   totalCorrect: number;
+  // Free practice daily reward cap (方案A)
+  freeRewardedCount: number;
+  freeRewardedDate: string;
 
   // CSP 真题训练
   examDailyDate: string;
@@ -67,6 +70,10 @@ export interface QuizState {
   canDoMonthlyReview: () => { allowed: boolean; reason: string };
   recordAnswer: (correct: boolean) => void;
   errorCount: () => number;
+  // Free practice daily reward cap
+  canRewardFreePractice: () => boolean;
+  recordFreeReward: () => void;
+  freeRewardRemaining: () => number;
   load: () => Promise<void>;
   save: () => void;
 
@@ -78,6 +85,9 @@ export interface QuizState {
 }
 
 const STORAGE_KEY = 'csp_quiz_state';
+
+// 自由练习每日奖励题数上限（方案A：前 N 题有奖励，超出可做题但不发奖）
+export const FREE_PRACTICE_DAILY_REWARD_CAP = 30;
 
 function getWeekStart(): string {
   const d = new Date();
@@ -122,6 +132,8 @@ export const useQuizStore = create<QuizState>((set, get) => {
     superBestScore: 0,
     totalPractice: 0,
     totalCorrect: 0,
+    freeRewardedCount: 0,
+    freeRewardedDate: '',
 
     // CSP 真题训练
     examDailyDate: '',
@@ -284,6 +296,30 @@ export const useQuizStore = create<QuizState>((set, get) => {
 
     errorCount: () => get().errors.length,
 
+    // === Free practice daily reward cap (方案A) ===
+    canRewardFreePractice: () => {
+      const s = get();
+      const today = new Date().toISOString().slice(0, 10);
+      if (s.freeRewardedDate !== today) return true; // new day → reset
+      return s.freeRewardedCount < FREE_PRACTICE_DAILY_REWARD_CAP;
+    },
+
+    recordFreeReward: () => {
+      const today = new Date().toISOString().slice(0, 10);
+      set(s => ({
+        freeRewardedDate: today,
+        freeRewardedCount: s.freeRewardedDate !== today ? 1 : s.freeRewardedCount + 1,
+      }));
+      get().save();
+    },
+
+    freeRewardRemaining: () => {
+      const s = get();
+      const today = new Date().toISOString().slice(0, 10);
+      if (s.freeRewardedDate !== today) return FREE_PRACTICE_DAILY_REWARD_CAP;
+      return Math.max(0, FREE_PRACTICE_DAILY_REWARD_CAP - s.freeRewardedCount);
+    },
+
     load: async () => {
       // Helper to parse and hydrate from raw JSON
       const hydrate = (raw: string | null) => {
@@ -306,6 +342,8 @@ export const useQuizStore = create<QuizState>((set, get) => {
           superBestScore: data.superBestScore || 0,
           totalPractice: data.totalPractice || 0,
           totalCorrect: data.totalCorrect || 0,
+          freeRewardedCount: data.freeRewardedDate === todayDate ? (data.freeRewardedCount || 0) : 0,
+          freeRewardedDate: data.freeRewardedDate === todayDate ? data.freeRewardedDate : '',
           weeklyCompletions: data.weeklyCompletions || 0,
           weeklyPerfects: data.weeklyPerfects || 0,
           weeklyTaskDone: sameWeek ? (data.weeklyTaskDone || 0) : 0,
@@ -341,6 +379,8 @@ export const useQuizStore = create<QuizState>((set, get) => {
           superBestScore: s.superBestScore,
           totalPractice: s.totalPractice,
           totalCorrect: s.totalCorrect,
+          freeRewardedCount: s.freeRewardedCount,
+          freeRewardedDate: s.freeRewardedDate,
           weeklyCompletions: s.weeklyCompletions,
           weeklyPerfects: s.weeklyPerfects,
           weeklyTaskDone: s.weeklyTaskDone,

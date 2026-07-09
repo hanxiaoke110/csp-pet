@@ -15,12 +15,23 @@ export class PetSprite extends Phaser.GameObjects.Container {
     this.shadow = scene.add.ellipse(0, 60, 120, 30, 0x000000, 0.3);
     this.add(this.shadow);
 
-    // 宠物图
-    const texture = scene.textures.exists(config.textureKey)
-      ? config.textureKey
-      : 'missing';
-    this.sprite = scene.add.image(0, 0, texture);
+    // 宠物图：纹理存在用图，不存在生成 fallback 纹理（灰色圆），避免 missing 纹理报错/黑屏
+    // sprite 始终是 Image，保证 setFlipX/setTint 等方法可用
+    const textureExists = scene.textures.exists(config.textureKey);
+    if (!textureExists) {
+      if (!scene.textures.exists('petFallback')) {
+        const g = scene.add.graphics();
+        g.fillStyle(0x2a2a3e, 1);
+        g.fillCircle(80, 80, 80);
+        g.lineStyle(3, 0x4a4a6a, 1);
+        g.strokeCircle(80, 80, 78);
+        g.generateTexture('petFallback', 160, 160);
+        g.destroy();
+      }
+    }
+    this.sprite = scene.add.image(0, 0, textureExists ? config.textureKey : 'petFallback');
     this.sprite.setDisplaySize(160, 160);
+    this.sprite.setOrigin(0.5, 0.5);
     this.sprite.setOrigin(0.5, 0.5);
     this.add(this.sprite);
 

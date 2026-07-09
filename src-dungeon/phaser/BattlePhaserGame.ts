@@ -7,6 +7,8 @@ export type BattleEventCallback = (event: string, data: unknown) => void;
 export interface BattlePhaserGame {
   game: Phaser.Game;
   setAnswerResult: (result: SkillSelectResult) => void;
+  pause: () => void;
+  resume: () => void;
   destroy: () => void;
 }
 
@@ -20,7 +22,7 @@ export function createBattleGame(
   onEvent: BattleEventCallback
 ): BattlePhaserGame {
   const config: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS, // 强制 Canvas: Tauri WebView 中 WebGL 易崩溃
     width: 960,
     height: 540,
     parent: container,
@@ -39,11 +41,17 @@ export function createBattleGame(
 
   const game = new Phaser.Game(config);
 
-  // 游戏就绪后动态添加场景并注入数据
-  game.events.on('ready', () => {
-    const scene = game.scene.add('BattleScene', BattleScene, false) as BattleScene;
-    scene.initBattle(initData, onEvent);
-  });
+  // 游戏就绪后动态添加场景并启动（传初始数据给 init），走 Phaser 标准 init→preload→create 生命周期
+  // 注意：重新进入战斗时 DOM 已 ready，Phaser 可能同步 boot，ready 事件在监听前已触发 → 用 isBooted 兜底
+  const startScene = () => {
+    game.scene.add('BattleScene', BattleScene, false);
+    game.scene.start('BattleScene', { initData, onEvent });
+  };
+  if (game.isBooted) {
+    startScene();
+  } else {
+    game.events.once('ready', startScene);
+  }
 
   return {
     game,
@@ -52,6 +60,13 @@ export function createBattleGame(
       if (scene) {
         scene.handleAnswerResult(result);
       }
+    },
+    pause: () => {
+      // 真暂停：冻结 BattleScene 的 update 循环，避免暂停遮罩下战斗仍推进
+      if (game.scene.isActive('BattleScene')) game.scene.pause('BattleScene');
+    },
+    resume: () => {
+      if (game.scene.isPaused('BattleScene')) game.scene.resume('BattleScene');
     },
     destroy: () => {
       game.destroy(true);

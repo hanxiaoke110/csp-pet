@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { listen, emit } from '@tauri-apps/api/event';
+import { emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
-import { getCurrentWindow, LogicalSize } from '@tauri-apps/api/window';
 import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 import { MemoryRouter } from 'react-router-dom';
 import AppShell from './components/layout/AppShell';
@@ -15,7 +14,10 @@ import OJTraining from './components/oj/OJTraining';
 import ExamTraining from './components/exam/ExamTraining';
 import SettingsPage from './components/settings/SettingsPage';
 import AdminPage from './components/admin/AdminPage';
-import DungeonEmbed, { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/DungeonEmbed';
+import LearningResourcesPage from './components/resources/LearningResourcesPage';
+import DungeonEmbed from '../src-dungeon/DungeonEmbed';
+import { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/utils/routeBridge';
+import { safeListen } from './lib/tauriEvents';
 import { useCourseStore } from './stores/courseStore';
 import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
@@ -33,7 +35,7 @@ function PetActionHandler() {
   useEffect(() => {
     const cleanups: (() => void)[] = [];
 
-    listen('pet-action', (e: any) => {
+    cleanups.push(safeListen('pet-action', (e: any) => {
       const { action, target } = e.payload;
       switch (action) {
         case 'open-window': {
@@ -59,7 +61,7 @@ function PetActionHandler() {
           break;
         }
       }
-    }).then(fn => cleanups.push(fn));
+    }));
 
     // Notify pet window of our visibility
     const handleVisibility = () => {
@@ -72,16 +74,18 @@ function PetActionHandler() {
     // Initial: main window is visible
     emit('main-window-state', { visible: true }).catch(() => {});
 
-    document.addEventListener('visibilitychange', () => {
+    const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') handleVisibility();
       else handleHidden();
-    });
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('focus', handleVisibility);
     window.addEventListener('blur', handleHidden);
 
     return () => {
       cleanups.forEach(fn => fn());
-      document.removeEventListener('visibilitychange', handleVisibility);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleVisibility);
       window.removeEventListener('blur', handleHidden);
     };
@@ -275,20 +279,33 @@ function App() {
           }
         }
       } catch {}
-      listen('pet-click', () => {
+      const cleanupPetClick = safeListen('pet-click', () => {
         usePetStore.getState().save();
-      }).catch(() => {});
-      listen('pet-request-sync', () => {
+      });
+      const cleanupPetSync = safeListen('pet-request-sync', () => {
         usePetStore.getState().save();
-      }).catch(() => {});
+      });
       setTimeout(() => usePetStore.getState().save(), 500);
+      return () => {
+        cleanupPetClick();
+        cleanupPetSync();
+      };
     };
     // 15s safety timeout: force loading to finish even if init hangs
     const safetyTimer = setTimeout(() => {
       console.warn('[init] safety timeout — forcing load complete');
     }, 15000);
-    init().finally(() => clearTimeout(safetyTimer));
-    return () => { if (hungerTimer) clearInterval(hungerTimer); };
+    let cleanupListeners: (() => void) | undefined;
+    let disposed = false;
+    init().then(cleanup => {
+      if (disposed) cleanup?.();
+      else cleanupListeners = cleanup;
+    }).finally(() => clearTimeout(safetyTimer));
+    return () => {
+      disposed = true;
+      if (hungerTimer) clearInterval(hungerTimer);
+      cleanupListeners?.();
+    };
   }, []);
 
   // Milestone toast listener — moved to AppLayout (only active in main app, not dungeon)
@@ -297,29 +314,7 @@ function App() {
     loadConfig();
     useAIStore.getState().loadSessions();
     loadCourseData();
-
-    // Restore saved window size
-    const saved = localStorage.getItem('csp_window_size');
-    if (saved) {
-      try {
-        const { width, height } = JSON.parse(saved);
-        if (width > 400 && height > 300) {
-          getCurrentWindow().setSize(new LogicalSize(width, height));
-        }
-      } catch { /* ignore */ }
-    }
-  }, []);
-
-  // Save window size on resize (debounced)
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    const unlisten = getCurrentWindow().onResized(({ payload: size }) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        localStorage.setItem('csp_window_size', JSON.stringify({ width: size.width, height: size.height }));
-      }, 500);
-    });
-    return () => { unlisten.then(fn => fn()); };
+    // 窗口尺寸/位置由 tauri-plugin-window-state 在启动阶段同步恢复，无需前端介入
   }, []);
 
   async function loadCourseData() {
@@ -468,6 +463,7 @@ function App() {
           <Route path="/achievements" element={<AchievementsPanel />} />
           <Route path="/exam" element={<ExamTraining />} />
           <Route path="/oj-training" element={<OJTraining />} />
+          <Route path="/resources" element={<LearningResourcesPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/admin" element={<AdminPage />} />
           {/* 兜底：未知路径回课程页 */}

@@ -11,13 +11,35 @@ export interface SubItem {
 interface Props {
   title: string;           // e.g. "📖 程序阅读 · CSP-J 2019 · 3小问"
   code?: string | null;
+  image?: string | null;   // 程序代码截图/流程图（reading/fillBlank 可能以图片形式给出代码）
+  codeImage?: string | null;
   question: string;
   subItems: SubItem[];
   onSubmit: (correctCount: number, total: number) => void;
   onBack: () => void;
 }
 
-export default function ExamMultiPart({ title, code, question, subItems, onSubmit, onBack }: Props) {
+// 题目图片渲染，加载失败时降级提示
+function MultiPartImage({ src }: { src?: string | null }) {
+  const [errored, setErrored] = useState(false);
+  if (!src) return null;
+  const resolved = /^https?:\/\//.test(src) ? src : (src.startsWith('/') ? src : '/' + src.replace(/^\/+/, ''));
+  if (errored) {
+    return (
+      <div className="quiz-image-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 80, color: '#94a3b8', fontSize: 13, background: '#f8fafc', borderRadius: 8, flexDirection: 'column', gap: 6, maxWidth: 620, boxSizing: 'border-box', padding: 12 }}>
+        <span>🖼️ 图片加载失败，请稍后重试</span>
+        <span style={{ fontSize: 11, wordBreak: 'break-all' }}>{resolved}</span>
+      </div>
+    );
+  }
+  return (
+    <div className="quiz-image-wrap">
+      <img className="quiz-image" src={resolved} alt="" loading="lazy" onError={() => setErrored(true)} />
+    </div>
+  );
+}
+
+export default function ExamMultiPart({ title, code, image, codeImage, question, subItems, onSubmit, onBack }: Props) {
   const [answers, setAnswers] = useState<number[]>(Array(subItems.length).fill(-1));
   const [submitted, setSubmitted] = useState(false);
 
@@ -56,6 +78,12 @@ export default function ExamMultiPart({ title, code, question, subItems, onSubmi
         </div>
       )}
 
+      {(image || codeImage) && (
+        <div className="quiz-question-card" style={{ marginTop: 0 }}>
+          <MultiPartImage src={image || codeImage} />
+        </div>
+      )}
+
       <div className="quiz-question-card" style={{ marginTop: 0 }}>
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderCodeText(question)} />
         <h4 style={{ marginTop: 16, marginBottom: 12 }}>请作答（共 {subItems.length} 小问，答对 ≥{passThreshold} 问算完成）</h4>
@@ -89,13 +117,14 @@ export default function ExamMultiPart({ title, code, question, subItems, onSubmi
                           const a = [...answers]; a[i] = oi; setAnswers(a);
                         }}
                       >
-                        {opt}. {item.options[oi]}
+                        <span>{opt}.</span>{' '}
+                        <span dangerouslySetInnerHTML={renderCodeText(item.options[oi])} />
                       </label>
                     );
                   })}
                 </div>
                 {submitted && answers[i] !== item.correctIndex && item.explanation && (
-                  <div style={{ fontSize: 12, color: '#ef4444', marginTop: 4 }}>{item.explanation}</div>
+                  <div style={{ fontSize: 12, color: '#ef4444', marginTop: 4 }} dangerouslySetInnerHTML={renderCodeText(item.explanation)} />
                 )}
               </div>
             </div>

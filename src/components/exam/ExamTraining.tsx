@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import ExamChoice from './ExamChoice';
 import ExamMultiPart from './ExamMultiPart';
 import { emit } from '@tauri-apps/api/event';
 import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
+import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
 
 interface ExamQuestion {
   id: string;
@@ -16,6 +18,7 @@ interface ExamQuestion {
   question: string;
   code?: string | null;
   image?: string | null;
+  codeImage?: string | null;
   options?: string[];
   correctIndex?: number;
   subQuestions?: { label: string; options: string[]; correctIndex: number; explanation?: string }[];
@@ -50,6 +53,9 @@ export default function ExamTraining() {
 
   const examStore = useQuizStore();
   const hasPet = usePetStore(s => s.ownedPets.length > 0);
+  const navigate = useNavigate();
+  // autoCheck=true：进入页面即自动校验班级码（6 小时本地缓存），未通过则显示门禁
+  const classAccess = useClassAccess(true);
 
   // Load bank：localStorage 缓存优先 + 后台检查 Gitee 更新
   const CACHE_KEY = 'csp_exam_bank_v3';
@@ -111,16 +117,19 @@ export default function ExamTraining() {
   const choiceDone = completed.filter(r => r.type === 'choice').length;
   const readingOrFillDone = completed.some(r => r.type === 'reading' || r.type === 'fillBlank');
 
-  const hasClassCode = !!(localStorage.getItem('csp_class_code'));
-
-  // Gate: must have class code bound
-  if (!hasClassCode) {
+  // Gate: must have a valid class code (auto-validated, 6h cached via ClassAccessGate)
+  if (!classAccess.isAllowed) {
+    if (classAccess.status === 'idle' || classAccess.status === 'checking') {
+      return <div className="quiz-practice"><div className="loading-spinner" /><p>正在校验班级权限...</p></div>;
+    }
     return (
-      <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>🔒</div>
-        <h2>请先绑定班级码</h2>
-        <p style={{ color: '#64748b', marginBottom: 20 }}>CSP 真题训练需要绑定班级码才能使用，请先在设置中输入老师提供的班级码。</p>
-      </div>
+      <ClassAccessRequired
+        title="CSP 真题训练需要班级码"
+        description="绑定老师提供的班级码后即可进入历年真题训练。"
+        message={classAccess.message}
+        onBind={() => navigate('/settings')}
+        onBack={() => navigate('/courses')}
+      />
     );
   }
 
@@ -355,6 +364,8 @@ export default function ExamTraining() {
         key={q.id}
         title={title}
         code={q.code}
+        image={q.image}
+        codeImage={q.codeImage}
         question={q.question}
         subItems={subItems}
         onSubmit={handleMultiPartSubmit}

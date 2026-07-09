@@ -1,0 +1,387 @@
+
+--- page 1 ---
+ee
+ GESP CCF编程能力等级认证
+cc¥                               Grade Examination of Software Programming
+C++ 二级
+2024 年 09 月
+1 单选题 (每题2 分，共 30 分)
+“@f123456789 0 1 2 13 11
+BREACACCDAAC BCA ABA
+
+第1题 据有关资料，山东大学于1972年研制成功DJL-1计算机，并于1973年投入运行，其综合性能居当时全国第三
+位。DJL-1计算机运算控制部分所使用的磁心存储元件由磁心颗粒组成，设计存贮周期为2nus 〈微秒) 。那么该磁心
+存储元件相当于现代计算机的 ( ) 。
+
+口 A.内存
+
+口 B. 磁盘
+
+口 C.CPU
+
+OD. 显示器
+第2题 IPv4版本的因特网总共有 ( ) 个A类地址网络。
+
+CG A. 65000
+
+OC B. 20077
+
+© C. 126
+
+0 D. 128
+第3题 在C++中，下列不可做变量的是( )。
+
+(A. ccf-gesp
+
+口 B. ccf_gesp
+
+OC. ccfGesp
+
+CD. _ccfGesp
+第4题 在C++中, 与for (int i = 1; 4 < 10; i++) 效果相同的是( )。
+
+CA. for (int i = 0; i < 10; i++)
+
+CB. for (int i = 0; i < 11; i++)
+
+OC. for (int i = 1; i < 10; ++i)
+
+口D. for (int i = @; i < 11; ++i)
+
+
+--- page 2 ---
+第S题 在C++中，cout << (5 / 2 + 5 % 3) 的输出是(   )。
+口 A.1
+口 B.2
+口 C.4
+口 D.5
+第6题 假定变量a和b可能是整型、字符型或浮点型，则下面C++代码执行时先后输入 -2 和 3.14 后，其输出不可能
+FEC )。[已知字符“+"、“-"、 t=" 的ASCII码值分别是43、45和61]
+1 cin >> a;
+2 cin >> bj;
+3 cout << (a + b);
+口 A.1
+口 B.1.14
+口 c.47
+OD. 将触发异常
+第7题 在C++代码中假设N为正整数，则下面代码能获得个位数的是 ( ) 。
+OAN% 10
+OC B.N/10
+口 CN&& 10
+口 D. 以上选项均不正确
+第8题 下面C++代码执行后的输出是 ( ) 。
+ int i;
+2 for (i = @; i < 10; i++){
+3     if (i % 2)
+4         break;
+5     cout << "@#";
+6 了
+7 if(i==16) cout << "1#"
+OA. @#
+OB. 1#
+0 C. e#e#1
+口 D. 没有输出
+第9题 执行下面C++代码并输入1和0，有关说法正确的是 ( ) 。
+
+
+--- page 3 ---
+1 int a,b;
+2 cin >> a >> b;
+3 if (a&&b)
+4     cout << ("1");
+5 else if(!(a||b))
+6     cout << ("2");
+7 else if(a || b)
+8     cout << ("3");
+9 else
+10     cout << ("4");
+口 A.1
+口 B.2
+口 c.3
+口 D.4
+第10题 下面C++代码执行后的输出是 ( ) 。
+1 int loopCount = @;
+2 for (int i = 1; i < 5; i += 2)
+3     loopCount += 1;
+4 cout << (loopCount) ;
+OAl
+口 B.2
+口 c.3
+口 D.5
+第11题 下图是C++程序执行后的输出。为实现其功能，横线处应填入代码是 ( ) 。
+1 7
+2 1
+3 23
+4 345
+5 4567
+6 56789
+7 67891011
+8 789 10 11 12 13
+9
+LO S/IITISIITTITITITT TTT TTT TTT
+11
+12 int lineNum;
+13 cin >> lineNum;
+14 for (int i= 1; i < lineNum+1; i++){
+15     for(int               )
+16        cout << j << " "5
+17     cout << endl;
+18 |}
+OA j=is j< is jr
+
+
+--- page 4 ---
+OB. j =15 j< is j+
+Oc. j = is j < i*2; jr
+© D. j = itd; j < itis j++
+第12题 下面C++代码执行后输出着序数，如输入 123 则输出 321 。如输入 120 则输出 21 。横线处先后应填入的
+代码是     ) 。
+ int N;
+2 cin >> Ni
+3 int rst = @;
+4 while (N){
+5     GS
+6     GS
+7}
+8 cout << (rst);
+OA. rst = rst *10+N%10 N=N/ 10
+OB. rst += N%10 N=N/ 10
+OC. rst = rst *10+N/10 N=N% 10
+OD. rst += N/10 N=N% 10
+第13 题 下面的C++代码用于输入学生成绩，并根据人数计算出平均成绩，有关说法错误的是 ( ) 。
+1 float Sum = 6; // 保存总成绩
+2 int cnt = 0; // 保存学生人数
+3 while (1){
+4     int score;
+5     cin >> score;
+6     if (score < @)
+7         break;
+8     cnt += 1;
+9      Sum += score;
+10 |}
+11 cout << "总学生数: " << ent << "平均分: " << Sum/cnt;
+OC A. 代码 while (1) 写法错误
+O B.如果输入负数，将结束输入，并正确输出
+口 C. 如果输入的学生成绩含有小数，程序将无法正常执行
+口 D.变量 int score 初始值不确定，但不影响程序执行
+第14题 以下C++代码判断输入的正整数是否为质数，如果该数字是质数，则输出 YES ，和否则输出 NO 。质数是指仅
+能被1和它本身整除的正整数。请在横线上填写代码。 ( )
+
+
+--- page 5 ---
+ int num, i;
+2 cin >> num;
+3 for(i = 2; i < num; i++)
+4     if (___DE
+5        cout << ("NO");
+6         break;
+7     了
+8 if(i == num)
+9     cout << ("YES");
+© A. num % i
+OC B. num % i == @
+Oc. num / i
+CD. num / i == 0
+第1S题 一个数如果能被某个数 〈比如7) 整除，或者含有该数，则说该数是某个数的相关数。下面C++代码用于判
+定输入的数与7是否有关。下列说法错误的是( ) 。
+1 int N, M;
+2 bool Flag = false;
+3 cin >> N;
+4 M=N;
+5
+6 if (M% 7 == @)
+7      Flag = true;
+8
+9 while (!Flag && M){
+10     if (M% 10 == 7){
+11         Flag = true;
+12         break;
+13     }
+14      M /= 10;
+15 |}
+16
+17 if (Flag)
+18     cout << N << "578K";
+19 else
+20     cout << N << "57K";
+OC A. 删除break语句不会导致死循环，但有时会导致结果错误
+口 B. 删除 M /= 10 将可能导致死循环
+口 C. 删除 M = N 并将其后代码中的M变量改为N，并调整输出同样能完成相关功能
+口 D. 删除 break 语句不会导致死循环，但有时会影响效率
+
+
+--- page 6 ---
+2 判断题 (每题2分，共 20 分)
+题号12345678 9 10
+答案VxVxxVxVVx
+
+第1题 小杨最近开始学习C++编程，老师说C++是一门面向对象的编程语言,也是一门高级语言。 ( )
+第2题 在C++中，cout << (3，4，5) 可以输出 3 4 5 ，且每个输出项之间用空格分开。( )
+第3题 C++表达式 12 % 16 % 16 的值为2。 (  )
+第4题 C++语句 cout << rand() << ' ' << rand(); 的第二个输出值较大。(   )
+第5题 定义C++的 int 类型的变量 ch ，而且值为“1 ，则语句 cout << int(ch); 的输出为1。 ( )
+第6题 下面C++代码执行后将输出10。 ( )
+
+ int i;
+
+2 for (i = 0; i < 10; i++)
+
+3     continue;
+
+4 if(i == 10)
+
+5     cout << i;
+第7题 下面C++代码能求整数N和M之间所有整数之和，包含N和M。 ( )
+
+1 int N, M, Sum;
+
+2
+
+3 cin >> N >> M3
+
+4
+
+5 if (N > M){
+
+6     int tmp = N;
+
+7     N=M, M = tmp;
+
+8 }
+
+9
+
+10 for (int i = Ni i < M+1; i++)
+
+11     Sum += i;
+
+12
+
+13 cout << Sum;
+第8题 将下面C++代码中的 L3 标记的代码行调整为for (int i = 6; i < 55 i++) 后输出结果相同。 ( )
+
+1 int loopCount = @;
+
+2 for (inti=1ii5; i++) // L3
+
+3     for (int j = 0; j < i; j++)
+
+4         loopCount += 1;
+
+5 cout << loopCount;
+第9题 某一系列数据的规律是从第3个数值开始是前两个数之和。下面的代码求第N个数的值，N限定为大于2。
+)
+
+
+--- page 7 ---
+1 int start1; // 第1个数
+2 int start2; // 第2个数
+3 int N; //求N个数的值
+4 int tmp;
+5 cin >> start1 >> start2 >> N;
+6
+7 for (int i = 2; i < N;5 i++){
+8     tmp = start1 + start2;
+9     startl = start2;
+10      start2 = tmp;
+11}
+12 cout << start2;
+第 10题 下面C++代码执行时如果输入 2024 ，则输出是42862 。 ( )
+ int N, flag=0;
+2 cin >> Ni
+3 while (N){
+4     if(!flag) cout << N % 10;
+5     N /= 10;
+6     flag = (flag + 1)%2;
+7}
+3 ”编程题 (每题 25 分，共 50 分)
+3.1 BER
+。 试题名称: 数位之和
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+3.1.1 题面描述
+小杨有普个正整数，他认为一个正整数是美丽数字当且仅当该正整数每一位数字的总和是 7 的倍数。
+小杨想请你编写一个程序判断交个正整数哪些是美丽数字。
+3.1.2 ”输入格式
+第一行包含一个正整数m，代表正整数个数。
+之后味行，每行包含一个正整数。
+3.1.3 ”输出格式
+对于每个正整数，如果是美丽数字则输出 Yes，否则输出 No.
+3.1.4 样例1
+ 3
+2 7
+3 52
+4 103
+
+
+--- page 8 ---
+1 Yes
+2 Yes
+3 No
+THRE SA 7, AE TW. SLMS HME SAA 5+ 2= 7, 是7了的倍数。103 的各位数字之和为
+1+0+3=4，不是7的倍数。
+对于全部数据，保证有1<m<1051< ai<105。
+工 #include<bits/stdc++.h>
+2 using namespace std;
+3
+4 int main(){
+5        int n;
+6         cin>>n;
+7        int ans=0;
+8        for(int i=1;i<=n;i++){
+9             int x;
+10              cin>>x;
+11             int tot=0;
+12              while(x){
+13                  tot+=(x%10) ;
+14                    x/=10;
+15               }
+16              if (tot%7==0) cout<<"Yes\n";
+17             else cout<<"No\n";
+18         }
+19        return @;
+20 |}
+3.2 ”编程题 2
+。 试题名称: 小杨的
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+3.2.1 Bmw
+小杨想要构造一个mm x m 的N 字矩阵 Om 为奇数) ，这个矩阵的从左上角到右下角的对角线、第工列和第 m 列都
+是半角加号 + ，其余都是半角减号 - 。例如,一个5x5 的N 字和矩阵如下:
+工 +---+
+2 | +4--+
+3 | 4-4-4
+4 +--++
+5 |+---+
+请你帮小杨根据给定的 mm 打印出对应的 N 字和矩阵。
+
+
+--- page 9 ---
+3.2.2 ”输入格式
+第一行包含一个正整数 me
+3.2.3 ”输出格式
+输出对应的 N 字和矩阵。
+3.2.4 样例1
+15
+1 |+---+
+2 | +4--+
+3 +-+-+
+4 +--++
+5 |+---+
+对于全部数据，保证有3 <m < 49 Hm 为奇数。
+工 #include<bits/stdc++.h>
+2 using namespace std;
+3 int main(){
+4        int n;
+5        cin>>n;
+6     for(int i=1;i<=n;i++){
+7         for(int j=1;j<=n;j++){
+8                if (j==1| |j==n)cout<<"+";
+9                  else{
+10                       if (i==j)cout<<"+"5
+11               else cout<<"-";
+12                  }
+13             }
+14             cout<<"\n";
+15        }
+16 |}

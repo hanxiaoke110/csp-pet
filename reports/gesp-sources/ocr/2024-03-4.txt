@@ -1,0 +1,371 @@
+
+--- page 1 ---
+BRRS                                                      人 了
+ GESP CCF编程能力等级认证
+CEE                               Grade Examination of Software Programming
+C++ 四级
+2024 年 03 月
+1 单选题 (每题2 分，共 30 分)
+MS 123 45 678 9 10 1 12 13 14 15
+答案 CCDDCCDAC BCC BCC
+第1题 若函数声明为 int f(int &x){ x+=3; return x; } ，则对声明的变量 int a=3 ，下面哪个调用能够改
+变a的值( )o
+OA. f(&a) ;
+OB. F(*a);
+Oc. f(a);
+O D. f(a-3) ;
+第2题 下面C++代码执行后，输出的是( )。
+1 int main()
+2 1
+3     int x[]={2, @, 2, 4};
+4     char geSP[]="Grade Examination of SP";
+5
+6     cout << geSP[sizeof(x)] << endl;
+7
+8     cout << endl;
+9     return @;
+10 }
+OA G
+OBe
+口 C.n
+口D.P
+第3题 下面C++代码执行后输出是( )。
+ int foo(float *f)
+2{
+3     return int(*#*2);
+4}
+5
+6 int main()
+
+
+--- page 2 ---
+7 {
+8     float fnum[10]={1.1};
+9     fnum[1]=foo(fnum) ;
+10     cout << fnum[@]+fnum[1] << endl;
+11
+12     cout << endl;
+13     return @;
+14 |}
+OAd
+OB. 1.1
+oc. 3
+OD. 3.1
+第4题 对二维数组 int arr[3][16]; . WW arr[1] 占用内存的大小为〈 ) 字节。
+口 A. 4
+口 B. 16
+Oc. 48
+口 D. 64
+第S题 对二维数组 int arr[3][16]; . # arr 的地址是 ex28cbce ，则 arr[1] 的值是 ( ) 。
+OA. @x28cbc4
+© B. @x28cbdo
+OC. 8x28cc66
+口 D. 不确定
+第6题 下面C++代码执行后输出是 ( ) 。
+ int main()
+2
+3     char *p="I love GESP!";
+4     cout << p+5 << endl;
+5
+6     cout << endl;
+7     return @;
+8 }
+OAe
+OB. I lov
+口 C. e GESP!
+口 D. GEsP!
+第7题 下面C++代码执行以后输出的是 ( ) 。
+
+
+--- page 3 ---
+1 aint rc=5;
+2 int main()
+3 1
+4     int rc;
+5     cout << ++#rc << endl;
+6
+7     cout << endl;
+8     return @;
+9}
+10
+OA e@
+口 B. 1
+口c.6
+口 D. 不确定
+第8题 下面C++函数中采用的算法是 ( ) 。
+1 int fib(int n)
+2{
+3     int i, f[n]={@, 1};
+4
+5    for(int i=2; i<=n; i++)
+6         f[i]=f[i-1]+f[i-2];
+7
+8     return f[n];
+9}
+10
+OB. ia
+O C.K
+口 D.循环
+第9题 插入排序在最好情况下的时间复杂度是 ( ) 。
+口A.o0)
+口 B.O(N/2)
+口 cC.O(V)
+2b. ow?)
+第10题 在如下的C++代码执行后，设第11和12行的输出地址值分别为X和Y ，则下面正确的是 ( ) 。
+ struct pass{
+2     int no;
+3      char name[26];
+4     int level;
+5 3S
+
+
+--- page 4 ---
+6
+7 int main()
+8 {
+9     struct pass XiaoYang;
+10
+11     cout << "&XiaoYang=" << &XiaoYang << endl;  //第11行
+12     cout << "&(XiaoYang.no)=" << &(XiaoYang.no) << endl; //第12行
+13
+14     cout << endl;
+15     return @;
+16}
+OA. XY
+口 B. x==Y
+Oc. xy
+OD. 不确定
+第1 题 如果文件 1.txt 中的内容如下，则执行下面C++代码时，注释了 寺村 那行代码所输出的 x 的值为〈
+) 。
+1 56 2024 3.16 I
+2 love
+3 GESP!
+1 int main()
+2 {
+3      ifstream fin;
+4     string line;
+5     int x;
+6       fin.open("1.txt",ios::in);
+7
+8     for (int i=@; ix 2; i++){
+9        fin >> line;
+10        cout << line << endl;
+11     }
+12     fin>>x;
+13     cout << x << endl; //##H#
+14
+15     cout << endl;
+16     return @;
+17 }
+口A.5
+口 B. 2024
+Oc 3
+口 D. 8
+第12 题 执行下列C++代码时输出中的第2行是 ( ) 。
+
+
+--- page 5 ---
+1 int main()
+2 1
+3     char *s[]={(char*)"2024", (char*)"3.16", (char*)"GESP"};
+4
+5     for (int i=@; ix 2; i++){
+6        cout << *s+i << endl;
+7     t
+8
+9     cout << endl;
+10     return @;
+il}
+OA. 2024
+OB. 3.16
+Oc. 824
+0 D. 3
+第 13 题 C++语言中下面哪个关键字能够限定对象的作用域 ( ) 。
+口 A. extern
+OB. static
+Oc. inline
+OC D. public
+第 14 题 小杨的父母最近刚刚给他买了一块华为手表，他说手表上跑的是鸿蒙，这个鸿蒙是 ( ) 。
+口 ^. 小程序
+口 B. 计时器
+口 c. 操作系统
+口 D. 神话人物
+第15题 中国计算机学会 (CCF) 在2024年1月27日的颁奖典礼上颁布了王选奖，王选先生的重大贡献是 ( ) 。
+OA. 制造自动驾驶汽车
+OB. 创立培训学校
+O C. 发明汉字激光照排系统
+口 D. 成立方正公司
+2 判断题 (每题2分，共20 分)
+题号12345678 9 10
+答案VVxVxxxxV Vv
+第1题 对 int a[]={2,8,2,4,3,1,6} ，执行第一趟选择排序处理后 a 中数据变为 {8,2,2,4,3,1,6} 。( )
+第2题 如果待排序数据不能都装进内存，需要使用外排序算法。 〈 )
+
+
+--- page 6 ---
+第3题 定义变量 int a=5 ,则 cout << &++a 会输出 6 (    )
+第4题 两个函数之间可以使用全局变量来传递数据。( 。 )
+第5题 定义数组 int a[2024][3][16]={2,0,2,4,3,1,6} ，则 cout << a[2823][2][15] 的结果不确定。 (
+)
+第6题 在C++语言中，函数的参数为指针时，可以在函数内部修改该参数的值。 ( )
+第7题 在C++语言中 try 子句里抛出的结构体等类型的异常无法被 catch 捕获。 ( )
+第8 题 C++语言中 cout << 942 << endl; 会输出81。 ( )
+第9题 小杨今年春节回奶奶家了，奶奶家的数字电视要设置ip地址并接入到WIFI盒子才能收看节目，那这个WIFI盒
+子具有路由器的功能。 ( )
+第10题 任何一个 for 循环都可以转化为等价的 while 循环 ( ) 。
+3 ”编程题 (每题 25 分，共 50 分)
+3.1 Rew
+。 试题名称: 相似字符串
+3.1.1 ”问题描述
+对于两个字符串 4 AB, UR A 可以通过删除一个字符，或插入一个字符，或修改一个字符变成妃，那么我们说 A
+All BARE
+比如 apple 可以通过插入一个字符变成 applee ，可以通过删除一个字符变成 appe ，也可以通过修改一个字符
+变成 bpple ，因此 apple 和 applee 、appe 、bpple 都是相似的。但 applee 并不能通过任意一个操作变成
+bpple ，因此它们并不相似。
+特别地，完全相同的两个字符串也是相似的。
+aye TAL 4, 再，请你分别判断他们是否相似。
+3.1.2 ”输入描述
+第一行一个正整数了。
+接下来卫行,每行两个用空格隔开的字符串 A 和 Be
+(MIE T < 100，4,忆的长度不超过 50。保证 4 和 也只包含小写字母。
+3.1.3 ”输出描述
+输出工行，对于每组 4,召，如果它们相似，则输出 similar ，否则输出 not similar 。
+3.1.4 ”特别提醒
+在常规程序中，输入、输出时提供提示是好习惯。但在本场考试中，由于系统限定，请不要在输入、输出中附带任
+何提示信息。
+
+
+--- page 7 ---
+3.1.5 ”祥例输入1
+15
+2 apple applee
+3 apple appe
+4 apple bpple
+5 applee bpple
+6 apple apple
+3.1.6 Fe) Ae 1
+1 similar
+2 similar
+3 similar
+4 not similar
+5 similar
+1 #include <iostream>
+2 #include <string>
+3
+4 using namespace std;
+5
+6 bool isSimilar(string A, string B) {
+7     int m = A.size(), n = B.size();
+8     if (abs(m - n) > 1) return false;
+9
+10     if (m == n) {
+11         int diff = @;
+12        for (int i = 0; i < mi ++i) {
+13          if (A[i] != B[i]) {
+14              if (++diff > 1) return false;
+15           }
+16        }
+17        return diff <= 1;
+18     } else {
+19        string& shorter = (m <n) ? A: B;
+20        string& longer = (m <n) ? B: A;
+21
+22    int i= 0, j = 9;
+23         int diff = @;
+24        while (i < shorter.size() && j < longer.size()) {
+25          if (shorter[i] != longer[j]) {
+26              if (++diff > 1) return false;
+27              +455
+28            } else {
+29              ++i;
+30              +455
+31           }
+32        }
+33         return true;
+34     }
+35}
+36
+
+
+--- page 8 ---
+37 int main() {
+38      int T;
+39     cin >> T;
+40
+41     while (T--) {
+42        string A, B;
+43        cin >> A >> B;
+44       if (isSimilar(A, B)) {
+45           cout << "similar" << endl;
+46         } else {
+47           cout << "not similar" << endl;
+48         }
+49     }
+50
+51     return @;
+52 }
+3.2 ”编程题 2
+。 试题名称: 做题
+3.2.1 题目描述
+小杨同学为了提高自己的实力制定了做题计划，在第大天时，他必须要完成必道题，否则他就会偷颌。
+小杨同学现在找到了一个题库，一共有n 套题单，每一套题单中有一定数量的题目。但是他十分挑剔，每套题单他
+只会使用一次，每一天也只能使用一套题单里的题目，之后那套题单就会被弃之不用。对于每套题单，他不必完成
+题单内所有的题。
+那么问题来了，小杨同学最多会做题几天才偷懒呢?
+3.2.2 ”输入格式
+第一行，1个数为m ，表示有多少套题单。
+第二行，n个整数 ol oa, .…,an，分别表示每套题单有多少道题。
+3.2.3 ”输出格式
+输出一行，小杨同学偷懒前最多做题天数。
+3.2.4 FE6I1
+14
+2.93141
+1 3
+对于全部数据，保证有1<m< 10°,1 <a; < 10°.
+工 #include<bits/stdc++.h>
+2 #define maxn 1000006
+3 using namespace std;
+4 long long a[maxn];int n;
+5 int main()
+
+
+--- page 9 ---
+6 {
+
+7     int m,ans=0;
+
+8     cin>>n;m=n;int s=1;
+9     for(int i=1;i<=n;i++)
+10     {
+
+11         cin>>a[i];
+
+12      }
+
+13     sort(a+1,a+n+1);
+
+14     for(int j=1;j<=m; j++)
+15     {
+
+16        for(int k=s;k<=n;k++)
+17         {
+
+18            if(j<=a[k])
+19            {
+
+20               ans++;
+21               a[k]=j;
+22               s=k;
+
+23               break;
+24            }
+
+25         }
+
+26     }
+
+27     cout<<ans;
+
+28     return @;
+
+29 }

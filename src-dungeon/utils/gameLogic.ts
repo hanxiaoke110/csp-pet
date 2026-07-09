@@ -49,6 +49,93 @@ export function getNextRankPoints(tier: number): number {
   return RANK_POINTS_THRESHOLDS[tier - 1]; // threshold to reach next tier
 }
 
+// ── 流派轻量被动 ──
+export const SCHOOL_PASSIVES: Record<string, { name: string; description: string }> = {
+  cultivation: {
+    name: '厚积薄发',
+    description: '获得的试炼 EXP +5%。',
+  },
+  tactical: {
+    name: '精准复盘',
+    description: '答对题目时，额外获得 +2 段位积分。',
+  },
+  star: {
+    name: '星轨洞察',
+    description: '技能暴击率 +3%。',
+  },
+  minecraft: {
+    name: '资源采集',
+    description: '通关结算金币 +5%。',
+  },
+  code: {
+    name: '代码共鸣',
+    description: '程序、算法、递归类题目答对时 EXP +8%。',
+  },
+  dream: {
+    name: '舞台连携',
+    description: '连对 3 题及以上时，答题金币 +5%。',
+  },
+};
+
+export function getSchoolPassive(school: string) {
+  return SCHOOL_PASSIVES[school] || SCHOOL_PASSIVES.cultivation;
+}
+
+function roundPositive(value: number): number {
+  return value > 0 ? Math.max(1, Math.round(value)) : 0;
+}
+
+function isCodeLikeQuestion(questionType?: string, knowledgePoint?: string): boolean {
+  const text = `${questionType || ''} ${knowledgePoint || ''}`;
+  return /程序|代码|算法|递归|函数|循环|数组|结构|C\+\+/i.test(text);
+}
+
+export function applySchoolAnswerPassive(
+  school: string,
+  reward: { exp: number; gold: number },
+  context: { combo: number; questionType?: string; knowledgePoint?: string }
+): { exp: number; gold: number } {
+  let exp = reward.exp;
+  let gold = reward.gold;
+
+  if (school === 'cultivation') {
+    exp = roundPositive(exp * 1.05);
+  }
+  if (school === 'code' && isCodeLikeQuestion(context.questionType, context.knowledgePoint)) {
+    exp = roundPositive(exp * 1.08);
+  }
+  if (school === 'dream' && context.combo >= 3) {
+    gold = roundPositive(gold * 1.05);
+  }
+
+  return { exp, gold };
+}
+
+export function applySchoolClearPassive(
+  school: string,
+  reward: { exp: number; gold: number }
+): { exp: number; gold: number } {
+  let exp = reward.exp;
+  let gold = reward.gold;
+
+  if (school === 'cultivation') {
+    exp = roundPositive(exp * 1.05);
+  }
+  if (school === 'minecraft') {
+    gold = roundPositive(gold * 1.05);
+  }
+
+  return { exp, gold };
+}
+
+export function getSchoolRankPointBonus(school: string, isCorrect: boolean): number {
+  return school === 'tactical' && isCorrect ? 2 : 0;
+}
+
+export function getCriticalChance(school: string): number {
+  return school === 'star' ? 0.13 : 0.1;
+}
+
 // ── 奖励计算 ──
 export const BASE_EXP = 15;
 export const BASE_GOLD = 10;
@@ -82,8 +169,8 @@ export function calculateAnswerReward(
   return { exp, gold };
 }
 
-export function rollCritical(): boolean {
-  return Math.random() < 0.1; // 10% chance
+export function rollCritical(school = ''): boolean {
+  return Math.random() < getCriticalChance(school);
 }
 
 export function randomGold(min: number, max: number): number {

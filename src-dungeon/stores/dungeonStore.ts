@@ -5,6 +5,7 @@ import type {
   BattleState, BadgeDefinition, DailyTasks, School,
 } from '../types/dungeon';
 import {
+  applySchoolClearPassive,
   getLevelFromExp,
   getRankTier, expToNextLevel,
   FIRST_CLEAR_MULTIPLIER,
@@ -19,6 +20,12 @@ function getWeekStart(): string {
   const monday = new Date(now.setDate(diff));
   monday.setHours(0, 0, 0, 0);
   return monday.toISOString();
+}
+
+// ── Local date string (YYYY-MM-DD)，用于流派被动每日上限的跨日重置 ──
+function todayStr(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 // ── Default player ──
@@ -77,6 +84,12 @@ interface DungeonState {
     resetAt: string; // ISO 周一开始
   };
   currentBattleEarnsRewards: boolean;
+  // 流派被动每日触发上限：轻量乘数被动每日最多触发 N 次，防刷 EXP（金币/段位已由 weeklyChallenges 间接限制）
+  schoolPassiveDaily: {
+    used: number;
+    limit: number;
+    resetAt: string; // YYYY-MM-DD 本地日期
+  };
 
   // Actions
   setView: (v: DungeonState['view']) => void;
@@ -125,6 +138,8 @@ interface DungeonState {
   recordHealingAnswer: (correct: boolean) => boolean;
   clearHealing: () => void;
   getWeakPointsAboveThreshold: (threshold: number) => string[];
+  // 流派被动每日上限：未达上限则计数+1 并返回 true（允许触发被动），达上限返回 false（只发基础奖励）
+  bumpSchoolPassiveDaily: () => boolean;
 
   // Persistence
   saveToLocalStorage: () => void;
@@ -150,6 +165,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   error: null,
   weeklyChallenges: { used: 0, limit: 5, resetAt: '' },
   currentBattleEarnsRewards: true,
+  schoolPassiveDaily: { used: 0, limit: 50, resetAt: '' },
   // Track if this dungeon has been cleared before (for first-clear bonus)
   _firstClears: {} as Record<string, boolean>,
 
@@ -279,6 +295,9 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         clearExp = STAGE_CLEAR_EXP * mult;
         clearGold = earnsRewards ? STAGE_CLEAR_GOLD * mult : 0;
       }
+      const schoolReward = applySchoolClearPassive(get().player.school, { exp: clearExp, gold: clearGold });
+      clearExp = schoolReward.exp;
+      clearGold = schoolReward.gold;
       get().addExp(clearExp);
       if (clearGold > 0) get().addGold(clearGold);
       snapshot.expEarned += clearExp;
@@ -465,6 +484,21 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     }));
   },
 
+  bumpSchoolPassiveDaily: () => {
+    const today = todayStr();
+    const st = get().schoolPassiveDaily;
+    // 跨日重置
+    if (st.resetAt !== today) {
+      set({ schoolPassiveDaily: { used: 1, limit: st.limit || 50, resetAt: today } });
+      return true;
+    }
+    if (st.used < st.limit) {
+      set({ schoolPassiveDaily: { used: st.used + 1, limit: st.limit, resetAt: today } });
+      return true;
+    }
+    return false;
+  },
+
   // ── Weak Points & Healing ──
   addWeakPoint: (kp) => set((s) => {
     const wp = { ...s.weakPoints };
@@ -505,7 +539,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   },
 
   saveToLocalStorage: () => {
-    const { player, dungeonProgress, earnedBadges, weakPoints, mistakeNotebook, _firstClears, weeklyChallenges } = get();
+    const { player, dungeonProgress, earnedBadges, weakPoints, mistakeNotebook, _firstClears, weeklyChallenges, schoolPassiveDaily } = get();
     try {
       localStorage.setItem('dungeon_player', JSON.stringify(player));
       localStorage.setItem('dungeon_progress', JSON.stringify(dungeonProgress));
@@ -514,6 +548,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       localStorage.setItem('dungeon_mistakes', JSON.stringify(mistakeNotebook));
       localStorage.setItem('dungeon_first_clears', JSON.stringify(_firstClears));
       localStorage.setItem('dungeon_weekly_challenges', JSON.stringify(weeklyChallenges));
+      localStorage.setItem('dungeon_school_passive_daily', JSON.stringify(schoolPassiveDaily));
     } catch { /* ignore */ }
   },
 
@@ -583,6 +618,18 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         }
       }
     } catch { /* ignore weekly */ }
+    try {
+      const spd = localStorage.getItem('dungeon_school_passive_daily');
+      if (spd) {
+        const parsed = JSON.parse(spd);
+        const today = todayStr();
+        if (parsed.resetAt === today) {
+          set({ schoolPassiveDaily: parsed });
+        } else {
+          set({ schoolPassiveDaily: { used: 0, limit: parsed.limit || 50, resetAt: today } });
+        }
+      }
+    } catch { /* ignore schoolPassiveDaily */ }
 
     return hasAny;
   },

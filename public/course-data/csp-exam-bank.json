@@ -1092,7 +1092,7 @@
       "knowledgePoint": "质因数分解",
       "difficulty": 3,
       "question": "以下程序的功能是：输入一个正整数 n（n >= 2），输出 n 的所有质因数（重复的质因数也输出，以空格分隔）。请补全程序中缺失的部分。",
-      "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    for (int i = 2; i <= n; i++) {\n        while (__1__) {\n            cout << i << \" \";\n            __2__;\n        }\n    }\n    return 0;\n}\n    // __3__\n    // __4__",
+      "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    for (int i = 2; i <= n; i++) {\n        while (__1__) {\n            cout << i << \" \";\n            __2__;\n        }\n    }\n    return 0;\n}",
       "image": null,
       "blanks": [
         {
@@ -1116,28 +1116,6 @@
           ],
           "correctIndex": 0,
           "explanation": "输出质因数 i 后，需要将 n 除以 i（n = n / i），这样可以：(1) 继续判断新的 n 是否还能被 i 整除（处理重复质因数）；(2) 缩小 n 的范围，继续寻找下一个质因数。例如 n=12：i=2 时发现 12%2==0，输出 2，n=12/2=6；6%2==0，输出 2，n=6/2=3；然后 i=3，3%3==0，输出 3，n=3/3=1。最终输出：2 2 3。"
-        },
-        {
-          "position": 3,
-          "options": [
-            "cin >> n",
-            "cout << n",
-            "scanf",
-            "return"
-          ],
-          "correctIndex": 0,
-          "explanation": "读入输入数据是程序的第一步操作。"
-        },
-        {
-          "position": 4,
-          "options": [
-            "main()",
-            "return 0",
-            "// end",
-            "}"
-          ],
-          "correctIndex": 1,
-          "explanation": "主函数末尾返回0表示程序正常结束。"
         }
       ],
       "explanation": "质因数分解算法：从最小质数2开始试除，如果n能被当前i整除，则输出i并将n除以i，重复此过程直到不能整除为止。当i²>n时，如果n>1则n本身是大于√n的最后一个质因数。时间复杂度O(√n)。"
@@ -1230,7 +1208,7 @@
       "knowledgePoint": "约瑟夫问题",
       "difficulty": 3,
       "question": "以下程序解决约瑟夫问题（Josephus Problem）：n 个人围成一圈，从第 1 个人开始报数，每次数到 m 的人出列，然后从下一个人继续报数，直到所有人都出列。程序输出出列顺序。请补全程序中缺失的部分。",
-      "code": "#include <iostream>\nusing namespace std;\n\nconst int MAXN = 100;\nint a[MAXN];\n\nint main() {\n    int n, m;\n    cin >> n >> m;\n    for (int i = 0; i < n; i++) a[i] = i + 1;\n    int cnt = 0, pos = 0, out = 0;\n    while (out < n) {\n        if (a[pos] != 0) {\n            cnt++;\n            if (cnt == m) {\n                cout << a[pos] << \" \";\n                __1__;\n                cnt = 0;\n                out++;\n            }\n        }\n        __2__;\n        if (pos == n) pos = 0;\n    }\n    return 0;\n}\n    // __3__\n    // __4__",
+      "code": "#include <iostream>\nusing namespace std;\n\nconst int MAXN = 100;\nint a[MAXN];\n\nint main() {\n    int n, m;\n    cin >> n >> m;\n    for (int i = 0; i < n; i++) a[i] = i + 1;\n    int cnt = 0, pos = 0, out = 0;\n    while (out < n) {\n        if (a[pos] != 0) {\n            cnt++;\n            if (cnt == m) {\n                cout << a[pos] << \" \";\n                __1__;\n                cnt = 0;\n                out++;\n            }\n        }\n        __2__;\n        if (pos == n) pos = 0;\n    }\n    return 0;\n}",
       "image": null,
       "blanks": [
         {
@@ -1254,28 +1232,6 @@
           ],
           "correctIndex": 0,
           "explanation": "每次循环都需要移动到下一个人，即 pos++（pos 加 1）。如果 pos == n（超出末尾），则通过下一行的 if (pos == n) pos = 0 回到开头，实现环形效果。整体流程：1.如果当前人还在圈内（a[pos] != 0），报数 cnt++；2.如果报数到 m，输出该人的编号，标记为出列（a[pos] = 0），cnt 归零；3.无论当前人是否出列，都移动 pos++ 到下一个位置；4.如果 pos 到达 n，回绕到 0。这个实现模拟了约瑟夫环的完整过程。"
-        },
-        {
-          "position": 3,
-          "options": [
-            "cin >> n",
-            "cout << n",
-            "scanf",
-            "return"
-          ],
-          "correctIndex": 0,
-          "explanation": "读入输入数据是程序的第一步操作。"
-        },
-        {
-          "position": 4,
-          "options": [
-            "main()",
-            "return 0",
-            "// end",
-            "}"
-          ],
-          "correctIndex": 1,
-          "explanation": "主函数末尾返回0表示程序正常结束。"
         }
       ],
       "explanation": "约瑟夫问题（Josephus）：n个人围成一圈，从0开始报数，每次报到m-1的人出列。程序使用数组模拟循环链表，通过(i+1)%n实现环形遍历。c记录已出列人数，当只剩1人时停止。报数使用变量p，每次出列后p重置为0重新计数。"
@@ -1791,7 +1747,7 @@
         "以上都不对"
       ],
       "correctIndex": 1,
-      "explanation": "最短路径最多n-1条边。n-1轮后得所有最短路。若再执行(第n轮)仍有边可松弛,说明存在负环(可无限缩短)。"
+      "explanation": "最短路径最多包含n-1条边。若完成n-1轮松弛后仍存在一条边可以继续松弛，说明存在可使路径无限变短的负环。"
     },
     {
       "id": "csp-s-2020-c13",
@@ -2190,7 +2146,7 @@
         "以上都可以"
       ],
       "correctIndex": 2,
-      "explanation": "全相联映射允许数据块放在Cache的任意位置,不会因映射到固定位置而导致冲突缺失。但硬件实现复杂昂贵。直接映射最简单但冲突最多;组相联折中。"
+      "explanation": "全相联映射允许主存块放入Cache中的任意位置，因此不会因为多个块固定映射到同一个位置而产生冲突缺失；代价是硬件比较和管理成本更高。"
     },
     {
       "id": "csp-s-2022-c04",
@@ -2285,7 +2241,7 @@
         "以上都不对"
       ],
       "correctIndex": 2,
-      "explanation": "单向BFS复杂度O(b^d)(b分支因子,d深度)。双向BFS从两端同时搜索,在中间相遇,每边搜索d/2层,复杂度O(b^(d/2)+b^(d/2))≈O(b^(d/2)),对大的d有显著改善。"
+      "explanation": "单向BFS复杂度通常记为O(b^d)，其中b为分支因子、d为搜索深度。双向BFS从起点和终点同时扩展，通常只需各搜索约d/2层，复杂度降为O(b^(d/2))量级。"
     },
     {
       "id": "csp-s-2022-c09",
@@ -3602,8 +3558,8 @@
             "6",
             "7"
           ],
-          "correctIndex": 1,
-          "explanation": "第1次合并(1,2)：cnt[1]=1,cnt[2]=1,ans+=1,fa[1]=2,cnt[2]=2;第2次合并(3,4)：cnt[3]=1,cnt[4]=1,ans+=1=2,fa[3]=4,cnt[4]=2;第3次合并(1,3)：find(1)=2,find(3)=4,cnt[2]=2,cnt[4]=2,ans+=4=6,fa[2]=4,cnt[4]=4。输出6。等等，重新计算：ans初始0，合并(1,2):cnt[1]*cnt[2]=1*1=1,ans=1;合并(3,4):cnt[3]*cnt[4]=1*1=1,ans=2;合并(1,3):cnt[2]=2,cnt[4]=2,ans+=2*2=4,ans=6。输出6。但选项没6...让我重算。合并(1,2):ra=1,rb=2,ans+=1*1=1,fa[1]=2,cnt[2]=2。合并(3,4):ra=3,rb=4,ans+=1*1=1(total=2),fa[3]=4,cnt[4]=2。合并(1,3):find(1)=2,find(3)=4,ans+=cnt[2]*cnt[4]=2*2=4,total=6。输出6。嗯，但选项是3,5,6,7，6在其中。输出6。等等不对，让我再仔细算。初始cnt全1。合并(1,2):ra=1,rb=2,1!=2,ans+=1*1=1,fa[1]=2,cnt[2]=1+1=2。合并(3,4):ra=3,rb=4,3!=4,ans+=1*1=1,ans=2,fa[3]=4,cnt[4]=1+1=2。合并(1,3):ra=find(1),find(1)沿fa[1]=2,fa[2]=2,所以ra=2;rb=find(3),fa[3]=4,fa[4]=4,所以rb=4。2!=4,ans+=cnt[2]*cnt[4]=2*2=4,ans=6,fa[2]=4,cnt[4]=2+2=4。输出6。正确，输出6。"
+          "correctIndex": 2,
+          "explanation": "三次合并的贡献分别为1×1=1、1×1=1、2×2=4，累计ans=1+1+4=6，因此程序输出6。"
         },
         {
           "label": "该程序最坏情况下的时间复杂度是（ ）。",
@@ -3900,8 +3856,8 @@
             "4",
             "-1"
           ],
-          "correctIndex": 1,
-          "explanation": "cur=0:左≤0的有[0,3],best=max(0,3)=3,ans=1;cur=3:左≤3的有[2,6],best=6,ans=2;cur=6:左≤6的有[4,9],[7,10](7>6不取),best=9,ans=3;cur=9:左≤9的有[7,10],best=10,ans=4;cur=10≥m=10结束。ans=4。等等，需要3个区间就能覆盖。用[0,3][2,6][7,10]不行因为6到7有gap。让我重新算：[0,3][4,9]也不行。[0,3][2,6][4,9]覆盖0-9还差一点，需要[7,10]。ans=4。但贪心选[0,3]后cur=3,然后[2,6]得cur=6,然后[4,9]得cur=9,然后[7,10]得cur=10,共4个。若选[0,3]后直接选[4,9]则cur=9再用[7,10]也得3个？不对[4,9]左端点4>cur=3,贪心不会跳过[2,6]因为i是连续的。让我重读代码:while(i<n&&a[i].l<=cur){best=max(best,a[i].r);i++;}所以cur=3时,i枚举[0,3]和[2,6],best=6。所以贪心输出4。但如果手动最优是3个([0,3],[4,9],[7,10])——[4,9]左端点4>3,所以贪心选不到。这是贪心近似，实际最优确实是3？不，[0,3]只到3，[4,9]从4开始中间缺失了1个单位。所以最少需要4个。输出4。"
+          "correctIndex": 2,
+          "explanation": "按程序模拟：cur=0时选择[0,3]，ans=1；cur=3时可选[2,6]，ans=2；cur=6时可选[4,9]，ans=3；cur=9时可选[7,10]，ans=4，达到m=10后结束。因此输出4。"
         },
         {
           "label": "best==cur时说明什么？（ ）",
@@ -3915,7 +3871,7 @@
           "explanation": "best==cur表示在左端点≤cur的区间中，没有任何区间的右端点超过cur，即cur处出现无法覆盖的gap。此时ans设为-1。"
         }
       ],
-      "explanation": "程序给定n个区间，选出最少的区间覆盖整个[0,m]线段，贪心策略同上。"
+      "explanation": "程序先按区间左端点排序，然后每次在所有左端点不超过当前覆盖位置cur的区间中，选择右端点最远的区间扩展覆盖；若无法扩展则输出-1。"
     },
     {
       "id": "csp-s-2020-r03",
@@ -4660,7 +4616,7 @@
           "explanation": "以节点1为根进行DFS后，最终答案是根节点选或不选的最大值：max(dp[1][0],dp[1][1])。"
         }
       ],
-      "explanation": "树的最大独立集（Maximum Weight Independent Set on Tree）。dp[u][0]表示不选节点u时，u子树的最大权值和（子节点可选可不选取max）。dp[u][1]表示选节点u时，u子树的最大权值和（子节点必须不选）。DFS自底向上DP，叶子节点dp[leaf][0]=0,dp[leaf][1]=val[leaf]。最终结果max(dp[root][0],dp[root][1])。时间复杂度O(n)。"
+      "explanation": "树形最大权独立集：dp[u][0]表示不选u时u子树的最大权值和，子节点可选可不选；dp[u][1]表示选u时u子树的最大权值和，子节点必须不选。DFS自底向上转移，最终答案为max(dp[1][0], dp[1][1])，时间复杂度O(n)。"
     },
     {
       "id": "csp-s-2023-f01",
@@ -4958,7 +4914,7 @@
           "explanation": "读入字符串和查询次数后，调用init(s)进行哈希预处理（计算pw1,pw2,h1,h2）。"
         }
       ],
-      "explanation": "字符串双哈希（Double Hashing）：使用两个不同的大质数MOD1=1e9+7和MOD2=1e9+9，同时计算两个哈希值。只有两个哈希值都相等时才认为子串相等。碰撞概率从单哈希的约1/MOD降低到约1/(MOD1*MOD2)=1e-18量级，实际应用中几乎不可能碰撞。子串哈希公式：h[l..r]=(prefix[r]-prefix[l-1]*BASE^(r-l+1)) mod MOD。注意取模时加上MOD防止负数。"
+      "explanation": "双哈希使用两个不同模数同时计算子串哈希。比较两个子串时，先判断长度，再分别比较两套哈希值；两者都相等才认为子串相等，从而显著降低碰撞概率。"
     },
     {
       "id": "csp-s-2024-f01",
@@ -5346,7 +5302,7 @@
       "knowledgePoint": "枚举因数打印",
       "difficulty": 2,
       "question": "完善以下程序：输入一个正整数n（1≤n≤10⁶），从小到大输出n的所有因数（包括1和n本身），每行输出一个数。\n\n请在代码中的(1)、(2)、(3)处填入正确的表达式。",
-      "code": "#include <iostream>\n#include <cmath>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    int cnt = 0;\n    int factors[10000];\n    \n    for (int i = 1; i * i <= n; i++) {\n        if (__1__) {\n            cout << i << endl;\n            if (__2__) {\n                factors[cnt++] = __3__;\n            }\n        }\n    }\n    \n    for (int i = cnt - 1; i >= 0; i--) {\n        cout << factors[i] << endl;\n    }\n    return 0;\n}\n    // __1__\n    // __2__\n    // __3__\n    // __4__\n    // __5__",
+      "code": "#include <iostream>\n#include <cmath>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    int cnt = 0;\n    int factors[10000];\n    \n    for (int i = 1; i * i <= n; i++) {\n        if (__1__) {\n            cout << i << endl;\n            if (__2__) {\n                factors[cnt++] = __3__;\n            }\n        }\n    }\n    \n    for (int i = cnt - 1; i >= 0; i--) {\n        cout << factors[i] << endl;\n    }\n    return 0;\n}",
       "image": null,
       "blanks": [
         {
@@ -5381,28 +5337,6 @@
           ],
           "correctIndex": 0,
           "explanation": "保存与i对应的较大的因数n/i，稍后从大到小逆序输出。"
-        },
-        {
-          "position": 4,
-          "options": [
-            "cin >> n",
-            "cout << n",
-            "scanf",
-            "return"
-          ],
-          "correctIndex": 0,
-          "explanation": "读入输入数据是程序的第一步操作。"
-        },
-        {
-          "position": 5,
-          "options": [
-            "main()",
-            "return 0",
-            "// end",
-            "}"
-          ],
-          "correctIndex": 1,
-          "explanation": "主函数末尾返回0表示程序正常结束。"
         }
       ],
       "explanation": "本题采用优化后的枚举因数方法：只枚举i从1到√n，找到因数i时，先输出i（小的因数），再将对应的n/i（大的因数）暂存起来，最后逆序输出暂存的大因数，实现从小到大的输出顺序。时间复杂度O(√n)。"
@@ -5495,7 +5429,7 @@
       "knowledgePoint": "编辑距离DP",
       "difficulty": 3,
       "question": "完善以下程序：该程序计算两个字符串之间的编辑距离（Levenshtein距离），允许的操作有：插入一个字符、删除一个字符、替换一个字符，每次操作代价为1。求将字符串A转换为字符串B的最少操作次数。\n\n请在代码中的(1)、(2)、(3)、(4)处填入正确的表达式。",
-      "code": "#include <iostream>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nconst int MAXN = 1005;\nint dp[MAXN][MAXN];\n\nint main() {\n    string A, B;\n    cin >> A >> B;\n    int n = A.length(), m = B.length();\n    \n    // 初始化边界条件\n    for (int i = 0; i <= n; i++) {\n        dp[i][0] = __1__;\n    }\n    for (int j = 0; j <= m; j++) {\n        dp[0][j] = __2__;\n    }\n    \n    // DP状态转移\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= m; j++) {\n            if (A[i-1] == B[j-1]) {\n                dp[i][j] = __3__;\n            } else {\n                dp[i][j] = min({dp[i-1][j] + 1, dp[i][j-1] + 1, __4__});\n            }\n        }\n    }\n    \n    cout << dp[n][m] << endl;\n    return 0;\n}\n    // __1__\n    // __2__\n    // __3__\n    // __4__",
+      "code": "#include <iostream>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nconst int MAXN = 1005;\nint dp[MAXN][MAXN];\n\nint main() {\n    string A, B;\n    cin >> A >> B;\n    int n = A.length(), m = B.length();\n    \n    // 初始化边界条件\n    for (int i = 0; i <= n; i++) {\n        dp[i][0] = __1__;\n    }\n    for (int j = 0; j <= m; j++) {\n        dp[0][j] = __2__;\n    }\n    \n    // DP状态转移\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= m; j++) {\n            if (A[i-1] == B[j-1]) {\n                dp[i][j] = __3__;\n            } else {\n                dp[i][j] = min({dp[i-1][j] + 1, dp[i][j-1] + 1, __4__});\n            }\n        }\n    }\n    \n    cout << dp[n][m] << endl;\n    return 0;\n}",
       "image": null,
       "blanks": [
         {
@@ -5633,7 +5567,7 @@
       "knowledgePoint": "实数二分查找",
       "difficulty": 2,
       "question": "完善以下程序：使用二分查找求解方程 x³ + x² + x = n 在区间[0, 1e6]内的唯一实数根，精度要求为1e-6。\n\n请在代码中的(1)、(2)、(3)处填入正确的表达式。",
-      "code": "#include <iostream>\n#include <cmath>\n#include <iomanip>\nusing namespace std;\n\ndouble f(double x) {\n    return x * x * x + x * x + x;\n}\n\nint main() {\n    double n;\n    cin >> n;\n    \n    double left = 0.0, right = 1e6;\n    while (__1__) {\n        double mid = (left + right) / 2.0;\n        if (__2__) {\n            right = mid;\n        } else {\n            left = mid;\n        }\n    }\n    \n    cout << fixed << setprecision(6) << __3__ << endl;\n    return 0;\n}\n    // __1__\n    // __2__\n    // __3__\n    // __4__\n    // __5__",
+      "code": "#include <iostream>\n#include <cmath>\n#include <iomanip>\nusing namespace std;\n\ndouble f(double x) {\n    return x * x * x + x * x + x;\n}\n\nint main() {\n    double n;\n    cin >> n;\n    \n    double left = 0.0, right = 1e6;\n    while (__1__) {\n        double mid = (left + right) / 2.0;\n        if (__2__) {\n            right = mid;\n        } else {\n            left = mid;\n        }\n    }\n    \n    cout << fixed << setprecision(6) << __3__ << endl;\n    return 0;\n}",
       "image": null,
       "blanks": [
         {
@@ -5668,28 +5602,6 @@
           ],
           "correctIndex": 0,
           "explanation": "循环结束后，left和right之间的距离小于1e-6，可以输出left（或right，或(left+right)/2）作为近似解。这里选择left。"
-        },
-        {
-          "position": 4,
-          "options": [
-            "cin >> n",
-            "cout << n",
-            "scanf",
-            "return"
-          ],
-          "correctIndex": 0,
-          "explanation": "读入输入数据是程序的第一步操作。"
-        },
-        {
-          "position": 5,
-          "options": [
-            "main()",
-            "return 0",
-            "// end",
-            "}"
-          ],
-          "correctIndex": 1,
-          "explanation": "主函数末尾返回0表示程序正常结束。"
         }
       ],
       "explanation": "实数二分与整数二分的区别：(1)终止条件使用精度而非相等判断 (2)mid不需要加1或减1 (3)输出格式需要指定小数位数。函数f(x)=x³+x²+x在[0,+∞)上单调递增，保证二分查找的正确性。"
@@ -6830,8 +6742,8 @@
             "99",
             "100"
           ],
-          "correctIndex": 1,
-          "explanation": "模拟：轮1: ans+=50, n=50。轮2: ans+=25, n=25。轮3: ans+=12, n=13(12+1)。轮4: ans+=6, n=7(6+1)。轮5: ans+=3, n=4(3+1)。轮6: ans+=2, n=2(2+0)。轮7: ans+=1, n=1(1+0)。轮8: n=1<2 退出。总 ans=50+25+12+6+3+2+1=99。但 while(n>=2): 当 n=1<2 退出。等等，50+25+12+6+3+2+1=99。但轮7后 n=1，1<2 退出。ans=99。不对，再算：50+25=75, +12=87, +6=93, +3=96, +2=98, +1=99。但选项C是99... 但这个答案不对。100转为二进制：1100100(7位)，进位次数是... 这是一个著名的题。实际进位总数 = 100 - popcount(100)。100 的二进制 popcount=3。100-3=97。所以答案应为 97。选 B。"
+          "correctIndex": 2,
+          "explanation": "模拟执行：n依次为100、50、25、13、7、4、2、1；ans累加50+25+12+6+3+2+1=99，所以输出99。"
         },
         {
           "label": "选择题：当 k=10 时，该程序计算的结果等价于（ ）。",
@@ -6856,7 +6768,7 @@
           "explanation": "当 n<k 时不能再进位，应退出。while(n>=k) 确保只有当 n 还大于等于基数 k 时才继续进位。"
         }
       ],
-      "explanation": "程序模拟十进制数n转换为k进制过程中的总进位次数。每次n/k的商累加到ans，n更新为商，直到n<k。"
+      "explanation": "程序每次累加n/k，并把n更新为n/k+n%k，持续模拟进位传播，直到n<k时输出累计结果。"
     },
     {
       "id": "csp-j-2020-r03",
@@ -7404,7 +7316,7 @@
       "knowledgePoint": "洪水填充（BFS）",
       "difficulty": 3,
       "question": "完善以下程序：使用 BFS 实现图像区域填充（Flood Fill）。给定图像矩阵和起始位置，将起始像素及其四连通相邻同色像素全部填充为新颜色。请补全代码中 (1)~(5) 处缺失的内容。",
-      "code": "#include <iostream>\n#include <queue>\nusing namespace std;\nconst int N = 110;\nint a[N][N];\nbool vis[N][N];\nint n, m;\n\nstruct Point {\n    int r, c;\n};\n\nint dr[] = {-1, __1__};\nint dc[] = {0, 0, __2__};\n\nvoid bfs(int sr, int sc, int newColor) {\n    queue<Point> q;\n    q.push({sr, sc});\n    vis[sr][sc] = true;\n    int oldColor = __3__;\n    \n    while (!q.empty()) {\n        Point p = q.front();\n        q.pop();\n        __4__;\n        \n        for (int i = 0; i < 4; i++) {\n            int nr = p.r + dr[i];\n            int nc = p.c + dc[i];\n            if (nr >= 0 && nr < n && nc >= 0 && nc < m &&\n                !vis[nr][nc] && __5__) {\n                vis[nr][nc] = true;\n                q.push({nr, nc});\n            }\n        }\n    }\n}\n\nint main() {\n    int sr, sc, newColor;\n    cin >> n >> m;\n    for (int i = 0; i < n; i++)\n        for (int j = 0; j < m; j++)\n            cin >> a[i][j];\n    cin >> sr >> sc >> newColor;\n    bfs(sr, sc, newColor);\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < m; j++) {\n            cout << a[i][j] << ' ';\n        }\n        cout << endl;\n    }\n    return 0;\n}\n    // __1__\n    // __2__\n    // __3__\n    // __4__\n    // __5__",
+      "code": "#include <iostream>\n#include <queue>\nusing namespace std;\nconst int N = 110;\nint a[N][N];\nbool vis[N][N];\nint n, m;\n\nstruct Point {\n    int r, c;\n};\n\nint dr[] = {-1, __1__};\nint dc[] = {0, 0, __2__};\n\nvoid bfs(int sr, int sc, int newColor) {\n    queue<Point> q;\n    q.push({sr, sc});\n    vis[sr][sc] = true;\n    int oldColor = __3__;\n    \n    while (!q.empty()) {\n        Point p = q.front();\n        q.pop();\n        __4__;\n        \n        for (int i = 0; i < 4; i++) {\n            int nr = p.r + dr[i];\n            int nc = p.c + dc[i];\n            if (nr >= 0 && nr < n && nc >= 0 && nc < m &&\n                !vis[nr][nc] && __5__) {\n                vis[nr][nc] = true;\n                q.push({nr, nc});\n            }\n        }\n    }\n}\n\nint main() {\n    int sr, sc, newColor;\n    cin >> n >> m;\n    for (int i = 0; i < n; i++)\n        for (int j = 0; j < m; j++)\n            cin >> a[i][j];\n    cin >> sr >> sc >> newColor;\n    bfs(sr, sc, newColor);\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < m; j++) {\n            cout << a[i][j] << ' ';\n        }\n        cout << endl;\n    }\n    return 0;\n}",
       "image": null,
       "blanks": [
         {
@@ -7463,7 +7375,7 @@
           "explanation": "只有颜色等于 oldColor 的相邻像素才属于同一填充区域，加入队列。"
         }
       ],
-      "explanation": "洪水填充 BFS 实现：从起始点出发，四方向扩展，将同色连通区域全部填充为新颜色。"
+      "explanation": "洪水填充BFS：从起始点入队，记录原颜色oldColor；每次出队后把当前位置改为newColor，并把四连通方向中未访问且颜色仍为oldColor的格子加入队列。"
     },
     {
       "id": "csp-j-2023-r02",
@@ -7633,7 +7545,7 @@
       "knowledgePoint": "实数域二分查找",
       "difficulty": 3,
       "question": "完善以下程序：在单调递增函数 f(x) 的条件下，使用二分法在实数域上求解 f(x)=target 的根。精度由 eps 控制，中点计算需防溢出，并通过单调性判断搜索方向。请补全代码中 (1)~(5) 处缺失的内容。",
-      "code": "#include <iostream>\n#include <iomanip>\nusing namespace std;\n\ndouble f(double x) {\n    return x * x;\n}\n\ndouble solve(double target, double low, double high, double eps) {\n    while (__1__) {\n        double mid = __2__;\n        if (f(mid) < target) {\n            __3__;\n        } else {\n            __4__;\n        }\n    }\n    return __5__;\n}\n\nint main() {\n    double target, eps;\n    cin >> target >> eps;\n    cout << fixed << setprecision(6) << solve(target, 0, target, eps) << endl;\n    return 0;\n}\n    // __1__\n    // __2__\n    // __3__\n    // __4__\n    // __5__",
+      "code": "#include <iostream>\n#include <iomanip>\nusing namespace std;\n\ndouble f(double x) {\n    return x * x;\n}\n\ndouble solve(double target, double low, double high, double eps) {\n    while (__1__) {\n        double mid = __2__;\n        if (f(mid) < target) {\n            __3__;\n        } else {\n            __4__;\n        }\n    }\n    return __5__;\n}\n\nint main() {\n    double target, eps;\n    cin >> target >> eps;\n    cout << fixed << setprecision(6) << solve(target, 0, target, eps) << endl;\n    return 0;\n}",
       "image": null,
       "blanks": [
         {
@@ -7862,7 +7774,7 @@
       "knowledgePoint": "快速幂（递归+迭代）",
       "difficulty": 3,
       "question": "完善以下程序：分别使用递归和迭代两种方式实现快速幂，计算 a^b mod p 的结果。请补全代码中 (1)~(5) 处缺失的内容。",
-      "code": "#include <iostream>\nusing namespace std;\n\n// 递归版本\nlong long qpow_recur(long long a, long long b, long long p) {\n    if (b == 0) return __1__;\n    long long half = qpow_recur(a, b / 2, p);\n    half = half * half % p;\n    if (__2__) {\n        half = half * a % p;\n    }\n    return half;\n}\n\n// 迭代版本\nlong long qpow_iter(long long a, long long b, long long p) {\n    long long res = __3__;\n    a = a % p;\n    while (b > 0) {\n        if (__4__) {\n            res = res * a % p;\n        }\n        __5__;\n        b >>= 1;\n    }\n    return res;\n}\n\nint main() {\n    long long a, b, p;\n    cin >> a >> b >> p;\n    cout << qpow_recur(a, b, p) << endl;\n    cout << qpow_iter(a, b, p) << endl;\n    return 0;\n}\n    // __1__\n    // __2__\n    // __3__\n    // __4__\n    // __5__",
+      "code": "#include <iostream>\nusing namespace std;\n\n// 递归版本\nlong long qpow_recur(long long a, long long b, long long p) {\n    if (b == 0) return __1__;\n    long long half = qpow_recur(a, b / 2, p);\n    half = half * half % p;\n    if (__2__) {\n        half = half * a % p;\n    }\n    return half;\n}\n\n// 迭代版本\nlong long qpow_iter(long long a, long long b, long long p) {\n    long long res = __3__;\n    a = a % p;\n    while (b > 0) {\n        if (__4__) {\n            res = res * a % p;\n        }\n        __5__;\n        b >>= 1;\n    }\n    return res;\n}\n\nint main() {\n    long long a, b, p;\n    cin >> a >> b >> p;\n    cout << qpow_recur(a, b, p) << endl;\n    cout << qpow_iter(a, b, p) << endl;\n    return 0;\n}",
       "image": null,
       "blanks": [
         {

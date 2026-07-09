@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import RedeemCode from '../courses/RedeemCode';
-import { navigateToMainApp } from '../../../src-dungeon/DungeonEmbed';
+import { navigateToMainApp } from '../../../src-dungeon/utils/routeBridge';
 
 interface Props { children: ReactNode; }
 
@@ -125,6 +125,9 @@ export default function AppShell({ children }: Props) {
         </NavLink>
         <NavLink to="/oj-training" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           💻 OJ 训练
+        </NavLink>
+        <NavLink to="/resources" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          📖 学习资料
         </NavLink>
         {/* 智子试炼场：全屏地牢，需整体切换到 MemoryRouter，用 pushState 触发顶层路由二选一 */}
         <button

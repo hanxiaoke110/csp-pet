@@ -1,0 +1,1242 @@
+{
+  "results": [
+    {
+      "id": "gesp-2023-03-2-13",
+      "question": "在下列代码横线处填写（ ），使得输出是50 10。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {\nint a = 10, b = 50;\n____;  // 在此处填入代码\nb -= a;\na += b;\ncout << a << \" \" << b << endl;\nreturn 0;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+      "sourceTitle": "3月 GESP C++二级试题解析",
+      "page": 7,
+      "crop": "reports/gesp-sources/crops/2023-03-2-q13.png",
+      "confidence": "candidate",
+      "rawOcr": "1   #include <iostream>\n\n2   using namespace std;\n\n3   int main() {\n\n4       int a = 10, b = 50;\n\n5           i // FESR ARIS\n\n6       b -= a;\n\n7       a += b;\n\n8       cout << a << \" \" << b << endl;\n9       return @;\n\n10   }\n"
+    },
+    {
+      "id": "gesp-2023-03-2-14",
+      "question": "在下列代码横线处填写（ ），使得输出是5。",
+      "code": "#include <iostream>\nusing namespace std;\nVv int main() {\nint cnt = 0;\nv    for (char ch = '1'; ch <= '9'; ch++)\nif (____)  // 在此处填入代码\ncnt++;\ncout << cnt << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+      "sourceTitle": "3月 GESP C++二级试题解析",
+      "page": 8,
+      "crop": "reports/gesp-sources/crops/2023-03-2-q14.png",
+      "confidence": "candidate",
+      "rawOcr": "1   #include <iostream>\n\n2   using namespace std;\n\n3 Vv int main() {\n\n4       int cnt = @;\n\n5 v    for (char ch = '1'; ch <= '9'; ch++)\n6 Vv      if (      ) // FECES ARES\n7                cnt++;\n\n8       cout << cnt << endl;\n\n9       return @;\n\n10 —o}sw\n"
+    },
+    {
+      "id": "gesp-2023-03-2-15",
+      "question": "执行以下程序后输出结果是（ ）。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {\nint n = 17;\nbool isprime = true;\nfor (int i = 2; i <= n; i++)\nif (n % i == 0)\nisprime = false;\ncout << isprime << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+      "sourceTitle": "3月 GESP C++二级试题解析",
+      "page": 8,
+      "crop": "reports/gesp-sources/crops/2023-03-2-q15.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n\n2 using namespace std;\n\n3 int main() {\n\n4       int n = 173\n\n5       bool isprime = true;\n\n6       for (int i = 2; i <= n; i++)\n7           if (n % i == @)\n\n8               isprime = false;\n9       cout << isprime << endl;\n10       return @;\n\n1% 3\n"
+    },
+    {
+      "id": "gesp-2023-06-1-14",
+      "question": "在下列代码横线处填写（ ），使得输出是\"147\"。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (int i = 1; i <= 8; i++)\nif (____)  // 在此处填入代码\ncout << i;\nreturn 0;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+      "sourceTitle": "6月 GESP C++一级试题解析",
+      "page": 8,
+      "crop": "reports/gesp-sources/crops/2023-06-1-q14.png",
+      "confidence": "candidate",
+      "rawOcr": "1   #include <iostream>\n\n2   using namespace std;\n\n3   int main() {\n\n4       for (int i = 1; i <= 8; i++)\n\n5         if (_____) // FERC ARES\n6               cout << i;\n\n7       return 0;\n\n8 }\n"
+    },
+    {
+      "id": "gesp-2023-06-1-15",
+      "question": "执行以下C++程序后输出结果是（ ）。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {\nint sum;\nfor (int i = 1; i <= 20; i++)\nif (i%3 ==0 || i%5 == 0)\nsum += i;\ncout << sum << endl;\nreturn 0;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+      "sourceTitle": "6月 GESP C++一级试题解析",
+      "page": 9,
+      "crop": "reports/gesp-sources/crops/2023-06-1-q15.png",
+      "confidence": "candidate",
+      "rawOcr": "1   #include <iostream>\n\n2   using namespace std;\n\n3   int main() {\n\n4       int sum;\n\n5       for (int i = 1; i <= 20; i++)\n\n6           if (i%3 ==0 || i%5 == 0)\n7                sum += i;\n\n8       cout << sum << endl;\n\n9       return @;\n\n10   }\n"
+    },
+    {
+      "id": "gesp-2023-06-2-13",
+      "question": "在下列代码横线处填写（ ），使得输出是9。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {",
+      "source": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+      "sourceTitle": "6月 GESP C++二级试题解析",
+      "page": 7,
+      "crop": "reports/gesp-sources/crops/2023-06-2-q13.png",
+      "confidence": "candidate",
+      "rawOcr": "1   #include <iostream>\n2   using namespace std;\n3   int main() {\n"
+    },
+    {
+      "id": "gesp-2023-06-2-15",
+      "question": "执行以下C++程序后输出结果是（ ）。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (char x = 'A'; << = 'D'$ x++)\nif ((x != 'A') + (x == 'C') + (x == 'D') + (* != 'D') == 3)\ncout << x;\nreturn 0;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+      "sourceTitle": "6月 GESP C++二级试题解析",
+      "page": 8,
+      "crop": "reports/gesp-sources/crops/2023-06-2-q15.png",
+      "confidence": "candidate",
+      "rawOcr": "1   #include <iostream>\n\n2   using namespace std;\n\n3   int main() {\n\n4       for (char x = 'A'; x <= 'D'$ x++)\n\n5           if ((x != 'A') + (x == 'C') + (x == 'D') + (* != 'D') == 3)\n6               cout << x3\n\n7       return 0;\n\n8 }\n"
+    },
+    {
+      "id": "gesp-2023-09-1-04",
+      "question": "下面C++代码段执行后输出是（ ）。",
+      "code": "int a = 3, b = 4;\ncout << \"a+b=\" << a+b;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q04.png",
+      "confidence": "low",
+      "rawOcr": "int a = 3, b = 4;\ncout << \"a+b=\" << a+b;\n"
+    },
+    {
+      "id": "gesp-2023-09-1-07",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int m = 14;\nint n = 12;\nif (m % 2 == 0 && n % 2 == 0)\ncout << \"Abe fHe\";\nelse if (m% 2 == 1 && n % 2 == 1)\ncout << \"Abe arhe\";\nelse\ncout << \"AME (HAA AT AL\" ;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q07.png",
+      "confidence": "low",
+      "rawOcr": "1   int m = 14;\n\n2   int n = 12;\n\n3 if (m % 2 == 0 && n % 2 == @)\n\n4      cout << \"Abe fHe\";\n\n5 else if (m% 2 == 1 && n % 2 == 1)\n6      cout << \"Abe arhe\";\n\n7   else\n\n8      cout << “AME (HAA AT AL\" ;\n"
+    },
+    {
+      "id": "gesp-2023-09-1-08",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int m = 14;\nint n = 12;\nif (m % 2 & n %& 2)\ncout << \"#ERar\";\nelse if (m % 2 == 1 & n % 2 == 1)\ncout << \"MEA R\";\nelse\ncout << \"Asai se fi Bak ay AL\" ;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q08.png",
+      "confidence": "low",
+      "rawOcr": "1   int m = 14;\n\n2   int n = 12;\n\n3 if (m % 2 & n %& 2)\n\n4      cout << \"#ERar\";\n\n5 else if (m % 2 == 1 & n % 2 == 1)\n6      cout << “MEA R\";\n\n7   else\n\n8      cout << “Asai se fi Bak ay AL\" ;\n"
+    },
+    {
+      "id": "gesp-2023-09-1-09",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int m = 7;\nif (m/ 5 [| m/ 3)\ncout << 0;\nelse if (m / 3)\ncout << 1;\nelse if (m / 5)\ncout << 2;\nelse\ncout << 3;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q09.png",
+      "confidence": "low",
+      "rawOcr": "1   int m = 7;\n\n2 if (m/ 5 [| m/ 3)\n3       cout << @;\n\n4   else if (m / 3)\n\n5       cout << 1;\n\n6   else if (m / 5)\n\n7       cout << 2;\n\n8   else\n\n9       cout << 3;\n"
+    },
+    {
+      "id": "gesp-2023-09-1-10",
+      "question": "下面C++代码段执行后输出是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q10.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2023-09-1-11",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int tnt = 0;\nfor (int i = 1; i < 5; i += 2)\ntnt = tnt + i;\ncout << tnt;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 6,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q11.png",
+      "confidence": "low",
+      "rawOcr": "1   int tnt = 0;\n\n2 for (int i = 1; i < 5; i += 2)\n3       tnt = tnt + i;\n\n4   cout << tnt;\n"
+    },
+    {
+      "id": "gesp-2023-09-1-12",
+      "question": "下面代码执行后cnt的值是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 6,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q12.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2023-09-1-13",
+      "question": "下面C++代码用于求正整数所有因数，横线处应填入（ ）。",
+      "code": "a, #7 A10, WTA 1, 2. 5. 10; M7A12, WHA 1. 2. 3. 4, 6, 12;\n____;  // 在此处填入代码\nint n = 0;\ncout << \"iff A—PIEMR: \";\ncin >> n;\nfor (              ) // 在此处填入代码\nif (n % i == 0)\ncout << i << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 7,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q13.png",
+      "confidence": "candidate",
+      "rawOcr": "a, #7 A10, WTA 1, 2. 5. 10; M7A12, WHA 1. 2. 3. 4, 6, 12;\nHU AL7, NFM 1, 17. FEREAEMD VIB ARES OC)\n\n1   int n = Q;\n\n2 cout << “iff A—PIEMR: \";\n\n3   cin >> n;\n\n4\n\n5 for (              ) // EARS (00S\n\n6      if (n % i == @)\n\n7         cout << i << endl;\n"
+    },
+    {
+      "id": "gesp-2023-09-1-14",
+      "question": "在下列代码横线处填写（ ），输出正整数1234各位数字平方和。",
+      "code": "int n = 1234, s = 0;\nfor (; n3; n /= 10)\ncout << s << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 8,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q14.png",
+      "confidence": "low",
+      "rawOcr": "FAFA.\n1 int n = 1234, s = 0;\n2   for (; n3; n /= 10)\n4   cout << s << endl;\n"
+    },
+    {
+      "id": "gesp-2023-09-1-15",
+      "question": "执行以下C++程序后输出是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+      "sourceTitle": "9月 GESP C++一级试题解析",
+      "page": 8,
+      "crop": "reports/gesp-sources/crops/2023-09-1-q15.png",
+      "confidence": "low",
+      "rawOcr": "A. 1\n"
+    },
+    {
+      "id": "gesp-2023-09-2-06",
+      "question": "从大到小输出N所有因子（如N=18输出18 9 6 3 2 1），横线处应填入（ ）。",
+      "code": "int N = 0;\ncin >> N;\nfor (          ) // 在此处填入代码\nif (!(N % i))\ncout << i<< ' ';",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q06.png",
+      "confidence": "low",
+      "rawOcr": "NH 189 6 3 2 1, BRARAbIHA ( ) .\n1   int N = @;\n2   cin >> N;\n3 for (          ) // eA\n4       if (!(N % i))\n5       cout << i<< ' ‘3\n"
+    },
+    {
+      "id": "gesp-2023-09-2-07",
+      "question": "输出N行N列矩阵，对角线为1，横线处应填入（ ）。",
+      "code": "int N = 0;\ncout << \"ims A tT 7B: \";\ncin >> N;\nfor (int i=1; i<N +41; i++) {\nfor (int j = 1; j < N+ 1; j++)\nif (____)  // 在此处填入代码\ncout << 1 << \" \";\nelse\ncout << 0 << \" \";\ncout << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q07.png",
+      "confidence": "candidate",
+      "rawOcr": "ii i A 47 A BCR 9\n\n100000000\n\n@100000080\n\n0010000080\n\n000100000\n\n@000100080\n\n@0000010080\n\n000000100\n\n@e000000180\n\n@e0e00e00e0ee1\n\n1   int N = @;\n\n2 cout << “ims A tT 7B: \";\n\n3   cin >> N;\n\n4 for (int i=1; i<N +41; i++) {\n5    for (int j = 1; j < N+ 1; j++)\n6      if (__ tO // ERAS\n7               cout << 1 << \" \";\n\n8           else\n\n9        cout << @ << \" \";\n\n10   cout << endl;\n\n11 =}\n"
+    },
+    {
+      "id": "gesp-2023-09-2-08",
+      "question": "判断N是否为质数，横线处填入（ ）。",
+      "code": "intN=0, i=2;\ncout << \"i#MA—TAKFS FAN ESR |\";\ncin >> N;\nfor (i = 2; i < N; i++)\nif (N% i == 0) {\ncout << \"SEAR\";\n____;  // 在此处填入代码\n}\nif (i == N)\ncout << \"Az\";",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q08.png",
+      "confidence": "candidate",
+      "rawOcr": "PIE RAN, TATEREZRADIR A Ga TREg C ) .\n1 intN=0, i=2;\n2 cout << “i#MA—TAKFS FAN ESR |\";\n3   cin >> N;\n4\n5   for (i = 2; i < N; i++)\n6      if (N% i == 0) {\n7         cout << \"SEAR\";\n8                  3 // SeEARAS (RS\n9      }\n10   if (i == N)\n11      cout << \"Az\";\n"
+    },
+    {
+      "id": "gesp-2023-09-2-09",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q09.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2023-09-2-11",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int cnt = 0;\nfor (int i = 1; i < 13; i += 3)\nfor (int j = 1; j < i; j += 2)\nif (i * j % 2 == 0)\nbreak;\nelse\ncnt += 1;\ncout << cnt;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 7,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q11.png",
+      "confidence": "low",
+      "rawOcr": "1   int cnt = @;\n\n2   for (int i = 1; i < 13; i += 3)\n\n3       for (int j = 1; j < i; j += 2)\n4           if (i * j % 2 == @)\n\n5                break;\n\n6           else\n\n7                cnt += 1;\n\n8   cout << cnt;\n"
+    },
+    {
+      "id": "gesp-2023-09-2-12",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int x = 1;\nwhile (x < 100) {\nif (!(x % 3))\ncout << << < \",\";\nelse if (x / 10)\nbreak;\nX += 2;\n}\ncout << x;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 7,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q12.png",
+      "confidence": "low",
+      "rawOcr": "1   int x = 1;\n\n2 while (x < 100) {\n\n3       if (!(x % 3))\n\n4           cout << x << \",\";\n5       else if (x / 10)\n6            break;\n\n7   X += 23\n\n8 }\n\n9   cout << x;\nA. 1\n\nB. 3,9,11\n"
+    },
+    {
+      "id": "gesp-2023-09-2-13",
+      "question": "每一行从A开始以ABC方式重复，横线处填入（ ）。",
+      "code": "____;  // 在此处填入代码\nint N = 0;\ncout << \"imiiATWRE:\";\ncin >> N;\nfor (int i=1; i<N+ 1; i++) {\nfor (int j = 0; j < i; j++)\n____;  // 在此处填入代码\ncout << endl;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 8,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q13.png",
+      "confidence": "candidate",
+      "rawOcr": "FE C++ ACA Beg Mbt A Que (iS CO)\nWimA SETA: 7\nA\nAB\nABC\nABCA\nABCAB\nABCABC\nABCABCA\n1   int N = Q;\n2 cout << “imiiATWRE:\";\n3   cin >> N;\n4 for (int i=1; i<N+ 1; i++) {\n5      for (int j = @; j < i; j++)\n6        cout <<        3 // SEAS (RS\n7      cout << endl;\n8 }\n"
+    },
+    {
+      "id": "gesp-2023-09-2-14",
+      "question": "输入行数输出数字三角形，横线处应填入（ ）。",
+      "code": "int lineCount = 0;\ncout << \"iffMATSCE:\";\ncin >> lineCount;\nfor (int i = 0; i < lineCount; i++) {\nfor (int j= 0; j<_s jt+) // 在此处填入代码\ncout << '' ';\nfor (int j = 1; j < i+ 1; j++)\ncout << j << \" \"5\nfor (int j = i+ 41; j > 0; j--)\ncout << j << \" \";\ncout << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 9,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q14.png",
+      "confidence": "low",
+      "rawOcr": "A ©) «\n1\n121\n12321\n1234321\n123454321\n12345654321\n1234567654321\n\n123456787654321\n1234567898765 4321\n1   int lineCount = @;\n2 cout << \"iffMATSCE:\";\n3   cin >> lineCount;\n4  for (int i = 0; i < lineCount; i++) {\n5    for (int j= 0; j<_s jt+) // ESS (US\n6            cout << '' ';\n7    for (int j = 1; j < i+ 1; j++)\n8     cout << j << \" \"5\n9    for (int j = i+ 41; j > @; j--)\n10     cout << j << \" \"3\n11  cout << endl;\n12. +}\n"
+    },
+    {
+      "id": "gesp-2023-09-2-15",
+      "question": "连续输入成绩直到负数停止求平均，横线处应填入（ ）。",
+      "code": "____;  // 在此处填入代码\n____;  // 在此处填入代码\n____;  // 在此处填入代码\nwhile (____)  // 在此处填入代码\ncin >> score;\nif (score < 0)\n|   break;\ntotalScore += score;\nstudCount += 1;\n}\ncout << \"\"Fij4¢=\" << totalScore / studCount;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+      "sourceTitle": "9月 GESP C++二级试题解析",
+      "page": 10,
+      "crop": "reports/gesp-sources/crops/2023-09-2-q15.png",
+      "confidence": "candidate",
+      "rawOcr": "IMB. FELL PR C++ {iS eb RAGE C )\n1   double totalScore = 0; // i4}\n\n2 int studCount = @; // BAR\n\n3 while (      ){ // HAAS 1S\n4      cin >> score;\n\n5      if (score < @)\n\n6      |   break;\n\n7       totalScore += score;\n\n8       studCount += 1;\n\n9 }\n\n10   cout << ““Fij4¢=\" << totalScore / studCount;\n"
+    },
+    {
+      "id": "gesp-2023-12-1-03",
+      "question": "假设现在是上午十点，求出N小时后是第几天几时。横线处应填写（ ）。",
+      "code": "int N, dayX, hourx;\ncin >> N;\ndayX =         , hourxX =         ;\nif (dayX == 0)\ncout << \"4K\" << hourx << \"kA\";\nelse\ncout << \"3\" << (dayX + 1) << \"KK\" << hourx << \"sa\";",
+      "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+      "sourceTitle": "GESP 12月认证C++一级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2023-12-1-q03.png",
+      "confidence": "low",
+      "rawOcr": "SRR APU DBE. DATE BEARDS (CS E( )o\n1    int N, dayX, hourx;\n2\n3      cin >> N;\n4\n5      dayX =         , hourxX =         ;\n6      if (dayX == 0)\n7         cout << \"4K\" << hourx << \"kA\";\n8      else\n9        cout << \"3\" << (dayX + 1) << \"KK\" << hourx << \"sa\";\n(A. (18 +N) % 24, (10 +N) / 24\nOB. (10 +N) / 24, (10 + N) % 24\nOC. N % 24,N / 24\nCD. 10 / 24, 10 % 24\n"
+    },
+    {
+      "id": "gesp-2023-12-1-04",
+      "question": "判断N是否为偶数，横线处应填入（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+      "sourceTitle": "GESP 12月认证C++一级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2023-12-1-q04.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2023-12-1-06",
+      "question": "下面代码执行后输出是（ ）。",
+      "code": "ocnt=0; © |\nfor(int i= 1; i < 10; i+t+){\ncnt += 1;\ni +=2;\ncout << cnt;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+      "sourceTitle": "GESP 12月认证C++一级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2023-12-1-q06.png",
+      "confidence": "low",
+      "rawOcr": "1 ocnt=0; © |\n2    for(int i= 1; i < 10; i+t+){\n3       cnt += 1;\n\n4       i +=2;\n\ns)    }\n\n6    cout << cnt;\n\nO A.10\n\nC B.9\n\nOc.3\n\nOD.1\n"
+    },
+    {
+      "id": "gesp-2023-12-1-07",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "cnt = 0;\nfor(int i= 1; i < 20; i++){\nif (i%2)\ncontinue;\nelse if (i$3==0 && i%5==0)\nbreak;\ncnt += i;\n}\ncout << cnt;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+      "sourceTitle": "GESP 12月认证C++一级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2023-12-1-q07.png",
+      "confidence": "low",
+      "rawOcr": "1    cnt = 0;\n\n2    for(int i= 1; i < 20; i++){\n3         if (i%2)\n\n4             continue;\n\n5        else if (i$3==0 && i%5==0)\n6            break;\n\n7        cnt += i;\n\n8     }\n\n9    cout << cnt;\n\n— A.90\n"
+    },
+    {
+      "id": "gesp-2023-12-1-08",
+      "question": "下面代码执行后cnt的值是（ ）。",
+      "code": "N = 10;\ncnt = 0;\nwhile (1) {\nif(N == 0) break;\ncnt += 1;\nN -= 2;\n}\ncout << cnt;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+      "sourceTitle": "GESP 12月认证C++一级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2023-12-1-q08.png",
+      "confidence": "low",
+      "rawOcr": "1    N = 10;\n\n2    cnt = 0;\n\n3    while (1) {\n\n4       if(N == 0) break;\n5       cnt += 1;\n6       N -= 2;\n\n7    }\n\n8    cout << cnt;\nO All\n\nC B. 10\n\nOc5\n\n0 v.4\n"
+    },
+    {
+      "id": "gesp-2023-12-1-09",
+      "question": "判断一个数是否为质数，横线处应填入（ ）。",
+      "code": "cin >> N;\ncnt = 0;\nfor (int i = 1; i<N + 1; i++)\nif (N % i == 0)\nif (cnt == 2)\ncout << N << \"FtJRR. \";\nelse\ncout << N << \"AAR. \";",
+      "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+      "sourceTitle": "GESP 12月认证C++一级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2023-12-1-q09.png",
+      "confidence": "low",
+      "rawOcr": "1      cin >> N;\n\n2     cnt = 0;\n\n3   for (int i = 1; i<N + 1; i++)\n4        if (N % i == 0)\n\n5                    ;\n\n6     if (cnt == 2)\n\n7         cout << N << \"FtJRR. \";\n\n8     else\n\n9         cout << N << \"AAR. \";\n() A. cnt = 1\n\n(CD B. cnt = 2\n\n() C. cnt =+ 1\n\nO D. cnt += 1\n"
+    },
+    {
+      "id": "gesp-2023-12-2-03",
+      "question": "从1到N顺序输出能整除N的数（N的因数），横线处应填（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1601261860290592.pdf",
+      "sourceTitle": "GESP 12月认证C++二级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2023-12-2-q03.png",
+      "confidence": "low",
+      "rawOcr": "Xr (  ) o\n"
+    },
+    {
+      "id": "gesp-2023-12-2-14",
+      "question": "下列代码输出是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1601261860290592.pdf",
+      "sourceTitle": "GESP 12月认证C++二级真题",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2023-12-2-q14.png",
+      "confidence": "low",
+      "rawOcr": "D A. 346 - Ala\n\nO B.S Re\n\nOC C. PAAR\n\nOC Dz eae hee EF)\n\nB15 7H HA—TIEBEN, BRM EAA A Bod. POW, HAI2, ABOdA.2). (2,3). 3.4)0 FRBBHt\nPERT EI PAM Bot? ( )\n\nCD A. for(i=tsicnsit+) if(!(N%i) && 1(N%(i41))) printf(\"(%d,%d)\\n\", i, i+1);\n\nCO B. for(i=2;icnsit+) if(!(N%i) && 1(N%(i41))) printf(\"(%d,%d)\\n\", i, i+1);\n\nCC. for(i=2;icn/2;i++) if (1(N%(4-1)) && !(N%i)) printf(\"(%d,%d)\\n\", i-1, i);\n"
+    },
+    {
+      "id": "gesp-2024-03-1-08",
+      "question": "下面代码的输出是（ ）。",
+      "code": "int tnt = 0;\n| for(int i=0; i<10; i++)\nif(i%3 && i%7)\ntnt +=i;\ncout << tnt << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+      "sourceTitle": "GESP 3月认证C++一级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-03-1-q08.png",
+      "confidence": "low",
+      "rawOcr": "1 int tnt = @;\n\n2\n\n3 | for(int i=@; i<10; i++)\n4     if(i%3 && i%7)\n\n5         tnt +=i;\n\n6 cout << tnt << endl;\n0 A.0\n"
+    },
+    {
+      "id": "gesp-2024-03-1-09",
+      "question": "下面代码执行后输出是（ ）。",
+      "code": "int N = 10;\n| while(N){\nN -= 1;\nif(N%3 == 0)\ncout << N << \"#\"5\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+      "sourceTitle": "GESP 3月认证C++一级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-03-1-q09.png",
+      "confidence": "low",
+      "rawOcr": "1 int N = 10;\n\n2 | while(N){\n\n3     N -= 1;\n\n4     if(N%3 == 0)\n\n5        cout << N << \"#\"5\n6 }\n(CD A. 9#6#3#\nCD B. 9#6#3#0#\nCD C. 8#7#5#4#2#1#\n\nCD D. 10#8#7#5#4#2#1#\n"
+    },
+    {
+      "id": "gesp-2024-03-1-10",
+      "question": "判断质数的代码横线处应填入（ ）。",
+      "code": "|int N;\n(cin >> N;\n____;  // 在此处填入代码\n|for(int i=1; i<N+1; i++)\nif (             )\ncnt +=1;\n\\|if(cnt == 2)\ncout << N << \"S2fRaX\";\nelse\ncout << N << \"AIR\";",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+      "sourceTitle": "GESP 3月认证C++一级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-03-1-q10.png",
+      "confidence": "candidate",
+      "rawOcr": "Wye ( ) o\n1 |int N;\n2 (cin >> N;\n3 int cnt = 0; // iCSRNR PRADA\n4 |for(int i=1; i<N+1; i++)\n5     if (             )\n6         cnt +=1;\n7 \\|if(cnt == 2)\n8     cout << N << \"S2fRaX\";\n9 else\n10     cout << N << \"AIR\";\nO AN% i\n() BNY%iIi==O)\n"
+    },
+    {
+      "id": "gesp-2024-03-2-06",
+      "question": "下列代码输出是（ ）。",
+      "code": "int n,a,m,i;\n|n=3, a= 5;\n|m = (a - 1) * 2;\n| for (i=0; i<n-1; i++)\nm= (m - 1) * 2;\ncout << m;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf",
+      "sourceTitle": "GESP 3月认证C++二级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-03-2-q06.png",
+      "confidence": "low",
+      "rawOcr": "1 int n,a,m,i;\n\n2\n\n3 |n=3, a= 5;\n\n4 |m = (a - 1) * 2;\n\n5 | for (i=@; i<n-1; i++)\n6     m= (m - 1) * 2;\n7\n\n8 cout << m;\n\nOA. 8\n\nOB. 14\n\nOC. 26\n\n0— D. 5@\n"
+    },
+    {
+      "id": "gesp-2024-03-2-14",
+      "question": "下列代码中循环执行次数是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf",
+      "sourceTitle": "GESP 3月认证C++二级真题",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2024-03-2-q14.png",
+      "confidence": "low",
+      "rawOcr": "O A. NBER\n\nOB. ima\n\nO C. BERS\n\nOD D. HRM\n\nSH HSLAES (CCF) 762024461427 A AVAL LAA TEE, EAE ()\nO A. fhe a wae\n\nCO B. alse BE\n\nO C. BAF MOLAR\n"
+    },
+    {
+      "id": "gesp-2024-06-1-06",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "(float a;\na = 101.101;\n|a = 101;\n| printf(\"at+1={%.0f}\",a+1);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 一级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-06-1-q06.png",
+      "confidence": "low",
+      "rawOcr": "1 (float a;\n\n2 a = 101.101;\n\n3 |a = 101;\n\n4 | printf(\"at+1={%.0f}\",a+1);\n\n(CA. 102={102}\n\n(CD B. a+1={at1}\n\n(CD C. at+1={102}\n\nO D. aE RUMEN RE. BUR. SUPER\n"
+    },
+    {
+      "id": "gesp-2024-06-1-09",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int Sum = 0, i = 0;\nfor (3; i < 10; )\nSum += i++;\n|cout << i << \" \" << Sum;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 一级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-06-1-q09.png",
+      "confidence": "low",
+      "rawOcr": "1 int Sum = @, i = @;\n\n2 for (3; i < 10; )\n\n3     Sum += i++;\n\n4 |cout << i << \" \" << Sum;\nOA. 9 45\n"
+    },
+    {
+      "id": "gesp-2024-06-2-08",
+      "question": "货币由5元、2元、1元组成求最少数量。横线处应填入（ ）。",
+      "code": "|int N;\ncin >>N;\n(int M5,M2,M1;\nMS =N/5;\nprintf(\"5*%d+2*%d+1*#%d\", MS, M2, M1);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071434350624.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 二级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-06-2-q08.png",
+      "confidence": "low",
+      "rawOcr": "MESH ( ) ©\n1 |int N;\n2 cin >>N;\n3\n4 (int M5,M2,M1;\n5 MS =N/5;\n6 M2 =         3\n7 M1 =        3\n8 printf(\"5*%d+2*%d+1*#%d\", MS, M2, M1);\nCD A. Fl BEA b IEA: N/ 2\n2 tae Ah WV A: N - M5 - M2\nCO B. Steg Ab DIBA: (N - M5 * 5)/2\nSOBER Ab WH A: N- M5 *5-M2*2\nCD C. S51 BEAR Ab WIA: N-MS5*5/2\nSOBER Ab WH A: N- M5 *5-M2*2\nCD Dz FB BRARAb IBA: (N - MS *5)/2\n2 pee Ah VE A: N - M5 - M2\n"
+    },
+    {
+      "id": "gesp-2024-09-1-08",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int Sum = 0;\nfor (int i = 0; i < 10; i++)\nSum += i;\n| cout << Sum;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 一级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-09-1-q08.png",
+      "confidence": "low",
+      "rawOcr": "1 int Sum = @;\n\n2 for (int i = @; i < 10; i++)\n3     Sum += i;\n\n4 | cout << Sum;\n\n— A.55\n\nCB. 45\n\n0 c.10\n\nOC D.9\n"
+    },
+    {
+      "id": "gesp-2024-09-1-09",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int N = 0;\nfor (int i = 0; i < 10; i++)\nN += 1;\n| cout << N;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 一级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-09-1-q09.png",
+      "confidence": "low",
+      "rawOcr": "1 int N = @;\n\n2 for (int i = @; i < 10; i++)\n3     N += 1;\n\n4 | cout << N;\n— A.55\n"
+    },
+    {
+      "id": "gesp-2024-09-1-10",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int N = 0;\nfor (int i = 1; i < 10; i +=2){\nif (i % 2 == 1)\ncontinue;\nN += 1;\n}\n| cout << N;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 一级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-09-1-q10.png",
+      "confidence": "low",
+      "rawOcr": "1 int N = @;\n2 for (int i = 1; i < 10; i +=2){\n3      if (i % 2 == 1)\n4          continue;\n5      N += 1;\n6 }\n7 | cout << N;\nOAS\nC—O B.4\nOc.2\n0 D.0\n"
+    },
+    {
+      "id": "gesp-2024-09-2-12",
+      "question": "求逆序数横线处应填入（ ）。",
+      "code": "int N;\n(cin >> N;\n| int rst = 0;\n|while (N){\ncout << (rst);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 二级真题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2024-09-2-q12.png",
+      "confidence": "low",
+      "rawOcr": "GE (   ) »\n\n1 int N;\n\n2 (cin >> N;\n\n3 | int rst = @;\n\n4 |while (N){\n\n5  —\n\n6  —\n\n7 3\n\n8 cout << (rst);\n\n() A. rst = rst * 10+N%10 N=N/ 10\n() B. rst += N% 10 N=N/ 10\n\n() Cc. rst = rst *10+N/10 N=N% 10\n() D. rst += N/10 N=N4% 10\n"
+    },
+    {
+      "id": "gesp-2024-09-2-14",
+      "question": "判断质数横线处填（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 二级真题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2024-09-2-q14.png",
+      "confidence": "low",
+      "rawOcr": "AE RIMECAR BRIER. ERAS A. ( )\n"
+    },
+    {
+      "id": "gesp-2024-12-1-07",
+      "question": "判断星期几的程序横线处应填入（ ）。",
+      "code": "1| int N, nowDay, afterDays;\n2} cout << \"SRBHBL? \" <<endl;\n3) cin >> nowDay;\n4) cout << \"RJLAG HAIL? \"<< endl;\n>| cin >>afterDays;\n| N = nowDay+afterDays;\n| if(              )\nprintf(\"#HAXK\");\n| else\nprintf (\"8A%d\", N%7);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+      "sourceTitle": "GESP 2024年12月认证 C++ 1级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-12-1-q07.png",
+      "confidence": "low",
+      "rawOcr": "AES (     ) o\n1| int N, nowDay, afterDays;\n2} cout << \"SRBHBL? \" <<endl;\n3) cin >> nowDay;\n4) cout << \"RJLAG HAIL? \"<< endl;\n>| cin >>afterDays;\n6\n7 | N = nowDay+afterDays;\n8\n9 | if(              )\n10           printf(\"#HAXK\");\n11 | else\n12    printf (\"8A%d\", N%7);\nHAN%7!I=0\nHO BN%7=0\nW CN=0\nOH DN%7\n"
+    },
+    {
+      "id": "gesp-2024-12-1-11",
+      "question": "判断能被3整除的偶数横线处填入（ ）。",
+      "code": "int N;\ncin >> N;\nif(  —sC*Y\ncout << \"SEAS BIRAT(BAL\" << endl;\nelse\ncout << \"EX(thiSZ\" << endl;\ncout << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+      "sourceTitle": "GESP 2024年12月认证 C++ 1级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-12-1-q11.png",
+      "confidence": "low",
+      "rawOcr": "1     int N;\n2     cin >> N;\n3\n4     if(  —sC*Y\n5       cout << \"SEAS BIRAT(BAL\" << endl;\n6       else\n7       cout << \"EX(thiSZ\" << endl;\n8\n9\n10     cout << endl;\nra. (N%2)8& (NR)\nCO B, (N%2==@)&&(N%3)\n"
+    },
+    {
+      "id": "gesp-2024-12-2-09",
+      "question": "正整各位数字之和横线处不应填入（ ）。",
+      "code": "int tnt, N;\n| printf (\"iSRIATER: \");\ncin >> N;\ntnt = 0;\n|while (N != 0){\nN /= 10;\n}\n| cout <<tnt;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1650239656165408.pdf",
+      "sourceTitle": "GESP 2024年12月认证 C++ 2级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-12-2-q09.png",
+      "confidence": "low",
+      "rawOcr": "1 int tnt, N;\n\n2 | printf (\"iSRIATER: \");\n3 cin >> N;\n\n4 tnt = @;\n\n5 |while (N != @){\n\n6     a\n7     N /= 10;\n\n8 }\n\n9 | cout <<tnt;\n(D A. tot = tnt +N % 10\n\nCD B. tnt += N% 10\n\n—D C. tnt= N % 10+ tnt\n"
+    },
+    {
+      "id": "gesp-2025-03-1-10",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int N = 10;\nprint#(\"{N}*{N}={%d*%d}\", N, N, N * N);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 1级试题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2025-03-1-q10.png",
+      "confidence": "low",
+      "rawOcr": "1 int N = 10;\n2 print#(\"{N}*{N}={%d*%d}\", N, N, N * N);\n(A. 10*10={10*10}\nCB. 100-10\n0 C. N¥N=108\nC D. {N}*{N}={10*10}\nSB BUT PACH RS, FER LCA 100200, HiIHAE ( ) ©\n1 int first,second;\n2 cout << \"iSBIASS 1 NEBR: \"5\n"
+    },
+    {
+      "id": "gesp-2025-03-1-13",
+      "question": "下面代码执行后Sum的值是（ ）。",
+      "code": "int tnt = 0;\n|for (int i = -1000; i < 1000; i++)\ntnt += i;\ncout << tnt << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 1级试题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2025-03-1-q13.png",
+      "confidence": "low",
+      "rawOcr": "1 int tnt = @;\n2 |for (int i = -1000; i < 1000; i++)\n3     tnt += i;\n4 cout << tnt << endl;\nC0 A. -1000\nC B.0\n0 C.999\nCD. 1000\n"
+    },
+    {
+      "id": "gesp-2025-03-2-03",
+      "question": "下面代码执行后a和b的值是（ ）。",
+      "code": "int a=3, b = 4;\na == b;\nb == a;\n|cout << a<< ' ' << b << endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 2级试题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2025-03-2-q03.png",
+      "confidence": "low",
+      "rawOcr": "1 int a=3, b = 4;\n\n2 a == b;\n\n3  b == a;\n\n4 |cout << a<< ' ' << b << endl;\n— A.34\n\nC B.33\n\nOc.44\n\nC D.43\n"
+    },
+    {
+      "id": "gesp-2025-03-2-05",
+      "question": "下面代码执行后tnt的值是（ ）。",
+      "code": "|int a=2, b = 3;\n| a=a-b;\n| b=a+b;\na=b-a;\n| printf(\"%d*%d=%d\\n\", a, b, a*b);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 2级试题",
+      "page": 7,
+      "crop": "reports/gesp-sources/crops/2025-03-2-q05.png",
+      "confidence": "low",
+      "rawOcr": "1 |int a=2, b = 3;\n\n2 | a=a-b;\n\n3 | b=a+b;\n\n4 a=b-a;\n\n5 | printf(\"%d*%d=%d\\n\", a, b, a*b);\n"
+    },
+    {
+      "id": "gesp-2025-03-2-06",
+      "question": "下面代码输出是（ ）。",
+      "code": "int i;\nfor (i = 10; i > 0; i -= 2)\nbreak;\ncout << i;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 2级试题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2025-03-2-q06.png",
+      "confidence": "low",
+      "rawOcr": "1 int i;\n2 for (i = 10; i > @; i -= 2)\n3     break;\n4 cout << i;\n— A. 10\n— B.8\nO c.0\nCD. BAGH PUTN ST breaks a) MAIEV, Bt Dn AE\n"
+    },
+    {
+      "id": "gesp-2025-03-2-07",
+      "question": "下面代码输出是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 2级试题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2025-03-2-q07.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2025-03-2-08",
+      "question": "下面代码输出是（ ）。",
+      "code": "int i,j;\n\\|for (i = 03; i < 53 i++)\nfor (j = i; j > 03; j -= 1)\nprintf(\"%d-\",7);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 2级试题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2025-03-2-q08.png",
+      "confidence": "low",
+      "rawOcr": "1 int i,j;\n2 \\|for (i = 03; i < 53 i++)\n3  for (j = i; j > 03; j -= 1)\n4        printf(\"%d-\",7);\n(A. 1-2-1-3-2-1-4-3-2-1-\nCB. 1-2-1-3-2-1-4-3-2-1\n—D C. 0-9-1-@-1-2-@-1-2-3-\n(DD. 0-@-1-8-1-2-9-1-2-3\n"
+    },
+    {
+      "id": "gesp-2025-03-2-10",
+      "question": "判断数字的某位是否为3，横线处应填入（ ）。找到3则____，没找到则____。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 2级试题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2025-03-2-q10.png",
+      "confidence": "low",
+      "rawOcr": "BAM UEDA ( ) o\n"
+    },
+    {
+      "id": "gesp-2025-06-1-06",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "|int x = 10, y = 20;\nx =x+y;\ny=x-y;\nx =x-y;\n|cout <<< << < ' ' << y;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+      "sourceTitle": "CCF GESP 2025年6月认证 C++ 1级试题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2025-06-1-q06.png",
+      "confidence": "low",
+      "rawOcr": "1 |int x = 10, y = 20;\n\n2 x =x+y3\n\n3 y=x-y;\n\n4 x =x-y;\n\n5 |cout <« x << ' ' << y;\n(CD A. 10 20\n\n(-D B. 20 10\n\n0 C. 1010\n\nCD Dz 20 20\n"
+    },
+    {
+      "id": "gesp-2025-06-1-09",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "| int a,b;\n|a=3;\nb=4;\n| printf(\"a+b=%02d#a+b={a+b}\", a+b, a+b);",
+      "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+      "sourceTitle": "CCF GESP 2025年6月认证 C++ 1级试题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2025-06-1-q09.png",
+      "confidence": "low",
+      "rawOcr": "1 | int a,b;\n\n2 |a=3;\n\n3 b=4;\n\n4 | printf(\"a+b=%@2d#a+b={a+b}\", a+b, a+b);\n"
+    },
+    {
+      "id": "gesp-2025-06-1-12",
+      "question": "求N的所有因数（从大到小输出），while循环横线处应填入（ ）。",
+      "code": "(int i, N;\n|cin >> N;\n|i =N;\n| while (      ){\nif (N% i == 0)\nprintf(\"%d,\", i);\ni -= 1;\n| printf(\"1\");",
+      "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+      "sourceTitle": "CCF GESP 2025年6月认证 C++ 1级试题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2025-06-1-q12.png",
+      "confidence": "low",
+      "rawOcr": "1 (int i, N;\n\n2 |cin >> N;\n\n3 |i =N;\n\n4 | while (      ){\n\n5      if (N% i == @)\n6       printf(\"%d,\", i);\n7     i -= 1;\n\n8 3\n\n9 | printf(\"1\");\n\nOA i-=1\n\n(CD B. i == 1\n\nOc i>\n\n() D. i >= 1\n"
+    },
+    {
+      "id": "gesp-2025-06-1-13",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "| int Sum = 0;\n| for (int i = 0; i < 10; i++){\nif (i % 2 == 0)\ncontinue;\nif (i %5 == 0)\nbreak;\nSum += i;\n| cout << Sum;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+      "sourceTitle": "CCF GESP 2025年6月认证 C++ 1级试题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2025-06-1-q13.png",
+      "confidence": "low",
+      "rawOcr": "1 | int Sum = @;\n2 | for (int i = @; i < 10; i++){\n3   if (i % 2 == @)\n4           continue;\n5   if (i %5 == @)\n6           break;\n7       Sum += i;\n8 |}\n9 | cout << Sum;\n\n(CD A. 55\n\nCE B. 15\n\n0 C.9\n\nOD D.4\n"
+    },
+    {
+      "id": "gesp-2025-06-1-14",
+      "question": "执行下面C++代码描述正确的是（ ）。",
+      "code": "| float x;\n|x = 101;\nx44;\n| cout << 4++x;\nOC C. #714 18;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+      "sourceTitle": "CCF GESP 2025年6月认证 C++ 1级试题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2025-06-1-q14.png",
+      "confidence": "low",
+      "rawOcr": "1 | float x;\n2 |x = 101;\n3 x44;\n4 | cout << 4++x;\nCD A. 47H} 101\n(CD B. #71} 182\nOC C. #714 183\nOC D. Sie. FORD\nS815 5H WRCHRIGT UR AT. he Mini ER EAE ES, BRB ITAS ARE ( )\n"
+    },
+    {
+      "id": "gesp-2025-06-2-09",
+      "question": "下面代码执行后cnt输出是（ ）。",
+      "code": "int i, cnt = 0;\n| for(i = -99; i < 100; i += 2)\ncnt = 1 + cnt;\n| cout << ent;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1687195838578720.pdf",
+      "sourceTitle": "CCF GESP 2025年6月认证 C++ 2级试题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2025-06-2-q09.png",
+      "confidence": "low",
+      "rawOcr": "1 int i, cnt = @;\n\n2 | for(i = -99; i < 100; i += 2)\n3      cnt = 1 + cnt;\n\n4 | cout << ent;\n\n- A. 101\n\nDC B. 100\n\n02 C.99\n(CD D. 98\n"
+    },
+    {
+      "id": "gesp-2023-12-3-03",
+      "question": "下⾯C++代码执⾏后不能输出\"GESP\"的是( )。",
+      "code": "(CD A. string str(\"GESP\"); cout<<str<<endl;\n() B. string str=\"GESP\"; cout<<str<<end1l;\n() C. string str(\"GESP\"); cout<<str[1]<<str[2]<<str[3]<<str[4]<<endl;\n() D. string str{\"GESP\"}; cout<<str<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q03.png",
+      "confidence": "low",
+      "rawOcr": "(CD A. string str(\"GESP\"); cout<<str<<end1;\n() B. string str=\"GESP\"; cout<<str<<end1l;\n() C. string str(\"GESP\"); cout<<str[1]<<str[2]<<str[3]<<str[4]<<end1;\n() D. string str{\"GESP\"}; cout<<str<<endl;\n"
+    },
+    {
+      "id": "gesp-2023-12-3-04",
+      "question": "执行下面C++代码输出是（ ）。",
+      "code": "int temp=0;\nfor(int i=13;i<7;i++)\n{\nfor(int j=1;j<5; j++)\n{\nif(i/j==2)\n{\ntemp++;\n}\n}\n}\ncout<<temp<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q04.png",
+      "confidence": "low",
+      "rawOcr": "int temp=0;\nfor(int i=13;i<7;i++)\n{\nfor(int j=1;j<5; j++)\n{\nif(i/j==2)\n{\ntemp++;\n}\n}\n}\ncout<<temp<<end1;\n"
+    },
+    {
+      "id": "gesp-2023-12-3-06",
+      "question": "执行下面C++代码后输出的是（ ）。",
+      "code": "string str=(\"chen\") ;\nint x=str.length();\ncout<<x<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q06.png",
+      "confidence": "low",
+      "rawOcr": "string str=(\"chen\") ;\nint x=str.length();\ncout<<x<<end1;\n\n(D A. 4\n\nC B.3\n\nOD C.2\n\nC D.5\n"
+    },
+    {
+      "id": "gesp-2023-12-3-07",
+      "question": "执行下面C++代码后输出的是（ ）。",
+      "code": "string str=(\"chen\");\ncout<<str[5]<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q07.png",
+      "confidence": "low",
+      "rawOcr": "string str=(\"chen\");\ncout<<str[5]<<end1;\nCO A. FT HH AR SB) 2\n© B. #f7HH'n'\n\n© C. 7H 0\n\nOC OD. Hii 248\n"
+    },
+    {
+      "id": "gesp-2023-12-3-08",
+      "question": "下面C++代码执行后的输出是（ ）。",
+      "code": "char ch[10]={'1'};\ncout<<ch[2]<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q08.png",
+      "confidence": "low",
+      "rawOcr": "char ch[10]={'1'};\ncout<<ch[2]<<end1;\n(j A.0\n\nCD B.1\n\nOC C. Hit 224%\n"
+    },
+    {
+      "id": "gesp-2023-12-3-09",
+      "question": "下面C++代码用于统计每种字符出现的次数，当输出为3时，横线上不能填入的代码是（ ）。",
+      "code": "string str=\"GESP is a good programming test!\";\nint x=0;\nfor(int i=0;i<str.length();i++)\n{\nif(_ i)\n{\n}\n}\ncout<<x<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q09.png",
+      "confidence": "low",
+      "rawOcr": "string str=\"GESP is a good programming test!\";\nint x=0;\nfor(int i=0;i<str.length();i++)\n{\nif(_ i)\n{\nX++5\n}\n}\ncout<<x<<end1;\nCD A. str[i]=='o'\n(CD B. str[i]J=='a'+14\n(DC. str[ij==115\n(CD D. str[i]==111\n"
+    },
+    {
+      "id": "gesp-2023-12-3-11",
+      "question": "下面C++程序执行的结果是（ ）。",
+      "code": "int cnt=0;\nfor(int 1=0;1<=20;i++)\n{\nif (i1%3==0881%5==0)\n{\ncnt++;\n}\n}\ncout<<cnt;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q11.png",
+      "confidence": "low",
+      "rawOcr": "int cnt=0;\nfor(int 1=0;1<=20;i++)\n{\nif (i1%3==0881%5==0)\n{\ncnt++;\n}\n}\ncout<<cnt;\n(CD A. 2\nCD B.3\n(<j ¢.5\n() D.4\n"
+    },
+    {
+      "id": "gesp-2023-12-3-12",
+      "question": "C++的数据类型转换让人很难琢磨透，下列代码输出的值是（ ）。",
+      "code": "int a=3;\nint b=2;\ncout<<a/b*1.0<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+      "sourceTitle": "GESP 12月认证C++三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2023-12-3-q12.png",
+      "confidence": "low",
+      "rawOcr": "int a=3;\n\nint b=2;\ncout<<a/b*1.0<<endl;\nCD A. 1.5\n\n(CD B.1\n\n() c.2\n"
+    },
+    {
+      "id": "gesp-2023-12-4-03",
+      "question": "下⾯C++代码最后执⾏后输出是（ ）。",
+      "code": "int funl(int *n)\n{\nreturn *n**n;\n}\nint main()\n{\nint arr[10]={2};\narr[1]=funi(arr);\ncout<<arr[1]<<endl;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+      "sourceTitle": "GESP 12月认证C++四级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2023-12-4-q03.png",
+      "confidence": "candidate",
+      "rawOcr": "int funl(int *n)\n\n{\nreturn *n**n;\n\n}\n\nint main()\n\n{\nint arr[10]={2};\narr[1]=funi(arr);\ncout<<arr[1]<<end1;\n\n}\n\nCD A. 1\n\nCB. 2\n"
+    },
+    {
+      "id": "gesp-2023-12-4-04",
+      "question": "下面C++代码执行后的结果是（ ）。",
+      "code": "int arr[3][3]={{1,2,3},{4,5,6},{7,8,9}}5\nfor(int 1=0;1<3;i++)\n{\nfor(int j=2;j>=0;j--)\n{\ncout<<arr[i][j]<<\" \";\n}\n_ cout<<endl;\n}\n12;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+      "sourceTitle": "GESP 12月认证C++四级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2023-12-4-q04.png",
+      "confidence": "low",
+      "rawOcr": "int arr[3][3]={{1,2,3},{4,5,6},{7,8,9}}5\nfor(int 1=0;1<3;i++)\n{\nfor(int j=2;j>=0;j--)\n{\ncout<<arr[i][j]<<\" \"3\n}\n_ cout<<endl;\n}\n123\nOn ase\n789\nOB. 123456789\n321\nOe b54\n987\n"
+    },
+    {
+      "id": "gesp-2023-12-4-12",
+      "question": "以下C++代码⽤于实现每个整数对应的因数，如输⼊12，则输出1 2 3 4 6 12；如输⼊18，则输出1 2 3 6 9 18。横线处应填⼊代码是（ ）。",
+      "code": "int n;\ncin>>n3;\nfor(int i=1;1i<=n;i++)\n{\n{\ncout<<i<<\" \"5\n}\n}\n(CD A. if(n%i==0)",
+      "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+      "sourceTitle": "GESP 12月认证C++四级真题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2023-12-4-q12.png",
+      "confidence": "low",
+      "rawOcr": "236918. PRA IRARSeE ( )\nint n;\ncin>>n3;\nfor(int i=1;1i<=n;i++)\n{\n\n{\n\ncout<<i<<\" \"5\n}\n}\n\n(CD A. if(n%i==0)\n"
+    },
+    {
+      "id": "gesp-2024-03-3-03",
+      "question": "下⾯C++代码执⾏后的输出是( )。",
+      "code": "| int main()\n{\ncout << (3|16) << endl;\ncout << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+      "sourceTitle": "GESP 3月认证C++三级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2024-03-3-q03.png",
+      "confidence": "candidate",
+      "rawOcr": "1 | int main()\n\n2 {\n\n3     cout << (3|16) << endl;\n4\n\n5     cout << endl;\n6     return 0;\n\n7 3\nOA. 3\nOC B. 16\n\nOc. 19\n\nCO D. 48\n"
+    },
+    {
+      "id": "gesp-2024-03-3-06",
+      "question": "下⾯C++代码执⾏后数组中⼤于0的数的特征是（ ）。",
+      "code": "int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\nali] = i+1;\nfor(int i = 0; i < 20; i++)\nif ((ali]%2)8&&(a[i]%3))\nafi] = 9;\nfor(i = 0; i < 20; i++)\nif(a[i])\ncout << afi] << \"\";",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+      "sourceTitle": "GESP 3月认证C++三级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-03-3-q06.png",
+      "confidence": "candidate",
+      "rawOcr": "1 int main()\n2 {\n3      int a[20],i;\n4      for(i = @; i < 20; i++)\n5          ali] = i+1;\n6\n7      for(int i = 0; i < 20; i++)\n8          if ((ali]%2)8&&(a[i]%3))\n9              afi] = 9;\n10\n11      for(i = @; i < 20; i++)\n12          if(a[i])\n13               cout << afi] << \"\";\n14\n15\n"
+    },
+    {
+      "id": "gesp-2024-03-3-07",
+      "question": "执⾏下⾯C++代码后输出的第⼀个数是（ ）。",
+      "code": "| int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\na[i] = i+1;\nfor( ; i > 0; i--)\ncout << a[i-1] << \" \"5\ncout << endl;\nreturn 0;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+      "sourceTitle": "GESP 3月认证C++三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-03-3-q07.png",
+      "confidence": "candidate",
+      "rawOcr": "1 | int main()\n2 {\n3      int a[20],i;\n4     for(i = @; i < 20; i++)\n5        a[i] = i+1;\n6\n7    for( ; i > @; i--)\n8       cout << a[i-1] << \" \"5\n9\n10     cout << endl;\n11     return Q;\n12 }\nC- A. 20\n0 B.19\neKen!\nOC Dz ARE\n"
+    },
+    {
+      "id": "gesp-2024-03-3-08",
+      "question": "在下列代码的横线处填写（ ），可以使得输出是GESP IS INTERESTING。",
+      "code": "int main()\n{\nstring str=\"gEsP is Interesting\";\nint x = str.length();\nfor(int i = 0; i < x; i++)\nif ((str[i]>='a') && (str[i]<=\"z'))\ncout << str << endl;\ncout << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+      "sourceTitle": "GESP 3月认证C++三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-03-3-q08.png",
+      "confidence": "candidate",
+      "rawOcr": "1 int main()\n2 {\n3     string str=\"gEsP is Interesting\";\n4     int x = str.length();\n5\n6     for(int i = @; i < x; i++)\n7        if ((str[i]>='a') && (str[i]<=\"z'))\n8            — r—s—“‘—stCS\n9     cout << str << endl;\n\n10\n\n11     cout << endl;\n\n12      return @;\n\n13 |}\n\n(CD A. str[i]t='a'-'A’\n\nCD B. str[i]+=20\n\nOc. str[i}+='a'-'a'\n\nCD. HERB\n"
+    },
+    {
+      "id": "gesp-2024-03-3-09",
+      "question": "假设英⽂句⼦由若⼲词构成。下⾯C++代码统计输出的词数是（ ）。",
+      "code": "int main()\nstring str=\"gEsP is Interesting !\";\nint x = str.length();\nint nwords = 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+      "sourceTitle": "GESP 3月认证C++三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-03-3-q09.png",
+      "confidence": "candidate",
+      "rawOcr": "1 int main()\n\n2\n\n3    string str=\"gEsP is Interesting !\";\n4     int x = str.length();\n\n5     int nwords = @;\n\n6\n"
+    },
+    {
+      "id": "gesp-2024-03-4-02",
+      "question": "下⾯C++代码执⾏后，输出的是( )。",
+      "code": "int main()\n{\nint x[]={2, 0, 2, 4};\nchar geSP[]=\"Grade Examination of SP\";\ncout << geSP[sizeof(x)] << endl;\ncout << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+      "sourceTitle": "GESP 3月认证C++四级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2024-03-4-q02.png",
+      "confidence": "candidate",
+      "rawOcr": "1 int main()\n2 {\n3    int x[]={2, 0, 2, 4};\n4     char geSP[]=\"Grade Examination of SP\";\n5\n6     cout << geSP[sizeof(x)] << endl;\n7\n8     cout << endl;\n9      return @;\n10 (}\nOA. G\n() B. e\nOC. n\n0 D. P\n"
+    },
+    {
+      "id": "gesp-2024-03-4-03",
+      "question": "下⾯C++代码执⾏后输出是( )。",
+      "code": "|int foo(float *f)\n{\nreturn int(*#*2);\nint main()",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+      "sourceTitle": "GESP 3月认证C++四级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2024-03-4-q03.png",
+      "confidence": "candidate",
+      "rawOcr": "1 |int foo(float *f)\n\n2 {\n\n3     return int(*#*2);\n4}\n\n5\n\n6 int main()\n"
+    },
+    {
+      "id": "gesp-2024-03-4-06",
+      "question": "下⾯C++代码执⾏后输出是（ ）。",
+      "code": "int main()\nchar *p=\"I love GESP!\";\ncout << p+5 << endl;\ncout << endl;\nreturn 0;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+      "sourceTitle": "GESP 3月认证C++四级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-03-4-q06.png",
+      "confidence": "candidate",
+      "rawOcr": "1 int main()\n\n2{\n\n3     char *p=\"I love GESP!\";\n4     cout << p+5 << endl;\n5\n\n6     cout << endl;\n\n7     return Q;\n\n8 }\n(DA. e\n() B. I lov\n\n— C. e GESP!\n\nC D. GESP!\n"
+    },
+    {
+      "id": "gesp-2024-03-4-07",
+      "question": "下⾯C++代码执⾏以后输出的是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+      "sourceTitle": "GESP 3月认证C++四级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-03-4-q07.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2024-03-4-08",
+      "question": "下面代码用于计算斐波那契数列，横线处填写（ ）。",
+      "code": "int fib(int n)\n{\nint i, f[n]={0, 1};\nfor(int i=2; i<=n; i++)\nf[ij=f[i-1]+f[i-2];\nreturn f[n];",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+      "sourceTitle": "GESP 3月认证C++四级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-03-4-q08.png",
+      "confidence": "low",
+      "rawOcr": "1 int fib(int n)\n2 {\n3     int i, f[n]={@, 1};\n4\n5    for(int i=2; i<=n; i++)\n6        f[ij=f[i-1]+f[i-2];\n7\n8      return f[n];\n9}\n10\n(CD A. wee\nO B. a8\nCC. eR\nCD D. 18s\n"
+    },
+    {
+      "id": "gesp-2024-03-4-12",
+      "question": "下面代码的输出是（ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+      "sourceTitle": "GESP 3月认证C++四级真题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2024-03-4-q12.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2024-06-3-04",
+      "question": "下列代码将⼗进制转化成⼋进制，则横线上应填⼊（ ）。",
+      "code": "#include <iostream>\nusing namespace std;\n| void decimal2octal(int decimal) {\nint oct_number[100];\nint i = 0;\nwhile (decimal > 0) {\n____;  // 在此处填入代码\n}\n1;\nfor (int j = i- 1; j >= 0; j--) f{\ncout << oct_number[j];\n}\ncout << endl;\n() A. oct_number[i] = decimal % 8;    decimal /= 8;\n() B. oct_number[i] = decimal / 8;    decimal %/= 8;\nOC C. oct_number[i++] = decimal % 8;    decimal /= 8;\n() D. oct_number[i++] = decimal / 8;    decimal %= 8;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 三级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-06-3-q04.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n\n2\n\n3 using namespace std;\n\n4\n\n5 | void decimal2octal(int decimal) {\n\n6     int oct_number[10Q];\n\n7     int i = @;\n\n8\n\n9     while (decimal > 0) {\n\n10                                 / /FECRMEAES\n11\n\n12     }\n\n13\n\n14     for (int j = i- 1; j >= 0; j--) f{\n\n15         cout << oct_number[j];\n\n16     }\n\n17     cout << endl;\n\n18}\n() A. oct_number[i] = decimal % 8;    decimal /= 8;\n() B. oct_number[i] = decimal / 8;    decimal %/= 8;\nOC C. oct_number[i++] = decimal % 8;    decimal /= 8;\n() D. oct_number[i++] = decimal / 8;    decimal %= 8;\n"
+    },
+    {
+      "id": "gesp-2024-06-3-07",
+      "question": "下列代码的输出结果是（ ）。",
+      "code": "#include <iostream>\n(using namespace std;\n|int main() {\nint a = 12;\nint result = a >> 2;\ncout << result << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-06-3-q07.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n2 (using namespace std;\n3\n4 |int main() {\n5      int a = 12;\n6      int result = a >> 2;\n7      cout << result << endl;\n8      return Q;\n9}\n0A. 12\nCD B.6\n0 C.3\nOQ D.1\n"
+    },
+    {
+      "id": "gesp-2024-06-3-08",
+      "question": "下列代码的输出结果是（ ）。",
+      "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint a = 5;\nint b = 10;\na=a%*b;\nb=a%*b;\na=a%*b;\ncout << \"a=\"<<a<< \", b=\" << b << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-06-3-q08.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n2 |using namespace std;\n3\n\n4 |int main() {\n\n5     int a = 5;\n\n6      int b = 10;\n\n7\n\n8     a=a%*b;\n\n9     b=a%*b;\n\n10     a=a%*b;\n\n11\n\n12     cout << \"a=\"<<a<< \", b=\" << b << endl;\n13      return Q;\n\n14 |}\n"
+    },
+    {
+      "id": "gesp-2024-06-3-10",
+      "question": "在下列代码的横线处填写( )，可以使得输出是“7”。",
+      "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint array[5] = {3, 7, 5, 2, 4};\nint max = 0;\nfor(int i=0; i<5; i++)\nif (____)  // 在此处填入代码\nmax = array[il];\ncout << max << endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 三级真题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2024-06-3-q10.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n\n2 |using namespace std;\n\n3\n\n4 |int main() {\n\n5       int array[5] = {3, 7, 5, 2, 4};\n6\n\n7      int max = @;\n\n8      for(int i=0; i<5; i++)\n\n9                   if(         ) // FESR AES\n10              max = array[il];\n11\n12      cout << max << endl;\n13      return Q;\n14 |}\n"
+    },
+    {
+      "id": "gesp-2024-06-3-12",
+      "question": "已知字符 '0' 的ASCII编码的⼗进制表⽰为48，则执⾏下⾯C++代码后，输出是( )。",
+      "code": "#include <iostream>\n|using namespace std;\n|int main() {\nstring s = \"0629\";\nint n = s.length();\nint x = 0;\nfor(int i = 0; i <n; i++)\nx += s[i];\ncout << << < endl;\nreturn 0;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 三级真题",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2024-06-3-q12.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n2 |using namespace std;\n3\n4 |int main() {\n5      string s = \"0629\";\n6\n7      int n = s.length();\n8      int x = Q;\n9      for(int i = @; i <n; i++)\n10          x += s[i];\n11\n12      cout << x << endl;\n13      return Q;\n14 |}\n(CD A.17\nC) B. 158\nCD C. 209\nC- Dz« 316\n"
+    },
+    {
+      "id": "gesp-2024-06-4-04",
+      "question": "假设变量a的地址是0x6ffe14，下面程序的输出是（ ）。",
+      "code": "#include<iostream>\nusing namespace std;\nint main()\nint *p;\nint a=1ée;\np=&a;\n&      pt+;\ncout<<p<<endl;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 四级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-06-4-q04.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include<iostream>\n2 using namespace std;\n3 int main()\n\n4cif{\n\n5      int *p;\n\n6      int a=1ée;\n\n7      p=&a;\n\n&      pt+;\n\n9      cout<<p<<endl;\n18   }\n\nOC A. 10\n\nCD B. Ox6ffe14\n\n(1C. @x6ffe15\n"
+    },
+    {
+      "id": "gesp-2024-06-4-08",
+      "question": "下列程序横线处，应该输⼊的是 （ ）。",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+      "sourceTitle": "GESP 6月认证 C++ 四级真题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2024-06-4-q08.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2024-09-3-01",
+      "question": "下列代码中，输出结果是（ ）",
+      "code": "#include<iostream>\n|using namespace std;\nint main()\n{\ndouble a=0.9;\ndouble b=1.0;\nif(((b-a)==0.1))\n{\ncout<<\"Equal\"<<endl;\n}\nelse\n{\ncout<<\"Not equal\"<<endl;\n}",
+      "source": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 三级真题",
+      "page": 1,
+      "crop": "reports/gesp-sources/crops/2024-09-3-q01.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include<iostream>\n2 |using namespace std;\n3 int main()\n4 {\n5      double a=0.9;\n6     double b=1.0;\n7     if(((b-a)==0.1))\n8     {\n9         cout<<\"Equal\"<<end1;\n10      }\n11     else\n12      {\n13         cout<<\"Not equal\"<<endl;\n14      }\n15\n16}\nDC A. Equal\n() B. Not equal\nOC C. AAR BELEREUT\nOD D. RAH\n"
+    },
+    {
+      "id": "gesp-2024-09-3-10",
+      "question": "下列程序中，result和result2输出分别是( ) 1 long a = 123;",
+      "code": "| long a = 123;\n|int b= 1;\n| long result = a & b;\n| cout<<result<<endl;\n| long a2 = -123;\n|unsigned int b2 = -1;\nlong result2 = a2 & b2;\ncout<<result2<<endl;\nCB. 123-12;\nCD. 1 -12;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-09-3-q10.png",
+      "confidence": "low",
+      "rawOcr": "1 | long a = 123;\n2 |int b= 1;\n3 | long result = a & b;\n4 | cout<<result<<endl;\n5\n6 | long a2 = -123;\n7 |unsigned int b2 = -1;\n8 long result2 = a2 & b2;\n9  cout<<result2<<end1;\n— A. 123 -1\nCB. 123-123\nOc 1-1\nCD. 1 -123\n"
+    },
+    {
+      "id": "gesp-2024-09-3-12",
+      "question": "关于一维数组，下列程序能够正确执行的是（ ）。",
+      "code": "| int a[10];\n(int sum=0;\n| for(int i=0;i<=10;i++) {\nsum=sum+a[i];",
+      "source": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+      "sourceTitle": "GESP 9月认证 C++ 三级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-09-3-q12.png",
+      "confidence": "low",
+      "rawOcr": "DA.\n1 | int a[10];\n2 (int sum=@;\n3 | for(int i=@;i<=10;i++) {\n4     sum=sum+a[i];\n5}\n0 B.\n"
+    },
+    {
+      "id": "gesp-2024-12-3-07",
+      "question": "下列代码输出的是（ ）。",
+      "code": "| string s=\"123400chenadai\";\nstring str=\"12345\";\n| s.replace(1,5,str);\n| cout<<s<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+      "sourceTitle": "GESP 2024年12月认证 C++ 3级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-12-3-q07.png",
+      "confidence": "low",
+      "rawOcr": "1 | string s=\"1234@@chenadai\";\n2 string str=\"12345\";\n3 | s.replace(1,5,str);\n4 | cout<<s<<end1;\n— A. 12345\nOC B. 2345@\n(CD C. 112345chenadai\n(D D. 12345chenadai\n"
+    },
+    {
+      "id": "gesp-2024-12-3-09",
+      "question": "下列程序输出的是（ ）",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+      "sourceTitle": "GESP 2024年12月认证 C++ 3级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-12-3-q09.png",
+      "confidence": "low",
+      "rawOcr": ""
+    },
+    {
+      "id": "gesp-2024-12-3-11",
+      "question": "下列程序最后输出的是（）",
+      "code": "int a=65;\n| cout<<tolower(a)<<endl;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+      "sourceTitle": "GESP 2024年12月认证 C++ 3级真题",
+      "page": 3,
+      "crop": "reports/gesp-sources/crops/2024-12-3-q11.png",
+      "confidence": "low",
+      "rawOcr": "1 int a=65;\n2 | cout<<tolower(a)<<end1;\nCA. 65\nOBA\nOC. a\nCQ D. 97\n"
+    },
+    {
+      "id": "gesp-2024-12-4-04",
+      "question": "运⾏下⾯代码，屏幕上输出是（ ）。 1 double* p_arr = new double [3]; 2 p_arr[0] = 0.2; 3 p_arr[1] = 0.5; 4 p_arr[2] = 0.8; 5 p_arr += 1;",
+      "code": "|double* p_arr = new double [3];\np_arr[0] = 0.2;\n|p_arr[1] = 0.5;\n|p_arr[2] = 0.8;\n|p_arr += 1;\ncout << p_arr[00] << endl;\n\\p_arr -= 1;\ndelete p_arr;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1650239710691360.pdf",
+      "sourceTitle": "GESP 2024年12月认证 C++ 4级真题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2024-12-4-q04.png",
+      "confidence": "low",
+      "rawOcr": "1 |double* p_arr = new double [3];\n2 p_arr[@] = 0.2;\n3 |p_arr[1] = @.5;\n4 |p_arr[2] = 0.8;\n5 |p_arr += 1;\n6 cout << p_arr[Q@] << endl;\n7 \\p_arr -= 1;\n8 delete p_arr;\n— A.0.2\nCB. 0.5\nOc12\n"
+    },
+    {
+      "id": "gesp-2025-03-3-07",
+      "question": "在C++中，以下代码的输出是什么()",
+      "code": "int a = -5;\nunsigned int b = a;\ncout << b;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 3级试题",
+      "page": 2,
+      "crop": "reports/gesp-sources/crops/2025-03-3-q07.png",
+      "confidence": "low",
+      "rawOcr": "1     int a = -5;\n2     unsigned int b = a;\n3     cout << b;\n\nOA. -5\n\nOB 5\n\n0 C. 4294967291\n\nCD. ee\n"
+    },
+    {
+      "id": "gesp-2025-03-3-09",
+      "question": "下⾯程序是将⼗进制转⼗六进制，横线处应该填⼊的是（）",
+      "code": "",
+      "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 3级试题",
+      "page": 6,
+      "crop": "reports/gesp-sources/crops/2025-03-3-q09.png",
+      "confidence": "low",
+      "rawOcr": "5B 10 eH CCF FUME) = 21AC( FSH) AKAKDS)\n"
+    },
+    {
+      "id": "gesp-2025-03-3-12",
+      "question": "以下代码的功能是将数组中的奇数和偶数分别放在数组的前半部分和后半部分,横线处应该填⼊的是（）",
+      "code": "#include <iostream>\nusing namespace std;\n|int main() {\nint arr[] = {1, 2, 3, 4, 5};\nint left = 0, right = 4;\nwhile (left < right) {\nwhile (arr[left] % 2 == 1 && left < right) left++;\nif (left < right) {\nswap(arr[left], arr[right]);\n}\n}\nfor (int i = 0; i < 5; i++) {\ncout << arr[i] << \" \"5\n}\nreturn 0;\n}\n() A. while (arr[left] % 2 == 0 & left < right) right--;\nCB. while (arr[right] % 2 == 0 && left < right) left--;\nOC. while (arr[right] % 2 != 0 && left < right) right--;\n© D. while (arr[right] % 2 == 0 && left < right) right--;",
+      "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 3级试题",
+      "page": 4,
+      "crop": "reports/gesp-sources/crops/2025-03-3-q12.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n2 using namespace std;\n3\n4 |int main() {\n5     int arr[] = {1, 2, 3, 4, 5};\n6     int left = 0, right = 4;\n7     while (left < right) {\n8        while (arr[left] % 2 == 1 && left < right) left++;\n9        SS\n10        if (left < right) {\n11          swap(arr[left], arr[right]);\n12        }\n13     }\n14      for (int i = 0; i < 5; i++) {\n15        cout << arr[i] << \" \"5\n16     }\n17      return Q;\n18 }\n() A. while (arr[left] % 2 == @ & left < right) right--;\nCB. while (arr[right] % 2 == @ && left < right) left--;\nOC. while (arr[right] % 2 != @ && left < right) right--;\n© D. while (arr[right] % 2 == 0 && left < right) right--;\n"
+    },
+    {
+      "id": "gesp-2025-03-3-14",
+      "question": "想要得到字符串world,下⾯程序横线处应该填⼊的是（）",
+      "code": "#include <iostream>\n#include <string>\nusing namespace std;\n|int main() {\nstring str = \"HelloC++\";\nreturn 0;\nstr.insert(4, \"World\");\n9)     cnint ee etr cihetr(da aA).",
+      "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+      "sourceTitle": "CCF GESP 2025年3月认证 C++ 3级试题",
+      "page": 5,
+      "crop": "reports/gesp-sources/crops/2025-03-3-q14.png",
+      "confidence": "candidate",
+      "rawOcr": "1 #include <iostream>\n2 #include <string>\n3 using namespace std;\n4\n5 |int main() {\n6      string str = \"HelloC++\";\n7     ——————\n8     a\n9      return Q;\n10}\nOA.\n1     str.insert(4, \"World\");\n9)     cnint ee etr cihetr(da aA).\n"
+    }
+  ],
+  "skipped": [
+    {
+      "id": "gesp-2023-06-1-13",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 13 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2023-06-2-14",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 14 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2023-09-2-10",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 10 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2023-12-1-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 11 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-06-1-12",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 12 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-09-2-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 11 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-12-1-15",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 15 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2025-03-1-15",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 15 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2025-06-1-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 115, in main\n    page_no = find_page(source_key, question_no)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 33, in find_page\n    raise RuntimeError(f\"question {question_no} not found in {source_key}\")\nRuntimeError: question 11 not found in 2025-06-1\n"
+    },
+    {
+      "id": "gesp-2025-06-1-15",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 115, in main\n    page_no = find_page(source_key, question_no)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 33, in find_page\n    raise RuntimeError(f\"question {question_no} not found in {source_key}\")\nRuntimeError: question 15 not found in 2025-06-1\n"
+    },
+    {
+      "id": "gesp-2023-12-4-06",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 6 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2023-12-4-07",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 7 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2023-12-4-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 11 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-03-3-05",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 5 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-03-3-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 11 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-03-4-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 115, in main\n    page_no = find_page(source_key, question_no)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 33, in find_page\n    raise RuntimeError(f\"question {question_no} not found in {source_key}\")\nRuntimeError: question 11 not found in 2024-03-4\n"
+    },
+    {
+      "id": "gesp-2024-06-3-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 11 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-06-3-15",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 115, in main\n    page_no = find_page(source_key, question_no)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 33, in find_page\n    raise RuntimeError(f\"question {question_no} not found in {source_key}\")\nRuntimeError: question 15 not found in 2024-06-3\n"
+    },
+    {
+      "id": "gesp-2024-06-4-12",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 12 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2024-09-3-15",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 15 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2025-03-3-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 115, in main\n    page_no = find_page(source_key, question_no)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 33, in find_page\n    raise RuntimeError(f\"question {question_no} not found in {source_key}\")\nRuntimeError: question 11 not found in 2025-03-3\n"
+    },
+    {
+      "id": "gesp-2025-03-3-15",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 120, in main\n    top, bottom = locate_crop(lines, question_no, page.height)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 70, in locate_crop\n    raise RuntimeError(f\"question line {question_no} not found on rendered page\")\nRuntimeError: question line 15 not found on rendered page\n"
+    },
+    {
+      "id": "gesp-2025-06-3-11",
+      "reason": "Traceback (most recent call last):\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 134, in <module>\n    main()\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 115, in main\n    page_no = find_page(source_key, question_no)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hanliuliu/Desktop/学生成长计划/csp学习助手（师+生）/csp-desktop-pet/scripts/extract_gesp_code_region.py\", line 33, in find_page\n    raise RuntimeError(f\"question {question_no} not found in {source_key}\")\nRuntimeError: question 11 not found in 2025-06-3\n"
+    }
+  ]
+}

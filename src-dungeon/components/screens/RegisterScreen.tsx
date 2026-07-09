@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { registerPlayer } from '../../utils/api';
 import { readDesktopBinding, isBindingComplete, buildPlayerIdentity } from '../../utils/autoRegister';
-import { navigateToMainApp } from '../../DungeonEmbed';
+import { navigateToMainApp } from '../../utils/routeBridge';
 import schoolsData from '../../data/schools.json';
 import type { School, SchoolDefinition } from '../../types/dungeon';
+import { getSchoolPassive } from '../../utils/gameLogic';
 
 const schools = schoolsData as SchoolDefinition[];
 
@@ -120,6 +121,9 @@ export default function RegisterScreen() {
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4, lineHeight: 1.6 }}>
                     {school.description.slice(0, 80)}...
+                  </div>
+                  <div style={{ fontSize: 11, color: school.themeColor, marginTop: 6, lineHeight: 1.6 }}>
+                    被动：{getSchoolPassive(school.id).name} · {getSchoolPassive(school.id).description}
                   </div>
                 </div>
                 {selectedSchool === school.id && (

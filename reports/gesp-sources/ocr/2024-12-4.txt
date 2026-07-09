@@ -1,0 +1,504 @@
+
+--- page 1 ---
+ GESP CCF编程能力等级认证
+SS 7AEA                                         tas                           :
+cc¥                               Grade Examination of Software Programming
+C++ 四级
+2024年 12 月
+1 Bum (每题2 分，共 30 分)
+M@s 123 45 67 8 9 10 11 12 13 14 15
+@& ABBBDDODODAC BBA CA
+1 PIN. ( ) 正确定义了一个计算浮点数z的平方(z? = > x z)的函数,并成功调用该函数。
+OA.
+1 float square(float x) {
+2     return x * x;
+3}
+4 float area = square(2);
+OB.
+1 square(float x) {
+2     return x * x;
+3}
+4 float area = square(2);
+Oc.
+1 void square(float x) {
+2     return x * x;
+3}
+4 area = square(2.@);
+OD.
+1 void square(float x) {
+2     x * x;
+3     return;
+4}
+5 area = square(2);
+第2题 下面代码的描述中，正确的是 () 。
+
+
+--- page 2 ---
+1 void n_chars(char c, int n) {
+2    while (n-- > 9)
+3        cout << Cc;
+4}
+5
+6 char my_char = 'w';
+7 int times = 5;
+8  n_chars(my_char, times);
+O A. 代码执行结束后，times 的值为0
+OB n 是形参，times 是实参
+上口 C.n 是实参，times 是形参
+CD. 代码最后一行换成 m_chars(times，my_char); 也可以
+第3题 给定以下代码，
+1 void func(int& x) {
+2     x =x * 2;
+3}
+4
+5 int a = 5;
+6 func(a);
+执行上述代码后,变量 a 的值为( ) 。
+OAS
+口 B.10
+口 c.15
+口 D.20
+第4题 运行下面代码，屏幕上输出是 ( ) 。
+1 double* p_arr = new double [3];
+2 p_arr[@] = 0.2;
+3 p_arr[1] = 0.5;
+4 p_arr[2] = 0.8;
+5 p_arr += 1;
+6 cout << p_arr[@] << endl;
+7 p_arr -= 1;
+8 delete p_arr;
+口 A.0.2
+口 B.0.5
+口 c.12
+口 D.1.5
+第5题 运行下面代码片段后，x 和 *p 的结果分别是〈 ) 。
+
+
+--- page 3 ---
+1 int x = 20;
+2 int* p = &;
+3 *p = *p + 2;
+口 A.2020
+口 B.2022
+口 c.2220
+口 D.22 22
+第6题 下面的描述中，(〈 ) 不能正确定义一个名为 student 的结构体以及一个包含20个元素的结构数组。
+OA.
+1 struct Student {
+2      string name;
+3     int age;
+4     float score;
+54S
+6 struct Student students[20];
+OB.
+1 struct Student {
+2      string name;
+3     int age;
+4     float score;
+543
+6 Student students[20];
+oc.
+1 struct Student {
+2      string name;
+3     int age;
+4     float score;
+5 33
+6 Student* students = new Student[20];
+Op.
+1 struct Student {
+2      string name;
+3     int age;
+4     float score;
+5 33
+6 Student students = new Student[20];
+第7题 假定整型是32位，对一个2行3列的二维整数数组 array ,假设数组第一个元素在内存中的地址为
+Ox7FFee4065820 ，则第2行第2个元素的地址 &array[1][1] W () 。
+
+
+--- page 4 ---
+ int array[2][3] = {
+2    {@, 1, 2},
+3     {3, 4, 5}
+445
+OA. 0x7ffee4065824
+O B. 0x7ffee4065828
+O C. 0x7ffee406582c
+O D. 0x7ffee4065830
+第8题 下面 ( ) 正确定义二维数组。
+OA. int af3][];
+OB. int a[][];
+Oc. int a[][4]，
+OC D. int ar[][2] = {{1,2},{1,2},{3,4}}5
+FO PTA EAE ER TE BB RBA f(n) = f(n—1) + jn一2)，则横线上应填写( ) 。
+ int fib(int n) {
+2  if (n == @ || n == 1)
+3        return n;
+4
+5     int f1 = @;
+6     int #2 = 1;
+7     int result = 0;
+8     for (int i = 2; i <= ni i++) {
+?         ~” /丰此处这和代码
+10     }
+11     return result;
+124
+DA.
+1 result = f1 + £2;
+2 f1 = f2;
+3 #2 = result;
+OB.
+1 result += f1 + £2;
+2 fl = £2;
+3 £2 = result;
+oc.
+1 result += f1 + £2;
+2 £2 = result;
+3 fl = £2;
+
+
+--- page 5 ---
+OD.
+1 result = f1 + £2;
+2 2 = result;
+3 fl = £2;
+第 10 题 下面关于排序算法 〈冒泡排序、插入排序和选择排序) 的描述中，不正确的是 ( ) 。
+口 A. 冒泡排序基于元素交换实现，需借助临时变量，共涉及3个单元操作; 而插入排序基于元素赋值实现，仅需1
+个单元操作。因此冒泡排序的计算开销通常比插入排序更高。
+口 B. 选择排序在任何情况下的时间复杂度都为O (n2) 。
+CC. 冒泡排序在任何情况下的时间复杂度都为O (2) 。
+OD. 如果给定数据部分有序，插入排序通常比选择排序效率更高。
+第1 题 冒泡排序的第一轮操作是从左到右遍历数组，通过两两比较相邻元素，将当前最大的元素移动到末尾。给
+定数组 arr[]={4，1，3，1，5，2} ，执行第一轮冒泡排序后数组 arr 中的内容为〈《 ) 。
+口A.1，4，3，1，5，2
+口B.1，3，1，4，2，5
+口c. 1,，4，3，1，2，5
+口D. 4，1，3，1，5，2
+第12题 给定如下代码，其时间复杂度为( ) 。
+ int cellRecur(int n) {
+2     if (n == 1)
+3         return 1;
+4     return cellRecur(n - 1) + cellRecur(n - 1) + 13
+5
+OC A0(n’)
+© B.0(2")
+ocon)
+口D.om)
+第13 题 下面代码实现了插入排序函数，则横线上应填写 ( ) 。
+
+
+--- page 6 ---
+ void insertion_sort(vector<int> &nums) {
+2     for (int i = 1; i < nums.size(); i++) {
+3
+4                                    { 7// 在此处填入代码
+5
+6        while (j >= @ && nums[j] > base)
+7
+8           nums[j + 1] = nums[j];
+9            jo
+10         }
+11        nums[j + 1] = base;
+12      }
+13 |}
+(J A. int base = nums[i], j = i - 1;
+(DB. int base = nums[i], j = i;
+(J C. int base = nums[@], j = i - 1;
+© D. int base = nums[@], j = i;
+第14题 下面哪种方式不能实现将字符串"Welcome to GESP!"输出重定向到文件 log.txt ( ) 。
+OA.
+1 freopen("log.txt", "w", stdout);
+2 cout << "Welcome to GESP!" << endl;
+3 fclose(stdout) ;
+OB.
+1 std::ofstream outFile("log.txt");
+2  outFile << "Welcome to GESP!" << endl;
+3 outFile.close();
+oc.
+1 std::ofstream outFile("log.txt");
+2 cout << "Welcome to GESP!" << endl;
+3 outFile.close();
+Ob.
+1 ofstream log file("log.txt");
+2 streambuf* org_cout = cout.rdbuf();
+3 cout. rdbuf(log_file.rdbuf());
+4 cout << "This output will go to the log file." << endl;
+5 cout. rdbuf(oorg_cout) ;
+第15题 运行下面的代码，将出现什么情况? ( )
+1 double hmean(double a, double b) {
+2     if (a == -b )
+3         throw runtime_error("Runtime error occurred");
+
+
+--- page 7 ---
+4     return 2.0*a*b/(a + b);
+5}
+6
+7 int main() {
+8     double x = 10;
+9     double y = -10;
+10
+11     try {
+12        int result = hmean(x, y);
+13        cout << “hmean: " << result << endl;
+14     }
+15     catch (const runtime_error& e) {
+16        cout << "Caught: " << e.what() << endl;
+17     } catch (...) {
+18        cout << "Caught an unknown exception." << endl;
+19     }
+20     return @;
+21}
+OC A. 屏幕上输出 Caught: Runtime error occurred
+口 B.屏幕上输出 Caught an unknown exception
+口 C. 程序调用 std::terminate()
+口 D. 编译错误
+2 ”判断题 〈每题2分，共 20 分)
+题号12345678 9 10
+答案 x xxxVVVVYVx x
+第1题 在C++中，下面代码可以正确定义指针和初始化指针。
+了 int* ptr;
+2 *ptr = 10;
+第2题 一个函数必须在调用之前既声明又定义。
+第3题 函数参数可以通过值传递、引用传递和指针传递，这样函数内对参数的修改可以直接修改传入变量的值。
+第4题 int arr[3][] 是一个正确的二维数组的声明。
+第5题 递推是一种通过已知的初始值和递推公式，逐步求解目标值的算法。
+第6题 某算法的递推关系式为T(n) = T(n - 1) +n (?为正整数) 及T(0) = 1，则该算法的时间复杂度为D(n2) 。
+第7题 冒泡排序的平均时间复杂度为 O(z2) ，但最优情况下为O(m) 。
+第8题 骨泡排序和插入排序都是稳定的排序算法。
+第9题 选择排序是稳定的排序算法。
+第10题 在 C++语言中，如果一个函数可能抛出异常，那么一定要在try 子句里调用这个函数。
+
+
+--- page 8 ---
+3 ”编程题 (M25 分，共 50 分)
+3.1 ”编程题1
+
+。 试题名称: Recaman
+
+。 时间限制: 1.0s
+
+。 内存限制: 512.0 MB
+3.1.1 题目描述
+小杨最近发现了有趣的 Recaman 数列，这个数列是这样生成的:
+
+。 数列的第一项 al 是 1;
+
+。 如果 ag 一天是正整数并且没有在数列中出现过，那么数列的第类项 ak 为 ak-1 一到，否则为 ok-l + he
+小杨想知道 Recaman 数列的前m项从小到大排序后的结果。手动计算非常困难，小杨希望你能帮他解决这个问题。
+3.1.2 ”输入格式
+第一行，一个正整数 m。
+
+3.1.3 ”输出格式
+一行, n 个空格分隔的整数，表示 Recaman 数列的前 n 项从小到大排序后的结果。
+3.1.4 #4
+3.1.5 AB I
+15
+3.1.6 BAH 1
+1012367
+3.1.7 RAAB 2
+1 8
+3.1.8 ”输出样例2
+1 123671213 20
+3.1.9 ”样例解释
+FRE 1, n= 5:
+
+© a=1;
+
+。 al 一2 = 一1，不是正整数，因此az =a, +2=3;
+
+。 oa2 一3=0，不是正整数，因此 as = az十3=6;
+
+。 as 一4=2，是正整数，且没有在数列中出现过，因此 ay = 2;
+
+
+--- page 9 ---
+。 a4一5= 一3，不是正整数，因此os = ag +5 = 7;
+al 42, 43,04, 05 从小到大排序后的结果为 1 2 3 6 7 。
+3.1.10 “数据范围
+对于所有数据点，保证1科m < 3000。
+
+3.1.11 ”参考程序
+工 #include <cstdio>
+2 #include <algorithm>
+3
+4 using namespace std;
+5
+6 const int N = 2e5 +5;
+7 const int C = 1e6 + 5;
+8
+9 int nj
+
+10 int a[N];
+
+il int vis[c];
+
+12
+
+13 void bubble_sort(int *a, int n) {
+
+14      bool flag = true;
+
+15     while (flag) {
+
+16         flag = false;
+
+17        for (int i = 1; i <n; ++i) {
+
+18           if (a[i] > afi +1]) {
+
+19                flag = true;
+
+20               int t = a[i];
+
+21               a{i] = a[i + 1];
+
+22               afi +1] =t;
+
+23            }
+
+24         }
+
+25      }
+
+26 |}
+
+27
+
+28 int main() {
+
+29     scanf("%d", &n);
+
+30     a[1] = 1;
+
+31     vis[1] = 1;
+
+32     for (int i = 2; i <= ni i++) {
+
+33        if (afi - 1] - i <= @ || visf{a[i - 1] - i])
+
+34           afi] = a[i - 1] + i;
+
+35         else
+
+36           a[i] = a[i - 1] - i;
+
+37        vis[a[i]] = 1;
+
+38     }
+
+39     bubble_sort(a, n);
+
+40     for (int i = 1; i <= ni i++)
+
+41        printf("%d%c", afi], " \n"[i == n]);
+
+42     return @;
+
+43 |}
+
+
+--- page 10 ---
+。 试题名称: 字符排序
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+3.2.1 Mme
+小杨有普个仅包含小写字母的字符串 81, 826.65 sn，小杨想将这些字符串按一定顺序排列后拼接到一起构成字符串二
+。小杨希望最后构成的字符串 二满足:
+。 假设去 为字符串宇的第站个字符，对于所有的了<1i均有塘生万。两个字符的大小关系与其在字母表中的顺序一
+RL, fille <g<p<so
+小杨想知道是否存在满足条件的字符串排列顺序。
+第一行包含一个正整数卫，代表测试数据组数。
+对于每组测试数据，第一行包含一个正整数风，含义如题面所示。
+之后风行，每行包含一个字符串 si。
+对于每组测试数据，如果存在满足条件的排列顺序，输出 1，否则输出 0。
+3.2.4 #4]
+1 3
+2 3
+3 aa
+4 ac
+5 de
+6 2
+7 aac
+8 be
+9 1
+10 gesp
+1 1
+2 9
+3 8
+3.2.5 FERRE
+对于第一组测试数据，一种可行的排列顺序为 aatac+tde，构成的字符串 七为 aaacde，满足条件。
+对于全部数据，保证有1< tn < 100，每个字符串的长度不超过 10.
+
+
+--- page 11 ---
+工 #include<bits/stdc++.h>
+
+2 using namespace std;
+
+3 string s[110];
+
+4 void bubble_sort(string *a, int n) {
+5      bool flag = true;
+
+6     while (flag) {
+
+7         flag = false;
+
+8        for (int i = 1; i <n; ++i) {
+9           if (a[i] > afi +1]) {
+10                flag = true;
+
+11               string t = a[i];
+12               a{i] = a[i + 1];
+13               afi +1] = t;
+14            }
+
+15         }
+
+16     }
+
+17 |}
+
+18 int main(){
+
+19     int t;
+
+20     cin>>t;
+
+21     while(t--){
+
+22         int n;
+
+23         cin>>n;
+
+24         for(int i=1;i<=n;i++){
+25            cin>>s[i];
+
+26         }
+
+27       bubble_sort(s, n);
+
+28         string t="";
+
+29         for(int i=1;i<=n;i++){
+30            t+=s[i];
+
+31         }
+
+32         int m = t.size();
+
+33         int f1=1;
+
+34         for(int i=1;i<m;i++){
+35            if(t[i]<t[i-1]){
+
+36               #1=0;
+
+37               break;
+
+38            }
+
+39         }
+40         cout<<fl<<"\n";
+41     }
+42 |}

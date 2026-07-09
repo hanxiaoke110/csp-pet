@@ -2,9 +2,15 @@
 // Used as the primary persistence layer replacing localStorage for core data.
 import { invoke } from '@tauri-apps/api/core';
 
-// 检测是否在 Tauri 运行时内（浏览器里 invoke 为 undefined，需降级到 localStorage 防崩）
+// 检测是否在 Tauri 运行时内。
+// 在普通浏览器里，@tauri-apps/api/core 的 invoke 函数也可能被打包出来，
+// 但内部桥接对象不存在；直接调用会抛 window.__TAURI_INTERNALS__.invoke 相关错误。
 function isTauriAvailable(): boolean {
-  return typeof invoke === 'function';
+  if (typeof window === 'undefined') return false;
+  const w = window as Window & {
+    __TAURI_INTERNALS__?: { invoke?: unknown };
+  };
+  return typeof invoke === 'function' && typeof w.__TAURI_INTERNALS__?.invoke === 'function';
 }
 
 // Tauri 不可用时降级到 localStorage（开发期浏览器预览、或异常环境兜底）

@@ -1449,7 +1449,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据结构-图",
-    "question": "下列流程图，属于计算机的哪种程序结构？（ ）。\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2023-03-2-02.svg)",
+    "question": "下列流程图，属于计算机的哪种程序结构？（ ）。",
     "options": [
       "A. 顺序结构",
       "B. 循环结构",
@@ -1461,7 +1461,8 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": true,
-    "level": 2
+    "level": 2,
+    "image": "/course-data/flowchart-gesp-2023-03-2-02.svg"
   },
   "gesp-2023-03-2-03": {
     "id": "gesp-2023-03-2-03",
@@ -2043,7 +2044,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据结构-图",
-    "question": "能够实现下面流程图功能的伪代码是（ ）。\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2023-06-2-02.svg)",
+    "question": "能够实现下面流程图功能的伪代码是（ ）。",
     "options": [
       "A. if条件判断then语句块",
       "B. if条件判断then什么也不做else语句块",
@@ -2055,7 +2056,8 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": true,
-    "level": 2
+    "level": 2,
+    "image": "/course-data/flowchart-gesp-2023-06-2-02.svg"
   },
   "gesp-2023-06-2-03": {
     "id": "gesp-2023-06-2-03",
@@ -2665,7 +2667,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据结构-图",
-    "question": "下列流程图的输出结果是（ ）？\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2023-09-2-02.svg)",
+    "question": "下列流程图的输出结果是（ ）？",
     "options": [
       "A. 5 12",
       "B. 12 5",
@@ -2677,7 +2679,8 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": true,
-    "level": 2
+    "level": 2,
+    "image": "/course-data/flowchart-gesp-2023-09-2-02.svg"
   },
   "gesp-2023-09-2-03": {
     "id": "gesp-2023-09-2-03",
@@ -4778,7 +4781,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "数据结构-图",
-    "question": "判断闰年的流程图中菱形框应填入（ ）。\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
+    "question": "判断闰年的流程图中菱形框应填入（ ）。",
     "options": [
       "A. (yr%400==0)||(yr%4==0)",
       "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
@@ -4790,7 +4793,8 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": true,
-    "level": 2
+    "level": 2,
+    "image": "/course-data/flowchart-gesp-2024-06-2-02.svg"
   },
   "gesp-2024-06-2-03": {
     "id": "gesp-2024-06-2-03",
@@ -9110,7 +9114,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "计算机基础",
-    "question": "下列流程图的输出结果是（ ）？\n\n![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-3-06.svg)",
+    "question": "下列流程图的输出结果是（ ）？",
     "options": [
       "A. 5",
       "B. 10",
@@ -9121,8 +9125,9 @@
     "explanation": "【需流程图】根据流程图逻辑，输出结果为10。答案B(10)。",
     "difficulty": 1,
     "questionType": "choice",
-    "hasImage": false,
-    "level": 3
+    "hasImage": true,
+    "level": 3,
+    "image": "/course-data/flowchart-gesp-2024-06-3-06.svg"
   },
   "gesp-2024-06-3-07": {
     "id": "gesp-2024-06-3-07",

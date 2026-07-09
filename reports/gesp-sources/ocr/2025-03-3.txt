@@ -1,0 +1,378 @@
+
+--- page 1 ---
+it SEAN.
+ GESP CCF编程能力等级认证
+cc¥                                Grade Examination of Software Programming
+C++ 三级
+2025 年 03 月
+
+1 Ba (每题2 分，共 30 分)
+‘@2123 45678 9 10 i 12 13 14 15
+EZDBAABACACD DOD BOD C
+
+第1题 Base64 编码将每3字节的输入数据编码为4字节的输出数据。如果输入数据长度不是 3 的倍数，会用 = 号填
+
+充。在Base64编码中，如果输入字符串的长度为10字节，编码后的字符串长度是多少 ( )
+
+OA. 12 字节
+
+口 B. 13 字节
+
+Oc 14 字节
+
+口 D. 16 字节
+
+第2题 UTF-8 编码规则如下:
+
+1 字节: Oxxxxxxx
+
+2 字节: 110xxxxx 10xxxxxx
+
+3 字节: 1110xxxx 10xxxxxx 10xxxxxx
+
+4字节: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+
+以下哪个字节序列是合法的 UTF-8 编码 〈 )
+
+(A. exce ex8e
+
+(CD B. OxF@ 6x98 6x86 8x86
+
+OC. 0x80 6x86 6x86
+
+O D. @xFF @xFE @xFD
+
+第3题 在8 位二进制原码表示中，八进制数 -5 的二进制形式是什么 ()
+
+口 A. 10000101
+
+口 B. 11111616
+
+口 C. 11111011
+
+器 D. 00000101
+
+第4题 十进制数 111.111 的二进制表示可以是下面的( ) 。
+
+
+--- page 2 ---
+CA. 1101111.0001110001
+口 B. 1101110.1001110001
+口 C. 1101111.1001110001
+口 D. 11e1111.6811116861
+第5题 在C++中，补码的主要作用是 O
+OA. 提高浮点数的精度
+口 B. 简化整数的加减法运算
+O C. 增加整数的表示范围
+口 D. 优化内存分配
+第6题 在C++中，一个8位有符号整数 〈使用补码表示) 的范围是 O
+OC A. -128 到 127
+口 B. -127 到 128
+口 C. -256 到 255
+口 D. 8到 255
+第7题 在C++中，以下代码的输出是什么()
+1     int a = -5
+2     unsigned int b = a;
+3     cout << bj;
+OA. -5
+OBS
+口 C. 4294967291
+口 D. 编译错误
+第8题 下列程序的作用是 〈)
+1 int main() {
+2     int decimal = 25;
+3     cout << oct << decimal;
+4     return @;
+>}
+CO) A. 将十进制数转换成八进制数
+CB 将八进制数转换成十进制数
+CO) C. 将二进制数转换成八进制数
+口 D. 将八进制数转换成16进制数
+(ie oy Mh ELS ee Lente tial oe bheteade bie AlN EL
+
+
+--- page 3 ---
+1 #include <iostream>
+2 using namespace std;
+3
+4 int main() {
+5     int decimal = 255;
+6     -~
+7     return @;
+8 }
+口 A. cout << oct << decimal;
+口 B. cout << decimal << decimal;
+(DC. cout << hex << decimal;
+© D. 不能正确执行
+第10题 以下代码的说法正确的是什么()
+工 #include <iostream>
+2 using namespace std;
+3
+4 int main() {
+5     int a = @b1101;
+6     int b = @b1011;
+7     cout << (a * b);
+8      return 0;
+9}
+10
+OC A. 进行的是整体异或运算
+口 B. 进行的是按位同或运算
+口 C. 进行的是按位与运算
+O D. 进行的是按位异或运算
+第1 题 下面枚举法查找最大值索引程序中，横线处应该填写的是 〈)
+工 #include <iostream>
+2 using namespace std;
+3
+4 int main() {
+5    int arr[] = {3, 7, 2, 9, 5};
+6     int maxIndex = 0;
+7     for (int i = 1; i < 5; i++) {
+8         ~
+9         {
+10            maxIndex = i;
+11         }
+12     }
+13     cout << maxIndex;
+14      return Q;
+15 }
+
+
+--- page 4 ---
+(CD A. if (arr[maxIndex] > arr[i])
+(CB. if (arr[i]-1 > arr[maxIndex])
+OC. if (arr[i]+1 > arr[maxIndex])
+© D«. if (arr[i] > arr[maxIndex])
+第12题 以下代码的功能是将数组中的奇数和偶数分别放在数组的前半部分和后半部分,横线处应该填入的是 〈)
+工 #include <iostream>
+2 using namespace std;
+3
+4 int main() {
+5    int arr[] = {1, 2, 3, 4, 5};
+6     int left = 0, right = 4;
+7     while (left < right) {
+8        while (arr[left] % 2 == 1 && left < right) left++;
+9
+10       if (left < right) {
+11         swap(arr[left], arr[right]);
+12        }
+13     }
+14      for (int i = 0; i < 5; i++) {
+15       cout << arr[i] << " "3
+16     }
+17      return 0;
+18 |}
+(CD A. while (arr[left] % 2 == @ && left < right) right--;
+© B. while (arr[right] % 2 == @ & left < right) left--;
+© C. while (arr[right] % 2 != © && left < right) right--;
+© Dz. while (arr[right] % 2 == @ && left < right) right--;
+第 13 题 下面程序最后能够得到 HelloC++ 的是 ()
+1
+2 int main() {
+3     string str = "HelloWorld";
+4     ee
+5     cout << str;
+6     return @;
+7}
+OA.
+1    str.replace(@, 5, "C++");
+口 B.
+1    str.replace(5, 5, "C++");
+Mc.
+
+
+--- page 5 ---
+工    str.replace(1, 5, "C++");
+OD.
+1    str.replace(4, 5, "C++");
+第 14 题 想要得到字符串 world ,下面程序横线处应该填入的是 〈)
+工 #include <iostream>
+2 #include <string>
+3 using namespace std;
+4
+5 int main() {
+6     string str = "HelloC++";
+7     ee
+8     es
+9      return 0;
+10 |}
+OA.
+1    str.insert(4, "World");
+2     cout << str.substr(4, 4);
+OB.
+1     cout << str.substr(5, 5);
+oc
+1     str.insert("World");
+2     cout << str.substr(5, 5);
+OD.
+1    str.insert(5, "“World");
+2     cout << str.substr(5, 5);
+第15题 有Dn个正整数，假设一个正整数是美丽数字当且仅当该正整数是 9 的倍数但不是 8 的倍数。下面的程序是
+编写计算mn 个正整数中美丽数字的数量，横线处应该填入的是 〈)
+1 for (int i = 1; i <= ni itt) {
+2     cin >> a3
+3     a
+4         cnt++;
+5}
+OCA. if (a %9 != 0 && a % 8 != @)
+(CB. if (a%9 == @&a % 8 == @)
+OC. if (a% 9 == @ 8& a % 8 != @)
+1D. if (a%9 == @&a% 8B != @)
+
+
+--- page 6 ---
+2 ”判断题 (每题2 分，共 20 分)
+题号12345678 9 10
+BR xVVVV VV Vv x x
+第1题 判断一个三角形是否成立的条件只有 :任意两边长度之和大于第三条边的长度
+第2 题 这段程序进行的是判断一个从键盘输入的字符的ASCIL 是否是奇数，若是，输出 YES，否则，和输出 NO
+1 int main()
+2{
+3     char x;
+4     scanf("%c", &x);
+5     int ASCII = (int)x;
+6     cout << (x &1 ? "YES" : "NO") << ANn
+7     return @;
+8 }
+第3题 AEM:
+普通阔年: 公历年份是4的倍数，且不是 100 的倍数的，为头年〈如 2004 年、2020 年等就是闽年) 。
+世纪阔年: 公历年份是整百数的，必须是 400 的倍数才是冰年如 1900 年不是六年，2000 年是闵年) 。
+下面程序是判断是否是六年的正确程序
+工     cin>>n;
+2         cout<< ((n%4==0&&n%100! =@) | | (n%4@0==0) )?1:0;
+3     return @;
+第4题 C++语句 cout<<(n%15==0? "YES":"NO") 5 能够判断一个整数能否被3和5同时整除
+第5题 有n个同学，从中抽取任意个人数来参加学校组织的大合唱，共有2的n次寡个方法
+第6题 若将一个正整数化为二进制数，在此二进制数中，我们将数字 1 的个数是偶数的这类二进制数称为A类数，
+否则就称其为B 类数。
+例如:
+(13) 10 =(1161) 2 ，其中 1 的个数为 3则称此数为 B 类数，
+(10) 10 =(1010) 2 ，其中 1 的个数为 2，称此数为 A 类数，
+判断 (2025) 10化为二进制后，1的个数为偶数个，因此2025为A类数。
+第7题 该段程序将n 不停地除以2，并输出此时的商和余数，直到 n-0 为止。
+1 long long n;
+2 cin >> nj;
+3 while(n != @) {
+4     cout << n/2 << ' ' <« n%2 << ANn'
+5     n /= 23
+6 }
+第8题 两个13进制的数A和B，在10进制下分别表示10和11。 (A+B) 13= (18) 13，也就是说13进制数A加上13进
+制数B，和是13进制数18。
+第9题 k UE, MEK MERA, ke 进百位，R WEP HL:
+第 10 题 CCF(十九进制)= 21AC(十三进制不区分大小写)
+
+
+--- page 7 ---
+3 ”编程题 《每题 25 分，共 50 分)
+3.1 ”编程题1
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+3.1.1 2025
+3.1.2 ”题目描述
+小A有一个整数 >，他想找到最小的正整数 y 使得下式成立:
+(z and y)+(e or 如=2025
+其中 and 表示二进制按位与运算，or 表示二进制按位或运算。如果不存在满足条件的y，则输出 -1。
+3.1.3 HABA
+一行，一个整数 r。
+3.1.4 ”输出格式
+一行，一个整数，若满足条件的y 存在则输出 y，否则输出 -1。
+3.1.5 #6
+3.15.1 HARI
+1 1025
+3.15.2 ”输出样例1
+1 1000
+3.1.6 ”数据范围
+对于所有测试点，保证 0 < aw < 2025。
+3.1.7 “提示
+(z and y)+(e or y) = 2025
+其中:
+。 and 表示按位与运算，运算符为 & 。
+。 or 表示按位或运算，运算符为 | 。
+3.1.8 ”参考程序
+1 #include <cstdio>
+2 using namespace std;
+5
+6 int main() {
+7     scanf("%d", &x);
+
+
+--- page 8 ---
+8     for (int i = 1; i <= 2025; i++)
+
+9       if ((x & i) + (x | i) == 2025) {
+
+10          printf("%d\n", i);
+
+11            return Q;
+
+12        }
+
+13     printf("-1\n");
+
+14      return Q;
+
+15}
+3.2 ”编程题 2
+
+。 时间限制: 1.0s
+
+。 内存限制: 512.0 MB
+3.2.9”词频统计
+3.2.10 ”题目描述
+在文本处理中，统计单词出现的频率是一个常见的任务。现在，给定半个单词，你需要找出其中出现次数最多的单
+词。在本题中，忽略单词中字母的大小写 〈(即 Apple 、 apple 、 APPLE. aPPle 等均视为同一个单词) 。
+请你编写一个程序，输入mm 个单词，输出其中出现次数最多的单词。
+3.2.11 ”输入格式
+第一行，一个整数风，表示单词的个数;
+接下来另行，每行包含一个单词，单词由大小写英文字母组成。
+输入保证，出现次数最多的单词只会有一个。
+3.2.12 ”输出格式
+输出一行，包含出现次数最多的单词 〈输出单词为小写形式) 。
+3.2.13 “”样例
+3.2.13.3 HARA 1
+
+1 6
+
+2 Apple
+
+3 banana
+
+4 apple
+
+5 Orange
+
+6 banana
+
+7 apple
+3.2.13.4 Ae
+
+1 apple
+3.2.14 “数据范围
+对于所有测试点，1 <n < 100，每个单词的长度不超过 30，且仅由大小写英文字母组成。
+
+
+--- page 9 ---
+3.2.1S “参考程序
+工 #include <bits/stdc++.h>
+2 using namespace std;
+3 int main() {
+4
+5     int nj cin >> n; assert(1 <= n && n <= 100);
+6     map<string, int> cnt;
+7     int mx = -1;
+8   for (int i = 1; i <=n; i++) {
+9        string s; cin >> s;
+10        assert(s.length() <= 30);
+11       transform(s.begin(), s.end(), s.begin(), ::tolower) ;
+12       if (! cnt.count(s))
+13            cnt[s] = @;
+14        mx = max(mx, ++ cnt[s]);
+15     }
+16     int mx_num = @;
+17     for (auto it = cnt.begin(); it != cnt.end(); it++)
+18       if ((it->second) == mx) {
+19          cout << (it->first) << '\n';
+20             mx_num ++;
+21        }
+22     assert(mx_num == 1);
+23      return 0;
+24 }

@@ -1,0 +1,451 @@
+
+--- page 1 ---
+计算:
+ CESP CCF编程能力等级认证
+cc¥                               Grade Examination of Software Programming
+C++ 三级
+2024 年 12 月
+1 单选题 (每题2 分，共 30 分)
+“@f123456789 0 1 2 13 11
+答案 BDAADBCAAD DCODCA
+
+第1题 下列二进制表示的十进制数值分别是〈 )
+
+1 [10000011] R= ( )
+
+2 [16666611]补= ( )
+
+OA. -125, -3
+
+© B. -3, -125
+
+Oc. -3, -3
+
+© Dz. -125, -125
+第2题 关于计算机中的编码，下列说法中错误的是 O
+
+OC A. 对于无符号数，原码就是真值
+
+口 B. 正数的反码是其本身
+
+O C. 负数的反码和补码是不一样的
+
+口 D. 负数的反码，在其原码的基础上, 各个位取反
+第3题 16进制数B2025转换成8进制数是 〈)
+
+口 A. 2620045
+
+OC B. 2004526
+
+OC. 729125
+
+© D. 2420045
+第4题 625.625变成二进制是 ( ) 。
+
+口 A. 1001110001.101
+
+© B. 101.101
+
+口 C. 101.1001110001
+
+oO D. 1001110001.1101
+
+
+--- page 2 ---
+第5题 下面罗辑运算中，正确的是〈 )
+口 A. 58&&3==0
+口 B. 5|3==8
+口 C. 5||3==11
+OD. 58&3==0001
+第6题 补码1111 1161进行运算1111 1161>>1以后得到的结果是 ()
+口 A. 1111 1100
+口 B. -2
+Oc. 1111 1101
+口 D. 1111 1010
+第7题 下列代码输出的是
+1 | string s="1234@@chenadai";
+2 string str="12345";
+3 s.replace(1,5,str);
+4 cout<<s<<end1;
+口 A. 12345
+口 B. 2345@
+口 C. 112345chenadai
+口 D. 12345chenadai
+第8题 a|16 (a与16都是16进制，且二进制表示最高位为1) 运算的结果是 ( ) 。
+O A. 使3的二进制表示从右往左的第二位为1
+口 B. 使的二进制表示从右往左的第一位为9
+O C. 使的二进制表示从右往左第二位为9
+O D. 使的二进制表示最高位为8
+第 9 题 下列程序输出的是 ( )
+
+
+--- page 3 ---
+] string ch="hello";
+2 if(ch[5]==NULL)
+3 f
+4     cout<<"right"<<end1;
+5}
+6 else if (ch[5]=='\e')
+7 {
+8     cout<<"wrong"<<end1;
+9}
+10 else
+il 《
+12     cout<<"hello"<<end1;
+13 |}
+OA. right
+OC B. wrong
+OC. hello
+口 D. 不能正确执行
+第 10 题 下列程序中，假设一个字符占用的内存空间是1，下列程序中，ch占用的内存空间是 ()
+ char ch[] = “hello world";
+2 size _t ret=strlen(ch);
+3 cout<<ret<<endl;
+OA. 11
+0 B. 10
+oc. 13
+口 D. 12
+第11 题 下列程序最后输出的是 ()
+ int a=65;
+2 cout<<tolower(a)<<endl;
+OA. 65
+OBA
+Oca
+0 D. 97
+第 12 题 想要计算从数字n到数字m之间 (包含n和m) 有多少个数字d出现，下列程序哪个能够实现 ( ) 。
+OA.
+
+
+--- page 4 ---
+ int n,m,res,d;
+2 cin >>n >>m>>d;
+3 for(int i = n+1; i <= m; i++){
+4     int temp = i;
+5     while(temp){
+6         if(temp % 10 == d) res++;
+7         temp /= 10;
+8     了
+9 】}
+10 cout << res << endl;
+11 return @;
+Os.
+1 int n,m,res,d;
+2 cin >> n >> m>>d;
+3 for(int i =n; i <= mi i++){
+4     int temp = i;
+5     while(temp){
+6         if(temp % 10 = d) res++;
+7         temp /= 10;
+8     了
+9 】}
+10 cout << res << endl;
+11 return @;
+oc.
+1 int n,m,res=0,d;
+2 cin >> n >> m>>d;
+3 for(int i =n; i <= mi i++){
+4     int temp = i;
+5     while(temp){
+6         if(temp % 10 == d) res++;
+7         temp /= 10;
+8     了
+9}
+10 cout << res << endl;
+11 return @;
+op.
+1 int n,m,res=0,d;
+2 cin >> n >> m>>d;
+3 for(int i =n; i <= mi i++){
+4     while(temp){
+5         if(temp % 10 == d) res++;
+6         temp /= 10;
+7     }
+8 }
+9 cout << res << endl;
+10 return @;
+
+
+--- page 5 ---
+第13 题 兔子五元一只，鸡三元一上只，小鸭子一元三只，现在你有一百元要买一百上只，兔子、鸡、隐子，问兔子、
+鸡、鸭子各买多少只，每种必须至少一上只，下列哪个程序能实现。 ( ) 。
+OA.
+1 for(int i = 0; i <= 100; i++){
+2     for(int j = 0; j <= 100; j++){
+3        for(int k = @; k <= 100; k++){
+4     if(i + 4+ k == 100 & 25 * i +10 * j +k == 300)
+5             cout << i << " "<< j <x" " << k << endl;
+6        t
+7     t
+8 }
+OB.
+1 for(int i = 0; i <= 100; i++){
+2     for(int j = 6; j <= 100; j++){
+3        for(int k = @; k <= 100; k++){
+4     if(i + j +k == 100 & 20 * i + 10 * j + k == 300)
+5             cout << i << “ "<< j <<" " << k << endl;
+6        t
+7     t
+8 }
+oc.
+1 for(int i = 0; i <= 20; i++){
+2     for(int j = 0; j <= 34; j++){
+3        for(int k = @; k <= 20; k++){
+4     if(i + j+k == 100 8& 15 *i+9* j +k == 300)
+5             cout << i << “ "<< j <<" " << k << endl;
+6        t
+7     t
+8}
+OD.
+1 for(int i = 0; i <= 100; i++){
+2     for(int j = 6; j <= 100; j++){
+3        for(int k = @; k <= 100; k++){
+4     if(i + j+k == 100 8& 15 *i+9* j +k == 300)
+5             cout << i << " "<< j <x" " << k << endl;
+6        t
+7     t
+8}
+第 14 题 求小于等于N的素数的方法中，有一种方法是将所有从2到它本身减1的数都除一遍，如果不能整除，就是素
+数。下列哪个程序，体现了这种方法 O
+口 A.
+] if(N >= 3){
+2 cout<<2<<end1;
+3 for(int i = 2;i <= Nii ++){
+
+
+--- page 6 ---
+4     for(int j = 23j < isj ++){
+5         if(i % j != @){
+6            flag = 1;
+7         }
+8     }
+9      if(flag == @){
+10         cout<<i<<endl;
+11     }
+12     flag = 0;
+13     }
+14 3
+OB.
+Lif (N >= 2){
+2 for(int i = 33i <= Nii ++){
+3     for(int j = 233 < isj ++){
+4         if(i % j == @){
+5            flag = 1;
+6         了
+7     了
+8      if(flag == 6){
+9         cout<<i<<endl;
+10     }
+11     flag = 0;
+12     }
+13 }
+oc.
+Lif (N >= 2){
+2 cout<<2<<endl;
+3 for(int i = 3;i <= Nii ++){
+4     for(int j = 235 < ij ++){
+5         if(i % j == @){
+6            flag = 1;
+7         了
+8     了
+9      if(flag == 6){
+10         cout<<i<<endl;
+11     }
+12     flag = 0;
+13     }
+14}
+Op.
+
+
+--- page 7 ---
+1 if(N >= 2){
+2     cout<<2<<endl;
+3     for(int i = 331 <= Nii ++){
+4        for(int j = 23j < isj ++){
+5            if(i % j == 6){
+6               flag = 1;
+7           了
+8        了
+9         if(flag == 6){
+10           cout<<i<<endl;
+11        }
+12     }
+13 }
+第15 题 工人工作一天，会得到一个金环作为工资报酬，某个工作需要15天完成，一条15个环的金环项链，为了严
+格执行每天工作结束时，完成对工人工资的结算，最少需要将金环项链剪裁成几段，每段几个金环 ( )
+O A. 4段，分别是1、2，4，8
+口 B. 15段，每段1个
+OC. 6段，分别是3、3、3、3、2、11
+口 D. 9段，分别是2、2、2、2、2、2、1、1、1
+2 判断题 (每题2分，共 20 分)
+题号12345678 9 10
+答案VVVxVVxVVV
+第1题 为了简化计算机基本运算电路，使加减法都只需要通过加法电路实现，也就是让减去一个正数或加上一个负
+数这样的运算可以用加上一个正数来代替。于是改变负数存储的形式，存储成一种可以直接当成正数来相加的形
+式，这种形式就是补码。
+第2题 使用原码进行的计算， 2+(-1) 的结果是 -3
+第3题 反码计算加减法: 加法与减法结果都是正确的，只是解决不了 -8 的问题
+第4题 10 进制数 63 ，在转换成二进制的计算过程中，产生了如下的式子:
+1 63/2=31 余 1
+2 31/2=15 余 1
+3 15/2=7 余1
+4 7/2=3 #1
+5 3/21 余1
+6 1/2 余1
+按照从前往后的顺序，获得 63 的二进制值是 111111
+第5题 下列程序输出的是 A
+1s char x=65;
+2 x=x&@0001111;
+3 cout<<x<<end1;
+
+
+--- page 8 ---
+第6题 下列可执行程序段中，最后 pos 的值是4
+1 string str="chenADai";
+2 int pos = str.find('D');
+3 --pos&11;
+第7题
+1 string ch="chen";
+2 cout<<ch[4]<<endl;
+该段程序将不能正确执行
+第8题
+1 char a='A';
+2 a=a+32;
+3 cout<<(int)a<<endl;
+将输出 97
+第9题 自然界中，最小的素数是2
+第 10 题 CCF(十六进制) = 12363(七进制)
+3 ”编程题 (每题 25 分，共 50 分)
+3.1 ”编程题 1
+。 试题名称: 数字替换
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+3.1.1 Meee
+小杨有一个包含见个数字的序列 A, BY 4 = {a1,02,...,an}. THRE PAF b BE a a FEL OG
+其中小于大的数字都蔡换为序列的最小值，请你帮他计算出蔡换后的序列。
+3.1.2 ”输入格式
+第一行包含两个正整数 mw,友，含义如题面所示。
+第二行包含m” 个数字，代表序列 4。
+3.1.3 ”输出格式
+输出交个整数，代表替换后的结果。
+3.1.4 HF
+150
+2-2-1012
+1-2-2022
+
+
+--- page 9 ---
+对于全部数据，保证有1和m 105,|对,|ail < 105。
+工 #include <iostream>
+2 #include <vector>
+3 #include <algorithm>
+4 using namespace std;
+5 int a[100010];
+6 int main() {
+7     int n, k;
+8     cin >> n >> kj
+9     for (int i = 1; i <=n; i++) {
+10        cin >> a[i];
+11     }
+12     int max_value = a[1],min_value=a[1];
+13     for (int i = 1; i <=n; i++) {
+14                max_value=max(max_value,a[i]);
+15                min_value=min(min_value,a[i]);
+16     }
+17     for (int i = 1; i <=n; i++) {
+18        if (a[i] > k) {
+19            a[i] = max_value;
+20        } else if (a[i] < k) {
+21           a[i] = min_value;
+22        }
+23        if (i !=n) {
+24          cout << afi] << ”
+25         } else {
+26           cout << a[i] << endl;
+27        }
+28     }
+29
+30     return 0;
+31 3}
+3.2 ”编程题2
+。 试题名称: 打印数字
+。 时间限制: 1.0s
+。 内存限制: 512.0 MB
+3.2.1 题面描述
+小杨为数字 0, 1, 2 和 3 设计了一款表示形式，每个数字占用了5 x 5 的网格。数字 0, 1 2 和 3 的表示形式如下:
+小杨想请你将给定的数字 转换为对应的表示形式。
+
+
+--- page 10 ---
+3.2.2 ”输入格式
+
+第一行包含一个正整数代表 m。
+
+3.2.3 ”输出格式
+
+输出对应的表示形式。
+
+3.2.4 FEB)
+1 12230
+
+SPARE. PIE O <n < 10°, An ACHES 0, 1, 2, 3组成。
+1 #include <iostream>
+2 #include <string>
+3 using namespace std;
+4
+5 int main() {
+6     string n;
+7     cin >> nj
+8
+9     for (int row = @; row < 5; row++) {
+10        string line = "";
+11       for (char digit : n) {
+12           if (digit == '@') {
+13               if (row == @ || row == 4) {
+14                line += "....."5
+15               } else {
+16                  line += ".***."5
+17               }
+18           } else if (digit == '1') {
+19               line += "****."5
+20           } else if (digit == '2') {
+21               if (row == @) {
+22                line += "....."5
+23               } else if (row == 1) {
+24                  line += "****."5
+25               } else if (row == 2) {
+26                line += "....."5
+27               } else if (row == 3) {
+28                  line += ".**#*";
+29               } else {
+30                line += "....."5
+31               }
+32           } else if (digit == '3') {
+33               if (row == @) {
+34                line += "....."5
+
+
+--- page 11 ---
+35               } else if (row == 1) {
+36                  line += "****."5
+37               } else if (row == 2) {
+38                line += "....."5
+39               } else if (row == 3) {
+40                  line += "****."5
+41               } else {
+
+42                line += "....."5
+43               }
+
+44            }
+
+45         }
+
+46        cout << line << endl;
+
+47     }
+
+48
+
+49     return @;
+
+50 }

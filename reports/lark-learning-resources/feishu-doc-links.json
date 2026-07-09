@@ -1,0 +1,1725 @@
+{
+  "createdAt": "2026-07-09T02:13:29.296Z",
+  "folder": {
+    "name": "CSP-J学习资料占位-2026-07",
+    "folderToken": "UIqef45D2lc458dpuOqcu8CCnHe",
+    "url": "https://scncdgmg7m6w.feishu.cn/drive/folder/UIqef45D2lc458dpuOqcu8CCnHe"
+  },
+  "resources": [
+    {
+      "resourceId": "p01-lecture",
+      "lessonNo": 1,
+      "type": "lecture",
+      "title": "基础框架",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P01｜讲义卡｜基础框架",
+      "documentId": "PDtpdjcijoyjbDxPVDscY93onMh",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/PDtpdjcijoyjbDxPVDscY93onMh"
+    },
+    {
+      "resourceId": "p02-lecture",
+      "lessonNo": 2,
+      "type": "lecture",
+      "title": "cin 输入",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P02｜讲义卡｜cin 输入",
+      "documentId": "NCCRdOReJoKXm5xDOYHcFQBGnxd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/NCCRdOReJoKXm5xDOYHcFQBGnxd"
+    },
+    {
+      "resourceId": "p03-lecture",
+      "lessonNo": 3,
+      "type": "lecture",
+      "title": "数据类型（整型）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P03｜讲义卡｜数据类型（整型）",
+      "documentId": "YbB2dG1jboYZmOxU0NPci7ofnEh",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/YbB2dG1jboYZmOxU0NPci7ofnEh"
+    },
+    {
+      "resourceId": "p04-lecture",
+      "lessonNo": 4,
+      "type": "lecture",
+      "title": "数据类型（浮点型）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P04｜讲义卡｜数据类型（浮点型）",
+      "documentId": "XoAjde0cPoPj0AxIUL2cbbzin3d",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/XoAjde0cPoPj0AxIUL2cbbzin3d"
+    },
+    {
+      "resourceId": "p05-lecture",
+      "lessonNo": 5,
+      "type": "lecture",
+      "title": "数据类型（字符型）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P05｜讲义卡｜数据类型（字符型）",
+      "documentId": "PdwNdiOQPok6BzxAj9AcsNG1nYc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/PdwNdiOQPok6BzxAj9AcsNG1nYc"
+    },
+    {
+      "resourceId": "p06-lecture",
+      "lessonNo": 6,
+      "type": "lecture",
+      "title": "类型转换",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P06｜讲义卡｜类型转换",
+      "documentId": "TeqkdyaGvo37RUxqUoxci5wBnxh",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/TeqkdyaGvo37RUxqUoxci5wBnxh"
+    },
+    {
+      "resourceId": "p07-lecture",
+      "lessonNo": 7,
+      "type": "lecture",
+      "title": "综合运用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P07｜讲义卡｜综合运用",
+      "documentId": "KLSbdriQHob9FXxXgsvcrc6fnbc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/KLSbdriQHob9FXxXgsvcrc6fnbc"
+    },
+    {
+      "resourceId": "p08-lecture",
+      "lessonNo": 8,
+      "type": "lecture",
+      "title": "关系运算符与分支结构",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P08｜讲义卡｜关系运算符与分支结构",
+      "documentId": "Ymzndk2b6oYPKWxHMr4chPOJneb",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Ymzndk2b6oYPKWxHMr4chPOJneb"
+    },
+    {
+      "resourceId": "p09-lecture",
+      "lessonNo": 9,
+      "type": "lecture",
+      "title": "逻辑运算符",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P09｜讲义卡｜逻辑运算符",
+      "documentId": "OSoHdH9rfolLsixvHMxcNtXZnkO",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/OSoHdH9rfolLsixvHMxcNtXZnkO"
+    },
+    {
+      "resourceId": "p10-lecture",
+      "lessonNo": 10,
+      "type": "lecture",
+      "title": "多分支结构",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P10｜讲义卡｜多分支结构",
+      "documentId": "KV9Ad2HkooVZuYx1rhIcZszlnhc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/KV9Ad2HkooVZuYx1rhIcZszlnhc"
+    },
+    {
+      "resourceId": "p11-lecture",
+      "lessonNo": 11,
+      "type": "lecture",
+      "title": "switch 语句",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P11｜讲义卡｜switch 语句",
+      "documentId": "BycmdgtDLoopLHx5zYbcOaXdnEe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/BycmdgtDLoopLHx5zYbcOaXdnEe"
+    },
+    {
+      "resourceId": "p12-lecture",
+      "lessonNo": 12,
+      "type": "lecture",
+      "title": "综合运用一",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P12｜讲义卡｜综合运用一",
+      "documentId": "B4qOd65rFoB43kxfKBtcJvk5nIh",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/B4qOd65rFoB43kxfKBtcJvk5nIh"
+    },
+    {
+      "resourceId": "p13-lecture",
+      "lessonNo": 13,
+      "type": "lecture",
+      "title": "常用数学函数",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P13｜讲义卡｜常用数学函数",
+      "documentId": "UnLpdUwLOo5FikxcP7EcKoVZnED",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/UnLpdUwLOo5FikxcP7EcKoVZnED"
+    },
+    {
+      "resourceId": "p14-lecture",
+      "lessonNo": 14,
+      "type": "lecture",
+      "title": "for 循环（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P14｜讲义卡｜for 循环（一）",
+      "documentId": "Latddv7xJoxqqaxlf8HcJ9rFn7d",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Latddv7xJoxqqaxlf8HcJ9rFn7d"
+    },
+    {
+      "resourceId": "p15-lecture",
+      "lessonNo": 15,
+      "type": "lecture",
+      "title": "for 循环（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P15｜讲义卡｜for 循环（二）",
+      "documentId": "A6I1de0QpoCIygx2nu2cyDcinqe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/A6I1de0QpoCIygx2nu2cyDcinqe"
+    },
+    {
+      "resourceId": "p16-lecture",
+      "lessonNo": 16,
+      "type": "lecture",
+      "title": "while 循环",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P16｜讲义卡｜while 循环",
+      "documentId": "YeeZd62XWoG5XTx0P22cmUORnhd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/YeeZd62XWoG5XTx0P22cmUORnhd"
+    },
+    {
+      "resourceId": "p22-lecture",
+      "lessonNo": 22,
+      "type": "lecture",
+      "title": "一维数组初识（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P22｜讲义卡｜一维数组初识（一）",
+      "documentId": "VAeLdMzJGoMIpTxDoiKcf9qxnKe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/VAeLdMzJGoMIpTxDoiKcf9qxnKe"
+    },
+    {
+      "resourceId": "p53-lecture",
+      "lessonNo": 53,
+      "type": "lecture",
+      "title": "枚举算法的优化",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P53｜讲义卡｜枚举算法的优化",
+      "documentId": "D4IcdSDwdoTyVzxRIQucnPX3njf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/D4IcdSDwdoTyVzxRIQucnPX3njf"
+    },
+    {
+      "resourceId": "p66-lecture",
+      "lessonNo": 66,
+      "type": "lecture",
+      "title": "二分查找（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P66｜讲义卡｜二分查找（一）",
+      "documentId": "AKXXdCYBfokhqLxCFB8cXSZgnpd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/AKXXdCYBfokhqLxCFB8cXSZgnpd"
+    },
+    {
+      "resourceId": "fable-001",
+      "lessonNo": null,
+      "type": "fable",
+      "title": "变量的盒子寓言",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "通用｜寓言卡｜变量的盒子寓言",
+      "documentId": "EAV7d1e62oQGL3xvdnQcjoBknKA",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/EAV7d1e62oQGL3xvdnQcjoBknKA"
+    },
+    {
+      "resourceId": "fable-002",
+      "lessonNo": null,
+      "type": "fable",
+      "title": "循环的跑步机寓言",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "通用｜寓言卡｜循环的跑步机寓言",
+      "documentId": "ZIVad7dpmooD64xmhywcKbmynRd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/ZIVad7dpmooD64xmhywcKbmynRd"
+    },
+    {
+      "resourceId": "practice-001",
+      "lessonNo": null,
+      "type": "practice",
+      "title": "基础语法配套练习",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "通用｜配套练习｜基础语法配套练习",
+      "documentId": "Lb9idzVyOoCLkpx2n4Gcd7QRnzb",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Lb9idzVyOoCLkpx2n4Gcd7QRnzb"
+    },
+    {
+      "resourceId": "review-001",
+      "lessonNo": null,
+      "type": "review",
+      "title": "一轮基础复盘材料",
+      "status": "coming_soon",
+      "requiresClassCode": true,
+      "docTitle": "通用｜复盘材料｜一轮基础复盘材料",
+      "documentId": "N72BdZ09BosK3CxddzScOWUJnmb",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/N72BdZ09BosK3CxddzScOWUJnmb"
+    },
+    {
+      "resourceId": "review-002",
+      "lessonNo": null,
+      "type": "review",
+      "title": "CSP-J 模考讲评（教师开启）",
+      "status": "coming_soon",
+      "requiresClassCode": true,
+      "docTitle": "通用｜复盘材料｜CSP-J 模考讲评（教师开启）",
+      "documentId": "Q8eNdizQVoMMK0xizd9cCKTAnrg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Q8eNdizQVoMMK0xizd9cCKTAnrg"
+    }
+  ],
+  "masterIndex": {
+    "title": "CSP-J 学习资料总索引",
+    "documentId": "IPpTdbqBmoRJ0mx2INqcjnWDnOg",
+    "url": "https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg",
+    "createdAt": "2026-07-09T02:20:20.787Z",
+    "publicPermission": {
+      "updatedAt": "2026-07-09T02:30:04.042Z",
+      "external_access": true,
+      "link_share_entity": "anyone_readable",
+      "security_entity": "only_full_access",
+      "share_entity": "only_full_access",
+      "note": "总索引已开启互联网链接只读；复制/下载/协作者管理仅管理者。"
+    },
+    "updatedAt": "2026-07-09T02:39:09.991Z",
+    "lessonDocCount": 71,
+    "note": "总索引已更新为 P1-P71 完整课程资料表。"
+  },
+  "uploadedSamples": [
+    {
+      "resourceId": "p53-lecture",
+      "title": "枚举优化：从慢到快｜讲义卡样张",
+      "localFile": "reports/lark-learning-resources/assets/p53-enum-optimization-sample.png",
+      "docUrl": "https://scncdgmg7m6w.feishu.cn/docx/D4IcdSDwdoTyVzxRIQucnPX3njf"
+    }
+  ],
+  "publicPermission": {
+    "updatedAt": "2026-07-09T02:26:09.948Z",
+    "scope": "24 learning resource docs",
+    "policy": {
+      "external_access": true,
+      "link_share_entity": "anyone_readable",
+      "security_entity": "only_full_access",
+      "share_entity": "only_full_access",
+      "invite_external": false,
+      "comment_entity": "anyone_can_view"
+    },
+    "results": [
+      {
+        "resourceId": "p01-lecture",
+        "title": "基础框架",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/PDtpdjcijoyjbDxPVDscY93onMh",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p02-lecture",
+        "title": "cin 输入",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/NCCRdOReJoKXm5xDOYHcFQBGnxd",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p03-lecture",
+        "title": "数据类型（整型）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/YbB2dG1jboYZmOxU0NPci7ofnEh",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p04-lecture",
+        "title": "数据类型（浮点型）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/XoAjde0cPoPj0AxIUL2cbbzin3d",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p05-lecture",
+        "title": "数据类型（字符型）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/PdwNdiOQPok6BzxAj9AcsNG1nYc",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p06-lecture",
+        "title": "类型转换",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/TeqkdyaGvo37RUxqUoxci5wBnxh",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p07-lecture",
+        "title": "综合运用",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/KLSbdriQHob9FXxXgsvcrc6fnbc",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p08-lecture",
+        "title": "关系运算符与分支结构",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/Ymzndk2b6oYPKWxHMr4chPOJneb",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p09-lecture",
+        "title": "逻辑运算符",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/OSoHdH9rfolLsixvHMxcNtXZnkO",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p10-lecture",
+        "title": "多分支结构",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/KV9Ad2HkooVZuYx1rhIcZszlnhc",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p11-lecture",
+        "title": "switch 语句",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/BycmdgtDLoopLHx5zYbcOaXdnEe",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p12-lecture",
+        "title": "综合运用一",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/B4qOd65rFoB43kxfKBtcJvk5nIh",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p13-lecture",
+        "title": "常用数学函数",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/UnLpdUwLOo5FikxcP7EcKoVZnED",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p14-lecture",
+        "title": "for 循环（一）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/Latddv7xJoxqqaxlf8HcJ9rFn7d",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p15-lecture",
+        "title": "for 循环（二）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/A6I1de0QpoCIygx2nu2cyDcinqe",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p16-lecture",
+        "title": "while 循环",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/YeeZd62XWoG5XTx0P22cmUORnhd",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p22-lecture",
+        "title": "一维数组初识（一）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/VAeLdMzJGoMIpTxDoiKcf9qxnKe",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p53-lecture",
+        "title": "枚举算法的优化",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/D4IcdSDwdoTyVzxRIQucnPX3njf",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "p66-lecture",
+        "title": "二分查找（一）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/AKXXdCYBfokhqLxCFB8cXSZgnpd",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "fable-001",
+        "title": "变量的盒子寓言",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/EAV7d1e62oQGL3xvdnQcjoBknKA",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "fable-002",
+        "title": "循环的跑步机寓言",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/ZIVad7dpmooD64xmhywcKbmynRd",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "practice-001",
+        "title": "基础语法配套练习",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/Lb9idzVyOoCLkpx2n4Gcd7QRnzb",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "review-001",
+        "title": "一轮基础复盘材料",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/N72BdZ09BosK3CxddzScOWUJnmb",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      },
+      {
+        "resourceId": "review-002",
+        "title": "CSP-J 模考讲评（教师开启）",
+        "url": "https://scncdgmg7m6w.feishu.cn/docx/Q8eNdizQVoMMK0xizd9cCKTAnrg",
+        "ok": true,
+        "permission": {
+          "comment_entity": "anyone_can_view",
+          "external_access": true,
+          "invite_external": true,
+          "link_share_entity": "anyone_readable",
+          "lock_switch": false,
+          "security_entity": "only_full_access",
+          "share_entity": "only_full_access"
+        }
+      }
+    ],
+    "successCount": 24,
+    "failureCount": 0
+  },
+  "allLessonResources": [
+    {
+      "resourceId": "p17-lecture",
+      "lessonNo": 17,
+      "type": "lecture",
+      "title": "单层循环应用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P17｜讲义卡｜单层循环应用",
+      "documentId": "OCXcdvHopoSc4hx2WZFc0Hslnjc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/OCXcdvHopoSc4hx2WZFc0Hslnjc",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P17-百罐长廊的老师傅",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p18-lecture",
+      "lessonNo": 18,
+      "type": "lecture",
+      "title": "循环嵌套（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P18｜讲义卡｜循环嵌套（一）",
+      "documentId": "I0CZdX7ICoxeY4xpcfRcITnWnpg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/I0CZdX7ICoxeY4xpcfRcITnWnpg",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P18-织布坊的飞梭",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p19-lecture",
+      "lessonNo": 19,
+      "type": "lecture",
+      "title": "循环嵌套（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P19｜讲义卡｜循环嵌套（二）",
+      "documentId": "IN3Ddh437oLonOxo9rOc3RqPnoe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/IN3Ddh437oLonOxo9rOc3RqPnoe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P19-砌九层塔",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p20-lecture",
+      "lessonNo": 20,
+      "type": "lecture",
+      "title": "循环综合应用（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P20｜讲义卡｜循环综合应用（一）",
+      "documentId": "N1HodDqGbo8LAEx8NmvcvEnPnxe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/N1HodDqGbo8LAEx8NmvcvEnPnxe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P20-瓷器店里的敲碗人",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p21-lecture",
+      "lessonNo": 21,
+      "type": "lecture",
+      "title": "循环综合应用（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P21｜讲义卡｜循环综合应用（二）",
+      "documentId": "RVTOdrCa8oh2bYxWAaKcGEdvn8k",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/RVTOdrCa8oh2bYxWAaKcGEdvn8k",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P21-青石上的十回水珠",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p23-lecture",
+      "lessonNo": 23,
+      "type": "lecture",
+      "title": "一维数组遍历",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P23｜讲义卡｜一维数组遍历",
+      "documentId": "QcRkd0FqQo9OeUxXh1McEM2Vnae",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/QcRkd0FqQo9OeUxXh1McEM2Vnae",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P23-查铺官的灯笼",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p24-lecture",
+      "lessonNo": 24,
+      "type": "lecture",
+      "title": "标记数组",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P24｜讲义卡｜标记数组",
+      "documentId": "Dr1ndqnT8ov6UVxJtgncozt7nrs",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Dr1ndqnT8ov6UVxJtgncozt7nrs",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P24-篝火边的木牌阵",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p25-lecture",
+      "lessonNo": 25,
+      "type": "lecture",
+      "title": "桶数组",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P25｜讲义卡｜桶数组",
+      "documentId": "Mmb5dIlAPory4bxALDVcenaGnCP",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Mmb5dIlAPory4bxALDVcenaGnCP",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P25-码头上的编号筐",
+      "stage": "C1 入门阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p26-lecture",
+      "lessonNo": 26,
+      "type": "lecture",
+      "title": "字符数组",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P26｜讲义卡｜字符数组",
+      "documentId": "Vw1qdSHhtoWVgvxR63Zc95fXneg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Vw1qdSHhtoWVgvxR63Zc95fXneg",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P26-驿站的无字木牌",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p27-lecture",
+      "lessonNo": 27,
+      "type": "lecture",
+      "title": "字符数组常用函数",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P27｜讲义卡｜字符数组常用函数",
+      "documentId": "LcGmdU64Oo5y9OxQ7xHczFtxnOe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/LcGmdU64Oo5y9OxQ7xHczFtxnOe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P27-绸带作坊的四件传家宝",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p28-lecture",
+      "lessonNo": 28,
+      "type": "lecture",
+      "title": "string 字符串",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P28｜讲义卡｜string 字符串",
+      "documentId": "IVamd6TOdoJZ7HxUCzFcNkein0g",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/IVamd6TOdoJZ7HxUCzFcNkein0g",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P28-珠链铺的整串生意",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p29-lecture",
+      "lessonNo": 29,
+      "type": "lecture",
+      "title": "字符串综合应用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P29｜讲义卡｜字符串综合应用",
+      "documentId": "GVYndkPjvoaQR9xEVmTcriqGnSc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/GVYndkPjvoaQR9xEVmTcriqGnSc",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P29-春联铺的剪刀与铜镜",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p30-lecture",
+      "lessonNo": 30,
+      "type": "lecture",
+      "title": "凯撒加密",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P30｜讲义卡｜凯撒加密",
+      "documentId": "CB2pdzxGXoDapQx0o7Vc4pHPnUf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/CB2pdzxGXoDapQx0o7Vc4pHPnUf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P30-第二十六颗银珠",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p31-lecture",
+      "lessonNo": 31,
+      "type": "lecture",
+      "title": "函数初识（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P31｜讲义卡｜函数初识（一）",
+      "documentId": "WngRdXjTyoQ27IxoCdHchUb8nmg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/WngRdXjTyoQ27IxoCdHchUb8nmg",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P31-印书坊的压印台",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p32-lecture",
+      "lessonNo": 32,
+      "type": "lecture",
+      "title": "函数初识（二）·值传递",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P32｜讲义卡｜函数初识（二）·值传递",
+      "documentId": "MrbidyQuLoPf2yxFUTUcTu6qnuf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/MrbidyQuLoPf2yxFUTUcTu6qnuf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P32-染坊的副本布",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p33-lecture",
+      "lessonNo": 33,
+      "type": "lecture",
+      "title": "自定义函数",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P33｜讲义卡｜自定义函数",
+      "documentId": "KaHnd9YRgooGeHxp9HgcPsgPnGx",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/KaHnd9YRgooGeHxp9HgcPsgPnGx",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P33-灶王巷的方子牌",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p34-lecture",
+      "lessonNo": 34,
+      "type": "lecture",
+      "title": "函数综合应用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P34｜讲义卡｜函数综合应用",
+      "documentId": "OLnxdFM8aoUXC1xxyxucvj9AnYd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/OLnxdFM8aoUXC1xxyxucvj9AnYd",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P34-瓷器店的三道关",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p35-lecture",
+      "lessonNo": 35,
+      "type": "lecture",
+      "title": "位权",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P35｜讲义卡｜位权",
+      "documentId": "PuQkdDaUxoK9M8xRv76cpJW9njf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/PuQkdDaUxoK9M8xRv76cpJW9njf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P35-客栈木牌上的圈",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p36-lecture",
+      "lessonNo": 36,
+      "type": "lecture",
+      "title": "进制转换（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P36｜讲义卡｜进制转换（一）",
+      "documentId": "R8erd5xCzoozGkxBCL9cgV5QnHd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/R8erd5xCzoozGkxBCL9cgV5QnHd",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P36-边境集市的笼屉账",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p37-lecture",
+      "lessonNo": 37,
+      "type": "lecture",
+      "title": "进制转换（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P37｜讲义卡｜进制转换（二）",
+      "documentId": "DfdDdBLpTowtDYx68icchlaCnzc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/DfdDdBLpTowtDYx68icchlaCnzc",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P37-糖果铺的翻倍匣",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p38-lecture",
+      "lessonNo": 38,
+      "type": "lecture",
+      "title": "补码",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P38｜讲义卡｜补码",
+      "documentId": "Q489d5GQwoVkGVxhVHqc0xBqnne",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Q489d5GQwoVkGVxhVHqc0xBqnne",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P38-钟楼上的倒拨人",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p39-lecture",
+      "lessonNo": 39,
+      "type": "lecture",
+      "title": "位运算（异或）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P39｜讲义卡｜位运算（异或）",
+      "documentId": "R4G6dimuvoEoHNxZnjMczUu6npf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/R4G6dimuvoEoHNxZnjMczUu6npf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P39-当铺里的吞字账本",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p40-lecture",
+      "lessonNo": 40,
+      "type": "lecture",
+      "title": "进制与编码综合",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P40｜讲义卡｜进制与编码综合",
+      "documentId": "MLGQdSE6kohI1txlhrdcSWAhntf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/MLGQdSE6kohI1txlhrdcSWAhntf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P40-万国驿站的算珠老人",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p41-lecture",
+      "lessonNo": 41,
+      "type": "lecture",
+      "title": "二维数组初识",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P41｜讲义卡｜二维数组初识",
+      "documentId": "CCztdovH4oFIucxiWPHcpb9nnUe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/CCztdovH4oFIucxiWPHcpb9nnUe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P41-老药铺的百子柜",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p42-lecture",
+      "lessonNo": 42,
+      "type": "lecture",
+      "title": "二维数组遍历",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P42｜讲义卡｜二维数组遍历",
+      "documentId": "SPQxd6CAtojK9bxKYkVcDNn3n4c",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/SPQxd6CAtojK9bxKYkVcDNn3n4c",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P42-田野巡查人的两条路",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p43-lecture",
+      "lessonNo": 43,
+      "type": "lecture",
+      "title": "二维数组应用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P43｜讲义卡｜二维数组应用",
+      "documentId": "Sz7Jdrx2MouVTTxTd51cAiTHnfe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Sz7Jdrx2MouVTTxTd51cAiTHnfe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P43-方田巡垄",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p44-lecture",
+      "lessonNo": 44,
+      "type": "lecture",
+      "title": "认识排序（选择）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P44｜讲义卡｜认识排序（选择）",
+      "documentId": "X4K8drryjo02CexI09sc2y6AnSc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/X4K8drryjo02CexI09sc2y6AnSc",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P44-老酒坊的排坛人",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p45-lecture",
+      "lessonNo": 45,
+      "type": "lecture",
+      "title": "sort 应用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P45｜讲义卡｜sort 应用",
+      "documentId": "Rrd2dst3mofyvsxUIfVcT41snec",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Rrd2dst3mofyvsxUIfVcT41snec",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P45-宴席上的排座师",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p46-lecture",
+      "lessonNo": 46,
+      "type": "lecture",
+      "title": "结构体初识",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P46｜讲义卡｜结构体初识",
+      "documentId": "QcmIdB3asorlRcxf1PMcYSb3nYc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/QcmIdB3asorlRcxf1PMcYSb3nYc",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P46-码头上的竹牌",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p47-lecture",
+      "lessonNo": 47,
+      "type": "lecture",
+      "title": "结构体排序",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P47｜讲义卡｜结构体排序",
+      "documentId": "TGUZdNLH6oN109xoeWFc41JPnIb",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/TGUZdNLH6oN109xoeWFc41JPnIb",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P47-醉仙楼品酒夜",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p48-lecture",
+      "lessonNo": 48,
+      "type": "lecture",
+      "title": "结构体应用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P48｜讲义卡｜结构体应用",
+      "documentId": "EEbhdjzzkoCJCyxOafGcuZNgnTf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/EEbhdjzzkoCJCyxOafGcuZNgnTf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P48-孙掌柜的客牌",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p49-lecture",
+      "lessonNo": 49,
+      "type": "lecture",
+      "title": "递推算法（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P49｜讲义卡｜递推算法（一）",
+      "documentId": "U8Uid72Yao61FzxbfM7c0hpenVe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/U8Uid72Yao61FzxbfM7c0hpenVe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P49-驿道上的算路翁",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p50-lecture",
+      "lessonNo": 50,
+      "type": "lecture",
+      "title": "递推算法（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P50｜讲义卡｜递推算法（二）",
+      "documentId": "MAsAddaCSopngwxcrVMcuWC6nYf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/MAsAddaCSopngwxcrVMcuWC6nYf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P50-两河交汇的粮仓",
+      "stage": "C2 基础阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p51-lecture",
+      "lessonNo": 51,
+      "type": "lecture",
+      "title": "枚举算法",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P51｜讲义卡｜枚举算法",
+      "documentId": "QkLCdiCxzoSX0pxzVfUcHOsPnxd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/QkLCdiCxzoSX0pxzVfUcHOsPnxd",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P51-海堤上的守灯人",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p52-lecture",
+      "lessonNo": 52,
+      "type": "lecture",
+      "title": "枚举应用",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P52｜讲义卡｜枚举应用",
+      "documentId": "Qf6hdsMq2oUi65xfqoLc5Jpzned",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Qf6hdsMq2oUi65xfqoLc5Jpzned",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P52-长码头上最沉的那一截",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p54-lecture",
+      "lessonNo": 54,
+      "type": "lecture",
+      "title": "模拟算法（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P54｜讲义卡｜模拟算法（一）",
+      "documentId": "XPhAdX6Svo7u4QxClFNcWdV1nif",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/XPhAdX6Svo7u4QxClFNcWdV1nif",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P54-提线木偶的戏谱",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p55-lecture",
+      "lessonNo": 55,
+      "type": "lecture",
+      "title": "模拟算法（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P55｜讲义卡｜模拟算法（二）",
+      "documentId": "T61Nd0s3hogaoGxeH49cu8NvnVc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/T61Nd0s3hogaoGxeH49cu8NvnVc",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P55-守闸人的粉笔板",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p56-lecture",
+      "lessonNo": 56,
+      "type": "lecture",
+      "title": "前缀和",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P56｜讲义卡｜前缀和",
+      "documentId": "BtDddDg4potoi3xXqcMcHVoVnKf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/BtDddDg4potoi3xXqcMcHVoVnKf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P56-粮仓的累计牌",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p57-lecture",
+      "lessonNo": 57,
+      "type": "lecture",
+      "title": "差分",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P57｜讲义卡｜差分",
+      "documentId": "A3aXdiBn5oalfuxyLEGc9K87n4d",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/A3aXdiBn5oalfuxyLEGc9K87n4d",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P57-水闸管理员的小本本",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p58-lecture",
+      "lessonNo": 58,
+      "type": "lecture",
+      "title": "贪心算法（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P58｜讲义卡｜贪心算法（一）",
+      "documentId": "ANw4dpoKDoG94UxYp9XcnlfNncg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/ANw4dpoKDoG94UxYp9XcnlfNncg",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P58-马戏团的一天",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p59-lecture",
+      "lessonNo": 59,
+      "type": "lecture",
+      "title": "贪心算法（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P59｜讲义卡｜贪心算法（二）",
+      "documentId": "Iex9djrBooBkJtxxxczchKHlnse",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Iex9djrBooBkJtxxxczchKHlnse",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P59-老马夫的三场比赛",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p60-lecture",
+      "lessonNo": 60,
+      "type": "lecture",
+      "title": "贪心算法（三）·邻项交换",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P60｜讲义卡｜贪心算法（三）·邻项交换",
+      "documentId": "YxIydNRSmoYYtUx9W9dcgUJOnMd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/YxIydNRSmoYYtUx9W9dcgUJOnMd",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P60-瓷器店的秘密配方",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p61-lecture",
+      "lessonNo": 61,
+      "type": "lecture",
+      "title": "初等排序（选择/冒泡/插入）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P61｜讲义卡｜初等排序（选择/冒泡/插入）",
+      "documentId": "HfkKdm1OgoaQ3Zx9RNgcDzY2n0g",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/HfkKdm1OgoaQ3Zx9RNgcDzY2n0g",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P61-柚子摊的三姐妹",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p62-lecture",
+      "lessonNo": 62,
+      "type": "lecture",
+      "title": "计数排序",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P62｜讲义卡｜计数排序",
+      "documentId": "HB76d6vR7o79aCxgrUwcY47TnKg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/HB76d6vR7o79aCxgrUwcY47TnKg",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P62-货栈里的一排空格子",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p63-lecture",
+      "lessonNo": 63,
+      "type": "lecture",
+      "title": "最大公因数·辗转相除",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P63｜讲义卡｜最大公因数·辗转相除",
+      "documentId": "Binwd1RAVoixUoxWMrrczaahnSc",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Binwd1RAVoixUoxWMrrczaahnSc",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P63-金匠的剪刀",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p64-lecture",
+      "lessonNo": 64,
+      "type": "lecture",
+      "title": "算术基本定理·质因数分解",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P64｜讲义卡｜算术基本定理·质因数分解",
+      "documentId": "AzzcdcJJCoA4InxsuovcKEx4nLd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/AzzcdcJJCoA4InxsuovcKEx4nLd",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P64-矿铺掌柜的拆石谱",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p65-lecture",
+      "lessonNo": 65,
+      "type": "lecture",
+      "title": "埃氏筛法",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P65｜讲义卡｜埃氏筛法",
+      "documentId": "Ov6Ed8YDBoxiK9xV34JcX1S7nNe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Ov6Ed8YDBoxiK9xV34JcX1S7nNe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P65-钟楼上的敲钟人",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p67-lecture",
+      "lessonNo": 67,
+      "type": "lecture",
+      "title": "二分查找（二）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P67｜讲义卡｜二分查找（二）",
+      "documentId": "I5FxdmbLqo1VSgxbIlkcTnGeneg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/I5FxdmbLqo1VSgxbIlkcTnGeneg",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P67-射箭场上的神箭手",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p68-lecture",
+      "lessonNo": 68,
+      "type": "lecture",
+      "title": "动态数组与队列",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P68｜讲义卡｜动态数组与队列",
+      "documentId": "XesTdaXZEoCjJMxREb9cnwEAn0d",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/XesTdaXZEoCjJMxREb9cnwEAn0d",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P68-戏院门口的长队",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p69-lecture",
+      "lessonNo": 69,
+      "type": "lecture",
+      "title": "栈",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P69｜讲义卡｜栈",
+      "documentId": "O6r9ddpbeoR9ArxU9zpcBGqpndf",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/O6r9ddpbeoR9ArxU9zpcBGqpndf",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P69-面馆后厨的深口缸",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p70-lecture",
+      "lessonNo": 70,
+      "type": "lecture",
+      "title": "递归算法（一）",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P70｜讲义卡｜递归算法（一）",
+      "documentId": "R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P70-七层塔的传令铃",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    },
+    {
+      "resourceId": "p71-lecture",
+      "lessonNo": 71,
+      "type": "lecture",
+      "title": "递归算法（二）·多重递归",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "docTitle": "P71｜讲义卡｜递归算法（二）·多重递归",
+      "documentId": "Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+      "source": "all-lessons-prebuild",
+      "fableTitle": "P71-绣坊的九尺礼带",
+      "stage": "C3 进阶阶段",
+      "publicPermission": {
+        "external_access": true,
+        "link_share_entity": "anyone_readable",
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      }
+    }
+  ],
+  "allLessonsPrebuilt": {
+    "updatedAt": "2026-07-09T02:38:24.062Z",
+    "totalLessons": 71,
+    "existingInitialDocs": 19,
+    "createdThisRun": 52,
+    "allLessonDocCount": 71,
+    "note": "飞书侧 P1-P71 讲义卡文档框架已预建；客户端仍只展示 learning-resources.json 中的开放批次。"
+  }
+}

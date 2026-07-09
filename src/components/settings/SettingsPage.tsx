@@ -3,6 +3,7 @@ import { useAIStore } from '../../stores/aiStore';
 import { usePetStore } from '../../stores/petStore';
 import { AI_MODELS, type AIProvider } from '../../types/ai';
 import { getDeviceId } from '../../utils/crypto';
+import { clearClassAccessCache, markClassAccessChecked } from '../access/ClassAccessGate';
 import UpdateChecker from './UpdateChecker';
 
 const API = 'https://api.cspstudy.top';
@@ -194,8 +195,7 @@ function ClassBindingSection() {
       .then(r => r.json())
       .then(data => {
         if (data.error) {
-          localStorage.removeItem('csp_class_code');
-          localStorage.removeItem('csp_class_info');
+          clearClassAccessCache();
           localStorage.removeItem('csp_display_name');
           localStorage.removeItem('csp_student_name');
           localStorage.removeItem('csp_student_phone');
@@ -229,6 +229,9 @@ function ClassBindingSection() {
 
       localStorage.setItem('csp_class_code', code.trim());
       localStorage.setItem('csp_class_info', JSON.stringify({ class_code: code.trim(), label: data.label || '', teacher_name: data.teacher_name || '' }));
+      localStorage.setItem('csp_class_label', data.label || '');
+      localStorage.setItem('csp_teacher_name', data.teacher_name || '');
+      markClassAccessChecked({ class_code: code.trim(), label: data.label || '', teacher_name: data.teacher_name || '' });
       localStorage.setItem('csp_display_name', nickname.trim());
       localStorage.setItem('csp_student_name', realName.trim() || nickname.trim());
       localStorage.setItem('csp_student_phone', phone.trim());
@@ -281,6 +284,7 @@ function ClassBindingSection() {
           </div>
           <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
             <button onClick={() => setShowModal(true)} style={{ padding: '6px 14px', borderRadius: 6, border: '1px solid #e2e8f0', background: '#fff', color: '#334155', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>✏️ 修改信息</button>
+            <button onClick={() => { clearClassAccessCache(); setClassInfo(null); setNickname(''); setRealName(''); setPhone(''); setMsg('已解绑班级，班级专属功能将需要重新绑定'); }} style={{ padding: '6px 14px', borderRadius: 6, border: '1px solid #fecaca', background: '#fff', color: '#dc2626', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>🚫 解绑</button>
           </div>
         </div>
       ) : (

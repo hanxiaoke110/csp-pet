@@ -11,6 +11,7 @@ interface ChoiceQuestion {
   question: string;
   code?: string | null;
   image?: string | null;
+  codeImage?: string | null;
   options: string[];
   correctIndex: number;
   explanation: string;
@@ -22,6 +23,26 @@ interface Props {
   onAnswer: (id: string, correct: boolean) => void;
   onNext: () => void;
   onBack: () => void;
+}
+
+// 题目图片（image/codeImage）渲染，加载失败时降级提示，不让页面报错
+function QuestionImage({ src }: { src?: string | null }) {
+  const [errored, setErrored] = useState(false);
+  if (!src) return null;
+  const resolved = /^https?:\/\//.test(src) ? src : (src.startsWith('/') ? src : '/' + src.replace(/^\/+/, ''));
+  if (errored) {
+    return (
+      <div className="quiz-image-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 80, color: '#94a3b8', fontSize: 13, background: '#f8fafc', borderRadius: 8, flexDirection: 'column', gap: 6, maxWidth: 620, boxSizing: 'border-box', padding: 12 }}>
+        <span>🖼️ 图片加载失败，请稍后重试</span>
+        <span style={{ fontSize: 11, wordBreak: 'break-all' }}>{resolved}</span>
+      </div>
+    );
+  }
+  return (
+    <div className="quiz-image-wrap">
+      <img className="quiz-image" src={resolved} alt="" loading="lazy" onError={() => setErrored(true)} />
+    </div>
+  );
 }
 
 export default function ExamChoice({ question: q, questionNum, onAnswer, onNext, onBack }: Props) {
@@ -49,6 +70,7 @@ export default function ExamChoice({ question: q, questionNum, onAnswer, onNext,
         {q.code && (
           <pre className="code-block"><code>{q.code}</code></pre>
         )}
+        <QuestionImage src={q.image || q.codeImage} />
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderCodeText(q.question)} />
 
         <div className="quiz-options">

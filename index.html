@@ -29,9 +29,18 @@
         document.body.appendChild(div);
       });
       window.addEventListener('unhandledrejection', function(e) {
+        var reason = e.reason;
+        var msg = (reason && (reason.message || String(reason))) || 'Unknown';
+        // 良性：Tauri 事件 unlisten 在 webview 重载/路由切换/StrictMode 双调用时，
+        // 内部 unregisterListener 访问已不存在的 listeners[eventId] 抛错。
+        // 我们的 safeListen 已吞掉绝大多数；这里再兜一层，避免剩余的惊吓用户。
+        if (msg.indexOf("listeners[eventId]") !== -1 || msg.indexOf("handlerId") !== -1) {
+          e.preventDefault();
+          return;
+        }
         var div = document.createElement('div');
         div.style.cssText = 'margin:20px;padding:16px;background:#fef2f2;border:2px solid #ef4444;border-radius:8px;font-family:monospace;font-size:13px;color:#dc2626;white-space:pre-wrap;word-break:break-all;';
-        div.textContent = '❌ Promise Error: ' + (e.reason?.message || e.reason || 'Unknown');
+        div.textContent = '❌ Promise Error: ' + msg;
         document.body.appendChild(div);
       });
     </script>

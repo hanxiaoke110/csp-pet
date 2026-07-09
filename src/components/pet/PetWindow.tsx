@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { listen, emit } from '@tauri-apps/api/event';
+import { emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWindow, PhysicalPosition, LogicalSize, availableMonitors } from '@tauri-apps/api/window';
 import PetSprite from './PetSprite';
 import type { PetAnimState } from './PetStateMachine';
 import type { OwnedPet } from '../../types/pet';
+import { safeListen } from '../../lib/tauriEvents';
 
 const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
   small:  { canvas: 110, win: 122 },
@@ -47,6 +48,7 @@ export default function PetWindow() {
   const [activePet, setActivePet] = useState<OwnedPet | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isDragging = useRef(false);
+  const dragStarted = useRef(false);
   const lastDragTime = useRef(0);
   const defaultPos = useRef<{ x: number; y: number } | null>(null);
   const [petSize, setPetSize] = useState(getPetSize);
@@ -70,15 +72,24 @@ export default function PetWindow() {
   // Window dragging — only start drag when mouse moved > 5px (distinguish from click)
   useEffect(() => {
     let startX = 0, startY = 0;
-    const onMD = (e: MouseEvent) => { startX = e.clientX; startY = e.clientY; isDragging.current = false; };
+    const onMD = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      startX = e.clientX;
+      startY = e.clientY;
+      isDragging.current = false;
+      dragStarted.current = false;
+    };
     const onMM = (e: MouseEvent) => {
+      if (dragStarted.current || (startX === 0 && startY === 0)) return;
       if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
         isDragging.current = true;
+        dragStarted.current = true;
         getCurrentWindow().startDragging().catch(() => {});
       }
     };
     const onMU = () => {
       if (isDragging.current) { lastDragTime.current = Date.now(); savePosition(); }
+      dragStarted.current = false;
       startX = startY = 0;
     };
     document.addEventListener('mousedown', onMD);
@@ -114,33 +125,33 @@ export default function PetWindow() {
     };
     load();
     const c: (() => void)[] = [];
-    listen('pet-data-sync', (e: any) => {
+    c.push(safeListen('pet-data-sync', (e: any) => {
       const d = e.payload;
       // Data already persisted to SQLite by main window — just update UI
       if (d.activePetId && d.ownedPets) {
         const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
         if (p) setActivePet(p);
       }
-    }).then(fn => c.push(fn));
+    }));
 
     // Listen for size/preference changes from main window
-    listen('pet-settings-changed', () => {
+    c.push(safeListen('pet-settings-changed', () => {
       setPetSize(getPetSize());
-    }).then(fn => c.push(fn));
+    }));
 
     // Poll for data until we get a pet
     pollRef.current = setInterval(() => {
       emit('pet-request-sync', {}).catch(() => {});
     }, 2000);
 
-    listen('pet-anim', (e: any) => {
+    c.push(safeListen('pet-anim', (e: any) => {
       const p = e.payload as { anim: PetAnimState; duration?: number };
       window.__petTrigger__?.(p.anim, p.duration);
-    }).then(fn => c.push(fn));
-    listen('pet-bubble', (e: any) => {
+    }));
+    c.push(safeListen('pet-bubble', (e: any) => {
       setBubble(e.payload.text);
       setTimeout(() => setBubble(''), 4000);
-    }).then(fn => c.push(fn));
+    }));
     return () => {
       c.forEach(fn => fn());
       if (pollRef.current) clearInterval(pollRef.current);
@@ -328,7 +339,11 @@ export default function PetWindow() {
             {[
               { icon: '📂', label: '窗口', action: () => emit('pet-action', { action: 'open-window' }).catch(() => {}) },
               { icon: '🛒', label: '商城', action: () => emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}) },
-              { icon: '👁️', label: '隐藏', action: () => { invoke('toggle_pet_window').catch(() => {}); emit('pet-visibility-toggled', {}).catch(() => {}); },
+              { icon: '👁️', label: '隐藏', action: () => {
+                invoke('toggle_pet_window').then((result) => {
+                  emit('pet-visibility-toggled', { visible: result === 'shown' }).catch(() => {});
+                }).catch(() => {});
+              },
                 disabled: activePet && activePet.hunger <= 10,
                 tooltip: activePet && activePet.hunger <= 10 ? '虚弱状态，无法关闭' : undefined },
             ].map(btn => {

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { readDesktopBinding, isBindingComplete } from '../../utils/autoRegister';
-import { navigateToMainApp } from '../../DungeonEmbed';
+import { navigateToMainApp } from '../../utils/routeBridge';
 
 // 智子试炼场标题页：复用桌面端「班级绑定」身份，不再有独立注册/登录流程。
 // - 已建档（本地 dungeon_player 有昵称+班级码）→ 继续修炼，进地图

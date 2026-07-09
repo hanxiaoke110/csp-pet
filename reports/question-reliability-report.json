@@ -1,0 +1,691 @@
+{
+  "generatedAt": "2026-07-09T01:57:58.703Z",
+  "sourceFiles": [
+    "public/course-data/unified-quiz-bank.json",
+    "public/course-data/quiz-bank.json",
+    "public/course-data/csp-exam-bank.json",
+    "src-dungeon/data/csp-exam-bank.json"
+  ],
+  "excludedConfig": {
+    "file": "public/course-data/excluded-question-ids.json",
+    "ids": [
+      "gesp-2024-03-4-10",
+      "gesp-2024-06-4-15",
+      "gesp-2024-12-4-13"
+    ],
+    "reason": "missing_or_corrupted_code",
+    "note": "这 3 道题原题代码为图片，导入后 code 缺失或仅 OCR 残片（含伪迹，如 j >= &&），无法可靠重建。已从学生题池隔离；补全 code 后从此列表移除即可恢复。客户端加载时读取本文件，读取失败降级为空集，不影响题库加载。"
+  },
+  "totals": {
+    "questions": 2117,
+    "sourceIssuesTotal": 38,
+    "excludedIssuesTotal": 4,
+    "visibleP0": 0,
+    "visibleP1": 0,
+    "visibleP2": 34,
+    "sourceP0": 0,
+    "sourceP1": 4,
+    "sourceP2": 34
+  },
+  "byCategory": {
+    "P1:code": 5,
+    "P2:content": 34
+  },
+  "summaries": [
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "total": 650,
+      "findings": 1,
+      "bySev": {
+        "P0": 0,
+        "P1": 1,
+        "P2": 0
+      }
+    },
+    {
+      "file": "public/course-data/quiz-bank.json",
+      "total": 432,
+      "findings": 0,
+      "bySev": {
+        "P0": 0,
+        "P1": 0,
+        "P2": 0
+      }
+    },
+    {
+      "file": "public/course-data/csp-exam-bank.json",
+      "total": 240,
+      "findings": 0,
+      "bySev": {
+        "P0": 0,
+        "P1": 0,
+        "P2": 0
+      }
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "total": 795,
+      "findings": 37,
+      "bySev": {
+        "P0": 0,
+        "P1": 3,
+        "P2": 34
+      }
+    }
+  ],
+  "findings": [
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-4-13",
+      "type": "choice",
+      "group": "gesp",
+      "severity": "P1",
+      "excluded": true,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "code",
+          "msg": "code 含相邻/悬空运算符（疑似 OCR 损坏）"
+        },
+        {
+          "sev": "P1",
+          "cat": "code",
+          "msg": "code 大括号严重不匹配/以 } 起始（疑似残片）"
+        }
+      ],
+      "question": "下⾯代码实现了插⼊排序函数，则横线上应填写（ ）。 1 void insertion_sort(vector<int> &nums) {"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2019-reading-01",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读程序，判断输出结果"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2020-r01",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答后面的问题。该程序输入两个整数 n 和 k，输出一个整数结果。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2021-r01",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下 Base64 解码程序，回答后面的问题。Base64 编码将每 3 个字节（24 位）编码为 4 个可打印字符。程序中的 decode 函数将单个 Base64 字符转换为其对应的 6 位数值（0-63）。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2019-r01",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序功能：对于给定的整数序列，找出每个位置后面第一个大于该位置元素的位置（基于1的索引）。如果没有更大的元素，则输出0。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2020-r01",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序功能：给定n个闭区间，选择最少的区间覆盖目标线段[1, m]。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2021-r01",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序实现了一个简单的并查集（未使用路径压缩），用于处理合并和查询操作。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2022-r01",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序使用线段树维护区间和，支持单点修改和区间查询操作。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2023-r01",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序在树上进行DP，求树的最大独立集（选取不相邻的节点使得权值和最大）。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2024-r01",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序使用字符串哈希和滑动窗口，在字符串S中找出所有长度为k的子串，并统计不同子串的数量。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2019-r02",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序实现了一个无路径压缩的并查集。初始有n个元素各自独立，每次合并两个集合时计算两个集合大小的乘积加到ans中。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2019-r03",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 给定字符串s和t，求从s中最多可以删去多少个连续字符后t仍是s的子序列。程序用pre和suf数组进行预处理。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2020-r03",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序实现了KMP字符串匹配算法，在文本串s中查找模式串p的出现位置。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2021-r02",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序输入两个16位无符号短整数x和y，通过位运算组合后输出加密结果。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2021-r03",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序在一棵带权树上进行DFS，计算每个节点的子树权值和，并找出树的重心。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2022-r02",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序对一棵树进行树链剖分。第一次DFS求size和重儿子，第二次DFS求top和dfn序。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2022-r03",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序使用莫队算法（Mo's Algorithm）处理多个区间查询，统计每个区间内不同数字的个数。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2023-r02",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序使用线段树维护区间最大值，支持单点修改和区间查询最大值。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2023-r03",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序实现了Dinic最大流算法的BFS分层和DFS增广部分。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2024-r02",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序实现了Dijkstra最短路径算法，使用优先队列（最小堆）优化。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-s-2024-r03",
+      "type": "reading",
+      "group": "S",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，回答问题： 程序使用ST表（Sparse Table）实现静态RMQ（区间最小值查询），支持O(1)查询。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2022-r01",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下C++程序，该程序通过位运算操作unsigned short类型的变量。 程序功能：输入两个整数x和y（0≤x,y<65536），程序对x进行一系列位运算操作后输出结果。 第(1)问：当输入x=5, y=1时，程序的输出是什么？ 第(2)问：当输入x=65535, y=4时，程序的行为是什么？ 第(3)问：该程"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2023-r01",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下C++程序，该程序使用动态规划求解两个字符串的最长公共子序列(LCS)问题。 第(1)问：当输入\"abcde\"和\"ace\"时，程序输出什么？ 第(2)问：该程序使用的DP状态dp[i][j]的含义是什么？ 第(3)问：该算法的时间复杂度和空间复杂度分别是多少？"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2024-r01",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下C++程序，该程序采用两种方法计算斐波那契数列的第n项（n从0开始，F(0)=0, F(1)=1）。 第(1)问：当输入n=10时，程序的两行输出分别是什么？ 第(2)问：方法一（fib_rec）在计算fib_rec(40)时为什么效率很低？ 第(3)问：方法二（fib_dp）的空间复杂度能否进一步优化？如果能"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2019-r02",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序维护两个数组 a 和 b 之间的映射关系，计算某种匹配计数 ans。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2019-r03",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序在数组 a 中找最小值位置，递归计算左右子区间的带权和。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2020-r03",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序给定 d[i][0] 和 d[i][1]，每次合并相邻两个元素，求最大总合并代价。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2021-r02",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下 Base64 解码程序，将 4 个 Base64 字符解码为 3 个字节。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2021-r03",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序使用线性筛求区间内每个数的约数个数 f[i] 和约数和 g[i]。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2022-r02",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序包含递归函数 f(n,m)（带记忆化）和动态规划函数 g(n,m)，计算最坏情况下的最少尝试次数（鸡蛋掉落问题变体）。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2022-r03",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序提供两种求平方根的方法：solve1 使用二分法，solve2 使用牛顿迭代法。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2023-r02",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序包含 f(x,y) 求最长公共子序列（LCS）长度和 g(x,y) 判断 x 的倍增是否包含子序列 y。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2023-r03",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序使用二分法在实数域上求解方程 f(x)=x^3-x-1 的根，带精度控制。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2024-r02",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序使用 BFS 求解迷宫从起点到终点的最短路径长度。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "csp-j-2024-r03",
+      "type": "reading",
+      "group": "J",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "content",
+          "msg": "缺 explanation/解析（内容缺失，不可自动补全）"
+        }
+      ],
+      "question": "阅读以下程序，该程序使用贪心策略求最大不相交区间数量。请回答后面的问题。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-03-4-10",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P1",
+      "excluded": true,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "code",
+          "msg": "题干引用代码/程序/输出但无 code 字段"
+        }
+      ],
+      "question": "在如下的C++代码执⾏后，设第11和12⾏的输出地址值分别为X和Y，则下⾯正确的是（ ）。 1 struct pass{"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-4-15",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P1",
+      "excluded": true,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "code",
+          "msg": "题干引用代码/程序/输出但无 code 字段"
+        }
+      ],
+      "question": "下⾯程序中，如果语句 cout<<p<<endl; 输出的是0x6ffe00，则cout<<++p<<endl;输出的是（）"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-4-13",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P1",
+      "excluded": true,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "code",
+          "msg": "题干引用代码/程序/输出但无 code 字段"
+        }
+      ],
+      "question": "下⾯代码实现了插⼊排序函数，则横线上应填写（ ）。 1 void insertion_sort(vector<int> &nums) {"
+    }
+  ]
+}

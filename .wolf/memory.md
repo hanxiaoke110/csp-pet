@@ -1,3 +1,37 @@
+## 2026-07-06 — GESP 题库导入 + 4 个 bug 修复 + 缺代码题处理
+
+### GESP 题库导入
+- 从桌宠 `public/course-data/unified-quiz-bank.json` 提取 GESP C++ 1-4 级 495 题（带答案+解析）
+- 转地牢格式合并到 `src-dungeon/data/csp-exam-bank.json`：合并后 735 题（GESP 495 + J 120 + S 120）
+- GESP 题新增 `level` 字段（1-4），`difficulty` = level
+- 含代码块的题（8题）提取了 code 字段
+- `Question.group` 类型加 `'GESP'`
+
+### 选题逻辑改造
+- `pickQuestionsByTag`：普通技能从 CSP-J choice + GESP 1-4 级 choice 选题，排除 CSP-S 超纲题
+- 新增 `getDungeonDifficulty(dungeonId)`：按副本分配难度（天机阁1-2→算法塔3-4→真题战场1-4）
+- `pickQuestionsByTag` 加 `difficultyRange` 参数，按副本难度过滤
+- 新增 `pickBigMoveQuestions`：大招用 J 组 reading/fillBlank 题（取第一个子问题转 choice）
+- BattleScreen：skill-4（递归爆发）用 pickBigMoveQuestions，其他用 pickQuestionsByTag
+
+### 4 个 bug 修复
+1. **切换智子后宠物不显示**：`BattlePhaserGame.ts` 的 `game.events.on('ready')` 竞态——重新进入时 game 已 booted，监听器错过事件。改为检查 `game.isBooted`，已 booted 直接启动 scene
+2. **排行榜字段不匹配**：后端返回 snake_case（display_name/rank_tier），前端用 camelCase。`api.ts` getLeaderboard 加 snake→camel 转换；`getTypeValue` 统一用 `entry.value`
+3. **代码格式被破坏**：`codeFormat.ts` 对已含换行的代码多余断行。改为多行代码只规范化缩进，单行才断行
+4. **关卡难度没划分**：`pickQuestionsByTag` 没用 difficulty。加 difficultyRange + getDungeonDifficulty 按副本分配
+
+### GESP 缺代码题处理（72 道，跳过）
+- **现状**：100 道题干明确要求看代码（"在下列代码横线处填写"）但 code 字段为空
+- **根因**：GESP 真题选择题的代码块在 CCF 官方 PDF 里是**图片格式**，所有第三方来源（少儿编程网站、coderli 博客、yummy-code GitHub）都没文本代码
+- **已补**：从少儿编程网站 questions.json 匹配补了 3 道（含文本代码的 3-4 级题）
+- **处理**`pickQuestionsByTag` 加 `hasCodeRequired` 判断，题干要求看代码但无 code 字段的题跳过不选中
+- **剩余 72 道**：1-2 级题代码网上全是图片，无法自动补。只能 OCR 或人工。先跳过，题库还剩 510 道可用 choice
+- **后续如需补**：需 OCR 工具从 CCF PDF 提取，或人工对照原题敲代码
+
+### 待办（未完成）
+- **Worker 部署**：后端 sync class_code、教师删除同步 class_students、leaderboard 等改动还没部署到 `api.cspstudy.top`（之前部署到错 worker `csp`，生产域名没更新）。需确认 `api.cspstudy.top` 绑哪个 worker 再重新部署
+- **GESP 缺代码题**：72 道，后续 OCR 或人工补
+
 ## 2026-07-06 — 智子试炼场集成桌面 App + 身份复用 + 换班级处理
 
 ### 集成方案
@@ -1271,3 +1305,103 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 ### 注意
 - BattleScene #15 偏离了任务字面建议（`const dungeonTitle = ...`），因为那样会再次产生未使用局部变量 TS6133；改为独立 `add.text` 调用，既保留标题显示又通过 tsc。这是“只删未使用代码”原则下的正确选择。
 - 多处删除引发连带未使用 import，已全部清理（`useState`/`determineFirstAttacker`/`getStoredHash`/`getStoredClassCode`/`ELEMENT_COLORS`）。
+
+## 2026-07-06 修复 Tauri 事件 unlisten 竢态 → Promise Error 红条
+- **现象**：客户端底部红条 `❌ Promise Error: undefined is not an object (evaluating 'listeners[eventId].handlerId')`
+- **根因**：index.html 全局 unhandledrejection 处理器把任何未捕获拒绝画成红条。源头是 Tauri 2 `_unlisten`（event.js:43）调用注入的 `unregisterListener(event, eventId)`，内部访问 `listeners[eventId].handlerId`；当 eventId 已不在 map（webview 重载 / 顶层路由 BrowserRouter↔MemoryRouter 整树切换卸载 / StrictMode 双调用）时抛错。4 处 `listen().then(fn => cleanups.push(fn))` 模式 cleanup 时不 await/catch 返回的 Promise → 冒泡成 unhandledrejection。进/出地牢集中卸载最易触发。
+- **修法**：新增 `src/lib/tauriEvents.ts` 的 `safeListen`/`safeWindowListen`——cancelled 标记解决「resolve 前已卸载」竞态 + `safeUnlisten` 吞掉 unlisten 拒绝。4 处调用点替换（App.tsx PetActionHandler + onResized、PetPanel、PetWindow 四事件）。index.html 加兜底过滤（msg 含 listeners[eventId]/handlerId 时 preventDefault）。
+- **验证**：npx tsc --noEmit 退出码 0。
+- **遗留**：App.tsx init 内 `listen('pet-click')`/`listen('pet-request-sync')` 是 fire-and-forget 永不注销，不会触发此错，保留原样。
+
+## 2026-07-06 消除冷启动主窗口「先大后小」闪烁（tauri-plugin-window-state）
+- **现象**：每次冷启动主窗口先以 950×560 显示，React mount 后才缩回上次保存尺寸。
+- **根因**：尺寸恢复在前端 useEffect（晚于窗口显示），Tauri 按 conf 创建显示窗口在前。
+- **方案**（用户选 A：官方插件）：接入 tauri-plugin-window-state v2.4.1。
+  - Cargo.toml + lib.rs 注册 `.with_denylist(&["pet"])`（pet 自管位置）
+  - tauri.conf.json main 加 `visible:false`——插件 on_window_ready 调 restore_state 恢复尺寸后 show()，无闪烁
+  - lib.rs setup 加 1.5s 兜底线程：若 main 仍 hidden 强制 show（防 restore_state 报错致卡死）
+  - 删 App.tsx localStorage 恢复 + onResized 保存 + 相关 import
+- **验证**：cargo build --release 通过；npx tsc --noEmit 退出码 0。
+- **注意**：main 窗口现在 visible:false，依赖插件 show。若未来移除插件，必须把 visible 改回 true。
+- **附带**：之前为修 Promise Error 加的 safeWindowListen 现在无调用方（App.tsx 不再用），但作为工具函数保留在 tauriEvents.ts 未删。
+
+## 2026-07-06 修复闯关界面缺代码残缺题（questionLoader 过滤不全）
+- **现象**：用户在闯关界面看到「输出数字三角形横线处应填入（ ）。」+ 选项 A.1;i+1 等，但无代码块。
+- **根因**：CODE_REQUIRED_PATTERNS 两类漏网——(1)「横线处应填入」无「代码」前缀，patterns 只有「代码的横线处」匹配不到；(2)「下面C++代码」「以下C++程序」因「C++」夹中间，子串匹配不到「下面代码」/「以下程序」。CCF 原题代码是图片，code 字段为 None。
+- **修法**：patterns 加 C++代码/C++程序/代码段/横线；新增 INLINE_CODE_MARKERS + hasInlineCode() 保护 38 道内联代码题（如 for(int i=10;...)cout<<i 可作答）；新 isBrokenCodeQuestion(q)=needsCodeBlock && !code && !hasInlineCode，替换旧逻辑。pickQuestionsByTag + pickBigMoveQuestions 都加过滤。
+- **验证**：Python 模拟 72→148 道过滤（多抓 76），用户题命中，L1/L2 行号题 0 漏网，内联代码题 0 误杀。tsc 退出码 0。GESP 1-4 选择题 495→可用 347，加 CSP-J 120 共 467 道，足够。
+- **注意**：过滤在查询时（pickQuestionsByTag）而非加载时，无需清 localStorage 题库缓存（csp_exam_bank_v4），重载即生效。
+- **遗留**：选项数据带「A. 」前缀（如 'A. 1;i+1'），UI 可能再加 A/B/C/D 标签致重复显示——单独的显示问题，未在此修。
+
+## 2026-07-06 第二轮修复残缺题（cnt+=i++循环输出cnt是）
+- **现象**：用户又遇到「cnt+=i++循环输出cnt是（ ）。」无循环代码，反馈可靠性差。
+- **根因**：两类问题。(1) 漏网：题干「循环+输出」但无横线/代码/程序信号，无 for(/while(，循环代码丢失。(2) 误判：题干含内联代码（void/struct/vector</string s/带行号）但旧 INLINE_CODE_MARKERS 不认，被误过滤。
+- **修法**：CODE_REQUIRED_PATTERNS 加「代码输出」；INLINE_CODE_MARKERS 扩展加 vector</std::</void /struct /return 0/;\\n/};/string s/int X=；isBrokenCodeQuestion 重构三段判定 + 循环启发式（/循环/ && /输出|执行后|结果是|的值是/）。
+- **验证**：Python 模拟总过滤 150 道，用户两道题命中，5 道内联代码题救援，循环启发式 0 误判（概念题无「输出」信号不抓）。tsc 退出码 0。
+- **教训**：CCF 原 GESP 题代码是图片，导入丢失 ~150 道。模式过滤是 whack-a-mole，每次用户报新题就补一个 pattern。根本解法是补全 code 字段或从题库删除残缺题，但工作量大。当前过滤覆盖率应已较高。
+- **数据**：GESP 1-4 选择题 495 道，过滤 150 道残缺，剩 345 道 + CSP-J 120 = 465 道可用。
+
+## 2026-07-08 班级码门禁初始版本补丁（不发版/不部署）
+- **范围**：仅 csp-desktop-pet。需求：月度复盘/超级挑战/CSP真题训练/智子试炼场需班级码；自由练习免；复用 GET /api/classes/validate?code=&device_hash=；校验成功本地缓存 6h；失效清缓存提示重绑；不新增每题上报/统计。
+- **改动文件**：src/components/access/ClassAccessGate.tsx、src/components/quiz/QuizPractice.tsx、src/components/exam/ExamTraining.tsx、src-dungeon/DungeonEmbed.tsx。SettingsPage 已用 markClassAccessChecked/clearClassAccessCache（#9/#10 已满足），未改。
+- **修 bug**：ensure 返回 Promise<boolean> -> Promise<{ok,message}>。原 startRestrictedMode 读 classAccess.message 是闭包旧值（''），门禁拿不到真实失败原因（offline/denied/missing）。改为带回收 message。autoCheck 路径不受影响（返回值忽略）。详见 buglog 2026-07-08。
+- **要点**：①QuizPractice 模式选择页顶部加 classGate 拦截（去设置=navigate('/settings')，返回=setClassGate(null)），月度复盘/超级挑战按钮改 startRestrictedMode，自由练习仍 startMode('free')。②ExamTraining 删只读 localStorage 的 hasClassCode，改 useClassAccess(true)+ClassAccessRequired，idle/checking 显示 spinner 避免闪烁，去设置=/settings、返回=/courses。③DungeonEmbed 在 AppContent 前加门禁，未通过不进 AppContent，去设置=navigateToMainApp('/settings')、返回=navigateToMainApp('/courses')；门禁用白底卡片包 ClassAccessRequired 保证深色背景下可读。
+- **跨目录导入**：src-dungeon/DungeonEmbed.tsx 从 ../src/components/access/ClassAccessGate 导入。已验证 src/ 与 src-dungeon/ 互导可行（petStore 已反向导入 combatLogic）。tsc 经 src/App.tsx→DungeonEmbed 传递检查。
+- **验证**：npm test 5 passed；npm run validate:assets 0 issues；npm run build（tsc+vite）2.90s 无错。
+
+## 2026-07-08 题库可靠性专项修复（不发版/版本号不变 1.7.2）
+- **背景**：用户反馈题目不显示代码、图片 markdown 原样显示、内容不完整。题库可靠性是发版前最高优先级。
+- **数据修复**：5 道 GESP 流程图题（gesp-2023-03-2-02/06-2-02/09-2-02/2024-06-2-02/2024-06-3-06）的 `![流程图](gitee-url)` 提取到 image 字段（转本地 `/course-data/flowchart-*.svg`，本地 SVG 已存在），从 question 移除 markdown。修了 unified-quiz-bank(5)+src-dungeon csp-exam-bank(5) 共 10 处。脚本：scripts/normalize-question-images.mjs（幂等）。所有题库 0 处残留 markdown 图片。
+- **渲染修复**：①markdown.ts renderCodeText 的 `<img>` 加 normalizeImageUrl（gitee->本地）。②QuizPractice QuizImage / ExamChoice QuestionImage / ExamMultiPart MultiPartImage / BattleScreen BattleImage 四处 `<img>` 加 onError 降级（失败显示"图片加载失败"+URL）。③ExamChoice 补渲染 image/codeImage（原漏）。④ExamMultiPart 接 image/codeImage prop 并渲染，子题选项+解析改用 renderCodeText（原 raw 文本，backtick 内联代码原样显示）。⑤ExamTraining 传 image/codeImage 给 ExamMultiPart。`.code-block`/`.battle-question-code` 已有 overflow-x:auto。
+- **审计**：新增 scripts/audit-question-reliability.mjs（type-aware：choice/reading/fillBlank/super，维度=字段完整性/代码/图片/内容残缺/显示风险），输出 reports/question-reliability-report.{json,md}。基线 13 P1 -> 修复后 P0=0, P1=3(unresolved), P2=34。
+- **unresolved 3 道**：gesp-2024-03-4-10/06-4-15/12-4-4-13（GESP 4级，原题代码是图片，导入丢失，本地 gesp-code-images 无对应 PNG，unified-quiz 里的 code 是 OCR 残片含伪迹如 'j >= &&'）。不可靠重建->加入 BROKEN_QUESTION_IDS 从 QuizPractice.loadBank 和 questionLoader.isBrokenCodeQuestion 排除，不进入题池。
+- **P2=34**：src-dungeon csp-exam-bank 的 34 道 CSP reading 题（csp-j-2019-reading-01 等）缺 explanation，属内容缺失非显示问题，不可自动补全。
+- **quiz-bank.json(432)**：客户端不加载（仅注释引用），精简 schema 无 explanation/kp，审计 0 issue。
+- **验证**：npm test 5 passed；validate:assets 0 issues；npm run build(tsc+vite) 2.92s 无错；build:dungeon 同步 dist-dungeon。dist + dist-dungeon 两个 csp-exam-bank bundle 均含修复后数据（有 image 路径，无 raw markdown，无 gitee URL）。Playwright 未本地安装，未跑 live 浏览器回归（静态+构建+审计+渲染代码审查替代）。
+
+## 2026-07-08 题库可靠性收口调整（硬编码->统一配置，不发版/不改版本号）
+- **目的**：把排除逻辑从"代码硬编码"改为"统一配置 + 清晰报告"，单一数据源。
+- **新增**：①public/course-data/excluded-question-ids.json（ids/reason/note，3 道缺代码题）。②src/utils/excludedQuestions.ts（共享 helper：loadExcludedQuestionIds 异步缓存 + getCachedExcludedQuestionIds 同步读，fetch 失败降级空集）。
+- **改动**：①QuizPractice.loadBank 删 BROKEN_QUESTION_IDS 硬编码，改 await loadExcludedQuestionIds() + filter。②questionLoader：删硬编码，loadQuestionBank 顶部 await 预加载缓存，isBrokenCodeQuestion 用 getCached 同步读。两处复用同一 helper，ID 列表只在 JSON 一份。③audit-question-reliability.mjs：读同一配置，findings 加 excluded 标记，新增 sourceIssuesTotal/excludedIssuesTotal/visibleP0/P1/P2，md 重构为 6 段（总览/学生可见风险/源题库剩余问题/已隔离题目/发版建议/后续补题清单）；STRICT_RELIBILITY_AUDIT 改为仅 visible P0/P1 触发。
+- **路径坑**：questionLoader 在 src-dungeon/utils/（2 层深），导入 src/utils 用 `../../src/...`（不是 `../../../src/...`，那是 screens/ 3 层深的 BattleScreen 用的）。已踩坑修复。
+- **结果**：sourceIssuesTotal=37（含 3 excluded），visibleP0=0、visibleP1=0、visibleP2=34。3 道已从 /quiz 和 /dungeon 题池排除（App bundle 运行时 fetch excluded-question-ids.json，不硬编码 id；3 个 id 仅出现在 csp-exam-bank 数据 bundle 作为题目 id）。
+- **验证**：audit:reliability 通过（visible P0/P1=0）；validate:assets 0 issues；npm test 5 passed；npm run build 2.97s 无错。dist/course-data/excluded-question-ids.json 已由 build 复制。
+
+## 2026-07-08 稳定初始版本推进（不发版/版本号不变 1.7.2）
+- **基线**：5 命令全绿（validate:assets / audit:reliability / test 5 / build / build:dungeon）。
+- **题库可靠性继续完善（任务三）**：①import-gesp-2026-06.mjs 已幂等（unified 按 id 键覆盖、dungeon 先滤后追加；实测重复运行指纹不变，replaced existing:60，60 道分布 1-4 级各 15）。②2026-06 GESP 1-4 级 60 道在 unified-quiz-bank(650) 与 src-dungeon csp-exam-bank(795) 双库均存在，dist/dist-dungeon 同步(650)。③audit-question-reliability.mjs 增强 3 类检测：undefined/[object Object] 序列化泄漏(P0)、抽取残缺"由 位/输入 个/分数为 的"(P1,EXTRACT_RESIDUE_RE)、code OCR 损坏(相邻运算符如"j >= &&" P1 + 行首孤立数字 P1 + 大括号严重不匹配 P1)。DANGLING_OP_RE 踩坑：初版第三分支误判所有 `a >= b`，移除；第二分支 `>= ;` 误判填空题 `i <= ;`，移除；仅保留相邻运算符高精度一支。④修复 2 道残片题 gesp-2024-12-4-02（void n_chars 代码分裂到 stem 带行号）与 gesp-2025-03-4-07（struct Person 嵌套 Address 分裂+题干混入 code），合并回 code 字段、清 stem，unified+dungeon 两库同修。⑤结果：visible P0=0 P1=0 P2=34；60 新题 0 issue；excluded=4（3 道隔离题在 2 库的 4 条 finding）。解析统一写"官方答案：X。"，审计 flag "待补充/TODO"。
+- **学习资料入口（任务六）**：新增 public/course-data/learning-resources.json（索引：lecture/fable/practice/review，requiresClassCode 区分，URL 占位 example.com 不含公司敏感信息，_note 标注后续飞书/Cloudflare 替换）+ src/components/resources/{types.ts,ResourceCard.tsx,LearningResourcesPage.tsx}。页面 fetch('/course-data/learning-resources.json')，type 过滤，openUrl(@tauri-apps/plugin-opener，复用 OJTraining 已配 capability) 系统浏览器打开；🔒 资源调 useClassAccess().ensure() 校验，失败渲染 ClassAccessRequired（复用门禁，真实失败原因 message）。路由 /resources 挂在 App.tsx，AppShell 侧栏加"📖 学习资料"NavLink。tsc 通过。
+- **教师端压力控制（任务七）**：核查通过，无需改动。答题流程无每题上报（QuizPractice 仅 loadBank 本地 fetch）；reportBattle 仅战斗结束调用（=任务七允许的"完成一次挑战后上报摘要"）；排行榜无 setInterval 自动刷新；班级码 validate/bind 保留。未动 Cloudflare Worker。
+- **商城/工坊边界（任务八）**：核查通过，不合并。商城(🛒 ShopPanel)与工坊(🏭 WorkshopShop)为 PetPanel 内独立 tab，入口清晰无重复按钮，未删养成资产，未动经济系统。
+- **班级码门禁统一（任务四）**：5 文件核查+精修。①ClassAccessGate.ensure 加 10s AbortController 超时（防卡"校验中"）+ 5xx 区分（"校验服务异常"不清缓存，与"班级码失效"4xx 清缓存分离）+ resp.json().catch 兜底；失败原因 4 类齐全：未绑定(无 code)/班级码失效(4xx 或 data.error，clearClassAccessCache)/网络不可用(fetch throw 或超时)/校验服务异常(5xx)。②QuizPractice 自由练习(startMode 'free')免门禁，月度复盘/超级挑战走 startRestrictedMode->ensure->result.ok/message->classGate(ClassAccessRequired)，描述含"普通自由练习仍可直接使用"。③ExamTraining useClassAccess(true) 自动校验，!isAllowed 时 idle/checking 显示 spinner 不白屏，再 ClassAccessRequired(message+onBind /settings+onBack /courses)。④DungeonEmbed 同模式，未通过不渲染 AppContent。⑤SettingsPage 加"🚫 解绑"按钮(clearClassAccessCache+清 UI)，原有绑定/失败自动清缓存+"⚠️ {data.error}"提示保留。ClassAccessRequired 文案含绑定班级码/去设置绑定/返回三要素。
+- **智子试炼场体验优化（任务五）**：①RegisterScreen 注册选流派卡片加"被动：{name}·{description}"(import getSchoolPassive)，与 ProfileScreen 换流派弹窗一致（F2 修复）。②Phaser 真暂停：BattlePhaserGame 接口加 pause()/resume()(game.scene.pause/resume('BattleScene'))，BattleScreen 加 useEffect 监听 window 'dungeon-pause'/'dungeon-resume' 事件调 gameRef.pause/resume，DungeonEmbed 暂停按钮 dispatch 'dungeon-pause'、继续战斗 dispatch 'dungeon-resume'（C2 修复，原仅 CSS 遮罩 Phaser 仍跑）。③BattleScreen.css 图片 min-width 520/560px 改 min(X,100%)（窄窗缩放非强制横滚，A1）+ @media(max-width:480px) card padding 16px（A5）。④流派被动每日上限：dungeonStore 加 schoolPassiveDaily{used,limit:50,resetAt:YYYY-MM-DD}+todayStr()+bumpSchoolPassiveDaily()（跨日重置，未达上限++返回 true）+saveToLocalStorage/loadFromLocalStorage 持久化 'dungeon_school_passive_daily'；BattleScreen.handleAnswer 仅答对时调 bumpSchoolPassiveDaily，true 才 applySchoolAnswerPassive（EXP/金被动），false 或答错发基础奖励。段位/暴击被动不限（段位已由 weeklyChallenges 5次/周限，暴击为战斗机制非资源）。BattleImage onError 降级已有(D1满足)。返回按钮左下角不遮挡顶部(B1)、战斗中暂停有确认弹窗(B2)已满足。
+- **验证（全绿）**：validate:assets 0 issues；audit:reliability VISIBLE P0=0 P1=0 P2=34；test 5 passed；build 2.70s；build:dungeon 2.46s。tsc --noEmit 干净。
+
+## 2026-07-08 新增发版前手动测试清单（只新增文档，不改代码/版本号）
+- **新增**：docs/release/manual-test-checklist-1.7.x.md（10 模块 + 最终结论，逐项 `- [ ]` 打勾 + 每模块「结果记录」+ 末尾「最终结论」）。
+- **覆盖**：基础启动 / 桌宠基础 / 班级码 / 普通练习 / 超级挑战月度复盘 / CSP真题 / 智子试炼场 / 学习资料入口 / 题库专项抽查 / 发版前阻塞项。
+- **阻塞项**：学习资料 URL 仍是 example.com 不得正式发版；SOURCE P1/P2 需确认学生不可见；至少一次 Tauri 实机测试通过；发现学生可见 P0/P1 必须修复后回归。
+- **约束**：仅新增文档，未改任何功能代码，未改版本号（1.7.2），未发版，未部署。
+
+## 2026-07-08 题库热更新推送 gitee master（不发版，仅数据）
+- **背景**：新版本代码未准备好，但先把题库数据修复推给学生缓解。App 启动时从 gitee master 拉 version.json+unified-quiz-bank.json 热更新（QuizPractice 优先读 localStorage csp_quiz_bank 缓存）。
+- **推送内容**（commit 8ff07bf，仅 2 文件）：①public/course-data/unified-quiz-bank.json：590->650 题（+60 道 2026-06 GESP 1-4 级 + 2 残片题修复 gesp-2024-12-4-02/2025-03-4-07 + 131 道历史数据修正）。②version.json 19->20 触发热更新。
+- **关键兼容处理**：5 道流程图题（gesp-2023-03-2-02/06-2-02/09-2-02/2024-06-2-02/2024-06-3-06）**保留 master 版**（markdown 在 question，不提取 image 字段）。原因：旧 App(1.7.3) renderCodeText 会把 `![alt](gitee-url)` 转 `<img>`，但不渲染 q.image 字段；若推本地提取版，旧 App 会丢图。流程图图片提取版等正式发版（新 App 有 QuizImage 渲染代码）时 bump v21 再推。
+- **未推**：excluded-question-ids.json（打包，热更新不覆盖）、csp-exam-bank.json（dungeon 打包）、所有代码改动（门禁/试炼场/学习资料）--这些必须发新版才生效。
+- **3 道隔离题**（gesp-2024-03-4-10/06-4-15/12-4-13）：旧 App 无 excluded 机制，热更新不解决，仍可能在 /quiz 出现（状态同前，非回归）；真正隔离需发版。
+- **认证**：gitee remote 未配 token，`git push gitee master` 失败（Unauthorized）。用一次性 URL `https://hanliuliu110:TOKEN@gitee.com/...` 推送成功（token 不入 .git/config）。**~/.zshrc 里的旧 GITEE_TOKEN(b346a470...) 已失效**（用户重新提供新 token，未存入记忆，建议用户在 Gitee 后台吊销旧 token）。
+- **推送方式**：本地建 master 分支（从 gitee/master），仅 add 2 个数据文件提交，`git push <url> master:master`，回到 feature 分支 stash pop 恢复全部本地开发改动。本地 master 分支保留（与 gitee/master 同步）。
+- **学生侧**：下次启动 App 自动拉 v20（需联网），无需操作。仅 /quiz 路径（普通练习/超级挑战/月度复盘）生效。
+
+## 2026-07-09 学习资料飞书链接预置机制（不发版 1.7.2）
+
+- **目标**：让客户端当前版本长期可用。后续讲义图/寓言图做好后只需上传飞书文档或改远程索引，不必频繁发版。
+- **数据结构升级** `public/course-data/learning-resources.json`（version 1->2）：新增 `lessonNo`(P1-P71)/`status`(ready/coming_soon/hidden)/`thumbnailUrl`/`updatedAt`/`description`；废弃 `enabled`(保留兼容，false 等同 hidden，status 优先)。`_note`+`_schema` 明确 example.com 是发版阻塞项。
+- **预置范围**（不一口气 P1-P71）：19 条 lecture = P1-P16 全部(16) + 第一批样张额外 P22/P53/P66(3)；8 张风格样张(P1/P2/P5/P8/P14/P22/P53/P66)加 `样张` tag。另保留 2 fable + 1 practice + 2 review(迁移到新 schema)。合计 24 条，全部 `coming_soon`(URL 仍是 example.com 占位)，ready=0/hidden=0。
+- **课号标题来源**：从 `lessons.json` 的 stages[].lessons[].title 取真实标题（如 P8="关系运算符与分支结构"、P53="枚举算法的优化"），不臆造。
+- **远程索引优先+本地兜底** `LearningResourcesPage.tsx`：常量 `REMOTE_RESOURCE_INDEX_URL=''`(空=不启用远程，直接本地)。非空时 `tauriFetch`(走 @tauri-apps/plugin-http 绕 WebView CORS，与 App.tsx 热更新一致) 拉远程 JSON，`isValidResourcesData` 校验通过则用远程；失败 `console.warn` 回退本地 `/course-data/learning-resources.json`。远程/本地/格式异常都不白屏(错误态+返回按钮/空状态)。
+- **UI** `ResourceCard.tsx`：status ready->按钮"打开"/coming_soon->"制作中"(仍可点击打开占位链接，飞书页后续直接更新)/hidden 页面层过滤不展示；lessonNo 显示 P{lessonNo} 徽标 + 升序排序(无 lessonNo 排后)；thumbnailUrl 有则显示 `<img>` onError 降级占位图标(不破图)，空显示 emoji 占位；STAGE_COLOR 扩展 C1-C4 真实阶段名。
+- **班级码门禁**：未破坏。requiresClassCode=true 资源未绑定时被 ClassAccessRequired 拦截，绑定后 openUrl 打开。coming_soon 也走同一门禁。
+- **文档**：`docs/content-image-generation-plan.md` 追加第 14 节(飞书链接预置策略)；`docs/release/manual-test-checklist-1.7.x.md` 第 8 节补充 9 项测试(coming_soon 显示/可点、hidden 不展示、lessonNo 排序、缩略图不破图、远程失败回退、空状态不白屏、门禁未破坏)。
+- **验收**：validate:assets(0 issue)/audit:reliability(exit0,VISIBLE P0=0 P1=0)/test(5/5)/build(tsc clean)/build:dungeon 全过。dist 同步 public==dist(24 条)。
+- **未做(边界)**：未发版、未改版本号(仍 1.7.2)、未部署、未动 Cloudflare Worker、未生图、未把图片塞进客户端包体、未删现有学习资料入口(/resources 路由+侧栏入口保留)。REMOTE_RESOURCE_INDEX_URL 仍空，远程索引未启用。example.com 仍是发版阻塞项。

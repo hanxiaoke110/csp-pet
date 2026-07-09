@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { listen } from '@tauri-apps/api/event';
 import { usePetStore, formatPetDisplayName } from '../../stores/petStore';
 import { useHatchStore } from '../../stores/hatchStore';
 import { STARTER_PETS } from '../../types/pet';
 import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
+import { safeListen } from '../../lib/tauriEvents';
 import CeremonyModal from './CeremonyModal';
 import PetSprite from './PetSprite';
 import HatchPanel from './HatchPanel';
@@ -57,10 +57,16 @@ export default function PetPanel() {
 
   // Listen for visibility toggle from pet window action bar
   useEffect(() => {
-    const unlisten = listen('pet-visibility-toggled', () => {
-      setPetWinVisible(prev => !prev);
-    });
-    return () => { unlisten.then(fn => fn()); };
+    const cleanups = [
+      safeListen('pet-visibility-toggled', (e: any) => {
+        if (typeof e.payload?.visible === 'boolean') setPetWinVisible(e.payload.visible);
+        else setPetWinVisible(prev => !prev);
+      }),
+      safeListen('pet-window-visibility', (e: any) => {
+        if (typeof e.payload?.visible === 'boolean') setPetWinVisible(e.payload.visible);
+      }),
+    ];
+    return () => cleanups.forEach(fn => fn());
   }, []);
 
   // Listen for tab switch from pet window

@@ -21,7 +21,8 @@
         "minWidth": 800,
         "minHeight": 500,
         "center": true,
-        "decorations": true
+        "decorations": true,
+        "visible": false
       },
       {
         "label": "pet",

@@ -1,6 +1,6 @@
 # anatomy.md — CSP 学习助手项目结构
 
-> 最后更新：2026-06-30（智子试炼场战斗逻辑修复后）
+> 最后更新：2026-07-09（学习资料飞书链接预置机制：status/lessonNo/thumbnailUrl/远程索引优先+本地兜底，不发版 1.7.2）
 
 ## 项目目录
 
@@ -29,9 +29,15 @@ csp学习助手（师+生）/
 │   │   │   │   ├── RaisingGuide.tsx    # 饲养指南
 │   │   │   │   └── PetStateMachine.ts  # 状态机
 │   │   │   ├── ai/AIChat.tsx
+│   │   │   ├── access/ClassAccessGate.tsx  # 班级码门禁 (useClassAccess + ClassAccessRequired, 6h 本地缓存, GET /api/classes/validate)
 │   │   │   ├── quiz/QuizPractice.tsx
+│   │   │   ├── exam/ExamTraining.tsx       # CSP 真题训练 (班级码门禁: 月度复盘/超级挑战/真题/智子试炼场需班级码，自由练习免)
 │   │   │   ├── achievements/AchievementsPanel.tsx
 │   │   │   ├── oj/OJTraining.tsx
+│   │   │   ├── resources/                # 学习资料入口 (2026-07-08 新增；2026-07-09 升级为飞书链接预置机制)
+│   │   │   │   ├── LearningResourcesPage.tsx  # /resources 页：REMOTE_RESOURCE_INDEX_URL 远程索引优先(tauriFetch)+本地兜底；type 过滤；status(hidden 不展示)+lessonNo 升序排序；openUrl 系统浏览器；🔒资源复用 useClassAccess 门禁
+│   │   │   │   ├── ResourceCard.tsx           # 卡片：缩略图(空/失败降级占位)/P{lessonNo}徽标/status(ready 打开·coming_soon 制作中仍可点)/阶段/标签/🔒班级码徽标
+│   │   │   │   └── types.ts                   # LearningResource 类型（lecture/fable/practice/review + status ready/coming_soon/hidden + lessonNo/thumbnailUrl/updatedAt/description）
 │   │   │   └── settings/SettingsPage.tsx  # 设置 (AI配置+班级绑定+学习数据+集训)
 │   │   ├── stores/
 │   │   │   ├── petStore.ts      # 宠物数据 (Zustand + localStorage)，含经验池与战斗属性初始化
@@ -47,8 +53,10 @@ csp学习助手（师+生）/
 │   │   │   └── spriteDownloader.ts
 │   │   ├── types/pet.ts         # 精灵类型定义 + 商城数据
 │   │   ├── lib/storage.ts       # 安全的 localStorage 操作
+│   │   ├── lib/tauriEvents.ts   # safeListen/safeWindowListen — 解决 Tauri 事件 unlisten 竞态与 unregisterListener 抛错（2026-07-06 新增）
 │   │   └── services/ai/         # AI 服务 (3个文件)
 │   ├── src-tauri/               # Rust 后端
+│   │   └── (tauri-plugin-window-state 已接入：main 窗口 visible:false，插件 on_window_ready 恢复尺寸后 show；lib.rs setup 内 1.5s 兜底 show 防卡死；pet 窗口 denylist 排除)
 │   ├── cf-workers/api.js        # Cloudflare Worker API (~670行)
 │   ├── teacher-app/index.html   # 教师 Web 后台 (SPA)
 │   ├── public/course-data/      # 课程数据 (JSON)
@@ -73,6 +81,8 @@ csp学习助手（师+生）/
 │   ├── csp-roadmap.md            # 升级路线图
 │   ├── 2026-06-02-wish-wall-design.md  # 许愿墙方案
 │   └── 2026-06-29-智子试炼场-design.md  # 智子试炼场（宠物回合制地牢战斗）
+├── docs/release/                # 发版前手动测试清单 (2026-07-08 新增)
+│   └── manual-test-checklist-1.7.x.md  # 1.7.x 发版前人工/Tauri 实机验收清单（10 模块 + 最终结论，逐项打勾）
 │
 └── .wolf/                       # 项目记忆 (OpenWolf)
     ├── anatomy.md               # 本文档

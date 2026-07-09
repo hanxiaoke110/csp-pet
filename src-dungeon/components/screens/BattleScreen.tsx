@@ -1,16 +1,25 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById } from '../../data/skills';
-import { pickQuestionsByTag } from '../../utils/questionLoader';
+import { pickQuestionsByTag, pickBigMoveQuestions, getDungeonDifficulty } from '../../utils/questionLoader';
 import { calculateStats } from '../../utils/combatLogic';
-import { calculateAnswerReward, rollCritical, calculateBattleRating } from '../../utils/gameLogic';
+import {
+  applySchoolAnswerPassive,
+  calculateAnswerReward,
+  calculateBattleRating,
+  getSchoolRankPointBonus,
+  rollCritical,
+} from '../../utils/gameLogic';
 import { createBattleGame, type BattlePhaserGame } from '../../phaser/BattlePhaserGame';
 import type { BattleInitData, PhaserPetConfig, BattleEndResult } from '../../phaser/types';
 import type { Question, DungeonDefinition, DungeonStage } from '../../types/dungeon';
 import type { OwnedPet, PetElement, PetTier } from '../../../src/types/pet';
 import { getPetTier, PET_BASE_STATS, TIER_MULTIPLIERS } from '../../../src/types/pet';
 import { loadWebPet } from '../../utils/webPet';
+import { formatCppCode } from '../../utils/codeFormat';
+import { isWorkshopPet, loadWorkshopThumbUrl } from '../../utils/petPreview';
 import FableCard from '../shared/FableCard';
 import fables from '../../data/fables.json';
 import './BattleScreen.css';
@@ -50,6 +59,87 @@ function loadActivePetFromStorage(): OwnedPet {
     obtainedAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
+}
+
+// 题干代码高亮：识别题干里的 C++ 代码片段（if/for/while/continue/break/运算表达式等），
+// 用等宽字体 + 高亮色渲染，避免代码和中文混在一起不美观。
+const CODE_KEYWORDS = ['if','else','for','while','continue','break','cout','cin','return','int','char','double','void','main','bool','string','long','short','float'];
+
+function normalizeQuestionAssetUrl(src: string): string {
+  const localMatch = src.match(/\/public\/(course-data\/[^?#)]+)/);
+  if (localMatch) return `/${localMatch[1]}`;
+  return resolveQuestionImage(src) || src;
+}
+
+function highlightInlineCode(text: string, keyPrefix: string): ReactNode[] {
+  if (!text) return [];
+  const nodes: ReactNode[] = [];
+  // 匹配代码片段：字母/数字开头，连续的代码字符（含括号/分号/运算符/~等）
+  const pattern = /[a-zA-Z0-9_][a-zA-Z0-9_%()<>=+\-*/;{}.\[\]!&|^~#]*/g;
+  let lastIdx = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = pattern.exec(text)) !== null) {
+    const code = m[0];
+    // 只高亮含代码特征的片段：有运算符/括号/分号/等号，或是 C++ 关键词
+    const hasOperators = /[();{}=<>+\-*/%&|^~#]/.test(code);
+    const isKeyword = CODE_KEYWORDS.includes(code);
+    // 排除纯数字或太短的
+    const tooShort = code.length < 2 && !isKeyword;
+    if (!hasOperators && !isKeyword) continue;
+    if (tooShort) continue;
+    if (m.index > lastIdx) nodes.push(text.slice(lastIdx, m.index));
+    nodes.push(<code key={`${keyPrefix}-c${key++}`} className="stem-code">{code}</code>);
+    lastIdx = m.index + code.length;
+  }
+  if (lastIdx < text.length) nodes.push(text.slice(lastIdx));
+  return nodes;
+}
+
+function renderBattleStem(stem: string): ReactNode[] {
+  if (!stem) return [];
+  const nodes: ReactNode[] = [];
+  const imagePattern = /!\[([^\]]*)\]\(([^)]+)\)/g;
+  let lastIdx = 0;
+  let imgKey = 0;
+  let m: RegExpExecArray | null;
+
+  while ((m = imagePattern.exec(stem)) !== null) {
+    if (m.index > lastIdx) {
+      nodes.push(...highlightInlineCode(stem.slice(lastIdx, m.index), `t${imgKey}`));
+    }
+    nodes.push(
+      <div key={`img-${imgKey}`} className="battle-stem-image-wrap">
+        <BattleImage className="battle-stem-image" src={normalizeQuestionAssetUrl(m[2])} />
+      </div>
+    );
+    imgKey++;
+    lastIdx = m.index + m[0].length;
+  }
+
+  if (lastIdx < stem.length) {
+    nodes.push(...highlightInlineCode(stem.slice(lastIdx), `t${imgKey}`));
+  }
+  return nodes;
+}
+
+function resolveQuestionImage(src?: string | null): string | null {
+  if (!src) return null;
+  if (/^https?:\/\//.test(src)) return src;
+  return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
+}
+
+// 战斗题目图片：加载失败时降级提示，不让 broken image 破坏战斗 UI
+function BattleImage({ src, className }: { src: string; className?: string }) {
+  const [errored, setErrored] = useState(false);
+  if (errored) {
+    return (
+      <div style={{ padding: '14px', color: '#94a3b8', fontSize: 13, textAlign: 'center', background: '#f8fafc', borderRadius: 8, minHeight: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        🖼️ 图片加载失败，请稍后重试
+      </div>
+    );
+  }
+  return <img className={className} src={src} alt="" onError={() => setErrored(true)} />;
 }
 
 function makePlayerPetConfig(): PhaserPetConfig {
@@ -181,75 +271,110 @@ export default function BattleScreen() {
     }
   }, [dungeonId, player.classCode, player.deviceHash, isUnlocked, navigate]);
 
-  // 防跳关
+  // 防跳关（依赖不含 store，避免反复触发；内部用 getState）
   useEffect(() => {
     if (!dungeonId) return;
     if (!isBoss && dungeon && stageId) {
       const stageIdx = dungeon.stages.findIndex(s => s.id === stageId);
-      const dp = store.getDungeonProgress(dungeonId);
+      const s = useDungeonStore.getState();
+      const dp = s.getDungeonProgress(dungeonId);
       if (dp && stageIdx >= 0 && stageIdx < dp.completedStages) {
         navigate(`/dungeon/${dungeonId}`);
-        store.setView('dungeon-preview');
+        s.setView('dungeon-preview');
       }
     }
-  }, [dungeon, stageId, isBoss, dungeonId, store, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dungeon, stageId, isBoss, dungeonId, navigate]);
 
   // 初始化 Phaser 游戏
+  // 依赖不含 store：store 每次变化引用都变，放进依赖会导致 effect 反复 cleanup+重建 Phaser，
+  // 而 Phaser 初始化又会触发 setState，形成死循环（Maximum update depth）。
+  // effect 内部用 getState() 取最新 action，引用稳定。
   useEffect(() => {
     if (!containerRef.current || !dungeonId || !enemyConfig) return;
     if (gameRef.current) return;
 
-    // 消耗挑战次数
-    const earnsRewards = store.canEarnRewards();
-    if (earnsRewards) {
-      store.useChallenge();
-    }
-    useDungeonStore.setState({ currentBattleEarnsRewards: earnsRewards });
+    let cancelled = false;
 
-    // 决定先手
+    (async () => {
+      const s = useDungeonStore.getState();
+      // 消耗挑战次数
+      const earnsRewards = s.canEarnRewards();
+      if (earnsRewards) {
+        s.useChallenge();
+      }
+      useDungeonStore.setState({ currentBattleEarnsRewards: earnsRewards });
 
-    const initData: BattleInitData = {
-      dungeonId,
-      stageId: stageId || 'boss',
-      isBoss,
-      playerPet: playerConfig,
-      enemyPet: enemyConfig,
-      initialEnergy: 2,
-      maxEnergy: 5,
-      dungeonColor: dungeon?.color || '#1a1a2e',
-      dungeonBgImage: dungeon?.bgImage,
-      dungeonName: dungeon?.name || '潜龙秘境',
-    };
+      // 工坊宠物：异步加载 AppData 的 thumb 缩略图作为 preview（普通宠物用 public preview）
+      let playerCfg = playerConfig;
+      if (isWorkshopPet(playerCfg.speciesId)) {
+        const thumbUrl = await loadWorkshopThumbUrl(playerCfg.speciesId);
+        if (thumbUrl) {
+          playerCfg = { ...playerCfg, previewUrl: thumbUrl, textureKey: 'playerPetThumb' };
+        }
+      }
 
-    // 如果敌方先手，初始能量仍为 2，由 Phaser 内部处理
-    // （当前简化：统一玩家先手开始，speed 只影响部分平衡加成）
-    // TODO: 后续把 firstTurn 传给 Phaser，支持敌方先手
+      if (cancelled) return;
 
-    statsRef.current = {
-      correctCount: 0,
-      wrongCount: 0,
-      comboCount: 0,
-      expEarned: 0,
-      goldEarned: 0,
-      usedSkillIds: [],
-      startTime: Date.now(),
-    };
+      const initData: BattleInitData = {
+        dungeonId,
+        stageId: stageId || 'boss',
+        isBoss,
+        playerPet: playerCfg,
+        enemyPet: enemyConfig,
+        initialEnergy: 2,
+        maxEnergy: 5,
+        dungeonColor: dungeon?.color || '#1a1a2e',
+        dungeonBgImage: dungeon?.bgImage,
+        dungeonName: dungeon?.name || '潜龙秘境',
+      };
 
-    const game = createBattleGame(containerRef.current, initData, (event, data) => {
-      handlePhaserEvent(event, data);
-    });
+      statsRef.current = {
+        correctCount: 0,
+        wrongCount: 0,
+        comboCount: 0,
+        expEarned: 0,
+        goldEarned: 0,
+        usedSkillIds: [],
+        startTime: Date.now(),
+      };
 
-    gameRef.current = game;
+      const game = createBattleGame(containerRef.current!, initData, (event, data) => {
+        handlePhaserEvent(event, data);
+      });
+
+      if (cancelled) {
+        game.destroy();
+        return;
+      }
+      gameRef.current = game;
+    })();
 
     return () => {
+      cancelled = true;
       if (answerTimeoutRef.current) {
         clearTimeout(answerTimeoutRef.current);
         answerTimeoutRef.current = null;
       }
-      game.destroy();
-      gameRef.current = null;
+      if (gameRef.current) {
+        gameRef.current.destroy();
+        gameRef.current = null;
+      }
     };
-  }, [dungeonId, stageId, isBoss, enemyConfig, dungeon, playerConfig, store]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dungeonId, stageId, isBoss, enemyConfig, dungeon, playerConfig]);
+
+  // 暂停/恢复 Phaser 场景：DungeonEmbed 暂停弹窗通过 window 事件触发，真暂停（冻结 update/计时器），而非仅 CSS 遮罩
+  useEffect(() => {
+    const onPause = () => gameRef.current?.pause();
+    const onResume = () => gameRef.current?.resume();
+    window.addEventListener('dungeon-pause', onPause);
+    window.addEventListener('dungeon-resume', onResume);
+    return () => {
+      window.removeEventListener('dungeon-pause', onPause);
+      window.removeEventListener('dungeon-resume', onResume);
+    };
+  }, []);
 
   const handlePhaserEvent = useCallback((event: string, data: unknown) => {
     switch (event) {
@@ -258,11 +383,21 @@ export default function BattleScreen() {
         const skill = getSkillById(skillId);
         if (!skill) return;
 
-        const questions = pickQuestionsByTag(questionBank, skill.knowledgeTag, 1);
+        // 大招（递归爆发）用程序阅读/填空题（J 组，难度高）；普通技能用 J 组选择题
+        // 难度按副本主题递进（天机阁简单→算法塔难）
+        const isBigMove = skill.id === 'skill-4';
+        const diffRange = getDungeonDifficulty(dungeonId || '');
+        const questions = isBigMove
+          ? pickBigMoveQuestions(questionBank, 1)
+          : pickQuestionsByTag(questionBank, skill.knowledgeTag, 1, diffRange);
         if (questions.length === 0) {
-          // 无题时直接视为答错，避免卡死
-          gameRef.current?.setAnswerResult({ skillId, isCorrect: false });
-          return;
+          // 大招无 reading/fillBlank 题时回退到 choice；仍无则视为答错
+          const fallback = isBigMove ? pickQuestionsByTag(questionBank, skill.knowledgeTag, 1, diffRange) : [];
+          if (fallback.length === 0) {
+            gameRef.current?.setAnswerResult({ skillId, isCorrect: false });
+            return;
+          }
+          questions.push(...fallback);
         }
 
         setSelectedSkillId(skillId);
@@ -294,8 +429,18 @@ export default function BattleScreen() {
     // 记录答题与奖励
     store.recordAnswer(correct);
     const newCombo = correct ? statsRef.current.comboCount + 1 : 0;
-    const critical = correct ? rollCritical() : false;
-    const rewards = calculateAnswerReward(correct, newCombo, critical);
+    const critical = correct ? rollCritical(player.school) : false;
+    const baseReward = calculateAnswerReward(correct, newCombo, critical);
+    // 流派被动每日上限：仅答对时消耗每日额度并应用 EXP/金 被动加成（防刷），达上限或答错只发基础奖励
+    // 段位/暴击被动不由此处限制（段位已由 weeklyChallenges 5次/周限制，暴击为战斗机制非资源）
+    const passiveAllowed = correct ? store.bumpSchoolPassiveDaily() : false;
+    const rewards = passiveAllowed
+      ? applySchoolAnswerPassive(player.school, baseReward, {
+          combo: newCombo,
+          questionType: currentQuestion.type,
+          knowledgePoint: currentQuestion.knowledgePoint,
+        })
+      : baseReward;
 
     statsRef.current.comboCount = newCombo;
     statsRef.current.correctCount += correct ? 1 : 0;
@@ -309,7 +454,7 @@ export default function BattleScreen() {
     store.addExp(rewards.exp);
     if (store.currentBattleEarnsRewards) {
       store.addGold(rewards.gold);
-      store.addRankPoints(correct ? (critical ? 20 : 10) : 0);
+      store.addRankPoints(correct ? (critical ? 20 : 10) + getSchoolRankPointBonus(player.school, correct) : 0);
     }
     store.checkRankUp();
 
@@ -411,9 +556,17 @@ export default function BattleScreen() {
               {selectedSkillId ? getSkillById(selectedSkillId)?.name : '施法中...'}
             </div>
 
-            <div className="battle-question-text">{currentQuestion.question}</div>
+            <div className="battle-question-text">{renderBattleStem(currentQuestion.question)}</div>
             {currentQuestion.code && (
-              <pre className="battle-question-code"><code>{currentQuestion.code}</code></pre>
+              <pre className="battle-question-code"><code>{formatCppCode(currentQuestion.code)}</code></pre>
+            )}
+            {resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
+              <div className="battle-question-image-wrap">
+                <BattleImage
+                  className="battle-question-image"
+                  src={resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage)!}
+                />
+              </div>
             )}
 
             <div className="battle-options">

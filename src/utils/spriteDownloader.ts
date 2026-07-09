@@ -7,12 +7,6 @@ const FALLBACK_BASE = ''; // Reserve for future CDN failover
 
 const CACHE_SUBDIR = 'pet-sprites/2d';
 
-// ─── Random delay to spread download load ───
-function randomDelay(): Promise<void> {
-  const ms = Math.floor(Math.random() * 240_000) + 30_000; // 30s ~ 270s
-  return new Promise(r => setTimeout(r, ms));
-}
-
 // ─── Exponential backoff ───
 function backoff(attempt: number): number {
   // 10s → 30s → 90s → 270s
@@ -69,10 +63,6 @@ export async function downloadSprite(
   // Build download URLs
   const primaryUrl = `${GITEE_BASE}/${filename}`;
   const urls = FALLBACK_BASE ? [primaryUrl, `${FALLBACK_BASE}/${filename}`] : [primaryUrl];
-
-  // Random delay to spread load
-  onProgress?.('delaying', 0);
-  await randomDelay();
 
   // Try each URL with backoff
   for (let urlIdx = 0; urlIdx < urls.length; urlIdx++) {

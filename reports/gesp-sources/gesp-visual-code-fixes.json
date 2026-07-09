@@ -1,0 +1,891 @@
+[
+  {
+    "id": "gesp-2023-03-2-13",
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nint a = 10, b = 50;\n____;  // 在此处填入代码\nb -= a;\na += b;\ncout << a << \" \" << b << endl;\nreturn 0;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2023-03-2-13.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2023-03-2-14",
+    "code": "#include <iostream>\nusing namespace std;\nVv int main() {\nint cnt = 0;\nv    for (char ch = '1'; ch <= '9'; ch++)\nif (____)  // 在此处填入代码\ncnt++;\ncout << cnt << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2023-03-2-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+    "page": 8
+  },
+  {
+    "id": "gesp-2023-03-2-15",
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nint n = 17;\nbool isprime = true;\nfor (int i = 2; i <= n; i++)\nif (n % i == 0)\nisprime = false;\ncout << isprime << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2023-03-2-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+    "page": 8
+  },
+  {
+    "id": "gesp-2023-06-1-13",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-06-1-13.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2023-06-1-14",
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (int i = 1; i <= 8; i++)\nif (____)  // 在此处填入代码\ncout << i;\nreturn 0;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2023-06-1-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+    "page": 8
+  },
+  {
+    "id": "gesp-2023-06-1-15",
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nint sum;\nfor (int i = 1; i <= 20; i++)\nif (i%3 ==0 || i%5 == 0)\nsum += i;\ncout << sum << endl;\nreturn 0;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2023-06-1-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+    "page": 9
+  },
+  {
+    "id": "gesp-2023-06-2-13",
+    "code": "#include <iostream>\nusing namespace std;\nint main() {",
+    "image": "/course-data/gesp-code-images/gesp-2023-06-2-13.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2023-06-2-14",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-06-2-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2023-06-2-15",
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (char x = 'A'; << = 'D'$ x++)\nif ((x != 'A') + (x == 'C') + (x == 'D') + (* != 'D') == 3)\ncout << x;\nreturn 0;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2023-06-2-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+    "page": 8
+  },
+  {
+    "id": "gesp-2023-09-1-04",
+    "code": "int a = 3, b = 4;\ncout << \"a+b=\" << a+b;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-04.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-09-1-07",
+    "code": "int m = 14;\nint n = 12;\nif (m % 2 == 0 && n % 2 == 0)\ncout << \"Abe fHe\";\nelse if (m% 2 == 1 && n % 2 == 1)\ncout << \"Abe arhe\";\nelse\ncout << \"AME (HAA AT AL\" ;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2023-09-1-08",
+    "code": "int m = 14;\nint n = 12;\nif (m % 2 & n %& 2)\ncout << \"#ERar\";\nelse if (m % 2 == 1 & n % 2 == 1)\ncout << \"MEA R\";\nelse\ncout << \"Asai se fi Bak ay AL\" ;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2023-09-1-09",
+    "code": "int m = 7;\nif (m/ 5 [| m/ 3)\ncout << 0;\nelse if (m / 3)\ncout << 1;\nelse if (m / 5)\ncout << 2;\nelse\ncout << 3;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2023-09-1-10",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2023-09-1-11",
+    "code": "int tnt = 0;\nfor (int i = 1; i < 5; i += 2)\ntnt = tnt + i;\ncout << tnt;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 6
+  },
+  {
+    "id": "gesp-2023-09-1-12",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 6
+  },
+  {
+    "id": "gesp-2023-09-1-13",
+    "code": "a, #7 A10, WTA 1, 2. 5. 10; M7A12, WHA 1. 2. 3. 4, 6, 12;\n____;  // 在此处填入代码\nint n = 0;\ncout << \"iff A—PIEMR: \";\ncin >> n;\nfor (              ) // 在此处填入代码\nif (n % i == 0)\ncout << i << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-13.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2023-09-1-14",
+    "code": "int n = 1234, s = 0;\nfor (; n3; n /= 10)\ncout << s << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 8
+  },
+  {
+    "id": "gesp-2023-09-1-15",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "page": 8
+  },
+  {
+    "id": "gesp-2023-09-2-06",
+    "code": "int N = 0;\ncin >> N;\nfor (          ) // 在此处填入代码\nif (!(N % i))\ncout << i<< ' ';",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2023-09-2-07",
+    "code": "int N = 0;\ncout << \"ims A tT 7B: \";\ncin >> N;\nfor (int i=1; i<N +41; i++) {\nfor (int j = 1; j < N+ 1; j++)\nif (____)  // 在此处填入代码\ncout << 1 << \" \";\nelse\ncout << 0 << \" \";\ncout << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2023-09-2-08",
+    "code": "intN=0, i=2;\ncout << \"i#MA—TAKFS FAN ESR |\";\ncin >> N;\nfor (i = 2; i < N; i++)\nif (N% i == 0) {\ncout << \"SEAR\";\n____;  // 在此处填入代码\n}\nif (i == N)\ncout << \"Az\";",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2023-09-2-09",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2023-09-2-10",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2023-09-2-11",
+    "code": "int cnt = 0;\nfor (int i = 1; i < 13; i += 3)\nfor (int j = 1; j < i; j += 2)\nif (i * j % 2 == 0)\nbreak;\nelse\ncnt += 1;\ncout << cnt;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2023-09-2-12",
+    "code": "int x = 1;\nwhile (x < 100) {\nif (!(x % 3))\ncout << << < \",\";\nelse if (x / 10)\nbreak;\nX += 2;\n}\ncout << x;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2023-09-2-13",
+    "code": "____;  // 在此处填入代码\nint N = 0;\ncout << \"imiiATWRE:\";\ncin >> N;\nfor (int i=1; i<N+ 1; i++) {\nfor (int j = 0; j < i; j++)\n____;  // 在此处填入代码\ncout << endl;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-13.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 8
+  },
+  {
+    "id": "gesp-2023-09-2-14",
+    "code": "int lineCount = 0;\ncout << \"iffMATSCE:\";\ncin >> lineCount;\nfor (int i = 0; i < lineCount; i++) {\nfor (int j= 0; j<_s jt+) // 在此处填入代码\ncout << '' ';\nfor (int j = 1; j < i+ 1; j++)\ncout << j << \" \"5\nfor (int j = i+ 41; j > 0; j--)\ncout << j << \" \";\ncout << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 9
+  },
+  {
+    "id": "gesp-2023-09-2-15",
+    "code": "____;  // 在此处填入代码\n____;  // 在此处填入代码\n____;  // 在此处填入代码\nwhile (____)  // 在此处填入代码\ncin >> score;\nif (score < 0)\n|   break;\ntotalScore += score;\nstudCount += 1;\n}\ncout << \"\"Fij4¢=\" << totalScore / studCount;",
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "page": 10
+  },
+  {
+    "id": "gesp-2023-12-1-03",
+    "code": "int N, dayX, hourx;\ncin >> N;\ndayX =         , hourxX =         ;\nif (dayX == 0)\ncout << \"4K\" << hourx << \"kA\";\nelse\ncout << \"3\" << (dayX + 1) << \"KK\" << hourx << \"sa\";",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-03.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2023-12-1-04",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-04.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2023-12-1-06",
+    "code": "ocnt=0; © |\nfor(int i= 1; i < 10; i+t+){\ncnt += 1;\ni +=2;\ncout << cnt;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-1-07",
+    "code": "cnt = 0;\nfor(int i= 1; i < 20; i++){\nif (i%2)\ncontinue;\nelse if (i$3==0 && i%5==0)\nbreak;\ncnt += i;\n}\ncout << cnt;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-1-08",
+    "code": "N = 10;\ncnt = 0;\nwhile (1) {\nif(N == 0) break;\ncnt += 1;\nN -= 2;\n}\ncout << cnt;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2023-12-1-09",
+    "code": "cin >> N;\ncnt = 0;\nfor (int i = 1; i<N + 1; i++)\nif (N % i == 0)\nif (cnt == 2)\ncout << N << \"FtJRR. \";\nelse\ncout << N << \"AAR. \";",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2023-12-1-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-2-03",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-2-03.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601261860290592.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2023-12-2-14",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-2-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601261860290592.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2024-03-1-08",
+    "code": "int tnt = 0;\n| for(int i=0; i<10; i++)\nif(i%3 && i%7)\ntnt +=i;\ncout << tnt << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-1-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-03-1-09",
+    "code": "int N = 10;\n| while(N){\nN -= 1;\nif(N%3 == 0)\ncout << N << \"#\"5\n}",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-1-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-03-1-10",
+    "code": "|int N;\n(cin >> N;\n____;  // 在此处填入代码\n|for(int i=1; i<N+1; i++)\nif (             )\ncnt +=1;\n\\|if(cnt == 2)\ncout << N << \"S2fRaX\";\nelse\ncout << N << \"AIR\";",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-1-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-03-2-06",
+    "code": "int n,a,m,i;\n|n=3, a= 5;\n|m = (a - 1) * 2;\n| for (i=0; i<n-1; i++)\nm= (m - 1) * 2;\ncout << m;",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-2-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-03-2-14",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-2-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2024-06-1-06",
+    "code": "(float a;\na = 101.101;\n|a = 101;\n| printf(\"at+1={%.0f}\",a+1);",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-1-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-06-1-09",
+    "code": "int Sum = 0, i = 0;\nfor (3; i < 10; )\nSum += i++;\n|cout << i << \" \" << Sum;",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-1-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-06-1-12",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-1-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-06-2-08",
+    "code": "|int N;\ncin >>N;\n(int M5,M2,M1;\nMS =N/5;\nprintf(\"5*%d+2*%d+1*#%d\", MS, M2, M1);",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-2-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071434350624.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-09-1-08",
+    "code": "int Sum = 0;\nfor (int i = 0; i < 10; i++)\nSum += i;\n| cout << Sum;",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-1-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-09-1-09",
+    "code": "int N = 0;\nfor (int i = 0; i < 10; i++)\nN += 1;\n| cout << N;",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-1-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-09-1-10",
+    "code": "int N = 0;\nfor (int i = 1; i < 10; i +=2){\nif (i % 2 == 1)\ncontinue;\nN += 1;\n}\n| cout << N;",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-1-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-09-2-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-2-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-09-2-12",
+    "code": "int N;\n(cin >> N;\n| int rst = 0;\n|while (N){\ncout << (rst);",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-2-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-09-2-14",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-2-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-12-1-07",
+    "code": "1| int N, nowDay, afterDays;\n2} cout << \"SRBHBL? \" <<endl;\n3) cin >> nowDay;\n4) cout << \"RJLAG HAIL? \"<< endl;\n>| cin >>afterDays;\n| N = nowDay+afterDays;\n| if(              )\nprintf(\"#HAXK\");\n| else\nprintf (\"8A%d\", N%7);",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-1-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-12-1-11",
+    "code": "int N;\ncin >> N;\nif(  —sC*Y\ncout << \"SEAS BIRAT(BAL\" << endl;\nelse\ncout << \"EX(thiSZ\" << endl;\ncout << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-1-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-12-1-15",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-1-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-12-2-09",
+    "code": "int tnt, N;\n| printf (\"iSRIATER: \");\ncin >> N;\ntnt = 0;\n|while (N != 0){\nN /= 10;\n}\n| cout <<tnt;",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-2-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1650239656165408.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2025-03-1-10",
+    "code": "int N = 10;\nprint#(\"{N}*{N}={%d*%d}\", N, N, N * N);",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-1-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2025-03-1-13",
+    "code": "int tnt = 0;\n|for (int i = -1000; i < 1000; i++)\ntnt += i;\ncout << tnt << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-1-13.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2025-03-1-15",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-1-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2025-03-2-03",
+    "code": "int a=3, b = 4;\na == b;\nb == a;\n|cout << a<< ' ' << b << endl;",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-03.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2025-03-2-05",
+    "code": "|int a=2, b = 3;\n| a=a-b;\n| b=a+b;\na=b-a;\n| printf(\"%d*%d=%d\\n\", a, b, a*b);",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-05.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "page": 7
+  },
+  {
+    "id": "gesp-2025-03-2-06",
+    "code": "int i;\nfor (i = 10; i > 0; i -= 2)\nbreak;\ncout << i;",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2025-03-2-07",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2025-03-2-08",
+    "code": "int i,j;\n\\|for (i = 03; i < 53 i++)\nfor (j = i; j > 03; j -= 1)\nprintf(\"%d-\",7);",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2025-03-2-10",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2025-06-1-06",
+    "code": "|int x = 10, y = 20;\nx =x+y;\ny=x-y;\nx =x-y;\n|cout <<< << < ' ' << y;",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2025-06-1-09",
+    "code": "| int a,b;\n|a=3;\nb=4;\n| printf(\"a+b=%02d#a+b={a+b}\", a+b, a+b);",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2025-06-1-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2025-06-1-12",
+    "code": "(int i, N;\n|cin >> N;\n|i =N;\n| while (      ){\nif (N% i == 0)\nprintf(\"%d,\", i);\ni -= 1;\n| printf(\"1\");",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2025-06-1-13",
+    "code": "| int Sum = 0;\n| for (int i = 0; i < 10; i++){\nif (i % 2 == 0)\ncontinue;\nif (i %5 == 0)\nbreak;\nSum += i;\n| cout << Sum;",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-13.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2025-06-1-14",
+    "code": "| float x;\n|x = 101;\nx44;\n| cout << 4++x;\nOC C. #714 18;",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2025-06-1-15",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2025-06-2-09",
+    "code": "int i, cnt = 0;\n| for(i = -99; i < 100; i += 2)\ncnt = 1 + cnt;\n| cout << ent;",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-2-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1687195838578720.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2023-12-3-03",
+    "code": "(CD A. string str(\"GESP\"); cout<<str<<endl;\n() B. string str=\"GESP\"; cout<<str<<end1l;\n() C. string str(\"GESP\"); cout<<str[1]<<str[2]<<str[3]<<str[4]<<endl;\n() D. string str{\"GESP\"}; cout<<str<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-03.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2023-12-3-04",
+    "code": "int temp=0;\nfor(int i=13;i<7;i++)\n{\nfor(int j=1;j<5; j++)\n{\nif(i/j==2)\n{\ntemp++;\n}\n}\n}\ncout<<temp<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-04.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2023-12-3-06",
+    "code": "string str=(\"chen\") ;\nint x=str.length();\ncout<<x<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-3-07",
+    "code": "string str=(\"chen\");\ncout<<str[5]<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-3-08",
+    "code": "char ch[10]={'1'};\ncout<<ch[2]<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-3-09",
+    "code": "string str=\"GESP is a good programming test!\";\nint x=0;\nfor(int i=0;i<str.length();i++)\n{\nif(_ i)\n{\n}\n}\ncout<<x<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2023-12-3-11",
+    "code": "int cnt=0;\nfor(int 1=0;1<=20;i++)\n{\nif (i1%3==0881%5==0)\n{\ncnt++;\n}\n}\ncout<<cnt;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2023-12-3-12",
+    "code": "int a=3;\nint b=2;\ncout<<a/b*1.0<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2023-12-4-03",
+    "code": "int funl(int *n)\n{\nreturn *n**n;\n}\nint main()\n{\nint arr[10]={2};\narr[1]=funi(arr);\ncout<<arr[1]<<endl;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-03.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2023-12-4-04",
+    "code": "int arr[3][3]={{1,2,3},{4,5,6},{7,8,9}}5\nfor(int 1=0;1<3;i++)\n{\nfor(int j=2;j>=0;j--)\n{\ncout<<arr[i][j]<<\" \";\n}\n_ cout<<endl;\n}\n12;",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-04.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-4-06",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2023-12-4-07",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2023-12-4-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2023-12-4-12",
+    "code": "int n;\ncin>>n3;\nfor(int i=1;1i<=n;i++)\n{\n{\ncout<<i<<\" \"5\n}\n}\n(CD A. if(n%i==0)",
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-03-3-03",
+    "code": "| int main()\n{\ncout << (3|16) << endl;\ncout << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-03.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2024-03-3-05",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-05.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-03-3-06",
+    "code": "int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\nali] = i+1;\nfor(int i = 0; i < 20; i++)\nif ((ali]%2)8&&(a[i]%3))\nafi] = 9;\nfor(i = 0; i < 20; i++)\nif(a[i])\ncout << afi] << \"\";",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-03-3-07",
+    "code": "| int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\na[i] = i+1;\nfor( ; i > 0; i--)\ncout << a[i-1] << \" \"5\ncout << endl;\nreturn 0;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-03-3-08",
+    "code": "int main()\n{\nstring str=\"gEsP is Interesting\";\nint x = str.length();\nfor(int i = 0; i < x; i++)\nif ((str[i]>='a') && (str[i]<=\"z'))\ncout << str << endl;\ncout << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-03-3-09",
+    "code": "int main()\nstring str=\"gEsP is Interesting !\";\nint x = str.length();\nint nwords = 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-03-3-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-03-4-02",
+    "code": "int main()\n{\nint x[]={2, 0, 2, 4};\nchar geSP[]=\"Grade Examination of SP\";\ncout << geSP[sizeof(x)] << endl;\ncout << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-02.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2024-03-4-03",
+    "code": "|int foo(float *f)\n{\nreturn int(*#*2);\nint main()",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-03.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2024-03-4-06",
+    "code": "int main()\nchar *p=\"I love GESP!\";\ncout << p+5 << endl;\ncout << endl;\nreturn 0;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-06.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-03-4-07",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-03-4-08",
+    "code": "int fib(int n)\n{\nint i, f[n]={0, 1};\nfor(int i=2; i<=n; i++)\nf[ij=f[i-1]+f[i-2];\nreturn f[n];",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-03-4-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2024-03-4-12",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-06-3-04",
+    "code": "#include <iostream>\nusing namespace std;\n| void decimal2octal(int decimal) {\nint oct_number[100];\nint i = 0;\nwhile (decimal > 0) {\n____;  // 在此处填入代码\n}\n1;\nfor (int j = i- 1; j >= 0; j--) f{\ncout << oct_number[j];\n}\ncout << endl;\n() A. oct_number[i] = decimal % 8;    decimal /= 8;\n() B. oct_number[i] = decimal / 8;    decimal %/= 8;\nOC C. oct_number[i++] = decimal % 8;    decimal /= 8;\n() D. oct_number[i++] = decimal / 8;    decimal %= 8;",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-04.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-06-3-07",
+    "code": "#include <iostream>\n(using namespace std;\n|int main() {\nint a = 12;\nint result = a >> 2;\ncout << result << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-06-3-08",
+    "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint a = 5;\nint b = 10;\na=a%*b;\nb=a%*b;\na=a%*b;\ncout << \"a=\"<<a<< \", b=\" << b << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-06-3-10",
+    "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint array[5] = {3, 7, 5, 2, 4};\nint max = 0;\nfor(int i=0; i<5; i++)\nif (____)  // 在此处填入代码\nmax = array[il];\ncout << max << endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-06-3-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-06-3-12",
+    "code": "#include <iostream>\n|using namespace std;\n|int main() {\nstring s = \"0629\";\nint n = s.length();\nint x = 0;\nfor(int i = 0; i <n; i++)\nx += s[i];\ncout << << < endl;\nreturn 0;",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2024-06-3-15",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-06-4-04",
+    "code": "#include<iostream>\nusing namespace std;\nint main()\nint *p;\nint a=1ée;\np=&a;\n&      pt+;\ncout<<p<<endl;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-4-04.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-06-4-08",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-4-08.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-06-4-12",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-06-4-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2024-09-3-01",
+    "code": "#include<iostream>\n|using namespace std;\nint main()\n{\ndouble a=0.9;\ndouble b=1.0;\nif(((b-a)==0.1))\n{\ncout<<\"Equal\"<<endl;\n}\nelse\n{\ncout<<\"Not equal\"<<endl;\n}",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-01.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "page": 1
+  },
+  {
+    "id": "gesp-2024-09-3-10",
+    "code": "| long a = 123;\n|int b= 1;\n| long result = a & b;\n| cout<<result<<endl;\n| long a2 = -123;\n|unsigned int b2 = -1;\nlong result2 = a2 & b2;\ncout<<result2<<endl;\nCB. 123-12;\nCD. 1 -12;",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-10.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-09-3-12",
+    "code": "| int a[10];\n(int sum=0;\n| for(int i=0;i<=10;i++) {\nsum=sum+a[i];",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-09-3-15",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2024-12-3-07",
+    "code": "| string s=\"123400chenadai\";\nstring str=\"12345\";\n| s.replace(1,5,str);\n| cout<<s<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-3-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-12-3-09",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-3-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2024-12-3-11",
+    "code": "int a=65;\n| cout<<tolower(a)<<endl;",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-3-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2024-12-4-04",
+    "code": "|double* p_arr = new double [3];\np_arr[0] = 0.2;\n|p_arr[1] = 0.5;\n|p_arr[2] = 0.8;\n|p_arr += 1;\ncout << p_arr[00] << endl;\n\\p_arr -= 1;\ndelete p_arr;",
+    "image": "/course-data/gesp-code-images/gesp-2024-12-4-04.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1650239710691360.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2025-03-3-07",
+    "code": "int a = -5;\nunsigned int b = a;\ncout << b;",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-07.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "page": 2
+  },
+  {
+    "id": "gesp-2025-03-3-09",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-09.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "page": 6
+  },
+  {
+    "id": "gesp-2025-03-3-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "page": 3
+  },
+  {
+    "id": "gesp-2025-03-3-12",
+    "code": "#include <iostream>\nusing namespace std;\n|int main() {\nint arr[] = {1, 2, 3, 4, 5};\nint left = 0, right = 4;\nwhile (left < right) {\nwhile (arr[left] % 2 == 1 && left < right) left++;\nif (left < right) {\nswap(arr[left], arr[right]);\n}\n}\nfor (int i = 0; i < 5; i++) {\ncout << arr[i] << \" \"5\n}\nreturn 0;\n}\n() A. while (arr[left] % 2 == 0 & left < right) right--;\nCB. while (arr[right] % 2 == 0 && left < right) left--;\nOC. while (arr[right] % 2 != 0 && left < right) right--;\n© D. while (arr[right] % 2 == 0 && left < right) right--;",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-12.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "page": 4
+  },
+  {
+    "id": "gesp-2025-03-3-14",
+    "code": "#include <iostream>\n#include <string>\nusing namespace std;\n|int main() {\nstring str = \"HelloC++\";\nreturn 0;\nstr.insert(4, \"World\");\n9)     cnint ee etr cihetr(da aA).",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-14.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2025-03-3-15",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-15.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "page": 5
+  },
+  {
+    "id": "gesp-2025-06-3-11",
+    "code": "",
+    "image": "/course-data/gesp-code-images/gesp-2025-06-3-11.png",
+    "source": "https://gesp.ccf.org.cn/101/attach/1699464809021472.pdf",
+    "page": 2
+  }
+]

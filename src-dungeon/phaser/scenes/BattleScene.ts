@@ -68,18 +68,20 @@ export class BattleScene extends Phaser.Scene {
     super({ key: 'BattleScene' });
   }
 
-  initBattle(data: BattleInitData, callback: BattleEventCallback): void {
-    this.initData = data;
-    this.onEvent = callback;
+  // Phaser 标准生命周期：scene.start(data) → init(data) → preload() → create()
+  // 之前用 scene.add(false) + 手动 initBattle，导致 load 不工作（scene 未启动），黑屏。
+  init(data: { initData: BattleInitData; onEvent: BattleEventCallback }): void {
+    this.initData = data.initData;
+    this.onEvent = data.onEvent;
 
     // 初始化战斗快照
     this.state = {
-      playerHp: data.playerPet.currentHp,
-      playerMaxHp: data.playerPet.maxHp,
-      enemyHp: data.enemyPet.currentHp,
-      enemyMaxHp: data.enemyPet.maxHp,
-      energy: data.initialEnergy - 1,
-      maxEnergy: data.maxEnergy,
+      playerHp: data.initData.playerPet.currentHp,
+      playerMaxHp: data.initData.playerPet.maxHp,
+      enemyHp: data.initData.enemyPet.currentHp,
+      enemyMaxHp: data.initData.enemyPet.maxHp,
+      energy: data.initData.initialEnergy - 1,
+      maxEnergy: data.initData.maxEnergy,
       shield: 0,
       combo: 0,
       round: 0,
@@ -89,22 +91,18 @@ export class BattleScene extends Phaser.Scene {
       enemyIntent: null,
       enemyDefending: false,
     };
+  }
 
-    // 加载宠物预览图，加载完成后再构建场景
-    this.load.image('playerPet', data.playerPet.previewUrl);
-    this.load.image('enemyPet', data.enemyPet.previewUrl);
-    this.load.once('complete', () => {
-      this.buildScene();
-      this.startPlayerTurn();
-    });
-    this.load.start();
+  preload(): void {
+    // scene 启动后 load 才工作；用 config.textureKey 作为纹理 key（工坊宠物用 playerPetThumb 区分）
+    this.load.image(this.initData.playerPet.textureKey, this.initData.playerPet.previewUrl);
+    this.load.image(this.initData.enemyPet.textureKey, this.initData.enemyPet.previewUrl);
   }
 
   create(): void {
-    // Phaser 会自动调用 create()，但我们在 initBattle() 中才构建场景
-    // 如果 initData 未设置，说明是自动调用，直接返回
-    if (!this.initData) return;
+    // preload 完成后自动调用，构建场景并开始第一回合
     this.buildScene();
+    this.startPlayerTurn();
   }
 
   private buildScene(): void {

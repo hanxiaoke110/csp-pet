@@ -1,5 +1,13 @@
 import DOMPurify from 'dompurify';
 
+// 把 gitee raw 等远程仓库图片链接 .../public/course-data/X 转为本地 /course-data/X，
+// 避免依赖远程图床导致图片加载失败/原样显示 markdown。本地不存在则保留原 URL。
+export function normalizeImageUrl(url: string): string {
+  if (!url) return url;
+  const m = String(url).match(/\/public\/(course-data\/[^?#)]+)/);
+  return m ? '/' + m[1] : url;
+}
+
 export function escapeHtml(text: string): string {
   if (!text) return '';
   return text
@@ -24,7 +32,7 @@ export function renderCodeText(text: string): { __html: string } {
   // Image syntax ![alt](url) — only outside <pre> blocks (skip if inside code)
   html = html.replace(/(<pre[\s\S]*?<\/pre>)|!\[([^\]]*)\]\(([^)]+)\)/g, (_match, pre, alt, url) => {
     if (pre) return pre; // inside <pre>, leave untouched
-    return `<img src="${url}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:8px 0" />`;
+    return `<img src="${normalizeImageUrl(url)}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:8px 0" />`;
   });
 
   // Replace newlines with <br> only in non-code parts (which are outside <pre>)

@@ -1,67 +1,179 @@
 {
   "bugs": [
     {
+      "date": "2026-07-06",
+      "error_message": "闯关界面仍出现残缺题「cnt+=i++循环输出cnt是（ ）。」选项 55/30/25/15，无循环代码，无法作答。用户反馈「题目可靠性太差」。",
+      "root_cause": "上一轮 CODE_REQUIRED_PATTERNS 扩展后仍有两类漏网：(1)「cnt+=i++循环输出cnt是」类——题干提到「循环」+「输出」但无「横线/代码/程序」信号词，且无完整循环结构 for(/while(，原题循环代码是图片丢失；(2) 部分题干含内联代码（如「1 void insertion_sort(vector<int>...)」「struct pass{」「string s=\"GESP考试\"」）却被误判为残缺——因 INLINE_CODE_MARKERS 只认 #include/for(/cout 等，不认 void /struct /vector</std::/string s/带行号代码。",
+      "fix": "questionLoader.ts 三处改动：(1) CODE_REQUIRED_PATTERNS 加「代码输出」（覆盖「代码输出数字三角形，last+=1改为...执行效果」）；(2) INLINE_CODE_MARKERS 扩展加 vector</std::</void /struct /return 0/;\\n/};/string s/int a=/int i=/int n=/int cnt=（救援 5 道题干含内联函数/结构体/带行号代码的可答题）；(3) isBrokenCodeQuestion 重构为三段判定——if(q.code)return false; if(hasInlineCode)return false; if(needsCodeBlock)return true; if(/循环/.test(stem)&&/输出|执行后|结果是|的值是/.test(stem))return true（循环启发式抓「cnt+=i++循环输出cnt是」「循环执行后输出是」等 6 道残缺题）。Python 验证：总过滤 150 道（上轮 148 + 代码输出/循环新增 ~7 - 内联标记扩展救援 5），用户题 gesp-2024-12-1-12 与 gesp-2024-09-2-11 均命中过滤，5 道内联代码题救援成功，gesp-2024-03-4-11(1.txt内容无代码)保持过滤。循环启发式 0 误判（概念题如「for循环中break的作用是」无「输出」信号不被抓）。npx tsc --noEmit 退出码 0。",
+      "tags": [
+        "智子试炼场",
+        "question-bank",
+        "gesp",
+        "missing-code",
+        "filter",
+        "src-dungeon",
+        "data-quality",
+        "false-positive"
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "error_message": "闯关界面仍出现缺代码残缺题，如「输出数字三角形横线处应填入（ ）。」选项 A.1;i+1 / B.i;N+1 / C.j=i;j<i*2;j++ / D.i;i*2，但题目无代码块，学生无法作答。",
+      "root_cause": "questionLoader.ts 的 CODE_REQUIRED_PATTERNS 覆盖不全，两类漏网：(1)「横线处应填入」类代码填空题——题干含「横线」但 patterns 里只有「代码的横线」「代码的横线处」，匹配不到无「代码」前缀的「横线处应填入」；(2)「下面C++代码段执行后输出」「执行以下C++程序后」类——pattern 是「下面代码」/「以下程序」，但题干里「C++」夹在中间，「下面C++代码」不含子串「下面代码」，匹配失败。CCF 原题代码是图片，导入后 code 字段为 None，这些题题干只剩一句话+选项，无代码可看。共 495 道 GESP 1-4 选择题里 148 道是此类残缺题（旧过滤器只抓 72 道，漏 76 道）。",
+      "fix": "questionLoader.ts 扩展 CODE_REQUIRED_PATTERNS：加「C++代码」「C++程序」「代码段」（覆盖 C++ 夹中间的变体）+「横线」（覆盖所有代码填空题，59 道全为残缺）。新增 INLINE_CODE_MARKERS（#include/int main/for(/while(/cout/printf/scanf/cin>>）与 hasInlineCode()——38 道题把代码内联在题干里（如 for(int i=10;...)cout<<i）是可作答的，不能误杀。新增 isBrokenCodeQuestion(q)=needsCodeBlock(stem) && !q.code && !hasInlineCode(stem)，替换原 hasCodeRequired(stem)&&!q.code。pickQuestionsByTag 与 pickBigMoveQuestions 都加 !isBrokenCodeQuestion(q) 过滤。Python 模拟验证：旧 72→新 148 道过滤，用户题 gesp-2024-09-2-11 命中，L1/L2 行号题 0 漏网，38 道内联代码题受保护。npx tsc --noEmit 退出码 0。getStageQuestions/getBossQuestions 是死代码无调用方，未改。",
+      "tags": [
+        "智子试炼场",
+        "question-bank",
+        "gesp",
+        "missing-code",
+        "filter",
+        "src-dungeon",
+        "data-quality"
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "error_message": "客户端每次冷启动主窗口「先大后小」闪烁：先以 tauri.conf.json 默认 950×560 显示，等 React mount 后 useEffect 才读 localStorage csp_window_size 调 setSize 缩回上次尺寸，视觉跳跃明显。",
+      "root_cause": "窗口尺寸恢复逻辑放在前端 React useEffect（App.tsx），晚于窗口显示。Tauri 按 conf 创建并显示窗口（visible 默认 true，950×560）在前，React mount + getCurrentWindow().setSize 在后，中间间隔整个 webview 加载时间，用户看到大窗口再缩回。onResized 保存到 localStorage 也是手写，无启动阶段同步恢复能力。",
+      "fix": "接入官方 tauri-plugin-window-state v2.4.1。Cargo.toml 加依赖；lib.rs 注册 .plugin(Builder::default().with_denylist(&[\"pet\"]).build())（pet 窗口由 PetWindow.tsx 自管位置，排除避免双重恢复跳动）；tauri.conf.json main 窗口加 visible:false——插件在 on_window_ready 调 restore_state 恢复 size/position/maximized 后调 show()，窗口直接以保存尺寸出现，无闪烁。lib.rs setup 加兜底：spawn 线程 sleep 1.5s 后若 main 仍 hidden 则强制 show，防 restore_state 报错（let _ = 吞错）致 show 未调用卡死。删 App.tsx 的 localStorage 恢复+onResized 保存 useEffect 及 getCurrentWindow/LogicalSize/safeWindowListen import。验证：cargo build --release 通过，npx tsc --noEmit 退出码 0。",
+      "tags": [
+        "tauri",
+        "window-state",
+        "flicker",
+        "cold-start",
+        "rust",
+        "src-tauri",
+        "ux"
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "error_message": "客户端底部红条：❌ Promise Error: undefined is not an object (evaluating 'listeners[eventId].handlerId')",
+      "root_cause": "index.html 全局 unhandledrejection 处理器把任何未捕获 Promise 拒绝画成红条。真正抛错源是 Tauri 2 事件系统 _unlisten：event.js:43 调用 window.__TAURI_EVENT_PLUGIN_INTERNALS__.unregisterListener(event, eventId)，该注入函数内部访问 listeners[eventId].handlerId，当 eventId 已不在 map（webview 重载 / 顶层路由整体切换 BrowserRouter↔MemoryRouter 致 AppLayout/PetActionHandler 整树卸载 / React StrictMode 双调用重复 unregister）时抛 undefined is not an object。代码里 4 处用 listen().then(fn => cleanups.push(fn)) 异步注册模式（App.tsx PetActionHandler、App.tsx onResized、PetPanel.tsx pet-visibility-toggled、PetWindow.tsx 四个事件），cleanup 时 cleanups.forEach(fn => fn()) 既不 await 也不 catch 返回的 Promise，_unlisten 抛错冒泡成 unhandledrejection。进/出地牢时 BrowserRouter 子树集中卸载最易触发。",
+      "fix": "新增 src/lib/tauriEvents.ts：safeListen(event, handler) 返回同步清理函数，内部用 cancelled 标记解决 listen Promise resolve 前就卸载的竞态（resolve 后若已卸载则立即注销），并用 safeUnlisten 包裹把 unlisten 返回的 Promise 拒绝吞掉；safeWindowListen 同样处理 onResized 等 Promise<UnlistenFn>。4 处调用点全部改用 safeListen/safeWindowListen。index.html unhandledrejection 处理器加兜底过滤：msg 含 listeners[eventId] 或 handlerId 时 preventDefault 不画红条。npx tsc --noEmit 退出码 0。",
+      "tags": [
+        "tauri",
+        "event",
+        "unhandledrejection",
+        "race-condition",
+        "dungeon",
+        "src",
+        "robustness"
+      ]
+    },
+    {
       "date": "2026-07-01",
       "error_message": "npx tsc --noEmit 报 17 处 noUnusedLocals/noUnusedParameters 错误，全部位于 src-dungeon/（未使用的 import/局部变量/类字段/map 回调参数）",
       "root_cause": "智子试炼场多次重构升级后遗留未使用代码：删功能未清 import；initDone/firstTurn/skill/dh/hasClassCode/elementColor 声明后从未读取；BattleScene.dungeonTitle 类字段只赋值不读取；ELEMENT_COLORS 常量仅被未使用变量引用。连带：删 initDone 使 useState import 失效；删 firstTurn 使 determineFirstAttacker import 失效；删 dh 使 getStoredHash import 失效；删 hasClassCode 使 getStoredClassCode import 失效；删 elementColor 使 ELEMENT_COLORS 常量失效",
       "fix": "仅删未使用代码不改逻辑：App.tsx 删 initDone 状态+setInitDone 调用+连带 useState import，删 DungeonDefinition/Question type import(保留 DungeonProgress)；BattleScreen 删 firstTurn/skill 局部变量+连带 determineFirstAttacker import+SkillSelectResult type import；DungeonMap 删 map 回调 index 参数；HealingScreen 删 getStageQuestions import+dungeonId 解构(改 [, stages])；LoginScreen 删 getRankTier import；RegisterScreen 删 dh 变量+连带 getStoredHash import；TitleScreen 删 hasClassCode+连带 getStoredClassCode import；BattlePhaserGame 删 BattleEndResult type import；PetSprite 删 elementColor+连带 ELEMENT_COLORS 常量；BattleScene 删 INITIAL_ENERGY 常量+dungeonTitle 类字段，this.dungeonTitle=this.add.text(...) 改为独立 this.add.text(...) 调用(保留标题显示且不产生新未使用局部)；dungeonStore 删 RANK_POINTS_THRESHOLDS import；types/dungeon 删 KnowledgeTag type import。修复后 npx tsc --noEmit 退出码 0",
-      "tags": ["智子试炼场", "typescript", "src-dungeon", "noUnusedLocals", "cleanup"]
+      "tags": [
+        "智子试炼场",
+        "typescript",
+        "src-dungeon",
+        "noUnusedLocals",
+        "cleanup"
+      ]
     },
     {
       "date": "2026-07-01",
       "error_message": "智子试炼场跨设备登录丢失等级/段位/连胜/进度；power/streak 排行榜恒为 0；金币 max 策略可被 localStorage 篡改；题库加载失败战斗永久卡死；Boss 战低等级不可战胜；completedStages 无去重可跳关；localStorage 单 try 包裹单损坏连累全部",
       "root_cause": "1) 服务端 dungeon_players 不存 player_level/exp/rank_tier/rank_points/streak，登录返回陈旧默认值覆盖客户端；2) initPlayer 用 Math.max(server,client) 合并 gold，客户端可篡改；3) reportBattle 失败被 .catch 吞，服务端进度落后但登录全量覆盖；4) incrWriteBudget 只在 rewardInserted 计 1 次，实际 5 次写，熔断少计；5) fallback Boss 用 legendary+level5+default 基础属性，低等级伤害为 1；6) BattleScreen init 不校验已通关关卡；7) loadFromLocalStorage 单 try 包 7 个 key",
       "fix": "report-battle 同步等级/段位/连胜字段到服务端(加上界防刷)；initPlayer 用服务端值恢复(金币以服务端为准)；LoginScreen 进度合并取较优；BattleScreen 加题库空检查+返回按钮；incrWriteBudget 按实际写次数累加；fallback Boss 改 rare+level3；init 校验已通关关卡跳回入口；loadFromLocalStorage 每 key 独立 try-catch；zhizi_tutorial_seen 加 try-catch；DungeonEntrance 锁定提示同时检查等级+前置",
-      "tags": ["智子试炼场", "cross-device", "data-consistency", "balance", "robustness", "api"]
+      "tags": [
+        "智子试炼场",
+        "cross-device",
+        "data-consistency",
+        "balance",
+        "robustness",
+        "api"
+      ]
     },
     {
       "date": "2026-06-30",
       "error_message": "智子试炼场后端安全与数据问题：POST /api/dungeon/sync 完全信任客户端写入 player_level/exp/gold/rank_tier/rank_points；dungeon_attempts 表从未写入；排行榜返回 device_hash；班级排行榜未验证查看者是否属于该班级",
       "root_cause": "sync 端点未做字段白名单，直接 UPDATE 客户端提供的经济敏感字段；缺少战斗结果上报端点，dungeon_attempts 无 INSERT；leaderboard SQL 直接返回 device_hash/class_code；class scope 仅校验 class_code 参数存在",
       "fix": "sync 改为仅允许非敏感白名单字段（display_name/total_answered/total_correct/current_streak/max_streak/login_streak/last_login_date/school）；新增 POST /api/dungeon/report-battle，服务端校验 device_hash 与 class_code 匹配后写入 dungeon_attempts，胜利时由服务端加金币并更新 dungeon_progress；leaderboard 统一返回 {rank,display_name,school,rank_tier,value}；class scope 从 X-Device-Hash 头或 device_hash 查询参数校验设备归属；CORS 增加 X-Device-Hash",
-      "tags": ["智子试炼场", "security", "api", "d1", "privacy"]
+      "tags": [
+        "智子试炼场",
+        "security",
+        "api",
+        "d1",
+        "privacy"
+      ]
     },
     {
       "date": "2026-06-30",
       "error_message": "src-dungeon 类型检查失败：BattleScreen/dungeonStore/RewardScreen 多处类型错误与战斗逻辑未按设计实现",
       "root_cause": "1) BattleScreen 未读取 stage.enemyPet、未校验周奖励限制、使用旧评级函数、未实现 50 回合上限；2) dungeonStore 未在接口声明 _firstClears、startBattle 返回的 BattleState 缺少新字段、loadFromLocalStorage 使用了未定义变量；3) RewardScreen 未对 battle 做空值保护、status 被推断为 string",
       "fix": "在 BattleScreen 中读取 stage.enemyPet 生成敌方宠物，初始化时调用 canEarnRewards/useChallenge，使用 calculateBattleRating，并在回合数达到 50 时按 HP 比例判定胜负；删除 dungeonStore 中未使用的 startBattle，补全 _firstClears 类型，修正 loadFromLocalStorage 变量名；为 RewardScreen 增加 battle 空值保护并显式声明 status 联合类型；顺手修复 RegisterScreen 的 player_level 字段名",
-      "tags": ["智子试炼场", "typescript", "battle", "src-dungeon", "type-error"]
+      "tags": [
+        "智子试炼场",
+        "typescript",
+        "battle",
+        "src-dungeon",
+        "type-error"
+      ]
     },
     {
       "date": "2026-06-24",
       "error_message": "v1.7.0 CI 构建全部失败：Cannot find module 'dompurify'",
       "root_cause": "src/utils/markdown.ts 引入了 dompurify，但依赖只加在根目录 package.json，CI 的 npm ci 使用 csp-desktop-pet/package.json 找不到",
       "fix": "在 csp-desktop-pet/package.json 中添加 dompurify + @types/dompurify",
-      "tags": ["ci", "build", "dependencies", "package.json"]
+      "tags": [
+        "ci",
+        "build",
+        "dependencies",
+        "package.json"
+      ]
     },
     {
       "date": "2026-06-24",
       "error_message": "v1.7.0 macOS 更新显示 404 / 页面不存在",
       "root_cause": "两重问题：(1) UpdateChecker.tsx buildUrls 硬编码 csp-v170-arm.dmg 格式，但 Gitee 上传时用了中文原始文件名；(2) Gitee releases/download 有两次 302 跳转，Tauri macOS updater 无法处理",
       "fix": "上传安装包时用 filename= 参数对齐 csp-v170-arm/intel/win 命名规则，修复 update.json 签名",
-      "tags": ["release", "gitee", "update", "macos", "naming"]
+      "tags": [
+        "release",
+        "gitee",
+        "update",
+        "macos",
+        "naming"
+      ]
     },
     {
       "date": "2026-06-24",
       "error_message": "v1.7.0 安装后版本号仍显示 v1.6.4",
       "root_cause": "发版时只更新了 package.json (v1.7.0)，忘更新 src-tauri/tauri.conf.json（仍是 1.6.4）。getVersion() 读的是 tauri.conf.json",
       "fix": "tauri.conf.json 同步更新到 1.7.1，重新打 tag 触发 CI 构建",
-      "tags": ["release", "version", "tauri.conf.json", "display"]
+      "tags": [
+        "release",
+        "version",
+        "tauri.conf.json",
+        "display"
+      ]
     },
     {
       "date": "2026-06-24",
       "error_message": "Gitee 附件配额满（1GB），无法上传新安装包",
       "root_cause": "旧版本 v1.5.2、v1.6.0 Release 附件未清理，加上 v1.7.0 文件超配额",
       "fix": "删除旧 Release（v1.5.2、v1.6.0），释放空间后重新上传",
-      "tags": ["gitee", "quota", "release", "cleanup"]
+      "tags": [
+        "gitee",
+        "quota",
+        "release",
+        "cleanup"
+      ]
     },
     {
       "date": "2026-06-24",
       "error_message": "update.json 签名格式错误，CI 生成的签名被截取/混入说明文字",
       "root_cause": "CI signer 输出包含 'Your file was signed successfully...' 等多余文字，直接复制整个字符串作为签名，Tauri updater 无法验证",
       "fix": "从 CI 输出中提取 'Public signature:' 之后的纯 base64 签名，去除所有说明文字",
-      "tags": ["release", "signing", "update.json", "ci"]
+      "tags": [
+        "release",
+        "signing",
+        "update.json",
+        "ci"
+      ]
     },
     {
       "date": "2026-05-29",
@@ -761,6 +873,63 @@
         "syntax",
         "build"
       ]
+    },
+    {
+      "date": "2026-07-08",
+      "error_message": "班级码门禁半成品：QuizPractice.startRestrictedMode 读取 classAccess.message 拿到闭包旧值（空串），月度复盘/超级挑战校验失败时门禁不显示真实原因（如「网络暂时不可用」「班级权限已失效」），学生看到笼统的「需要先绑定班级码」会误去重新绑定",
+      "root_cause": "useClassAccess 返回的 classAccess 对象每次 render 重建，但 startRestrictedMode 闭包捕获的是点击时那次 render 的快照。ensure() 内部 setState 调度的新 message 不会回写到闭包里的 classAccess.message，故 await ensure() 后读 classAccess.message 仍是旧值 ''。仅手动调 ensure() 的路径有此问题；autoCheck=true 路径（ExamTraining/DungeonEmbed）从最新 render 读 message，无此问题",
+      "fix": "ClassAccessGate.ensure 返回值从 Promise<boolean> 改为 Promise<{ok, message}>，把本次校验产生的 message 直接带回收；QuizPractice.startRestrictedMode 改用 result.ok / result.message。autoCheck 路径返回值被忽略，不受影响。顺带补齐 ExamTraining（删只读 localStorage 的 hasClassCode，改 useClassAccess(true)+ClassAccessRequired）与 DungeonEmbed（AppContent 前加门禁，未通过不进入）",
+      "tags": [
+        "class-gate",
+        "stale-closure",
+        "quiz",
+        "exam",
+        "dungeon",
+        "half-finished"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "error_message": "题库可靠性：5 道 GESP 流程图题（gesp-2023-03-2-02 等）的图片以 markdown ![流程图](gitee-url) 形式嵌在 question 文本里，image 字段为空，客户端依赖 gitee 图床加载，慢/失败时图片不显示；ExamChoice/ExamMultiPart 不渲染 image/codeImage 字段；ExamMultiPart 子题选项/解析用原始文本（backtick 内联代码原样显示）；所有题目 <img> 无加载失败降级",
+      "root_cause": "①数据：流程图题导入时图片没提取到 image 字段，留在 question markdown 里，且 URL 是 gitee raw（远程依赖）。②渲染：ExamChoice 只渲染 code+question+options，漏 image；ExamMultiPart 连 image prop 都没接，子题选项直接 {opt}. {text} 不过 renderCodeText；QuizImage/BattleScreen 的 <img> 无 onError。renderCodeText 虽已转 ![alt](url)-><img> 但不转 gitee->本地",
+      "fix": "①数据：新增 scripts/normalize-question-images.mjs，把 question 里的 ![alt](url) 提取到 image 字段（gitee .../public/course-data/X -> 本地 /course-data/X），从 question 移除 markdown。修了 unified-quiz-bank(5) + src-dungeon csp-exam-bank(5) 共 10 处。②渲染：markdown.ts renderCodeText 的 <img> 加 normalizeImageUrl（gitee->本地）；QuizPractice QuizImage / ExamChoice QuestionImage / ExamMultiPart MultiPartImage / BattleScreen BattleImage 四个 <img> 组件加 onError 降级（图片加载失败显示提示+URL）；ExamChoice 渲染 image/codeImage；ExamMultiPart 接 image/codeImage prop 并渲染，子题选项/解析改用 renderCodeText；ExamTraining 传 image/codeImage 给 ExamMultiPart。③审计：新增 scripts/audit-question-reliability.mjs（字段完整性/代码/图片/内容残缺/显示风险，type-aware），输出 reports/question-reliability-report.{json,md}。④3 道 GESP 题(gesp-2024-03-4-10/06-4-15/12-4-13) 原题代码是图片、导入丢失、本地无 PNG、code 仅 OCR 残片（如 'j >= &&'）不可靠，加入 BROKEN_QUESTION_IDS 从 QuizPractice loadBank 和 dungeon isBrokenCodeQuestion 排除",
+      "tags": [
+        "question-bank",
+        "reliability",
+        "markdown-image",
+        "rendering",
+        "gesp",
+        "fallback",
+        "audit"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "error_message": "题库可靠性排除逻辑硬编码：QuizPractice 和 questionLoader 各自 const BROKEN_QUESTION_IDS = new Set([...3 个 id...])，两处复制同一份 ID 列表；审计报告不区分「源题库问题」与「学生可见问题」，3 道已排除题仍计入 P1 总数，发版判断不清晰",
+      "root_cause": "上一轮收口时为快速隔离 3 道缺代码题，在两个文件各硬编码了一份 ID 集合，违反单一数据源；审计脚本未读取排除配置，无法区分 source issue（含已隔离）与 visible issue（学生实际会看到）",
+      "fix": "①新增单一数据源 public/course-data/excluded-question-ids.json（ids/reason/note）。②新增共享 helper src/utils/excludedQuestions.ts（loadExcludedQuestionIds 异步缓存 + getCachedExcludedQuestionIds 同步读，fetch 失败降级空集）；QuizPractice.loadBank 和 questionLoader.loadQuestionBank 复用之，删除两处硬编码。questionLoader 在 loadQuestionBank 顶部 await 预加载缓存，isBrokenCodeQuestion 用 getCached 同步读。③审计脚本读同一配置，findings 加 excluded 标记，报告新增 sourceIssuesTotal/excludedIssuesTotal/visibleP0/visibleP1/visibleP2，md 重构为 总览/学生可见风险/源题库剩余问题/已隔离题目/发版建议/后续补题清单。严格模式 STRICT_RELIBILITY_AUDIT 改为仅 visible P0/P1 触发（已隔离不计入）",
+      "tags": [
+        "question-bank",
+        "reliability",
+        "config",
+        "single-source-of-truth",
+        "audit",
+        "refactor"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "error_message": "题库可靠性审计漏检：undefined/[object Object] 序列化泄漏、抽取残缺（'由 位''输入 个''分数为 的'）、code OCR 残片（'j >= &&'）；2 道 GESP 4 级题（gesp-2024-12-4-02 void n_chars、gesp-2025-03-4-07 struct Person 嵌套 Address）code 被导入时分裂到 stem（带行号）+ code 字段，学生看到题干夹代码行 + code 块以 } 起始的残片",
+      "root_cause": "①audit-question-reliability.mjs 无 undefined/对象泄漏/抽取残缺/code OCR 检测。②2 道题导入时行号切分错误，把代码前几行（带 '1 ''2 ' 行号）留在了 question 字段，剩余行进了 code 字段，且题干文本混入 code 末尾（gesp-2025-03-4-07 的'下面描述错误的是'被切到 code）",
+      "fix": "①audit 加 3 类检测：EXTRACT_RESIDUE_RE（量词前缺数值）、undefined/[object Object] 泄漏 P0、code OCR（DANGLING_OP_RE 相邻运算符如 'j >= &&' + 行首孤立数字 + 大括号严重不匹配）。DANGLING_OP_RE 踩坑：第三分支误判所有 'a >= b'、第二分支 '>= ;' 误判填空题 'i <= ;'，均移除，仅保留相邻运算符高精度一支。②node 脚本修 2 道残片题：stem 去行号代码、code 合并恢复（void n_chars 签名+调用 / struct Person 嵌套 struct Address），unified-quiz-bank + src-dungeon csp-exam-bank 两库同修（dungeon 版原 code='' 一并补全）。结果 visible P0/P1=0，60 新题 0 issue。解析统一'官方答案：X。'，审计 flag '待补充/TODO'",
+      "tags": ["question-bank", "reliability", "audit", "data-quality", "gesp", "OCR", "fragment"]
+    },
+    {
+      "date": "2026-07-08",
+      "error_message": "班级码门禁失败原因不区分'校验服务异常'（5xx 被并入'班级码失效'且误清缓存，班级码实际仍有效却被清空需重绑）；fetch 无超时，服务无响应时永久卡'校验中'。智子试炼场暂停为假暂停（仅 CSS 遮罩，Phaser 场景 update 仍跑）。流派被动无每日/每局限制（EXP 乘数被动可无限刷）。RegisterScreen 选流派不展示被动效果",
+      "root_cause": "①ClassAccessGate.ensure 对所有 !resp.ok 一律 clearClassAccessCache + '班级权限已失效'，未区分 5xx 服务端错误；fetch 无 AbortController。②BattlePhaserGame 无 pause/resume API，DungeonEmbed 暂停只 setPauseOpen 渲染遮罩。③6 流派被动为轻量乘数（5-8%），EXP 被动（cultivation/code）每次答题触发无上限；金币/段位已由 weeklyChallenges 5次/周间接限制，但 EXP 未限。④RegisterScreen 流派卡片未调 getSchoolPassive",
+      "fix": "①ensure 加 10s AbortController 超时；resp.status>=500 -> '校验服务异常'不清缓存（status offline）；4xx/data.error -> '班级码失效' clearClassAccessCache（status denied）；fetch throw/超时 -> '网络不可用'不清缓存；resp.json().catch 兜底。4 类失败原因齐全。②BattlePhaserGame 接口加 pause()/resume()(game.scene.pause/resume('BattleScene'))；BattleScreen useEffect 监听 window 'dungeon-pause'/'dungeon-resume' 调 gameRef.pause/resume；DungeonEmbed 暂停按钮 dispatch 'dungeon-pause'、继续战斗 dispatch 'dungeon-resume'。③dungeonStore 加 schoolPassiveDaily{used,limit:50,resetAt}+todayStr()+bumpSchoolPassiveDaily()+持久化'dungeon_school_passive_daily'；BattleScreen.handleAnswer 仅答对时 bump，true 才 applySchoolAnswerPassive。④RegisterScreen 卡片加'被动：{name}·{description}'。⑤SettingsPage 加'🚫 解绑'按钮。⑥BattleScreen.css 图片 min-width 改 min(X,100%)+@media 窄窗 padding。tsc+build+build:dungeon 全绿",
+      "tags": ["class-gate", "failure-reason", "timeout", "智子试炼场", "phaser", "pause", "流派被动", "rate-limit", "ux"]
     }
   ]
 }

@@ -11,7 +11,15 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "validate:assets": "node scripts/validate-assets.mjs",
+    "audit:question-code": "node scripts/audit-question-code.mjs",
+    "normalize:question-code": "node scripts/normalize-question-code.mjs",
+    "enrich:quiz-code": "node scripts/enrich-quiz-bank-code.mjs",
+    "apply:question-code-fixes": "node scripts/apply-question-code-fixes.mjs",
+    "audit:reliability": "node scripts/audit-question-reliability.mjs",
+    "normalize:question-images": "node scripts/normalize-question-images.mjs",
+    "import:gesp-2026-06": "node scripts/import-gesp-2026-06.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
