@@ -2,19 +2,30 @@ import { useState, useEffect } from 'react';
 import { check, type Update } from '@tauri-apps/plugin-updater';
 import { getVersion } from '@tauri-apps/api/app';
 import { openUrl } from '@tauri-apps/plugin-opener';
+import { fetch } from '@tauri-apps/plugin-http';
 
 function isMac(): boolean {
   return navigator.userAgent.includes('Mac');
 }
 
-function buildUrls(version: string) {
-  const short = version.replace(/\./g, '');
-  const base = `https://gitee.com/hanliuliu110/csp-pet/releases/download/v${version}`;
-  return {
-    'macOS Apple Silicon': `${base}/csp-v${short}-arm.dmg`,
-    'macOS Intel': `${base}/csp-v${short}-intel.dmg`,
-    'Windows 64位': `${base}/csp-v${short}-win.exe`,
-  };
+// update.json 是下载 URL 的唯一真源（与 Tauri updater 同源），避免硬编码文件名导致 404
+const UPDATE_JSON_URL = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/update.json';
+const PLATFORM_LABELS: Record<string, string> = {
+  'darwin-aarch64': 'macOS Apple Silicon',
+  'darwin-x86_64': 'macOS Intel',
+  'windows-x86_64': 'Windows 64位',
+};
+
+async function fetchDownloadLinks(): Promise<Record<string, string>> {
+  const res = await fetch(UPDATE_JSON_URL);
+  const data = await res.json();
+  const p = data.platforms || {};
+  const links: Record<string, string> = {};
+  for (const [key, label] of Object.entries(PLATFORM_LABELS)) {
+    const url = p[key]?.url;
+    if (url) links[label] = url;
+  }
+  return links;
 }
 
 export default function UpdateChecker() {
@@ -24,6 +35,7 @@ export default function UpdateChecker() {
   const [error, setError] = useState('');
   const [version, setVersion] = useState('');
   const [showLinks, setShowLinks] = useState(false);
+  const [links, setLinks] = useState<Record<string, string>>({});
 
   useEffect(() => {
     getVersion()
@@ -38,6 +50,11 @@ export default function UpdateChecker() {
       const result = await check();
       if (result) {
         setUpdate(result);
+        try {
+          setLinks(await fetchDownloadLinks());
+        } catch {
+          setLinks({});
+        }
       } else {
         setError('已经是最新版本');
         setTimeout(() => setError(''), 3000);
@@ -64,8 +81,6 @@ export default function UpdateChecker() {
     }
   };
 
-  const links = update ? buildUrls(update.version) : {};
-
   return (
     <div className="settings-section">
       <h3>🔄 版本更新</h3>
@@ -83,13 +98,21 @@ export default function UpdateChecker() {
             </button>
             {isMac() && showLinks && (
               <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {Object.entries(links).map(([name, url]) => (
-                  <button key={name} className="mode-btn"
-                    onClick={() => openUrl(url as string)}
+                {Object.entries(links).length > 0 ? (
+                  Object.entries(links).map(([name, url]) => (
+                    <button key={name} className="mode-btn"
+                      onClick={() => openUrl(url)}
+                      style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0', fontSize: 13, padding: '10px 16px' }}>
+                      {name}
+                    </button>
+                  ))
+                ) : (
+                  <button className="mode-btn"
+                    onClick={() => openUrl(`https://gitee.com/hanliuliu110/csp-pet/releases/tag/v${update.version}`)}
                     style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0', fontSize: 13, padding: '10px 16px' }}>
-                    {name}
+                    打开 Gitee Releases 下载
                   </button>
-                ))}
+                )}
                 <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>点击上方按钮下载，完成后打开安装包即可</p>
               </div>
             )}

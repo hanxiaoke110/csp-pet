@@ -36,16 +36,18 @@
   <p class="note">下载后打开安装包即可安装</p>
 </div>
 <script>
-const BASE = 'https://gitee.com/hanliuliu110/csp-pet/releases/download';
 fetch('https://gitee.com/hanliuliu110/csp-pet/raw/master/update.json')
   .then(r => r.json())
   .then(data => {
     const v = data.version;
     document.getElementById('ver').textContent = 'v' + v;
-    const short = v.replace(/\./g, '');
-    document.getElementById('btn-mac-arm').href = `${BASE}/v${v}/csp-v${short}-arm.dmg`;
-    document.getElementById('btn-mac-intel').href = `${BASE}/v${v}/csp-v${short}-intel.dmg`;
-    document.getElementById('btn-win').href = `${BASE}/v${v}/csp-v${short}-win.exe`;
+    // 直接用 update.json 的 platforms URL（与 App 自动更新同源），避免硬编码文件名导致 404
+    const p = data.platforms || {};
+    const fallback = `https://gitee.com/hanliuliu110/csp-pet/releases/tag/v${v}`;
+    const pick = (key) => (p[key] && p[key].url) ? p[key].url : fallback;
+    document.getElementById('btn-mac-arm').href = pick('darwin-aarch64');
+    document.getElementById('btn-mac-intel').href = pick('darwin-x86_64');
+    document.getElementById('btn-win').href = pick('windows-x86_64');
   })
   .catch(() => {
     document.getElementById('ver').textContent = '请打开 Gitee Releases 查看';
