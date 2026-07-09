@@ -1670,8 +1670,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int a = 10, b = 50;\n_______;\nb -= a;\na += b;\ncout << a << \" \" << b << endl;",
-    "level": 2
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nint a = 10, b = 50;\n____;  // 在此处填入代码\nb -= a;\na += b;\ncout << a << \" \" << b << endl;\nreturn 0;\n}",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-03-2-13.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+    "sourcePage": 7
   },
   "gesp-2023-03-2-14": {
     "id": "gesp-2023-03-2-14",
@@ -1690,8 +1693,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int cnt = 0;\nfor (char ch = '1'; ch <= '9'; ch++)\n    if (______)\n        cnt++;\ncout << cnt << endl;",
-    "level": 2
+    "code": "#include <iostream>\nusing namespace std;\nVv int main() {\nint cnt = 0;\nv    for (char ch = '1'; ch <= '9'; ch++)\nif (____)  // 在此处填入代码\ncnt++;\ncout << cnt << endl;\nreturn 0;",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-03-2-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+    "sourcePage": 8
   },
   "gesp-2023-03-2-15": {
     "id": "gesp-2023-03-2-15",
@@ -1710,8 +1716,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int n = 17;\nbool isprime = true;\nfor(int i = 2; i <= n; i++)\nif(n % i == 0) isprime = false;\n    cout << isprime << endl;",
-    "level": 2
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nint n = 17;\nbool isprime = true;\nfor (int i = 2; i <= n; i++)\nif (n % i == 0)\nisprime = false;\ncout << isprime << endl;\nreturn 0;",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-03-2-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+    "sourcePage": 8
   },
   "gesp-2023-06-1-01": {
     "id": "gesp-2023-06-1-01",
@@ -1959,7 +1968,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a = 10, b = 20;\na = ___________;\nb = a + b;\na = b - a;\ncout << a << \" \" << b << endl;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-06-1-13.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+    "sourcePage": 7
   },
   "gesp-2023-06-1-14": {
     "id": "gesp-2023-06-1-14",
@@ -1978,8 +1990,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "for(int i = 1; i <= 8; i++)\nif(___________)\n    cout << i;",
-    "level": 1
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (int i = 1; i <= 8; i++)\nif (____)  // 在此处填入代码\ncout << i;\nreturn 0;\n}",
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-06-1-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+    "sourcePage": 8
   },
   "gesp-2023-06-1-15": {
     "id": "gesp-2023-06-1-15",
@@ -1998,8 +2013,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int sum;\nfor(int i=1;i<=20;i++)\nif(i%3==0||i%5==0) sum+=i;\n    cout << sum << endl;",
-    "level": 1
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nint sum;\nfor (int i = 1; i <= 20; i++)\nif (i%3 ==0 || i%5 == 0)\nsum += i;\ncout << sum << endl;\nreturn 0;\n}",
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-06-1-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361525473312.pdf",
+    "sourcePage": 9
   },
   "gesp-2023-06-2-01": {
     "id": "gesp-2023-06-2-01",
@@ -2246,8 +2264,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "char a='3',b='6';\ncout<<__________;",
-    "level": 2
+    "code": "#include <iostream>\nusing namespace std;\nint main() {",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-06-2-13.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+    "sourcePage": 7
   },
   "gesp-2023-06-2-14": {
     "id": "gesp-2023-06-2-14",
@@ -2267,7 +2288,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int sum=0;\nfor(int i=1;i<=20;i++)\nif(________) sum+=i;\n    cout<<sum<<endl;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-06-2-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+    "sourcePage": 7
   },
   "gesp-2023-06-2-15": {
     "id": "gesp-2023-06-2-15",
@@ -2286,8 +2310,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "for(char x='A';x<='D';x++)\nif((x!='A')+(x=='C')+(x=='D')+(x!='D')==3)\n    cout<<x;",
-    "level": 2
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (char x = 'A'; << = 'D'$ x++)\nif ((x != 'A') + (x == 'C') + (x == 'D') + (* != 'D') == 3)\ncout << x;\nreturn 0;\n}",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-06-2-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+    "sourcePage": 8
   },
   "gesp-2023-09-1-01": {
     "id": "gesp-2023-09-1-01",
@@ -2364,7 +2391,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a=3,b=4;\ncout<<\"a+b=\"<<a+b;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-04.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-09-1-05": {
     "id": "gesp-2023-09-1-05",
@@ -2422,7 +2452,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int m=14,n=12;\nif(m%2==0&&n%2==0) cout<<\"都是偶数\";\n    else if(m%2==1&&n%2==1) cout<<\"都是奇数\";\n    else cout<<\"不都是偶数或奇数\";",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 4
   },
   "gesp-2023-09-1-08": {
     "id": "gesp-2023-09-1-08",
@@ -2442,7 +2475,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int m=14,n=12;\nif(m%2&&n%2) cout<<\"都是偶数\";\n    else if(m%2==1&&n%2==1) cout<<\"都是奇数\";\n    else cout<<\"不都是偶数或奇数\";",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 4
   },
   "gesp-2023-09-1-09": {
     "id": "gesp-2023-09-1-09",
@@ -2462,7 +2498,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int m=7;\nif(m/5||m/3) cout<<0;\n    else if(m/3) cout<<1;\n    else if(m/5) cout<<2;\n    else cout<<3;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 5
   },
   "gesp-2023-09-1-10": {
     "id": "gesp-2023-09-1-10",
@@ -2482,7 +2521,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt=0;\nfor(int i=1;i<=5;i++) cnt=cnt+1;\n    cout<<cnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 5
   },
   "gesp-2023-09-1-11": {
     "id": "gesp-2023-09-1-11",
@@ -2502,7 +2544,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int tnt=0;\nfor(int i=1;i<5;i+=2) tnt=tnt+i;\n    cout<<tnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 6
   },
   "gesp-2023-09-1-12": {
     "id": "gesp-2023-09-1-12",
@@ -2522,7 +2567,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt = 0, n = 10;\nwhile (n >= 0) {\n    cnt += 1;\n    n -= 2;\n    }\ncout << cnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 6
   },
   "gesp-2023-09-1-13": {
     "id": "gesp-2023-09-1-13",
@@ -2541,8 +2589,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int n=0;cin>>n;\nfor(__________) if(n%i==0) cout<<i<<endl;",
-    "level": 1
+    "code": "a, #7 A10, WTA 1, 2. 5. 10; M7A12, WHA 1. 2. 3. 4, 6, 12;\n____;  // 在此处填入代码\nint n = 0;\ncout << \"iff A—PIEMR: \";\ncin >> n;\nfor (              ) // 在此处填入代码\nif (n % i == 0)\ncout << i << endl;",
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-13.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 7
   },
   "gesp-2023-09-1-14": {
     "id": "gesp-2023-09-1-14",
@@ -2562,7 +2613,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int n=1234,s=0;\nfor(;n;n/=10) s+=___________;\n    cout<<s<<endl;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 8
   },
   "gesp-2023-09-1-15": {
     "id": "gesp-2023-09-1-15",
@@ -2582,7 +2636,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int n=0,s=1;\nfor(;n=0;) s*=n;\n    cout<<s;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-1-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+    "sourcePage": 8
   },
   "gesp-2023-09-2-01": {
     "id": "gesp-2023-09-2-01",
@@ -2697,7 +2754,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N;cin>>N;\nfor(________) if(!(N%i)) cout<<i<<' ';",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 3
   },
   "gesp-2023-09-2-07": {
     "id": "gesp-2023-09-2-07",
@@ -2716,8 +2776,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "for(int i=1;i<N+1;i++){\n    for(int j=1;j<N+1;j++)\n    if(_________) cout<<1<<\" \";\n        else cout<<0<<\" \";\n        cout<<endl;",
-    "level": 2
+    "code": "int N = 0;\ncout << \"ims A tT 7B: \";\ncin >> N;\nfor (int i=1; i<N +41; i++) {\nfor (int j = 1; j < N+ 1; j++)\nif (____)  // 在此处填入代码\ncout << 1 << \" \";\nelse\ncout << 0 << \" \";\ncout << endl;",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 4
   },
   "gesp-2023-09-2-08": {
     "id": "gesp-2023-09-2-08",
@@ -2736,8 +2799,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int N,i;\ncin>>N;\nfor(i=2;i<N;i++)\nif(N%i==0){cout<<\"非质数\";________;} if(i==N) cout<<\"是质数\";",
-    "level": 2
+    "code": "intN=0, i=2;\ncout << \"i#MA—TAKFS FAN ESR |\";\ncin >> N;\nfor (i = 2; i < N; i++)\nif (N% i == 0) {\ncout << \"SEAR\";\n____;  // 在此处填入代码\n}\nif (i == N)\ncout << \"Az\";",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 5
   },
   "gesp-2023-09-2-09": {
     "id": "gesp-2023-09-2-09",
@@ -2757,7 +2823,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N=9;\nfor(int i=2;i<9;i++)\nif(N%i) cout<<\"1#\";\n    cout<<0;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 5
   },
   "gesp-2023-09-2-10": {
     "id": "gesp-2023-09-2-10",
@@ -2777,7 +2846,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt=0;\nfor(int i=1;i<9;i++)\nfor(int j=1;j<i;j+=2)\n    cnt+=1;\n    cout<<cnt;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 5
   },
   "gesp-2023-09-2-11": {
     "id": "gesp-2023-09-2-11",
@@ -2797,7 +2869,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt=0;\nfor(int i=1;i<13;i+=3)\nfor(int j=1;j<i;j+=2){\n    if(i*j%2==0) break;\n        else cnt++;\n        }\n    cout<<cnt;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 7
   },
   "gesp-2023-09-2-12": {
     "id": "gesp-2023-09-2-12",
@@ -2817,7 +2892,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int x=1;\nwhile(true){\n    if(!(x%3)) cout<<x<<\",\";\n        else if(x/10) break;\n        x+=2;\n        }\n    cout<<x;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 7
   },
   "gesp-2023-09-2-13": {
     "id": "gesp-2023-09-2-13",
@@ -2836,8 +2914,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int N;cin>>N;\nfor(int i=1;i<N+1;i++){\n    for(int j=0;j<i;j++)\n        cout<<______;\n        cout<<endl;",
-    "level": 2
+    "code": "____;  // 在此处填入代码\nint N = 0;\ncout << \"imiiATWRE:\";\ncin >> N;\nfor (int i=1; i<N+ 1; i++) {\nfor (int j = 0; j < i; j++)\n____;  // 在此处填入代码\ncout << endl;\n}",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-13.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 8
   },
   "gesp-2023-09-2-14": {
     "id": "gesp-2023-09-2-14",
@@ -2857,7 +2938,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "cin>>lineCount;\nfor(int i=0;i<lineCount;i++){\n    for(int j=0;j<________;j++)\n        cout<<' ';",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 9
   },
   "gesp-2023-09-2-15": {
     "id": "gesp-2023-09-2-15",
@@ -2876,8 +2960,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "double totalScore=0;int studCount=0;\nwhile(________){\n    cin>>score;\n    if(score<0) break;\n        totalScore+=score;studCount++;\n        }\n    cout<<totalScore/studCount<<endl;",
-    "level": 2
+    "code": "____;  // 在此处填入代码\n____;  // 在此处填入代码\n____;  // 在此处填入代码\nwhile (____)  // 在此处填入代码\ncin >> score;\nif (score < 0)\n|   break;\ntotalScore += score;\nstudCount += 1;\n}\ncout << \"\"Fij4¢=\" << totalScore / studCount;",
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-09-2-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+    "sourcePage": 10
   },
   "gesp-2023-03-1-01": {
     "id": "gesp-2023-03-1-01",
@@ -3220,7 +3307,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N,dayX,hourX;\ncin>>N;\ndayX=_________,hourX=_________;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-03.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "sourcePage": 1
   },
   "gesp-2023-12-1-04": {
     "id": "gesp-2023-12-1-04",
@@ -3240,7 +3330,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "if(______) cout<<\"偶数\";\n    else cout<<\"奇数\";",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-04.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "sourcePage": 1
   },
   "gesp-2023-12-1-05": {
     "id": "gesp-2023-12-1-05",
@@ -3280,7 +3373,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt = 0;\nfor (int i = 1; i < 10; i++) {\n    cnt += 1;\n    i += 2;\n    }\ncout << cnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-1-07": {
     "id": "gesp-2023-12-1-07",
@@ -3300,7 +3396,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "cnt=0;\nfor(int i=1;i<20;i++){\n    if(i%2) continue;\n        else if(i%3==0&&i%5==0) break;\n        cnt+=i;\n        }\n    cout<<cnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-1-08": {
     "id": "gesp-2023-12-1-08",
@@ -3320,7 +3419,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt = 0, N = 10;\nwhile (1) {\n    if (N == 0) break;\n        cnt += 1;\n        N -= 2;\n        }\n    cout << cnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "sourcePage": 3
   },
   "gesp-2023-12-1-09": {
     "id": "gesp-2023-12-1-09",
@@ -3340,7 +3442,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "cin>>N;cnt=0;\nfor(int i=1;i<N+1;i++)\nif(N%i==0) ________;\nif(cnt==2) cout<<\"是质数\";\n    else cout<<\"不是质数\";",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "sourcePage": 3
   },
   "gesp-2023-12-1-10": {
     "id": "gesp-2023-12-1-10",
@@ -3380,7 +3485,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "cnt=0;\nfor(i=10;i>3;i-=3) cnt=cnt+i;\n    cout<<cnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-1-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1585703601307680.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-1-12": {
     "id": "gesp-2023-12-1-12",
@@ -3515,7 +3623,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "cin>>N;\nfor(________) if(N%i==0) cout<<i<<\" \";",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-2-03.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601261860290592.pdf",
+    "sourcePage": 1
   },
   "gesp-2023-12-2-04": {
     "id": "gesp-2023-12-2-04",
@@ -3725,7 +3836,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int sum=0;\nfor(int i=1;i<=10;i++){\n    if(i%2==0) continue;\n        sum+=i;\n        }\n    cout<<sum;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-2-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601261860290592.pdf",
+    "sourcePage": 5
   },
   "gesp-2023-12-2-15": {
     "id": "gesp-2023-12-2-15",
@@ -3899,7 +4013,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int tnt=0;\nfor(int i=1;i<=10;i++)\nif(i%3&&i%7) tnt+=i;\n    cout<<tnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-1-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-03-1-09": {
     "id": "gesp-2024-03-1-09",
@@ -3919,7 +4036,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N=10;\nwhile(N){if(N%3==0)cout<<N<<\"#\";N--;} cout<<0<<\"#\";",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-1-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-03-1-10": {
     "id": "gesp-2024-03-1-10",
@@ -3938,8 +4058,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "for(int i=2;i<N;i++)\nif(______){cout<<\"非质数\";return 0;} cout<<\"是质数\";",
-    "level": 1
+    "code": "|int N;\n(cin >> N;\n____;  // 在此处填入代码\n|for(int i=1; i<N+1; i++)\nif (             )\ncnt +=1;\n\\|if(cnt == 2)\ncout << N << \"S2fRaX\";\nelse\ncout << N << \"AIR\";",
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-1-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047004639264.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-03-1-11": {
     "id": "gesp-2024-03-1-11",
@@ -4149,7 +4272,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a=3,b=4;\nif(a>b) cout<<a;\n    else cout<<b;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-2-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-03-2-07": {
     "id": "gesp-2024-03-2-07",
@@ -4303,7 +4429,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(int i=2;i<=8;i+=2) cout<<i;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-2-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf",
+    "sourcePage": 5
   },
   "gesp-2024-03-2-15": {
     "id": "gesp-2024-03-2-15",
@@ -4437,7 +4566,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "float a;\na=101.101;a=101;\nprintf(\"a+1={%.0f}\",a+1);",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-1-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-06-1-07": {
     "id": "gesp-2024-06-1-07",
@@ -4496,7 +4628,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int Sum=0,i=0;\nfor(;i<10;) Sum+=i++;\n    cout<<i<<\" \"<<Sum;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-1-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-06-1-10": {
     "id": "gesp-2024-06-1-10",
@@ -4556,7 +4691,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N;cin>>N;\nfor(int i=0;i<=N;i++)\nif(___________) cout<<N<<\"是平方数\";",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-1-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071329493024.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-06-1-13": {
     "id": "gesp-2024-06-1-13",
@@ -4769,7 +4907,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "M5=N/5;\nM2=______;\nM1=______;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-2-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071434350624.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-06-2-09": {
     "id": "gesp-2024-06-2-09",
@@ -5060,7 +5201,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int Sum=0;\nfor(int i=0;i<10;i++) Sum+=i;\n    cout<<Sum;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-1-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-09-1-09": {
     "id": "gesp-2024-09-1-09",
@@ -5080,7 +5224,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N=0;\nfor(int i=0;i<10;i++) N+=1;\n    cout<<N;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-1-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-09-1-10": {
     "id": "gesp-2024-09-1-10",
@@ -5100,7 +5247,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N=0;\nfor(int i=1;i<10;i+=2){\n    if(i%2==1) continue;\n        N+=1;\n        }\n    cout<<N;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-1-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1633835940839456.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-09-1-11": {
     "id": "gesp-2024-09-1-11",
@@ -5411,7 +5561,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(int i=1;i<=N;i++){\n    for(int j=___1___;j<___2___;j++) cout<<j<<\" \";\n        cout<<endl;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-2-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-09-2-12": {
     "id": "gesp-2024-09-2-12",
@@ -5431,7 +5584,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "while(N>0){\n    ______;  // 先填入\n    ______;  // 后填入",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-2-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-09-2-13": {
     "id": "gesp-2024-09-2-13",
@@ -5470,7 +5626,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(int i=2;i<num;i++)\nif(________) {flag=0;break;}",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-2-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-09-2-15": {
     "id": "gesp-2024-09-2-15",
@@ -5623,7 +5782,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-1-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-12-1-08": {
     "id": "gesp-2024-12-1-08",
@@ -5702,7 +5864,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-1-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-12-1-12": {
     "id": "gesp-2024-12-1-12",
@@ -5781,7 +5946,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int N,n1,n2;\ncin>>N;\nbool flag=true;\nwhile(N>=10){\n    n1=N%10;\n    ______;\n    n2=N%10;\n    if(n1!=n2+1) flag=false;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-1-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-12-2-01": {
     "id": "gesp-2024-12-2-01",
@@ -5953,7 +6121,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-2-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1650239656165408.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-12-2-10": {
     "id": "gesp-2024-12-2-10",
@@ -6258,7 +6429,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a=10,b=20;\nprintf(\"a=%d,b=%d\",a,b);",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-1-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+    "sourcePage": 3
   },
   "gesp-2025-03-1-11": {
     "id": "gesp-2025-03-1-11",
@@ -6316,7 +6490,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int Sum=0;\nfor(int i=-1000;i<1000;i++) Sum+=i;\n    cout<<Sum;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-1-13.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+    "sourcePage": 4
   },
   "gesp-2025-03-1-14": {
     "id": "gesp-2025-03-1-14",
@@ -6355,7 +6532,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt=0;\nfor(int i=0;i<10;i++){\n    if(i%3==0) continue;\n    if(i%4==0) break;\n        cnt++;\n        }\n    cout<<cnt;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-1-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256632598560.pdf",
+    "sourcePage": 4
   },
   "gesp-2025-03-2-01": {
     "id": "gesp-2025-03-2-01",
@@ -6413,7 +6593,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a = 3, b = 4;\na = b;\nb = a;\ncout << a << ' ' << b << endl;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-03.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "sourcePage": 1
   },
   "gesp-2025-03-2-04": {
     "id": "gesp-2025-03-2-04",
@@ -6452,7 +6635,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int tnt=0;\nfor(int i=0;i<10;i++)\nif(i%3) tnt+=1;\n    else tnt+=2;\n    cout<<tnt;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-05.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "sourcePage": 7
   },
   "gesp-2025-03-2-06": {
     "id": "gesp-2025-03-2-06",
@@ -6472,7 +6658,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(i=10;i>0;i-=2) break;\n    cout<<i;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "sourcePage": 2
   },
   "gesp-2025-03-2-07": {
     "id": "gesp-2025-03-2-07",
@@ -6492,7 +6681,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(i=0;i<10;i++){\n    if(i%3==0) continue;\n        cout<<\"0\"<<\"#\";\n        }\n    if(i>=10) cout<<\"1#\";",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "sourcePage": 2
   },
   "gesp-2025-03-2-08": {
     "id": "gesp-2025-03-2-08",
@@ -6512,7 +6704,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(i=0;i<5;i++)\nfor(j=i;j>0;j-=1)\n    printf(\"%d-\",j);",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "sourcePage": 3
   },
   "gesp-2025-03-2-09": {
     "id": "gesp-2025-03-2-09",
@@ -6550,7 +6745,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-2-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
+    "sourcePage": 3
   },
   "gesp-2025-03-2-11": {
     "id": "gesp-2025-03-2-11",
@@ -6760,7 +6958,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int x=10,y=20;\nx=x+y;\ny=x-y;\nx=x-y;\ncout<<x<<' '<<y;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "sourcePage": 2
   },
   "gesp-2025-06-1-07": {
     "id": "gesp-2025-06-1-07",
@@ -6818,7 +7019,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a,b;\na=3;b=4;\nprintf(\"a+b=%02d#a+b={a+b}\",a+b,a+b);",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "sourcePage": 2
   },
   "gesp-2025-06-1-10": {
     "id": "gesp-2025-06-1-10",
@@ -6858,7 +7062,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(i=1;i<11;i+=3){\n    continue;\n    if(i%2==0) break;\n        printf(\"%d#\",i);\n        }\n    if(i>=11) printf(\"END\");",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "sourcePage": 2
   },
   "gesp-2025-06-1-12": {
     "id": "gesp-2025-06-1-12",
@@ -6878,7 +7085,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "i=N;\nwhile(______){\n    if(N%i==0) cout<<i<<\" \";\n        i--;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "sourcePage": 4
   },
   "gesp-2025-06-1-13": {
     "id": "gesp-2025-06-1-13",
@@ -6898,7 +7108,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int Sum=0;\nfor(int i=0;i<10;i++){\n    if(i%2==0) continue;\n    if(i%5==0) break;\n        Sum+=i;\n        }\n    cout<<Sum;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-13.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "sourcePage": 4
   },
   "gesp-2025-06-1-14": {
     "id": "gesp-2025-06-1-14",
@@ -6918,7 +7131,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "float x;\nx=101;\nx++;\ncout<<++x;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "sourcePage": 4
   },
   "gesp-2025-06-1-15": {
     "id": "gesp-2025-06-1-15",
@@ -6938,7 +7154,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a=i%10;\nint b=______;\nint c=i/100;",
-    "level": 1
+    "level": 1,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-1-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
+    "sourcePage": 4
   },
   "gesp-2025-06-2-01": {
     "id": "gesp-2025-06-2-01",
@@ -7111,7 +7330,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "for(i=-99;i<100;i+=2) cnt=1+cnt;\n    cout << cnt;",
-    "level": 2
+    "level": 2,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-2-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1687195838578720.pdf",
+    "sourcePage": 3
   },
   "gesp-2025-06-2-10": {
     "id": "gesp-2025-06-2-10",
@@ -7581,7 +7803,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-03.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 1
   },
   "gesp-2023-12-3-04": {
     "id": "gesp-2023-12-3-04",
@@ -7601,7 +7826,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int temp = 0;\nfor (int i = 1; i < 7; i++) {\n    for (int j = 1; j < 5; j++) {\n        if (i / j == 2) {\n            temp++;\n        }\n    }\n}\ncout << temp << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-04.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 1
   },
   "gesp-2023-12-3-05": {
     "id": "gesp-2023-12-3-05",
@@ -7641,7 +7869,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "string str(\"chen\");\nint x = str.length();\ncout << x << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-3-07": {
     "id": "gesp-2023-12-3-07",
@@ -7661,7 +7892,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "string str = \"chen\";\ncout << str[5] << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-3-08": {
     "id": "gesp-2023-12-3-08",
@@ -7681,7 +7915,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "char ch[10] = {'1'};\ncout << ch[2] << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-3-09": {
     "id": "gesp-2023-12-3-09",
@@ -7701,7 +7938,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "string str = \"GESP is a good programming test!\";\nint x = 0;\nfor (int i = 0; i < str.length(); i++) {\n    if (____________) x++;\n}\ncout << x << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 3
   },
   "gesp-2023-12-3-10": {
     "id": "gesp-2023-12-3-10",
@@ -7740,7 +7980,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int cnt = 0;\nfor(int i = 0; i <= 20; i++) {\n    if(i % 3 == 0 && i % 5 == 0)\n        cnt++;\n}\ncout << cnt;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 3
   },
   "gesp-2023-12-3-12": {
     "id": "gesp-2023-12-3-12",
@@ -7760,7 +8003,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a = 3, b = 2;\ncout << a / b * 1.0 << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-3-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
+    "sourcePage": 3
   },
   "gesp-2023-12-3-13": {
     "id": "gesp-2023-12-3-13",
@@ -7876,8 +8122,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int fun1(int *n) {\n    return *n * *n;\n}\n\nint main() {\n    int arr[10] = {2};\n    arr[1] = fun1(arr);\n    cout << arr[1] << endl;\n}",
-    "level": 4
+    "code": "int funl(int *n)\n{\nreturn *n**n;\n}\nint main()\n{\nint arr[10]={2};\narr[1]=funi(arr);\ncout<<arr[1]<<endl;\n}",
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-03.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "sourcePage": 1
   },
   "gesp-2023-12-4-04": {
     "id": "gesp-2023-12-4-04",
@@ -7897,7 +8146,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int arr[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\nfor (int i = 0; i < 3; i++) {\n    for (int j = 2; j >= 0; j--) {\n        cout << arr[i][j] << \" \";\n    }\n    cout << endl;\n}",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-04.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-4-05": {
     "id": "gesp-2023-12-4-05",
@@ -7937,7 +8189,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int *p = NULL;\nint x = 2;\np = &x;\np++;\ncout << p << endl;",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "sourcePage": 1
   },
   "gesp-2023-12-4-07": {
     "id": "gesp-2023-12-4-07",
@@ -7957,7 +8212,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int point(int *p) {\n    return *p * *p;\n}\nint main() {\n    int a = 20;\n    int *p = &a;\n    *p = point(p);\n    cout << *p << endl;\n}",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "sourcePage": 2
   },
   "gesp-2023-12-4-08": {
     "id": "gesp-2023-12-4-08",
@@ -7983,7 +8241,7 @@
     "source": "gesp",
     "year": 2023,
     "knowledgePoint": "数据类型与运算",
-    "question": "在如下的C++代码中实现了对字符串中出现的26个字母的个数统计，横线处应填入是（ ）。\n\n```cpp\nstring str = \"HELLO CHEN A DAI\";\nint strlen = str.length();\nchar alpha[26] = {65};\nint cnt[26] = {0};\nfor(int i = 1; i < 26; i++) {\n    __________;  // 横线处需要填入代码\n}\nfor(int i = 0; i < 26; i++) {\n    cout << alpha[i] << \" \";\n}\ncout << endl;\nfor(int i = 0; i < 26; i++) {\n    for(int j = 0; j < strlen; j++) {\n        if(alpha[i] == str[j]) {\n            cnt[i]++;\n        }\n    }\n}\nfor(int i = 0; i < 26; i++) {\n    cout << cnt[i] << \" \";\n}\n```",
+    "question": "在如下的C++代码中实现了对字符串中出现的26个字母的个数统计，横线处应填入是（ ）。",
     "options": [
       "A. alpha[i]=alpha[i-1]+1;",
       "B. alpha[i]=alpha[i]+1;",
@@ -7995,7 +8253,8 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 4
+    "level": 4,
+    "code": "string str = \"HELLO CHEN A DAI\";\nint strlen = str.length();\nchar alpha[26] = {65};\nint cnt[26] = {0};\nfor(int i = 1; i < 26; i++) {\n    __________;  // 横线处需要填入代码\n}\nfor(int i = 0; i < 26; i++) {\n    cout << alpha[i] << \" \";\n}\ncout << endl;\nfor(int i = 0; i < 26; i++) {\n    for(int j = 0; j < strlen; j++) {\n        if(alpha[i] == str[j]) {\n            cnt[i]++;\n        }\n    }\n}\nfor(int i = 0; i < 26; i++) {\n    cout << cnt[i] << \" \";\n}"
   },
   "gesp-2023-12-4-10": {
     "id": "gesp-2023-12-4-10",
@@ -8035,7 +8294,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "string str = \"\";\ncin >> str;\nint strlen = str.length();\nfor (int i = 0; i < strlen; i++) {\n    if (str[i] <= '9' && str[i] >= '0') {\n        cout << str[i];\n    } else {\n        cout << \"#\";\n    }\n}",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "sourcePage": 4
   },
   "gesp-2023-12-4-12": {
     "id": "gesp-2023-12-4-12",
@@ -8055,7 +8317,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2023-12-4-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
+    "sourcePage": 4
   },
   "gesp-2023-12-4-13": {
     "id": "gesp-2023-12-4-13",
@@ -8169,8 +8434,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "cout << (3|16) << endl;",
-    "level": 3
+    "code": "| int main()\n{\ncout << (3|16) << endl;\ncout << endl;\nreturn 0;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-03.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "sourcePage": 1
   },
   "gesp-2024-03-3-04": {
     "id": "gesp-2024-03-3-04",
@@ -8209,7 +8477,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "string s = \"316\";\nint n = s.length();\nint x = 0;\nfor (int i = 0; i < n; i++)\n    x += s[i];\n    cout << x << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-05.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-03-3-06": {
     "id": "gesp-2024-03-3-06",
@@ -8228,8 +8499,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int a[20],i;\nfor(i = 0;\n    i < 20;\n    i++) a[i] = i+1;\n    for(int i = 0;\n        i < 20;\n        i++) if((a[i]%2)&&(a[i]%3)) a[i] = 0;\n        for(i = 0;\n            i < 20;\n            i++) if(a[i]) cout << a[i] << \" \";",
-    "level": 3
+    "code": "int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\nali] = i+1;\nfor(int i = 0; i < 20; i++)\nif ((ali]%2)8&&(a[i]%3))\nafi] = 9;\nfor(i = 0; i < 20; i++)\nif(a[i])\ncout << afi] << \"\";",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-03-3-07": {
     "id": "gesp-2024-03-3-07",
@@ -8248,8 +8522,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int a[20],i;\nfor(i = 0;\n    i < 20;\n    i++) a[i] = i+1;\n    for( ;\n        i > 0;\n        i--) cout << a[i-1] << \" \";",
-    "level": 3
+    "code": "| int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\na[i] = i+1;\nfor( ; i > 0; i--)\ncout << a[i-1] << \" \"5\ncout << endl;\nreturn 0;\n}",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-03-3-08": {
     "id": "gesp-2024-03-3-08",
@@ -8268,8 +8545,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "string str = \"gEsP is Interesting\";\nint x = str.length();\nfor (int i = 0; i < x; i++)\nif ((str[i] >= 'a') && (str[i] <= 'z'))\n    ________________________;\n    cout << str << endl;",
-    "level": 3
+    "code": "int main()\n{\nstring str=\"gEsP is Interesting\";\nint x = str.length();\nfor(int i = 0; i < x; i++)\nif ((str[i]>='a') && (str[i]<=\"z'))\ncout << str << endl;\ncout << endl;\nreturn 0;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-03-3-09": {
     "id": "gesp-2024-03-3-09",
@@ -8288,8 +8568,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "string str=\"gEsP is Interesting !\";\nint x = str.length();\nint nwords = 0;\nfor(int i = 0;\n    i < x;\n    i++) if (str[i]==' '){\n        nwords++;\n        while(str[++i]==' ') ;\n            }\n        cout << nwords << endl;",
-    "level": 3
+    "code": "int main()\nstring str=\"gEsP is Interesting !\";\nint x = str.length();\nint nwords = 0;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-03-3-10": {
     "id": "gesp-2024-03-3-10",
@@ -8328,7 +8611,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a[20],i;\nint cnt=0;\nfor(i = 0;\n    i < 20;\n    i++) a[i] = i+1;\n    for( ;\n        i > 1;\n        i--) if((a[i-1]+a[i-2])%3) cnt++;\n        cout << cnt << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-3-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-03-3-12": {
     "id": "gesp-2024-03-3-12",
@@ -8442,8 +8728,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int x[]={\n    2, 0, 2, 4}\nchar geSP[]=\"Grade Examination of SP\";\ncout << geSP[sizeof(x)] << endl;",
-    "level": 4
+    "code": "int main()\n{\nint x[]={2, 0, 2, 4};\nchar geSP[]=\"Grade Examination of SP\";\ncout << geSP[sizeof(x)] << endl;\ncout << endl;\nreturn 0;",
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-02.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "sourcePage": 1
   },
   "gesp-2024-03-4-03": {
     "id": "gesp-2024-03-4-03",
@@ -8462,8 +8751,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "return int(*f*2);\n}\nint main() {\n    float fnum[10]={\n        1.1}\n    fnum[1]=foo(fnum);\n    cout << fnum[0]+fnum[1] << endl;",
-    "level": 4
+    "code": "|int foo(float *f)\n{\nreturn int(*#*2);\nint main()",
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-03.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "sourcePage": 1
   },
   "gesp-2024-03-4-04": {
     "id": "gesp-2024-03-4-04",
@@ -8520,8 +8812,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "char *p=\"I love GESP!\";\ncout << p+5 << endl;",
-    "level": 4
+    "code": "int main()\nchar *p=\"I love GESP!\";\ncout << p+5 << endl;\ncout << endl;\nreturn 0;\n}",
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-06.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-03-4-07": {
     "id": "gesp-2024-03-4-07",
@@ -8541,7 +8836,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "{\n    int rc;\n    cout << ++rc << endl;",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-03-4-08": {
     "id": "gesp-2024-03-4-08",
@@ -8561,7 +8859,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int f(int n) {\n    int f[n + 2];\n    f[0] = 0, f[1] = 1;\n    for (int i = 2; i <= n; i++)\n        f[i] = f[i - 1] + f[i - 2];\n        return f[n];",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-03-4-09": {
     "id": "gesp-2024-03-4-09",
@@ -8620,7 +8921,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "ifstream fin;\nstring line;\nint x;\nfin.open(\"1.txt\", ios::in);\nfor (int i = 0; i < 2; i++) {\n    fin >> line;\n    cout << line << endl;\n    }\nfin >> x;\ncout << x << endl; //####",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "sourcePage": 1
   },
   "gesp-2024-03-4-12": {
     "id": "gesp-2024-03-4-12",
@@ -8640,7 +8944,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "char *s[] = {(char*)\"2024\", (char*)\"3.16\", (char*)\"GESP\"};\nfor (int i = 0; i < 2; i++) {\n    cout << *s + i << endl;",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-03-4-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-03-4-13": {
     "id": "gesp-2024-03-4-13",
@@ -8773,8 +9080,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "void decimal2octal(int decimal) {\n    int oct_number[100];\n    int i = 0;\n    while (decimal > 0) {\n        __________________________ //在此处填入代码 12 }\n    for (int j = i - 1;\n        j >= 0;\n        j--) {\n            cout << oct_number[j];\n            }\n        cout << endl;",
-    "level": 3
+    "code": "#include <iostream>\nusing namespace std;\n| void decimal2octal(int decimal) {\nint oct_number[100];\nint i = 0;\nwhile (decimal > 0) {\n____;  // 在此处填入代码\n}\n1;\nfor (int j = i- 1; j >= 0; j--) f{\ncout << oct_number[j];\n}\ncout << endl;\n() A. oct_number[i] = decimal % 8;    decimal /= 8;\n() B. oct_number[i] = decimal / 8;    decimal %/= 8;\nOC C. oct_number[i++] = decimal % 8;    decimal /= 8;\n() D. oct_number[i++] = decimal / 8;    decimal %= 8;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-04.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-06-3-05": {
     "id": "gesp-2024-06-3-05",
@@ -8831,8 +9141,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int main() {\n    int a = 12;\n    int result = a >> 2;\n    cout << result << endl;\n    return 0;",
-    "level": 3
+    "code": "#include <iostream>\n(using namespace std;\n|int main() {\nint a = 12;\nint result = a >> 2;\ncout << result << endl;\nreturn 0;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-06-3-08": {
     "id": "gesp-2024-06-3-08",
@@ -8851,8 +9164,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int main() {\n    int a = 5;\n    int b = 10;\n    a = a ^ b;\n    b = a ^ b;\n    a = a ^ b;\n    cout << \"a = \" << a << \", b = \" << b << endl;\n    return 0;",
-    "level": 3
+    "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint a = 5;\nint b = 10;\na=a%*b;\nb=a%*b;\na=a%*b;\ncout << \"a=\"<<a<< \", b=\" << b << endl;\nreturn 0;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-06-3-09": {
     "id": "gesp-2024-06-3-09",
@@ -8890,8 +9206,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int main() {\n    int array[5] = {\n        3,7,5,2,4}\n    int max = 0;\n    for(int i=0;\n        i<5;\n        i++) if(______________) // 在此处填入代码 max = array[i];\n        cout << max << endl;\n        return 0;",
-    "level": 3
+    "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint array[5] = {3, 7, 5, 2, 4};\nint max = 0;\nfor(int i=0; i<5; i++)\nif (____)  // 在此处填入代码\nmax = array[il];\ncout << max << endl;\nreturn 0;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-06-3-11": {
     "id": "gesp-2024-06-3-11",
@@ -8911,7 +9230,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int main() {\n    int arr[35];\n    int count = 0;\n    for (int i = 1;\n        i <= 35;\n        i++) {\n            if (i % == 0) __________________________ // 在此处填入代码 } for (int i = 0; i < count; i++) cout << arr[i] << endl;\n            return 0;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-06-3-12": {
     "id": "gesp-2024-06-3-12",
@@ -8930,8 +9252,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int main() {\n    string s = \"0629\";\n    int n = s.length();\n    int x = 0;\n    for(int i = 0;\n        i < n;\n        i++) x += s[i];\n        cout << x << endl;\n        return 0;",
-    "level": 3
+    "code": "#include <iostream>\n|using namespace std;\n|int main() {\nstring s = \"0629\";\nint n = s.length();\nint x = 0;\nfor(int i = 0; i <n; i++)\nx += s[i];\ncout << << < endl;\nreturn 0;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "sourcePage": 5
   },
   "gesp-2024-06-3-13": {
     "id": "gesp-2024-06-3-13",
@@ -8990,7 +9315,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int main() {\n    string str = \"gesp.ccf.org.cn\";\n    string delimiter = \".\";\n    string result=\"\";\n    string token;\n    size_t found = str.find(delimiter);\n    while (found != string::npos) {\n        token = str.substr(0, found);\n        result += token;\n        result += \" \";\n        __________________________ // 在此处填入代码 found = str.find(delimiter);\n        }\n    19 //最后一部分 result += str;\n    result += \" \";\n    cout << result << endl;\n    return 0;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-3-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071490973728.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-06-4-01": {
     "id": "gesp-2024-06-4-01",
@@ -9069,15 +9397,18 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "#include <iostream>\nusing namespace std;\nint main() {\n    int *p;\n    int a = 10;\n    p = &a;\n    p++;\n    cout << p << endl;\n}",
-    "level": 4
+    "code": "#include<iostream>\nusing namespace std;\nint main()\nint *p;\nint a=1ée;\np=&a;\n&      pt+;\ncout<<p<<endl;\n}",
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-4-04.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-06-4-05": {
     "id": "gesp-2024-06-4-05",
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "数据类型与运算",
-    "question": "如果下列程序输出的地址是0x6ffe00，则cout<<a+1<<endl;输出的是（ ）\n\n```cpp\n#include <iostream>\nusing namespace std;\nint main() {\n    int a[2][3] = {0};\n    cout << a << endl;   // 假设输出 0x6ffe00\n    cout << a+1 << endl;\n}\n```",
+    "question": "如果下列程序输出的地址是0x6ffe00，则cout<<a+1<<endl;输出的是（ ）",
     "options": [
       "A. 0x6ffe04",
       "B. 0x6ffe0C",
@@ -9089,7 +9420,8 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 4
+    "level": 4,
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\n    int a[2][3] = {0};\n    cout << a << endl;   // 假设输出 0x6ffe00\n    cout << a+1 << endl;\n}"
   },
   "gesp-2024-06-4-06": {
     "id": "gesp-2024-06-4-06",
@@ -9146,7 +9478,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-4-08.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-06-4-09": {
     "id": "gesp-2024-06-4-09",
@@ -9223,7 +9558,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "{\n    int key = a[i];\n    int j=i-1;\n    while(a[j]>key && j>=0) {\n        ________;\n        j -= 1;\n        12 }\n    a[j + 1]= key;",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-06-4-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
+    "sourcePage": 1
   },
   "gesp-2024-06-4-13": {
     "id": "gesp-2024-06-4-13",
@@ -9300,8 +9638,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int main() {\n    double a=0.9;\n    double b=1.0;\n    if(((b-a)==0.1)) {\n        cout<<\"Equal\"<<endl;\n        }\n    else {\n        cout<<\"Not equal\"<<endl;\n        }\n    16 }",
-    "level": 3
+    "code": "#include<iostream>\n|using namespace std;\nint main()\n{\ndouble a=0.9;\ndouble b=1.0;\nif(((b-a)==0.1))\n{\ncout<<\"Equal\"<<endl;\n}\nelse\n{\ncout<<\"Not equal\"<<endl;\n}",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-01.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "sourcePage": 1
   },
   "gesp-2024-09-3-02": {
     "id": "gesp-2024-09-3-02",
@@ -9474,7 +9815,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "cout<<result<<endl;\nlong a2 = -123;\nunsigned int b2 = -1;\nlong result2 = a2 & b2;\ncout<<result2<<endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-10.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-09-3-11": {
     "id": "gesp-2024-09-3-11",
@@ -9512,7 +9856,10 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-09-3-13": {
     "id": "gesp-2024-09-3-13",
@@ -9571,7 +9918,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "string str = \"Hello,CHAD\";\ncout << str.find(\"A\") << '\\n';",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-09-3-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
+    "sourcePage": 4
   },
   "gesp-2024-12-3-01": {
     "id": "gesp-2024-12-3-01",
@@ -9705,7 +10055,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "string s = \"1234@@chenadai\";\nstring str = \"12345\";\ns.replace(1, 5, str);\ncout << s << endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-3-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-12-3-08": {
     "id": "gesp-2024-12-3-08",
@@ -9744,7 +10097,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "{\n    cout<<\"right\"<<endl;\n    }\nelse if (ch[5]=='\\0') {\n    cout<<\"wrong\"<<endl;\n    }\nelse {\n    cout<<\"hello\"<<endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-3-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-12-3-10": {
     "id": "gesp-2024-12-3-10",
@@ -9784,7 +10140,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a=65;\ncout<<tolower(a)<<endl;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-3-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1650388837072928.pdf",
+    "sourcePage": 3
   },
   "gesp-2024-12-3-12": {
     "id": "gesp-2024-12-3-12",
@@ -9889,7 +10248,7 @@
     "source": "gesp",
     "year": 2024,
     "knowledgePoint": "数据类型与运算",
-    "question": "下⾯代码的描述中，正确的是（ ）。 1 void n_chars(char c, int n) {",
+    "question": "下面代码的描述中，正确的是（ ）。",
     "options": [
       "A. 代码执⾏结束后，times的值为0",
       "B. n是形参，times是实参",
@@ -9901,7 +10260,7 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "}\nchar my_char = 'w';\nint times = 5;\nn_chars(my_char, times);",
+    "code": "void n_chars(char c, int n) {\n}\nchar my_char = 'w';\nint times = 5;\nn_chars(my_char, times);",
     "level": 4
   },
   "gesp-2024-12-4-03": {
@@ -9942,7 +10301,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "cout << p_arr[0] << endl;\np_arr -= 1;\ndelete p_arr;",
-    "level": 4
+    "level": 4,
+    "image": "/course-data/gesp-code-images/gesp-2024-12-4-04.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1650239710691360.pdf",
+    "sourcePage": 2
   },
   "gesp-2024-12-4-05": {
     "id": "gesp-2024-12-4-05",
@@ -10293,7 +10655,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int a = -5;\nunsigned int b = a;\ncout << b;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-07.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "sourcePage": 2
   },
   "gesp-2025-03-3-08": {
     "id": "gesp-2025-03-3-08",
@@ -10333,7 +10698,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int main() {\n    int decimal = 255;\n    —————————————————— return 0;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-09.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "sourcePage": 6
   },
   "gesp-2025-03-3-10": {
     "id": "gesp-2025-03-3-10",
@@ -10373,7 +10741,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int main() {\n    int arr[] = {\n        3, 7, 2, 9, 5}\n    int maxIndex = 0;\n    for (int i = 1;\n        i < 5;\n        i++) {\n            ———————————————————————————————— {\n                maxIndex = i;\n                }\n            }\n        cout << maxIndex;\n        return 0;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "sourcePage": 3
   },
   "gesp-2025-03-3-12": {
     "id": "gesp-2025-03-3-12",
@@ -10392,8 +10763,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int main() {\n    int arr[] = {\n        1, 2, 3, 4, 5}\n    int left = 0, right = 4;\n    while (left < right) {\n        while (arr[left] % == && left < right) left++;\n            ———————————————————————————————————————————————————— if (left < right) {\n                swap(arr[left], arr[right]);\n                }\n            }\n        for (int i = 0;\n            i < 5;\n            i++) {\n                cout << arr[i] << \" \";\n                }\n            return 0;",
-    "level": 3
+    "code": "#include <iostream>\nusing namespace std;\n|int main() {\nint arr[] = {1, 2, 3, 4, 5};\nint left = 0, right = 4;\nwhile (left < right) {\nwhile (arr[left] % 2 == 1 && left < right) left++;\nif (left < right) {\nswap(arr[left], arr[right]);\n}\n}\nfor (int i = 0; i < 5; i++) {\ncout << arr[i] << \" \"5\n}\nreturn 0;\n}\n() A. while (arr[left] % 2 == 0 & left < right) right--;\nCB. while (arr[right] % 2 == 0 && left < right) left--;\nOC. while (arr[right] % 2 != 0 && left < right) right--;\n© D. while (arr[right] % 2 == 0 && left < right) right--;",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-12.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "sourcePage": 4
   },
   "gesp-2025-03-3-13": {
     "id": "gesp-2025-03-3-13",
@@ -10432,8 +10806,11 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "using namespace std;\nint main() {\n    string str = \"HelloC++\";\n    _________________ _________________ return 0;",
-    "level": 3
+    "code": "#include <iostream>\n#include <string>\nusing namespace std;\n|int main() {\nstring str = \"HelloC++\";\nreturn 0;\nstr.insert(4, \"World\");\n9)     cnint ee etr cihetr(da aA).",
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-14.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "sourcePage": 5
   },
   "gesp-2025-03-3-15": {
     "id": "gesp-2025-03-3-15",
@@ -10453,7 +10830,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "__________________________ cnt++;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2025-03-3-15.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1670868226801696.pdf",
+    "sourcePage": 5
   },
   "gesp-2025-03-4-01": {
     "id": "gesp-2025-03-4-01",
@@ -10578,7 +10958,7 @@
     "source": "gesp",
     "year": 2025,
     "knowledgePoint": "C++语法基础",
-    "question": "给定如下代码， 1 struct Person { 2 std::string name;",
+    "question": "给定如下代码，下面描述错误的是（ ）。",
     "options": [
       "A. 结构Person内嵌套结构Address",
       "B. Person 有⼀个Address 类型的 address 成员",
@@ -10590,7 +10970,7 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "std::string street;\nstd::string city;\n}\nAddress address;\n}\n下⾯描述错误的是（ ）。",
+    "code": "struct Person {\n    std::string name;\n    struct Address {\n        std::string street;\n        std::string city;\n    } address;\n}",
     "level": 4
   },
   "gesp-2025-03-4-08": {
@@ -10957,7 +11337,10 @@
     "questionType": "choice",
     "hasImage": false,
     "code": "int main() {\n    int count = 0;\n    for (int i = 100;\n        i <= 999;\n        i++) {\n            int a = i / 100;\n            ———————————————————— int c = i % 10;\n            if (a * a + b * b == c * c) {\n                count++;\n                }\n            }\n        cout << count << endl;\n        return 0;",
-    "level": 3
+    "level": 3,
+    "image": "/course-data/gesp-code-images/gesp-2025-06-3-11.png",
+    "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1699464809021472.pdf",
+    "sourcePage": 2
   },
   "gesp-2025-06-3-12": {
     "id": "gesp-2025-06-3-12",
@@ -11345,5 +11728,1243 @@
     "difficulty": 2,
     "questionType": "choice",
     "hasImage": false
+  },
+  "gesp-2026-06-1-01": {
+    "id": "gesp-2026-06-1-01",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "条件判断",
+    "question": "学校组织到未来农场参观,小明听讲解员介绍,在智能温室中,湿度传感器可以连续检测土壤的湿度变化,并将检测到的湿度数据实时发送给中央控制器。中央控制器根据这些数据判断是否开启灌溉系统。请问,这里的湿度传感器所发挥的作用,类似于计算机系统中的哪一类组件?( )",
+    "options": [
+      "A. 处理器",
+      "B. 存储器",
+      "C. 输入设备",
+      "D. 输出设备"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-02": {
+    "id": "gesp-2026-06-1-02",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "函数/结构体",
+    "question": "在使用某集成开发环境(比如 Dev-C++)来编辑源代码文件时,程序员经常需要在编辑区中对代码进行各种修改。以下关于在编辑区中执行的操作描述不正确的( )。",
+    "options": [
+      "A. 可以将变量名 count 统一修改为 number",
+      "B. 可以连续撤销最近 次输入的内容",
+      "C. 可以调整代码行的缩进(如按 Tab 键)",
+      "D. 在注释文本中间不能混用中英文"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-03": {
+    "id": "gesp-2026-06-1-03",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "输入输出",
+    "question": "有关如下 C++ 代码的说法,正确的是( )。",
+    "code": "float a = 3 + 3.5;\ncout << a;",
+    "options": [
+      "A. 代码执行将报错。如果将 a = 3 + 3.5 改为 a = 3 + 3 + 1/2 将能正常执行。",
+      "B. 代码执行将报错。如果将 a = 3 + 3.5 改为 a = 3.0 + 3.5 将能正常执行。",
+      "C. 代码能正常执行,将输出 6 。",
+      "D. 代码能正常执行,将输出 6.5 。"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-04": {
+    "id": "gesp-2026-06-1-04",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "表达式与运算",
+    "question": "下列 C++ 表达式与 - 2 * 2 % 4 的值不同的是( )。",
+    "options": [
+      "A. - (2 * 2) % 4",
+      "B. (- 2 * 2) % 4",
+      "C. - 2 * (2 % 4)",
+      "D. (2 * 2) % - 4"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-05": {
+    "id": "gesp-2026-06-1-05",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "输入输出",
+    "question": "执行如下 C++ 代码片段,其输出是( )。",
+    "code": "int a = 3;\nint b = a;\na = 4;\nprintf(\"%d %d\", a, b);",
+    "options": [
+      "A. 3 3",
+      "B. 4 3",
+      "C. 4 4",
+      "D. 3 4"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-06": {
+    "id": "gesp-2026-06-1-06",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "输入输出",
+    "question": "如下 C++ 代码执行时输入 2026-6-27 ,下列说法正确的是( )。",
+    "code": "int N;\ncin >> N;\ncout << N;",
+    "options": [
+      "A. 输入失败,不允许输入减号,没有输出",
+      "B. 允许输入,输出 1993",
+      "C. 允许输入并原样输出 2026-6-27",
+      "D. 允许输入并输出 2026"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-07": {
+    "id": "gesp-2026-06-1-07",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "条件判断",
+    "question": "如下 C++ 代码执行时,其说法错误的是( )。",
+    "code": "int N, M;\ncin >> N >> M;\nif (N > M)\ncout << \"A \" << (N - M);\nelse\ncout << \"B \" << (M - N);",
+    "options": [
+      "A. 如果输入 4 3 ,将输出 A 1",
+      "B. 如果输入 3 4 ,将输出 B 1",
+      "C. 如果输入 3 3 ,将输出 A 0",
+      "D. 如果输入 4 4 ,将输出 B 0"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-08": {
+    "id": "gesp-2026-06-1-08",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "阅读如下 C++ 代码,下列说法错误的是( )。",
+    "code": "int cnt = 0;\nfor (int i = 0; i < 5; i++)\ncnt += 1;\ncout << cnt;",
+    "options": [
+      "A. 将 cnt += 1 修改为 cnt = cnt + 1 ,执行效果相同",
+      "B. 将 cnt += 1 修改为 cnt = 1 + cnt ,执行效果相同",
+      "C. 将 cnt += 1 修改为 cnt =+ 1 ,执行效果相同",
+      "D. 将 cnt += 1 修改为 cnt = + 1 + cnt ,执行效果相同"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-09": {
+    "id": "gesp-2026-06-1-09",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "如下 C++ 代码执行后输出是 1 2 3 4 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8",
+    "code": "10 11 5 6 7 。横线处应该先后依次填入的运算符是( )。\nint num = 1;\nfor (int i = 0; i < 35; i++) {\nprintf(\"%d \", num);\nif (num _______ 10)\nnum _______ 2;\nelse\nnum _______ 1;\n}",
+    "options": [
+      "A. > /= +=",
+      "B. >= %= +=",
+      "C. > %= +=",
+      "D. > /= =+"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-10": {
+    "id": "gesp-2026-06-1-10",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "如下 C++ 代码可以执行,其输出是( )。",
+    "code": "int i;\nfor (i = 1; i < 5; i++)\nif (i % 2 == 0) {\ncontinue;\ncout << i << \"#\";\n}\ncout << i << \"END#\";",
+    "options": [
+      "A. 5END#",
+      "B. 5#END",
+      "C. 1#3#4#END",
+      "D. 1#3#4 END#"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-11": {
+    "id": "gesp-2026-06-1-11",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "如下 C++ 代码执行时,下列说法正确的是( )。",
+    "code": "int N, i;\ncin >> N;\nfor (i = 2; i < N; i++)\nif (N % i == 0) {\ncout << \"1#\";\nbreak;\n} else\ncout << \"0#\";",
+    "options": [
+      "A. 如果输入 2 ,将输出 1# 。",
+      "B. 如果输入 15 ,将输出 0#1# 。",
+      "C. 如果输入 1 ,将输出 0# 。",
+      "D. 如果输入 3 ,将输出 1# 。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-12": {
+    "id": "gesp-2026-06-1-12",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "有关如下 C++ 代码,下列说法中错误的是( )。",
+    "code": "int i, tot;\ni = 0, tot = 0;\nwhile (0 <= i && i < 10) {\ntot += 1;\ni += 1;\n}\ncout << tot;",
+    "options": [
+      "A. 如果调整 0 <= i && i < 10 为 1 <= i && i < 10 ,输出同样为 45 ,因为加上 0 不影响结果。",
+      "B. 如果将 i = 0 和 tot = 0 合并为 i = tot = 0 ,执行结果与修改前相同。",
+      "C. 将 tot += 1 与 i += 1 交换顺序,执行结果与修改前相同。",
+      "D. 将 i = 0 与 tot = 0 交换顺序,执行结果与修改前相同。"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-13": {
+    "id": "gesp-2026-06-1-13",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "以下 C++ 代码可以找出千位、百位、十位和个位满足特定条件的四位数(例如各位数字的四次方和等于原数,即“四叶玫瑰数”),横线处应该填入的是( )。",
+    "code": "int count = 0;\nfor (int n = 1000; n <= 9999; n++) {\nint a = n / 1000;\nint b = (n / 100) % 10;\n_________________________ // L1\nint d = n % 10;\nif (a * a * a * a + b * b * b * b + c * c * c * c + d * d * d * d == n) { // 特定条件\ncount++;\n}\n}",
+    "options": [
+      "A. int c = (n / 10) / 10;",
+      "B. int c = (n / 10) % 10;",
+      "C. int c = (n % 10) / 10;",
+      "D. int c = (n % 10) % 10;"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-14": {
+    "id": "gesp-2026-06-1-14",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "条件判断",
+    "question": "下面的 C++ 代码用于计算经过 n 秒后的秒针位置( ),两处横线处分别应填入的代码是( )。",
+    "code": "int start, n, pos;\ncout << \"当前秒数(0-59): \";\ncin >> start;\ncout << \"经过多少秒: \";\ncin >> n;\npos = ____________; // L1\nif (____________) // L2\ncout << n << \"秒后回到12点方向\" << endl;\nelse\ncout << n << \"秒后指向\" << pos << \"秒刻度\" << endl;",
+    "options": [
+      "A. (start + n) / 60 和 pos == 0",
+      "B. (start + n) % 60 和 pos == 0",
+      "C. (start + n) / 60 和 pos <= 0",
+      "D. (start + n) % 60 和 pos = 0"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-1-15": {
+    "id": "gesp-2026-06-1-15",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "函数/结构体",
+    "question": "如果正整数 N 只能被 1 和它本身整除,则它是一个质数(或素数)。下面的 C++ 代码用于判断正整数N 是否为质数(素数)。若 N 是质数,输出 YES ,否则输出 NO 。横线处不应填入的代码是( )。",
+    "code": "int N, i;\ncin >> N;\nif (N <= 1) {\ncout << \"NO\";\nreturn 0;\n}\nfor (i = 2; ______; i++) {\nif (N % i == 0) {\ncout << \"NO\";\nreturn 0;\n}\n}\ncout << \"YES\";",
+    "options": [
+      "A. i < N",
+      "B. i <= N",
+      "C. i <= N / 2",
+      "D. i * i <= N"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 1,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1
+  },
+  "gesp-2026-06-2-01": {
+    "id": "gesp-2026-06-2-01",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "条件判断",
+    "question": "学校组织到未来农场参观,小明听讲解员介绍,在智能温室中,湿度传感器可以连续检测土壤的湿度变化,并将检测到的湿度数据实时发送给中央控制器。中央控制器根据这些数据判断是否开启灌溉系统。请问,这里的湿度传感器所发挥的作用,类似于计算机系统中的哪一类组件?( )",
+    "options": [
+      "A. 处理器",
+      "B. 存储器",
+      "C. 输入设备",
+      "D. 输出设备"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-02": {
+    "id": "gesp-2026-06-2-02",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "GESP 2026年6月2级真题",
+    "question": "小明去农场参观回来后就在自己的电脑上安装了一个 3D 农场仿真模拟系统,因为他今年买的二手电脑有点老旧,系统运行时经常弹出“系统内存不足”的警告,导致系统卡顿严重。他计划通过增加物理内存来解决问题。请问他应该购买以下哪种硬件组件?( )",
+    "options": [
+      "A. 机械硬盘",
+      "B. 内存条",
+      "C. 图形显卡",
+      "D. 移动硬盘"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-03": {
+    "id": "gesp-2026-06-2-03",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "输入输出",
+    "question": "有关如下 C++ 代码的说法,正确的是( )。",
+    "code": "float a = 3 + 3.5;\ncout << a;",
+    "options": [
+      "A. 代码执行将报错。如果将 a = 3 + 3.5 改为 a = float(3) + 3.5 将能正常执行。",
+      "B. 代码执行将报错。如果将 a = 3 + 3.5 改为 a = 3.0 + 3.5 将能正常执行。",
+      "C. 代码能正常执行,将输出 6 。",
+      "D. 代码能正常执行,将输出 6.5 。"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-04": {
+    "id": "gesp-2026-06-2-04",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面选择项中,与 C++ 表达式 not (x > 5 or y <= 10) 等价的是( )。",
+    "options": [
+      "A. x <= 5 or y > 10",
+      "B. x > 5 and y <= 10",
+      "C. x <= 5 and y > 10",
+      "D. not x > 5 and not y <= 10"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-05": {
+    "id": "gesp-2026-06-2-05",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "输入输出",
+    "question": "小明在某开发环境中执行 C++ 代码 cout << (2.5 + 2.25) << ' ' << (2.2 + 2.1) 时输出 4.754.300000000000001 ,其原因最可能是( )。",
+    "options": [
+      "A. C++ 的 + 运算符在处理浮点数时有时正确,有时错误",
+      "B. 某些浮点数难以精确表示,导致微小误差",
+      "C. + 运算符不能用于浮点数,只能用于整数",
+      "D. 因为 cout 函数难以输出太长的数值"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-06": {
+    "id": "gesp-2026-06-2-06",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "执行如下 C++ 程序后,当输入 4 时,输出的最后一行是( )。",
+    "code": "int n;\ncin >> n;\nfor (int i = n; i > 0; i--) {\nfor (int j = 0; j < i; j++)\ncout << j + 1 << ' ';\ncout << endl;\n}",
+    "options": [
+      "A. 0",
+      "B. 1",
+      "C. 1 2",
+      "D. 1 2 3 4"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-07": {
+    "id": "gesp-2026-06-2-07",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "下面的 C++ 代码执行后其输出是( )。",
+    "code": "int tnt = 0;\nfor (int i = 1; i < 5; i += 3) {\nfor (int j = 0; j < i; j++)\ntnt += 1;\ncout << tnt << \"#\";\n}\ncout << tnt;",
+    "options": [
+      "A. 1#5#5",
+      "B. 1#5#5#",
+      "C. 1#5#12#12",
+      "D. 0"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-08": {
+    "id": "gesp-2026-06-2-08",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "下面的 C++ 代码执行之后的输出是( )。",
+    "code": "int i;\nfor (i = -2; i < 2; i++)\nif (not i % 3 == 0)\ncout << i << \"#\";\ncout << i;",
+    "options": [
+      "A. -2#-1#1#2",
+      "B. -2#-1#1#2#3",
+      "C. 1#2#3",
+      "D. 0#1#2#3"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-09": {
+    "id": "gesp-2026-06-2-09",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "下面的 C++ 代码执行后其输出是( )。",
+    "code": "int cnt = 0, i, j;\nfor (i = 0; i < 3; i++) {\nj = i;\nwhile (j) {\ncnt += 1;\nj -= 1;\n}\n}\ncout << i << ' ' << j << ' ' << cnt;",
+    "options": [
+      "A. 3 0 3",
+      "B. 2 0 4",
+      "C. 2 0 5",
+      "D. 3 0 5"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-10": {
+    "id": "gesp-2026-06-2-10",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "下面 C++ 代码执行后其输出是( )。",
+    "code": "int count = 0, i, j;\nfor (i = 1; i < 4; i++)\nfor (j = 0; j < i; j++) {\nif (j % 3 != 0)\ncontinue;\ncount += 1;\nbreak;\n}\ncout << i << ' ' << j << ' ' << count;",
+    "options": [
+      "A. 4 0 4",
+      "B. 3 0 0",
+      "C. 3 2 0",
+      "D. 4 0 3"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-11": {
+    "id": "gesp-2026-06-2-11",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "如下 C++ 代码执行后输出是 1 2 3 4 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7",
+    "code": "9 10 11 5 6 7 。横线处应该填入的运算符是( )。\nint num = 1;\nfor (int i = 0; i < 35; i++) {\ncout << num << \" \";\nif (num _______ 10)\nnum _______ 2;\nelse\nnum _______ 1;\n}",
+    "options": [
+      "A. > /= +=",
+      "B. >= %= +=",
+      "C. > /= =+",
+      "D. >= %= =+"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-12": {
+    "id": "gesp-2026-06-2-12",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "如下数字图形在通过执行后续的 C++ 代码时,输入 10 来输出。横线处应填入的代码是( )。",
+    "code": "1 1 1 1 1 1 1 1 1 1\n1 1 0 0 0 0 0 0 0 1\n1 0 1 0 0 0 0 0 0 1\n1 0 0 1 0 0 0 0 0 1\n1 0 0 0 1 0 0 0 0 1\n1 0 0 0 0 1 0 0 0 1\n1 0 0 0 0 0 1 0 0 1\n1 0 0 0 0 0 0 1 0 1\n1 0 0 0 0 0 0 0 1 1\n1 1 1 1 1 1 1 1 1 1\nint N;\ncin >> N;\nfor (int i = 1; i < N + 1; i++) {\nfor (int j = 1; j < N + 1; j++)\nif (________)\ncout << \"1 \";\nelse\ncout << \"0 \";\ncout << endl;\n}",
+    "options": [
+      "A. i == j and i == 1 and j == 1 and i == N and j == N",
+      "B. i == j or i == 1 or j == 1 or i == N or j == N",
+      "C. i == j or i == 0 or j == 0 or i == (N + 1) or j == (N + 1)",
+      "D. i == j and i == 1 and j == 1 and i == (N + 1) and j == (N + 1)"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-13": {
+    "id": "gesp-2026-06-2-13",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "算法基础",
+    "question": "英文 corner case 通常翻译为极端案例或边角案例,通常指正常范围以外的问题或者情形。在如下 C++代码中,变量都是整型,则 corner case 最应该是( )。",
+    "code": "int tnt = 0, cnt = 0;\nwhile (1) {\nint score;\ncin >> score;\nif (score == -1)\nbreak;\ntnt += score;\ncnt += 1;\n}\ncout << tnt / cnt;",
+    "options": [
+      "A. tnt = 0, cnt = 0 是 corner case ,应分为两行",
+      "B. while(1) 是 corner case ,因为 while(1) 将会导致死循环",
+      "C. cin >> score 是 corner case ,因为输入数据前应该提示整型数据",
+      "D. cout << tnt / cnt 是 corner case ,因为如果直接输入 -1 ,将导致执行错误,虽然这种情况较为罕\n见"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-14": {
+    "id": "gesp-2026-06-2-14",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "如下 C++ 代码执行后,输入 4 后,输出的数字图形是( )。",
+    "code": "int n;\ncin >> n;\nfor (int i = n; i > 0; i--) {\nfor (int j = 0; j < n - i; j++)\ncout << \"0 \";\nfor (int k = 0; k < i; k++)\ncout << k + 1 << \" \";\ncout << endl;\n}",
+    "options": [
+      "A.\n1 2 3 4\n1 2 3 0\n1 2 0 0\n1 0 0 0",
+      "B.\n1 2 3 4\n0 1 2 3\n0 0 1 2\n0 0 0 1",
+      "C.\n1 2 3 4\n2 3 4 0\n3 4 0 0\n4 0 0 0",
+      "D.\n0 0 0 1\n0 0 1 2\n0 1 2 3\n1 2 3 4"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-2-15": {
+    "id": "gesp-2026-06-2-15",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "循环结构",
+    "question": "某学校举办“校园演讲比赛”，每位选手由 8 位评委打分（分数为 0 ~ 10 的整数），且每位评委必须打分。计分规则：去掉一个最高分，去掉一个最低分。如下程序通过键盘先输入选手编号，然后依次输入 8 个分数，并计算最终得分。下列说法正确的是（ ）。",
+    "code": "for (int i = 0; i < 10; i++) {\nint id, score;\nprintf(\"输入选手编号: \");\nscanf(\"%d\", &id);\nint max_score = 0, min_score = 100; // 最高分和最低分\nint total_score = 0; // 总分\nfor (int j = 1; j < 9; j++) {\nprintf(\"输入选手第%d个成绩:\", j);\nscanf(\"%d\", &score);\nif (max_score < score)\nmax_score = score;\nif (min_score > score)\nmin_score = score;\ntotal_score += score;\n}\ntotal_score = total_score - max_score - min_score;\nprintf(\"%d号选手的成绩:\\\n去掉一个最高分%d,\\\n去掉一个最低分%d,\\\n最后成绩是:%d\", id, max_score, min_score, total_score);\n}",
+    "options": [
+      "A. 上述代码能完成题目要求",
+      "B. max_score = 0, min_score = 100 应修改为 max_score = 0, min_score = 0",
+      "C. max_score < score 和 min_score > score 必须相应修改为 <= 和 >=",
+      "D. total_score = total_score - max_score - min_score 不能达到预期,可修改如下:\nint total = total_score - max_score - min_score;\ntotal_score = total;"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2
+  },
+  "gesp-2026-06-3-01": {
+    "id": "gesp-2026-06-3-01",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "关于计算机的数据编码,下面说法正确的是( )。",
+    "options": [
+      "A. 机器数 1000 1101B 的真值可能是 -13 (如果它是原码)或 141 (如果它是无符号数)等数,这取决于我\n们如何解释它。",
+      "B. 计算机中,所有数据最终都以二进制、八进制、十六进制的形式存储和运算。",
+      "C. 字节( Byte )是计算机中最小的数据单位。位( bit )是计算机中最小的存储单位。",
+      "D. 计算机中, 1k 字节是 1000 字节的意思。"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-02": {
+    "id": "gesp-2026-06-3-02",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "计算机厂商为了计算方便，一般采用 1000 进制。如果我们买的厂商标注的是 1 TB 的硬盘，它实际的存储容量是（ ）。",
+    "options": [
+      "A. 1000 × 1000 × 1000 × 1000 ÷ 1024 ÷ 1024 ÷ 1024b = 931Gb",
+      "B. 1000 × 1000 × 1000 × 1000 ÷ 1024 ÷ 1024 ÷ 1024B = 931GB",
+      "C. 1024 × 1024 × 1024 × 1024 ÷ 1000 ÷ 1000 ÷ 1024B = 1049GB",
+      "D. 1000 × 1024 × 1024 × 1024 ÷ 1024 ÷ 1024 ÷ 1024b = 977Gb"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-03": {
+    "id": "gesp-2026-06-3-03",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "低 4 位、高 4 位压缩技术，适用于数据仅使用字节的一部分（如仅用低 4 位）的场景。字节结构：一个字节为 8 位，分为高 4 位（高位）和低 4 位（低位）。当数据是十六进制数（0 ~ 15，即 0x0 到 0xF），每个值仅需 4 位表示，高 4 位全为 0。将两个相邻的 4 位值合并为一个字节。四个数据 0x1、0x2、0x3、0x4 采用上述压缩技术压缩以后是（ ）。",
+    "options": [
+      "A. 12D 、 34D",
+      "B. 12Q 、 34Q",
+      "C. 12H 、 34H",
+      "D. 00010011B 、 00110101B"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-04": {
+    "id": "gesp-2026-06-3-04",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "关于计算机编码中反码和补码,下面说法错误的是( )。",
+    "options": [
+      "A. 负数的补码，一个快速方法是从右往左扫描正数的二进制形式，遇到第一个 1 之后，左边的所有位都取反。",
+      "B. 对于一个 n 位的二进制数：最大表示范围：[-(2^(n-1))-1, +(2^(n-1)-1)]。",
+      "C. 反码减法可以统一为加法。符号位可以直接参与运算。",
+      "D. 反码表示中，0 的表示不唯一：0000 0000B 和 1111 1111B。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-05": {
+    "id": "gesp-2026-06-3-05",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "一种加密方式是字符数组与密钥 KEY 、运算方式分开传输,比如字符数组 char text[4] = {'G', 'E','S', 'P'}; 由一种传输方式发送,密钥 KEY = 2026 通过另一种发送方式发送,运算方式 char function[4]= {'|', '-', '^', '+'}; 又是另一种发送方式发送。三种数据都到达目的地以后,分别进行例如 'G' |最终的内容是( )。",
+    "code": "、 'E' - 2 、 'S' ^ 0 、 'P' + 2 等计算,来得到相应的真实内容,上述 GESP 通过这种加密方式,加密以后",
+    "options": [
+      "A. GCSR",
+      "B. RSCG",
+      "C. GCSA",
+      "D. BCSR"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-06": {
+    "id": "gesp-2026-06-3-06",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "关于位运算,下列说法错误的是( )。",
+    "options": [
+      "A. 找唯一数：数组中唯一出现一次的数，其余出现两次，全部异或结果即为该数。例如：数组 [5, 7, 9, 7, 5]（唯一数是 9）。",
+      "B. 交换两个数：a ^= b; b ^= a; a ^= b;（无需临时变量）。",
+      "C. 将二进制位整体左移 n 位，高位溢出舍弃，低位补 0；等价于 num 乘以 2^n。",
+      "D. 对每一个二进制位取反，包括符号位，简单运算规则是 ~n = -n - 1。"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-07": {
+    "id": "gesp-2026-06-3-07",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "关于字符串和字符数组,下列说法正确的是( )。",
+    "options": [
+      "A.\nchar str[] = \"GESP\";\nint len1 = sizeof(str);\nint len2 = strlen(str);\n上面程序能够正确执行, len1 与 len2 相等。",
+      "B.\nchar str1[4] = \"GESP\";\nchar str2[4] = {'G', 'E', 'S', 'P'};\n这段程序将能够正确执行。",
+      "C.\nchar str2[4] = {'G', 'E', 'S', 'P'};\nstrcpy(str2, \"HELLO,GESP\");\ncout << str2 << endl;\n这段程序即使能够运行,但是存在覆盖数组以外的内存空间的行为,可能会引起严重错误。",
+      "D.\nchar dest[4] = {'G', 'E', 'S', 'P'};\nchar src[] = \"HELLO\";\nstrcat(dest, src);\ncout << dest << endl;\n这段程序能够正确执行,不存在数组越界行为。"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-08": {
+    "id": "gesp-2026-06-3-08",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "计算机中的 2 KB 等于多少 bit ( )。",
+    "options": [
+      "A. 16384",
+      "B. 20000",
+      "C. 2000",
+      "D. 2048"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-09": {
+    "id": "gesp-2026-06-3-09",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "在 C++ 中，对于 32 位有符号整数 int 类型数据 n，关于按位取反运算符 ~，下列说法正确的是（ ）。",
+    "options": [
+      "A. ~6 的结果是 5 。",
+      "B. 按位取反满足公式 ~n = -n - 1 。",
+      "C. ~0 的结果是 1 。",
+      "D. ~(-2) 的结果是 -1 。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-10": {
+    "id": "gesp-2026-06-3-10",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "关于计算机中的二进制编码表示,下列说法错误的是( )。",
+    "options": [
+      "A. 原码是最直观的一种有符号数表示方法。最高位（最左边的位）为符号位：0 表示正数，1 表示负数，其余位为数值位（真值的绝对值）。",
+      "B. 补码完美解决了原码和反码的缺陷，是现代计算机中表示有符号整数的标准方式。正数的补码与其原码、反码相同；负数的补码是将其对应正数的原码按位取反（得到反码），然后加 1。",
+      "C. 计算补码的一个更快的技巧：从右往左扫描正数的二进制形式，遇到第一个 1 之后，左边的所有位都取反。",
+      "D. 对于一个 n 位的二进制数，补码最大表示范围为 [-2^(n-1), +2^(n-1)]。"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-11": {
+    "id": "gesp-2026-06-3-11",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "下面选项中提到的变量都是正整数,关于位运算,下面说法错误的是( )。",
+    "options": [
+      "A. num & 1，结果为 1 则奇数，0 则偶数（仅看最低位）。",
+      "B. num & 0xFF 保留低 8 位。",
+      "C. num & b 的结果一定小于等于 num。",
+      "D. 若 num 左移导致高位溢出（如超过整型范围），结果符合乘法规律。"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-12": {
+    "id": "gesp-2026-06-3-12",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "表达式与运算",
+    "question": "a=7, b=3, c=14, d=15, e=8 ,对于运算表达式 !a << b & c ^ d | e 的结果是( )。",
+    "options": [
+      "A. 0",
+      "B. 15",
+      "C. 7",
+      "D. 14"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-13": {
+    "id": "gesp-2026-06-3-13",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "关于 string 的成员函数,下面说法错误的是( )。",
+    "options": [
+      "A. size() :返回字符串长度(字符个数,不含 '\\0' )。",
+      "B. length() 与 size() 功能完全一致,返回字符串长度。",
+      "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
+      "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-14": {
+    "id": "gesp-2026-06-3-14",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "以下数组定义,符合 C++ 语法的是( )。",
+    "options": [
+      "A. int [10] a;",
+      "B. int b['&'];",
+      "C. int c[*];",
+      "D. double d[10.0];"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-3-15": {
+    "id": "gesp-2026-06-3-15",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "现在有一个数，请你分别判断它们是否可能是二进制、八进制、十进制、十六进制。例如，6AFF 就只可能是十六进制，而 1011 则是四种进制皆有可能。输入 N（保证 1 <= N <= 1000），表示有 N 个数让你进行判断，接下来输入 N 个字符串（保证所有字符串长度不超过 10），判断可能是四个进制当中的哪个进制数。输出 N 行，每行 4 个数，用空格隔开，分别表示给定的字符串是否可能表示一个二进制数、八进制数、十进制数、十六进制数。使用 1 表示可能，使用 0 表示不可能。下面程序横线处可以满足这个要求的是（ ）。",
+    "code": "#include <iostream>\nusing namespace std;\nint main() {\nint n = 0;\ncin >> n;\nfor (int i = 0; i < n; i++) {\nchar str[11];\ncin >> str;\nchar max = '0';\nfor (int i = 0; str[i] != '\\0'; i++)\nif (str[i] > max)\nmax = str[i];\n___________________________________________\n}\nreturn 0;\n}",
+    "options": [
+      "A. cout << (max >= '1') << \" \" << (max >= '7') << \" \" << (max >= '9') << \" \" << (max >=\n'F') << endl;",
+      "B. cout << (max <= '1') << \" \" << (max <= '7') << \" \" << (max <= '9') << \" \" << (max <=\n'F') << endl;",
+      "C. cout << (max = '1') << \" \" << (max = '7') << \" \" << (max = '9') << \" \" << (max = 'F')\n<< endl;",
+      "D. cout << (max < '1') << \" \" << (max < '7') << \" \" << (max < '9') << \" \" << (max < 'F')\n<< endl;"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 3,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3
+  },
+  "gesp-2026-06-4-01": {
+    "id": "gesp-2026-06-4-01",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "函数/结构体",
+    "question": "小杨正在编写一个“数字交换器”程序,他希望通过函数交换两个变量的值。请问运行以下代码后,屏幕上输出的是( )。",
+    "code": "void exchange(int *a, int &b) {\nint t = *a;\n*a = b;\nb = t;\n}\nint main() {\nint x = 100, y = 200;\nexchange(&x, y);\ncout << x << \" \" << y;\nreturn 0;\n}",
+    "options": [
+      "A. 100 200",
+      "B. 200 100",
+      "C. 200 200",
+      "D. 编译错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-02": {
+    "id": "gesp-2026-06-4-02",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "函数/结构体",
+    "question": "下面程序想通过函数计算三门课总分,横线处应填入的是( )。",
+    "code": "int sumScore(int a, int b, int c) {\nreturn a + b + c;\n}\nint main() {\nint chinese = 88, math = 95, english = 90;\nint total = __________;\ncout << total;\nreturn 0;\n}",
+    "options": [
+      "A. sumScore",
+      "B. sumScore(chinese, math, english)",
+      "C. sumScore(int chinese, int math, int english)",
+      "D. sumScore(a, b, c)"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-03": {
+    "id": "gesp-2026-06-4-03",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "函数/结构体",
+    "question": "下面程序输出结果是( )。",
+    "code": "int addOne(int x) {\nreturn x + 1;\n}\nint main() {\nint a = 6;\ncout << addOne(a) + addOne(3);\nreturn 0;\n}",
+    "options": [
+      "A. 9",
+      "B. 10",
+      "C. 11",
+      "D. 12"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-04": {
+    "id": "gesp-2026-06-4-04",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "函数/结构体",
+    "question": "关于下面程序,说法正确的是( )。",
+    "code": "void show() {\nint stars = 5;\n}\nint main() {\ncout << stars;\nreturn 0;\n}",
+    "options": [
+      "A. 程序输出 5",
+      "B. 程序可以通过编译,但输出随机值",
+      "C. 程序不能通过编译,因为 stars 只在 show 函数中有效",
+      "D. 程序不能通过编译,因为 cout 不能输出变量"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-05": {
+    "id": "gesp-2026-06-4-05",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "表达式与运算",
+    "question": "小杨在调试一个“等级提升”系统,代码逻辑如下,执行后 *p 的值是( )。",
+    "code": "int lv = 5, next_lv = 6;\nint *p = &lv;\n*p = *p + 1;\np = &next_lv;",
+    "options": [
+      "A. 5",
+      "B. 6",
+      "C. lv 的地址",
+      "D. next_lv 的地址"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-06": {
+    "id": "gesp-2026-06-4-06",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "计算机基础",
+    "question": "小杨正在开发一款名为“星际网格”的游戏，他用二维数组 int map[5][4]; 来表示地图。已知 int 占 4 字节，如果 map 的内存地址是 0x2000，则表达式 &map + 1 的地址值是（ ）。",
+    "options": [
+      "A. 0x204c",
+      "B. 0x205c",
+      "C. 0x2050",
+      "D. 0x2058"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-07": {
+    "id": "gesp-2026-06-4-07",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "表达式与运算",
+    "question": "执行完下面代码后,变量 val 的值是( )。",
+    "code": "int data[] = {10, 20, 30, 40, 50};\nint *ptr = data + 2;\nint val = *(ptr - 1) + *(ptr + 1);",
+    "options": [
+      "A. 50",
+      "B. 60",
+      "C. 70",
+      "D. 80"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-08": {
+    "id": "gesp-2026-06-4-08",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "某班 3 个小组、每组 4 名同学的分数存入下面的二维数组 score，则 score[1][2] 的值是（ ）。",
+    "code": "int score[3][4] = {\n{80, 81, 82, 83},\n{90, 91, 92, 93},\n{70, 71, 72, 73}\n};",
+    "options": [
+      "A. 81",
+      "B. 90",
+      "C. 92",
+      "D. 72"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-09": {
+    "id": "gesp-2026-06-4-09",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "小杨定义了一个结构体 Hero 来表示游戏角色,下面哪种初始化方式会由于语法错误导致编译失败?()。",
+    "code": "struct Hero {\nstring name;\nint hp;\n};",
+    "options": [
+      "A. Hero h = {\"Arthur\", 100};",
+      "B.\nHero h;\nh.name = \"Arthur\";\nh.hp = 100;",
+      "C. Hero h = new Hero{\"Arthur\", 100};",
+      "D. Hero *p = new Hero{\"Arthur\", 100};"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-10": {
+    "id": "gesp-2026-06-4-10",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "下面程序输出结果是( )。",
+    "code": "struct Book {\nstring title;\nint pages;\n};\nint main() {\nBook books[2] = {{\"Math\", 120}, {\"Science\", 150}};\ncout << books[1].title;\nreturn 0;\n}",
+    "options": [
+      "A. Math",
+      "B. Science",
+      "C. 120",
+      "D. 150"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-11": {
+    "id": "gesp-2026-06-4-11",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "算法基础",
+    "question": "小杨在对“能量晶石”按亮度进行排序。如果两块晶石亮度相同,他希望保持它们在原始序列中的相对顺序。下列关于排序算法稳定性的说法,错误的是( )。",
+    "options": [
+      "A. 冒泡排序是稳定的,因为只有在左边比右边大时才交换。",
+      "B. 插入排序是稳定的,因为它将元素插入到相等元素的右侧。",
+      "C. 选择排序是稳定的,因为它每次选出最小元素放在前面。",
+      "D. 稳定性是指排序后相等元素的相对位置不发生改变。"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-12": {
+    "id": "gesp-2026-06-4-12",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "函数/结构体",
+    "question": "小杨的机器人正在能量踏板上跳跃，踏板编号为 1, 2, 3, ...。跳到第 n 块踏板的方案数满足递推式 f(n) = f(n - 1) + f(n - 2)。若 f(1) = 1, f(2) = 2，则运行以下代码计算 jump(5) 的结果是（ ）。",
+    "code": "int jump(int n) {\nif (n <= 2)\nreturn n;\nint a = 1, b = 2, c = 0;\nfor (int i = 3; i <= n; i++) {\nc = a + b;\na = b;\nb = c;\n}\nreturn c;\n}",
+    "options": [
+      "A. 5",
+      "B. 8",
+      "C. 13",
+      "D. 21"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-13": {
+    "id": "gesp-2026-06-4-13",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "在“模拟实验室”程序中，为了防止除以 0 导致崩溃，小杨使用了异常处理机制。执行以下代码将输出（ ）。",
+    "code": "try {\nint x = 10, y = 0;\nif (y == 0) throw \"Zero Error\";\ncout << x / y;\n} catch (int e) {\ncout << \"Error Code: \" << e;\n} catch (const char* msg) {\ncout << \"Caught: \" << msg;\n}",
+    "options": [
+      "A. 0",
+      "B. Error Code: 0",
+      "C. Caught: Zero Error",
+      "D. 程序直接崩溃"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-14": {
+    "id": "gesp-2026-06-4-14",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "下面代码使用某种排序算法,将数组中的元素按从小到大排序。这段代码使用的排序算法是( )。",
+    "code": "void mystery_sort(double arr[], int n) {\nfor (int i = 0; i < n - 1; i++) {\nint minPos = i;\nfor (int j = i + 1; j < n; j++) {\nif (arr[j] < arr[minPos]) {\nminPos = j;\n}\n}\ndouble temp = arr[i];\narr[i] = arr[minPos];\narr[minPos] = temp;\n}\n}",
+    "options": [
+      "A. 冒泡排序",
+      "B. 插入排序",
+      "C. 选择排序",
+      "D. 非典型排序"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
+  },
+  "gesp-2026-06-4-15": {
+    "id": "gesp-2026-06-4-15",
+    "source": "gesp",
+    "year": 2026,
+    "month": 6,
+    "knowledgePoint": "数组/字符串",
+    "question": "小杨正在读取“冒险日志”文件 quest.txt 。若文件内容为 Level 10 ,执行以下程序后输出为( )。",
+    "code": "ifstream fin(\"quest.txt\");\nstring s;\nint v;\nfin >> s >> v;\ncout << s.length() * v;",
+    "options": [
+      "A. 50",
+      "B. 15",
+      "C. 70",
+      "D. 5"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 4,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4
   }
 }
