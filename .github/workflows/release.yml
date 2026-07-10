@@ -93,12 +93,16 @@ jobs:
           sign_file() {
             local f="$1"
             if [ -n "$f" ] && [ -f "$f" ]; then
-              npx @tauri-apps/cli signer sign --private-key "$PRIVKEY" --password "" "$f" 2>/dev/null || true
-              local sigfile="${f}.sig"
-              if [ -f "$sigfile" ]; then cat "$sigfile"; else echo ""; fi
+              # 只提取纯 base64 签名行（以 dW50 开头），滤掉 "Your file was signed..." 等说明文字
+              npx @tauri-apps/cli signer sign --private-key "$PRIVKEY" --password "" "$f" 2>/dev/null | grep '^dW50' | head -1 || true
             else
               echo ""
             fi
+          }
+
+          # GitHub Release 会把非 ASCII 字符替换成点，URL 中需要用 sanitize 后的文件名
+          sanitize_name() {
+            basename "$1" | sed 's/[^a-zA-Z0-9._-]/./g' | sed 's/\.\.*/./g'
           }
 
           SIG_MAC_ARM=$(sign_file "$MAC_ARM")
@@ -132,11 +136,11 @@ jobs:
           URL_MAC_INTEL=$(upload_file "$MAC_INTEL")
           URL_WIN=$(upload_file "$WIN_MSI")
 
-          # Fallback to GitHub Release URLs
+          # Fallback to GitHub Release URLs（GitHub 会把中文文件名 sanitize 成点）
           GH_RELEASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
-          URL_MAC_ARM="${URL_MAC_ARM:-$GH_RELEASE/$(basename "$MAC_ARM")}"
-          URL_MAC_INTEL="${URL_MAC_INTEL:-$GH_RELEASE/$(basename "$MAC_INTEL")}"
-          URL_WIN="${URL_WIN:-$GH_RELEASE/$(basename "$WIN_MSI")}"
+          URL_MAC_ARM="${URL_MAC_ARM:-$GH_RELEASE/$(sanitize_name "$MAC_ARM")}"
+          URL_MAC_INTEL="${URL_MAC_INTEL:-$GH_RELEASE/$(sanitize_name "$MAC_INTEL")}"
+          URL_WIN="${URL_WIN:-$GH_RELEASE/$(sanitize_name "$WIN_MSI")}"
 
           cat > dist/update.json << JSONEOF
           {
