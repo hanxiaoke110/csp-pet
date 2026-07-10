@@ -200,7 +200,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       loginStreak: srv('login_streak', 'loginStreak') || s.player.loginStreak,
       lastLoginDate: srv('last_login_date', 'lastLoginDate') || s.player.lastLoginDate,
       season: srv('season', 'season') || s.player.season,
-      expToNext: s.player.expToNext,
+      expToNext: expToNextLevel(srv('player_level', 'playerLevel') || s.player.playerLevel),
     };
     return { player: p };
   }),
@@ -212,7 +212,13 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   setClassCode: (classCode) => set((s) => ({ player: { ...s.player, classCode } })),
 
   addExp: (amount) => set((s) => {
-    const totalExp = (s.player.exp || 0) + amount;
+    // 重建总累积经验：s.player.exp 是「当前等级内的经验」，但 getLevelFromExp 期望从 1 级起的总经验。
+    // 必须先加上前面所有等级的门槛，否则每次 addExp 都会掉级（#bug-2026-07-10）。
+    let totalExp = (s.player.exp || 0);
+    for (let lv = 1; lv < (s.player.playerLevel || 1); lv++) {
+      totalExp += expToNextLevel(lv);
+    }
+    totalExp += amount;
     const { level, exp, expToNext } = getLevelFromExp(totalExp);
     return { player: { ...s.player, playerLevel: level, exp, expToNext } };
   }),

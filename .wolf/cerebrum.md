@@ -53,6 +53,7 @@
 - PetPanel 拆组件原则：用 zustand hooks 直接在子组件取数据，减少 props 传递
 - 组件拆分不碰数据层，对现有用户数据零影响
 
+- **绝不**: 用 PlayerState.exp 直接当 totalExp 传给 getLevelFromExp()——exp 是当前等级内经验，getLevelFromExp 期望从头累计。LV2+ 不先重建总累积就会掉级。
 - **绝不**: 在版本发布说明中出现"防篡改"等字眼——统一写"修复部分已知问题"
 - **绝不**: 硬编码任何密码/密钥在前端代码——统一用教练端生成＋学生端校验
 - **绝不**: Gitee 上传安装包时用中文原始文件名——必须用 `filename=csp-v${short}-${arch}.${ext}` 格式，否则 UpdateChecker 的下载链接 404

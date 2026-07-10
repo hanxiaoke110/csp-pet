@@ -1,6 +1,30 @@
 {
   "bugs": [
     {
+      "date": "2026-07-10",
+      "error_message": "孩子打通天机阁+数术殿两关，等级仍为 LV1，灵码洞需要 LV2 无法进入",
+      "root_cause": "addExp 把 PlayerState.exp（当前等级内的经验）当作 getLevelFromExp 期望的从 1 级起总经验。exp 字段存储的是当前等级内剩余经验，但 addExp 直接把它当 totalExp 传入 getLevelFromExp。LV2+ 后每次调用 addExp 都会丢光前面等级的经验，甚至降级回 LV1。若战斗失败（无 finalizeBattle 奖励补偿），降级就永久保存了。",
+      "fix": "addExp 内重建总累积经验：for lv=1..playerLevel-1: totalExp+=expToNextLevel(lv) 再加 exp+amount。同时 initPlayer 的 expToNext 改为 expToNextLevel(playerLevel)。",
+      "tags": [
+        "智子试炼场",
+        "等级系统",
+        "exp计算",
+        "数据模型"
+      ]
+    },
+    {
+      "date": "2026-07-10",
+      "error_message": "孩子打通天机阁+数术殿两关，等级仍为 LV1，灵码洞需要 LV2 无法进入",
+      "root_cause": "addExp 把 PlayerState.exp（当前等级内的经验）当作 getLevelFromExp 期望的从 1 级起总经验。exp 字段存储的是\"当前等级内剩余经验\"，但 addExp 直接把它当 totalExp 传入 getLevelFromExp。LV2+ 后每次调用 addExp 都会丢光前面等级的经验，甚至降级回 LV1。若战斗失败（无 finalizeBattle 奖励补偿），降级就永久保存了。",
+      "fix": "addExp 内重建总累积经验：for (lv=1; lv<playerLevel; lv++) totalExp += expToNextLevel(lv); 再加当前 exp + amount。同时 initPlayer 的 expToNext 改为 expToNextLevel(playerLevel) 而非保留旧值。",
+      "tags": [
+        "智子试炼场",
+        "等级系统",
+        "exp计算",
+        "数据模型"
+      ]
+    },
+    {
       "date": "2026-07-06",
       "error_message": "闯关界面仍出现残缺题「cnt+=i++循环输出cnt是（ ）。」选项 55/30/25/15，无循环代码，无法作答。用户反馈「题目可靠性太差」。",
       "root_cause": "上一轮 CODE_REQUIRED_PATTERNS 扩展后仍有两类漏网：(1)「cnt+=i++循环输出cnt是」类——题干提到「循环」+「输出」但无「横线/代码/程序」信号词，且无完整循环结构 for(/while(，原题循环代码是图片丢失；(2) 部分题干含内联代码（如「1 void insertion_sort(vector<int>...)」「struct pass{」「string s=\"GESP考试\"」）却被误判为残缺——因 INLINE_CODE_MARKERS 只认 #include/for(/cout 等，不认 void /struct /vector</std::/string s/带行号代码。",
@@ -922,14 +946,49 @@
       "error_message": "题库可靠性审计漏检：undefined/[object Object] 序列化泄漏、抽取残缺（'由 位''输入 个''分数为 的'）、code OCR 残片（'j >= &&'）；2 道 GESP 4 级题（gesp-2024-12-4-02 void n_chars、gesp-2025-03-4-07 struct Person 嵌套 Address）code 被导入时分裂到 stem（带行号）+ code 字段，学生看到题干夹代码行 + code 块以 } 起始的残片",
       "root_cause": "①audit-question-reliability.mjs 无 undefined/对象泄漏/抽取残缺/code OCR 检测。②2 道题导入时行号切分错误，把代码前几行（带 '1 ''2 ' 行号）留在了 question 字段，剩余行进了 code 字段，且题干文本混入 code 末尾（gesp-2025-03-4-07 的'下面描述错误的是'被切到 code）",
       "fix": "①audit 加 3 类检测：EXTRACT_RESIDUE_RE（量词前缺数值）、undefined/[object Object] 泄漏 P0、code OCR（DANGLING_OP_RE 相邻运算符如 'j >= &&' + 行首孤立数字 + 大括号严重不匹配）。DANGLING_OP_RE 踩坑：第三分支误判所有 'a >= b'、第二分支 '>= ;' 误判填空题 'i <= ;'，均移除，仅保留相邻运算符高精度一支。②node 脚本修 2 道残片题：stem 去行号代码、code 合并恢复（void n_chars 签名+调用 / struct Person 嵌套 struct Address），unified-quiz-bank + src-dungeon csp-exam-bank 两库同修（dungeon 版原 code='' 一并补全）。结果 visible P0/P1=0，60 新题 0 issue。解析统一'官方答案：X。'，审计 flag '待补充/TODO'",
-      "tags": ["question-bank", "reliability", "audit", "data-quality", "gesp", "OCR", "fragment"]
+      "tags": [
+        "question-bank",
+        "reliability",
+        "audit",
+        "data-quality",
+        "gesp",
+        "OCR",
+        "fragment"
+      ]
     },
     {
       "date": "2026-07-08",
       "error_message": "班级码门禁失败原因不区分'校验服务异常'（5xx 被并入'班级码失效'且误清缓存，班级码实际仍有效却被清空需重绑）；fetch 无超时，服务无响应时永久卡'校验中'。智子试炼场暂停为假暂停（仅 CSS 遮罩，Phaser 场景 update 仍跑）。流派被动无每日/每局限制（EXP 乘数被动可无限刷）。RegisterScreen 选流派不展示被动效果",
       "root_cause": "①ClassAccessGate.ensure 对所有 !resp.ok 一律 clearClassAccessCache + '班级权限已失效'，未区分 5xx 服务端错误；fetch 无 AbortController。②BattlePhaserGame 无 pause/resume API，DungeonEmbed 暂停只 setPauseOpen 渲染遮罩。③6 流派被动为轻量乘数（5-8%），EXP 被动（cultivation/code）每次答题触发无上限；金币/段位已由 weeklyChallenges 5次/周间接限制，但 EXP 未限。④RegisterScreen 流派卡片未调 getSchoolPassive",
       "fix": "①ensure 加 10s AbortController 超时；resp.status>=500 -> '校验服务异常'不清缓存（status offline）；4xx/data.error -> '班级码失效' clearClassAccessCache（status denied）；fetch throw/超时 -> '网络不可用'不清缓存；resp.json().catch 兜底。4 类失败原因齐全。②BattlePhaserGame 接口加 pause()/resume()(game.scene.pause/resume('BattleScene'))；BattleScreen useEffect 监听 window 'dungeon-pause'/'dungeon-resume' 调 gameRef.pause/resume；DungeonEmbed 暂停按钮 dispatch 'dungeon-pause'、继续战斗 dispatch 'dungeon-resume'。③dungeonStore 加 schoolPassiveDaily{used,limit:50,resetAt}+todayStr()+bumpSchoolPassiveDaily()+持久化'dungeon_school_passive_daily'；BattleScreen.handleAnswer 仅答对时 bump，true 才 applySchoolAnswerPassive。④RegisterScreen 卡片加'被动：{name}·{description}'。⑤SettingsPage 加'🚫 解绑'按钮。⑥BattleScreen.css 图片 min-width 改 min(X,100%)+@media 窄窗 padding。tsc+build+build:dungeon 全绿",
-      "tags": ["class-gate", "failure-reason", "timeout", "智子试炼场", "phaser", "pause", "流派被动", "rate-limit", "ux"]
+      "tags": [
+        "class-gate",
+        "failure-reason",
+        "timeout",
+        "智子试炼场",
+        "phaser",
+        "pause",
+        "流派被动",
+        "rate-limit",
+        "ux"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "error_message": "v1.7.3 智子试炼场缺失：点「智子试炼场」白屏，phaser 库没打包进安装包",
+      "root_cause": "三层：(1) v1.7.3 tag(09c9e0a)打在不含phaser依赖的旧commit，CI npm ci不装phaser。(2)codex修复在csp-desktop-pet/docs-oj-local-spec旧分支(缺题库v20)未提交。(3)发版误用csp-pet-gitee(过时clone,分叉历史)。修复：csp-desktop-pet master合并codex修复(cherry-pick,2冲突已解决)，phaser WebGL→Canvas(codex已改)，UpdateChecker/download改读update.json platforms.url，bump 1.7.4，CI重新构建三平台",
+      "fix": "以master(8ff07bf)为基础cherry-pick codex修复(Canvas Phaser+桌宠+题库)，QuizPractice/teacher-app冲突已解决。UpdateChecker+download改读update.json(避免404)。bump 1.7.4。push tag触发CI三平台构建",
+      "tags": [
+        "智子试炼场",
+        "phaser",
+        "WebGL",
+        "Canvas",
+        "release",
+        "tag",
+        "merge",
+        "codex",
+        "404"
+      ]
     }
   ]
 }
