@@ -1405,3 +1405,31 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - **文档**：`docs/content-image-generation-plan.md` 追加第 14 节(飞书链接预置策略)；`docs/release/manual-test-checklist-1.7.x.md` 第 8 节补充 9 项测试(coming_soon 显示/可点、hidden 不展示、lessonNo 排序、缩略图不破图、远程失败回退、空状态不白屏、门禁未破坏)。
 - **验收**：validate:assets(0 issue)/audit:reliability(exit0,VISIBLE P0=0 P1=0)/test(5/5)/build(tsc clean)/build:dungeon 全过。dist 同步 public==dist(24 条)。
 - **未做(边界)**：未发版、未改版本号(仍 1.7.2)、未部署、未动 Cloudflare Worker、未生图、未把图片塞进客户端包体、未删现有学习资料入口(/resources 路由+侧栏入口保留)。REMOTE_RESOURCE_INDEX_URL 仍空，远程索引未启用。example.com 仍是发版阻塞项。
+
+## 2026-07-09 v1.7.4 发版：智子试炼场修复
+
+### 关键发现
+- **csp-desktop-pet** 是主开发目录(master=远程Gitee master=8ff07bf)，有完整发版配置；**csp-pet-gitee 是过时本地clone**(master停在分叉历史6f5b9b7)，1.7.3误从它发版，已废弃
+- **codex 周二修复在 csp-desktop-pet/docs-oj-local-spec 分支**(基于f224fb1,旧)，缺master的题库v20+Petdex9行，且working tree未提交
+- **v1.7.3 tag(09c9e0a)打在不含phaser的旧commit**：其package.json无phaser依赖→CI npm ci不装phaser→全平台产物缺phaser→智子试炼场白屏
+- **phaser 3.90.0 WebGL在macOS WKWebView编译失败**：`getProgramParameter` program不是WebGLProgram(codex已改`type: Phaser.CANVAS`)
+
+### 合并策略
+- 以master(8ff07bf,含题库v20+Petdex9行)为基础,cherry-pick codex修复(2冲突:QuizPractice teacher-app)
+- QuizPractice冲突：保留两者(freeStreakRef + classGate/reviewSession)
+- teacher-app冲突：用master(opts.timeout + /api/admin/settings,CPU超限修复)
+- 题库unified-quiz-bank.json：用master v20(更新,优先)
+
+### 发版流程(csp-desktop-pet master)
+1. 提交codex working tree→docs/oj-local-spec→checkout master→cherry-pick→解决冲突
+2. UpdateChecker.tsx:buildUrls→fetchDownloadLinks(读update.json platforms.url)
+3. download.html:硬编码csp-v${short}→pick(darwin-aarch64)等(读update.json platforms.url)
+4. bump 1.7.3→1.7.4(package.json+tauri.conf.json)
+5. push master Gitee+tag v1.7.4 GitHub→CI三平台构建+签名+上传+update.json
+
+### 教训
+- **tag必须打在含所有依赖的commit**：v1.7.3 tag不含phaser→CI产物缺phaser
+- **发版目录唯一**：csp-desktop-pet是主目录,csp-pet-gitee废弃
+- **其他工具(codex)修复后先确认分支**：codex在旧分支修,需merge到master才发版
+- **phaser在Tauri WKWebView**：WebGL shader可能不兼容,Phaser.CANVAS绕过
+- **下载UI单一真源**：UpdateChecker+download都读update.json platforms.url,不硬编码文件名

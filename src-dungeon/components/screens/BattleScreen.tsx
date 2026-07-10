@@ -16,7 +16,7 @@ import { createBattleGame, type BattlePhaserGame } from '../../phaser/BattlePhas
 import type { BattleInitData, PhaserPetConfig, BattleEndResult } from '../../phaser/types';
 import type { Question, DungeonDefinition, DungeonStage } from '../../types/dungeon';
 import type { OwnedPet, PetElement, PetTier } from '../../../src/types/pet';
-import { getPetTier, PET_BASE_STATS, TIER_MULTIPLIERS } from '../../../src/types/pet';
+import { PET_BASE_STATS, TIER_MULTIPLIERS } from '../../../src/types/pet';
 import { loadWebPet } from '../../utils/webPet';
 import { formatCppCode } from '../../utils/codeFormat';
 import { isWorkshopPet, loadWorkshopThumbUrl } from '../../utils/petPreview';
@@ -145,17 +145,29 @@ function BattleImage({ src, className }: { src: string; className?: string }) {
 function makePlayerPetConfig(): PhaserPetConfig {
   const raw = loadActivePetFromStorage();
   const base = PET_BASE_STATS[raw.speciesId] || PET_BASE_STATS.default;
-  const tier = getPetTier(raw.speciesId);
-  const stats = calculateStats(base, TIER_MULTIPLIERS[tier], raw.level);
+
+  // 使用潜龙闭关的玩家等级（而非宠物系统等级）计算战斗属性。
+  // 宠物等级来自喂养系统，增长极慢（1-3 级），与副本敌人等级（1-10 级）完全不匹配。
+  // 后期副本敌人属性指数膨胀，玩家会被一击秒杀且打不动敌人。
+  const dungeonLevel = useDungeonStore.getState().player.playerLevel || 1;
+
+  // 随潜龙等级提升战斗品质：LV1-2 普通(1.0) → LV3-4 稀有(1.3) → LV5+ 传说(1.6)
+  let combatTier: PetTier;
+  if (dungeonLevel >= 5) combatTier = 'legendary';
+  else if (dungeonLevel >= 3) combatTier = 'rare';
+  else combatTier = 'common';
+
+  const stats = calculateStats(base, TIER_MULTIPLIERS[combatTier], dungeonLevel);
 
   return {
     petId: raw.petId,
     displayName: raw.petName,
     speciesId: raw.speciesId,
     element: raw.element,
-    level: raw.level,
+    level: dungeonLevel,
     maxHp: stats.maxHp,
-    currentHp: raw.battle?.currentHp ?? stats.maxHp,
+    // 试炼场使用独立战斗属性，不沿用宠物喂养体系的旧血量。
+    currentHp: stats.maxHp,
     attack: stats.attack,
     defense: stats.defense,
     speed: stats.speed,

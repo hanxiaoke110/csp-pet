@@ -113,7 +113,9 @@ export function resolveEnemyIntent(
     return { damageTaken: 0, remainingShield: shield, blocked: false };
   }
 
-  const rawDamage = intent.power;
+  // 敌方伤害先扣除玩家防御力（与 calculateDamage 公式一致：attack - defense），
+  // 再乘元素克制。修复前直接用 intent.power 跳过防御，导致后期副本被一击秒杀。
+  const rawDamage = Math.max(1, intent.power - player.defense);
   const elementMultiplier = getElementMultiplier(enemy.element, player.element);
   const damageBeforeShield = Math.max(1, Math.floor(rawDamage * elementMultiplier));
 
