@@ -15,11 +15,13 @@ export class Card extends Phaser.GameObjects.Container {
   private cooldownText: Phaser.GameObjects.Text;
   private skill: SkillDefinition;
   private isDisabled: boolean = false;
+  private readonly baseY: number;
 
   constructor(scene: Phaser.Scene, x: number, y: number, skill: SkillDefinition) {
     super(scene, x, y);
 
     this.skill = skill;
+    this.baseY = y;
     const color = KNOWLEDGE_TAG_COLORS[skill.knowledgeTag] || 0x888888;
 
     // 卡牌背景
@@ -83,6 +85,11 @@ export class Card extends Phaser.GameObjects.Container {
     this.isDisabled = disabled;
     this.setAlpha(disabled ? 0.5 : 1);
     this.cooldownText.setText(reason || '');
+    if (disabled) {
+      this.scene.tweens.killTweensOf(this);
+      this.setScale(1);
+      this.y = this.baseY;
+    }
   }
 
   isDisabledState(): boolean {
@@ -102,11 +109,12 @@ export class Card extends Phaser.GameObjects.Container {
   }
 
   playSelectAnimation(): void {
+    this.scene.tweens.killTweensOf(this);
     this.scene.tweens.add({
       targets: this,
       scaleX: 1.1,
       scaleY: 1.1,
-      y: this.y - 20,
+      y: this.baseY - 20,
       duration: 150,
       ease: 'Back.easeOut',
     });
@@ -131,7 +139,7 @@ export class Card extends Phaser.GameObjects.Container {
       targets: this,
       scaleX: 1.08,
       scaleY: 1.08,
-      y: this.y - 8,
+      y: this.baseY - 8,
       duration: 100,
       ease: 'Sine.easeOut',
     });
@@ -144,7 +152,7 @@ export class Card extends Phaser.GameObjects.Container {
       targets: this,
       scaleX: 1,
       scaleY: 1,
-      y: this.y + 8,
+      y: this.baseY,
       duration: 100,
       ease: 'Sine.easeOut',
     });

@@ -177,6 +177,10 @@ function makePlayerPetConfig(): PhaserPetConfig {
   };
 }
 
+function getBossStage(dungeon?: DungeonDefinition): DungeonStage | undefined {
+  return dungeon?.stages[dungeon.stages.length - 1];
+}
+
 function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isBoss: boolean): PhaserPetConfig {
   if (stage.enemyPet) {
     const cfg = stage.enemyPet;
@@ -266,7 +270,7 @@ export default function BattleScreen() {
   const [playerConfig, enemyConfig] = useMemo(() => {
     const playerPet = makePlayerPetConfig();
     const stage: DungeonStage | undefined = isBoss
-      ? { id: 'boss', name: 'Boss 战', description: '', questionIds: [], requiredCorrect: 0, hp: 5 }
+      ? getBossStage(dungeon)
       : dungeon?.stages.find(s => s.id === stageId);
     const enemyPet = dungeon && stage ? makeEnemyPetConfig(dungeon, stage, isBoss) : null;
     return [playerPet, enemyPet] as [PhaserPetConfig, PhaserPetConfig | null];
@@ -628,6 +632,19 @@ export default function BattleScreen() {
             {submitted && (
               <div className={`battle-answer-feedback ${isCorrect ? 'correct' : 'wrong'}`}>
                 {isCorrect ? '✅ 回答正确！技能完美释放' : '❌ 回答错误，技能施法失败'}
+                {!isCorrect && currentQuestion && (
+                  <div style={{ marginTop: 8, fontSize: 13 }}>
+                    🤔 没懂？
+                    <a
+                      href="https://scncdgmg7m6w.feishu.cn/docx/GxWbddqOno4LcVxKD7LcqalrnTb"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#f59e0b', fontWeight: 700, marginLeft: 4 }}
+                    >
+                      打开「真题知识点救援」→
+                    </a>
+                  </div>
+                )}
               </div>
             )}
           </div>

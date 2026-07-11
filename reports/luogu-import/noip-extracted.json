@@ -1,0 +1,1425 @@
+[
+  {
+    "id": "noip-2015-p-307",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "$1 \\text{ MB}$ 等于(\t)。",
+    "options": [
+      "A. $10000$ 字节",
+      "B. $1024$ 字节",
+      "C. $1000\\times 1000$ 字节",
+      "D. $1024\\times 1024$ 字节"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 307
+  },
+  {
+    "id": "noip-2015-p-310",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "计算机基础",
+    "question": "操作系统的作用是(\t)。",
+    "options": [
+      "A. 把源程序译成目标程序",
+      "B. 便于进行数据管理",
+      "C. 控制和管理系统资源",
+      "D. 实现硬件之间的连接"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 310
+  },
+  {
+    "id": "noip-2015-p-311",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "在计算机内部用来传送、存贮、加工处理的数据或指令都是以(\t)形式进行的。",
+    "options": [
+      "A. 二进制码",
+      "B. 八进制码",
+      "C. 十进制码",
+      "D. 智能拼音码"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 311
+  },
+  {
+    "id": "noip-2015-p-312",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "下列说法正确的是(\t)。",
+    "options": [
+      "A. CPU 的主要任务是执行数据运算和程序控制",
+      "B. 存储器具有记忆能力，其中信息任何时候都不会丢失",
+      "C. 两个显示器屏幕尺寸相同，则它们的分辨率必定相同",
+      "D. 个人用户只能使用 Wifi 的方式连接到 Internet"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 312
+  },
+  {
+    "id": "noip-2015-p-313",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "进制与编码",
+    "question": "二进制数 $00100100$ 和 $00010100$ 的和是(\t)。",
+    "options": [
+      "A. $00101000$",
+      "B. $01100111$",
+      "C. $01000100$",
+      "D. $00111000$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 313
+  },
+  {
+    "id": "noip-2015-p-316",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "进制与编码",
+    "question": "与二进制小数 $0.1$ 相等的十六进制数是(\t)。",
+    "options": [
+      "A. 0.8",
+      "B. 0.4",
+      "C. 0.2",
+      "D. 0.1"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 316
+  },
+  {
+    "id": "noip-2015-p-317",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "所谓的“中断”是指(\t)。",
+    "options": [
+      "A. 操作系统随意停止一个程序的运行",
+      "B. 当出现需要时，CPU 暂时停止当前程序的执行转而执行处理新情况的过程",
+      "C. 因停机而停止一个程序的运行",
+      "D. 电脑死机"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 317
+  },
+  {
+    "id": "noip-2015-p-318",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "计算机病毒是(\t)。",
+    "options": [
+      "A. 通过计算机传播的危害人体健康的一种病毒",
+      "B. 人为制造的能够侵入计算机系统并给计算机带来故障的程序或指令集合",
+      "C. 一种由于计算机元器件老化而产生的对生态环境有害的物质",
+      "D. 利用计算机的海量高速运算能力而研制出来的用于疾病预防的新型病毒"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 318
+  },
+  {
+    "id": "noip-2015-p-319",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "FTP 可以用于(\t)。",
+    "options": [
+      "A. 远程传输文件",
+      "B. 发送电子邮件",
+      "C. 浏览网页",
+      "D. 网上聊天"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 319
+  },
+  {
+    "id": "noip-2015-p-320",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "下面哪种软件不属于即时通信软件(\t)。",
+    "options": [
+      "A. QQ",
+      "B. MSN",
+      "C. 微信",
+      "D. P2P"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 320
+  },
+  {
+    "id": "noip-2015-p-321",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "数据结构-图",
+    "question": "$6$ 个顶点的连通图的最小生成树，其边数为(\t)。",
+    "options": [
+      "A. 6",
+      "B. 5",
+      "C. 7",
+      "D. 4"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 321
+  },
+  {
+    "id": "noip-2015-p-322",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "数据结构-线性",
+    "question": "链表不具备的特点是(\t)。",
+    "options": [
+      "A. 可随机访问任何一个元素",
+      "B. 插入、删除操作不需要移动元素",
+      "C. 无需事物估计存储空间大小",
+      "D. 所需存储空间与存储元素个数成正比"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 322
+  },
+  {
+    "id": "noip-2015-p-323",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "计算机基础",
+    "question": "线性表若采用链表存储结构，要求内存中可用存储单元地址(\t)。",
+    "options": [
+      "A. 必须连续",
+      "B. 部分地址必须连续",
+      "C. 一定不连续",
+      "D. 连续不连续均可"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 323
+  },
+  {
+    "id": "noip-2015-p-324",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "数据结构-线性",
+    "question": "今有一空栈 $S$，对下列待进栈的数据元素序列 $a,b,c,d,e,f$ 依次进行进栈，进栈，出栈，进栈， 进栈，出栈的操作，则此操作完成后，栈 $S$ 的栈顶元素为:",
+    "options": [
+      "A. f",
+      "B. c",
+      "C. a",
+      "D. b"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 324
+  },
+  {
+    "id": "noip-2015-p-325",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "数据结构-树",
+    "question": "前序遍历序列与中序遍历序列相同的二叉树为(\t)。",
+    "options": [
+      "A. 根结点无左子树",
+      "B. 根结点无右子树",
+      "C. 只有根结点的二叉树或非叶子结点只有左子树的二叉树",
+      "D. 只有根结点的二叉树或非叶子结点只有右子树的二叉树"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 325
+  },
+  {
+    "id": "noip-2015-p-326",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "数据结构-树",
+    "question": "如果根的高度为 $1$，具有 $61$ 个结点的完全二叉树的高度为（   ）。",
+    "options": [
+      "A. 5",
+      "B. 6",
+      "C. 7",
+      "D. 8"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 326
+  },
+  {
+    "id": "noip-2015-p-327",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "下列选项中不属于视频文件格式的是(\t)。",
+    "options": [
+      "A. TXT",
+      "B. AVI",
+      "C. MOV",
+      "D. RMVB"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 327
+  },
+  {
+    "id": "noip-2015-p-328",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "函数与递归",
+    "question": "某算法的计算时间表示为递推关系式 $T(n)=T(n-1)+n$（$n$ 为正整数）及 $T(0)=1$，则该算法的时间复杂度为(\t)。",
+    "options": [
+      "A. $O(\\log n)$",
+      "B. $O(n\\log n)$",
+      "C. $O(n)$",
+      "D. $O(n^{2})$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 328
+  },
+  {
+    "id": "noip-2015-p-329",
+    "source": "noip",
+    "year": 2015,
+    "knowledgePoint": "其他",
+    "question": "在 NOI 系列赛事中参赛选手必须使用累承办单位统一提供的设备。下列物品中不允许选手自带的是( )。",
+    "options": [
+      "A. 鼠标",
+      "B. 笔",
+      "C. 身份证",
+      "D. 准考证"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 329
+  },
+  {
+    "id": "noip-2016-p-378",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "以下不是微软公司出品的软件是（）",
+    "options": [
+      "A. Powerpoint",
+      "B. Word",
+      "C. Excel",
+      "D. Acrobat Reader"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 378
+  },
+  {
+    "id": "noip-2016-p-380",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "进制与编码",
+    "question": "如果 $256$ 种颜色用二进制编码来表示，至少需要（ ）位。",
+    "options": [
+      "A. 6",
+      "B. 7",
+      "C. 8",
+      "D. 9"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 380
+  },
+  {
+    "id": "noip-2016-p-382",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "以下不属于无线通信技术的是（ ）。",
+    "options": [
+      "A. 蓝牙",
+      "B. Wifi",
+      "C. GPRS",
+      "D. 以太网"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 382
+  },
+  {
+    "id": "noip-2016-p-386",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "计算机基础",
+    "question": "以下不是 CPU 生产厂商的是（ ）。",
+    "options": [
+      "A. Intel",
+      "B. AMD",
+      "C. Microsoft",
+      "D. IBM"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 386
+  },
+  {
+    "id": "noip-2016-p-704",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "计算机基础",
+    "question": "以下不是存储设备的是（ ） 。",
+    "options": [
+      "A. 光盘",
+      "B. 磁盘",
+      "C. 固态硬盘",
+      "D. 鼠标"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 704
+  },
+  {
+    "id": "noip-2016-p-390",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "控制结构",
+    "question": "如果开始时计算机处于小写输入状态，现在有一只小老鼠反复按照 CapsLock、字母键 A、字母键 S 和字母键 D 的顺序循环按键，即 CapsLock、A、S、D、CapsLock、A、S、D、……，屏幕上输出的第 $81$ 个字符是字母（ ）。",
+    "options": [
+      "A. A",
+      "B. S",
+      "C. D",
+      "D. a"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 390
+  },
+  {
+    "id": "noip-2016-p-391",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "进制与编码",
+    "question": "二进制数 $00101100$ 和 $00010101$ 的和（ ）。",
+    "options": [
+      "A. 00101000",
+      "B. 01000001",
+      "C. 01000100",
+      "D. 00111000"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 391
+  },
+  {
+    "id": "noip-2016-p-392",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "进制与编码",
+    "question": "与二进制小数 $0.1$ 相等的八进制数是（）。",
+    "options": [
+      "A. 0.8",
+      "B. 0.4",
+      "C. 0.2",
+      "D. 0.1"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 392
+  },
+  {
+    "id": "noip-2016-p-393",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "以下是 32 位机器和 64 位机器的区别是（ ）。",
+    "options": [
+      "A. 显示器不同",
+      "B. 硬盘大小不同",
+      "C. 寻址空间不同",
+      "D. 输入法不同"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 393
+  },
+  {
+    "id": "noip-2016-p-395",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "以下关于字符串的判定语句中正确的是（）。",
+    "options": [
+      "A. 字符串是一种特殊的线性表",
+      "B. 串的长度必须大于零",
+      "C. 字符串不可以用数组来表示",
+      "D. 空格字符组成的串就是空串"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 395
+  },
+  {
+    "id": "noip-2016-p-398",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "计算机基础",
+    "question": "一棵二叉树如右图所示，若采用顺序存储结构，即用一 维数组元素存储该二叉树中的结点（根结点的下标为 $1$， 若某结点的下标为 $i$ ，则其左孩子位于下标 $2i$ 处、右孩 子位于下标 $(2i+1)$ 处），则图中所有结点的最大下标为（ ）。  \n![](http://luogu-ipic.oss-cn-shanghai.aliyuncs.com/3rxla.jpg)",
+    "options": [
+      "A. 6",
+      "B. 10",
+      "C. 12",
+      "D. 15"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 398
+  },
+  {
+    "id": "noip-2016-p-405",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "控制结构",
+    "question": "若有如下程序段，其中 $s,a,b,c$ 均已定义为整型变量，且 $a,c$ 均已赋值 （$c$ 大于 $0$）。  \n```\ns = a;\nfor (b = 1;b <= c; b++ )\n\ts = s + 1;\n```\n则与上述程序段修改 $s$ 值的功能等价的赋值语句是（）。",
+    "options": [
+      "A. `s = a + b;`",
+      "B. `s = a + c;`",
+      "C. `s = s + c;`",
+      "D. `s = b + c;`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 405
+  },
+  {
+    "id": "noip-2016-p-409",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "控制结构",
+    "question": "有以下程序：  \n```\n#include <iostream>\nusing namespace std;\nint main()\n{\n    int k = 4, n = 0;\n    while (n < k)\n    {\n        n++;\n        if (n % 3 != 0)\n            continue;\n        k--;\n    }\n    cout << k << \",\" << n << endl;\n    return 0;\n}\n```\n程序运行后输出的结果是（ ）。",
+    "options": [
+      "A. 2,2",
+      "B. 2,3",
+      "C. 3,2",
+      "D. 3,3"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 409
+  },
+  {
+    "id": "noip-2016-p-412",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "控制结构",
+    "question": "给定含有 $n$ 个不同的数的数组 $L=\\text{<}x_{1}, x_{2}, ..., x_{n}\\text{>}$。如果 $L$ 中存在 $x_{i}$ $(1<i<n)$ 使得 $x_{1}<x _{2}< \\dots < x_{i-1}< x_{i} > x_{i+1}>\\dots > x_{n}$ ， 则称 $L$ 是单峰的，并称 $x_{i}$ 是 $L$ 的“峰顶”。现在已知 $L$ 是单峰的,请把 a-c 三行代码补全到算法中使得算法 正确找到 $L$ 的峰顶。  \n\na. `Search(k+1, n)`  \nb. `Search(1, k-1)`  \nc. `return L[k]`  \n\n```\nSearch(1, n)\n1. k←⌊n/2⌋\n2. if L[k] > L[k-1] and L[k] > L[k+1]\n3. then __________\n4. else if L[k] > L[k-1] and L[k] < L[k+1]\n5. then __________\n6. else __________\n```\n正确的填空顺序是（）。",
+    "options": [
+      "A. c,a,b",
+      "B. c,b,a",
+      "C. a,b,c",
+      "D. b,a,c"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 412
+  },
+  {
+    "id": "noip-2016-p-420",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "数据结构-图",
+    "question": "设简单无向图 $G$ 有 $16$ 条边且每个顶点的度数都是 $2$，则图 $G$ 有( )个顶点。",
+    "options": [
+      "A. 10",
+      "B. 12",
+      "C. 8",
+      "D. 16"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 420
+  },
+  {
+    "id": "noip-2016-p-421",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "数论",
+    "question": "有 $7$ 个一模一样的苹果，放到 $3$ 个一样的盘子中，一共有（）种放法。",
+    "options": [
+      "A. $7$",
+      "B. $8$",
+      "C. $21$",
+      "D. $3^{7}$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 421
+  },
+  {
+    "id": "noip-2016-p-427",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "下图表示一个果园灌溉系统，有 $A,B,C,D$ 四个阀门，每个阀门可以打开或关上，所有管道粗细相同，以下设置阀门的方法中，可以让果树浇上水的是（）。\n![](http://luogu-ipic.oss-cn-shanghai.aliyuncs.com/youti/18.png)",
+    "options": [
+      "A. B 打开，其他都关上",
+      "B. AB 都打开，CD 都关上",
+      "C. A 打开，其他都关上",
+      "D 打开，其他都关上"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 427
+  },
+  {
+    "id": "noip-2016-p-429",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "Lucia 和她的朋友以及朋友的朋友都在某社交网站上注册了账号。下图是他们之间的关系图，两个人之间有边相连代表这两个人是朋友，没有边相连代表不是朋友。这个社交网站的规则是：如果某人 A 向他（她）的朋友 B 分享了某张照片，那么 B 就可以对该照片进行评论；如果 B 评论了该照片，那么他（她）的所有朋友都可以看见这个评论以及被评论的照片，但是不能对该照片进行评论（除非 A 也向他（她）分享了该照片）。现在 Lucia 已经上传了一张照片，但是她不想让 Jacob 看见这张照片，那么她可以向以下朋友 （ ）分享该照片。  \n![](http://luogu-ipic.oss-cn-shanghai.aliyuncs.com/8p80q.jpg)",
+    "options": [
+      "A. Dana, Michael, Eve",
+      "B. Dana, Eve, Monica",
+      "C. Michael, Eve, Jacob",
+      "D. Micheal, Peter, Monica"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 429
+  },
+  {
+    "id": "noip-2016-p-434",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "周末小明和爸爸妈妈三个人一起想动手做三道菜。小明负责洗菜、爸爸负责切菜、妈妈负责炒菜。假设做每道菜的顺序都是：先洗菜 10 分钟，然后切菜 10 分钟，最后炒菜 10 分钟。那么做一道菜需要 30 分钟。注意：两道不同的菜的相同步骤不可以同时进行。例如第一道菜和第二道的菜不能同时洗，也不能同时切。那么做完三道菜的最短时间需要（ ）分钟。",
+    "options": [
+      "A. 90",
+      "B. 60",
+      "C. 50",
+      "D. 40"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 434
+  },
+  {
+    "id": "noip-2016-p-436",
+    "source": "noip",
+    "year": 2016,
+    "knowledgePoint": "其他",
+    "question": "参加 NOI 比赛，以下不能带入考场的是（）。",
+    "options": [
+      "A. 钢笔",
+      "B. 适量的衣服",
+      "C. U 盘",
+      "D. 铅笔"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 436
+  },
+  {
+    "id": "noip-2017-p-451",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "进制与编码",
+    "question": "在 $8$ 位二进制补码中，$10101011$ 表示的数是十进制下的（ ）。",
+    "options": [
+      "A. 43",
+      "B. -85",
+      "C. -43",
+      "D. -84"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 451
+  },
+  {
+    "id": "noip-2017-p-452",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "计算机基础",
+    "question": "计算机存储数据的基本单位是（ ）。",
+    "options": [
+      "A. bit",
+      "B. Byte",
+      "C. GB",
+      "D. KB"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 452
+  },
+  {
+    "id": "noip-2017-p-453",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "计算机基础",
+    "question": "下列协议中与电子邮件无关的是（ ）。",
+    "options": [
+      "A. POP3",
+      "B. SMTP",
+      "C. WTO",
+      "D. IMAP"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 453
+  },
+  {
+    "id": "noip-2017-p-454",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "计算机基础",
+    "question": "分辨率为 $800\\times 600$、$16$ 位色的位图，存储图像信息所需的空间为（ ）。",
+    "options": [
+      "A. $937.5 \\text{ KB}$",
+      "B. $4218.75 \\text{ KB}$",
+      "C. $4320 \\text{ KB}$",
+      "D. $2880 \\text{ KB}$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 454
+  },
+  {
+    "id": "noip-2017-p-455",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "计算机应用的最早领域是（ ）。",
+    "options": [
+      "A. 数值计算",
+      "B. 人工智能",
+      "C. 机器人",
+      "D. 过程控制"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 455
+  },
+  {
+    "id": "noip-2017-p-456",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "下列不属于面向对象程序设计语言的是（ ）。",
+    "options": [
+      "A. C",
+      "B. C++",
+      "C. Java",
+      "D. C#"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 456
+  },
+  {
+    "id": "noip-2017-p-457",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "NOI 的中文意思是（ ）。",
+    "options": [
+      "A. 中国信息学联赛",
+      "B. 全国青少年信息学奥林匹克竞赛",
+      "C. 中国青少年信息学奥林匹克竞赛",
+      "D. 中国计算机协会"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 457
+  },
+  {
+    "id": "noip-2017-p-458",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "2017 年 10 月 1 日是星期日，1999 年 10 月 1 日是（ ）。",
+    "options": [
+      "A. 星期三",
+      "B. 星期日",
+      "C. 星期五",
+      "D. 星期二"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 458
+  },
+  {
+    "id": "noip-2017-p-459",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "甲、乙、丙三位同学选修课程，从 4 门课程中，甲选修 2 门，乙、丙各选修3门，则不同的选修方案共有（ ）种。",
+    "options": [
+      "A. 36",
+      "B. 48",
+      "C. 96",
+      "D. 192"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 459
+  },
+  {
+    "id": "noip-2017-p-460",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "数据结构-树",
+    "question": "设 $G$ 是有 $n$ 个结点、$m$ 条边 $(n \\leq m)$ 的连通图，必须删去 $G$ 的（ ）条边，才能使得 $G$ 变成一棵树。",
+    "options": [
+      "A. $m - n + 1$",
+      "B. $m - n$",
+      "C. $m + n + 1$",
+      "D. $n - m + 1$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 460
+  },
+  {
+    "id": "noip-2017-p-461",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "对于给定的序列 $\\{a_k\\}$，我们把 $(i,j)$ 称为逆序对当且仅当 $i < j$ 且 $a_i > a_j$。那么序列 $1, 7, 2, 3, 5, 4$ 的逆序对数为（ ）个。",
+    "options": [
+      "A. 4",
+      "B. 5",
+      "C. 6",
+      "D. 7"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 461
+  },
+  {
+    "id": "noip-2017-p-462",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "表达式 $\\texttt{a * (b + c) * d}$ 的后缀形式是（ ）。",
+    "options": [
+      "A. $\\texttt{a b c d * + *}$",
+      "B. $\\texttt{a b c + * d *}$",
+      "C. $\\texttt{a * b c + * d}$",
+      "D. $\\texttt{b + c * a * d}$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 462
+  },
+  {
+    "id": "noip-2017-p-463",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "数据结构-线性",
+    "question": "向一个栈顶指针为 $hs$ 的链式栈中插入一个指针 $s$ 指向的结点时，应执行（ ）。",
+    "options": [
+      "A. `hs->next = s;`",
+      "B. `s->next = hs; hs = s;`",
+      "C. `s->next = hs->next; hs->next = s;`",
+      "D. `s->next = hs; hs = hs->next;`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 463
+  },
+  {
+    "id": "noip-2017-p-464",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "若串 $S =\\texttt{copyright}$，其子串的个数是（ ）。",
+    "options": [
+      "A. 72",
+      "B. 45",
+      "C. 46",
+      "D. 36"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 464
+  },
+  {
+    "id": "noip-2017-p-465",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "进制与编码",
+    "question": "十进制小数 $13.375$ 对应的二进制数是（ ）。",
+    "options": [
+      "A. 1101.011",
+      "B. 1011.011",
+      "C. 1101.101",
+      "D. 1010.01"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 465
+  },
+  {
+    "id": "noip-2017-p-466",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "数据结构-线性",
+    "question": "对于入栈顺序为 $a, b, c, d, e, f, g$ 的序列，下列（ ）不可能是合法的出栈序列。",
+    "options": [
+      "A. $a, b, c, d, e, f, g$",
+      "B. $a, d, c, b, e, g, f$",
+      "C. $a, d, b, c, g, f, e$",
+      "D. $g, f, e, d, c, b, a$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 466
+  },
+  {
+    "id": "noip-2017-p-467",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "数组与字符串",
+    "question": "设 $A$ 和 $B$ 是两个长为 $n$ 的有序数组，现在需要将 $A$ 和 $B$ 合并成一个排好序的数组，任何以元素比较作为基本运算的归并算法在最坏情况下至少要做（ ）次比较。",
+    "options": [
+      "A. $n^{2}$",
+      "B. $n \\log n$",
+      "C. $2n$",
+      "D. $2n - 1$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 467
+  },
+  {
+    "id": "noip-2017-p-468",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "从（ ）年开始，NOIP 竞赛将不再支持 Pascal 语言。",
+    "options": [
+      "A. 2020",
+      "B. 2021",
+      "C. 2022",
+      "D. 2023"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 468
+  },
+  {
+    "id": "noip-2017-p-469",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "组合数学",
+    "question": "一家四口人，至少两个人生日属于同一月份的概率是（ ）（假定每个人生日属于每个月份的概率相同且不同人之间相互独立）。",
+    "options": [
+      "A. $\\frac{1}{12}$",
+      "B. $\\frac{1}{144}$",
+      "C. $\\frac{41}{96}$",
+      "D. $\\frac{3}{4}$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 469
+  },
+  {
+    "id": "noip-2017-p-470",
+    "source": "noip",
+    "year": 2017,
+    "knowledgePoint": "其他",
+    "question": "以下和计算机领域密切相关的奖项是（ ）。",
+    "options": [
+      "A. 奥斯卡奖",
+      "B. 图灵奖",
+      "C. 诺贝尔奖",
+      "D. 普利策奖"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 470
+  },
+  {
+    "id": "noip-2018-p-706",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "以下哪一种设备属于输出设备",
+    "options": [
+      "A. 扫描仪",
+      "B. 键盘",
+      "C. 鼠标",
+      "D. 打印机"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 706
+  },
+  {
+    "id": "noip-2018-p-707",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "进制与编码",
+    "question": "下列四个不同进制的数中，与其它三项数值上不相等的是",
+    "options": [
+      "A. $(269)_{16}$",
+      "B. $(617)_{10}$",
+      "C. $(1151)_8$",
+      "D. $(1001101011)_2$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 707
+  },
+  {
+    "id": "noip-2018-p-708",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "$1 \\text{ MB}$ 等于（ ）",
+    "options": [
+      "A. $1000$ 字节",
+      "B. $1024$ 字节",
+      "C. $1000 \\times 1000$ 字节",
+      "D. $1024 \\times 1024$ 字节"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 708
+  },
+  {
+    "id": "noip-2018-p-709",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "广域网的英文缩写是（ ）",
+    "options": [
+      "A. LAN",
+      "B. WAN",
+      "C. MAN",
+      "D. LNA"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 709
+  },
+  {
+    "id": "noip-2018-p-710",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "中国计算机学会于（ ）年创办全国青少年计算机程序设计竞赛。",
+    "options": [
+      "A. 1983",
+      "B. 1984",
+      "C. 1985",
+      "D. 1986"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 710
+  },
+  {
+    "id": "noip-2018-p-711",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "控制结构",
+    "question": "如果开始时计算机处于小写输入状态，现在有一只小老鼠反复按照 CapsLock、\n字母键 A、字母键 S、字母键 D、字母键 F 的顺序循环按键，即 CapsLock、A、S、D、F、CapsLock、A、S、D、F、……，屏幕上输出的第 81 个字符是字母\n（ ）",
+    "options": [
+      "A. A",
+      "B. S",
+      "C. D",
+      "D. a"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 711
+  },
+  {
+    "id": "noip-2018-p-712",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "数据结构-树",
+    "question": "根节点深度为 $0$，一棵深度为 $h$ 的满 $k(k>1)$ 叉树，即除最后一层无任何子节点外，每一层上的所有结点都有 $k$ 个子结点的树，共有（ ）个结点。",
+    "options": [
+      "A. $\\dfrac{k^{h+1}-1}{k-1}$",
+      "B. $k^{h-1}$",
+      "C. $k^h$",
+      "D. $\\dfrac{k^{h-1}}{k-1}$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 712
+  },
+  {
+    "id": "noip-2018-p-713",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "排序与查找",
+    "question": "以下排序算法中，不需要进行关键字比较操作的算法是（ ）。",
+    "options": [
+      "A. 基数排序",
+      "B. 冒泡排序",
+      "C. 堆排序",
+      "D. 直接插入排序"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 713
+  },
+  {
+    "id": "noip-2018-p-714",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "数组与字符串",
+    "question": "给定一个含 $N$ 个不相同数字的数组，在最坏情况下，找出其中最大或最小的\n数，至少需要 $N - 1$ 次比较操作。则最坏情况下，在该数组中同时找最大与\n最小的数至少需要（ ）次比较操作。（ $\\lceil \\rceil$ 表示向上取整，$\\lfloor \\rfloor$ 表示向下取整）",
+    "options": [
+      "A. $\\lceil \\dfrac{3N}{2} \\rceil - 2$",
+      "B. $\\lfloor \\dfrac{3N}{2}\\rfloor - 2$",
+      "C. $2N - 2$",
+      "D. $2N - 4$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 714
+  },
+  {
+    "id": "noip-2018-p-715",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "下面的故事与（ ）算法有着异曲同工之妙。\n\n从前有座山，山里有座庙，庙里有个老和尚在给小和尚讲故事：“从前有座山，山里有座庙，庙里有个老和尚在给小和尚讲故事：‘从前有座山，山里有座庙，庙里有个老和尚给小和尚讲故事……’”",
+    "options": [
+      "A. 枚举",
+      "B. 递归",
+      "C. 贪心",
+      "D. 分治"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 715
+  },
+  {
+    "id": "noip-2018-p-716",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "数据结构-图",
+    "question": "由四个没有区别的点构成的简单无向连通图的个数是（ ）。",
+    "options": [
+      "A. 6",
+      "B. 7",
+      "C. 8",
+      "D. 9"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 716
+  },
+  {
+    "id": "noip-2018-p-717",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "设含有 $10$ 个元素的集合的全部子集数为 $S$，其中由 $7$ 个元素组成的子集数为 $T$，则 $\\dfrac{T}{S}$ 的值为（ ）。",
+    "options": [
+      "A. $\\dfrac{5}{32}$",
+      "B. $\\dfrac{15}{128}$",
+      "C. $\\dfrac{1}{8}$",
+      "D. $\\dfrac{21}{128}$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 717
+  },
+  {
+    "id": "noip-2018-p-718",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "$10000$ 以内，与 $10000$ 互质的正整数有（ ）个。",
+    "options": [
+      "A. 2000",
+      "B. 4000",
+      "C. 6000",
+      "D. 8000"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 718
+  },
+  {
+    "id": "noip-2018-p-719",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "进制与编码",
+    "question": "为了统计一个非负整数的二进制形式中 $1$ 的个数，代码如下：\n\n```cpp\nint CountBit(int x)\n{\n\tint ret = 0;\n\twhile (x)\n\t{\n\t\tret++;\n\t\t___________;\n\t}\n\treturn ret;\n}\n```\n\n则空格内要填入的语句是（ ）。",
+    "options": [
+      "A. `x >>= 1`",
+      "B. `x &= x - 1`",
+      "C. `x |= x >> 1`",
+      "D. `x <<= 1`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 719
+  },
+  {
+    "id": "noip-2018-p-720",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "下图中所使用的数据结构是（ ）。\n\n![](https://luogu-ipic.oss-cn-shanghai.aliyuncs.com/youti/95.png)",
+    "options": [
+      "A. 哈希表",
+      "B. 栈",
+      "C. 队列",
+      "D. 二叉树"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 720
+  },
+  {
+    "id": "noip-2018-p-721",
+    "source": "noip",
+    "year": 2018,
+    "knowledgePoint": "其他",
+    "question": "甲乙丙丁四人在考虑周末要不要外出郊游。\n\n已知①如果周末下雨，并且乙不去，则甲一定不去；②如果乙去，则丁一定去；③如果丙去，则丁一定不去；④如果丁不去，而且甲不去，则丙一定不去。\n\n如果周末丙去了，则甲________，乙________，丁________，周末________。",
+    "options": [
+      "A. 去了",
+      "B. 没去"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "_luogu_pid": 721
+  }
+]

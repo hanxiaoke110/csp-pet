@@ -1,3 +1,71 @@
+## 2026-07-10（续）— 知识卡文档全部创建完成 + 最终审计 + Codex 规范交付
+
+### 21 份知识卡文档
+- 使用 `scripts/create-knowledge-cards.mjs --execute --fill-urls` 批量创建成功
+- 每份文档统一模板：标题 → 摘要 → 1分钟速懂 → 最容易踩的坑 → 深入学习 → 返回总导航
+- 创建间隔 600ms（前13份）+ 2500ms（后8份，因 99991400 限流）
+- 所有 document_id + URL 记录在 `reports/feishu-knowledge-card-ids.json`
+
+### knowledge-points.json 完成
+- 21/21 feishuCardUrl 已填入（非空）
+- 救援索引页（GxWbddqOno4LcVxKD7LcqalrnTb）已按 C1-C4 组织全部 21 个卡片链接
+
+### 最终审计结果（2026-07-10）
+- `npm test`：10 tests passed ✅
+- `npm run build`：通过（main app）✅
+- `npm run build:dungeon`：通过（智子试炼场）✅
+- `npm run validate:assets`：0 issues ✅
+- `npm run audit:reliability`：VISIBLE P0=0 P1=0（38 issue 均为 pre-existing dungeon data）✅
+- knowledge-points.json：21/21 feishuCardUrl filled ✅
+- learning-resources.json：0 example.com references ✅
+- question-knowledge-mapping.json：967/1023 mapped (94.5%)，56 unmapped 待人工标注
+
+### Codex 规范已交付
+- 写入 `docs/codex-knowledge-card-spec.md`：完整 21 张知识卡生图 + 上传 + 权限验证规范
+- Codex 核心任务：为 21 份文档生成配图（9:16暖色竖版）、上传、填充「1分钟速懂」和「最容易踩的坑」、验证公开只读权限
+- 源素材：教学资料/CSP集训初赛补充物料/csp初赛重点知识卡片.xlsx（~40MB）
+
+### 已知待办
+- 56 道未映射题目需人工标注（`_needsReview: true`）
+- feishuLectureUrl 全部为空（等 Codex 处理 DOCX 讲义）
+- 21 份文档权限待 Codex 验证（互联网公开只读）
+- 知识卡文档内容为占位符（待 Codex 生图替换）
+- `sorting-and-searching` 在 greedy 的 prerequisiteIds 中但不在 21 知识点列表（缺失）
+- `REMOTE_RESOURCE_INDEX_URL` 仍为空（未启用远程索引）
+
+### 飞书资料库
+- 飞书总导航文档 (IPpTdbqBmoRJ0mx2INqcjnWDnOg) 结构调整为：00从这里开始→01课程信息(C1-C3课程线+寓言)→02 CSP-J初赛(真题救援)→03 CSP-J复赛→04班级专属
+- 24份学习资料文档由 Codex 完成统一排版（面包屑+返回总导航+占位内容），22份基础资料设为互联网公开只读，review-001/002 保持班级码门禁
+- 排版操作使用 lark-cli --as user（非API应用），已安装于 `~/.npm-global/bin/lark-cli` v1.0.66
+- lark-cli docs +update 使用 str_replace + doc-format markdown + `...`前缀后缀语法进行大段替换
+
+### 知识点→题目映射
+- 新增 `public/course-data/knowledge-points.json`：21个知识点目录，含id/name/stage/batch/summary/feishuCardUrl/prerequisiteIds/relatedLessonIds
+- 新增 `public/course-data/question-knowledge-mapping.json`：967/1023题已映射（94.5%），基于existing knowledgePoint字段 + 关键词推断
+- 新增 `scripts/generate-knowledge-mapping.mjs`：自动生成题目映射，56题待人工标注
+
+### 客户端：KnowledgePointHelp 组件
+- 新增 `src/components/shared/KnowledgePointHelp.tsx`：题后知识点帮助入口组件
+  - 答错：突出按钮"没懂？看「XX知识卡」"→打开飞书知识卡
+  - 答对：轻量文字"巩固这个知识点"
+  - 知识卡URL为空或题目未映射→静默隐藏，不阻塞答题
+- 新增 `src/utils/knowledgePointHelp.ts`：知识点数据工具（加载kp目录+题目映射，提供查询函数）
+- 接入四个答题入口：
+  - QuizPractice.tsx（覆盖普通练习/超级挑战/周练/复盘/自由练习）
+  - ExamChoice.tsx（CSP真题选择题）
+  - BattleScreen.tsx（智子试炼场—使用直接链接到真题救援索引页）
+- 当前 knowledge-points.json 中 feishuCardUrl 均为空，KnowledgePointHelp 组件静默隐藏，等 URL 填入后自动激活
+- 两个构建（build + build:dungeon）均通过，TypeScript 零错误
+
+### lark-cli 操作要点
+- 命令使用 `+` 前缀：`lark-cli docs +fetch`, `lark-cli docs +update`
+- `--doc` 接受 document_id 或完整 URL
+- `--as user` 以用户身份操作，`--as bot` 以bot身份
+- `str_replace` + `--doc-format markdown` + `...` 语法支持跨行大段替换
+- `@file.md` 语法加载内容文件，路径必须相对于当前工作目录
+- Block types: text=2, heading1=3, heading2=4, ..., bullet=12, code=14, callout=16
+- Text colors 仅支持 1-7（8+会报 field validation failed）
+
 ## 2026-07-06 — GESP 题库导入 + 4 个 bug 修复 + 缺代码题处理
 
 ### GESP 题库导入

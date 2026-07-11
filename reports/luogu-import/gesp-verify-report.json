@@ -1,0 +1,763 @@
+{
+  "generated": "2026-07-10T04:56:38.879Z",
+  "source": "gesp",
+  "totalCompared": 853,
+  "findings": [
+    {
+      "id": "gesp-2023-06-2-09",
+      "paperKey": "2023-06-L2",
+      "ourStem": "以下哪个循环语句会无限次执行？（ ）",
+      "luoguDesc": "以下哪个循环语句会无限次执行？（ ）",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. `for(int a=0;a;a++);`",
+          "luogu": "` for (int a = 0; a; a++); `"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. `for(bool b=false;b<=true;b++);`",
+          "luogu": "` for (bool b = false; b <= true; b++); `"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. `for(char c='A';c<'z';c++);`",
+          "luogu": "` for (char c = 'A'; c < 'z'; c++); `"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. `for(double d=0.0;d<10.0;d+=0.001);`",
+          "luogu": "` for (double d = 0.0; d < 10.0; d += 0.001); `"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2024-12-1-02",
+      "paperKey": "2024-12-L1",
+      "ourStem": "下列软件中是操作系统的是（ ）。",
+      "luoguDesc": "下列软件中是操作系统的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. WPS Office",
+          "luogu": "高德地图"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. Photoshop",
+          "luogu": "金山永中"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2024-06-4-07",
+      "paperKey": "2024-06-L4",
+      "ourStem": "关于直接插入排序，下列说法错误的是（）",
+      "luoguDesc": "关于直接插入排序，下列说法错误的是（ ）",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 插入排序的最好情况是数组已经有序，此时只需要进行 n-1 次比较，时间复杂度为 O(n)",
+          "luogu": "插入排序的最好情况是数组已经有序，此时只需要进行 $n - 1$ 次比较，时间复杂度为 $O(n)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 最坏情况是数组逆序排序，此时需要进行 n(n-1)/2 次比较以及 n(n-1)/2 次赋值操作（插入），时间复杂度为 O(n²)",
+          "luogu": "最坏情况是数组逆序排序，此时需要进行 $n(n - 1)/2$ 次比较以及 $n - 1$ 次赋值操作（插入）"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 平均来说插入排序算法的复杂度为 O(n²)",
+          "luogu": "平均来说插入排序算法的复杂度为 $O(n^2)$"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2024-09-3-02",
+      "paperKey": "2024-09-L3",
+      "ourStem": "关于计算机中的编码，下列说法中正确的是（）",
+      "luoguDesc": "关于计算机中的编码，下列说法中正确的是（ ）",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. [-1]=[1000 0001]原=[1111 1111]反",
+          "luogu": "$[-1] = [1000\\ 0001]_{原} = [1111\\ 1111]_{反}$"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2024-09-3-06",
+      "paperKey": "2024-09-L3",
+      "ourStem": "下列说法正确的是（）",
+      "luoguDesc": "下列说法正确的是（ ）",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 2>>1和1>>1的值是一样的",
+          "luogu": "2>>1 和 1>>1 的值是一样的"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. (2>>2)和(1>>1)的值是一样的",
+          "luogu": "(2>>2) 和 (1>>1) 的值是一样的"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. (11^00)和(1^0)的值是一样的",
+          "luogu": "(11^00) 和 (1^0) 的值是一样的"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. (~0的输出值是1)",
+          "luogu": "(~0) 的输出值是 1"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2024-09-3-07",
+      "paperKey": "2024-09-L3",
+      "ourStem": "下列代码实现的是（ ）",
+      "luoguDesc": "下列代码实现的是（ ）",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. a和b的异或",
+          "luogu": "a 和 b 的异或"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. a和b的同或",
+          "luogu": "a 和 b 的同或"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. a和b的值交换",
+          "luogu": "a 和 b 的值交换"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. a和b的高低位互换",
+          "luogu": "a 和 b 的高低位互换"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2024-12-3-02",
+      "paperKey": "2024-12-L3",
+      "ourStem": "关于计算机中的编码，下列说法中错误的是（）",
+      "luoguDesc": "关于计算机中的编码，下列说法中错误的是（ ）",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 对于⽆符号数，原码就是真值",
+          "luogu": "对于无符号数，原码就是真值"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 正数的反码是其本⾝",
+          "luogu": "正数的反码是其本身"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 负数的反码和补码是不⼀样的",
+          "luogu": "负数的反码和补码是不一样的"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 负数的反码，在其原码的基础上, 各个位取反",
+          "luogu": "负数的反码，在其原码的基础上，各个位取反"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2024-12-4-02",
+      "paperKey": "2024-12-L4",
+      "ourStem": "下面代码的描述中，正确的是（ ）。",
+      "luoguDesc": "下面代码的描述中，正确的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 代码执⾏结束后，times的值为0",
+          "luogu": "代码执行结束后，times 的值为 0"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. n是形参，times是实参",
+          "luogu": "n 是形参， times 是实参"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. n是实参，times是形参",
+          "luogu": "n 是实参， times 是形参"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 代码最后⼀⾏换成n_chars(times, my_char);也可以",
+          "luogu": "代码最后一行换成 `n_chars(times, my_char);` 也可以"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2025-03-4-01",
+      "paperKey": "2025-03-L4",
+      "ourStem": "关于下述代码，说法错误的是（ ）。",
+      "luoguDesc": "关于下述代码，说法错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 函数multiply的定义应该放到函数main之前。",
+          "luogu": "函数 `multiply` 的定义应该放到函数 `main` 之前。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. `函数声明int multiply(int x, int y);中明确指定了函数multiply()的返回值为整数类型。`",
+          "luogu": "函数声明 `int multiply(int x, int y);` 中明确指定了函数 `multiply()` 的返回值为整数类型。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 在main函数中，函数multiply通过multiply(a, b)被调⽤，其中a和b是定义在main函数中的变 量，它们作为实参传递给了multiply函数的形参x和y。",
+          "luogu": "在 `main` 函数中，函数 `multiply` 通过 `multiply(a, b)` 被调用，其中 `a` 和 `b` 是定义在 `main` 函数中的变量，它们作为实参传递给了 `multiply` 函数的形参 `x` 和 `y`。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 运⾏上述代码，将输出The result is: 20。",
+          "luogu": "运行上述代码，将输出 `The result is: 20`。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2025-03-4-11",
+      "paperKey": "2025-03-L4",
+      "ourStem": "给定如下算法，其时间复杂度为（ ）。",
+      "luoguDesc": "给定如下算法，其时间复杂度为（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. O(n²)",
+          "luogu": "$O(n^2)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. O(n × 2ⁿ)",
+          "luogu": "$O(n \\times 2^n)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. O(n³)",
+          "luogu": "$O(n^3)$"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2025-06-4-10",
+      "paperKey": "2025-06-L4",
+      "ourStem": "以下关于递推算法基本思想的描述，正确的是（ ）。",
+      "luoguDesc": "以下关于递推算法基本思想的描述，正确的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 递推算法通过将问题分解为相互独⽴的⼦问题来解决。",
+          "luogu": "递推算法通过将问题分解为相互独立的子问题来解决。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 递推算法从已知的基础情况出发，通过某种关系逐步推导出更⼤规模问题的解。",
+          "luogu": "递推算法从已知的基础情况出发，通过某种关系逐步推导出更大规模问题的解。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 递推算法通常⽤于穷举所有可能的解决⽅案。",
+          "luogu": "递推算法通常用于穷举所有可能的解决方案。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 递推算法适⽤于在每⼀步做出局部最优选择以达到全局最优。",
+          "luogu": "递推算法适用于在每一步做出局部最优选择以达到全局最优。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2025-06-4-11",
+      "paperKey": "2025-06-L4",
+      "ourStem": "给定如下算法，其时间复杂度为（ ）。",
+      "luoguDesc": "给定如下算法，其时间复杂度为（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. O(n²)",
+          "luogu": "$O(n)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. O(n × 2ⁿ)",
+          "luogu": "$O(n^2)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. O(1)",
+          "luogu": "$O(n^3)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. O(n³)",
+          "luogu": "$O(2^n)$"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2025-06-4-12",
+      "paperKey": "2025-06-L4",
+      "ourStem": "下述斐波那契数列计算的时间复杂度是（ ）。",
+      "luoguDesc": "下述斐波那契数列计算的时间复杂度是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. O(n²)",
+          "luogu": "$O(n^2)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. O(log n)",
+          "luogu": "$O(n^3)$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. O(2ⁿ)",
+          "luogu": "$O(2^n)$"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2025-06-4-13",
+      "paperKey": "2025-06-L4",
+      "ourStem": "关于下面 C++ 程序的描述，（ ）最准确。",
+      "luoguDesc": "关于下面 C++ 程序的描述，（ ）最准确。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 将从标准输⼊读取每⾏，并输出到屏幕",
+          "luogu": "将从标准输入读取每行，并输出到屏幕"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 程序⽆法运⾏，因为 getline 只能读取 cin",
+          "luogu": "程序无法运行，因为 getline 只能读取 cin"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 将 data.txt 中的每⼀⾏读取并输出到屏幕",
+          "luogu": "将 data.txt 中的每一行读取并输出到屏幕"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 程序将创建 data.txt 并写⼊默认⽂本",
+          "luogu": "程序将创建 data.txt 并写入默认文本"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-1-03",
+      "paperKey": "2026-06-L1",
+      "ourStem": "有关如下 C++ 代码的说法,正确的是( )。",
+      "luoguDesc": "有关如下 C++ 代码的说法，正确的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 代码能正常执行,将输出 6 。",
+          "luogu": "代码能正常执行，将输出 $6$。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 代码能正常执行,将输出 6.5 。",
+          "luogu": "代码能正常执行，将输出 $6.5$。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-1-07",
+      "paperKey": "2026-06-L1",
+      "ourStem": "如下 C++ 代码执行时,其说法错误的是( )。",
+      "luoguDesc": "如下 C++ 代码执行时，其说法错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 如果输入 4 3 ,将输出 A 1",
+          "luogu": "如果输入 `4 3`，将输出 `A 1`"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 如果输入 3 4 ,将输出 B 1",
+          "luogu": "如果输入 `3 4`，将输出 `B 1`"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 如果输入 3 3 ,将输出 A 0",
+          "luogu": "如果输入 `3 3`，将输出 `A 0`"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 如果输入 4 4 ,将输出 B 0",
+          "luogu": "如果输入 `4 4`，将输出 `B 0`"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-1-08",
+      "paperKey": "2026-06-L1",
+      "ourStem": "阅读如下 C++ 代码,下列说法错误的是( )。",
+      "luoguDesc": "阅读如下 C++ 代码，下列说法错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 将 cnt += 1 修改为 cnt = cnt + 1 ,执行效果相同",
+          "luogu": "将 `cnt += 1` 修改为 `cnt = cnt + 1`，执行效果相同"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 将 cnt += 1 修改为 cnt = 1 + cnt ,执行效果相同",
+          "luogu": "将 `cnt += 1` 修改为 `cnt = 1 + cnt`，执行效果相同"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 将 cnt += 1 修改为 cnt =+ 1 ,执行效果相同",
+          "luogu": "将 `cnt += 1` 修改为 `cnt =+ 1`，执行效果相同"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 将 cnt += 1 修改为 cnt = + 1 + cnt ,执行效果相同",
+          "luogu": "将 `cnt += 1` 修改为 `cnt = +1 + cnt`，执行效果相同"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-1-11",
+      "paperKey": "2026-06-L1",
+      "ourStem": "如下 C++ 代码执行时,下列说法正确的是( )。",
+      "luoguDesc": "如下 C++ 代码执行时，下列说法正确的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 如果输入 2 ,将输出 1# 。",
+          "luogu": "如果输入 `2`，将输出 `1#`。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 如果输入 15 ,将输出 0#1# 。",
+          "luogu": "如果输入 `15`，将输出 `0#1#`。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 如果输入 1 ,将输出 0# 。",
+          "luogu": "如果输入 `1`，将输出 `0#`。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 如果输入 3 ,将输出 1# 。",
+          "luogu": "如果输入 `3`，将输出 `1#`。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-1-12",
+      "paperKey": "2026-06-L1",
+      "ourStem": "有关如下 C++ 代码,下列说法中错误的是( )。",
+      "luoguDesc": "有关如下 C++ 代码，下列说法中错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 如果将 i = 0 和 tot = 0 合并为 i = tot = 0 ,执行结果与修改前相同。",
+          "luogu": "如果将 `i = 0` 和 `tot = 0` 合并为 `i = tot = 0`，执行结果与修改前相同。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-2-03",
+      "paperKey": "2026-06-L2",
+      "ourStem": "有关如下 C++ 代码的说法,正确的是( )。",
+      "luoguDesc": "有关如下 C++ 代码的说法，正确的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 代码能正常执行,将输出 6 。",
+          "luogu": "代码能正常执行，将输出 $6$。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 代码能正常执行,将输出 6.5 。",
+          "luogu": "代码能正常执行，将输出 $6.5$。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-2-13",
+      "paperKey": "2026-06-L2",
+      "ourStem": "英文 corner case 通常翻译为极端案例或边角案例,通常指正常范围以外的问题或者情形。在如下 C++代码中,变量都是整型,则 corner case 最应该是( )。",
+      "luoguDesc": "英文 corner case 通常翻译为极端案例或边角案例，通常指正常范围以外的问题或者情形。在如下 C++ 代码中，变量都是整型，则 corner case 最应该是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. tnt = 0, cnt = 0 是 corner case ,应分为两行",
+          "luogu": "`tnt = 0, cnt = 0` 是 corner case，应分为两行"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. while(1) 是 corner case ,因为 while(1) 将会导致死循环",
+          "luogu": "`while(1)` 是 corner case，因为 `while(1)` 将会导致死循环"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. cin >> score 是 corner case ,因为输入数据前应该提示整型数据",
+          "luogu": "`cin >> score` 是 corner case，因为输入数据前应该提示整型数据"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. cout << tnt / cnt 是 corner case ,因为如果直接输入 -1 ,将导致执行错误,虽然这种情况较为罕\n见",
+          "luogu": "`cout << tnt / cnt` 是 corner case，因为如果直接输入 $-1$，将导致执行错误，虽然这种情况较为罕见"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-3-01",
+      "paperKey": "2026-06-L3",
+      "ourStem": "关于计算机的数据编码,下面说法正确的是( )。",
+      "luoguDesc": "关于计算机的数据编码，下面说法正确的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 机器数 1000 1101B 的真值可能是 -13 (如果它是原码)或 141 (如果它是无符号数)等数,这取决于我\n们如何解释它。",
+          "luogu": "机器数 $1000\\ 1101\\mathrm{B}$ 的真值可能是 $-13$（如果它是原码）或 $141$（如果它是无符号数）等数，这取决于我们如何解释它。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 字节( Byte )是计算机中最小的数据单位。位( bit )是计算机中最小的存储单位。",
+          "luogu": "字节（Byte）是计算机中最小的数据单位。位（bit）是计算机中最小的存储单位。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 计算机中, 1k 字节是 1000 字节的意思。",
+          "luogu": "计算机中，$1\\mathrm{k}$ 字节是 $1000$ 字节的意思。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-3-03",
+      "paperKey": "2026-06-L3",
+      "ourStem": "低 4 位、高 4 位压缩技术，适用于数据仅使用字节的一部分（如仅用低 4 位）的场景。字节结构：一个字节为 8 位，分为高 4 位（高位）和低 4 位（低位）。当数据是十六进制数（0 ~ 15，即 0x0 到 0xF），每个值仅需 4 位表示，高 4 位全为 0。将两个相邻的 4 位值合并为一个字节。四个数据 0x1、0x2、0x3、0x4 采用上述压缩技术压缩以后是（ ）。",
+      "luoguDesc": "低 $4$ 位、高 $4$ 位压缩技术，适用于数据仅使用字节的一部分（如仅用低 $4$ 位）的场景。字节结构：一个字节为 $8$ 位，分为高 $4$ 位（高位）和低 $4$ 位（低位）。当数据是十六进制数（$0$ 到 $15$，即 `0x0` 到 `0xF`），每个值仅需 $4$ 位表示，高 $4$ 位全为 $0$。将两个相邻的 $4$ 位值合并为一个字节。四个数据 `0x1`、`0x2`、`0x",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 12D 、 34D",
+          "luogu": "$12\\mathrm{D}$、$34\\mathrm{D}$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 12Q 、 34Q",
+          "luogu": "$12\\mathrm{Q}$、$34\\mathrm{Q}$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 12H 、 34H",
+          "luogu": "$12\\mathrm{H}$、$34\\mathrm{H}$"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 00010011B 、 00110101B",
+          "luogu": "$00010011\\mathrm{B}$、$00110101\\mathrm{B}$"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-3-04",
+      "paperKey": "2026-06-L3",
+      "ourStem": "关于计算机编码中反码和补码,下面说法错误的是( )。",
+      "luoguDesc": "关于计算机编码中反码和补码，下面说法错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 对于一个 n 位的二进制数：最大表示范围：[-(2^(n-1))-1, +(2^(n-1)-1)]。",
+          "luogu": "对于一个 $n$ 位的二进制数：最大表示范围：$-2^n$ 到 $2^n-1$。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 反码表示中，0 的表示不唯一：0000 0000B 和 1111 1111B。",
+          "luogu": "反码表示中，$0$ 的表示不唯一：$0000\\ 0000\\mathrm{B}$ 和 $1111\\ 1111\\mathrm{B}$。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-3-06",
+      "paperKey": "2026-06-L3",
+      "ourStem": "关于位运算,下列说法错误的是( )。",
+      "luoguDesc": "关于位运算，下列说法错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. 找唯一数：数组中唯一出现一次的数，其余出现两次，全部异或结果即为该数。例如：数组 [5, 7, 9, 7, 5]（唯一数是 9）。",
+          "luogu": "找唯一数：数组中唯一出现一次的数，其余出现两次，全部异或结果即为该数。例如：数组 $[5,7,9,7,5]$（唯一数是 $9$）。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. 将二进制位整体左移 n 位，高位溢出舍弃，低位补 0；等价于 num 乘以 2^n。",
+          "luogu": "将二进制位整体左移 $k$ 位，高位溢出舍弃，低位补 $0$；等价于 `num` 乘以 $2^k$。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 对每一个二进制位取反，包括符号位，简单运算规则是 ~n = -n - 1。",
+          "luogu": "对每一个二进制位取反，包括符号位，简单运算规则是 $\\sim n=-n-1$。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-3-09",
+      "paperKey": "2026-06-L3",
+      "ourStem": "在 C++ 中，对于 32 位有符号整数 int 类型数据 n，关于按位取反运算符 ~，下列说法正确的是（ ）。",
+      "luoguDesc": "在 C++ 中，对于 $32$ 位有符号整数 `int` 类型数据 `n`，关于按位取反运算符 `~`，下列说法正确的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. ~6 的结果是 5 。",
+          "luogu": "`~6` 的结果是 $5$。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 1,
+          "ours": "B. 按位取反满足公式 ~n = -n - 1 。",
+          "luogu": "按位取反满足公式 $\\sim n=-n-1$。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. ~0 的结果是 1 。",
+          "luogu": "`~0` 的结果是 $1$。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. ~(-2) 的结果是 -1 。",
+          "luogu": "`~(-2)` 的结果是 $-1$。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-3-10",
+      "paperKey": "2026-06-L3",
+      "ourStem": "关于计算机中的二进制编码表示,下列说法错误的是( )。",
+      "luoguDesc": "关于计算机中的二进制编码表示，下列说法错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 3,
+          "ours": "D. 对于一个 n 位的二进制数，补码最大表示范围为 [-2^(n-1), +2^(n-1)]。",
+          "luogu": "对于一个 $n$ 位的二进制数，补码最大表示范围为 $-2^n$ 到 $2^n-1$。"
+        }
+      ]
+    },
+    {
+      "id": "gesp-2026-06-3-13",
+      "paperKey": "2026-06-L3",
+      "ourStem": "关于 string 的成员函数,下面说法错误的是( )。",
+      "luoguDesc": "关于 `string` 的成员函数，下面说法错误的是（ ）。",
+      "fixes": [
+        {
+          "type": "option_mismatch",
+          "index": 0,
+          "ours": "A. size() :返回字符串长度(字符个数,不含 '\\0' )。",
+          "luogu": "`size()`：返回字符串长度（字符个数，不含 `'\\0'`）。"
+        },
+        {
+          "type": "option_mismatch",
+          "index": 2,
+          "ours": "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
+          "luogu": "`empty()`：判断字符串是否为空（非空返回 `true`，空返回 `false`）。"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "answerMismatches": 0,
+    "option_mismatch": 88
+  }
+}

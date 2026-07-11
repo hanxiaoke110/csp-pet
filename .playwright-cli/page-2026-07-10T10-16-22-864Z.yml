@@ -1,0 +1,58 @@
+- generic [ref=f2e1]:
+  - generic [ref=f2e5]:
+    - generic [ref=f2e8]:
+      - link "飞书云文档" [ref=f2e10] [cursor=pointer]:
+        - /url: https://www.feishu.cn
+      - generic [ref=f2e24]:
+        - generic [ref=f2e26]:
+          - generic [ref=f2e27]:
+            - generic [ref=f2e28]: 用户675753的组织
+            - paragraph [ref=f2e33]:
+              - generic [ref=f2e34]: P01｜讲义卡｜基础框架
+          - paragraph [ref=f2e37]: 最新修改时间为07月10日
+        - generic [ref=f2e41]:
+          - button "登录/注册" [ref=f2e43] [cursor=pointer]
+          - button [ref=f2e44] [cursor=pointer]
+    - generic [ref=f2e51]:
+      - list [ref=f2e59] [cursor=pointer]:
+        - listitem
+        - listitem [ref=f2e60]:
+          - link "P01｜讲义卡｜基础框架" [ref=f2e61]:
+            - /url: "#PDtpdjcijoyjbDxPVDscY93onMh"
+        - listitem [ref=f2e65]:
+          - link "P01｜讲义卡｜基础框架" [ref=f2e66]:
+            - /url: "#doxcnXpavLqypsCAscPB92NCLWe"
+        - listitem [ref=f2e70]:
+          - link "📋 内容即将上线" [ref=f2e71]:
+            - /url: "#doxcnX283G8vOCs2r9yG4WaKZMc"
+        - listitem
+      - generic [ref=f2e84]:
+        - generic [ref=f2e85]:
+          - heading "P01｜讲义卡｜基础框架" [level=1] [ref=f2e87]
+          - generic [ref=f2e90]: 今天修改
+        - generic [ref=f2e97]:
+          - generic [ref=f2e102]:
+            - link "智子学习资料库" [ref=f2e105] [cursor=pointer]:
+              - /url: https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg
+            - text: "> CSP-J 初赛 > 课程线：C1 入门阶段 > P01｜讲义卡｜基础框架"
+          - generic [ref=f2e112]: P01｜讲义卡｜基础框架
+          - generic [ref=f2e118]: 📘 课程讲义 P01 | C1 入门阶段 | CSP-J
+          - generic [ref=f2e123]: 📖 P1 基础框架讲义卡。飞书文档上传后无需更新客户端即可查看。
+          - generic [ref=f2e134]: 📋 内容即将上线
+          - generic [ref=f2e142]:
+            - generic [ref=f2e143]: •
+            - generic [ref=f2e145]: 知识点的详细讲解与图示
+          - generic [ref=f2e150]:
+            - generic [ref=f2e151]: •
+            - generic [ref=f2e153]: 交互式例题与代码演示
+          - generic [ref=f2e158]:
+            - generic [ref=f2e159]: •
+            - generic [ref=f2e161]: 常见陷阱与解题技巧
+          - generic [ref=f2e166]:
+            - generic [ref=f2e167]: •
+            - generic [ref=f2e169]: 配套练习题
+          - generic [ref=f2e172]: 内容更新后无需重新安装桌宠，刷新本页面即可查看。
+          - link "← 返回总导航：智子学习资料库｜CSP 学习导航" [ref=f2e190] [cursor=pointer]:
+            - /url: https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg
+          - generic [ref=f2e191]: 💡 收藏总导航链接，即使不打开桌宠也能随时学习。
+  - textbox [active] [ref=f2e196]

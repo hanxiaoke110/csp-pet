@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { renderCodeText } from '../../utils/markdown';
+import KnowledgePointHelp from '../shared/KnowledgePointHelp';
 
 interface ChoiceQuestion {
   id: string;
@@ -98,6 +99,10 @@ export default function ExamChoice({ question: q, questionNum, onAnswer, onNext,
             {selected !== q.correctIndex && (
               <p className="correct-answer">正确答案是 {String.fromCharCode(65 + q.correctIndex)}</p>
             )}
+            <KnowledgePointHelp
+              questionId={q.id}
+              isCorrect={selected === q.correctIndex}
+            />
           </div>
         )}
       </div>

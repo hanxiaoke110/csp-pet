@@ -1,0 +1,72 @@
+- generic [ref=f4e1]:
+  - generic [ref=f4e5]:
+    - generic [ref=f4e8]:
+      - link "飞书云文档" [ref=f4e10] [cursor=pointer]:
+        - /url: https://www.feishu.cn
+      - generic [ref=f4e24]:
+        - generic [ref=f4e26]:
+          - generic [ref=f4e27]:
+            - generic [ref=f4e28]: 用户675753的组织
+            - paragraph [ref=f4e33]:
+              - generic [ref=f4e34]: P53｜讲义卡｜枚举算法的优化
+          - paragraph [ref=f4e37]: 最新修改时间为07月10日
+        - generic [ref=f4e41]:
+          - button "登录/注册" [ref=f4e43] [cursor=pointer]
+          - button [ref=f4e44] [cursor=pointer]
+    - generic [ref=f4e51]:
+      - list [ref=f4e59] [cursor=pointer]:
+        - listitem
+        - listitem [ref=f4e60]:
+          - link "P53｜讲义卡｜枚举算法的优化" [ref=f4e61]:
+            - /url: "#D4IcdSDwdoTyVzxRIQucnPX3njf"
+        - listitem [ref=f4e65]:
+          - link "枚举算法的优化" [ref=f4e66]:
+            - /url: "#doxcn0EjzZ8A2SqebF6DamSnsCd"
+        - listitem [ref=f4e70]:
+          - link "资料状态" [ref=f4e71]:
+            - /url: "#doxcnTCSm0J2gInetccGhliDobd"
+        - listitem [ref=f4e75]:
+          - link "学习建议" [ref=f4e76]:
+            - /url: "#doxcnbtwKgkCWS6nAy9gsKcDWz0"
+        - listitem [ref=f4e80]:
+          - link "后续待上传" [ref=f4e81]:
+            - /url: "#doxcnU6N9Wlb5h8XYxOsPx0pMCc"
+        - listitem [ref=f4e85]:
+          - link "首张样张" [ref=f4e86]:
+            - /url: "#doxcnDxEJg7riFfKyoGIE2izi5b"
+        - listitem
+      - generic [ref=f4e90]:
+        - generic [ref=f4e99]:
+          - generic [ref=f4e100]:
+            - heading "P53｜讲义卡｜枚举算法的优化" [level=1] [ref=f4e102]
+            - generic [ref=f4e105]: 今天修改
+          - generic [ref=f4e112]:
+            - generic [ref=f4e117]:
+              - generic [ref=f4e118]: 📝
+              - generic [ref=f4e122]: 本页面是 CSP-J 学习资料的预置入口。当前状态：制作中。
+            - generic [ref=f4e129]: 枚举算法的优化
+            - generic [ref=f4e135]: 课号：P53
+            - generic [ref=f4e140]: 资料类型：讲义卡
+            - generic [ref=f4e145]: 学习阶段：C3 进阶阶段
+            - generic [ref=f4e150]: 访问规则：无需班级码，可直接查看
+            - generic [ref=f4e155]: 标签：算法、枚举、优化、样张
+            - generic [ref=f4e166]: 资料状态
+            - generic [ref=f4e172]: P53 枚举算法优化讲义卡。飞书文档上传后无需更新客户端即可查看。
+            - generic [ref=f4e177]: 后续老师会把讲义图、寓言图或复盘材料上传到本页面。内容更新后，学生无需更新客户端，重新打开本链接即可看到最新资料。
+            - generic [ref=f4e182]: 学习建议
+            - generic [ref=f4e190]:
+              - generic [ref=f4e191]: •
+              - generic [ref=f4e193]: 先完成本节课堂练习或普通选择题练习。
+            - generic [ref=f4e198]:
+              - generic [ref=f4e199]: •
+              - generic [ref=f4e201]: 遇到卡壳知识点，再回到本页面查看讲义卡或寓言卡。
+            - generic [ref=f4e206]:
+              - generic [ref=f4e207]: •
+              - generic [ref=f4e209]: 如果本页面暂时只有占位内容，说明资料还在制作中，可以先继续完成 APP 内练习。
+            - generic [ref=f4e212]: 后续待上传
+            - generic [ref=f4e218]: 主讲义卡图片
+            - generic [ref=f4e225]: 易错复盘卡或寓言卡
+            - generic [ref=f4e232]: 配套练习/复盘链接
+            - generic [ref=f4e245]: 资源 ID：p53-lecture ｜ 更新时间：2026-07-09
+        - generic [ref=f4e251]: 评论
+  - textbox [active] [ref=f4e263]

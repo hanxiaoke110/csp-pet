@@ -1,0 +1,5722 @@
+{
+  "gesp-2025-09-1-3335": {
+    "id": "gesp-2025-09-1-3335",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数论",
+    "question": "人工智能现在非常火，小杨就想多了解一下，其中就经常听人提到“大模型”。那么请问这里说的“大模型”最贴切是指（ ）。",
+    "options": [
+      "A. 大电脑模型",
+      "B. 大规模智能",
+      "C. 智能的单位",
+      "D. 大语言模型"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3335
+  },
+  "gesp-2025-09-1-3336": {
+    "id": "gesp-2025-09-1-3336",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "小杨这学期刚开学就选修了一门编程课，然后就想编写程序来计算 1 到 10001 之间的所有偶数的和。他希望程序采用简单累加整数的方法，同时希望源程序尽可能清晰、简洁，则下面关于实现累加时采用的主要控制结构的哪个说法最不合适（ ）。",
+    "options": [
+      "A. 使用循环结构",
+      "B. 使用循环和分支的组合",
+      "C. 仅使用顺序结构",
+      "D. 不使用分支结构"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3336
+  },
+  "gesp-2025-09-1-3337": {
+    "id": "gesp-2025-09-1-3337",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "下面的 C++ 代码用于输入姓名，然后输出姓名，正确的说法是（ ）。\n\n```cpp\nstring XingMing;\ncout << \"请输入您的姓名：\";\ncin >> XingMing;\ncout << XingMing;\n```",
+    "options": [
+      "A. XingMing 是汉语拼音，不能作为变量名称",
+      "B. 可以将 XingMing 改为 Xing Ming",
+      "C. 可以将 XingMing 改为 xingming",
+      "D. 可以将 XingMing 改为 Xing-Ming"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3337
+  },
+  "gesp-2025-09-1-3338": {
+    "id": "gesp-2025-09-1-3338",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下列 C++ 代码中 a 和 b 都是整型变量，执行后，其结果是（ ）。\n\n```cpp\na = 13;\nb = 5;\ncout << a / b << a %// b << a % b;\na * b;\n```",
+    "options": [
+      "A. 2 3",
+      "B. 23",
+      "C. 20",
+      "D. 以上都不准确"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3338
+  },
+  "gesp-2025-09-1-3339": {
+    "id": "gesp-2025-09-1-3339",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 表达式 `3 * 4 % 5 / 6` 的值是（ ）。",
+    "options": [
+      "A. 10",
+      "B. 5",
+      "C. 2",
+      "D. 0"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3339
+  },
+  "gesp-2025-09-1-3340": {
+    "id": "gesp-2025-09-1-3340",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面的 C++ 代码中变量 N 和 M 都是整型，则执行时如果先输入 10 并输入一个制表符后输入 20 并回车，其输出的数值是（ ）。\n\n```cpp\nscanf(\"%d\", &N);\nscanf(\"%d\", &M);\nprintf(\"{%d}\", N + M);\n```",
+    "options": [
+      "A. {30}",
+      "B. 1020",
+      "C. {N+M}",
+      "D. 不输出，继续等待输入"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3340
+  },
+  "gesp-2025-09-1-3341": {
+    "id": "gesp-2025-09-1-3341",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "当前是 9 月，编写 C++ 代码求 N 个月后的月份。横线处应填入的代码是（ ）。\n\n```cpp\nint N, M;\ncin >> N;\nM = ___________;\nif (M == 0)\n    printf(\"%d个月后12月\", N);\nelse\n    printf(\"%d个月后是%d月\", N, M);\n```",
+    "options": [
+      "A. `N % 12`",
+      "B. `9 + N % 12`",
+      "C. `(9 + N) / 12`",
+      "D. `(9 + N) % 12`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3341
+  },
+  "gesp-2025-09-1-3342": {
+    "id": "gesp-2025-09-1-3342",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后的输出是（ ）。\n\n```cpp\nint n = 0;\nfor (int i = 0; i < 100; i++)\n    n += i % 2;\ncout << n;\n```",
+    "options": [
+      "A. 5050",
+      "B. 4950",
+      "C. 50",
+      "D. 49"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3342
+  },
+  "gesp-2025-09-1-3343": {
+    "id": "gesp-2025-09-1-3343",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行后输出是（ ）。\n\n```cpp\nint N = 0, i;\nfor (i = -100; i < 100; i++)\n    N += i % 10;\ncout << N;\n```",
+    "options": [
+      "A. 900",
+      "B. 100",
+      "C. 0",
+      "D. -100"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3343
+  },
+  "gesp-2025-09-1-3344": {
+    "id": "gesp-2025-09-1-3344",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出是（ ）。\n\n```cpp\nint i;\nfor(i = 1; i < 5; i++){\n    if(i % 3 == 0)\n        break;\n    printf(\"%d#\",i);\n}\nif(i > 5) printf(\"END\n\");\n```",
+    "options": [
+      "A. 1#2#",
+      "B. 1#2#END",
+      "C. 1#2",
+      "D. 1#2#3#4#END"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3344
+  },
+  "gesp-2025-09-1-3359": {
+    "id": "gesp-2025-09-1-3359",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码用于求 $N$ 的镜面数（$N$ 的个位到最高位的各位数字依次反过来出现在数字中，但高位 $0$ 将被忽略，不输出），如输入 $1234$，则将输出 $4321$，又如输入 $120$，则将输出 $21$，错误的选项是（ ）。\n\n```cpp\ncout << \"请输入个位数不为0的正整数：\";\ncin >> N;\nrst = 0; // 保存逆序结果\nwhile (_____________){\n    rst = rst * 10 + N % 10;\n    N = N / 10;\n}\ncout << rst << endl;\n```",
+    "options": [
+      "A. `N != 0`",
+      "B. `not (N == 0)`",
+      "C. `N = 0`",
+      "D. `N > 0`"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3359
+  },
+  "gesp-2025-09-1-3345": {
+    "id": "gesp-2025-09-1-3345",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面 C++ 代码用于交换两个正整数 $a$ 和 $b$ 的值，不能实现交换的代码是（ ）。\n\nA.\n```cpp\ncout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\ntemp = a;\na = b;\nb = temp;\ncout << \"a=\" << a << \" b=\" << b << endl;\n```\n\nB.\n```cpp\ncout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\nb = a - b;\na = a - b;\nb = a + b;\ncout << \"a=\" << a << \" b=\" << b << endl;\n```\n\nC.\n```cpp\ncout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\na = a + b;\nb = a - b;\na = a - b;\ncout << \"a=\" << a << \" b=\" << b << endl;\n```\n\nD.\n```cpp\ncout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\na, b = b, a;\ncout << \"a=\" << a << \" b=\" << b << endl;\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3345
+  },
+  "gesp-2025-09-1-3346": {
+    "id": "gesp-2025-09-1-3346",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码用于获得正整数 $N$ 的第 $M$ 位数，约定个位数为第 1 位，如 $N$ 等于 $1234$，$M$ 等于 $2$，则输出 $3$。假设 $M$ 的值是大于等于 $1$ 且小于等于 $N$ 的位数。横线处应填入的代码是（ ）。\n\n```cpp\nint N, M, div=1;\ncout << \"请输入一个正整数：\";\ncin >> N;\ncout << \"请输入从右到左取第几位数：\";\ncin >> M;\nfor (int i = 0; i < (M - 1); i++) div *= 10;\ncout << (_____________);\n```",
+    "options": [
+      "A. `N % div / 10`",
+      "B. `N / div / 10`",
+      "C. `N % div % 10`",
+      "D. `N / div % 10`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3346
+  },
+  "gesp-2025-09-1-3347": {
+    "id": "gesp-2025-09-1-3347",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出是（ ）。\n\n```cpp\nnum = 0;\nwhile (num <= 5){\n    num += 1;\n    if (num == 3)\n        continue;\n    printf(\"%d#\", num);\n}\n```",
+    "options": [
+      "A. 1#2#4#5#6#",
+      "B. 1#2#4#5#6",
+      "C. 1#2#3#4#5#6#",
+      "D. 1#2#3#4#5#6"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3347
+  },
+  "gesp-2025-09-1-3348": {
+    "id": "gesp-2025-09-1-3348",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码用于记录多个输入数中的最大数和最小数（输入 $-999$ 则输入结束），相关说法错误的是（ ）。\n\n```cpp\ncin >> now_num;\nmin_num = max_num = now_num;\nwhile (now_num != -999){\n    if (max_num < now_num)\n        max_num = now_num;\n    if (min_num > now_num)\n        min_num = now_num;\n    cin >> now_num;\n}\ncout << min_num << ' ' << max_num;\n```",
+    "options": [
+      "A. 程序运行时如果第一个数输入 $-999$，则输出将是 $-999$ $-999$",
+      "B. 程序输入过程中，如果输入的第一个数不是 $-999$，则如果待输入的数据中没有 $-999$，则程序能求出已输入整数中的最大数和最小数",
+      "C. 如果用于输入考试成绩，即成绩中不可能有 $-999$，则程序能求出已输入成绩中的最高成绩和最低成绩",
+      "D. 可以将 `cin >> now_num;` 移动到 `while (now_num != -999) {` 下面，结果不变"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3348
+  },
+  "gesp-2025-09-1-3349": {
+    "id": "gesp-2025-09-1-3349",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "在集成开发环境里调试程序时，要注意不能修改源程序，因为如果修改，就要终止调试、关闭该文件并重新打开，才能再次开始调试。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3349
+  },
+  "gesp-2025-09-1-3350": {
+    "id": "gesp-2025-09-1-3350",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "执行 C++ 表达式 `10 % 0.5` 将报错，因为 `0.5` 所在位置只能是整数。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3350
+  },
+  "gesp-2025-09-1-3351": {
+    "id": "gesp-2025-09-1-3351",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后将输出 $9$。（ ）\n```cpp\nfor (i = 0; i < 10; i++)\n    break;\ncout << i;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3351
+  },
+  "gesp-2025-09-1-3352": {
+    "id": "gesp-2025-09-1-3352",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后将输出 $55$。（ ）\n```cpp\nn = 0;\nfor (int i = 0; i > -10; i--)\n    n = n + i * -1;\ncout << n;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3352
+  },
+  "gesp-2025-09-1-3353": {
+    "id": "gesp-2025-09-1-3353",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "将下面 C++ 代码中的 L1 行的 $i = 0$ 修改为 $i = 1$，其输出与当前代码输出相同。（ ）\n```cpp\ncnt = 0;\nfor (int i = 0; i < 100; i++) // L1\n    cnt += i;\ncout << cnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3353
+  },
+  "gesp-2025-09-1-3354": {
+    "id": "gesp-2025-09-1-3354",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "将下面 C++ 代码中的 `i < 10` 修改为 `i <= 10`，其执行后输出相同。（ ）\n```cpp\nint n, i;\nn = i = 0;\nwhile (i < 10){\n    n += i;\n    i += 1;\n}\ncout << n;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3354
+  },
+  "gesp-2025-09-1-3355": {
+    "id": "gesp-2025-09-1-3355",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行后将输出 $45$。（ ）\n```cpp\nint n, i;\nn = i = 0;\nwhile (i < 10){\n    i += 1;\n    n += i;\n}\ncout << n;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3355
+  },
+  "gesp-2025-09-1-3356": {
+    "id": "gesp-2025-09-1-3356",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "执行 C++ 代码 `cout << (12 + 12.12)` 将报错，因为 $12$ 是 `int` 类型，而 $12.12$ 是 `float` 类型，不同类型不能直接运算。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3356
+  },
+  "gesp-2025-09-1-3357": {
+    "id": "gesp-2025-09-1-3357",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行时将导致无限循环（也称死循环）。（ ）\n```cpp\nint count = 0;\nwhile (count < 5){\n    count += 1;\n    if (count == 3)\n        continue;\n    cout << count << ' ';\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3357
+  },
+  "gesp-2025-09-1-3358": {
+    "id": "gesp-2025-09-1-3358",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下列 C++ 代码用于求斐波那契数列，即第 1 个数为 $0$、第 2 个数为 $1$，从第三个数开始，依次是其前两个数之和。如果输入的值为大于 1 的正整数，该代码能实现所求。（ ）\n```cpp\ncin >> n;\na = 0, b = 1;\nfor (int j = 0; j < n; j++){\n    cout << a << \" \";\n    b = b + a;\n    a = b - a;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3358
+  },
+  "gesp-2025-09-2-3360": {
+    "id": "gesp-2025-09-2-3360",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数论",
+    "question": "人工智能现在非常火，小杨就想多了解一下，其中就经常听人提到“大模型”。那么请问这里说的“大模型”最贴切是指（ ）。",
+    "options": [
+      "A. 大电脑模型",
+      "B. 大规模智能",
+      "C. 智能的单位",
+      "D. 大语言模型"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3360
+  },
+  "gesp-2025-09-2-3361": {
+    "id": "gesp-2025-09-2-3361",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "在 TCP 协议中，完成连接建立需要通过（ ）握手。",
+    "options": [
+      "A. 一次",
+      "B. 二次",
+      "C. 三次",
+      "D. 四次"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3361
+  },
+  "gesp-2025-09-2-3362": {
+    "id": "gesp-2025-09-2-3362",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "下面的 C++ 代码用于输入姓名，然后输出姓名，正确的说法是（ ）。\n\n```cpp\nstring XingMing;\ncout << \"请输入您的姓名：\";\ncin >> XingMing;\ncout << XingMing;\n```",
+    "options": [
+      "A. `XingMing` 是汉语拼音，不能作为变量名称",
+      "B. 可以将 `XingMing` 改为 `Xing Ming`",
+      "C. 可以将 `XingMing` 改为 `xingming`",
+      "D. 可以将 `XingMing` 改为 `Xing-Ming`"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3362
+  },
+  "gesp-2025-09-2-3363": {
+    "id": "gesp-2025-09-2-3363",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码用于获得正整数 $N$ 的第 $M$ 位数，如 $N$ 等于 $1234$，$M$ 等于 $2$，则输出 $3$。此题假设 $M$ 的值大于等于 $1$ 且小于等于 $N$ 的位数。横线处应填入的代码是（ ）。\n\n```cpp\nint N, M, div=1;\ncout << \"请输入一个正整数：\";\ncin >> N;\ncout << \"请输入从右到左取第几位数：\";\ncin >> M;\nfor (int i = 0; i < (M - 1); i++) div *= 10;\ncout << (_____________);\n```",
+    "options": [
+      "A. `N % div / 10`",
+      "B. `N / div / 10`",
+      "C. `N % div % 10`",
+      "D. `N / div % 10`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3363
+  },
+  "gesp-2025-09-2-3364": {
+    "id": "gesp-2025-09-2-3364",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面 C++ 代码执行，其输出是（ ）。\n\n```cpp\na, b = 3, 4;\nc = a == b;\ncout << a << ' ' << b << ' ' << c;\n```",
+    "options": [
+      "A. 3 4 0",
+      "B. 3 3 3",
+      "C. 4 4 4",
+      "D. 以上都不对"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3364
+  },
+  "gesp-2025-09-2-3365": {
+    "id": "gesp-2025-09-2-3365",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "进制与编码",
+    "question": "某种编号的规则是“XX-Y”，其中 XX 从 00 到 11，Y 从 0 到 9。第 1 个编号是 00-0，第 2 个编号是 01-1，…，第 12 个编号 11-1，第 13 个编号 00-2，即其编码规则是 XX 和 Y 同时增 1，到 XX 到 11 时下一个变为 00，Y 到 9 时，下一个变为 0。下面的 C++ 代码用于生成第 N 个编号，横线处应填上的代码是（ ）。\n\n```cpp\ncout << \"请输入编号位置：\";\ncin >> N;\npart1 = N % _____;\npart2 = N % _____;\nif (part1 < 10)\n    printf(\"0%d-%d\n\", part1, part2);\nelse\n    printf(\"%d-%d\n\", part1, part2);\n```",
+    "options": [
+      "A. 12 10",
+      "B. 10 10",
+      "C. 11 9",
+      "D. 9 9"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3365
+  },
+  "gesp-2025-09-2-3366": {
+    "id": "gesp-2025-09-2-3366",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行后其输出是（ ）。\n\n```cpp\ncnt = 0;\nfor (int i = -10; i < 10; i++)\n    for (int j = 0; j < i; j++)\n        cnt += 1;\ncout << cnt;\n```",
+    "options": [
+      "A. 145",
+      "B. 125",
+      "C. 55",
+      "D. 45"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3366
+  },
+  "gesp-2025-09-2-3367": {
+    "id": "gesp-2025-09-2-3367",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后其输出是（ ）。\n\n```cpp\nfor (i = 1; i < 12; i++) {\n    if (i % 2 == 0)\n        continue;\n    for (j = 0; j < i; j++)\n        if (i * j % 2)\n            break;\n}\nif (i >= 12)\n    cout << (i * j);\n```",
+    "options": [
+      "A. 110",
+      "B. 12",
+      "C. 不确定",
+      "D. 无输出"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3367
+  },
+  "gesp-2025-09-2-3368": {
+    "id": "gesp-2025-09-2-3368",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "阅读下面的 C++ 代码，其中变量都是整型，则说法正确的是（ ）。\n\n```cpp\ncin >> a >> b;\nwhile (b != 0) {\n    remainder = a % b;\n    a = b;\n    b = remainder;\n}\ncout << a;\n```",
+    "options": [
+      "A. `b` 不能为 $0$，因为 `a % b` 将导致错误",
+      "B. `a` 必须小于 `b`，否则 `a % b` 将导致错误",
+      "C. `a` 和 `b` 都必须为正整数，否则 `a % b` 将导致错误",
+      "D. 如果 `a` 输入为 $0$，则不管 `b` 的输入值是什么，输出值的绝对值都是 `abs(b)`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3368
+  },
+  "gesp-2025-09-2-3369": {
+    "id": "gesp-2025-09-2-3369",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出是（ ）。\n\n```cpp\nnum = 0;\nwhile (num <= 5) {\n    num += 1;\n    if (num == 3)\n        continue;\n    printf(\"%d#\", num);\n}\n```",
+    "options": [
+      "A. 1#2#4#5#6#",
+      "B. 1#2#4#5#6",
+      "C. 1#2#3#4#5#6#",
+      "D. 1#2#3#4#5#6"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3369
+  },
+  "gesp-2025-09-2-3370": {
+    "id": "gesp-2025-09-2-3370",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码用于记录多个输入数中的最大数和最小数（输入 $-999$ 则输入结束），相关说法错误的是（ ）。\n\n```cpp\ncin >> now_num;\nmin_num = max_num = now_num;\n\nwhile (now_num != -999){\n    if (max_num < now_num)\n        max_num = now_num;\n\n    if (min_num > now_num)\n        min_num = now_num;\n\n    cin >> now_num;\n}\ncout << min_num << ' ' << max_num;\n```",
+    "options": [
+      "A. 程序运行时如果第一个数输入 $-999$，则输出将是 $-999$ $-999$",
+      "B. 程序输入过程中，如果输入的第一个数不是 $-999$，则如果待输入的数据中没有 $-999$，则程序能求出已输入整数中的最大数和最小数",
+      "C. 如果用于输入考试成绩，即成绩中不可能有 $-999$，则程序能求出已输入成绩中的最高成绩和最低成绩",
+      "D. 可以将 `cin >> now_num;` 移动到 `while (now_num != -999) {` 下面，结果不变"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3370
+  },
+  "gesp-2025-09-2-3371": {
+    "id": "gesp-2025-09-2-3371",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出与 5 有关数的数量。“与 5 有关的数”定义为含有 5 或者能被 5 整除的数。相关说法正确的是（ ）。\n\n```cpp\ncnt = 0;\nfor (i = 1; i < 1000; i++){\n    if (i % 5 == 0){\n        cnt += 1;\n        continue;\n    }\n\n    j = i;\n    while (j > 0)\n        if (j % 10 == 5){\n            cnt += 1;\n            break;\n        }\n        else\n            j /= 10;\n}\ncout << cnt;\n```",
+    "options": [
+      "A. 删除代码中 `continue` 不影响程序执行结果",
+      "B. 删除 `j = i` 并将 `while` 循环内的 `j` 修改为 `i`，不影响程序执行结果",
+      "C. 代码中 `break` 修改为 `j = 0`，不影响程序执行结果",
+      "D. 将 `while (j > 0)` 修正为 `while (j >= 0)` 不影响程序执行的结果"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3371
+  },
+  "gesp-2025-09-2-3372": {
+    "id": "gesp-2025-09-2-3372",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码实现输出如下图形，应该在横线处填入的代码是（ ）。\n\n```\n请输入层数：10\n         1\n        23\n       456\n      7891\n     23456\n    789123\n   4567891\n  23456789\n 123456789\n1234567891\n```\n\n```cpp\ncout << \"请输入层数：\";\ncin >> N;\nK = 1;\nfor (i = 1; i < N + 1; i++){\n    for (int _ = 1; _ < __________; _++)\n        cout << \" \";\n    for (int _ = 1; _ < __________; _++){\n        cout << K;\n        K += 1;\n        if (K == 10)\n            K = 1;\n    }\n    cout << '\n';\n}\n```\n\nA.\n\n```cpp\nN - i + 1\ni + 1\n```\n\nB.\n\n```cpp\nN - i\ni\n```\n\nC.\n\n```cpp\nN\ni\n```\n\nD.\n\n```\nN - i\ni + 1\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3372
+  },
+  "gesp-2025-09-2-3373": {
+    "id": "gesp-2025-09-2-3373",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面 C++ 代码执行，其输出是（ ）。\n\n```cpp\nint a=9, b=27;\na = 'a' + 'b';\nb = 'a' - 'b';\na = a - b;\ncout << a << ' ' << b << endl;\n```",
+    "options": [
+      "A. 196 -1",
+      "B. 27 9",
+      "C. 98 97",
+      "D. 不确定"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3373
+  },
+  "gesp-2025-09-2-3374": {
+    "id": "gesp-2025-09-2-3374",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "有个无限长的链，由 3 种外形相同但材质不同的环链成。3 种环的重量分别是 $3$、$4$、$6$ 克，相同材质的多个环每 $12$ 克一组，分别记为 G3、G4、G6。链依次 G3、G4、G6、G3、G4、G6、...。同时对链上所有环从头依次编号 $1$、$2$、$3$、$4$……。输入正整数代表环编号，求该编号前所有环（不含该环本身）的重量。下面是 C++ 代码是实现，正确说法是（ ）。\n\n\n```cpp\nint N, G, R;\nint wc = 0;\n\ncin >> N;  // 输入正整数\n\nG = (N - 1) / 9; // L1\nR = (N - 1) % 9; // L2：保存余数\nwc += 36*G;\n\nif((1 <= R) && (R <= 4))\n    wc += 3*R; // L3\nelse if ((5 <= R) && (R <= 7))\n    wc += 4*R; // L4\nelse if(R == 8)\n    wc += 6*(R - 1); // L5\ncout << wc << endl;\n```",
+    "options": [
+      "A. 必须同时修改 L1 和 L2 代码行才能实现功能",
+      "B. 必须同时修改 L3 和 L4 代码行才能实现功能",
+      "C. 必须同时修改 L3 和 L5 代码行才能实现功能",
+      "D. 其他说法都不对"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3374
+  },
+  "gesp-2025-09-2-3375": {
+    "id": "gesp-2025-09-2-3375",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "在集成开发环境里调试程序时，要注意不能修改源程序，因为如果修改，就要终止调试、关闭该文件并重新打开，才能再次开始调试。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3375
+  },
+  "gesp-2025-09-2-3376": {
+    "id": "gesp-2025-09-2-3376",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 代码中，假设 $N$ 为正整数且大于 $100$，则 $N / 100$ 将舍弃个位和十位，如 $N$ 为 $1234$ 则 `cout << (N / 100)` 将输出 $12$。如果 $N$ 小于 $100$，则其值为 $0$。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3376
+  },
+  "gesp-2025-09-2-3377": {
+    "id": "gesp-2025-09-2-3377",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下列 C++ 代码执行后将输出 $1$，因为 $a$ 确实小于 $20$ 和 $10$。（ ）\n\n```cpp\na = 5;\ncout << (a < 10 and 20);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3377
+  },
+  "gesp-2025-09-2-3378": {
+    "id": "gesp-2025-09-2-3378",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面的 C++ 代码中变量都是整型，则执行后将输出 $1$。（ ）\n\n```cpp\nx, y, z = 5, 10, 15;\nresult = x < y < z;\ncout << result;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3378
+  },
+  "gesp-2025-09-2-3379": {
+    "id": "gesp-2025-09-2-3379",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行时如输入 $99.99$，将输出 及格 两个汉字。（ ）\n\n```cpp\nint score;\ncout << \"请输入学生成绩：\";\ncin >> score;\nif (score >= 60)\n    printf(\"及格\");\nelse\n    printf(\"不及格\");\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3379
+  },
+  "gesp-2025-09-2-3380": {
+    "id": "gesp-2025-09-2-3380",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面的 C++ 代码时输入 $123$，则输出是 DCB。（ ）\n\n```cpp\nint a;\ncin >> a;\nwhile(a){\n    cout << 'A' + a%10;\n    a /= 10;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3380
+  },
+  "gesp-2025-09-2-3381": {
+    "id": "gesp-2025-09-2-3381",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行后将输出 `+#+#3#`。（ ）\n\n```cpp\nint i;\nfor (i = 0; i < 3; i++){\n    if (i == 2)\n        continue;\n    printf(\"+#\");\n}\ncout << i << '#';\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3381
+  },
+  "gesp-2025-09-2-3382": {
+    "id": "gesp-2025-09-2-3382",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下列 C++ 代码用于求斐波那契数列，即第 $1$ 个数 $0$、第 $2$ 个数 $1$，从第三个数开始，是前两个数之和。如果输入的值为大于 $1$ 的正整数，该代码能实现。（ ）\n\n```cpp\ncin >> n;\na = 0, b = 1;\nfor (int j = 0; j < n; j++){\n    cout << a << \" \";\n    b = b + a;\n    a = b - a;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3382
+  },
+  "gesp-2025-09-2-3383": {
+    "id": "gesp-2025-09-2-3383",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 不能实现如下输出，但如果将 L1 标记的 `cout << 0` 行移动 if 块外面，或者说移动到 L2 标记行，则可以。（ ）\n\n```plaintext\n请输入矩阵大小n: 9\n100000000\n020000000\n003000000\n000400000\n000050000\n000006000\n000000700\n000000080\n000000009\n```\n\n```cpp\nint n, i, j;\ncout << \"请输入矩阵大小n: \";\ncin >> n;\n\nfor (i = 0; i < n; i++){\n    for (j = 0; j < n; j++){\n        if (i == j){\n            cout << i + 1;\n            continue;\n            cout << 0; // L1\n        }\n        // L2\n    }\n    printf(\"\n\");\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3383
+  },
+  "gesp-2025-09-2-3384": {
+    "id": "gesp-2025-09-2-3384",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 代码 `cout << ('5' + 4);` 执行后的输出为 $9$。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3384
+  },
+  "gesp-2025-09-3-3385": {
+    "id": "gesp-2025-09-3-3385",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "执行以下 C++ 代码后，`c` 的数值是（ ）。\n\n```cpp\nint a = 10, b = 3;\ndouble c = a / b;\n```",
+    "options": [
+      "A. 3.33333",
+      "B. 3.333",
+      "C. 3.0",
+      "D. 3.3"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3385
+  },
+  "gesp-2025-09-3-3386": {
+    "id": "gesp-2025-09-3-3386",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下列 C++ 表达式的结果为 `true` 的是（ ）。",
+    "options": [
+      "A. `(5 <= 5) && (7 < 5)`",
+      "B. `!(10 > 5)`",
+      "C. `(10 != 10) || (5 >= 3)`",
+      "D. `(5 == 3) && (4 > 2)`"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3386
+  },
+  "gesp-2025-09-3-3387": {
+    "id": "gesp-2025-09-3-3387",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "以下关于 C++ 数组的说法，错误的是（ ）。",
+    "options": [
+      "A. 数组的下标通常从 0 开始。",
+      "B. `int arr[5];` 声明了一个包含 5 个整数的数组。",
+      "C. 数组的大小必须在编译时确定，不能使用变量定义大小。",
+      "D. 可以通过 `arr[5]` 来访问 `int arr[5];` 数组的最后一个元素。"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3387
+  },
+  "gesp-2025-09-3-3388": {
+    "id": "gesp-2025-09-3-3388",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "执行以下 C++ 代码后，变量 `sum` 的值是（ ）。\n\n```cpp\nint sum = 0;\nfor (int i = 1; i <= 5; i += 2) {\n    sum += i;\n    int sum=0;\n}\n```",
+    "options": [
+      "A. 6",
+      "B. 9",
+      "C. 15",
+      "D. 死循环"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3388
+  },
+  "gesp-2025-09-3-3389": {
+    "id": "gesp-2025-09-3-3389",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "要正确定义一个返回两个整数中较大值的函数 `max`，应该使用（ ）。",
+    "options": [
+      "A. `void max(int a, int b) { return a > b ? a : b; }`",
+      "B. `int max(int a, int b) { if (a > b) return a; else return b; }`",
+      "C. `int max(a, b) { if (a > b) return a; else return b; }`",
+      "D. `void max(a, b) { cout << (a > b ? a : b); }`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3389
+  },
+  "gesp-2025-09-3-3390": {
+    "id": "gesp-2025-09-3-3390",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "执行以下 C++ 代码后，数组 `arr` 的内容是（ ）。\n\n```cpp\nint arr[4] = {1, 2, 3};\narr[3] = arr[0] + arr[2];\n```",
+    "options": [
+      "A. {1, 2, 3, 3}",
+      "B. {1, 2, 3, 4}",
+      "C. {1, 2, 3, 5}",
+      "D. {1, 2, 3, 6}"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3390
+  },
+  "gesp-2025-09-3-3391": {
+    "id": "gesp-2025-09-3-3391",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "以下关于 C++ 函数的描述，正确的是（ ）。",
+    "options": [
+      "A. 函数必须要有参数。",
+      "B. 函数通过 `return` 语句只能返回一个值。但是可以通过很多间接的方式返回多个值。",
+      "C. `main` 函数可以被其他函数调用。",
+      "D. 函数的定义可以直接嵌套，即一个函数内部可以真正定义另一个函数。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3391
+  },
+  "gesp-2025-09-3-3392": {
+    "id": "gesp-2025-09-3-3392",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "以下 C++ 代码 `count++` 执行的次数是（ ）。\n\n```cpp\nint i = 10;\nint count=0;\nwhile (i > 0) {\n    i -= 3;\n    continue;\n    count++;\n}\n```",
+    "options": [
+      "A. 2",
+      "B. 3",
+      "C. 4",
+      "D. 0"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3392
+  },
+  "gesp-2025-09-3-3393": {
+    "id": "gesp-2025-09-3-3393",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "以下 C++ 代码段的输出是（ ）。\n\n```cpp\nfor (int i = 0; i < 4; i++) {\n    for (int j = 0; j <= i; j++) {\n        cout << j;\n    }\n    cout << \"#\";\n}\n```",
+    "options": [
+      "A. 0#01#012#0123#",
+      "B. 1#12#123#1234#",
+      "C. 0#1#2#3#",
+      "D. 0#01#012#012343#"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3393
+  },
+  "gesp-2025-09-3-3394": {
+    "id": "gesp-2025-09-3-3394",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "以下关于 C++ 变量作用域的说法，错误的是（ ）。",
+    "options": [
+      "A. 在 `for` 循环语句中声明的变量，其作用域仅限于该循环体内。",
+      "B. 在函数内部声明的变量（局部变量），仅在函数内部有效。",
+      "C. 在所有函数外部声明的变量，在整个程序中都有效。",
+      "D. 不同函数中的局部变量可以同名，它们代表不同的内存单元。"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3394
+  },
+  "gesp-2025-09-3-3395": {
+    "id": "gesp-2025-09-3-3395",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "关于以下代码的说法正确的是（ ）。\n\n```cpp\nint reversed = 0;\nwhile (x != 0) {\n    int digit = x % 10;\n    x /= 10;\n    reversed = reversed * 10 + digit;\n}\n```",
+    "options": [
+      "A. 能够反转任何位数的整数",
+      "B. 能够反转的最大位数正整数是 $2147483647$",
+      "C. 能够反转的最大位数正整数是 $2147483648$",
+      "D. 能够反转的最大位数正整数是 $1463847412$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3395
+  },
+  "gesp-2025-09-3-3396": {
+    "id": "gesp-2025-09-3-3396",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "以下 C++ 代码试图查找数组中的最大值，划线处应填入（ ）。\n\n```cpp\n#include <iostream>\nusing namespace std;\n\nint findMax(int arr[], int size) {\n    int maxVal = _______; // 划线处\n    for (int i = 1; i < size; i++) {\n        if (arr[i] > maxVal) {\n            maxVal = arr[i];\n        }\n    }\n    return maxVal;\n}\n```",
+    "options": [
+      "A. 0",
+      "B. `arr[-1]`",
+      "C. `arr[0]`",
+      "D. `size`"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3396
+  },
+  "gesp-2025-09-3-3397": {
+    "id": "gesp-2025-09-3-3397",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "以下关于 C++ 函数的说法，正确的是（ ）。",
+    "options": [
+      "A. 函数参数传递只有值传递一种方式。",
+      "B. 函数的形参在函数调用结束后依然占用内存空间",
+      "C. 没有返回值的函数必须声明为 `void` 类型，且不能包含 `return` 语句",
+      "D. C++11 及之后标准要求函数必须显式声明返回类型，不允许默认返回 `int`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3397
+  },
+  "gesp-2025-09-3-3398": {
+    "id": "gesp-2025-09-3-3398",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "以下 C++ 代码中存在几处错误（ ）。\n\n```cpp\n#include <iostream>\nusing namespace std;\n\nint main() {\n    const int SIZE = 5;\n    int arr[SIZE];\n    for (int i = 0; i <= SIZE; i++) {\n        arr[i] = i * 2;\n    }\n    cout << arr[SIZE] << endl;\n    return 0;\n}\n```",
+    "options": [
+      "A. 0 处",
+      "B. 1 处",
+      "C. 2 处",
+      "D. 3 处"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3398
+  },
+  "gesp-2025-09-3-3399": {
+    "id": "gesp-2025-09-3-3399",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "以下关于 C++ 中 `string` 类和字符数组（`char[]`）的说法，错误的是（ ）。",
+    "options": [
+      "A. `string` 对象可以使用 `=` 进行赋值，而字符数组需要使用 `strcpy`。",
+      "B. `string` 对象的长度可以使用 `length()` 成员函数获取，而字符数组需要使用 `strlen()` 函数。",
+      "C. `string` 对象在内存中是动态分配空间的，因此可以自动处理字符串长度的变化。",
+      "D. `string` 对象和字符数组都可以使用 `==` 运算符来直接比较两个字符串的内容是否相同。"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3399
+  },
+  "gesp-2025-09-3-3400": {
+    "id": "gesp-2025-09-3-3400",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "表达式 `sizeof('a')` 的结果总是 $1$，因为 `'a'` 是一个字符。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3400
+  },
+  "gesp-2025-09-3-3401": {
+    "id": "gesp-2025-09-3-3401",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 中，所有全局变量如果没有显式初始化，都会被自动初始化为 $0$。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3401
+  },
+  "gesp-2025-09-3-3402": {
+    "id": "gesp-2025-09-3-3402",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "`do { ... } while (false);` 循环体内的语句至少会被执行一次。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3402
+  },
+  "gesp-2025-09-3-3403": {
+    "id": "gesp-2025-09-3-3403",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 中，`++i` 是一个左值表达式，而 `i++` 是一个右值表达式。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3403
+  },
+  "gesp-2025-09-3-3404": {
+    "id": "gesp-2025-09-3-3404",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "对于 `enum Color { RED, GREEN, BLUE };`，RED 的类型是 `int`。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3404
+  },
+  "gesp-2025-09-3-3405": {
+    "id": "gesp-2025-09-3-3405",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "`#define SQUARE(x) x * x` 是一个安全的宏定义，`SQUARE(2+3)` 会正确计算出 $25$。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3405
+  },
+  "gesp-2025-09-3-3406": {
+    "id": "gesp-2025-09-3-3406",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 中，`char` 类型的取值范围总是 $-128$ 到 $127$。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3406
+  },
+  "gesp-2025-09-3-3407": {
+    "id": "gesp-2025-09-3-3407",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "表达式 `a > b ? a : b = 10;` 一定是合法的 C++ 代码。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3407
+  },
+  "gesp-2025-09-3-3408": {
+    "id": "gesp-2025-09-3-3408",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "`#include \"file.h\"` 和 `#include <file.h>` 在编译器查找头文件时的搜索策略是完全相同的。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3408
+  },
+  "gesp-2025-09-3-3409": {
+    "id": "gesp-2025-09-3-3409",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "在同一个作用域内，`extern` 声明的变量可以多次定义。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3409
+  },
+  "gesp-2025-09-4-3410": {
+    "id": "gesp-2025-09-4-3410",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "运行下面程序后变量 `a` 的值是（ ）。\n\n```cpp\nint a = 42;\nint* p = &a;\n*p = *p + 1;\n```",
+    "options": [
+      "A. 42",
+      "B. 43",
+      "C. 编译错误",
+      "D. 不确定"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3410
+  },
+  "gesp-2025-09-4-3411": {
+    "id": "gesp-2025-09-4-3411",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "以下关于数组的描述中，（ ）是错误的。",
+    "options": [
+      "A. 数组名是一个指针常量",
+      "B. 随机访问数组的元素方便快捷",
+      "C. 数组可以像指针一样进行自增操作",
+      "D. `sizeof(arr)` 返回的是整个数组 `arr` 占用的字节数"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3411
+  },
+  "gesp-2025-09-4-3412": {
+    "id": "gesp-2025-09-4-3412",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "给定如下定义的数组 `arr`，则 `*(*(arr + 1) + 2)` 的值是（ ）。\n\n```cpp\nint arr[2][3] = {{1, 2, 3}, {4, 5, 6}};\n```",
+    "options": [
+      "A. 2",
+      "B. 5",
+      "C. 4",
+      "D. 6"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3412
+  },
+  "gesp-2025-09-4-3413": {
+    "id": "gesp-2025-09-4-3413",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "下面这段代码会输出（ ）。\n\n```cpp\nint add(int a, int b = 1); // 函数声明\n\nint main() {\n    cout << add(2) << \" \" << add(2, 3);\n    return 0;\n}\n\nint add(int a, int b) { // 函数定义\n    return a + b;\n}\n```",
+    "options": [
+      "A. 3 5",
+      "B. 编译失败：定义处少了默认参数",
+      "C. 运行错误",
+      "D. 链接失败：未定义引用"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3413
+  },
+  "gesp-2025-09-4-3414": {
+    "id": "gesp-2025-09-4-3414",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "下面这段代码会输出（ ）。\n\n```cpp\nint x = 5;\n\nvoid foo() {\n    int x = 10;\n    cout << x << \" \";\n}\n\nvoid bar() {\n    cout << x << \" \";\n}\n\nint main() {\n    foo();\n    bar();\n}\n```",
+    "options": [
+      "A. 5 5",
+      "B. 10 10",
+      "C. 5 10",
+      "D. 10 5"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3414
+  },
+  "gesp-2025-09-4-3415": {
+    "id": "gesp-2025-09-4-3415",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "下面程序运行的结果是（ ）。\n\n```cpp\nvoid increaseA(int x) {\n    x++;\n}\n\nvoid increaseB(int* p) {\n    (*p)++;\n}\n\nint main() {\n    int a = 5;\n    increaseA(a);\n    cout << a << \" \";\n    increaseB(&a);\n    cout << a;\n}\n```",
+    "options": [
+      "A. 6 7",
+      "B. 6 6",
+      "C. 5 6",
+      "D. 5 5"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3415
+  },
+  "gesp-2025-09-4-3416": {
+    "id": "gesp-2025-09-4-3416",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "关于结构体初始化，以下哪个选项中正确的是（ ）。\n\n```cpp\nstruct Point {int x,y;};\n```",
+    "options": [
+      "A. `Point p = (1,2);`",
+      "B. `Point p = {1,2};`",
+      "C. `Point p = new {1,2};`",
+      "D. `Point p = <1,2>;`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3416
+  },
+  "gesp-2025-09-4-3417": {
+    "id": "gesp-2025-09-4-3417",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "运行如下代码会输出（ ）。\n\n```cpp\nstruct Cat {\n    string name;\n    int age;\n};\n\nvoid birthday(Cat& c) {\n    c.age++;\n}\n\nint main() {\n    Cat kitty{\"Mimi\", 2};\n    birthday(kitty);\n    cout << kitty.name << \" \" << kitty.age;\n}\n```",
+    "options": [
+      "A. Mimi 2",
+      "B. Mimi 3",
+      "C. kitty 3",
+      "D. kitty 2"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3417
+  },
+  "gesp-2025-09-4-3418": {
+    "id": "gesp-2025-09-4-3418",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "排序与查找",
+    "question": "关于排序算法的稳定性，以下说法错误的是（ ）。",
+    "options": [
+      "A. 稳定的排序算法不改变相等元素的相对位置",
+      "B. 冒泡排序是稳定的排序算法",
+      "C. 选择排序是稳定的排序算法",
+      "D. 插入排序是稳定的排序算法"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3418
+  },
+  "gesp-2025-09-4-3419": {
+    "id": "gesp-2025-09-4-3419",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面代码试图实现选择排序，使其能对数组 `nums` 排序为升序，则横线上应分别填写（ ）。\n\n```cpp\nvoid selectionSort(vector<int>& nums) {\n    int n = nums.size();\n    for (int i = 0; i < n - 1; ++i) {\n        int minIndex = i;\n        for (int j = i + 1; j < n; ++j) {\n            if (__________) {  // 在此处填入代码\n                minIndex = j;\n            }\n        }\n        ______________; // 在此处填入代码\n    }\n}\n```\n\nA.  \n```cpp\nnums[j] < nums[minIndex]\nswap(nums[i], nums[minIndex])\n```\n\nB.  \n```cpp\nnums[j] > nums[minIndex]\nswap(nums[i], nums[minIndex])\n```\n\nC.  \n```cpp\nnums[j] <= nums[minIndex]\nswap(nums[j], nums[minIndex])\n```\n\nD.  \n```cpp\nnums[j] <= nums[minIndex]\nswap(nums[i], nums[j])\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3419
+  },
+  "gesp-2025-09-4-3420": {
+    "id": "gesp-2025-09-4-3420",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面程序实现插入排序（升序排序），则横线上应分别填写（ ）。\n\n```cpp\nvoid insertionSort(int arr[], int n) {\n    for (int i = 1; i < n; i++) {\n        int key = arr[i];\n        int j = i - 1;\n        while (j >= 0 && ________________) { // 在此处填入代码\n            arr[j + 1] = arr[j];\n            j--;\n        }\n        ________________; // 在此处填入代码\n    }\n}\n```\n\nA.  \n```cpp\narr[j] > key\narr[j + 1] = key\n```\n\nB.  \n```cpp\narr[j] < key\narr[j + 1] = key\n```\n\nC.  \n```cpp\narr[j] > key\narr[j] = key\n```\n\nD.  \n```cpp\narr[j] < key\narr[j] = key\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3420
+  },
+  "gesp-2025-09-4-3421": {
+    "id": "gesp-2025-09-4-3421",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "排序与查找",
+    "question": "关于插入排序的时间复杂度，下列说法正确的是（ ）。",
+    "options": [
+      "A. 最好情况和最坏情况的时间复杂度都是 $O(n^2)$",
+      "B. 最好情况是 $O(n)$，最坏情况是 $O(n^2)$",
+      "C. 最好情况是 $O(n)$，最坏情况是 $O(2^n)$",
+      "D. 最好情况是 $O(n^2)$，最坏情况是 $O(2^n)$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3421
+  },
+  "gesp-2025-09-4-3422": {
+    "id": "gesp-2025-09-4-3422",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "小杨正在爬楼梯，需要 $n$ 阶才能到达楼顶，每次可以爬 $1$ 阶或 $2$ 阶，求小杨有多少种不同的方法可以爬到楼顶，横线上应填写（ ）。\n\n```cpp\nint climbStairs(int n) {\n    if (n <= 2) return n;\n    int prev2 = 1;\n    int prev1 = 2;\n    int current = 0;\n    for (int i = 3; i <= n; ++i) {\n        ________________ // 在此处填入代码\n    }\n    return current;\n}\n```\n\nA.  \n```cpp\nprev2 = prev1;\nprev1 = current;\ncurrent = prev1 + prev2;\n```\n\nB.  \n```cpp\ncurrent = prev1 + prev2;\nprev2 = prev1;\nprev1 = current;\n```\n\nC.  \n```cpp\ncurrent = prev1 + prev2;\nprev1 = current;\nprev2 = prev1;\n```\n\nD.  \n```cpp\nprev1 = current;\nprev2 = prev1;\ncurrent = prev1 + prev2;\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3422
+  },
+  "gesp-2025-09-4-3423": {
+    "id": "gesp-2025-09-4-3423",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "假设有一个班级的成绩单，存储在一个长度为 $n$ 的数组 `scores` 中，每个元素是一个学生的分数。老师想要找出所有满足 `scores[i] + scores[j] + scores[k] == 300` 的三元组，其中 $i < j < k$。下面代码实现该功能，请问其时间复杂度是（ ）。\n\n```cpp\nint cnt = 0;\nfor (int i = 0; i < n; i++) {\n    for (int j = i + 1; j < n; j++) {\n        for (int k = j + 1; k < n; k++) {\n            if (scores[i] + scores[j] + scores[k] == 300) {\n                cnt++;\n            }\n        }\n    }\n}\n```",
+    "options": [
+      "A. $O(n)$",
+      "B. $O(n^2)$",
+      "C. $O(n^3)$",
+      "D. $O(2^n)$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3423
+  },
+  "gesp-2025-09-4-3424": {
+    "id": "gesp-2025-09-4-3424",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "关于异常处理，以下说法错误的是（ ）。",
+    "options": [
+      "A. `try` 块中的代码可能会抛出异常",
+      "B. `catch` 块可以有多个，处理不同类型的异常",
+      "C. `throw` 语句用于抛出异常",
+      "D. 所有异常都必须被捕获，否则程序会崩溃"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3424
+  },
+  "gesp-2025-09-4-3425": {
+    "id": "gesp-2025-09-4-3425",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "以下代码能正确初始化指针。\n\n```cpp\nint a = 5;\nint *p = a;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3425
+  },
+  "gesp-2025-09-4-3426": {
+    "id": "gesp-2025-09-4-3426",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面 C++ 代码将输出 $11$。\n\n```cpp\nint x = 10;\nvoid f() {\n    int x = x + 1;\n    cout << x << endl;\n}\n\nint main() {\n    f();\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3426
+  },
+  "gesp-2025-09-4-3427": {
+    "id": "gesp-2025-09-4-3427",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "以下 C++ 代码合法。\n\n```cpp\nstruct Student {\n    string name;\n    int age;\n    float score;\n};\nStudent* students = new Student[20];\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3427
+  },
+  "gesp-2025-09-4-3428": {
+    "id": "gesp-2025-09-4-3428",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面 C++ 代码将输出 $10$。\n\n```cpp\nvoid func(int* p) {\n    *p = 10;\n}\n\nint main() {\n    int a = 5;\n    func(&a);\n    cout << a << endl;\n    return 0;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3428
+  },
+  "gesp-2025-09-4-3429": {
+    "id": "gesp-2025-09-4-3429",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "下面代码将二维数组 `arr` 传递给函数 `f`，函数内部用 `arr[i][j]` 访问元素，函数参数声明为 `int arr[][4]` 是错误的。\n\n```cpp\nvoid f(int arr[][4], int rows) {\n    // 访问 arr[i][j]\n}\n\nint main() {\n    int arr[3][4] = { /* 初始化 */ };\n    f(arr, 3);\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3429
+  },
+  "gesp-2025-09-4-3430": {
+    "id": "gesp-2025-09-4-3430",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "递推是在给定初始条件下，已知前一项（或前几项）求后一项的过程。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3430
+  },
+  "gesp-2025-09-4-3431": {
+    "id": "gesp-2025-09-4-3431",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "排序与查找",
+    "question": "虽然插入排序的时间复杂度为 $O(n^2)$，但由于单元操作相对较少，因此在小数据量的排序任务中非常受欢迎。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3431
+  },
+  "gesp-2025-09-4-3432": {
+    "id": "gesp-2025-09-4-3432",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "对整数数组 $\\{4, 1, 3, 1, 5, 2\\}$ 进行冒泡排序（将最大元素放到最后），执行一轮之后是 $\\{4, 1, 3, 1, 2, 5\\}$。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3432
+  },
+  "gesp-2025-09-4-3433": {
+    "id": "gesp-2025-09-4-3433",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "以下代码只能捕获 int 类型异常。\n\n```cpp\nint main() {\n    try {\n        throw 42;\n    } catch (...) {\n        cout << \"Caught\" << endl;\n    }\n    return 0;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3433
+  },
+  "gesp-2025-09-4-3434": {
+    "id": "gesp-2025-09-4-3434",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "输入输出",
+    "question": "以下代码将 `Hello` 写入文件 `data.txt`。\n\n```cpp\nofstream file(\"data.txt\");\ncout << \"Hello\" << endl;\nfile.close();\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3434
+  },
+  "gesp-2025-12-1-3536": {
+    "id": "gesp-2025-12-1-3536",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "近日，空中客车公司表示，约 6000 架空客 A320 系列飞机需要紧急更换一种易受太阳辐射影响的飞行控制软件。空客表示，在对一起飞行事故分析后的结果显示，强烈的太阳辐射可能会损坏飞行控制系统所需的关键数据，导致判断失误，进而引发飞行异常。那这里的飞行控制系统执行判断的部件最可能是下面的（ ）。",
+    "options": [
+      "A. 辐射传感器",
+      "B. 处理器",
+      "C. 内存单元",
+      "D. 输出设备"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3536
+  },
+  "gesp-2025-12-1-3537": {
+    "id": "gesp-2025-12-1-3537",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面的 C++ 代码在某集成开发环境中编译运行时，提示有“Invalid Character”（“无效字符”）错误。可能的原因是（ ）：\n\n```cpp\nint a, b;\na=3, b = 4; // L1\ncout << a; // L2\ncout << b; // L3\n```",
+    "options": [
+      "A. L1 行代码中的逗号很可能是中文逗号，应该改为英文逗号。",
+      "B. L1 行应该分为两行，分别是 `a = 3` 和 `b = 4`。",
+      "C. 代码运行前没有保存到文件。",
+      "D. L2 和 L3 不能分为两行，应合并为一行。"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3537
+  },
+  "gesp-2025-12-1-3538": {
+    "id": "gesp-2025-12-1-3538",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+    "options": [
+      "A. 不可以用 `for` 作为变量名，因为 `for` 是 C++ 的关键字（保留字）。",
+      "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+      "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+      "D. 可以用 `printf` 作为变量名，因为 `printf` 是关键字，但这不是好习惯，因为 `printf` 有约定的功能与含义。"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3538
+  },
+  "gesp-2025-12-1-3539": {
+    "id": "gesp-2025-12-1-3539",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "$ X $ 是 C++ 的整型变量，则 `cout << (X=3, X++, ++X);` 执行后的输出是（ ）。",
+    "options": [
+      "A. $ 3 $",
+      "B. $ 4 $",
+      "C. $ 5 $",
+      "D. 不确定"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3539
+  },
+  "gesp-2025-12-1-3540": {
+    "id": "gesp-2025-12-1-3540",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 表达式 `2 + 3 * 4 % 5` 的值为（ ）。",
+    "options": [
+      "A. $ 0 $",
+      "B. $ 4 $",
+      "C. $ 14 $",
+      "D. $ 50 $"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3540
+  },
+  "gesp-2025-12-1-3541": {
+    "id": "gesp-2025-12-1-3541",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面的 C++ 代码执行后，其输出是（ ）。\n\n```cpp\na = 3;\nb = a = 4;\nprintf(\"%d %d\", a, b);\n```",
+    "options": [
+      "A. $ 4\\ 4 $",
+      "B. $ 3\\ 3 $",
+      "C. $ 3\\ 4 $",
+      "D. $ 4\\ 3 $"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3541
+  },
+  "gesp-2025-12-1-3542": {
+    "id": "gesp-2025-12-1-3542",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面的 C++ 代码执行时如果先输入 10 回车后输入 20 并回车，其输出是（ ）。\n\n```cpp\nint N, M;\nprintf(\"第一个数:\");\nscanf(\"%d\", &N);\nprintf(\"第二个数:\");\nscanf(\"%d\", &M);\nprintf(\"%(N+M)=%d\", N+M, int(N+M));\n```",
+    "options": [
+      "A. `30=30`",
+      "B. `10+20=30`",
+      "C. `%(N+M)=30`",
+      "D. 错误提示"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3542
+  },
+  "gesp-2025-12-1-3543": {
+    "id": "gesp-2025-12-1-3543",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "某个整数很长很长，形如：$1232123212321\\ldots$，其规律是从 $1$ 开始逐一升高到 $3$ 然后逐一降低到 $1$，然后又逐一升高到 $3$，一直到很长很长。假设最高位编号为 $1$，要求判断从左边最高位开始的第 $N$ 位数是几？在横线处应该填入的代码是（ ）。\n\n```cpp\nint N, M;\ncout << \"请输入编号: \";\ncin >> N;\nM = ______________;\nif (M != 0)\n    cout << M;\nelse\n    cout << 2;\n```",
+    "options": [
+      "A. `N % 4`",
+      "B. `N / 4`",
+      "C. `N % 3`",
+      "D. `N / 3`"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3543
+  },
+  "gesp-2025-12-1-3544": {
+    "id": "gesp-2025-12-1-3544",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后的输出是（ ）。\n\n```cpp\nint i, tnt = 0;\nfor (i = 0; i < 100; i++)\n    tnt += 1;\ncout << tnt << ' ' << i;\n```",
+    "options": [
+      "A. $ 99\\ 99 $",
+      "B. $ 100\\ 99 $",
+      "C. $ 99\\ 100 $",
+      "D. $ 100\\ 100 $"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3544
+  },
+  "gesp-2025-12-1-3545": {
+    "id": "gesp-2025-12-1-3545",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "有关下面 C++ 代码的说法，错误的是（ ）。\n\n```cpp\nint tnt = 0;\nfor (int i = 1; i < 10; i += 2) // L1\n    tnt += i; // L2\ncout << tnt;\n```",
+    "options": [
+      "A. L1 的 `i < 10` 改为 `i < 11` 结果相同。",
+      "B. L1 的 `i = 1` 改为 `i = 0` 结果相同。",
+      "C. `tnt += i` 与 `tnt = tnt + i` 效果相同。",
+      "D. `tnt += i` 与 `tnt = i + tnt` 效果相同。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3545
+  },
+  "gesp-2025-12-1-3546": {
+    "id": "gesp-2025-12-1-3546",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出是（ ）。\n\n```cpp\nint i;\nfor (i = 10; i < 100; i += 10){\n    if (i % 10 == 0)\n        continue;\n    printf(\"%d#\",i);\n}\nif(i >= 100)\n    printf(\"%d END\",i);\n```",
+    "options": [
+      "A. 10#20#30#40#50#60#70#80#90#100 END",
+      "B. 100#100 END",
+      "C. 100 END",
+      "D. 没有输出"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3546
+  },
+  "gesp-2025-12-1-3547": {
+    "id": "gesp-2025-12-1-3547",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "两个正整数，只要不相等，就一直进行如下操作：最大数减去最小数得到一个值，该值和两个数的最小数构成新的两个正整数，重复操作，直到两个数相等，此时输出该数。下面的 C++ 代码用于实现该操作，横线处应该填写的代码是（ ）。\n\n```cpp\nint N, M;\ncin >> N >> M;\nwhile (N != M) {\n    if (N > M)\n        ____________;\n    else\n        ____________;\n}\ncout << N;\n```\n\nA.  \n1 `N = N - M`  \n2 `M = M - N`\n\nB.  \n1 `M = M - N`  \n2 `N = N - M`\n\nC.  \n1 `M = N - M`  \n2 `N = M - N`\n\nD.  \n1 `N, M = M, N`  \n2 `M, N = N, M`",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3547
+  },
+  "gesp-2025-12-1-3548": {
+    "id": "gesp-2025-12-1-3548",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "如果一个正整数能被 $3$ 整除，或者某一位能被 $3$ 整除，则称之为“漂亮数”。下面的 C++ 代码用于判断正整数 $N$ 是否为漂亮数，L1 行的横线处应该填入的代码是（ ）。\n\n```cpp\nint N, Flag;\ncin >> N;\n\nFlag = 0; // \"非漂亮数\"\nif (N % 3 == 0)\n    Flag = 1; // \"漂亮数\"\nelse\n    while (N != 0){\n        if (_____________){ // L1\n            Flag = 1;\n            break;\n        }\n        N /= 10;\n    }\ncout << (Flag? \"漂亮数\" : \"非漂亮数\");\n```",
+    "options": [
+      "A. `N % 10 == 0`",
+      "B. `N % 3 % 10 == 0`",
+      "C. `N % 10 % 3`",
+      "D. `N % 10 % 3 == 0`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3548
+  },
+  "gesp-2025-12-1-3549": {
+    "id": "gesp-2025-12-1-3549",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "如果正整数 $N$ 的所有奇因数（即能将 $N$ 整除的正奇数）的和是 $27$ 的倍数，则称 $N$ 是 $27$ 的神秘数。下面的 C++ 代码用于判断输入的 $N$ 是否为 $27$ 的神秘数。如输入 $53$，它有两个奇因数 $1$ 和 $53$，则将输出 Y。（ ）。\n\n```cpp\nint i, N, cnt = 0;\ncin >> N;\nfor (i=1; i <=N; i++){\n    if (_____________)\n        cnt += i;\n}\nif(cnt % 27 == 0)\n    cout << 'Y';\n```",
+    "options": [
+      "A. `(N % i) && (i % 2)`",
+      "B. `(N % i == 0) && (i % 2 == 0)`",
+      "C. `(N % i == 0) && (i % 2)`",
+      "D. `(N % i) && (i % 2 == 0)`"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3549
+  },
+  "gesp-2025-12-1-3551": {
+    "id": "gesp-2025-12-1-3551",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "鸿蒙是华为公司开发的一款操作系统，那么它能够将正确的源程序翻译成目标程序，并运行。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3551
+  },
+  "gesp-2025-12-1-3552": {
+    "id": "gesp-2025-12-1-3552",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 表达式 `10 * 4 % 6` 和 `10 * 2 % 3` 的结果相同。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3552
+  },
+  "gesp-2025-12-1-3553": {
+    "id": "gesp-2025-12-1-3553",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后将输出 0。（ ）\n\n```cpp\nint i;\nfor (i = 0; i < 10; i++)\n    if (i % 3 == 0)\n        continue;\n    else\n        break;\ncout << i;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3553
+  },
+  "gesp-2025-12-1-3554": {
+    "id": "gesp-2025-12-1-3554",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码中的 `i > -10; i--` 改为 `i < 10; i++` 执行结果相同。（ ）\n\n```cpp\nint tnt = 0;\nfor (int i = 0; i > -10; i--){\n    if (i < 0)\n        i = -i;\n    tnt += i;\n}\ncout << tnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3554
+  },
+  "gesp-2025-12-1-3555": {
+    "id": "gesp-2025-12-1-3555",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后将输出 99，因为 `i < 100` 不包括 100，而是到 99。（ ）\n\n```cpp\nint cnt = 0;\nfor (int i = 0; i < 100; i++)\n    cnt += 1;\ncout << cnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3555
+  },
+  "gesp-2025-12-1-3556": {
+    "id": "gesp-2025-12-1-3556",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码能用于判断输入的正整数是否为对称数。所谓对称数是指从左到右和从右到左读该数，其值相同，$121$ 或 $414$ 等是对称数，而 $123$ 不是对称数。（ ）\n\n```cpp\nint n, new_number;\ncout << \"请输入正整数:\";\ncin >> n;\n\nnew_number = 0;\nwhile (n != 0){\n    new_number = new_number * 10 + n % 10;\n    n /= 10;\n}\n\nif (n == new_number)\n    cout << \"对称数\";\nelse\n    cout << \"非对称数\";\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3556
+  },
+  "gesp-2025-12-1-3557": {
+    "id": "gesp-2025-12-1-3557",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行后将输出 $0$。（ ）\n\n```cpp\nint tnt = 0;\nfor (int i = -100; i < 100; i++)\n    tnt += i;\ncout << tnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3557
+  },
+  "gesp-2025-12-1-3558": {
+    "id": "gesp-2025-12-1-3558",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "某同学执行 C++ 代码时 `printf(\"%g\n\", (3 + 3.1415926535));` 输出 $6.14159$ 而不是 $6.1415926535$，表明该同学的计算机存在故障需要重新安装 C++ 软件。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3558
+  },
+  "gesp-2025-12-1-3559": {
+    "id": "gesp-2025-12-1-3559",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "如果 $x$ 是 C++ 代码中的 `double` 型变量，则对 `cout << (x? 1227 : 12.27);` 编译时将报错，因为 $1227$ 和 $12.12$ 分别是 `int` 和 `double` 类型，导致识别混乱。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3559
+  },
+  "gesp-2025-12-1-3560": {
+    "id": "gesp-2025-12-1-3560",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 代码中，不可以将变量命名为 `keyword`，因为它是 C++ 语言的关键字。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3560
+  },
+  "gesp-2025-12-2-3561": {
+    "id": "gesp-2025-12-2-3561",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "近日，空中客车公司表示，约 $6000$ 架空客 A320 系列飞机需要紧急更换一种易受太阳辐射影响的飞行控制软件。空客表示，在对一起飞行事故分析后的结果显示，强烈的太阳辐射可能会损坏飞行控制系统所需的关键数据，导致判断失误，进而引发飞行异常。那这里的飞行控制系统执行判断的部件最可能是下面的（ ）。",
+    "options": [
+      "A. 辐射传感器",
+      "B. 处理器",
+      "C. 内存单元",
+      "D. 输出设备"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3561
+  },
+  "gesp-2025-12-2-3562": {
+    "id": "gesp-2025-12-2-3562",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "小明最近为了备考 GESP，开始看 B 站上关于网络知识的视频。其中提到计算机网络系统有不同的划分标准，那他平时上学所在的教学楼内的网络是一个（ ）。",
+    "options": [
+      "A. PAN",
+      "B. LAN",
+      "C. MAN",
+      "D. WAN"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3562
+  },
+  "gesp-2025-12-2-3563": {
+    "id": "gesp-2025-12-2-3563",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+    "options": [
+      "A. 不可以用 for 作为变量名，因为 for 是 C++ 的关键字（保留字）。",
+      "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+      "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+      "D. 可以用 printf 作为变量名，因为 printf 是关键字，但这不是好习惯，因为 printf 有约定的功能与含义。"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3563
+  },
+  "gesp-2025-12-2-3564": {
+    "id": "gesp-2025-12-2-3564",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "一个小数是 $0.123123123\\ldots$ 无限循环，其小数点后 $1$ 位是 $1$，后 $2$ 位是 $2$，依此类推，求第 $N$ 位的值。横线处应填入的代码是（ ）。\n\n```cpp\nint N;\ncin >> N;\nremainder = ___________;\n\nif (remainder == 0)\n    cout << 1;\nelse if (remainder == 1)\n    cout << 2;\nelse\n    cout << 3;\n```",
+    "options": [
+      "A. `N % 3`",
+      "B. `(N - 1) % 3`",
+      "C. `N / 3`",
+      "D. `(N - 1) / 3`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3564
+  },
+  "gesp-2025-12-2-3565": {
+    "id": "gesp-2025-12-2-3565",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "某同学执行 C++ 代码时 `printf(\"%g\n\", (3 + 3.1415926535));` 输出 $6.14159$，其原因最可能是（ ）。",
+    "options": [
+      "A. C++ 中整数和浮点数相加时，整数会被转换为浮点数，而某些十进制小数无法精确表示为二进制小数，从而产生某些舍入误差。",
+      "B. C++ 的 `printf` 函数在输出浮点数时根据格式有默认小数点位数，因此输出了较少的位数。",
+      "C. $3.1415926535$ 是一个无限循环小数，在计算机中无法精确表示。",
+      "D. 由于计算机 CPU 的运算错误导致。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3565
+  },
+  "gesp-2025-12-2-3566": {
+    "id": "gesp-2025-12-2-3566",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "进制与编码",
+    "question": "某单位工号的编码规则：编码总长 5 位，均为数字。前 4 位依次整除以 3 其值累加之和除以 10 的余数为第 5 位数字。如某工号为 76587，前 4 位分别整除以 3 后，商分别为 2、2、1、2，其累加之和为 7，除以 10 的余数为 7，故第 5 位为 7。下面代码依次输入前 4 位后，两个横线处分别应填的是（ ）。\n\n```cpp\nint rst = 0, N;\nfor (int i = 0; i < 4; i++) {\n    cin >> N;\n    rst += __________; // L1\n}\ncout << __________; // L2\n```\n\nA.\n\n```cpp\nN % 3\nrst / 10\n```\n\nB.\n\n```cpp\nN % 3\nrst % 10\n```\n\nC.\n\n```cpp\nN / 3\nrst / 10\n```\n\nD.\n\n```cpp\nN / 3\nrst % 10\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3566
+  },
+  "gesp-2025-12-2-3567": {
+    "id": "gesp-2025-12-2-3567",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行后的输出是（ ）。\n\n```cpp\nfor (int i = -2; i < 2; i++)\n    if (i % 2)\n        printf(\"%d#\", i);\n```",
+    "options": [
+      "A. -1#1#",
+      "B. -1#0#1#",
+      "C. -2#-1#1#",
+      "D. -2#-1#1#2#"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3567
+  },
+  "gesp-2025-12-2-3568": {
+    "id": "gesp-2025-12-2-3568",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行后其输出是（ ）。\n\n```cpp\nint cnt = 0, N;\nfor (int i = 1; i < 10; i += 2)\n    for (int j = 0; j < i; j++)\n        cnt += 1;\ncout << cnt;\n```",
+    "options": [
+      "A. $100$",
+      "B. $55$",
+      "C. $45$",
+      "D. $25$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3568
+  },
+  "gesp-2025-12-2-3569": {
+    "id": "gesp-2025-12-2-3569",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后其输出是（ ）。\n\n```cpp\nint i, j;\nfor (i = 1; i < 12; i++) {\n    if (i % 2 == 0)\n        continue;\n    for (j = 0; j < i; j++)\n        if (i * j % 2 == 0)\n            break;\n    if (j >= i)\n        cout << i * j << \" \";\n}\nif (i >= 12)\n    cout << (i * j);\n```",
+    "options": [
+      "A. $0\\ 0$",
+      "B. $11$",
+      "C. $0$",
+      "D. $0\\ 11$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3569
+  },
+  "gesp-2025-12-2-3570": {
+    "id": "gesp-2025-12-2-3570",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "与下面 C++ 输出效果不一致的代码是（ ）。\n\n```cpp\nint i;\nfor (i = 0; i < 10; i++)\n    cout << i;\n```\n\nA.\n\n```cpp\nint i = 0;\nwhile (i < 10) {\n    cout << i;\n    i += 1;\n}\n```\n\nB.\n\n```cpp\nint i = 0;\nwhile (i < 10) {\n    i += 1;\n    cout << i;\n}\n```\n\nC.\n\n```cpp\nint i = 0;\nwhile (true) {\n    cout << i;\n    i += 1;\n    if (i >= 10)\n        break;\n}\n```\n\nD.\n\n```cpp\nint i = 0;\nwhile (true) {\n    if (i >= 10)\n        break;\n    cout << i;\n    i += 1;\n}\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3570
+  },
+  "gesp-2025-12-2-3573": {
+    "id": "gesp-2025-12-2-3573",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出是（ ）。\n\n```cpp\nint num = 0;\nwhile (num <= 5) {\n    num += 1;\n    if (num % 3)\n        continue;\n    printf(\"%d#\", num);\n}\nif (num > 5)\n    printf(\"%d\", num);\n```",
+    "options": [
+      "A. 3#6#",
+      "B. 3#6#6",
+      "C. 1#2#3#4#5#6#",
+      "D. 1#2#3#4#5#6#6"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3573
+  },
+  "gesp-2025-12-2-3571": {
+    "id": "gesp-2025-12-2-3571",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后，其输出是（ ）。\n\n```cpp\nint cnt = 0;\nfor (int i = 0; i < 5; i++)\n    for (int j = i; j < 4; j++)\n        cnt += 1;\ncout << cnt;\n```",
+    "options": [
+      "A. $9$",
+      "B. $10$",
+      "C. $14$",
+      "D. $20$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3571
+  },
+  "gesp-2025-12-2-3572": {
+    "id": "gesp-2025-12-2-3572",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "漂亮数的定义是：如果 $N$ 能被 $M$ 整除，或者某位是 $M$，或者 $N$ 的每位数之和能被 $M$ 整除，则说 $N$ 是 $M$ 的漂亮数。如果三个条件都满足，则是完整漂亮数。123 是 3 的完整漂亮数，因为 123 能被 3 整除，也含有 3，其每位数之和为 6 也能被 3 整除。下面的代码用于判断 $N$ 是否为 $M$ 的完整漂亮数并输出。相关说法正确的是（ ）。\n\n```cpp\nint N, M, Flag, Sum, num;\ncout << \"请输入N, 不等于0的正整数: \";\ncin >> N;\ncout << \"请输入M: M必须大于1小于9: \";\ncin >> M;\n\nSum = 0; // 记录各位数之和\nFlag = 0; // 假设记录N不含有M\n\nwhile (N != 0) {\n    num = N % 10;\n    Sum += num;\n    if (num == M)\n        Flag = 1;\n    N /= 10;\n}\n\nif ((N % M == 0) && (Flag == 1) && (Sum % M == 0)) // L1\n    printf(\"%d 是 %d 的完整漂亮数\", N, M);\nelse\n    printf(\"%d 不是 %d 的完整漂亮数\", N, M);\n```",
+    "options": [
+      "A. 代码能完成题目设定目标。",
+      "B. 在 while 循环中 $N$ 最终将变成 0，因此 L1 行代码中 `N % M` 将总是满足条件，可以在 while 前增加一行代码 `int old_num = N;`，并将 L1 开始这 4 行代码中的 $N$ 都改为 old_num 就可以做出正确的判定。",
+      "C. while 循环中 if 判断语句可以增加 else 句，其内容为 `Flag = 0`。",
+      "D. 如果先后输入 0 和 3，则肯定会输出 0 是 3 的完整漂亮数。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3572
+  },
+  "gesp-2025-12-2-3574": {
+    "id": "gesp-2025-12-2-3574",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "阅读下面的 C++ 代码。执行后如输入 $5$，其输出的字符图形是（ ）。\n\n```cpp\nint n, i, j, k;\ncin >> n;\nfor (i = 0; i < n; i++) {\n    for (j = 0; j < n - i - 1; j++)\n        cout << \" \";\n    for (k = 0; k < 2 * i + 1; k++)\n        cout << \"*\";\n    cout << endl;\n}\n```\n\nA.\n\n```plain\n *****\n  ****\n   ***\n    **\n     *\n```\n\nB.\n\n```plain\n     *\n    ***\n   *****\n  *******\n *********\n```\n\nC.\n\n```plain\n *\n **\n ***\n ****\n *****\n```\n\nD.\n\n```plain\n     *\n    **\n   ***\n  ****\n *****\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3574
+  },
+  "gesp-2025-12-2-3575": {
+    "id": "gesp-2025-12-2-3575",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "某学校举办“十佳歌手大奖赛”，经过选拔最终参赛选手有 25 人，评委 10 人，最终计分规则为去掉一个最高分去掉一个最低分作为该参赛选手的最终得分，并输出该得分。如果单个评委可给满分为 10 分，则相关说法正确的是（ ）。\n\n```cpp\nfloat total_score, max_score, min_score, now_score;\nfor (int i = 0; i < 25; i++) {\n    max_score = 0; // 记录最高分\n    min_score = 10; // 记录最低分\n    total_score = 0; // 记录总分\n\n    for (int j = 0; j < 10; j++) {\n        cin >> now_score; // 录入评委打分\n        max_score = max(max_score, now_score); // L1\n        min_score = min(min_score, now_score); // L2\n        total_score += now_score;\n    }\n\n    cout << (total_score - max_score - min_score);\n}\n```",
+    "options": [
+      "A. 程序总体逻辑错误。因为要去掉最高分和最低分，需要排序，而程序没有相关代码。",
+      "B. 内层循环和外层循环之间的三行代码也就是 `max_score = 0` 开始的三行代码应该移动到外层循环外。",
+      "C. L1 和 L2 标记的两行代码可以分别改为简单的 if 语句或 ? : 语句。",
+      "D. `total_score += now_score` 不可以更改为 `total_score = total_score + now_score`。"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3575
+  },
+  "gesp-2025-12-2-3576": {
+    "id": "gesp-2025-12-2-3576",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "鸿蒙是华为公司开发的一款操作系统，那么它能够将正确的源程序翻译成目标程序，并运行。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3576
+  },
+  "gesp-2025-12-2-3577": {
+    "id": "gesp-2025-12-2-3577",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 表达式 `5 < 10 && 20` 对应的逻辑值为 `true`。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3577
+  },
+  "gesp-2025-12-2-3578": {
+    "id": "gesp-2025-12-2-3578",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 表达式 `10 / 0.333333 == 10 / (1 / 3)` 的值为 `true`。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3578
+  },
+  "gesp-2025-12-2-3579": {
+    "id": "gesp-2025-12-2-3579",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码中 $N$ 是整数，执行时无论输入负整数、0 或正整数，其输出都将是 0。（ ）\n\n```cpp\ncin >> N;\nwhile (N)\n    N /= 10;\ncout << N;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3579
+  },
+  "gesp-2025-12-2-3580": {
+    "id": "gesp-2025-12-2-3580",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面的 C++ 代码执行后，其输出是 `4 0`。（ ）\n\n```cpp\nint a, b;\na = 4;\nb = a == 5;\ncout << a << ' ' << b;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3580
+  },
+  "gesp-2025-12-2-3581": {
+    "id": "gesp-2025-12-2-3581",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 代码中对表达式 `('Z' - 'A') < ('z' - 'A')` 的结果输出为 0。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3581
+  },
+  "gesp-2025-12-2-3582": {
+    "id": "gesp-2025-12-2-3582",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码可以用于判断正整数 $N$ 的位数（即几位数，如 123 是 3 位数，12 为 2 位数）。（ ）\n\n```cpp\nint N, N10, i;\ncin >> N;\nN10 = 10, i = 1;\nwhile (1) {\n    if (N % N10 == N) {\n        printf(\"%d 是 %d 位数\", N, i);\n        break;\n    }\n    i++, N10 *= 10;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3582
+  },
+  "gesp-2025-12-2-3583": {
+    "id": "gesp-2025-12-2-3583",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "计算交叉加减的结果，形如 $1 - 2 + 3 - 4 + 5 - \\cdots$。下面 C++ 代码中的变量都是整型，则将 `Flag = -Flag` 改为 `Flag -= Flag` 效果相同。（ ）\n\n```cpp\ncin >> N;\nFlag = -1;\ntnt = 0;\nfor (i = 1; i < N + 1; i++) {\n    Flag = -Flag;\n    tnt += Flag * i;\n}\ncout << tnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3583
+  },
+  "gesp-2025-12-2-3584": {
+    "id": "gesp-2025-12-2-3584",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下列 C++ 代码段执行后将输出 55。（ ）\n\n```cpp\nint cnt = 0;\nfor (i = 0; i < 10; i++)\n    for (j = i; j < 10; j++)\n        cnt += 1;\ncout << cnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3584
+  },
+  "gesp-2025-12-2-3585": {
+    "id": "gesp-2025-12-2-3585",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出如下，因为代码 `printf(\"\n\")` 没有任何可读内容，删除不影响输出效果。（ ）\n\n```\n  1  2  3  4  5  6  7  8  9\n  2  4  6  8 10 12 14 16 18\n  3  6  9 12 15 18 21 24 27\n  4  8 12 16 20 24 28 32 36\n  5 10 15 20 25 30 35 40 45\n  6 12 18 24 30 36 42 48 54\n  7 14 21 28 35 42 49 56 63\n  8 16 24 32 40 48 56 64 72\n  9 18 27 36 45 54 63 72 81\n```\n\n```cpp\nfor (int i = 1; i < 10; i++) {\n    for (int j = 1; j < 10; j++)\n        printf(\"%3d\", i * j);\n    printf(\"\n\");\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3585
+  },
+  "gesp-2025-12-3-3586": {
+    "id": "gesp-2025-12-3-3586",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "进制与编码",
+    "question": "请将二进制数 $(1101.101)_2$，转换为等值的 $10$ 进制数（ ）。",
+    "options": [
+      "A. $14.25$",
+      "B. $13.625$",
+      "C. $13.5$",
+      "D. $14.5$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3586
+  },
+  "gesp-2025-12-3-3587": {
+    "id": "gesp-2025-12-3-3587",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "以下关于标准 C++ 一维数组的描述，哪一项是错误的？（ ）",
+    "options": [
+      "A. 数组的下标从 $0$ 开始",
+      "B. 数组在内存中是连续存放的",
+      "C. 数组的长度只能在运行时才能确定",
+      "D. 可以在程序中修改数组某个元素的值"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3587
+  },
+  "gesp-2025-12-3-3588": {
+    "id": "gesp-2025-12-3-3588",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下列代码段执行后，变量 `sum` 的值是（ ）\n\n```cpp\n{\n    int sum = 0;\n    for (int i = 1; i <= 10; i++) {\n        if (i % 3 == 8 >> 2)\n            continue;\n        sum += i;\n    }\n}\n```",
+    "options": [
+      "A. $12$",
+      "B. $17$",
+      "C. $33$",
+      "D. $40$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3588
+  },
+  "gesp-2025-12-3-3589": {
+    "id": "gesp-2025-12-3-3589",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "执行以下程序段，输出值是（ ）\n\n```cpp\nint x = 5;\nif (x == 3 >> 2) x = 8 >> 3;\ncout << x << endl;\n```",
+    "options": [
+      "A. $0$",
+      "B. $5$",
+      "C. $120$",
+      "D. $1$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3589
+  },
+  "gesp-2025-12-3-3590": {
+    "id": "gesp-2025-12-3-3590",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "已知字符串 `s = \"C++ Programming\"`，下列程序运行的结果是（ ）\n\n```cpp\ncout << (int)(s.length() | 3) << endl;\n```",
+    "options": [
+      "A. $14$",
+      "B. $15$",
+      "C. $16$",
+      "D. $17$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3590
+  },
+  "gesp-2025-12-3-3591": {
+    "id": "gesp-2025-12-3-3591",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "以下代码是一个程序的部分代码，能够正确执行，输出的结果是（ ）\n\n```cpp\nint arr[5] = {1, 2, 3, 4, 5};\nint p = arr[1];\ncout << (p + 2) << endl;\n```",
+    "options": [
+      "A. $1$",
+      "B. $2$",
+      "C. $3$",
+      "D. $4$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3591
+  },
+  "gesp-2025-12-3-3592": {
+    "id": "gesp-2025-12-3-3592",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "以下关于 C++ 求最小值函数 `min()` 的描述，不正确的是（ ）",
+    "options": [
+      "A. 函数必须返回一个值",
+      "B. 该函数可以嵌套调用",
+      "C. 调用 `min(5)` 是错误的，不能通过编译",
+      "D. 调用 `min()`（不传任何参数）可以通过编译，结果为 $0$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3592
+  },
+  "gesp-2025-12-3-3593": {
+    "id": "gesp-2025-12-3-3593",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "在一个特定的计算机系统中，假如 `unsigned int` 类型需要占用 $2$ 个字节的存储空间（每个字节有 $8$ 位），则 `unsigned int` 可以表示的数据范围是（ ）",
+    "options": [
+      "A. 0 ~ 65535",
+      "B. 0 ~ 65536",
+      "C. -65536 ~ 65535",
+      "D. 0 ~ 32767"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3593
+  },
+  "gesp-2025-12-3-3594": {
+    "id": "gesp-2025-12-3-3594",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "以下代码执行后，数组 `arr` 的内容是（ ）\n\n```cpp\nint arr[6] = {1, 2, 3, 4, 5, 6};\nfor (int i = 0; i < 6; i += 2) {\n    arr[i] = arr[i] + arr[i+1];\n    arr[i+1] = arr[i] - arr[i+1];\n    arr[i] = arr[i] - arr[i+1];\n}\n```",
+    "options": [
+      "A. $\\{2,1,4,3,6,5\\}$",
+      "B. $\\{1,2,3,4,5,6\\}$",
+      "C. $\\{3,1,4,2,5,3\\}$",
+      "D. $\\{1,3,2,5,4,6\\}$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3594
+  },
+  "gesp-2025-12-3-3595": {
+    "id": "gesp-2025-12-3-3595",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "`a & b | (c ^ d)`，其中 $a = 3$，$b = 7$，$c = 15$，$d = 4$，计算结果是（ ）",
+    "options": [
+      "A. 十进制 $11$",
+      "B. 二进制 $11$",
+      "C. 八进制 $11$",
+      "D. 十六进制 $11$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3595
+  },
+  "gesp-2025-12-3-3596": {
+    "id": "gesp-2025-12-3-3596",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "整型变量 $x$ 的初始值为 $10$，以下代码的输出结果是（ ）\n\n```cpp\nint t = x--;\nt -= x;\ncout << t << endl;\n```",
+    "options": [
+      "A. $0$",
+      "B. $-1$",
+      "C. $1$",
+      "D. 死循环"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3596
+  },
+  "gesp-2025-12-3-3597": {
+    "id": "gesp-2025-12-3-3597",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "根据下面的流程图，如果成绩 `score` 输入 $60$，输出的结果是（ ）\n\n![](https://cdn.luogu.com.cn/upload/image_hosting/ng3uhw6l.png)",
+    "options": [
+      "A. 优秀",
+      "B. 及格",
+      "C. 不及格",
+      "D. 没有输出"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3597
+  },
+  "gesp-2025-12-3-3598": {
+    "id": "gesp-2025-12-3-3598",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "以下代码运行后，`sum` 的结果是（ ）\n\n```cpp\nint arr[5] = {2, 4, 6, 8, 10};\nint sum = 0;\nfor (int i = 0; i < 5; i++) {\n    switch (arr[i] % (1|2)) {\n        case 0: sum += 1; break;\n        case 1: sum += 2; break;\n        case 2: sum += 3; break;\n    }\n}\n```",
+    "options": [
+      "A. $10$",
+      "B. $11$",
+      "C. $14$",
+      "D. $15$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3598
+  },
+  "gesp-2025-12-3-3599": {
+    "id": "gesp-2025-12-3-3599",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "以下关于 C++ 中 `abs()` 函数的描述，正确的是（ ）",
+    "options": [
+      "A. `abs()` 函数可用于计算 `int` 类型整数的绝对值，头文件为 `<cmath>` 或 `<cstdlib>`",
+      "B. 调用 `abs(3.14)` 可以四舍五入得到 $3$",
+      "C. `abs(-1, -2)` 的返回值是 $1$",
+      "D. 若传入负数浮点数，`abs()` 会自动截断小数部分后返回整数绝对值"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3599
+  },
+  "gesp-2025-12-3-3600": {
+    "id": "gesp-2025-12-3-3600",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "如果字符串 `s` 的值是 `GESP`，以下代码 `s` 的最后结果是（ ）\n\n```cpp\nfor (int i = 0; i < s.length(); i++) {\n    s[i] = toupper(s[i] + i);\n}\n```",
+    "options": [
+      "A. `GESP`",
+      "B. `HFTR`",
+      "C. `hesp`",
+      "D. `GFUS`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3600
+  },
+  "gesp-2025-12-3-3601": {
+    "id": "gesp-2025-12-3-3601",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "在 C++ 中，数组名不能改变，数组名不能被赋值。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3601
+  },
+  "gesp-2025-12-3-3602": {
+    "id": "gesp-2025-12-3-3602",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "整型变量 a 的值为 3，浮点数变量 b 的值为 3.5，在 C++ 编译环境下，经过 `a *= b` 计算后，a 的值变为 10.5。此时如果输出 a，将输出 10.5。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3602
+  },
+  "gesp-2025-12-3-3603": {
+    "id": "gesp-2025-12-3-3603",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "`strcmp(str1, str2)` 返回 0 表示 str1 大于 str2，返回正数表示两者相等。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3603
+  },
+  "gesp-2025-12-3-3604": {
+    "id": "gesp-2025-12-3-3604",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "以下代码输出结果为 8。\n\n```cpp\nint a = 5, b = 3;\nint c = a++ + ++b;\ncout << c << endl;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3604
+  },
+  "gesp-2025-12-3-3605": {
+    "id": "gesp-2025-12-3-3605",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "进制与编码",
+    "question": "位运算符 `&`、`|`、`^`、`~` 的优先级高于算术运算符 `+`、`-`、`*`、`/`。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3605
+  },
+  "gesp-2025-12-3-3606": {
+    "id": "gesp-2025-12-3-3606",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "在 C++ 中，`int a[] = {1, 2, 3, 4, 5};` 可以定义一个包含 5 个元素的整型数组。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3606
+  },
+  "gesp-2025-12-3-3607": {
+    "id": "gesp-2025-12-3-3607",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "C++ 表达式 `z = a > b ? x : y` 等同于：\n\n```cpp\nif (a > b) {\n    z = x;\n} else {\n    z = y;\n}\n```\n\n以下代码执行后，输出将会是 2。\n\n```cpp\nint main() {\n    int arr[5] = {1, 2, 3, 4, 5};\n    cout << arr[3 > 2 ? 1 : 2] << endl;\n    return 0;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3607
+  },
+  "gesp-2025-12-3-3608": {
+    "id": "gesp-2025-12-3-3608",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 中，`++` 和 `--` 运算符只能用于整型变量，不能用于浮点数变量。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3608
+  },
+  "gesp-2025-12-3-3609": {
+    "id": "gesp-2025-12-3-3609",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "进制与编码",
+    "question": "给定一个正整数 a，当需要计算 -a 的补码时，有这样一个计算技巧：将 a 的二进制形式从右往左扫描，遇到第一个 1 之后，将找到的第一个 1 左边的所有位都取反，能得到 -a 的补码。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3609
+  },
+  "gesp-2025-12-3-3610": {
+    "id": "gesp-2025-12-3-3610",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "以下代码中，Hello 将被输出 5 次。\n\n```cpp\nfor (int i = 0; i < 5; i++);\n{\n    cout << \"Hello\" << endl;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3610
+  },
+  "gesp-2025-12-4-3611": {
+    "id": "gesp-2025-12-4-3611",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "小杨想让指针 `p` 指向整数变量 `x`，正确写法是（ ）。",
+    "options": [
+      "A. `int p = &x;`",
+      "B. `int *p = x;`",
+      "C. `int *p = &x;`",
+      "D. `p = *x;`"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3611
+  },
+  "gesp-2025-12-4-3612": {
+    "id": "gesp-2025-12-4-3612",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "小杨写了如下的指针接力程序，程序执行完后变量 `a`、`*p1` 和 `*p2` 的值分别是（ ）。\n\n```cpp\nint a = 5;\nint* p1 = &a;\nint* p2 = p1;\n*p2 = 10;\n```",
+    "options": [
+      "A. $5\\ 10\\ 10$",
+      "B. $5\\ 10\\ 15$",
+      "C. $10\\ 10\\ 10$",
+      "D. $5\\ 5\\ 10$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3612
+  },
+  "gesp-2025-12-4-3613": {
+    "id": "gesp-2025-12-4-3613",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "小杨用一个二维数组表示棋盘，其中 $1$ 表示有棋子，$0$ 表示没有棋子。他想知道第 $2$ 行 第 $3$ 列有没有棋子，可采用的代码是：（ ）。\n\n```cpp\nint a[3][4] = {\n    {1, 0, 1, 0},\n    {0, 1, 0, 1},\n    {1, 1, 0, 0}\n};\n```",
+    "options": [
+      "A. `cout << a[1, 2] << endl;`",
+      "B. `cout << a[1][2] << endl;`",
+      "C. `cout << a(1, 2) << endl;`",
+      "D. `cout << a{1}{2} << endl;`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3613
+  },
+  "gesp-2025-12-4-3614": {
+    "id": "gesp-2025-12-4-3614",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "C++语法基础",
+    "question": "执行完下面的代码后，`*(p + 5)` 和 `arr[1][1]` 的值分别是（ ）。\n\n```cpp\nint arr[3][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12}};\nint* p = &arr[0][0];\n```",
+    "options": [
+      "A. $5\\ 6$",
+      "B. $6\\ 5$",
+      "C. $5\\ 5$",
+      "D. $6\\ 6$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3614
+  },
+  "gesp-2025-12-4-3615": {
+    "id": "gesp-2025-12-4-3615",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "执行完下面的代码后，`sum` 的值是（ ）。\n\n```cpp\nint arr[2][3][2] = {\n    {{1,2}, {3,4}, {5,6}},\n    {{7,8}, {9,10}, {11,12}}\n};\nint sum = 0;\nfor(int i = 0; i < 2; i++)\n    for(int j = 0; j < 3; j++)\n        for(int k = 0; k < 2; k++)\n            if((i+j+k) % 2 == 0)\n                sum += arr[i][j][k];\n```",
+    "options": [
+      "A. $36$",
+      "B. $39$",
+      "C. $78$",
+      "D. $30$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3615
+  },
+  "gesp-2025-12-4-3616": {
+    "id": "gesp-2025-12-4-3616",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "执行完下面的代码后，输出是（ ）。\n\n```cpp\nint a = 1;\n\nvoid test() {\n    int a = 2;\n    {\n        int a = 3;\n        a++;\n    }\n    a++;\n    cout << a << \" \";\n}\n\nint main() {\n    test();\n    cout << a;\n    return 0;\n}\n```",
+    "options": [
+      "A. $3\\ 1$",
+      "B. $4\\ 1$",
+      "C. $3\\ 2$",
+      "D. $4\\ 2$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3616
+  },
+  "gesp-2025-12-4-3617": {
+    "id": "gesp-2025-12-4-3617",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "执行完下面的代码后，`a`、`b` 和 `c` 的值分别是（ ）。\n\n```cpp\nvoid byValue(int x) { x = 100; }\nvoid byRef(int& x) { x = 200; }\nvoid byPointer(int* x) { *x = 300; }\n\nint main() {\n    int a = 1, b = 2, c = 3;\n    byValue(a);\n    byRef(b);\n    byPointer(&c);\n    return 0;\n}\n```",
+    "options": [
+      "A. $100\\ 200\\ 300$",
+      "B. $1\\ 2\\ 3$",
+      "C. $1\\ 200\\ 300$",
+      "D. $1\\ 2\\ 300$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3617
+  },
+  "gesp-2025-12-4-3618": {
+    "id": "gesp-2025-12-4-3618",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "运行如下代码会输出（ ）。\n\n```cpp\nstruct Point {\n    int x, y;\n};\n\nstruct Rectangle {\n    Point topLeft;\n    Point bottomRight;\n};\n\nint main() {\n    Rectangle rect = {{10, 10}, {20, 20}};\n    rect.topLeft.x = 5;\n    Point* p = &rect.bottomRight;\n    p->y = 5;\n    cout << rect.topLeft.x + rect.bottomRight.y;\n    return 0;\n}\n```",
+    "options": [
+      "A. $10$",
+      "B. $30$",
+      "C. $15$",
+      "D. $20$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3618
+  },
+  "gesp-2025-12-4-3619": {
+    "id": "gesp-2025-12-4-3619",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "给定函数 `climbStairs(int n)` 的定义如下，则 `climbStairs(5)` 的返回的值是（ ）。\n\n```cpp\nint climbStairs(int n) {\n    if(n <= 2) return n;\n    int a = 1, b = 2;\n    for(int i = 3; i <= n; i++) {\n        int temp = a + b;\n        a = b;\n        b = temp;\n    }\n    return b;\n}\n```",
+    "options": [
+      "A. $5$",
+      "B. $8$",
+      "C. $13$",
+      "D. $10$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3619
+  },
+  "gesp-2025-12-4-3620": {
+    "id": "gesp-2025-12-4-3620",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "排序与查找",
+    "question": "对如下 $4$ 个扑克牌进行排序，\n\n```cpp\nstruct Card {\n    int value;\n    char suit; // 花色\n};\n\nCard cards[4] = {{5,'A'}, {3,'B'}, {5,'C'}, {3,'D'}};\n```\n\n使用某排序算法按`value`排序后，结果为：`{3,'D'}`, `{3,'B'}`, `{5,'A'}`, `{5,'C'}`，则这个排序算法是稳定的吗？",
+    "options": [
+      "A. 稳定，因为相同 `value` 的元素相对顺序保持不变",
+      "B. 不稳定，因为 `{3,'D'}` 出现在 `{3,'B'}` 之前",
+      "C. 无法判断",
+      "D. 稳定，因为结果是有序的"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3620
+  },
+  "gesp-2025-12-4-3621": {
+    "id": "gesp-2025-12-4-3621",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面的函数 `selectTopK()` 实现从 $n$ 个学生中选出前 $k$ 名成绩最好的学生颁发奖学金（不需要对所有学生完全排序，只需要找出前 $k$ 名），则横线上应填写（ ）。\n\n```cpp\nstruct Student {\n    string name;\n    int score;\n};\n\nvoid selectTopK(Student students[], int n, int k) {\n    for (int i = 0; i < k; i++) {\n        int maxIdx = i;\n        for (__________________) {  // 在此处填入代码\n            if (students[j].score > students[maxIdx].score) {\n                maxIdx = j;\n            }\n        }\n\n        if (maxIdx != i) {\n            Student temp = students[i];\n            students[i] = students[maxIdx];\n            students[maxIdx] = temp;\n        }\n    }\n}\n```",
+    "options": [
+      "A. `int j = 0; j < n; j++`",
+      "B. `int j = i + 1; j < n; j++`",
+      "C. `int j = i; j < n; j++`",
+      "D. `int j = 1; j <= n; j++`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3621
+  },
+  "gesp-2025-12-4-3622": {
+    "id": "gesp-2025-12-4-3622",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "某游戏的排行榜系统需要实时更新玩家分数。每次只有一个玩家的分数发生变化，排行榜已经是按分数降序排列的。现在需要将更新后的玩家调整到正确位置。下面的函数 `updateRanking()` 要实现上述功能，则两处横线上应分别填写（ ）。\n\n```cpp\nstruct Player {\n    string name;\n    int score;\n};\n\n// 玩家索引 playerIdx 的分数刚刚更新，需要调整位置\nvoid updateRanking(Player players[], int size, int playerIdx) {\n    Player updatedPlayer = players[playerIdx];\n\n    if (playerIdx > 0 && updatedPlayer.score > players[playerIdx - 1].score) {\n        int i = playerIdx;\n        while (____________________) {  // 在此处填入代码\n            players[i] = players[i - 1];\n            i--;\n        }\n        players[i] = updatedPlayer;\n    }\n    else if (playerIdx < size - 1 && updatedPlayer.score < players[playerIdx + 1].score) {\n        int i = playerIdx;\n        while (____________________) {  // 在此处填入代码\n            players[i] = players[i + 1];\n            i++;\n        }\n        players[i] = updatedPlayer;\n    }\n}\n```\n\nA.\n```cpp\ni > 0 && updatedPlayer.score > players[i - 1].score\ni < size - 1 && updatedPlayer.score < players[i + 1].score\n```\n\nB.\n```cpp\ni < size - 1 && updatedPlayer.score < players[i + 1].score\ni > 0 && updatedPlayer.score > players[i - 1].score\n```\n\nC.\n```cpp\ni > 0 && updatedPlayer.score < players[i - 1].score\ni < size - 1 && updatedPlayer.score < players[i + 1].score\n```\n\nD.\n```cpp\ni > 0 && updatedPlayer.score < players[i - 1].score\ni < size - 1 && updatedPlayer.score > players[i + 1].score\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3622
+  },
+  "gesp-2025-12-4-3623": {
+    "id": "gesp-2025-12-4-3623",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "给定如下算法，其时间复杂度为（ ）。\n\n```cpp\nbool f(int arr[], int n, int target) {\n    for (int i = 0; i < n; i++) {\n        int sum = 0;\n        for (int j = 0; j < n; j++) {\n            if (i & (1 << j)) {\n                sum += arr[j];\n            }\n        }\n        if (sum == target) return true;\n    }\n    return false;\n}\n```",
+    "options": [
+      "A. $O(n)$",
+      "B. $O(n^2)$",
+      "C. $O(n^3)$",
+      "D. $O(2^n)$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3623
+  },
+  "gesp-2025-12-4-3624": {
+    "id": "gesp-2025-12-4-3624",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数组与字符串",
+    "question": "执行下面 C++ 程序，会输出（ ）。\n\n```cpp\nint main() {\n    ofstream fout(\"test.txt\");\n    fout << \"Happy\" << endl;\n    fout << \"New Year\";\n    fout.close();\n\n    ifstream fin(\"test.txt\");\n    string s1, s2;\n    fin >> s1;\n    getline(fin, s2);\n    fin.close();\n\n    cout << s1 << \"|\" << s2;\n    return 0;\n}\n```",
+    "options": [
+      "A. `Happy|New Year`",
+      "B. `Happy| New Year`",
+      "C. `HappyNew Year|`",
+      "D. `Happy|`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3624
+  },
+  "gesp-2025-12-4-3625": {
+    "id": "gesp-2025-12-4-3625",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面 C++ 代码，会输出（ ）。\n\n```cpp\nint divide(int a, int b) {\n    if(b == 0) throw \"Division by zero\";\n    return a / b;\n}\n\nint main() {\n    int result = 0;\n    try {\n        result = divide(10, 0);\n        cout << \"A\";\n    }\n    catch(const char* msg) {\n        cout << \"B\";\n        result = -1;\n    }\n    cout << result;\n    return 0;\n}\n```",
+    "options": [
+      "A. `A0`",
+      "B. `B-1`",
+      "C. `A10`",
+      "D. 程序崩溃"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3625
+  },
+  "gesp-2025-12-4-3626": {
+    "id": "gesp-2025-12-4-3626",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "数据结构-图",
+    "question": "小杨正在调试他的温度传感器程序，其中变量 x 保存当前温度。下面这段代码运行后，变量 x 的值变成了 8。\n\n```cpp\nint x = 5;\nint *p = &x;\n*p = *p + 3;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3626
+  },
+  "gesp-2025-12-4-3627": {
+    "id": "gesp-2025-12-4-3627",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "其他",
+    "question": "一个结构体不能包含另一个结构体。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3627
+  },
+  "gesp-2025-12-4-3628": {
+    "id": "gesp-2025-12-4-3628",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "计算机基础",
+    "question": "在 C++ 中，定义如下二维数组：`int a[3][4];`，数组 a 在内存中是按行优先连续存放的，即 `a[0][0]`、`a[0][1]`、`a[0][2]`、`a[0][3]` 在内存中是连续的。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3628
+  },
+  "gesp-2025-12-4-3629": {
+    "id": "gesp-2025-12-4-3629",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面程序后，变量 a 的值会变成 15。\n\n```cpp\nvoid add(int &x){\n    x += 10;\n}\n\nint a = 5;\nadd(a);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3629
+  },
+  "gesp-2025-12-4-3630": {
+    "id": "gesp-2025-12-4-3630",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "表达式与运算",
+    "question": "执行下面的 C++ 代码，会输出 8，因为两个指针地址相差 8 个字节（假设 int 占 4 字节）。\n\n```cpp\nint arr[5] = {1, 2, 3, 4, 5};\nint* p1 = arr;\nint* p2 = arr + 2;\ncout << p2 - p1;  // 输出结果\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3630
+  },
+  "gesp-2025-12-4-3631": {
+    "id": "gesp-2025-12-4-3631",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "考虑用如下递推方式计算斐波那契数列，时间复杂度是 $O(n)$。\n\n```cpp\nint n = 10;\nint f[20];\nf[0] = 0;\nf[1] = 1;\nfor (int i = 2; i <= n; i++)\n    f[i] = f[i - 1] + f[i - 2];\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3631
+  },
+  "gesp-2025-12-4-3632": {
+    "id": "gesp-2025-12-4-3632",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "排序与查找",
+    "question": "冒泡排序和插入排序都是稳定排序算法。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3632
+  },
+  "gesp-2025-12-4-3633": {
+    "id": "gesp-2025-12-4-3633",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "控制结构",
+    "question": "下面这段代码实现了选择排序算法。\n\n```cpp\nvoid sort(int a[], int n) {\n    for (int i = 1; i < n; i++) {\n        int x = a[i];\n        int j = i - 1;\n        while (j >= 0 && a[j] > x) {\n            a[j + 1] = a[j];\n            j--;\n        }\n        a[j + 1] = x;\n    }\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3633
+  },
+  "gesp-2025-12-4-3634": {
+    "id": "gesp-2025-12-4-3634",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "下面代码可以正常编译并输出 10。\n\n```cpp\n#include <iostream>\nusing namespace std;\n\nint calculate(int x, int y = 10);\n\nint main() {\n    cout << calculate(5);  // 调用1\n    return 0;\n}\n\nint calculate(int x, int y) {\n    return x * y;\n}\n\nint calculate(int x) {  // 重载函数\n    return x * 2;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3634
+  },
+  "gesp-2025-12-4-3635": {
+    "id": "gesp-2025-12-4-3635",
+    "source": "gesp",
+    "year": 2025,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面代码会输出 100。\n\n```cpp\nint main() {\n    ofstream fout(\"data.txt\");\n    fout << 10 << \" \" << 20 << endl;\n    fout << 30 << \" \" << 40;\n    fout.close();\n\n    ifstream fin(\"data.txt\");\n    int a, b, c, d;\n    fin >> a >> b >> c >> d;\n    fin.close();\n\n    cout << a + b + c + d;\n    return 0;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3635
+  },
+  "gesp-2026-03-1-3763": {
+    "id": "gesp-2026-03-1-3763",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数据结构-线性",
+    "question": "2026 年春节联欢晚会上一个武术表演节目《武 BOT》。节目中多个人形机器人会表演空翻，它们落地可能会有微微踉跄，但都会迅速调整姿态站稳，并适当移动来和前后左右的其他机器人保持原来队列。如果将机器人视作一个计算机系统，那么在该计算机系统中下面哪一项不能作为输入设备（ ）。",
+    "options": [
+      "A. 检测重心的重力传感器",
+      "B. 预装的 AI 算法程序",
+      "C. 接收动作指令的遥控器",
+      "D. 拍摄其他机器人的摄像头"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3763
+  },
+  "gesp-2026-03-1-3764": {
+    "id": "gesp-2026-03-1-3764",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "其他",
+    "question": "小明学习编程有一段时间了，他想在图形环境下把当前目录（或文件夹）下的文本文件 20260314.txt 的名字改一下。他用鼠标左键点击选中该文件后，立即完成下面哪个操作后将处于输入新文件名的状态（ ）：",
+    "options": [
+      "A. 单击右键并选择弹出菜单中的“重命名”",
+      "B. 双击左键",
+      "C. 按功能键 $F1$",
+      "D. 按回车键"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3764
+  },
+  "gesp-2026-03-1-3765": {
+    "id": "gesp-2026-03-1-3765",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面 C++ 代码可以执行，有关说法正确的是（ ）。\n\n```cpp\ndouble PI = 3.1415926;\ncout << (PI);\n```",
+    "options": [
+      "A. 为了方便初学者，`cout << (PI)` 和 `cout << (pi)` 效果相同，即变量的大小写不敏感",
+      "B. `cout << (PI)` 修改为 `cout << (pi)` 能正常执行",
+      "C. 不能用 `PI` 做变量名，因为要保存圆周率这个常量",
+      "D. 将程序中全部 `PI` 都改写为 `Pai`，将能正常执行，不会报错"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3765
+  },
+  "gesp-2026-03-1-3766": {
+    "id": "gesp-2026-03-1-3766",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 表达式 `3 * 3 % 2` 的值为（ ）。",
+    "options": [
+      "A. 81",
+      "B. 27",
+      "C. 4",
+      "D. 1"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3766
+  },
+  "gesp-2026-03-1-3767": {
+    "id": "gesp-2026-03-1-3767",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "整型变量 a、b 的初值都是 4，则下面的 C++ 代码执行后的输出是（ ）。\n\n```cpp\na, b = 3, 4;\ncout << (a + 2) << (b - 2) << endl;\ncout << a << b << endl;\n```\nA.\n```\n61\n43\n```\nB.\n```\n52\n34\n```\nC.\n```\n62\n44\n```\nD.\n```\n62\n32\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3767
+  },
+  "gesp-2026-03-1-3769": {
+    "id": "gesp-2026-03-1-3769",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面 C++ 代码的相关说法，正确的是（ ）。\n\n```cpp\nint N = 0;\ncin >> N;\ncout << (N);\n```",
+    "options": [
+      "A. 执行时如输入 10，则将输出 10",
+      "B. 执行时如输入 3.14，将报错",
+      "C. 执行时如输入 ABC，将报错",
+      "D. 执行时如输入 -10，将报错"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3769
+  },
+  "gesp-2026-03-1-3770": {
+    "id": "gesp-2026-03-1-3770",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行时，其说法正确的是（ ）。\n\n```cpp\nint M = 0, N = 0;\ncin >> M;\ncin >> N;\n\nif (N > M)\n    cout << (N - M);\nelse\n    cout << (M - N);\n```",
+    "options": [
+      "A. 如果输入一个正数和一个负数，其输出结果肯定是大于 0",
+      "B. 不管是负整数、正整数亦或 0，其结果肯定是大于等于 0",
+      "C. 如果 N 和 M 是相等的整数，将不会有输出",
+      "D. 如果 N 和 M 输入带有小数点的数，将按整数部分计算"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3770
+  },
+  "gesp-2026-03-1-3771": {
+    "id": "gesp-2026-03-1-3771",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后的输出是（ ）。\n\n```cpp\nint i, tnt = 1;\nfor (i = 0; i < 5; i++)\n    tnt *= i;\nprintf(\"%2d%2d\n\", tnt, i);\n```",
+    "options": [
+      "A. 24 5",
+      "B. 10 5",
+      "C. 0 4",
+      "D. 0 5"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3771
+  },
+  "gesp-2026-03-1-3772": {
+    "id": "gesp-2026-03-1-3772",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面 C++ 代码段求序列 $-1+2+3-4+5+6-7+8+9-10+11+12\\ldots$ 之值。例如输入 4，则计算序列前 4 项的值，规律如序列所示，输出为 0。下面说法中正确的是（ ）。\n\n```cpp\nint N, tnt, i;\ncout << \"请输入正整数：\";\ncin >> N;\n\ntnt = 0;\nfor (i = 1; i < N + 1; i++) // L1\n    if (i % 3 == 1)         // L2\n        tnt += -i;\n    else\n        tnt += i;\ncout << tnt;\n```",
+    "options": [
+      "A. L1 行中 `i < N + 1` 应该修为 `i < N` 才会符合预期",
+      "B. L2 行中 `i % 3 == 1` 应修改为 `i % 3 == 0` 才会符合预期",
+      "C. L2 行中 `i % 3 == 1` 修改为 `i % 3` 与当前程序效果相同",
+      "D. 当前代码能实现题目所描述计算目标"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3772
+  },
+  "gesp-2026-03-1-3773": {
+    "id": "gesp-2026-03-1-3773",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码的相关说法，正确的是（ ）。\n\n```cpp\nint i;\nfor (i = 1; i < 10; i++){\n    if (i % 2 == 0){\n        continue;           // L1\n    }\n    else\n        cout << i << \"#\";\n}\ncout << i << \"END\";\n```",
+    "options": [
+      "A. 上述代码执行后，其输出是 1#3#5#7#9#END",
+      "B. 删除 else 后的执行效果与当前代码相同",
+      "C. 删除 else 且将 `cout << i << \"#\"` 移入 L1 行下面，则执行效果与当前代码相同",
+      "D. 在 `cout << i << \"END\"` 前增加判断 `if(i > 10)`，其执行效果与当前代码相同"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3773
+  },
+  "gesp-2026-03-1-3774": {
+    "id": "gesp-2026-03-1-3774",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "一个正整数的每位都是个位数，称为数位，最高位非 0。下面的 C++ 代码用于求正整数的所有数位之和，简称数位和。如 123 的各数位分别是 1、2、3，则其数位和为 $1+2+3$，结果为 6。为实现该目标，横线处应该填写的代码是（ ）。\n\n```cpp\nint N;\ncin >> N;\nint tnt = 0;\nwhile (N != 0){\n    ________;\n    ________;\n}\ncout << \"N的数位和为：\" << tnt;\n```\n\nA.\n\n```cpp\ntnt += N / 10\nN /= 10\n```\n\nB.\n\n```cpp\ntnt += N % 10\nN /= 10\n```\n\nC.\n\n```cpp\ntnt += N / 10\nN %= 10\n```\n\nD.\n\n```cpp\ntnt = tnt + N % 10\nN %= 10\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3774
+  },
+  "gesp-2026-03-1-3775": {
+    "id": "gesp-2026-03-1-3775",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "小明想要快速知道任给一个正整数中有多少个奇数位（数位值是奇数），下面的 C++ 代码是其实现，横线处应该填入的代码是（ ）。\n\n```cpp\nint N;\ncin >> N;\n\nint odd_count = 0;  // 记录奇数的个数\nint old_number = N; // 保存原数\n\nwhile (N != 0){\n    if (_____________)\n        odd_count += 1;\n    N = (N - N % 10) / 10;\n}\ncout << old_number << \"中共有 \" << odd_count << \" 个奇数\";\n```",
+    "options": [
+      "A. N % 10 % 2 == 0",
+      "B. N % 10 % 2 == 1",
+      "C. N / 10 / 2 == 1",
+      "D. N / 2 / 10 == 0"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3775
+  },
+  "gesp-2026-03-1-3776": {
+    "id": "gesp-2026-03-1-3776",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "小明和弟弟在玩一个拼数字游戏，游戏规则是：二人各写一个两位正整数 $M$ 和 $N$；然后将较大的数字放在较小的前面，拼成一个 4 位数；将这个 4 位数除以 3 的余数添加到4位数的后面，得到一个 5 位数；最后判断这个 5 位数能否被 14 整除。下面的 C++ 代码用于判断 $M$ 和 $N$ 是否符合全部要求，如果符合则输出 Y 否则输出 N。例如输入 85 和 79，可以拼出 85792，恰好是 14 的倍数，则输出 Y。关于下面代码描述正确的是（ ）。\n\n```cpp\nint M, N, Q;\ncin >> M >> N;\n\nif(M > N)     // L1\n    Q = M*100+N;\nelse\n    Q = N*100+M;\n\nif((Q*10+Q%3) % 14 == 0)   // L2\n    cout << \"Y\";\nelse\n    cout << \"N\";\n```",
+    "options": [
+      "A. 代码段不能完成正确判断",
+      "B. L1 行代码中条件应该改为 `M <= N`",
+      "C. L2 行代码应该改为 `if ((Q*10+Q/3) % 14 == 0)`",
+      "D. 代码段可以不使用变量 Q，而是在区分 M 和 N 大小后分别直接用它们来判断"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3776
+  },
+  "gesp-2026-03-1-3777": {
+    "id": "gesp-2026-03-1-3777",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面 C++ 代码可以判断一个 6 位正整数 $N$ 的高 3 位和低 3 位的差是否是 314 的倍数。例如 628314 就符合要求。横线处应该填入（ ）。\n\n```cpp\ncin >> N;\nif (______________________)\n    cout << N << \"符合条件\" << endl;\n```",
+    "options": [
+      "A. (N % 1000) - (N / 1000) / 314 == 0",
+      "B. (N / 1000) - (N % 1000) % 314 == 0",
+      "C. (N % 1000) - (N / 1000) / 314",
+      "D. (N / 1000) - (N % 1000) % 314"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3777
+  },
+  "gesp-2026-03-1-3778": {
+    "id": "gesp-2026-03-1-3778",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "$N$ 是一个正整数。如果 $N$ 的所有奇数位的数位和等于所有偶数位的数位和，则称它是一个“双螺旋数”。例如 12375 的所有奇数位的数位和是 9，同时它的所有偶数位的数位和也是 9，则 12375 就是一个双螺旋数。下面的 C++ 代码用于判断输入的 $N$ 是否为双螺旋数。空白处应该填入的代码是（ ）。\n\n```cpp\nint i, N, N1=0, N2=0, N0;\ncin >> N;\nN0 = N;\nwhile (N){\n    ________\n    ________\n}\nif(N1 == N2)\n    cout << N0 << \"是双螺旋数\" << endl;\n```\n\nA.\n\n```cpp\nN1 += N%10, N /= 10;\nN2 += N%10, N /= 10;\n```\n\nB.\n\n```cpp\nN1 += N/10, N /= 10;\nN2 += N/10, N /= 10;\n```\n\nC.\n\n```cpp\nN1 += N%10, N %= 10;\nN2 += N%10, N %= 10;\n```\n\nD.\n\n```cpp\nN1 += N/10, N %= 10;\nN2 += N/10, N %= 10;\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3778
+  },
+  "gesp-2026-03-1-3779": {
+    "id": "gesp-2026-03-1-3779",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "计算机基础",
+    "question": "小明的妈妈最近刚刚给他买了一块电话手表，除了可以看时间，小明也可以用它和妈妈打电话、收发信息，那么可以推测这块手表中装有一款特定操作系统。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3779
+  },
+  "gesp-2026-03-1-3780": {
+    "id": "gesp-2026-03-1-3780",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 表达式 `4 % 2` 和 `2 * 2 % 2` 的结果相同。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3780
+  },
+  "gesp-2026-03-1-3781": {
+    "id": "gesp-2026-03-1-3781",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码段成功执行后将输出 $0$。\n\n```cpp\nfor (i = 1; i < 10; i++)\n    if (i % 3 == 0)\n        break;\ncout << i;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3781
+  },
+  "gesp-2026-03-1-3782": {
+    "id": "gesp-2026-03-1-3782",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面能够正常执行的 C++ 代码段用于求 $1$ 到 $N$ 之和，$N$ 为正整数。因为 $i < N + 1$，所以是 $1$ 到 $N$ 且包含 $N$ 之和。\n\n```cpp\ntnt = 0;\ncout << \"请输入正整数：\";\ncin >> N;\ntotal = 0;\nfor (i = 1; i < N + 1; i++);\n    total += i;\ncout << total;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3782
+  },
+  "gesp-2026-03-1-3783": {
+    "id": "gesp-2026-03-1-3783",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面的 C++ 代码段，其语句 `cout << (N)` 将被执行 $0$ 次或无数次（即死循环）。\n\n```cpp\ncin >> N;\nwhile (N)\n    cout << (N);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3783
+  },
+  "gesp-2026-03-1-3784": {
+    "id": "gesp-2026-03-1-3784",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码段的变量都是整型，它能用于判断输入的正整数是否为对称数。所谓对称数是指从左到右和从右到左读该数，其值相同。例如，$121$ 和 $414$ 都是对称数，而 $123$ 不是对称数。（ ）\n\n```cpp\ncout << \"请输入正整数：\";\ncin >> n;\n\nold_number = n;\nnew_number = 0;\nwhile (n != 0) {\n    new_number = new_number * 10 + n % 10;\n    n /= 10;\n}\n\nif (old_number == new_number)\n    cout << \"对称数\";\nelse\n    cout << \"非对称数\";\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3784
+  },
+  "gesp-2026-03-1-3785": {
+    "id": "gesp-2026-03-1-3785",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面的 C++ 代码段，如果变量都为整型变量，输入为大于 $0$ 的整数，则输出数值一定为 $-N$ 的值。\n\n```cpp\ncin >> N;\ntotal = 0;\nfor (i = -N; i < N; i += 2)\n    total += i;\ncout << total;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3785
+  },
+  "gesp-2026-03-1-3786": {
+    "id": "gesp-2026-03-1-3786",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "执行 C++ 语句 `printf(\"%d\n\", 3.14)` 将报错。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3786
+  },
+  "gesp-2026-03-1-3787": {
+    "id": "gesp-2026-03-1-3787",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面的 C++ 代码后将输出 $2500$。\n\n```cpp\nint cnt = 0;\nfor (int i = 1; i < 100; i++)\n    cnt += i++;\ncout << cnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3787
+  },
+  "gesp-2026-03-1-3788": {
+    "id": "gesp-2026-03-1-3788",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "小明在测试 C++ 的 `printf` 的功能时执行了 `printf(\"%-5d\n\", 314)`，则代码输出的结果是 $-5314$。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 1,
+    "_luogu_pid": 3788
+  },
+  "gesp-2026-03-2-3789": {
+    "id": "gesp-2026-03-2-3789",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数据结构-线性",
+    "question": "2026 年春节联欢晚会上一个武术表演节目《武 BOT》。节目中多个人形机器人会表演空翻，它们落地可能会有微微踉跄，但都会迅速调整姿态站稳，并适当移动来和前后左右的其他机器人保持原来队列。如果将机器人视作一个计算机系统，那么在该计算机系统中下面哪一项不能作为输入设备（ ）。",
+    "options": [
+      "A. 检测重心的重力传感器",
+      "B. 预装的 AI 算法程序",
+      "C. 接收动作指令的遥控器",
+      "D. 拍摄其他机器人的摄像头"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3789
+  },
+  "gesp-2026-03-2-3790": {
+    "id": "gesp-2026-03-2-3790",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面代码用来找出输入的 $N$ 个正整数中最大的一个。如果将代码段用流程图来表示，则 L1 标记的代码行应该使用的图形是（ ）。\n\n```cpp\nint N, max=0, val;\ncin >> N;\n\nwhile(N){\n    cin >> val;\n    if(val > max) // L1\n        max = val;\n    N--;\n}\n\ncout << max;\n```",
+    "options": [
+      "A. 圆形框",
+      "B. 椭圆形框",
+      "C. 平行四边形框",
+      "D. 菱形框"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3790
+  },
+  "gesp-2026-03-2-3791": {
+    "id": "gesp-2026-03-2-3791",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面 C++ 代码可以执行，有关说法正确的是（ ）。\n\n```cpp\ndouble PI = 3.1415926;\ncout << (PI);\n```",
+    "options": [
+      "A. 为了方便初学者，`cout << (PI)` 和 `cout << (pi)` 效果相同，即变量的大小写不敏感",
+      "B. `cout << (PI)` 修改为 `cout << (Pi)` 能正常执行",
+      "C. 不能用 PI 做变量名，因为要保存圆周率这个常量",
+      "D. 将程序中全部 PI 都改写为 Pai，将能正常执行，不会报错"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3791
+  },
+  "gesp-2026-03-2-3792": {
+    "id": "gesp-2026-03-2-3792",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面选择项中，与 C++ 表达式 `!(x > 5 && y <= 10)` 等价的是（ ）。",
+    "options": [
+      "A. x <= 5 && y > 10",
+      "B. x > 5 || y <= 10",
+      "C. x <= 5 || y > 10",
+      "D. ! x > 5 && ! y <= 10"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3792
+  },
+  "gesp-2026-03-2-3793": {
+    "id": "gesp-2026-03-2-3793",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "某同学执行 C++ 代码 `cout << ((0.1 + 0.2) == 0.3)` 时输出 0，下面最可能的原因是（ ）。",
+    "options": [
+      "A. C++ 的 + 运算符在处理小数时存在 bug",
+      "B. 0.1、0.2 和 0.3 在计算机中无法用二进制浮点数精确表示，导致 0.1 + 0.2 的结果与 0.3 存在微小误差",
+      "C. == 运算符不能用于比较浮点数，只能用于整数",
+      "D. 因为 0.1 + 0.2 的数学结果不等于 0.3"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3793
+  },
+  "gesp-2026-03-2-3794": {
+    "id": "gesp-2026-03-2-3794",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码段执行后其输出是（ ）。\n\n```cpp\ntnt = 0;\nfor (int i = 0; i < 5; i++){\n    for (int j = 0; j < i; j++)\n        tnt += 1;\n    cout << tnt << \"#\";\n}\ncout << tnt;\n```",
+    "options": [
+      "A. 0#1#3#6#10#10",
+      "B. 1#2#3#4#5#6#7#8#9#10#10",
+      "C. 10#10",
+      "D. 10"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3794
+  },
+  "gesp-2026-03-2-3795": {
+    "id": "gesp-2026-03-2-3795",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码执行之后的输出是（ ）。\n\n```cpp\nfor ( int i = -2; i < 2; i++)\n    if (not i % 3)\n        cout << i << \"#\";\n```",
+    "options": [
+      "A. 0#",
+      "B. -2#-1#1#",
+      "C. -1#0#",
+      "D. -2#0#1#"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3795
+  },
+  "gesp-2026-03-2-3797": {
+    "id": "gesp-2026-03-2-3797",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后其输出是（ ）。\n\n```cpp\nint count = 0;\nfor (int i = 1; i < 4; i++)\n    for (int j = 1; j < 5; j++){\n        if (j == 3)\n            continue;\n        if (i == 2)\n            break;\n        count += 1;\n    }\ncout << (count);\n```",
+    "options": [
+      "A. 2",
+      "B. 4",
+      "C. 6",
+      "D. 8"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3797
+  },
+  "gesp-2026-03-2-3798": {
+    "id": "gesp-2026-03-2-3798",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 4 个选项中，与下面 C++ 代码段具有相同效果的是（ ）。\n\n```cpp\ni = 0;\nwhile (i < 5) {\n    cout << i;\n    i += 1;\n}\n```\n\nA.\n```cpp\nfor (i = 0; i < 5; i++)\n    cout << i;\n```\n\nB.\n```cpp\nfor (i = 1; i < 5; i++)\n    cout << i;\n```\n\nC.\n```cpp\nfor (i = 0; i < 6; i++)\n    cout << i;\n```\n\nD.\n```cpp\nfor (i = 1; i < 6; i++)\n    cout << i;\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3798
+  },
+  "gesp-2026-03-2-3799": {
+    "id": "gesp-2026-03-2-3799",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出是（ ）。\n\n```cpp\nint n = 10;\nwhile (n > 0){\n    n -= 1;\n    if (n % 3 == 0)\n        continue;\n    if (n == 5)\n        break;\n}\ncout << n;\n```",
+    "options": [
+      "A. 0",
+      "B. 5",
+      "C. 6",
+      "D. 7"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3799
+  },
+  "gesp-2026-03-2-3800": {
+    "id": "gesp-2026-03-2-3800",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码段执行后，其输出是（ ）。\n\n```cpp\nint i, j, cnt;\ncnt = 0;\nfor (i = 0; i < 5; i++){\n    i = -i;\n    for (j = i; j < -i; j++)\n        cnt += 1;\n    i = -i;\n}\ncout << cnt;\n```",
+    "options": [
+      "A. 5",
+      "B. 15",
+      "C. 20",
+      "D. 30"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3800
+  },
+  "gesp-2026-03-2-3801": {
+    "id": "gesp-2026-03-2-3801",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "某学校图书馆的借阅卡号由 6 位整数组成。前 5 位是顺序编号，第 6 位是校验码，用于防止输错。校验码规则如下：将前 5 位数字相加，然后除以 $10$ 的余数，就是第 6 位数字。如卡号 $123455$ 的前 5 位之和为 $15$，除以 $10$ 的余数是 $5$，故第 6 位为 $5$。下面的 C++ 代码段用于判断卡号是否正确，横线处应填入的代码是（ ）。\n\n```cpp\ncout << \"请输入卡号：\";\ncin >> N;\norder_num = N / 10; // 获得前5位顺序号，假设录入一定为6位正整数\ncheck_num = N % 10; // 获得最后一位\n\ntnt = 0; // 保存前5位之和\nfor (i = 0; i < 5; i++) {\n    ________________;\n    order_num /= 10;\n}\n\nif (________________)\n    cout << \"符合校验规则\";\nelse\n    cout << \"不符合校验规则\";\n```\n\nA.\n\n```cpp\ntnt += order_num / 10\ntnt / 10 == check_num\n```\n\nB.\n\n```cpp\ntnt += order_num % 10\ntnt % 10 == check_num\n```\n\nC.\n\n```cpp\ntnt = order_num / 10 + tnt\ntnt % 10 == check_num\n```\n\nD.\n\n```cpp\ntnt = order_num % 10\ntnt / 10 == check_num\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3801
+  },
+  "gesp-2026-03-2-3802": {
+    "id": "gesp-2026-03-2-3802",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码段正常执行后其输出的数字图形是（ ）。\n\n```cpp\nfor (i = 1; i < 5; i++) {\n    for (j = 1; j < i + 1; j++)\n        cout << j;\n    cout << endl;\n}\n```\n\nA.\n\n```\n1\n12\n123\n1234\n```\n\nB.\n\n```\n1\n22\n333\n4444\n```\n\nC.\n\n```\n1\n21\n321\n4321\n```\n\nD.\n\n```\n4\n34\n234\n1234\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3802
+  },
+  "gesp-2026-03-2-3803": {
+    "id": "gesp-2026-03-2-3803",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "某学校举办“校园演讲比赛”，每位选手由 8 位评委打分（分数为 $0$-$10$ 的整数），且每位评委必须打分。计分规则：若至少有 5 位评委给出大于等于 $6$ 分，则成绩有效，最终得分为所有 8 位评委的总分；如给出低于 $6$ 分的评委数量超过 5 位，则记为 $0$ 分。以下核心程序段依次输入 8 个分数，并计算最终得分。横线处应填入（ ）。\n\n```cpp\ntotal_score = 0; // 所有分数之和\nhigh_count = 0; // ≥6分的评委数量\n\nfor (i = 0; i < 8; i++) {\n    cout << \"请输入评委分数：\";\n    cin >> score;\n    ________________;\n    if (score >= 6)\n        ________________;\n}\n\nif (high_count >= 5)\n    cout << total_score;\nelse\n    cout << 0;\n```\n\nA.\n\n```cpp\ntotal_score += score\nhigh_count += 1\n```\n\nB.\n\n```cpp\ntotal_score += score\nhigh_count += score\n```\n\nC.\n\n```cpp\nhigh_count += 1\ntotal_score += score\n```\n\nD.\n\n```cpp\ntotal_score *= score\nhigh_count *= 1\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3803
+  },
+  "gesp-2026-03-2-3804": {
+    "id": "gesp-2026-03-2-3804",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "计算机基础",
+    "question": "小明的妈妈最近刚刚给他买了一块电话手表，除了可以看时间，小明也可以用它和妈妈打电话、收发信息，那么可以推测这块手表中装有一款特定操作系统。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3804
+  },
+  "gesp-2026-03-2-3805": {
+    "id": "gesp-2026-03-2-3805",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "C++ 语句 `cout << ('4' % '2' == '2' * '2' % 2);` 执行后的输出是 $1$。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3805
+  },
+  "gesp-2026-03-2-3806": {
+    "id": "gesp-2026-03-2-3806",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "下面的 C++ 代码段执行时将报错，因为 $10$ 是整数类型，`a` 是布尔类型。由于类型不同，不能进行加法运算。（ ）\n\n```cpp\nbool a = true;\ncout << (10 + a);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3806
+  },
+  "gesp-2026-03-2-3807": {
+    "id": "gesp-2026-03-2-3807",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码段执行后将输出 `0-3-6-9-`。（ ）\n\n```cpp\nfor (int i = 0; i < 10; i++) {\n    if (i % 3)\n        continue;\n    cout << i << \"-\";\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3807
+  },
+  "gesp-2026-03-2-3808": {
+    "id": "gesp-2026-03-2-3808",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面的 C++ 代码段，如果 N 是基本数据类型，则语句 `cout << (N);` 将被执行 $0$ 次或无数次（即死循环）。（ ）\n\n```cpp\ncin >> N;\nwhile (N)\n    cout << (N);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3808
+  },
+  "gesp-2026-03-2-3809": {
+    "id": "gesp-2026-03-2-3809",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码段可正常执行，删除 `continue` 不影响执行效果。（ ）\n\n```cpp\nfor (i = 0; i < 10; i++) {\n    i += 1;\n    continue;\n}\ncout << (i);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3809
+  },
+  "gesp-2026-03-2-3810": {
+    "id": "gesp-2026-03-2-3810",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码段用于计算 1 到 N 之间且包含 N 的所有数字中含有的 3 的个数，如 1 到 40 含有 14 个 3，而 1 到 20 则只含有 2 个 3。如果将 `while (i != 0)` 改为 `while (abs(i))`，则执行结果相同。（ ）\n\n```cpp\ncout << \"请输入正整数N：\";\ncin >> N;\ncnt = 0; // 保存3的个数\nfor (k = 1; k < N + 1; k++) {\n    i = k;\n    while (i != 0) {\n        if (i % 10 == 3)\n            cnt += 1;\n        i /= 10;\n    }\n}\ncout << cnt;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3810
+  },
+  "gesp-2026-03-2-3811": {
+    "id": "gesp-2026-03-2-3811",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面的 C++ 代码段执行将不会有输出，因为内层循环 `j` 总是 0 开始，`i * j % 10 == 0` 将会被满足，执行 `break`，故而 `i` 小于 $10$，不会满足 `if` 判断条件。（ ）\n\n```cpp\nfor (i = 1; i < 10; i++)\n    for (j = 0; j < i; j++)\n        if (i * j % 10 == 0)\n            break;\nif (i >= 10)\n    cout << (i * j);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3811
+  },
+  "gesp-2026-03-2-3812": {
+    "id": "gesp-2026-03-2-3812",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下列 C++ 代码执行后将输出 1#4#9#16#16 。（ ）\n\n```cpp\ncnt = 0;\nfor (i = 1; i < 5; i++) {\n    for (j = 1; j < i + 1; j++)\n        if (i * j % 10 == 0)\n            break;\n    if (j >= i + 1)\n        cout << (i * j) << \"#\";\n}\nif (i >= 5)\n    cout << (i * j);\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3812
+  },
+  "gesp-2026-03-2-3813": {
+    "id": "gesp-2026-03-2-3813",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面 C++ 代码执行后输出如左图所示，将 `\"%d\"` 修改为 `\"%3d\"` 即可实现右图输出。（ ）\n\n```cpp\n/*\n// 左图\n1 2 3 4 5 6 7 8 9\n2 4 6 8 10 12 14 16 18\n3 6 9 12 15 18 21 24 27\n4 8 12 16 20 24 28 32 36\n5 10 15 20 25 30 35 40 45\n6 12 18 24 30 36 42 48 54\n7 14 21 28 35 42 49 56 63\n8 16 24 32 40 48 56 64 72\n9 18 27 36 45 54 63 72 81\n*/\n\n// 右图\n1   2   3   4   5   6   7   8   9\n2   4   6   8  10  12  14  16  18\n3   6   9  12  15  18  21  24  27\n4   8  12  16  20  24  28  32  36\n5  10  15  20  25  30  35  40  45\n6  12  18  24  30  36  42  48  54\n7  14  21  28  35  42  49  56  63\n8  16  24  32  40  48  56  64  72\n9  18  27  36  45  54  63  72  81\n\n\nfor (i = 1; i < 10; i++) {\n    for (j = 1; j < 10; j++)\n        printf(\"%d\", i * j);\n    printf(\"\n\");\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 2,
+    "_luogu_pid": 3813
+  },
+  "gesp-2026-03-3-3814": {
+    "id": "gesp-2026-03-3-3814",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "C++语法基础",
+    "question": "如果字符变量 `_1` 的值是字符 $1$,那么 `(int) _1` 的值是? （ ）。",
+    "options": [
+      "A. $1$",
+      "B. -$1$",
+      "C. $49$",
+      "D. $+1$ 或者 -$1$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3814
+  },
+  "gesp-2026-03-3-3815": {
+    "id": "gesp-2026-03-3-3815",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "其他",
+    "question": "a,b 是整型变量，各自有互不相同的初始值。下列程序实现了什么效果（ ）。\n\n```cpp\na = a ^ b;\nb = a ^ b;\na = a ^ b;\n```",
+    "options": [
+      "A. a,b 的值从始至终都没有改变。",
+      "B. a,b 的值实现了互换。",
+      "C. a,b 的值互换了以后，又还回去了，相当于没有变化。",
+      "D. a,b 的值最后和原值不一样，没有任何意义。"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3815
+  },
+  "gesp-2026-03-3-3816": {
+    "id": "gesp-2026-03-3-3816",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "C++语法基础",
+    "question": "关于下列正确的程序段，说法正确的是（ ）。\n\n```cpp\nchar str1[] = \"Hello\";\nchar str2[]={'H','e','l','l','0'};\n```",
+    "options": [
+      "A. 字符数组 str1 和 str2 完全相同。",
+      "B. `cout<<str1<<endl; cout<<str2<<endl;` 这段程序多次执行将输出不同的结果。",
+      "C. 字符数组 str1 和 str2 不相等。",
+      "D. 这两个赋值方式完全相同。"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3816
+  },
+  "gesp-2026-03-3-3817": {
+    "id": "gesp-2026-03-3-3817",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "关于以下程序段，说法正确的是（ ）。\n\n```cpp\nint x=10;\ncout<<(x++) + (++x)<<endl;\n```",
+    "options": [
+      "A. C++11 标准中，这是未定义行为，不同的环境有可能出现不同的结果",
+      "B. $22$",
+      "C. $21$",
+      "D. $20$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3817
+  },
+  "gesp-2026-03-3-3818": {
+    "id": "gesp-2026-03-3-3818",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "$8$ 位二进制下，十进制数 $-15$ 的补码是（ ）。",
+    "options": [
+      "A. $11110000$",
+      "B. $10001111$",
+      "C. $10010000$",
+      "D. $11110001$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3818
+  },
+  "gesp-2026-03-3-3819": {
+    "id": "gesp-2026-03-3-3819",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "三进制数 $2102_{(3)}$ 转换成十进制是：（ ）。",
+    "options": [
+      "A. $63$",
+      "B. $65$",
+      "C. $67$",
+      "D. $69$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3819
+  },
+  "gesp-2026-03-3-3820": {
+    "id": "gesp-2026-03-3-3820",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "二进制数 $10110101$ 是某数的 $8$ 位补码，该数的十进制是（ ）。",
+    "options": [
+      "A. $-73$",
+      "B. $-75$",
+      "C. $-77$",
+      "D. $75$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3820
+  },
+  "gesp-2026-03-3-3821": {
+    "id": "gesp-2026-03-3-3821",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "已知 `unsigned char c = 0x0F;` （十六进制 `0F` = 二进制 `00001111`），执行 `c = c << 3;` 后，`c` 的十进制值是：（ ）。",
+    "options": [
+      "A. $64$",
+      "B. $72$",
+      "C. $80$",
+      "D. $120$"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3821
+  },
+  "gesp-2026-03-3-3822": {
+    "id": "gesp-2026-03-3-3822",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "补码的情况下，关于按位取反运算，用笔计算的情况下，以下说法错误的是：（ ）",
+    "options": [
+      "A. `~5` 的结果是 $-6$（`int` 类型，$32$ 位）",
+      "B. `~0` 的结果是 $0$（`int` 类型，$32$ 位）",
+      "C. `~(-3)` 的结果是 $2$（`int` 类型，$32$ 位）",
+      "D. `~8` 的结果是 $-9$（`int` 类型，$32$ 位）"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3822
+  },
+  "gesp-2026-03-3-3823": {
+    "id": "gesp-2026-03-3-3823",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数组与字符串",
+    "question": "执行以下 C++ 代码后，`sub` 的值是（）。\n\n```cpp\nstring str = \"GESP2026\";\nstring sub = str.substr(4, 2);\n```",
+    "options": [
+      "A. $20$",
+      "B. $02$",
+      "C. $2026$",
+      "D. $026$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3823
+  },
+  "gesp-2026-03-3-3824": {
+    "id": "gesp-2026-03-3-3824",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "C++语法基础",
+    "question": "执行以下代码后，输出结果是：（ ）。\n\n```cpp\nint arr[] = {5, 10, 15, 20, 25, 30};\nint count = sizeof(arr) / sizeof(arr[0]);\ncout << count;\n```",
+    "options": [
+      "A. $4$",
+      "B. $6$",
+      "C. $24$",
+      "D. $30$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3824
+  },
+  "gesp-2026-03-3-3825": {
+    "id": "gesp-2026-03-3-3825",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数组与字符串",
+    "question": "执行以下代码后，输出结果是：（ ）。\n\n```cpp\nchar s[10] = \"abcde\";\nint a = sizeof(s) / sizeof(s[0]);\nint b = strlen(s);\ncout << a - b;\n```",
+    "options": [
+      "A. $4$",
+      "B. $5$",
+      "C. $6$",
+      "D. $10$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3825
+  },
+  "gesp-2026-03-3-3826": {
+    "id": "gesp-2026-03-3-3826",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "算法思想",
+    "question": "以下问题中，最不适合用枚举法解决的是：（ ）",
+    "options": [
+      "A. 找出 $1 \\sim 100$ 之间所有能被 $7$ 整除的数",
+      "B. 找出 $100 \\sim 200$ 之间的所有质数",
+      "C. 计算 $1+2+3+\\dots+1000$ 的和",
+      "D. 找出三位数中个位、十位、百位数字之和等于 $10$ 的数"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3826
+  },
+  "gesp-2026-03-3-3827": {
+    "id": "gesp-2026-03-3-3827",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "算法思想",
+    "question": "用枚举法解决“鸡兔同笼问题：头共 $35$ 个，脚共 $94$ 只，求鸡和兔的数量”，以下枚举逻辑最合理的是：（ ）",
+    "options": [
+      "A. 枚举鸡的数量 `x` （$0 \\sim 35$），兔的数量 `y=35-x` ，判断 `2*x + 4*y == 94`",
+      "B. 枚举兔的数量 `y` （$0 \\sim 94$），鸡的数量 `x=35-y` ，判断 `2*x + 4*y == 94`",
+      "C. 枚举所有整数 `x` （$0 \\sim 100$）和 `y` （$0 \\sim 100$），判断 `x+y==35 && 2*x+4*y==94`",
+      "D. 枚举脚的总数 `sum` （$0 \\sim 94$），判断 `sum == 94`"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3827
+  },
+  "gesp-2026-03-3-3828": {
+    "id": "gesp-2026-03-3-3828",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "模拟“字符串加密”：规则为“每个字符 ASCII 码 +3 ，若超过 z（$122$）则从 a 重新开始”，以下代码中正确的条件判断是：（ ）\n\n```cpp\nfor (int i = 0; i < str.length(); i++) {\n    // 需补充条件:\n    ________________\n    else {\n        str[i] += 3;\n    }\n}\n```",
+    "options": [
+      "A. `if (str[i]> 122) str[i] = str[i] + 3 - 26;`",
+      "B. `if (str[i] > 122) str[i] = str[i] - 26;`",
+      "C. `if (str[i] + 3 > 122) str[i] = str[i] - 26;`",
+      "D. `if (str[i] + 3 > 'z') str[i] = 'a' + (str[i] + 3 - 'z') - 1;`"
+    ],
+    "correctIndex": 3,
+    "explanation": "官方答案：D。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3828
+  },
+  "gesp-2026-03-3-3829": {
+    "id": "gesp-2026-03-3-3829",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数组与字符串",
+    "question": "定义 `int arr[5] = {1,2,3};` ，则 `arr[3]` 的值为 $0$，`arr[5]` 是合法下标。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3829
+  },
+  "gesp-2026-03-3-3830": {
+    "id": "gesp-2026-03-3-3830",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数组与字符串",
+    "question": "定义 `double arr[10];` ，未手动初始化时，数组中所有元素的默认值为 $0.0$。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3830
+  },
+  "gesp-2026-03-3-3831": {
+    "id": "gesp-2026-03-3-3831",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "C++语法基础",
+    "question": "定义 `int arr[] = {1,2,3};` ，则 `sizeof(arr)` 的结果为 $12$（`int` 占 $4$ 字节）。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3831
+  },
+  "gesp-2026-03-3-3832": {
+    "id": "gesp-2026-03-3-3832",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "其他",
+    "question": "下面的流程图是用来求 $1+2+3+\\dots+10$ 的和。请判断：这个流程图的逻辑正确还是错误？\n\n![](https://cdn.luogu.com.cn/upload/image_hosting/5hg52phy.png)",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3832
+  },
+  "gesp-2026-03-3-3833": {
+    "id": "gesp-2026-03-3-3833",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "其他",
+    "question": "下面流程图的功能是计算 $5$ 对 $2$ 取余数，输出结果为 $1$。\n\n![](https://cdn.luogu.com.cn/upload/image_hosting/1yeu7o6d.png)",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3833
+  },
+  "gesp-2026-03-3-3834": {
+    "id": "gesp-2026-03-3-3834",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "已知大写字母 A 的 ASCII 编码的十六进制表示为 `0x41` ，计算字符 m 的 ASCII 编码的八进制表示为 $155$ （八进制）。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3834
+  },
+  "gesp-2026-03-3-3835": {
+    "id": "gesp-2026-03-3-3835",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "在 C++ 位运算中，各种不同的运算符有优先级的区分，使用括号能够解决优先级的问题。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3835
+  },
+  "gesp-2026-03-3-3836": {
+    "id": "gesp-2026-03-3-3836",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "C++语法基础",
+    "question": "由于在 $0 \\sim 255$ 范围内，`char` 类型和 `int` 类型可以互换，因此在这里 x 和 y 相等。\n \n```cpp\nchar x='1';\nint y=1;\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3836
+  },
+  "gesp-2026-03-3-3837": {
+    "id": "gesp-2026-03-3-3837",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 语言中，表达式 `((0xff0 + 0x15) == 255)` 的值为 `true` 。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3837
+  },
+  "gesp-2026-03-3-3838": {
+    "id": "gesp-2026-03-3-3838",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "进制与编码",
+    "question": "如果 a 为 `int` 类型的变量，且 a 的二进制最低位为 $0$ ，则表达式 `((a & 3 & 1) == 0)` 的值为 `true` 。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 3,
+    "_luogu_pid": 3838
+  },
+  "gesp-2026-03-4-3839": {
+    "id": "gesp-2026-03-4-3839",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面程序后，输出为（ ）。\n\n```cpp\nint f(int x = 2){\n    return x * 3;\n}\n\nint main(){\n    cout << f() << \" \" << f(4);\n}\n```",
+    "options": [
+      "A. $2 \\ 12$",
+      "B. $6 \\ 12$",
+      "C. $6 \\ 4$",
+      "D. $12 \\ 6$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3839
+  },
+  "gesp-2026-03-4-3840": {
+    "id": "gesp-2026-03-4-3840",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "C++语法基础",
+    "question": "执行下面代码后，输出为（ ）。\n\n```cpp\nint main() {\n    int a = 5;\n    int* p = &a;\n    int** q = &p;\n    **q += 7;\n    cout << a << \" \" << *p;\n}\n```",
+    "options": [
+      "A. $5 \\ 5$",
+      "B. $12 \\ 12$",
+      "C. $12 \\ 5$",
+      "D. $5 \\ 12$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3840
+  },
+  "gesp-2026-03-4-3841": {
+    "id": "gesp-2026-03-4-3841",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数组与字符串",
+    "question": "已知：\n\n```cpp\nint a[3][4] = {\n    {1,2,3,4},\n    {5,6,7,8},\n    {9,10,11,12}\n};\nint (*p)[4] = a;\n```\n\n则表达式 `*(*(p + 2) + 1)` 的值为（ ）。",
+    "options": [
+      "A. $6$",
+      "B. $10$",
+      "C. $9$",
+      "D. $11$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3841
+  },
+  "gesp-2026-03-4-3842": {
+    "id": "gesp-2026-03-4-3842",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面程序后，输出为（ ）。\n\n```cpp\nvoid fun(int a, int &b, int *c){\n    a += 1;\n    b += 2;\n    *c += 3;\n}\n\nint main(){\n    int x = 1, y = 1, z = 1;\n    fun(x, y, &z);\n    cout << x << \" \" << y << \" \" << z;\n}\n```",
+    "options": [
+      "A. $2 \\ 3 \\ 4$",
+      "B. $1 \\ 3 \\ 4$",
+      "C. $2 \\ 1 \\ 4$",
+      "D. $1 \\ 1 \\ 1$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3842
+  },
+  "gesp-2026-03-4-3843": {
+    "id": "gesp-2026-03-4-3843",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面程序后输出为（ ）。\n\n```cpp\nint x = 3;\nvoid f(int& x){\n    x += 2;\n}\nint main(){\n    int x = 10;\n    f(x);\n    cout << x << \" \" << ::x;\n}\n```",
+    "options": [
+      "A. $12 \\ 3$",
+      "B. $10 \\ 5$",
+      "C. $12 \\ 5$",
+      "D. $10 \\ 3$"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3843
+  },
+  "gesp-2026-03-4-3844": {
+    "id": "gesp-2026-03-4-3844",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "其他",
+    "question": "下列关于结构体初始化的写法，正确的是（ ）。",
+    "options": [
+      "A. `struct Point { int x, y; }; Point p = (1,2);`",
+      "B. `struct Point { int x, y; }; Point p = {1,2};`",
+      "C. `struct Point { int x, y; }; Point p = new Point(1,2);`",
+      "D. `struct Point { int x, y; }; Point p = <1,2>;`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3844
+  },
+  "gesp-2026-03-4-3845": {
+    "id": "gesp-2026-03-4-3845",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "执行下面代码后输出为（ ）。\n\n```cpp\nstruct S { int a; int b; };\n\nvoid g(S s){ s.a += 10; }\nvoid h(S& s){ s.b += 10; }\n\nint main(){\n    S s{1,2};\n    g(s);\n    h(s);\n    cout << s.a << \" \" << s.b;\n}\n```",
+    "options": [
+      "A. $11$ $12$",
+      "B. $1$ $12$",
+      "C. $11$ $2$",
+      "D. $1$ $2$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3845
+  },
+  "gesp-2026-03-4-3846": {
+    "id": "gesp-2026-03-4-3846",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "关于递推算法的描述，正确的是（ ）。",
+    "options": [
+      "A. 递推表现为函数自己调用自己",
+      "B. 递推从已知初值出发，利用递推关系逐步推出后续结果",
+      "C. 递推只能用于指数复杂度问题",
+      "D. 递推一定需要回溯"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3846
+  },
+  "gesp-2026-03-4-3847": {
+    "id": "gesp-2026-03-4-3847",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行 `climb(6)` 的返回值为（ ）。\n\n```cpp\nint climb(int n){\n    if(n <= 2) return n;\n    int a = 1, b = 2, c = 0;\n    for(int i = 3; i <= n; i++){\n        c = a + b;\n        a = b;\n        b = c;\n    }\n    return c;\n}\n```",
+    "options": [
+      "A. $8$",
+      "B. $13$",
+      "C. $5$",
+      "D. $10$"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3847
+  },
+  "gesp-2026-03-4-3848": {
+    "id": "gesp-2026-03-4-3848",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "排序与查找",
+    "question": "某排序算法对如下数据排序（按 score 升序），则下面关于该排序算法稳定性的描述中，说法正确的是（ ）。\n\n- 初始：$(90, `A'), (90, `B'), (80, `C'), (90, `D')$\n- 排序后：$(80, `C'), (90, `A'), (90, `B'), (90, `D')$",
+    "options": [
+      "A. 不稳定，因为出现了相同分数",
+      "B. 稳定，因为相同 score 的相对顺序保持为 A 在 B 前、B 在 D 前",
+      "C. 不稳定，因为 C 跑到前面了",
+      "D. 无法判断"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3848
+  },
+  "gesp-2026-03-4-3849": {
+    "id": "gesp-2026-03-4-3849",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面代码试图把数组按升序进行“插入排序”，横线处应填写（ ）。\n\n```cpp\nvoid ins(int a[], int n){\n    for(int i = 1; i < n; i++){\n        int key = a[i];\n        int j = i-1;\n        while(j >= 0 && __________){\n            a[j+1] = a[j];\n            j--;\n        }\n        a[j+1] = key;\n    }\n}\n```",
+    "options": [
+      "A. `a[j] < key`",
+      "B. `a[j] > key`",
+      "C. `a[j+1] > key`",
+      "D. `a[j] == key`"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3849
+  },
+  "gesp-2026-03-4-3850": {
+    "id": "gesp-2026-03-4-3850",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下列代码段的时间复杂度为（ ）。\n\n```cpp\nint cnt=0;\nfor(int i=0; i<n; i++){\n    for(int j=0; j<n; j++){\n        if( (i+j) % 3 == 0) cnt++;\n    }\n}\n```",
+    "options": [
+      "A. $O(n)$",
+      "B. $O(n \\log n)$",
+      "C. $O(n^2)$",
+      "D. $O(2^n)$"
+    ],
+    "correctIndex": 2,
+    "explanation": "官方答案：C。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3850
+  },
+  "gesp-2026-03-4-3851": {
+    "id": "gesp-2026-03-4-3851",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "输入输出",
+    "question": "下面哪种方式不能实现将字符串 Welcome to 2026! 输出重定向到文件 log.txt（ ）。\n\nA.\n```cpp\nfreopen(\"log.txt\", \"w\", stdout);\ncout << \"Welcome to 2026!\" << endl;\nfclose(stdout);\n```\n\nB.\n```cpp\nstd::ofstream outFile(\"log.txt\");\ncout << \"Welcome to 2026!\" << endl;\noutFile.close();\n```\n\nC.\n```cpp\nofstream log_file(\"log.txt\");\nstreambuf* org_cout = cout.rdbuf();\ncout.rdbuf(log_file.rdbuf());\ncout << \"Welcome to 2026!\" << endl;\ncout.rdbuf(org_cout);\n```\n\nD.\n```cpp\nstd::ofstream outFile(\"log.txt\");\noutFile << \"Welcome to 2026!\" << endl;\noutFile.close();\n```",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. C",
+      "D. D"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3851
+  },
+  "gesp-2026-03-4-3852": {
+    "id": "gesp-2026-03-4-3852",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "执行下面程序，输出结果是（ ）。\n\n```cpp\nint divi(int a,int b){\n    if(b==0) throw 0;\n    return a/b;\n}\n\nint main(){\n    try{\n        cout << divi(10,0);\n    }catch(const char* msg){\n        cout << \"A\";\n    }catch(int){\n        cout << \"B\";\n    }\n}",
+    "options": [
+      "A. A",
+      "B. B",
+      "C. 程序崩溃",
+      "D. 无输出"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3852
+  },
+  "gesp-2026-03-4-3853": {
+    "id": "gesp-2026-03-4-3853",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下列函数实现排行榜中单个元素的位置调整（类似插入排序的相邻搬移）。当某玩家分数增加，需将其向前移动时， `while` 循环的条件应为（ ）。\n\n```cpp\nstruct Player{ int score; };\nvoid up(Player players[], int n, int idx){\n    Player cur = players[idx];\n    int i = idx;\n    while( _________________ ){\n        players[i] = players[i-1];\n        i--;\n    }\n    players[i] = cur;\n}\n```",
+    "options": [
+      "A. `i > 0 && cur.score > players[i-1].score`",
+      "B. `i > 0 && cur.score < players[i-1].score`",
+      "C. `i < n-1 && cur.score > players[i+1].score`",
+      "D. `i < n-1 && cur.score < players[i+1].score`"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "choice",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3853
+  },
+  "gesp-2026-03-4-3854": {
+    "id": "gesp-2026-03-4-3854",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "下面代码执行结束时，变量 `a` 的值变成 $15$。\n\n```cpp\nvoid add10(int &x) { x += 10; }\n\nint main() {\n    int a = 5;\n    add10(a);\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3854
+  },
+  "gesp-2026-03-4-3855": {
+    "id": "gesp-2026-03-4-3855",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "其他",
+    "question": "引用一旦绑定某个变量，就不能再绑定其他变量。（ ）",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3855
+  },
+  "gesp-2026-03-4-3856": {
+    "id": "gesp-2026-03-4-3856",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数组与字符串",
+    "question": "执行下面代码，输出结果为 $5$。\n\n```cpp\nint main() {\n    int a[2][3];\n    cout << &a[1][2] - &a[0][1] << endl;\n    return 0;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3856
+  },
+  "gesp-2026-03-4-3857": {
+    "id": "gesp-2026-03-4-3857",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "下面程序可以正常编译并输出 $10$。\n\n```cpp\nint calc(int x, int y = 10);\nint calc(int x) { return x * 2; }\nint calc(int x, int y) { return x * y; }\n\nint main() {\n    cout << calc(5);\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3857
+  },
+  "gesp-2026-03-4-3858": {
+    "id": "gesp-2026-03-4-3858",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "函数与递归",
+    "question": "下面程序执行后输出 $2010$。\n\n```cpp\nint x = 10;\nvoid f() { int x = 20; cout << x; }\n\nint main() {\n    f();\n    cout << x;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3858
+  },
+  "gesp-2026-03-4-3859": {
+    "id": "gesp-2026-03-4-3859",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "表达式与运算",
+    "question": "在 C++ 中，如果声明了一个指针变量但没有显式初始化，该指针会自动被初始化为 `nullptr`。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3859
+  },
+  "gesp-2026-03-4-3860": {
+    "id": "gesp-2026-03-4-3860",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "数组与字符串",
+    "question": "下面代码没有语法错误。\n\n```cpp\nstruct GameCharacter {\n    string name;\n    int level;\n    float position_x;\n    float position_y;\n\n    struct Equipment {\n        string weapon;\n        int attack_bonus;\n        int defense_bonus;\n    } equipment;\n\n    struct Skill {\n        string name;\n        int damage;\n    } skills[8];\n    int skill_count;\n};\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 0,
+    "explanation": "官方答案：A。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3860
+  },
+  "gesp-2026-03-4-3861": {
+    "id": "gesp-2026-03-4-3861",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "输入输出",
+    "question": "下面程序能够把 Hello 写入 data.txt 文件中。\n\n```cpp\nofstream fout(\"data.txt\");\ncout << \"Hello\";\nfout.close();\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3861
+  },
+  "gesp-2026-03-4-3862": {
+    "id": "gesp-2026-03-4-3862",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "排序与查找",
+    "question": "由于选择排序和插入排序的时间复杂度均为 $O(n^2)$，在任何实际场景下两者的性能表现几乎相同，可以互相替代。",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3862
+  },
+  "gesp-2026-03-4-3863": {
+    "id": "gesp-2026-03-4-3863",
+    "source": "gesp",
+    "year": 2026,
+    "knowledgePoint": "控制结构",
+    "question": "下面用递推方式计算斐波那契数列第 $n$ 项的程序，时间复杂度是 $O(2^n)$。\n\n```cpp\nint fib(int n) {\n    if (n <= 1) return n;\n    int f0 = 0, f1 = 1, cur = 0;\n    for (int i = 2; i <= n; i++) {\n        cur = f0 + f1;\n        f0 = f1;\n        f1 = cur;\n    }\n    return cur;\n}\n```",
+    "options": [
+      "A. 正确",
+      "B. 错误"
+    ],
+    "correctIndex": 1,
+    "explanation": "官方答案：B。",
+    "difficulty": 2,
+    "questionType": "boolean",
+    "hasImage": false,
+    "level": 4,
+    "_luogu_pid": 3863
+  }
+}

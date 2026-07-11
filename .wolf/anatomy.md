@@ -1,6 +1,6 @@
 # anatomy.md — CSP 学习助手项目结构
 
-> 最后更新：2026-07-09（学习资料飞书链接预置机制：status/lessonNo/thumbnailUrl/远程索引优先+本地兜底，不发版 1.7.2）
+> 最后更新：2026-07-10（最终审计通过 + 21 份知识卡文档全部创建完成 + Codex 生图规范交付；KnowledgePointHelp 组件接入4个答题入口 + 飞书知识卡联动；lark-cli 操作飞书文档排版；总导航结构调整为 00→01→02→03→04）
 
 ## 项目目录
 
@@ -30,6 +30,7 @@ csp学习助手（师+生）/
 │   │   │   │   └── PetStateMachine.ts  # 状态机
 │   │   │   ├── ai/AIChat.tsx
 │   │   │   ├── access/ClassAccessGate.tsx  # 班级码门禁 (useClassAccess + ClassAccessRequired, 6h 本地缓存, GET /api/classes/validate)
+│   │   │   ├── shared/KnowledgePointHelp.tsx  # 题后知识点帮助入口：答错显示"没懂？看XX知识卡"按钮，答对显示"巩固这个知识点"文字链。接入QuizPractice/ExamChoice/BattleScreen四个入口。知识卡URL为空时静默隐藏，不阻塞答题。
 │   │   │   ├── quiz/QuizPractice.tsx
 │   │   │   ├── exam/ExamTraining.tsx       # CSP 真题训练 (班级码门禁: 月度复盘/超级挑战/真题/智子试炼场需班级码，自由练习免)
 │   │   │   ├── achievements/AchievementsPanel.tsx
@@ -50,6 +51,7 @@ csp学习助手（师+生）/
 │   │   │   ├── crypto.ts        # AES加密 + 许愿票周限 + 设备ID
 │   │   │   ├── validateName.ts  # 宠物改名验证
 │   │   │   ├── markdown.ts      # Markdown渲染
+│   │   │   ├── knowledgePointHelp.ts  # 知识点帮助数据工具（加载kp目录+题目映射，供KnowledgePointHelp组件查询）
 │   │   │   └── spriteDownloader.ts
 │   │   ├── types/pet.ts         # 精灵类型定义 + 商城数据
 │   │   ├── lib/storage.ts       # 安全的 localStorage 操作
@@ -60,6 +62,10 @@ csp学习助手（师+生）/
 │   ├── cf-workers/api.js        # Cloudflare Worker API (~670行)
 │   ├── teacher-app/index.html   # 教师 Web 后台 (SPA)
 │   ├── public/course-data/      # 课程数据 (JSON)
+│   │   ├── unified-quiz-bank.json               # 统一题库 1023 题
+│   │   ├── learning-resources.json              # 学习资料索引 24 份（飞书公开只读链接）
+│   │   ├── knowledge-points.json                # 知识点目录 21 项（2026-07-10 新增）— 阶段/批次/知识卡URL/讲义URL/关联课程/前置知识点
+│   │   └── question-knowledge-mapping.json      # 题目→知识点映射 967/1023（2026-07-10 新增）— 每题1个primary+0-2个secondary
 │   ├── package.json
 │   ├── vite.config.ts
 │   └── wrangler.toml
@@ -83,6 +89,7 @@ csp学习助手（师+生）/
 │   └── 2026-06-29-智子试炼场-design.md  # 智子试炼场（宠物回合制地牢战斗）
 ├── docs/release/                # 发版前手动测试清单 (2026-07-08 新增)
 │   └── manual-test-checklist-1.7.x.md  # 1.7.x 发版前人工/Tauri 实机验收清单（10 模块 + 最终结论，逐项打勾）
+├── docs/codex-knowledge-card-spec.md  # Codex 知识卡生图+上传规范 (2026-07-10)
 │
 └── .wolf/                       # 项目记忆 (OpenWolf)
     ├── anatomy.md               # 本文档

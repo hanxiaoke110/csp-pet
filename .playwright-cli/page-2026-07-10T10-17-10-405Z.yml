@@ -1,0 +1,58 @@
+- generic [ref=f11e3]:
+  - generic [ref=f11e4]:
+    - img "logo" [ref=f11e6] [cursor=pointer]
+    - generic [ref=f11e7]:
+      - generic [ref=f11e12]:
+        - generic [ref=f11e14]:
+          - generic [ref=f11e15]: 扫码登录
+          - generic [ref=f11e16]: 请使用飞书移动端扫描二维码
+        - generic [ref=f11e17]: 加载中...
+        - link "切换至Lark登录" [ref=f11e30] [cursor=pointer]:
+          - /url: https://www.larksuite.com/accounts/cross_login/auth?app_id=2&origin_web_did=eb0b02ba6588492c76a9bdafd1a6932b&redirect_uri=https%3A%2F%2Fscncdgmg7m6w.feishu.cn%2Fdocx%2FQ8eNdizQVoMMK0xizd9cCKTAnrg%3Flogin_redirect_times%3D1
+        - generic [ref=f11e31]: 扫码成功
+      - generic [ref=f11e39]:
+        - text: 还没有账号？
+        - button "立即注册" [ref=f11e40] [cursor=pointer]
+    - generic [ref=f11e41]:
+      - generic [ref=f11e42]: 简体中文
+      - generic:
+        - list:
+          - listitem [ref=f11e48] [cursor=pointer]:
+            - generic [ref=f11e49]: 简体中文
+          - listitem [ref=f11e51] [cursor=pointer]:
+            - generic [ref=f11e52]: 繁體中文（中國香港）
+          - listitem [ref=f11e53] [cursor=pointer]:
+            - generic [ref=f11e54]: 繁體中文（中國台灣）
+          - listitem [ref=f11e55] [cursor=pointer]:
+            - generic [ref=f11e56]: English
+          - listitem [ref=f11e57] [cursor=pointer]:
+            - generic [ref=f11e58]: 日本語
+          - listitem [ref=f11e59] [cursor=pointer]:
+            - generic [ref=f11e60]: Bahasa Indonesia
+          - listitem [ref=f11e61] [cursor=pointer]:
+            - generic [ref=f11e62]: Bahasa Melayu
+          - listitem [ref=f11e63] [cursor=pointer]:
+            - generic [ref=f11e64]: Deutsch
+          - listitem [ref=f11e65] [cursor=pointer]:
+            - generic [ref=f11e66]: Español
+          - listitem [ref=f11e67] [cursor=pointer]:
+            - generic [ref=f11e68]: Français
+          - listitem [ref=f11e69] [cursor=pointer]:
+            - generic [ref=f11e70]: Italiano
+          - listitem [ref=f11e71] [cursor=pointer]:
+            - generic [ref=f11e72]: Português (Brasil)
+          - listitem [ref=f11e73] [cursor=pointer]:
+            - generic [ref=f11e74]: Русский
+          - listitem [ref=f11e75] [cursor=pointer]:
+            - generic [ref=f11e76]: Tiếng Việt
+          - listitem [ref=f11e77] [cursor=pointer]:
+            - generic [ref=f11e78]: ภาษาไทย
+          - listitem [ref=f11e79] [cursor=pointer]:
+            - generic [ref=f11e80]: 한국어
+  - generic [ref=f11e81]:
+    - generic [ref=f11e83]:
+      - img "pic" [ref=f11e84]
+      - button "animation" [ref=f11e86]
+    - generic [ref=f11e138]:
+      - generic [ref=f11e139]: 先进团队 先用飞书
+      - generic [ref=f11e140]: 字节跳动旗下 AI 工作平台

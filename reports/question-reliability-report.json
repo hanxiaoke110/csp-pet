@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-09T01:57:58.703Z",
+  "generatedAt": "2026-07-10T10:55:32.213Z",
   "sourceFiles": [
     "public/course-data/unified-quiz-bank.json",
     "public/course-data/quiz-bank.json",
@@ -17,7 +17,7 @@
     "note": "这 3 道题原题代码为图片，导入后 code 缺失或仅 OCR 残片（含伪迹，如 j >= &&），无法可靠重建。已从学生题池隔离；补全 code 后从此列表移除即可恢复。客户端加载时读取本文件，读取失败降级为空集，不影响题库加载。"
   },
   "totals": {
-    "questions": 2117,
+    "questions": 2490,
     "sourceIssuesTotal": 38,
     "excludedIssuesTotal": 4,
     "visibleP0": 0,
@@ -34,7 +34,7 @@
   "summaries": [
     {
       "file": "public/course-data/unified-quiz-bank.json",
-      "total": 650,
+      "total": 1023,
       "findings": 1,
       "bySev": {
         "P0": 0,

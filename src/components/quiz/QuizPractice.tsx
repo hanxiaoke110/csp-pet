@@ -6,6 +6,7 @@ import { renderCodeText } from '../../utils/markdown';
 import { loadExcludedQuestionIds } from '../../utils/excludedQuestions';
 import { useNavigate } from 'react-router-dom';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
+import KnowledgePointHelp from '../shared/KnowledgePointHelp';
 
 // 月度复盘单次奖励封顶（金币/经验）
 const MONTHLY_REVIEW_COIN_CAP = 300;
@@ -814,6 +815,10 @@ export default function QuizPractice() {
             {selected !== q.correctIndex && (
               <p className="correct-answer">正确答案是 {String.fromCharCode(65 + q.correctIndex)}</p>
             )}
+            <KnowledgePointHelp
+              questionId={q.id}
+              isCorrect={selected === q.correctIndex}
+            />
           </div>
         )}
       </div>

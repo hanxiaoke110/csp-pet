@@ -1,11 +1,11 @@
 # 题库可靠性报告 (Question Reliability Report)
 
-生成时间: 2026-07-09T01:57:58.704Z
+生成时间: 2026-07-10T10:55:32.216Z
 
 ## 总览
 
 - 审计源文件: 4 个
-- 源题库总题数: 2117
+- 源题库总题数: 2490
 - 源题库问题题数 (sourceIssuesTotal): 38 (P0=0, P1=4, P2=34)
 - 已隔离题目数 (excludedIssuesTotal): 4
 - 学生可见问题 (visible): P0=0, P1=0, P2=34
@@ -14,7 +14,7 @@
 
 | 文件 | 总题数 | 问题数 | P0 | P1 | P2 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| public/course-data/unified-quiz-bank.json | 650 | 1 | 0 | 1 | 0 |
+| public/course-data/unified-quiz-bank.json | 1023 | 1 | 0 | 1 | 0 |
 | public/course-data/quiz-bank.json | 432 | 0 | 0 | 0 | 0 |
 | public/course-data/csp-exam-bank.json | 240 | 0 | 0 | 0 | 0 |
 | src-dungeon/data/csp-exam-bank.json | 795 | 37 | 0 | 3 | 34 |

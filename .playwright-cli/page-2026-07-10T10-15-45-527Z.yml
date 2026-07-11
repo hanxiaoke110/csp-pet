@@ -1,0 +1,107 @@
+- generic [ref=e1]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e8]:
+        - link "飞书云文档" [ref=e10] [cursor=pointer]:
+          - /url: https://www.feishu.cn
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]: 用户675753的组织
+            - paragraph [ref=e33]:
+              - generic [ref=e34]: 智子学习资料库｜CSP 学习导航
+          - paragraph [ref=e37]: 最新修改时间为07月10日
+      - generic [ref=e41]:
+        - list [ref=e49] [cursor=pointer]:
+          - listitem
+          - listitem [ref=e50]:
+            - link "智子学习资料库｜CSP 学习导航" [ref=e51]:
+              - /url: "#IPpTdbqBmoRJ0mx2INqcjnWDnOg"
+          - listitem [ref=e55]:
+            - link "智子学习资料库｜CSP 学习导航" [ref=e56]:
+              - /url: "#doxcnhSuOyHFfTraT2zTzZfLJig"
+          - listitem [ref=e60]:
+            - link "00 从这里开始" [ref=e61]:
+              - /url: "#doxcn4uMjGupB8rZfwAKVjvc8Gg"
+          - listitem [ref=e65]:
+            - link "01 CSP-J 初赛" [ref=e66]:
+              - /url: "#doxcnIxVTNFd6VN1hXoSNXBHPUd"
+          - listitem [ref=e70]:
+            - link "课程线：C1 入门阶段（P1-P25）" [ref=e71]:
+              - /url: "#doxcn4J16ZmPj9Cx21mZgxbqfeg"
+          - listitem [ref=e75]:
+            - link "课程线：C2 基础阶段（P26-P50）" [ref=e76]:
+              - /url: "#doxcnEZ63wcAzcaNNDrrAaCUwLe"
+          - listitem [ref=e80]:
+            - link "课程线：C3 进阶阶段（P51-P71）" [ref=e81]:
+              - /url: "#doxcnTRnSR6TREd2Tho0osNG6Cd"
+          - listitem [ref=e85]:
+            - link "真题知识点救援" [ref=e86]:
+              - /url: "#doxcnmSFMYjArwn3gRtQRLJeuWb"
+          - listitem [ref=e90]:
+            - link "寓言与记忆卡" [ref=e91]:
+              - /url: "#doxcnPnrhT7DfNh3RoJZ3ax9pVb"
+          - listitem [ref=e95]:
+            - link "02 CSP-J 复赛（筹备中）" [ref=e96]:
+              - /url: "#doxcndOA8JnL2DY59haStMO52ly"
+          - listitem [ref=e100]:
+            - link "03 班级专属资料（需班级码）" [ref=e101]:
+              - /url: "#doxcnMxXwLZyxB77wbedjXzryHb"
+          - listitem [ref=e105]:
+            - link "课程资料总表" [ref=e106]:
+              - /url: "#doxcnHpEQDugdNYAX1ZT8VTwWee"
+          - listitem
+        - generic [ref=e110]:
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - heading "智子学习资料库｜CSP 学习导航" [level=1] [ref=e122]
+              - generic [ref=e125]: 今天修改
+            - generic [ref=e132]:
+              - generic [ref=e133]: 智子学习资料库｜CSP 学习导航
+              - generic [ref=e143]:
+                - generic [ref=e144]: 💡
+                - generic [ref=e148]: 收藏本页面即可随时学习。所有基础资料均为公开只读，无需登录飞书或安装桌宠。
+              - generic [ref=e155]: 00 从这里开始
+              - generic [ref=e163]:
+                - generic [ref=e164]: •
+                - generic [ref=e166]: 零基础入门：从 P1 开始，按课程顺序建立 C++ 基础。
+              - generic [ref=e171]:
+                - generic [ref=e172]: •
+                - generic [ref=e174]: 一轮复习：按知识模块回顾概念，再配合普通选择题练习。
+              - generic [ref=e179]:
+                - generic [ref=e180]: •
+                - generic [ref=e182]: 考前冲刺：优先使用真题知识点救援和错题复盘。
+              - generic [ref=e187]:
+                - generic [ref=e188]: •
+                - generic [ref=e190]: 使用方法：桌宠会把你带到相关资料；也可以收藏本页直接学习。
+              - generic [ref=e193]: 01 CSP-J 初赛
+              - generic [ref=e199]: 课程线：C1 入门阶段（P1-P25）
+              - generic [ref=e205]: 从零开始学习 C++ 基础语法、输入输出、数据类型和基本控制结构。
+              - link "查看 C1 对应课程表" [ref=e217] [cursor=pointer]:
+                - /url: https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg#doxcnHpEQDugdNYAX1ZT8VTwWee
+              - generic [ref=e218]: 课程线：C2 基础阶段（P26-P50）
+              - generic [ref=e224]: 数组、字符串、函数、递归，以及初等数论和基础算法。
+              - link "查看 C2 对应课程表" [ref=e236] [cursor=pointer]:
+                - /url: https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg#doxcnHpEQDugdNYAX1ZT8VTwWee
+              - generic [ref=e237]: 课程线：C3 进阶阶段（P51-P71）
+              - generic [ref=e243]: 枚举、模拟、贪心、二分、栈、队列和递归等进阶内容。
+              - link "查看 C3 对应课程表" [ref=e255] [cursor=pointer]:
+                - /url: https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg#doxcnHpEQDugdNYAX1ZT8VTwWee
+              - generic [ref=e256]: 真题知识点救援
+              - generic [ref=e262]: 做错题时快速查对应知识点。先看 1 分钟速懂知识卡，再按需进入深入学习讲义。
+              - link "打开真题知识点救援索引" [ref=e274] [cursor=pointer]:
+                - /url: https://scncdgmg7m6w.feishu.cn/docx/GxWbddqOno4LcVxKD7LcqalrnTb
+              - generic [ref=e277]:
+                - generic [ref=e278]: •
+                - generic [ref=e280]: 二进制与位运算 / 数据类型与存储单位 / 栈与队列 / 表达式求值
+          - generic [ref=e284]: 评论（0）
+          - button [ref=e297] [cursor=pointer]
+    - generic:
+      - generic:
+        - generic:
+          - menu:
+            - generic:
+              - generic:
+                - menuitem "帮助中心"
+              - generic:
+                - menuitem "效率指南"
+  - textbox [active] [ref=e308]

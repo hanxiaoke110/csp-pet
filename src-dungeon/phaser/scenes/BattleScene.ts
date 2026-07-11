@@ -26,6 +26,7 @@ import type { SkillDefinition } from '../../data/skills';
 
 
 const MAX_ENERGY = 5;
+const BOSS_MAX_DAMAGE_RATIO = 0.45;
 
 interface BattleSnapshot {
   playerHp: number;
@@ -435,9 +436,18 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private applyDamageToEnemy(damage: number, type: 'normal' | 'crit' | 'miss'): void {
-    this.state.enemyHp = Math.max(0, this.state.enemyHp - damage);
+    const cappedDamage = this.capPlayerDamage(damage);
+    if (cappedDamage <= 0) return;
+    this.state.enemyHp = Math.max(0, this.state.enemyHp - cappedDamage);
     this.enemyHpBar.updateHp(this.state.enemyHp);
-    this.showDamageText(this.enemyPet.x, this.enemyPet.y - 80, `-${damage}`, type);
+    this.showDamageText(this.enemyPet.x, this.enemyPet.y - 80, `-${cappedDamage}`, type);
+  }
+
+  private capPlayerDamage(damage: number): number {
+    if (!this.initData.isBoss) return damage;
+
+    const maxDamage = Math.max(1, Math.floor(this.state.enemyMaxHp * BOSS_MAX_DAMAGE_RATIO));
+    return Math.min(damage, maxDamage);
   }
 
   private applyDamageToPlayer(damage: number): void {

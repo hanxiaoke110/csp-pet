@@ -1,0 +1,55 @@
+- generic [ref=f6e1]:
+  - generic [ref=f6e5]:
+    - generic [ref=f6e8]:
+      - link "飞书云文档" [ref=f6e10] [cursor=pointer]:
+        - /url: https://www.feishu.cn
+      - generic [ref=f6e24]:
+        - generic [ref=f6e26]:
+          - generic [ref=f6e27]:
+            - generic [ref=f6e28]: 用户675753的组织
+            - paragraph [ref=f6e33]:
+              - generic [ref=f6e34]: CSP-J 真题知识点救援
+          - paragraph [ref=f6e37]: 最新修改时间为07月10日
+        - generic [ref=f6e41]:
+          - button "登录/注册" [ref=f6e43] [cursor=pointer]
+          - button [ref=f6e44] [cursor=pointer]
+    - generic [ref=f6e61]:
+      - generic [ref=f6e62]:
+        - heading "CSP-J 真题知识点救援" [level=1] [ref=f6e64]
+        - generic [ref=f6e67]: 今天修改
+      - generic [ref=f6e74]:
+        - link "返回：智子学习资料库｜CSP 学习导航" [ref=f6e82] [cursor=pointer]:
+          - /url: https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg
+        - generic [ref=f6e83]: 真题知识点救援
+        - generic [ref=f6e89]: 做完题后，如果对解析仍有疑问，可以从题目中的“知识点救援”入口来到这里。每个主题先用一张知识卡帮你快速抓住关键，再按需进入完整讲义和课程资料。
+        - generic [ref=f6e94]: 首批开放主题
+        - generic [ref=f6e102]:
+          - generic [ref=f6e103]: •
+          - generic [ref=f6e105]: 二进制与位运算：进制转换、补码、位运算与常见误区。
+        - generic [ref=f6e110]:
+          - generic [ref=f6e111]: •
+          - generic [ref=f6e113]: 初等数论：整除、质数、因数、最大公因数与质因数分解。
+        - generic [ref=f6e118]:
+          - generic [ref=f6e119]: •
+          - generic [ref=f6e121]: 数据类型与存储单位：bit、byte、范围、指针与存储概念。
+        - generic [ref=f6e126]:
+          - generic [ref=f6e127]: •
+          - generic [ref=f6e129]: 栈与表达式：先进后出、前缀/后缀表达式与求值过程。
+        - generic [ref=f6e134]:
+          - generic [ref=f6e135]: •
+          - generic [ref=f6e137]: 树与图：二叉树遍历、图的基础概念、连通性与搜索。
+        - generic [ref=f6e142]:
+          - generic [ref=f6e143]: •
+          - generic [ref=f6e145]: 程序复杂度：常见复杂度、循环分析与递归树。
+        - generic [ref=f6e150]:
+          - generic [ref=f6e151]: •
+          - generic [ref=f6e153]: 二分与搜索：边界、判定函数与二分答案。
+        - generic [ref=f6e158]:
+          - generic [ref=f6e159]: •
+          - generic [ref=f6e161]: 算法思想：洪水填充、贪心与动态规划的入门认识。
+        - generic [ref=f6e164]: 使用方式
+        - generic [ref=f6e170]: 先看与错题对应的知识卡；仍不明白时，点击卡片底部的“深入学习”进入专题讲义。专题讲义会继续链接相关课程和配套练习。
+        - generic [ref=f6e179]:
+          - generic [ref=f6e180]: 💡
+          - generic [ref=f6e184]: 这里的内容会持续更新。孩子重新打开同一个链接，就能看到最新版本，不需要更新桌宠。
+  - textbox [active] [ref=f6e191]

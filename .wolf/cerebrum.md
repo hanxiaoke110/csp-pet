@@ -29,7 +29,7 @@
 - 新增精灵需要同时做：spritesheet → Gitee + preview → public/ + pet.ts 配置，缺一不可
 - **Gitee 上传安装包必须对齐 UpdateChecker.buildUrls 命名规则**：`csp-v${short}-arm.dmg`、`csp-v${short}-intel.dmg`、`csp-v${short}-win.exe`，否则旧版 App 手动下载链接 404
 - **CI 的 `npm ci` 只装 `csp-desktop-pet/package.json` 的依赖**，如果根目录 `package.json` 有额外依赖，必须同步到子项目
-- **CI 生成的 `update.json` 签名需要提取**：从 CI output 中取 "Public signature:" 之后的纯 base64，去掉说明文字，再写入 Gitee
+- **CI `sign_file` 用 `grep '^dW50' | head -1` 提取纯签名**，不再读 `.sig` 文件（含说明文字）。GitHub Release 的文件名需 `sanitize_name()` 把非 ASCII 替换成点
 
 ## Do-Not-Repeat
 - **绝不**: 将 C++ 代码塞进 quiz options 数组 — 应放在 `code` 字段，选项用简短标签
@@ -63,6 +63,7 @@
 - **绝不**: 盲目给 Worker 加限流用 KV——D1 建个 rate_limits 表更轻量，带 reset_at 滑动窗口
 - **绝不**: 用宠物系统等级（喂养升级）作为智子试炼场的战斗属性等级——应使用潜龙闭关的 playerLevel，两者是完全独立的升级体系。宠物等级通常 1-3 级而副本敌人 1-10 级，混用导致后期指数碾压。
 - **绝不**: 敌方伤害跳过玩家防御——resolveEnemyIntent 必须像 calculateDamage 一样先减 defender.defense 再乘元素克制，否则后期高攻敌人一击秒杀。
+- **绝不**: 发版操作前不读 .wolf/cerebrum.md——已有教训：签名格式、Gitee 配额、macOS 重定向等问题都有记录，不读就踩坑。
 
 ## 2026-06-02/03 许愿墙 + 班级系统新增
 
@@ -88,3 +89,24 @@
 - **绝不**: 忘记给 votes 表建 UNIQUE INDEX（INSERT-try-catch 依赖它）
 - **绝不**: API 的 `resp.json()` 不检查 `resp.ok`——非 2xx 响应会导致 JSON 解析抛异常
 - **绝不**: Promise 链只用 `.then()` 不加 `.catch()` —— 错误会被静默吞掉
+
+## 2026-07-10 飞书集成新增
+
+### Learnings
+- Claude Code 安全分类器会拦截任何包含飞书 App ID 和 App Secret 的 bash 命令（归类为 "Credential Materialization" / "Credential Leakage"），即使在环境变量或 .env 文件中也不行
+- lark-cli（`~/.npm-global/bin/lark-cli`）是唯一安全的飞书文档操作方式——它以用户身份运行，不需要在命令中暴露凭证
+- lark-cli 命令使用 `+` 前缀：`docs +create`、`docs +fetch`、`docs +update`
+- lark-cli 的 `--content "@file.md"` 必须使用当前工作目录的相对路径，不支持绝对路径
+- 飞书 Docx 块类型编号：text=2, heading1=3, heading2=4, ..., heading9=11, bullet=12, code=14, callout=16
+- 文本颜色只支持 1-7（8+ 触发 "field validation failed"）
+- divider 块类型不能通过 children API 创建，用文本分隔符替代
+- lark-cli 文档创建的限流是 99991400，约 13 次 / 短时间窗口，需间隔 2.5s 以上
+- 知识卡文档 URL 格式：`https://scncdgmg7m6w.feishu.cn/docx/<document_id>`
+- 飞书云空间 domain 固定为 `scncdgmg7m6w.feishu.cn`
+
+### Do-Not-Repeat
+- **绝不**: 在 Claude Code 的 bash 命令中包含飞书 App ID 或 App Secret——会被安全分类器拦截。只用 lark-cli --as user
+- **绝不**: 用飞书开放平台 API（curl + tenant_access_token）在 Claude Code 中操作文档——安全分类器会阻止。用 lark-cli 替代
+- **绝不**: lark-cli docs +create 连续创建超过 13 个文档不加大于 2s 延迟——触发 99991400 限流
+- **绝不**: 在飞书 Docx 中使用 text_color ≥ 8——会触发 "field validation failed"
+- **绝不**: 尝试通过 children API 创建 divider 块——不支持，用文本分隔符替代

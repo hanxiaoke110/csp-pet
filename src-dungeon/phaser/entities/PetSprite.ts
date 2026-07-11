@@ -70,6 +70,7 @@ export class PetSprite extends Phaser.GameObjects.Container {
   }
 
   playAttackAnimation(targetX: number, targetY: number, onComplete: () => void): void {
+    this.scene.tweens.killTweensOf(this);
     const originalX = this.x;
     const originalY = this.y;
     const midX = (originalX + targetX) / 2;
@@ -120,13 +121,18 @@ export class PetSprite extends Phaser.GameObjects.Container {
   }
 
   playCelebrateAnimation(): void {
+    this.scene.tweens.killTweensOf(this);
+    const originalY = this.y;
     this.scene.tweens.add({
       targets: this,
-      y: this.y - 20,
+      y: originalY - 20,
       duration: 300,
       yoyo: true,
       repeat: 2,
       ease: 'Sine.easeOut',
+      onComplete: () => {
+        this.y = originalY;
+      },
     });
   }
 

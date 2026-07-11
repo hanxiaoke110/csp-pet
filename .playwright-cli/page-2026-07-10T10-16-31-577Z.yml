@@ -1,0 +1,43 @@
+- generic [ref=f8e1]:
+  - generic [ref=f8e5]:
+    - generic [ref=f8e8]:
+      - link "飞书云文档" [ref=f8e10] [cursor=pointer]:
+        - /url: https://www.feishu.cn
+      - generic [ref=f8e24]:
+        - generic [ref=f8e26]:
+          - generic [ref=f8e27]:
+            - generic [ref=f8e28]: 用户675753的组织
+            - paragraph [ref=f8e33]:
+              - generic [ref=f8e34]: CSP-J 复赛学习路径（筹备中）
+          - paragraph [ref=f8e37]: 最新修改时间为07月10日
+        - generic [ref=f8e41]:
+          - button "登录/注册" [ref=f8e43] [cursor=pointer]
+          - button [ref=f8e44] [cursor=pointer]
+    - generic [ref=f8e61]:
+      - generic [ref=f8e62]:
+        - heading "CSP-J 复赛学习路径（筹备中）" [level=1] [ref=f8e64]
+        - generic [ref=f8e67]: 今天修改
+      - generic [ref=f8e74]:
+        - link "返回：智子学习资料库｜CSP 学习导航" [ref=f8e82] [cursor=pointer]:
+          - /url: https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg
+        - generic [ref=f8e83]: CSP-J 复赛学习路径
+        - generic [ref=f8e89]: 这里将承接完成 CSP-J 初赛基础学习后的进阶训练。当前先建立导航框架，课程和专题内容会在完成审核后逐步开放。
+        - generic [ref=f8e94]: 计划中的学习脉络
+        - generic [ref=f8e102]:
+          - generic [ref=f8e103]: •
+          - generic [ref=f8e105]: 算法基础与代码实现：复杂度、模拟、枚举、排序、二分与递归。
+        - generic [ref=f8e110]:
+          - generic [ref=f8e111]: •
+          - generic [ref=f8e113]: 数据结构与搜索：数组、链表、栈、队列、树、图、DFS 与 BFS。
+        - generic [ref=f8e118]:
+          - generic [ref=f8e119]: •
+          - generic [ref=f8e121]: 动态规划与图论：状态设计、转移、路径与基础图算法。
+        - generic [ref=f8e126]:
+          - generic [ref=f8e127]: •
+          - generic [ref=f8e129]: 专题训练与复盘：按题型练习、错题复盘与阶段挑战。
+        - generic [ref=f8e132]: 开放状态
+        - generic [ref=f8e138]: 筹备中。已开放的内容会在总导航中标记，并可直接打开阅读。
+        - generic [ref=f8e147]:
+          - generic [ref=f8e148]: 📌
+          - generic [ref=f8e152]: 复赛资料会和初赛资料分开组织：初赛先打基础，复赛再进入算法实现与综合训练，避免学习路径混杂。
+  - textbox [active] [ref=f8e159]
