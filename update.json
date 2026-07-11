@@ -1,19 +1,10 @@
 {
-  "version": "1.7.6",
-  "notes": "Release v1.7.6 - 修复智子试炼场后期战斗数值失衡问题",
-  "pub_date": "2026-07-10T10:51:54Z",
+  "version": "1.7.7",
+  "notes": "Release v1.7.7 - 详见 Gitee Releases",
+  "pub_date": "2026-07-11T04:17:13Z",
   "platforms": {
-    "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVy9mMnE5RmJQTGFJV0hGMk1vam85TGptenJoQ25pWURiYlkzS2JYcmdTOGZzTnZHYmx3T3ZNWnNKZEJpS04waUdKSDZzMzFIRTg3d1ZKNDE5ck9nSXdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzNjc4OTEwCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuNl9hYXJjaDY0LmRtZwpxRjNPQ2R1TExmMlJ1ZHVrUUtyQlZTYzRWWXdjeDk1dEx2dnkvcnpPcUMrVHJ1UDYyamtCaXhlNktvSGJRVldLOUd6czRVZ1gzeGFKUzZYcHpIL3REdz09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.6/CSP._1.7.6_aarch64.dmg"
-    },
-    "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3pOQlV0Rkhsdm9RbnVGc0Zaa1JkcjVvQ2F1ay8wYStGWlI4SXBJRit2WmVFRnR5dktjUXQ0M0pzdVdLYlpZVzlLQzl5SUhuSUxTUENsb3czZE41TkFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzNjc4OTExCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuNl94NjQuZG1nCnhTTW42dmUyeXBpWmZ4Qng0am90TDZ2NFltYUhlWkhaRmVQYU1LSmM2TkJlb3BMQXdZeUF4YjJvcXZ6L21hQ2VrY2pJQTlodkFnNWgwdi8zeUVIR0RRPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.6/CSP._1.7.6_x64.dmg"
-    },
-    "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzNKQ0lYVGdxRUdoRXFOS3JBQStTYmFvR0p1M2lkNHAvZUVUTXhBWjVVdHJNcjRKVktvdXRYaFlSQklJY3VRVjRQTGZNd0FhcS96ais5Mi9DSmdPZEFRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzNjc4OTEyCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuNl94NjQtc2V0dXAuZXhlCnNuRGt0cmlpR2UwRTdlcFd5R3FuenY0Yi9qM1BLRnlpNElHZUJSTVR5dWxsOGorSm45K0pVUzlhbHloZzJGbUtya3RDcUk4Ylk5aklFYWJleXFHS0RnPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.6/CSP._1.7.6_x64-setup.exe"
-    }
+    "darwin-aarch64":  { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzc0enZiR0UyT2lDSkt6YU02akN6cHBySnBCQytCNVJWcVhNanMzR2crcHRoQk5aRFVYNkpMUy90Z002SmZwQ0Ztb2xWTHcyV25iRWR5TjdSZW12UEFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzNzQxNjI3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuN19hYXJjaDY0LmRtZwpmOWFKVGMrdXpZSHFXOGZ3VHZmdGVVRTg5TDc0cWlmMkRmNVpFL3JsNXNnZyt2ek9IZGFXdU1WcWpTamg1ZkZ5RitPNE5uZ1lkSjZqWm5pVjI3cHBCUT09Cg==",   "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.7/CSP._1.7.7_aarch64.dmg"   },
+    "darwin-x86_64":   { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3p4cklPZUNFTEtoRUkvRGh1NmN2MWlBMlRKdEhuUmVnL1VEL0F4RTZjaThpa09XeGlMdE1Ca1RmUEY5K0k4K1QydVVHb3Juekp2OUhHbmRONlR0N0FZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzNzQxNjI4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuN194NjQuZG1nCmpFazhJdjVoYmYrRmpPczhwRHd2R1dVa2VMQzB2KzRIN2VkdFZrcThadEdSZHRBTy84c1FzYmxNaCs3eWJxUldEbnJybjQxNnh2NkFOdU9jdXZqMUFRPT0K", "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.7/CSP._1.7.7_x64.dmg" },
+    "windows-x86_64":  { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3lsWTBQd3B4czF1cjhoTkJWdHJaMEYxczEyTmh3MW5jQTE1allkSGU1UlFKTHBjNTBpQ3ZQTi9PWEw0blQxOGk5SmllUEFGNTRwN3M4QnkxUzFndVFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgzNzQxNjI5CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuN194NjQtc2V0dXAuZXhlCkU5dTFadkJ3SGJLbXRPRGx6OUZvdzZXTTlOVVY1RWZ0ckhSSm1VaVVDSTh1eXZaV2pGTExUUE0vTUozTEFNSlN5RnFaU2pma1BQWmdCRFM2aHlnZENnPT0K",       "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.7/CSP._1.7.7_x64-setup.exe"       }
   }
 }
