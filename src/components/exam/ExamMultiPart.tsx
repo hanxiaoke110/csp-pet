@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { renderCodeText } from '../../utils/markdown';
+import KnowledgePointHelp from '../shared/KnowledgePointHelp';
 
 export interface SubItem {
   label: string;
@@ -15,6 +16,7 @@ interface Props {
   codeImage?: string | null;
   question: string;
   subItems: SubItem[];
+  questionId: string;
   onSubmit: (correctCount: number, total: number) => void;
   onBack: () => void;
 }
@@ -39,7 +41,7 @@ function MultiPartImage({ src }: { src?: string | null }) {
   );
 }
 
-export default function ExamMultiPart({ title, code, image, codeImage, question, subItems, onSubmit, onBack }: Props) {
+export default function ExamMultiPart({ title, code, image, codeImage, question, subItems, questionId, onSubmit, onBack }: Props) {
   const [answers, setAnswers] = useState<number[]>(Array(subItems.length).fill(-1));
   const [submitted, setSubmitted] = useState(false);
 
@@ -56,6 +58,9 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
   };
 
   const passThreshold = subItems.length >= 5 ? 3 : 2;
+  const correctCount = submitted
+    ? subItems.reduce((sum, item, i) => sum + (answers[i] === item.correctIndex ? 1 : 0), 0)
+    : 0;
 
   return (
     <div className="quiz-practice">
@@ -130,6 +135,13 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
             </div>
           ))}
         </div>
+
+        {submitted && (
+          <KnowledgePointHelp
+            questionId={questionId}
+            isCorrect={correctCount >= passThreshold}
+          />
+        )}
       </div>
 
       <div className="quiz-actions">

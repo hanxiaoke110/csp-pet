@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById } from '../../data/skills';
 import { pickQuestionsByTag, pickBigMoveQuestions, getDungeonDifficulty } from '../../utils/questionLoader';
@@ -234,6 +234,7 @@ function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isB
 export default function BattleScreen() {
   const { dungeonId, stageId } = useParams<{ dungeonId: string; stageId: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const store = useDungeonStore();
   const player = store.player;
   const dungeons = store.dungeons;
@@ -241,6 +242,7 @@ export default function BattleScreen() {
 
   const dungeon = dungeons.find(d => d.id === dungeonId) as DungeonDefinition | undefined;
   const isBoss = !stageId || stageId === 'boss';
+  const isReplay = searchParams.get('replay') === '1';
   const isUnlocked = useDungeonStore(s => s.isDungeonUnlocked);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -294,13 +296,13 @@ export default function BattleScreen() {
       const stageIdx = dungeon.stages.findIndex(s => s.id === stageId);
       const s = useDungeonStore.getState();
       const dp = s.getDungeonProgress(dungeonId);
-      if (dp && stageIdx >= 0 && stageIdx < dp.completedStages) {
+      if (!isReplay && dp && stageIdx >= 0 && stageIdx < dp.completedStages) {
         navigate(`/dungeon/${dungeonId}`);
         s.setView('dungeon-preview');
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dungeon, stageId, isBoss, dungeonId, navigate]);
+  }, [dungeon, stageId, isBoss, isReplay, dungeonId, navigate]);
 
   // 初始化 Phaser 游戏
   // 依赖不含 store：store 每次变化引用都变，放进依赖会导致 effect 反复 cleanup+重建 Phaser，
@@ -315,7 +317,7 @@ export default function BattleScreen() {
     (async () => {
       const s = useDungeonStore.getState();
       // 消耗挑战次数
-      const earnsRewards = s.canEarnRewards();
+      const earnsRewards = !isReplay && s.canEarnRewards();
       if (earnsRewards) {
         s.useChallenge();
       }
@@ -378,7 +380,7 @@ export default function BattleScreen() {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dungeonId, stageId, isBoss, enemyConfig, dungeon, playerConfig]);
+  }, [dungeonId, stageId, isBoss, isReplay, enemyConfig, dungeon, playerConfig]);
 
   // 暂停/恢复 Phaser 场景：DungeonEmbed 暂停弹窗通过 window 事件触发，真暂停（冻结 update/计时器），而非仅 CSS 遮罩
   useEffect(() => {
@@ -442,14 +444,15 @@ export default function BattleScreen() {
     const correct = optionIndex === correctIndex;
     setIsCorrect(correct);
 
-    // 记录答题与奖励
-    store.recordAnswer(correct);
+    const earnsRewards = store.currentBattleEarnsRewards;
+    // 记录答题与奖励：重打只用于冲评级，不累计总答题/连击/经验/金币/段位，避免刷榜。
+    if (earnsRewards) store.recordAnswer(correct);
     const newCombo = correct ? statsRef.current.comboCount + 1 : 0;
     const critical = correct ? rollCritical(player.school) : false;
     const baseReward = calculateAnswerReward(correct, newCombo, critical);
     // 流派被动每日上限：仅答对时消耗每日额度并应用 EXP/金 被动加成（防刷），达上限或答错只发基础奖励
     // 段位/暴击被动不由此处限制（段位已由 weeklyChallenges 5次/周限制，暴击为战斗机制非资源）
-    const passiveAllowed = correct ? store.bumpSchoolPassiveDaily() : false;
+    const passiveAllowed = correct && earnsRewards ? store.bumpSchoolPassiveDaily() : false;
     const rewards = passiveAllowed
       ? applySchoolAnswerPassive(player.school, baseReward, {
           combo: newCombo,
@@ -461,18 +464,18 @@ export default function BattleScreen() {
     statsRef.current.comboCount = newCombo;
     statsRef.current.correctCount += correct ? 1 : 0;
     statsRef.current.wrongCount += correct ? 0 : 1;
-    statsRef.current.expEarned += rewards.exp;
-    statsRef.current.goldEarned += store.currentBattleEarnsRewards ? rewards.gold : 0;
+    statsRef.current.expEarned += earnsRewards ? rewards.exp : 0;
+    statsRef.current.goldEarned += earnsRewards ? rewards.gold : 0;
     if (!statsRef.current.usedSkillIds.includes(selectedSkillId)) {
       statsRef.current.usedSkillIds.push(selectedSkillId);
     }
 
-    store.addExp(rewards.exp);
-    if (store.currentBattleEarnsRewards) {
+    if (earnsRewards) {
+      store.addExp(rewards.exp);
       store.addGold(rewards.gold);
       store.addRankPoints(correct ? (critical ? 20 : 10) + getSchoolRankPointBonus(player.school, correct) : 0);
+      store.checkRankUp();
     }
-    store.checkRankUp();
 
     // 错题本 / 寓言
     if (!correct) {

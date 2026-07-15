@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useDungeonStore } from './stores/dungeonStore';
 import { loadQuestionBank, loadDungeons, loadQuestionMapping } from './utils/questionLoader';
 import { getStoredClassCode } from './utils/api';
+import { readDesktopBinding } from './utils/autoRegister';
 import type { DungeonProgress } from './types/dungeon';
 
 // Screen imports (will be created in later phases)
@@ -60,12 +61,23 @@ export function AppContent() {
             bestRating: 'D',
           }));
           store.setView('title');
-          const cc = getStoredClassCode();
-          if (cc) {
+          const binding = readDesktopBinding();
+          if (binding) {
             useDungeonStore.getState().initPlayer({
               deviceHash: crypto.randomUUID?.() || 'dh-' + Date.now(),
-              classCode: cc,
+              classCode: binding.classCode,
+              displayName: binding.displayName,
+              realName: binding.realName,
+              phone: binding.phone,
             });
+          } else {
+            const cc = getStoredClassCode();
+            if (cc) {
+              useDungeonStore.getState().initPlayer({
+                deviceHash: crypto.randomUUID?.() || 'dh-' + Date.now(),
+                classCode: cc,
+              });
+            }
           }
           store.initProgress(defaultProgress);
         }

@@ -139,13 +139,13 @@ export function getStageQuestions(
     const shuffled = [...allIds].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count)
       .map(id => bank.find(q => q.id === id))
-      .filter(Boolean) as Question[];
+      .filter(isUsableChoiceQuestion);
   }
 
   // Shuffle and pick — only CHOICE questions (reading/fillBlank need separate UI)
   const choiceIds = stageIds.filter(id => {
     const q = bank.find(bq => bq.id === id);
-    return q && q.type === 'choice' && q.options && q.options.length >= 4;
+    return isUsableChoiceQuestion(q);
   });
   const shuffled = [...choiceIds].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count)
@@ -167,12 +167,13 @@ export function getBossQuestions(
   const shuffled = [...allIds].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count)
     .map(id => bank.find(q => q.id === id))
-    .filter(Boolean) as Question[];
+    .filter(isUsableChoiceQuestion);
 }
 
 // 题干出现这些词时，必须有 code 字段或题干内联代码才能选用（否则代码块缺失，学生看到残缺题）
 const CODE_REQUIRED_PATTERNS = [
-  '下列代码', '以下程序', '如下代码', '下面代码', '代码的横线', '代码的横线处',
+  '下列代码', '以下代码', '关于以下代码', '以下程序', '如下代码', '下面代码', '关于下面代码',
+  '代码的横线', '代码的横线处',
   '程序后输出', '程序输出', '代码执行', '代码运行', '这段代码', '该程序',
   // 「C++」夹在中间的变体：题干如「下面C++代码段执行后输出」「执行以下C++程序后」，
   // 子串匹配不到「下面代码」/「以下程序」（中间隔着 C++），单独列出
@@ -201,7 +202,7 @@ function hasInlineCode(stem: string): boolean {
 }
 
 // 残缺题：题干要求看代码/程序/填空，但既无 code 字段、题干也无内联代码片段
-function isBrokenCodeQuestion(q: Question): boolean {
+export function isBrokenCodeQuestion(q: Question): boolean {
   // 统一排除配置（/course-data/excluded-question-ids.json）中的题直接排除。
   // 缓存由 loadQuestionBank 预加载；未加载时返回空集，不排除（降级安全）。
   if (q.id && getCachedExcludedQuestionIds().has(q.id)) return true;
@@ -214,6 +215,14 @@ function isBrokenCodeQuestion(q: Question): boolean {
   // 如「cnt+=i++循环输出cnt是」「循环执行后输出是」——原题循环代码丢失
   if (/循环/.test(stem) && /输出|执行后|结果是|的值是/.test(stem)) return true;
   return false;
+}
+
+export function isUsableChoiceQuestion(q: Question | undefined): q is Question {
+  return Boolean(q) &&
+    q!.type === 'choice' &&
+    Array.isArray(q!.options) &&
+    q!.options.length >= 4 &&
+    !isBrokenCodeQuestion(q!);
 }
 
 // ── Pick questions by skill knowledge tag ──

@@ -1585,11 +1585,10 @@ export default {
         let query, params;
         const classFilter = (scope === 'class' && cc) ? 'AND p.class_code = ?' : '';
 
-        if (type === 'wins' || type === 'ss_count' || type === 'warrior') {
+        if (type === 'wins' || type === 'warrior') {
           const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString();
           let whereExtra = '';
           if (type === 'wins') whereExtra = 'AND a.is_win = 1';
-          else if (type === 'ss_count') whereExtra = "AND a.rating = 'SS'";
           const selectValue = type === 'warrior'
             ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.rating = 'S' THEN 1 END) * 15) as value"
             : 'COUNT(*) as value';
@@ -1606,8 +1605,17 @@ export default {
                    FROM dungeon_progress dp
                    JOIN dungeon_players p ON dp.device_hash = p.device_hash
                    WHERE p.status = 'active' ${classFilter} AND dp.status = 'cleared'
+          GROUP BY dp.device_hash
+          ORDER BY value DESC
+          LIMIT 50`;
+          params = (scope === 'class' && cc) ? [cc] : [];
+        } else if (type === 'ss_count') {
+          query = `SELECT dp.device_hash, p.display_name, p.school, p.rank_tier, COUNT(DISTINCT dp.dungeon_id) as value
+                   FROM dungeon_progress dp
+                   JOIN dungeon_players p ON dp.device_hash = p.device_hash
+                   WHERE p.status = 'active' ${classFilter} AND dp.best_rating = 'SS'
                    GROUP BY dp.device_hash
-                   ORDER BY value DESC
+                   ORDER BY value DESC, SUM(dp.best_score) DESC
                    LIMIT 50`;
           params = (scope === 'class' && cc) ? [cc] : [];
         } else {

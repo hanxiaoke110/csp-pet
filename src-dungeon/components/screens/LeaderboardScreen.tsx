@@ -9,6 +9,18 @@ const SCHOOL_ICONS: Record<string, string> = {
   cultivation: '🏯', tactical: '🎯', star: '🌌', minecraft: '⛏️', code: '💻', dream: '✨',
 };
 
+function normalizeEntry(entry: any): LeaderboardEntry {
+  return {
+    rank: Number(entry?.rank || 0),
+    displayName: entry?.displayName || entry?.display_name || '匿名修行者',
+    school: (entry?.school || 'cultivation') as LeaderboardEntry['school'],
+    rankTier: Number(entry?.rankTier ?? entry?.rank_tier ?? 1),
+    rankPoints: Number(entry?.rankPoints ?? entry?.rank_points ?? entry?.value ?? 0),
+    classCode: entry?.classCode || entry?.class_code || '',
+    value: Number(entry?.value ?? entry?.rankPoints ?? entry?.rank_points ?? 0),
+  };
+}
+
 export default function LeaderboardScreen() {
   const navigate = useNavigate();
   const player = useDungeonStore(s => s.player);
@@ -31,8 +43,8 @@ export default function LeaderboardScreen() {
       return;
     }
     getLeaderboard(scope, type).then(resp => {
-      setEntries(resp.entries || []);
-      setPlayerEntry(resp.playerEntry);
+      setEntries((resp.entries || []).map(normalizeEntry));
+      setPlayerEntry(resp.playerEntry ? normalizeEntry(resp.playerEntry) : null);
     }).catch((e) => {
       setError(e instanceof Error ? e.message : '排行榜加载失败，请稍后重试');
       setEntries([]);
@@ -43,12 +55,10 @@ export default function LeaderboardScreen() {
   const tabs: { key: LeaderboardType; label: string; icon: string }[] = [
     { key: 'power', label: '战力榜', icon: '🏆' },
     { key: 'streak', label: '连击榜', icon: '⚡' },
-    { key: 'conquest', label: '征服榜', icon: '🎯' },
+    { key: 'progress', label: '通关榜', icon: '🗺️' },
     { key: 'badge', label: '成就榜', icon: '🏅' },
-    { key: 'wins', label: '试炼胜场', icon: '⚔️' },
-    { key: 'ss_count', label: '无伤通关', icon: '🛡️' },
-    { key: 'progress', label: '征服进度', icon: '🗺️' },
-    { key: 'warrior', label: '班级战神', icon: '👑' },
+    { key: 'wins', label: '近30天胜场', icon: '⚔️' },
+    { key: 'ss_count', label: 'SS副本', icon: '🛡️' },
   ];
 
   const getTypeValue = (entry: LeaderboardEntry, t: LeaderboardType): string => {
@@ -56,11 +66,11 @@ export default function LeaderboardScreen() {
     switch (t) {
       case 'power': return `${entry.value || 0} 分`;
       case 'streak': return `${entry.value || 0} 连击`;
-      case 'conquest': return `${entry.rankTier || 1}段`;
-      case 'badge': return `${entry.value || 0} 题`;
-      case 'wins': return `${entry.value || 0} 胜`;
-      case 'ss_count': return `${entry.value || 0} 次`;
       case 'progress': return `${entry.value || 0} 副本`;
+      case 'badge': return `${entry.value || 0} 枚`;
+      case 'wins': return `${entry.value || 0} 胜`;
+      case 'ss_count': return `${entry.value || 0} 个`;
+      case 'conquest': return `${entry.value || 0} 分`;
       case 'warrior': return `${entry.value || 0} 分`;
       default: return '';
     }
@@ -162,7 +172,7 @@ export default function LeaderboardScreen() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {entries.map((entry, i) => {
               const isTop3 = entry.rank <= 3;
-              const isPlayer = playerEntry && entry.rank === playerEntry.rank;
+              const isPlayer = playerEntry && entry.rank === playerEntry.rank && entry.displayName === playerEntry.displayName;
               return (
                 <div
                   key={i}

@@ -37,6 +37,24 @@ interface KnowledgePointsData {
   items: KnowledgePoint[];
 }
 
+export interface KnowledgeLecture {
+  id: string;
+  title: string;
+  sourceFile: string;
+  knowledgePointIds: string[];
+  knowledgePointNames: string[];
+  stage: string;
+  batch: string;
+  feishuUrl: string;
+  cardUrl: string;
+}
+
+interface KnowledgeLecturesData {
+  version: number;
+  updated: string;
+  lectures: KnowledgeLecture[];
+}
+
 // ---- 题目映射 ----
 
 interface QuestionMapping {
@@ -56,7 +74,9 @@ interface QuestionKnowledgeMappingData {
 
 let _kpData: KnowledgePointsData | null = null;
 let _mappingData: QuestionKnowledgeMappingData | null = null;
+let _lectureData: KnowledgeLecturesData | null = null;
 let _kpMap: Map<string, KnowledgePoint> | null = null;
+let _lectureMap: Map<string, KnowledgeLecture[]> | null = null;
 let _loading = false;
 let _loadPromise: Promise<void> | null = null;
 
@@ -71,23 +91,37 @@ async function loadJson<T>(path: string): Promise<T> {
 }
 
 export async function loadKnowledgePointData(): Promise<void> {
-  if (_kpData && _mappingData) return;
+  if (_kpData && _mappingData && _lectureData) return;
   if (_loading && _loadPromise) return _loadPromise;
 
   _loading = true;
   _loadPromise = (async () => {
     try {
-      const [kpData, mappingData] = await Promise.all([
+      const [kpData, mappingData, lectureData] = await Promise.all([
         loadJson<KnowledgePointsData>('course-data/knowledge-points.json'),
         loadJson<QuestionKnowledgeMappingData>('course-data/question-knowledge-mapping.json'),
+        loadJson<KnowledgeLecturesData>('course-data/knowledge-lectures.json').catch(() => ({
+          version: 0,
+          updated: '',
+          lectures: [],
+        })),
       ]);
       _kpData = kpData;
       _mappingData = mappingData;
+      _lectureData = lectureData;
 
       // 构建快速查询 Map
       _kpMap = new Map();
       for (const item of kpData.items) {
         _kpMap.set(item.id, item);
+      }
+      _lectureMap = new Map();
+      for (const lecture of lectureData.lectures || []) {
+        for (const kpId of lecture.knowledgePointIds || []) {
+          const list = _lectureMap.get(kpId) || [];
+          list.push(lecture);
+          _lectureMap.set(kpId, list);
+        }
       }
     } catch (e) {
       console.warn('[KnowledgePointHelp] Failed to load data:', e);
@@ -110,6 +144,16 @@ export function getPrimaryKnowledgePoint(questionId: string): KnowledgePoint | n
   const mapping = _mappingData.mappings[questionId];
   if (!mapping?.primary) return null;
   return _kpMap.get(mapping.primary) || null;
+}
+
+/**
+ * 根据题目 ID 获取主知识点下的专题详解。
+ * 一个知识点可能有多份详解（例如贪心、二分各有两个专题）。
+ */
+export function getPrimaryKnowledgeLectures(questionId: string): KnowledgeLecture[] {
+  const kp = getPrimaryKnowledgePoint(questionId);
+  if (!kp || !_lectureMap) return [];
+  return _lectureMap.get(kp.id) || [];
 }
 
 /**

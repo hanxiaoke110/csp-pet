@@ -1,6 +1,6 @@
 // 学习资料索引条目类型（与 public/course-data/learning-resources.json 对齐）
 
-export type ResourceType = 'lecture' | 'fable' | 'practice' | 'review';
+export type ResourceType = 'lecture' | 'fable' | 'practice' | 'review' | 'knowledge_card';
 
 // ready：内容已完成，按钮显示“打开”
 // coming_soon：飞书文档已预置但内容未完成，按钮显示“制作中”（仍可点击打开占位链接）

@@ -3,6 +3,7 @@ import type { LearningResource, ResourceStatus } from './types';
 
 const TYPE_META: Record<string, { label: string; emoji: string; color: string }> = {
   lecture: { label: '讲义卡', emoji: '📘', color: '#3b82f6' },
+  knowledge_card: { label: '知识卡', emoji: '🧠', color: '#0891b2' },
   fable: { label: '寓言卡', emoji: '🐉', color: '#8b5cf6' },
   practice: { label: '配套练习', emoji: '✏️', color: '#10b981' },
   review: { label: '复盘材料', emoji: '🔎', color: '#f59e0b' },

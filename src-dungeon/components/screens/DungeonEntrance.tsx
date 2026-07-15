@@ -52,9 +52,19 @@ export default function DungeonEntrance() {
     navigate(`/battle/${dungeonId}/${stageId}`);
   };
 
+  const handleReplayStage = (stageId: string) => {
+    setView('battle');
+    navigate(`/battle/${dungeonId}/${stageId}?replay=1`);
+  };
+
   const handleStartBoss = () => {
     setView('battle');
     navigate(`/battle/${dungeonId}/boss`);
+  };
+
+  const handleReplayBoss = () => {
+    setView('battle');
+    navigate(`/battle/${dungeonId}/boss?replay=1`);
   };
 
   const bgStyle = dungeon.bgImage
@@ -159,6 +169,12 @@ export default function DungeonEntrance() {
                       进入 →
                     </button>
                   )}
+                  {isCompleted && (
+                    <button className="pixel-btn" style={{ fontSize: '11px', padding: '6px 12px' }}
+                      onClick={() => handleReplayStage(stage.id)}>
+                      再来一次
+                    </button>
+                  )}
                 </div>
               );
             })}
@@ -180,7 +196,10 @@ export default function DungeonEntrance() {
               </div>
             </div>
             {dp?.bossDefeated ? (
-              <span style={{ color: 'var(--hp-green)', fontWeight: 700 }}>✅ 已击败</span>
+              <button className="pixel-btn danger" style={{ fontSize: '11px', padding: '6px 12px' }}
+                onClick={handleReplayBoss}>
+                再战 Boss
+              </button>
             ) : nextStage ? (
               <span style={{ color: 'var(--text-dim)', fontSize: '11px' }}>需先通关所有关卡</span>
             ) : (

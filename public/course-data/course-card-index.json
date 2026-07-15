@@ -1,0 +1,1458 @@
+{
+  "version": 1,
+  "updated": "2026-07-15",
+  "source": "教学资料/卡片合集",
+  "totalLessons": 69,
+  "note": "客户端只保存课程目录和飞书链接；完整卡片原图与正文全部放在飞书文档中，避免安装包超过 Gitee 100MB 限制。",
+  "lessons": [
+    {
+      "lessonNo": 1,
+      "title": "基础框架",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/PDtpdjcijoyjbDxPVDscY93onMh",
+      "documentId": "PDtpdjcijoyjbDxPVDscY93onMh",
+      "cards": {
+        "preclassFable": {
+          "title": "P1 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P1 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P1 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 2,
+      "title": "cin 输入",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/NCCRdOReJoKXm5xDOYHcFQBGnxd",
+      "documentId": "NCCRdOReJoKXm5xDOYHcFQBGnxd",
+      "cards": {
+        "preclassFable": {
+          "title": "P2 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P2 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P2 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 3,
+      "title": "数据类型（整型）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/YbB2dG1jboYZmOxU0NPci7ofnEh",
+      "documentId": "YbB2dG1jboYZmOxU0NPci7ofnEh",
+      "cards": {
+        "preclassFable": {
+          "title": "P3 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P3 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P3 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 4,
+      "title": "数据类型（浮点型）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/XoAjde0cPoPj0AxIUL2cbbzin3d",
+      "documentId": "XoAjde0cPoPj0AxIUL2cbbzin3d",
+      "cards": {
+        "preclassFable": {
+          "title": "P4 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P4 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P4 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 5,
+      "title": "数据类型（字符型）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/PdwNdiOQPok6BzxAj9AcsNG1nYc",
+      "documentId": "PdwNdiOQPok6BzxAj9AcsNG1nYc",
+      "cards": {
+        "preclassFable": {
+          "title": "P5 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P5 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P5 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 6,
+      "title": "类型转换",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/TeqkdyaGvo37RUxqUoxci5wBnxh",
+      "documentId": "TeqkdyaGvo37RUxqUoxci5wBnxh",
+      "cards": {
+        "preclassFable": {
+          "title": "P6 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P6 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P6 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 7,
+      "title": "综合运用",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/KLSbdriQHob9FXxXgsvcrc6fnbc",
+      "documentId": "KLSbdriQHob9FXxXgsvcrc6fnbc",
+      "cards": {
+        "preclassFable": {
+          "title": "P7 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P7 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P7 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 8,
+      "title": "关系运算符与分支结构",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Ymzndk2b6oYPKWxHMr4chPOJneb",
+      "documentId": "Ymzndk2b6oYPKWxHMr4chPOJneb",
+      "cards": {
+        "preclassFable": {
+          "title": "P8 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P8 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P8 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 9,
+      "title": "逻辑运算符",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OSoHdH9rfolLsixvHMxcNtXZnkO",
+      "documentId": "OSoHdH9rfolLsixvHMxcNtXZnkO",
+      "cards": {
+        "preclassFable": {
+          "title": "P9 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P9 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P9 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 10,
+      "title": "多分支结构",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/KV9Ad2HkooVZuYx1rhIcZszlnhc",
+      "documentId": "KV9Ad2HkooVZuYx1rhIcZszlnhc",
+      "cards": {
+        "preclassFable": {
+          "title": "P10 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P10 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P10 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 11,
+      "title": "switch 语句",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/BycmdgtDLoopLHx5zYbcOaXdnEe",
+      "documentId": "BycmdgtDLoopLHx5zYbcOaXdnEe",
+      "cards": {
+        "preclassFable": {
+          "title": "P11 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P11 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P11 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 12,
+      "title": "综合运用一",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/B4qOd65rFoB43kxfKBtcJvk5nIh",
+      "documentId": "B4qOd65rFoB43kxfKBtcJvk5nIh",
+      "cards": {
+        "preclassFable": {
+          "title": "P12 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P12 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P12 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 13,
+      "title": "常用数学函数",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/UnLpdUwLOo5FikxcP7EcKoVZnED",
+      "documentId": "UnLpdUwLOo5FikxcP7EcKoVZnED",
+      "cards": {
+        "preclassFable": {
+          "title": "P13 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P13 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P13 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 14,
+      "title": "for 循环（一）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Latddv7xJoxqqaxlf8HcJ9rFn7d",
+      "documentId": "Latddv7xJoxqqaxlf8HcJ9rFn7d",
+      "cards": {
+        "preclassFable": {
+          "title": "P14 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P14 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P14 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 15,
+      "title": "for 循环（二）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/A6I1de0QpoCIygx2nu2cyDcinqe",
+      "documentId": "A6I1de0QpoCIygx2nu2cyDcinqe",
+      "cards": {
+        "preclassFable": {
+          "title": "P15 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P15 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P15 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 16,
+      "title": "while 循环",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/YeeZd62XWoG5XTx0P22cmUORnhd",
+      "documentId": "YeeZd62XWoG5XTx0P22cmUORnhd",
+      "cards": {
+        "preclassFable": {
+          "title": "P16 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P16 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P16 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 17,
+      "title": "单层循环应用",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OCXcdvHopoSc4hx2WZFc0Hslnjc",
+      "documentId": "OCXcdvHopoSc4hx2WZFc0Hslnjc",
+      "cards": {
+        "preclassFable": {
+          "title": "P17 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P17 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P17 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 18,
+      "title": "循环嵌套（一）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/I0CZdX7ICoxeY4xpcfRcITnWnpg",
+      "documentId": "I0CZdX7ICoxeY4xpcfRcITnWnpg",
+      "cards": {
+        "preclassFable": {
+          "title": "P18 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P18 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P18 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 19,
+      "title": "循环嵌套（二）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/IN3Ddh437oLonOxo9rOc3RqPnoe",
+      "documentId": "IN3Ddh437oLonOxo9rOc3RqPnoe",
+      "cards": {
+        "preclassFable": {
+          "title": "P19 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P19 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P19 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 20,
+      "title": "循环综合应用（一）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/N1HodDqGbo8LAEx8NmvcvEnPnxe",
+      "documentId": "N1HodDqGbo8LAEx8NmvcvEnPnxe",
+      "cards": {
+        "preclassFable": {
+          "title": "P20 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P20 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P20 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 21,
+      "title": "循环综合应用（二）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/RVTOdrCa8oh2bYxWAaKcGEdvn8k",
+      "documentId": "RVTOdrCa8oh2bYxWAaKcGEdvn8k",
+      "cards": {
+        "preclassFable": {
+          "title": "P21 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P21 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P21 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 22,
+      "title": "一维数组初识（一）",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/VAeLdMzJGoMIpTxDoiKcf9qxnKe",
+      "documentId": "VAeLdMzJGoMIpTxDoiKcf9qxnKe",
+      "cards": {
+        "preclassFable": {
+          "title": "P22 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P22 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P22 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 23,
+      "title": "一维数组遍历",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/QcRkd0FqQo9OeUxXh1McEM2Vnae",
+      "documentId": "QcRkd0FqQo9OeUxXh1McEM2Vnae",
+      "cards": {
+        "preclassFable": {
+          "title": "P23 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P23 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P23 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 24,
+      "title": "标记数组",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Dr1ndqnT8ov6UVxJtgncozt7nrs",
+      "documentId": "Dr1ndqnT8ov6UVxJtgncozt7nrs",
+      "cards": {
+        "preclassFable": {
+          "title": "P24 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P24 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P24 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 25,
+      "title": "桶数组",
+      "stage": "C1 入门阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Mmb5dIlAPory4bxALDVcenaGnCP",
+      "documentId": "Mmb5dIlAPory4bxALDVcenaGnCP",
+      "cards": {
+        "preclassFable": {
+          "title": "P25 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P25 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P25 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 26,
+      "title": "字符数组",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Vw1qdSHhtoWVgvxR63Zc95fXneg",
+      "documentId": "Vw1qdSHhtoWVgvxR63Zc95fXneg",
+      "cards": {
+        "preclassFable": {
+          "title": "P26 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P26 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P26 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 27,
+      "title": "字符数组常用函数",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/LcGmdU64Oo5y9OxQ7xHczFtxnOe",
+      "documentId": "LcGmdU64Oo5y9OxQ7xHczFtxnOe",
+      "cards": {
+        "preclassFable": {
+          "title": "P27 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P27 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P27 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 28,
+      "title": "string 字符串",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/IVamd6TOdoJZ7HxUCzFcNkein0g",
+      "documentId": "IVamd6TOdoJZ7HxUCzFcNkein0g",
+      "cards": {
+        "preclassFable": {
+          "title": "P28 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P28 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P28 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 29,
+      "title": "字符串综合应用",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/GVYndkPjvoaQR9xEVmTcriqGnSc",
+      "documentId": "GVYndkPjvoaQR9xEVmTcriqGnSc",
+      "cards": {
+        "preclassFable": {
+          "title": "P29 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P29 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P29 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 30,
+      "title": "凯撒加密",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/CB2pdzxGXoDapQx0o7Vc4pHPnUf",
+      "documentId": "CB2pdzxGXoDapQx0o7Vc4pHPnUf",
+      "cards": {
+        "preclassFable": {
+          "title": "P30 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P30 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P30 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 31,
+      "title": "函数初识（一）",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/WngRdXjTyoQ27IxoCdHchUb8nmg",
+      "documentId": "WngRdXjTyoQ27IxoCdHchUb8nmg",
+      "cards": {
+        "preclassFable": {
+          "title": "P31 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P31 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P31 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 32,
+      "title": "函数初识（二）·值传递",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/MrbidyQuLoPf2yxFUTUcTu6qnuf",
+      "documentId": "MrbidyQuLoPf2yxFUTUcTu6qnuf",
+      "cards": {
+        "preclassFable": {
+          "title": "P32 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P32 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P32 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 33,
+      "title": "自定义函数",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/KaHnd9YRgooGeHxp9HgcPsgPnGx",
+      "documentId": "KaHnd9YRgooGeHxp9HgcPsgPnGx",
+      "cards": {
+        "preclassFable": {
+          "title": "P33 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P33 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P33 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 34,
+      "title": "函数综合应用",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OLnxdFM8aoUXC1xxyxucvj9AnYd",
+      "documentId": "OLnxdFM8aoUXC1xxyxucvj9AnYd",
+      "cards": {
+        "preclassFable": {
+          "title": "P34 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P34 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P34 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 35,
+      "title": "位权",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/PuQkdDaUxoK9M8xRv76cpJW9njf",
+      "documentId": "PuQkdDaUxoK9M8xRv76cpJW9njf",
+      "cards": {
+        "preclassFable": {
+          "title": "P35 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P35 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P35 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 36,
+      "title": "进制转换（一）",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/R8erd5xCzoozGkxBCL9cgV5QnHd",
+      "documentId": "R8erd5xCzoozGkxBCL9cgV5QnHd",
+      "cards": {
+        "preclassFable": {
+          "title": "P36 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P36 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P36 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 37,
+      "title": "进制转换（二）",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/DfdDdBLpTowtDYx68icchlaCnzc",
+      "documentId": "DfdDdBLpTowtDYx68icchlaCnzc",
+      "cards": {
+        "preclassFable": {
+          "title": "P37 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P37 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P37 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 38,
+      "title": "补码",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Q489d5GQwoVkGVxhVHqc0xBqnne",
+      "documentId": "Q489d5GQwoVkGVxhVHqc0xBqnne",
+      "cards": {
+        "preclassFable": {
+          "title": "P38 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P38 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P38 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 39,
+      "title": "位运算（异或）",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/R4G6dimuvoEoHNxZnjMczUu6npf",
+      "documentId": "R4G6dimuvoEoHNxZnjMczUu6npf",
+      "cards": {
+        "preclassFable": {
+          "title": "P39 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P39 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P39 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 40,
+      "title": "进制与编码综合",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/MLGQdSE6kohI1txlhrdcSWAhntf",
+      "documentId": "MLGQdSE6kohI1txlhrdcSWAhntf",
+      "cards": {
+        "preclassFable": {
+          "title": "P40 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P40 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P40 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 41,
+      "title": "二维数组初识",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/CCztdovH4oFIucxiWPHcpb9nnUe",
+      "documentId": "CCztdovH4oFIucxiWPHcpb9nnUe",
+      "cards": {
+        "preclassFable": {
+          "title": "P41 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P41 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P41 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 42,
+      "title": "二维数组遍历",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/SPQxd6CAtojK9bxKYkVcDNn3n4c",
+      "documentId": "SPQxd6CAtojK9bxKYkVcDNn3n4c",
+      "cards": {
+        "preclassFable": {
+          "title": "P42 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P42 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P42 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 43,
+      "title": "二维数组应用",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Sz7Jdrx2MouVTTxTd51cAiTHnfe",
+      "documentId": "Sz7Jdrx2MouVTTxTd51cAiTHnfe",
+      "cards": {
+        "preclassFable": {
+          "title": "P43 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P43 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P43 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 44,
+      "title": "认识排序（选择）",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/X4K8drryjo02CexI09sc2y6AnSc",
+      "documentId": "X4K8drryjo02CexI09sc2y6AnSc",
+      "cards": {
+        "preclassFable": {
+          "title": "P44 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P44 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P44 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 45,
+      "title": "sort 应用",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Rrd2dst3mofyvsxUIfVcT41snec",
+      "documentId": "Rrd2dst3mofyvsxUIfVcT41snec",
+      "cards": {
+        "preclassFable": {
+          "title": "P45 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P45 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P45 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 46,
+      "title": "结构体初识",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/QcmIdB3asorlRcxf1PMcYSb3nYc",
+      "documentId": "QcmIdB3asorlRcxf1PMcYSb3nYc",
+      "cards": {
+        "preclassFable": {
+          "title": "P46 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P46 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P46 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 47,
+      "title": "结构体排序",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/TGUZdNLH6oN109xoeWFc41JPnIb",
+      "documentId": "TGUZdNLH6oN109xoeWFc41JPnIb",
+      "cards": {
+        "preclassFable": {
+          "title": "P47 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P47 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P47 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 48,
+      "title": "结构体应用",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/EEbhdjzzkoCJCyxOafGcuZNgnTf",
+      "documentId": "EEbhdjzzkoCJCyxOafGcuZNgnTf",
+      "cards": {
+        "preclassFable": {
+          "title": "P48 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P48 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P48 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 49,
+      "title": "递推算法（一）",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/U8Uid72Yao61FzxbfM7c0hpenVe",
+      "documentId": "U8Uid72Yao61FzxbfM7c0hpenVe",
+      "cards": {
+        "preclassFable": {
+          "title": "P49 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P49 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P49 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 50,
+      "title": "递推算法（二）",
+      "stage": "C2 基础阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/MAsAddaCSopngwxcrVMcuWC6nYf",
+      "documentId": "MAsAddaCSopngwxcrVMcuWC6nYf",
+      "cards": {
+        "preclassFable": {
+          "title": "P50 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P50 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P50 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 51,
+      "title": "枚举算法",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/QkLCdiCxzoSX0pxzVfUcHOsPnxd",
+      "documentId": "QkLCdiCxzoSX0pxzVfUcHOsPnxd",
+      "cards": {
+        "preclassFable": {
+          "title": "P51 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P51 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P51 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 52,
+      "title": "枚举应用",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Qf6hdsMq2oUi65xfqoLc5Jpzned",
+      "documentId": "Qf6hdsMq2oUi65xfqoLc5Jpzned",
+      "cards": {
+        "preclassFable": {
+          "title": "P52 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P52 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P52 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 53,
+      "title": "枚举算法的优化",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/D4IcdSDwdoTyVzxRIQucnPX3njf",
+      "documentId": "D4IcdSDwdoTyVzxRIQucnPX3njf",
+      "cards": {
+        "preclassFable": {
+          "title": "P53 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P53 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P53 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 54,
+      "title": "模拟算法（一）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/XPhAdX6Svo7u4QxClFNcWdV1nif",
+      "documentId": "XPhAdX6Svo7u4QxClFNcWdV1nif",
+      "cards": {
+        "preclassFable": {
+          "title": "P54 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P54 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P54 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 55,
+      "title": "模拟算法（二）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/T61Nd0s3hogaoGxeH49cu8NvnVc",
+      "documentId": "T61Nd0s3hogaoGxeH49cu8NvnVc",
+      "cards": {
+        "preclassFable": {
+          "title": "P55 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P55 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P55 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 56,
+      "title": "前缀和",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/BtDddDg4potoi3xXqcMcHVoVnKf",
+      "documentId": "BtDddDg4potoi3xXqcMcHVoVnKf",
+      "cards": {
+        "preclassFable": {
+          "title": "P56 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P56 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P56 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 57,
+      "title": "差分",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/A3aXdiBn5oalfuxyLEGc9K87n4d",
+      "documentId": "A3aXdiBn5oalfuxyLEGc9K87n4d",
+      "cards": {
+        "preclassFable": {
+          "title": "P57 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P57 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P57 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 58,
+      "title": "贪心算法（一）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/ANw4dpoKDoG94UxYp9XcnlfNncg",
+      "documentId": "ANw4dpoKDoG94UxYp9XcnlfNncg",
+      "cards": {
+        "preclassFable": {
+          "title": "P58 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P58 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P58 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 59,
+      "title": "贪心算法（二）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Iex9djrBooBkJtxxxczchKHlnse",
+      "documentId": "Iex9djrBooBkJtxxxczchKHlnse",
+      "cards": {
+        "preclassFable": {
+          "title": "P59 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P59 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P59 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 60,
+      "title": "贪心算法（三）·邻项交换",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/YxIydNRSmoYYtUx9W9dcgUJOnMd",
+      "documentId": "YxIydNRSmoYYtUx9W9dcgUJOnMd",
+      "cards": {
+        "preclassFable": {
+          "title": "P60 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P60 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P60 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 61,
+      "title": "初等排序（选择/冒泡/插入）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/HfkKdm1OgoaQ3Zx9RNgcDzY2n0g",
+      "documentId": "HfkKdm1OgoaQ3Zx9RNgcDzY2n0g",
+      "cards": {
+        "preclassFable": {
+          "title": "P61 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P61 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P61 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 62,
+      "title": "计数排序",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/HB76d6vR7o79aCxgrUwcY47TnKg",
+      "documentId": "HB76d6vR7o79aCxgrUwcY47TnKg",
+      "cards": {
+        "preclassFable": {
+          "title": "P62 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P62 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P62 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 63,
+      "title": "最大公因数·辗转相除",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Binwd1RAVoixUoxWMrrczaahnSc",
+      "documentId": "Binwd1RAVoixUoxWMrrczaahnSc",
+      "cards": {
+        "preclassFable": {
+          "title": "P63 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P63 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P63 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 64,
+      "title": "算术基本定理·质因数分解",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/AzzcdcJJCoA4InxsuovcKEx4nLd",
+      "documentId": "AzzcdcJJCoA4InxsuovcKEx4nLd",
+      "cards": {
+        "preclassFable": {
+          "title": "P64 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P64 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P64 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 65,
+      "title": "埃氏筛法",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Ov6Ed8YDBoxiK9xV34JcX1S7nNe",
+      "documentId": "Ov6Ed8YDBoxiK9xV34JcX1S7nNe",
+      "cards": {
+        "preclassFable": {
+          "title": "P65 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P65 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P65 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 66,
+      "title": "二分查找（一）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/AKXXdCYBfokhqLxCFB8cXSZgnpd",
+      "documentId": "AKXXdCYBfokhqLxCFB8cXSZgnpd",
+      "cards": {
+        "preclassFable": {
+          "title": "P66 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P66 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P66 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 67,
+      "title": "二分查找（二）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/I5FxdmbLqo1VSgxbIlkcTnGeneg",
+      "documentId": "I5FxdmbLqo1VSgxbIlkcTnGeneg",
+      "cards": {
+        "preclassFable": {
+          "title": "P67 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P67 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P67 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 68,
+      "title": "动态数组与队列",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/XesTdaXZEoCjJMxREb9cnwEAn0d",
+      "documentId": "XesTdaXZEoCjJMxREb9cnwEAn0d",
+      "cards": {
+        "preclassFable": {
+          "title": "P68 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P68 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P68 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 69,
+      "title": "栈",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/O6r9ddpbeoR9ArxU9zpcBGqpndf",
+      "documentId": "O6r9ddpbeoR9ArxU9zpcBGqpndf",
+      "cards": {
+        "preclassFable": {
+          "title": "P69 课前寓言卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P69 知识总览卡",
+          "use": "课后梳理：把概念、规则、易错点收拢成一页。"
+        },
+        "reviewCombo": {
+          "title": "P69 复习结合卡",
+          "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    }
+  ]
+}

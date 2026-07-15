@@ -10,6 +10,8 @@ export default function DungeonMap() {
   const progress = useDungeonStore(s => s.dungeonProgress);
   const setView = useDungeonStore(s => s.setView);
   const isUnlocked = useDungeonStore(s => s.isDungeonUnlocked);
+  const weeklyChallenges = useDungeonStore(s => s.weeklyChallenges);
+  const buyRewardChallenge = useDungeonStore(s => s.buyRewardChallenge);
 
   const rankName = getRankName(player.school, player.rankTier);
 
@@ -51,6 +53,17 @@ export default function DungeonMap() {
           <span className="status-label">💰</span>
           <span className="status-value gold-text">{player.gold}</span>
         </div>
+        <button
+          className="pixel-btn"
+          style={{ fontSize: '10px', padding: '4px 10px' }}
+          title={`本周奖励次数 ${weeklyChallenges.used}/${weeklyChallenges.limit}`}
+          onClick={() => {
+            const ok = buyRewardChallenge();
+            if (!ok) window.alert('金币不足，需要 120 金币。');
+          }}
+        >
+          🎟️ +1奖励 120金
+        </button>
         <div className="status-item">
           <span className="status-label">⚡</span>
           <span className="status-value" style={{ color: player.currentStreak >= 5 ? 'var(--crit-yellow)' : 'var(--text-light)' }}>

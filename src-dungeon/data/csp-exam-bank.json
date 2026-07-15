@@ -9751,7 +9751,7 @@
       "knowledgePoint": "控制结构",
       "difficulty": 1,
       "question": "对下面C++代码描述正确的是（ ）。",
-      "code": null,
+      "code": "cin>>N;cnt=0;\nfor(int i=1;i<N;i++) cnt+=1;\n    cout<<cnt;",
       "image": null,
       "options": [
         "A. 如果N<=2输出0",
@@ -9859,7 +9859,7 @@
       "knowledgePoint": "控制结构",
       "difficulty": 1,
       "question": "对下面代码描述正确的是（ ）。",
-      "code": null,
+      "code": "int arr[]={2,6,3,5,4,8,1,0,9,10};\nfor(int i=0;i<10;i++) cout<<arr[i]<<\" \";\n    cout<<i<<endl;",
       "image": null,
       "options": [
         "A. 输出数组元素和10",
@@ -11141,7 +11141,7 @@
       "knowledgePoint": "控制结构",
       "difficulty": 1,
       "question": "执行下面C++代码后cnt的值是（ ）。",
-      "code": null,
+      "code": "int cnt=0;\nfor(int i=0;i*i<64;i+=2) cnt++;\n    cout<<cnt;",
       "image": null,
       "options": [
         "A. 8",
@@ -11321,7 +11321,7 @@
       "knowledgePoint": "函数与递归",
       "difficulty": 2,
       "question": "关于以下代码说法错误的是（ ）。",
-      "code": null,
+      "code": "cin>>a>>b;\nif(a&&b) cout<<\"1\";\n    else if(!(a||b)) cout<<\"2\";\n    else if(a||b) cout<<\"3\";\n    else cout<<\"4\";",
       "image": null,
       "options": [
         "A. 输入1和1输出1",
@@ -12501,7 +12501,7 @@
       "knowledgePoint": "控制结构",
       "difficulty": 2,
       "question": "关于下面程序说法正确的是（ ）。",
-      "code": null,
+      "code": "int tnt;\nfor(int i=1;i<=10;i++) tnt+=i;\n    cout << tnt;",
       "image": null,
       "options": [
         "A. 求1到10和",
@@ -15465,7 +15465,7 @@
       "knowledgePoint": "数据类型与运算",
       "difficulty": 3,
       "question": "某⼩学男⼦篮球队招募新成员，要求加⼊球队的成员⾝⾼在135厘⽶以上（不含135厘⽶）。本次报名的⼈ 员有10⼈，他们的⾝⾼分别是125、127、136、134、137、138、126、135、140、145。完善以下代码，求出本次球 队能够招募到新成员的⼈数？（ ）",
-      "code": null,
+      "code": "int main() {\n    int arr[10] = {\n        125, 127, 136, 134, 137, 138, 126, 135, 140, 145}\n    int count = 0;\n    for(int i=0;\n        i<10;\n        i++) __________________________ // 在此处填入代码 11 cout << count << endl;\n        return 0;",
       "image": null,
       "options": [
         "A. count = arr[i]>135? 1: 0;",
@@ -16933,7 +16933,7 @@
       "knowledgePoint": "C++语法基础",
       "difficulty": 3,
       "question": "以下代码的说法正确的是什么( )",
-      "code": null,
+      "code": "int main() {\n    int a = 0b1101;\n    int b = 0b1011;\n    cout << (a ^ b);\n    return 0;",
       "image": null,
       "options": [
         "A. 进行的是整体异或运算",
@@ -17723,7 +17723,7 @@
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
       "question": "关于以下 C++代码，说法正确的是（ ）。",
-      "code": null,
+      "code": "return 0;\n}\nvoid greet() {\n    cout << \"Hello!\" << endl;",
       "image": null,
       "options": [
         "A. 正确编译并输出 Hello!",

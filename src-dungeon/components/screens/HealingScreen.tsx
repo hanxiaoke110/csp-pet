@@ -4,6 +4,13 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import fables from '../../data/fables.json';
 import FableCard from '../shared/FableCard';
 import type { Question } from '../../types/dungeon';
+import { isUsableChoiceQuestion } from '../../utils/questionLoader';
+
+function resolveQuestionImage(src?: string | null): string | null {
+  if (!src) return null;
+  if (/^https?:\/\//.test(src)) return src;
+  return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
+}
 
 export default function HealingScreen() {
   const navigate = useNavigate();
@@ -49,9 +56,10 @@ export default function HealingScreen() {
       // Get full questions, shuffle, take 5
       const matchedQs = matchingIds
         .map(id => questionBank.find(q => q.id === id))
-        .filter(Boolean) as Question[];
+        .filter(isUsableChoiceQuestion);
+      const fallbackQs = questionBank.filter(isUsableChoiceQuestion);
       const shuffled = [...matchedQs].sort(() => Math.random() - 0.5).slice(0, 5);
-      setQuestions(shuffled.length > 0 ? shuffled : questionBank.slice(0, 3));
+      setQuestions(shuffled.length > 0 ? shuffled : fallbackQs.slice(0, 3));
     }
   }, [healing, questionBank.length, questionMapping]);
 
@@ -168,6 +176,15 @@ export default function HealingScreen() {
                 }}>
                   {currentQuestion.code}
                 </pre>
+              )}
+              {resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
+                <div style={{ marginBottom: '12px' }}>
+                  <img
+                    src={resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage)!}
+                    alt=""
+                    style={{ maxWidth: '100%', border: '2px solid #333', background: '#fff' }}
+                  />
+                </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {(currentQuestion.options || []).map((opt, idx) => {

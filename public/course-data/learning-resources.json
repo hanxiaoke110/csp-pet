@@ -1,16 +1,16 @@
 {
-  "_note": "所有 URL 已替换为飞书公开只读链接。24 份文档由 Codex 于 2026-07-09 创建，权限已全部设为互联网可阅读。总导航：智子学习资料库｜CSP 学习导航。链接汇总见 reports/lark-learning-resources/feishu-doc-links.json。",
+  "_note": "24/24 飞书资料链接已确认公开只读，客户端显示为已就绪；21 张真题知识卡由 knowledge-points.json 合并展示。",
   "_schema": {
     "lessonNo": "课程序号 P1-P71，非课程类资源可省略",
-    "status": "ready=内容已完成按钮显示'打开'；coming_soon=飞书文档已预置但内容未完成按钮显示'制作中'（仍可点击打开占位链接）；hidden=不展示",
+    "status": "ready=内容已可打开；coming_soon=飞书文档已预置但内容未完成按钮显示'制作中'（仍可点击打开占位链接）；hidden=不展示",
     "thumbnailUrl": "缩略图外链，空则显示占位（不破图）",
     "updatedAt": "资源更新时间 YYYY-MM-DD",
     "description": "卡片说明",
     "requiresClassCode": "true 表示需要绑定班级码后才可打开",
     "url": "资料外链，全部为飞书公开只读链接——发版前已替换"
   },
-  "version": 2,
-  "updated": "2026-07-10",
+  "version": 3,
+  "updated": "2026-07-14",
   "resources": [
     {
       "id": "p01-lecture",
@@ -19,7 +19,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -29,8 +29,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/PDtpdjcijoyjbDxPVDscY93onMh",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P1 基础框架讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P1 基础框架讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p02-lecture",
@@ -39,7 +39,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -49,8 +49,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/NCCRdOReJoKXm5xDOYHcFQBGnxd",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P2 cin 输入讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P2 cin 输入讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p03-lecture",
@@ -59,7 +59,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -68,8 +68,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/YbB2dG1jboYZmOxU0NPci7ofnEh",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P3 整型讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P3 整型讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p04-lecture",
@@ -78,7 +78,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -87,8 +87,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/XoAjde0cPoPj0AxIUL2cbbzin3d",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P4 浮点型讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P4 浮点型讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p05-lecture",
@@ -97,7 +97,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -107,8 +107,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/PdwNdiOQPok6BzxAj9AcsNG1nYc",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P5 字符型与 ASCII 讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P5 字符型与 ASCII 讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p06-lecture",
@@ -117,7 +117,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -125,8 +125,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/TeqkdyaGvo37RUxqUoxci5wBnxh",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P6 类型转换讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P6 类型转换讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p07-lecture",
@@ -135,7 +135,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -144,8 +144,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/KLSbdriQHob9FXxXgsvcrc6fnbc",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P7 综合运用（IPO）讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P7 综合运用（IPO）讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p08-lecture",
@@ -154,7 +154,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -164,8 +164,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/Ymzndk2b6oYPKWxHMr4chPOJneb",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P8 分支结构讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P8 分支结构讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p09-lecture",
@@ -174,7 +174,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -182,8 +182,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/OSoHdH9rfolLsixvHMxcNtXZnkO",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P9 逻辑运算符讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P9 逻辑运算符讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p10-lecture",
@@ -192,7 +192,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -201,8 +201,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/KV9Ad2HkooVZuYx1rhIcZszlnhc",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P10 多分支结构讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P10 多分支结构讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p11-lecture",
@@ -211,7 +211,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -219,8 +219,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/BycmdgtDLoopLHx5zYbcOaXdnEe",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P11 switch 语句讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P11 switch 语句讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p12-lecture",
@@ -229,7 +229,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -237,8 +237,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/B4qOd65rFoB43kxfKBtcJvk5nIh",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P12 综合运用一讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P12 综合运用一讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p13-lecture",
@@ -247,7 +247,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -256,8 +256,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/UnLpdUwLOo5FikxcP7EcKoVZnED",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P13 常用数学函数讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P13 常用数学函数讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p14-lecture",
@@ -266,7 +266,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -276,8 +276,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/Latddv7xJoxqqaxlf8HcJ9rFn7d",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P14 for 循环讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P14 for 循环讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p15-lecture",
@@ -286,7 +286,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -295,8 +295,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/A6I1de0QpoCIygx2nu2cyDcinqe",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P15 for 循环（二）讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P15 for 循环（二）讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p16-lecture",
@@ -305,7 +305,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -314,8 +314,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/YeeZd62XWoG5XTx0P22cmUORnhd",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P16 while 循环讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P16 while 循环讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p22-lecture",
@@ -324,7 +324,7 @@
       "stage": "C1 入门阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "C++",
@@ -334,8 +334,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/VAeLdMzJGoMIpTxDoiKcf9qxnKe",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P22 一维数组初识讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P22 一维数组初识讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p53-lecture",
@@ -344,7 +344,7 @@
       "stage": "C3 进阶阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "算法",
@@ -354,8 +354,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/D4IcdSDwdoTyVzxRIQucnPX3njf",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P53 枚举算法优化讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P53 枚举算法优化讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "p66-lecture",
@@ -364,7 +364,7 @@
       "stage": "C3 进阶阶段",
       "type": "lecture",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "算法",
@@ -373,8 +373,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/AKXXdCYBfokhqLxCFB8cXSZgnpd",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "P66 二分查找讲义卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "P66 二分查找讲义卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "fable-001",
@@ -382,7 +382,7 @@
       "stage": "C1 入门阶段",
       "type": "fable",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "寓言",
@@ -391,8 +391,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/EAV7d1e62oQGL3xvdnQcjoBknKA",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "变量的盒子寓言卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "变量的盒子寓言卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "fable-002",
@@ -400,7 +400,7 @@
       "stage": "C1 入门阶段",
       "type": "fable",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "寓言",
@@ -409,8 +409,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/ZIVad7dpmooD64xmhywcKbmynRd",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "循环的跑步机寓言卡。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "循环的跑步机寓言卡。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "practice-001",
@@ -418,7 +418,7 @@
       "stage": "C1 入门阶段",
       "type": "practice",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": false,
       "tags": [
         "练习",
@@ -427,8 +427,8 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/Lb9idzVyOoCLkpx2n4Gcd7QRnzb",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
-      "description": "基础语法配套练习。飞书文档上传后无需更新客户端即可查看。"
+      "updatedAt": "2026-07-14",
+      "description": "基础语法配套练习。飞书公开链接已就绪，后续内容更新无需升级客户端。"
     },
     {
       "id": "review-001",
@@ -436,7 +436,7 @@
       "stage": "综合",
       "type": "review",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": true,
       "tags": [
         "复盘",
@@ -445,7 +445,7 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/N72BdZ09BosK3CxddzScOWUJnmb",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
+      "updatedAt": "2026-07-14",
       "description": "一轮基础复盘材料。需要绑定班级码后打开。"
     },
     {
@@ -454,7 +454,7 @@
       "stage": "综合",
       "type": "review",
       "level": "CSP-J",
-      "status": "coming_soon",
+      "status": "ready",
       "requiresClassCode": true,
       "tags": [
         "模考",
@@ -463,7 +463,7 @@
       ],
       "url": "https://scncdgmg7m6w.feishu.cn/docx/Q8eNdizQVoMMK0xizd9cCKTAnrg",
       "thumbnailUrl": "",
-      "updatedAt": "2026-07-10",
+      "updatedAt": "2026-07-14",
       "description": "CSP-J 模考讲评。需要绑定班级码后打开。"
     }
   ]

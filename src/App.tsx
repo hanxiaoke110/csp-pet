@@ -168,7 +168,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.2';
+  const VER = '1.7.7';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -179,12 +179,12 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🏅 CSP 真题训练 (240题, J/S双组别)</div>
-          <div>📝 每日任务 + 正确率阶梯奖励</div>
-          <div>🍖 饥饿三级预警 (≤15/≤10/≤0)</div>
-          <div>🔒 班级码限制</div>
-          <div>🌐 题库在线更新</div>
-          <div>🐛 多项 Bug 修复</div>
+          <div>⚔️ 智子试炼场重打与排行榜优化</div>
+          <div>🧪 题库残缺代码题过滤与展示修复</div>
+          <div>📖 学习资料入口上线</div>
+          <div>🏅 CSP 真题与选择题题库可靠性增强</div>
+          <div>💰 金币消耗入口补充</div>
+          <div>🐛 多项体验与稳定性修复</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

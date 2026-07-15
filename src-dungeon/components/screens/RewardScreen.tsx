@@ -50,6 +50,15 @@ export default function RewardScreen() {
     setView('dungeon-preview');
   };
 
+  const handleReplay = () => {
+    useDungeonStore.setState({ lastBattleResult: null });
+    const target = battle.isBoss
+      ? `/battle/${dungeonId}/boss?replay=1`
+      : `/battle/${dungeonId}/${battle.stageId}?replay=1`;
+    navigate(target);
+    setView(battle.isBoss ? 'boss' : 'battle');
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -143,13 +152,33 @@ export default function RewardScreen() {
         )}
 
         {/* Continue */}
-        <button
-          className={`pixel-btn ${won ? 'primary' : ''}`}
-          onClick={handleContinue}
-          style={{ width: '100%', fontSize: '14px' }}
-        >
-          {won ? '继续修行 →' : '重新挑战'}
-        </button>
+        <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+          <button
+            className={`pixel-btn ${won ? 'primary' : ''}`}
+            onClick={won ? handleReplay : handleReplay}
+            style={{ width: '100%', fontSize: '14px' }}
+          >
+            {won ? '再来一次冲评级' : '重新挑战'}
+          </button>
+          {won && (
+            <button
+              className="pixel-btn"
+              onClick={handleContinue}
+              style={{ width: '100%', fontSize: '14px' }}
+            >
+              继续修行 →
+            </button>
+          )}
+          {!won && (
+            <button
+              className="pixel-btn"
+              onClick={handleContinue}
+              style={{ width: '100%', fontSize: '12px' }}
+            >
+              返回副本
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

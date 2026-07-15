@@ -13,8 +13,8 @@
       "summary": "用二进制表示信息，掌握与、或、非、异或和移位运算。理解补码、原码、反码的转换。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/R2XGdA7gzok7K2xVKJTclIr4nPh",
       "feishuCardTitle": "知识卡｜二进制与位运算",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜二进制与位运算",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/Se5LdxYqzovi39xe0q5cSPTpnNc",
+      "feishuLectureTitle": "专题讲解｜二进制和位运算",
       "existingQuizKps": [
         "进制与编码"
       ],
@@ -36,8 +36,8 @@
       "summary": "素数判断、质因数分解、最大公约数（gcd）、最小公倍数（lcm）、同余与模运算。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/DoZBds5MioeHjfxz3rqcjYWOnOg",
       "feishuCardTitle": "知识卡｜初等数论",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜初等数论",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/MIJTdhUn6og4MExv5akcrPZUnKb",
+      "feishuLectureTitle": "专题讲解｜质数判断和质因数分解",
       "existingQuizKps": [
         "数论"
       ],
@@ -54,8 +54,8 @@
       "summary": "整型、浮点型、字符型、布尔型的取值范围与存储方式。位、字节、KB、MB、GB 的换算。ASCII 编码基础。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/ICwGdxbAzoYSmlxZOaAcFxN0nAc",
       "feishuCardTitle": "知识卡｜数据类型与存储单位",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜数据类型与存储单位",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/DqL5dBD8xoyqphxQ0BkcLTQ8nrh",
+      "feishuLectureTitle": "专题讲解｜数据类型、存储单位、指针",
       "existingQuizKps": [
         "数据类型与运算"
       ],
@@ -77,8 +77,8 @@
       "summary": "后进先出（LIFO）与先进先出（FIFO）。栈在表达式求值、函数调用中的应用。队列在 BFS 中的应用。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/Fx4Ldpsg5oiV1IxKawJcetNRnxg",
       "feishuCardTitle": "知识卡｜栈与队列",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜栈与队列",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/WeIUdwO0AoyNhbxwS8PcI6UznBg",
+      "feishuLectureTitle": "专题讲解｜栈和队列",
       "existingQuizKps": [
         "数据结构-线性"
       ],
@@ -99,8 +99,8 @@
       "summary": "前缀、中缀、后缀表达式的转换与计算。运算符优先级与结合性。逻辑表达式的短路求值。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/UIE4dEp65oWNeVxYGtZc2ki4nBN",
       "feishuCardTitle": "知识卡｜表达式求值",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜表达式求值",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/Pjs4dLRfSorncHxhnBqc4e3Mnme",
+      "feishuLectureTitle": "专题讲解｜表达式求值",
       "existingQuizKps": [
         "表达式与运算"
       ],
@@ -119,8 +119,8 @@
       "summary": "二叉树的基本概念与遍历（先序、中序、后序）。二叉搜索树、堆、哈夫曼编码。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/HhzsdN5hvoD5jLxuul3ckDN8nvf",
       "feishuCardTitle": "知识卡｜树",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜树",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/XnsMd3XAao4459x3ZKXcbArrnCd",
+      "feishuLectureTitle": "专题讲解｜二叉树的形态与遍历",
       "existingQuizKps": [
         "数据结构-树"
       ],
@@ -139,8 +139,8 @@
       "summary": "图的基本概念（有向/无向、度、连通）。邻接矩阵与邻接表存储。深度优先搜索（DFS）与广度优先搜索（BFS）。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/P9RBdFsAEomKGHxrkS2cusnYnJe",
       "feishuCardTitle": "知识卡｜图",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜图",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/NRsyd2S2koAO1fxVTuRcejcQnNd",
+      "feishuLectureTitle": "专题讲解｜图的基础概念和深搜广搜",
       "existingQuizKps": [
         "数据结构-图"
       ],
@@ -160,8 +160,8 @@
       "summary": "大 O 表示法。最好、最坏、平均时间复杂度。空间复杂度。常见复杂度级别（O(1), O(n), O(n²), O(log n), O(n log n)）的直观含义。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/Joamd7W7foFWlYxpMJMc0T87nOg",
       "feishuCardTitle": "知识卡｜时间复杂度与算法复杂度",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜时间复杂度与算法复杂度",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/X1ISdZNhBoxUasxJ0ZRcr08Bnmd",
+      "feishuLectureTitle": "专题讲解｜算法复杂度分析",
       "existingQuizKps": [
         "算法思想",
         "算法基础"
@@ -179,8 +179,8 @@
       "summary": "递归的基本思想：基准条件与递归条件。递推关系的建立。递归树与递归深度。尾递归优化。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/Kogod4koSouxgkx1UdicTEL4n9f",
       "feishuCardTitle": "知识卡｜递归与递推",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜递归与递推",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/FLu4dSVxeoZ5Uvx7ANScj9ObnQf",
+      "feishuLectureTitle": "专题讲解｜递归复杂度分析",
       "existingQuizKps": [
         "函数与递归"
       ],
@@ -199,8 +199,8 @@
       "summary": "贪心策略：每步选局部最优。适用范围与证明方法。典型问题：找零钱、活动选择、区间调度。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/DYMOdLnySoLxoQxsUXUcgM27nz2",
       "feishuCardTitle": "知识卡｜贪心算法",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜贪心算法",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/HvB7dvF7zojkl1xWoQbcnlW8nxc",
+      "feishuLectureTitle": "专题讲解｜贪心算法：3个经典区间问题",
       "existingQuizKps": [],
       "prerequisiteIds": [
         "sorting-and-searching"
@@ -217,8 +217,8 @@
       "summary": "二分查找的前提与实现。边界条件的处理。二分答案：在单调性上二分枚举答案。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/OiVedCjFeoETprxQd6ZcZMLfnJe",
       "feishuCardTitle": "知识卡｜二分查找与二分答案",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜二分查找与二分答案",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/OZh2d0njzo6ybJx7x7PcuGeVnDf",
+      "feishuLectureTitle": "专题讲解｜二分答案",
       "existingQuizKps": [
         "排序与查找"
       ],
@@ -239,8 +239,8 @@
       "summary": "DFS 与 BFS 的搜索框架。洪水填充算法的二维应用。连通块计数、迷宫路径。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/OQJhdbTqpoSZvGxmg8qc1US8nwe",
       "feishuCardTitle": "知识卡｜洪水填充与搜索",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜洪水填充与搜索",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/MBHrdUWzDopjxqxII8ncEJbEnqf",
+      "feishuLectureTitle": "专题讲解｜洪水填充算法",
       "existingQuizKps": [],
       "prerequisiteIds": [
         "graph",
@@ -258,8 +258,8 @@
       "summary": "ASCII 编码表的使用。字符与数字的转换。Base64、URL 编码的基本概念。哈夫曼编码的压缩原理。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/FE4Sdc39boOA4ZxNVLRcqcxInnc",
       "feishuCardTitle": "知识卡｜编码与解码",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜编码与解码",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/FpWnd8hNmoExYZxx6KkcLRphnpg",
+      "feishuLectureTitle": "专题讲解｜编码解码",
       "existingQuizKps": [],
       "prerequisiteIds": [
         "binary-and-bitwise"
@@ -278,8 +278,8 @@
       "summary": "DP 的核心思想：最优子结构与重叠子问题。记忆化搜索与递推。经典问题：背包、最长子序列、编辑距离。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/Gaefd6ZVvo4JBzxts6dc0xLGn7c",
       "feishuCardTitle": "知识卡｜动态规划",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜动态规划",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/HwGfd31cKoA38yxGuCtcbudnnHf",
+      "feishuLectureTitle": "专题讲解｜动态规划的基本概念",
       "existingQuizKps": [],
       "prerequisiteIds": [
         "recursion",
@@ -297,8 +297,8 @@
       "summary": "IP 地址、域名、DNS。局域网与广域网。TCP/IP 协议栈。HTTP 与 HTTPS 的区别。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/UjdbdZ6VKoLjNCxFCGxc9aqEnbh",
       "feishuCardTitle": "知识卡｜计算机网络基础",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜计算机网络基础",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/X4DadWzB2oBM6uxsDXncTZfQnid",
+      "feishuLectureTitle": "专题讲解｜计算机网络的诞生和发展",
       "existingQuizKps": [
         "计算机基础"
       ],
@@ -315,8 +315,8 @@
       "summary": "计算机的发展阶段（电子管→晶体管→集成电路）。冯·诺依曼结构。图灵与图灵机。中国计算机发展。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/B2UNdVgHgoh7uPx9I69cxK5snhd",
       "feishuCardTitle": "知识卡｜计算机发展史",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜计算机发展史",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/EhNPdP3fFoegbrxdxhhc9Umnnpb",
+      "feishuLectureTitle": "专题讲解｜计算机诞生和发展",
       "existingQuizKps": [],
       "prerequisiteIds": [],
       "relatedLessonIds": [],
@@ -331,8 +331,8 @@
       "summary": "编译型语言 vs 解释型语言。C++ 的编译过程（预处理、编译、汇编、链接）。常见编程语言分类。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/KsN7df8SooVd7qxiUgtc4NDMnbb",
       "feishuCardTitle": "知识卡｜编程语言与编译原理",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜编程语言与编译原理",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/E34Td76uooIqZnxVyPgcattyn5c",
+      "feishuLectureTitle": "专题讲解｜计算机语言",
       "existingQuizKps": [
         "C++语法基础",
         "输入输出"
@@ -352,8 +352,8 @@
       "summary": "一维与二维数组的定义、初始化和访问。字符数组与 string。字符串的比较、拷贝、拼接。下标与越界。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/U3rZdXg13ovLQXxImldc0qNynCf",
       "feishuCardTitle": "知识卡｜数组与字符串",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜数组与字符串",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/RPUjd3sDPodwXGxDMo3cISXnnIh",
+      "feishuLectureTitle": "专题讲解｜数组和链表",
       "existingQuizKps": [
         "数组与字符串",
         "数组/字符串"
@@ -403,8 +403,8 @@
       "summary": "排列、组合、阶乘。加法原理与乘法原理。概率的基本计算。鸽巢原理。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/FL4rdY9cvoErchxhw0dcV7vanfc",
       "feishuCardTitle": "知识卡｜组合数学与概率",
-      "feishuLectureUrl": "",
-      "feishuLectureTitle": "专题讲义｜组合数学与概率",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/JkwpdaeceovKQ7xgN7bcAhpSnvh",
+      "feishuLectureTitle": "专题讲解｜排列组合",
       "existingQuizKps": [
         "组合数学"
       ],

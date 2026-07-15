@@ -1,0 +1,199 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useDungeonStore } from './dungeonStore';
+import { expToNextLevel } from '../utils/gameLogic';
+import type { BattleState, DungeonProgress, PlayerState } from '../types/dungeon';
+
+function makeLocalStorage() {
+  const data = new Map<string, string>();
+  return {
+    getItem: (key: string) => data.get(key) ?? null,
+    setItem: (key: string, value: string) => { data.set(key, String(value)); },
+    removeItem: (key: string) => { data.delete(key); },
+    clear: () => { data.clear(); },
+  };
+}
+
+function makePlayer(overrides: Partial<PlayerState> = {}): PlayerState {
+  return {
+    deviceHash: 'test-device',
+    classCode: 'TEST01',
+    displayName: '测试学生',
+    realName: '测试学生',
+    phone: '13800000000',
+    status: 'active',
+    school: 'cultivation',
+    rankTier: 1,
+    rankPoints: 0,
+    playerLevel: 1,
+    exp: 0,
+    expToNext: expToNextLevel(1),
+    gold: 0,
+    totalAnswered: 0,
+    totalCorrect: 0,
+    currentStreak: 0,
+    maxStreak: 0,
+    loginStreak: 0,
+    lastLoginDate: '',
+    season: '2026-autumn',
+    ...overrides,
+  };
+}
+
+function makeProgress(overrides: Partial<DungeonProgress> = {}): DungeonProgress {
+  return {
+    dungeonId: 'dungeon-01',
+    status: 'unlocked',
+    completedStages: 0,
+    totalStages: 5,
+    currentStageId: null,
+    bossDefeated: false,
+    bestScore: 0,
+    bestRating: 'D',
+    ...overrides,
+  };
+}
+
+function makeBattle(overrides: Partial<BattleState> = {}): BattleState {
+  return {
+    dungeonId: 'dungeon-01',
+    stageId: 'dungeon-01-stage-01',
+    questions: [],
+    currentQuestionIndex: 0,
+    hp: 100,
+    maxHp: 100,
+    correctCount: 3,
+    wrongCount: 0,
+    comboCount: 3,
+    startTime: Date.now(),
+    isBoss: false,
+    isFinished: true,
+    isWon: true,
+    expEarned: 0,
+    goldEarned: 0,
+    rating: 'A',
+    enemyHp: 0,
+    enemyMaxHp: 100,
+    currentTurn: 'player',
+    roundCount: 8,
+    skillUsages: [],
+    usedSkillIds: ['skill-1'],
+    energy: 0,
+    maxEnergy: 5,
+    shield: 0,
+    enemyIntent: null,
+    burnStacks: [],
+    ...overrides,
+  };
+}
+
+beforeEach(() => {
+  vi.stubGlobal('localStorage', makeLocalStorage());
+  vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('network disabled in unit tests'))));
+  useDungeonStore.setState({
+    player: makePlayer(),
+    dungeons: [],
+    dungeonProgress: [makeProgress()],
+    questionBank: [],
+    questionMapping: {},
+    badges: [],
+    earnedBadges: [],
+    dailyTasks: { date: '', questionsDone: 0, stagesCleared: 0, bossesDefeated: 0, allDone: false, claimed: false },
+    battle: null,
+    lastBattleResult: null,
+    weakPoints: {},
+    mistakeNotebook: [],
+    healing: null,
+    view: 'map',
+    loading: false,
+    error: null,
+    weeklyChallenges: { used: 0, limit: 5, resetAt: '' },
+    currentBattleEarnsRewards: true,
+    schoolPassiveDaily: { used: 0, limit: 50, resetAt: '' },
+    _firstClears: {},
+  });
+});
+
+describe('智子试炼场核心结算', () => {
+  it('升级后继续获得经验不会掉级', () => {
+    useDungeonStore.setState({
+      player: makePlayer({ playerLevel: 3, exp: 0, expToNext: expToNextLevel(3) }),
+    });
+
+    useDungeonStore.getState().addExp(10);
+
+    const player = useDungeonStore.getState().player;
+    expect(player.playerLevel).toBe(3);
+    expect(player.exp).toBe(10);
+    expect(player.expToNext).toBe(expToNextLevel(3));
+  });
+
+  it('有奖励挑战胜利会推进关卡并发通关奖励', () => {
+    useDungeonStore.setState({
+      battle: makeBattle({ rating: 'A' }),
+      currentBattleEarnsRewards: true,
+      dungeonProgress: [makeProgress({ completedStages: 0, bestRating: 'D' })],
+    });
+
+    const result = useDungeonStore.getState().finalizeBattle('dungeon-01', false);
+
+    const state = useDungeonStore.getState();
+    expect(result?.isWon).toBe(true);
+    expect(state.dungeonProgress[0].completedStages).toBe(1);
+    expect(state.dungeonProgress[0].status).toBe('in_progress');
+    expect(state.dungeonProgress[0].bestRating).toBe('A');
+    expect(state.player.exp).toBeGreaterThan(0);
+    expect(state.player.gold).toBeGreaterThan(0);
+    expect(state.lastBattleResult?.expEarned).toBeGreaterThan(0);
+    expect(state.lastBattleResult?.goldEarned).toBeGreaterThan(0);
+  });
+
+  it('重打已通关关卡不发奖励不推进进度，但能提升最好评级', () => {
+    useDungeonStore.setState({
+      player: makePlayer({ exp: 40, gold: 90 }),
+      battle: makeBattle({ rating: 'S', correctCount: 5 }),
+      currentBattleEarnsRewards: false,
+      dungeonProgress: [makeProgress({ completedStages: 1, bestScore: 3, bestRating: 'A' })],
+      _firstClears: { 'dungeon-01': true },
+    });
+
+    useDungeonStore.getState().finalizeBattle('dungeon-01', false);
+
+    const state = useDungeonStore.getState();
+    expect(state.player.exp).toBe(40);
+    expect(state.player.gold).toBe(90);
+    expect(state.dungeonProgress[0].completedStages).toBe(1);
+    expect(state.dungeonProgress[0].bestScore).toBe(5);
+    expect(state.dungeonProgress[0].bestRating).toBe('S');
+    expect(state.lastBattleResult?.expEarned).toBe(0);
+    expect(state.lastBattleResult?.goldEarned).toBe(0);
+  });
+
+  it('重打较差评级不会覆盖已有 SS 最好评级', () => {
+    useDungeonStore.setState({
+      battle: makeBattle({ rating: 'B', correctCount: 2 }),
+      currentBattleEarnsRewards: false,
+      dungeonProgress: [makeProgress({ completedStages: 1, bestScore: 6, bestRating: 'SS' })],
+      _firstClears: { 'dungeon-01': true },
+    });
+
+    useDungeonStore.getState().finalizeBattle('dungeon-01', false);
+
+    const progress = useDungeonStore.getState().dungeonProgress[0];
+    expect(progress.bestScore).toBe(6);
+    expect(progress.bestRating).toBe('SS');
+  });
+
+  it('金币可以购买本周额外奖励次数，金币不足时失败', () => {
+    useDungeonStore.setState({ player: makePlayer({ gold: 119 }) });
+    useDungeonStore.getState().canEarnRewards();
+    expect(useDungeonStore.getState().buyRewardChallenge()).toBe(false);
+
+    useDungeonStore.setState((s) => ({ player: { ...s.player, gold: 120 } }));
+    const before = useDungeonStore.getState().weeklyChallenges;
+    expect(useDungeonStore.getState().buyRewardChallenge()).toBe(true);
+
+    const state = useDungeonStore.getState();
+    expect(state.player.gold).toBe(0);
+    expect(state.weeklyChallenges.limit).toBe(before.limit + 1);
+  });
+});

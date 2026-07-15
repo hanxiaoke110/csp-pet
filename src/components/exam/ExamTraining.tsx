@@ -368,6 +368,7 @@ export default function ExamTraining() {
         codeImage={q.codeImage}
         question={q.question}
         subItems={subItems}
+        questionId={q.id}
         onSubmit={handleMultiPartSubmit}
         onBack={handleMultiPartBack}
       />

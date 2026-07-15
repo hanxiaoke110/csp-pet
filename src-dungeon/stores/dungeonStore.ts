@@ -102,6 +102,7 @@ interface DungeonState {
   setClassCode: (classCode: string) => void;
   addExp: (amount: number) => void;
   addGold: (amount: number) => void;
+  spendGold: (amount: number) => boolean;
   addRankPoints: (amount: number) => void;
   checkRankUp: () => { upgraded: boolean; newTier: number } | null;
   recordAnswer: (correct: boolean) => void;
@@ -129,6 +130,7 @@ interface DungeonState {
   // Weekly challenge limit
   canEarnRewards: () => boolean;
   useChallenge: () => void;
+  buyRewardChallenge: () => boolean;
 
   // Weak points & healing
   addWeakPoint: (kp: string) => void;
@@ -227,6 +229,15 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     player: { ...s.player, gold: s.player.gold + amount }
   })),
 
+  spendGold: (amount) => {
+    const cost = Math.max(0, amount || 0);
+    const { player } = get();
+    if (player.gold < cost) return false;
+    set((s) => ({ player: { ...s.player, gold: s.player.gold - cost } }));
+    get().saveToLocalStorage();
+    return true;
+  },
+
   addRankPoints: (amount) => set((s) => ({
     player: { ...s.player, rankPoints: s.player.rankPoints + amount }
   })),
@@ -295,16 +306,16 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       let clearExp = 0;
       let clearGold = 0;
       if (isBoss) {
-        clearExp = BOSS_CLEAR_EXP * mult;
+        clearExp = earnsRewards ? BOSS_CLEAR_EXP * mult : 0;
         clearGold = earnsRewards ? BOSS_CLEAR_GOLD * mult : 0;
       } else {
-        clearExp = STAGE_CLEAR_EXP * mult;
+        clearExp = earnsRewards ? STAGE_CLEAR_EXP * mult : 0;
         clearGold = earnsRewards ? STAGE_CLEAR_GOLD * mult : 0;
       }
       const schoolReward = applySchoolClearPassive(get().player.school, { exp: clearExp, gold: clearGold });
       clearExp = schoolReward.exp;
       clearGold = schoolReward.gold;
-      get().addExp(clearExp);
+      if (clearExp > 0) get().addExp(clearExp);
       if (clearGold > 0) get().addGold(clearGold);
       snapshot.expEarned += clearExp;
       snapshot.goldEarned += clearGold;
@@ -321,13 +332,18 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         if (!dp) return {};
         const newProgress = progress.map(p => {
           if (p.dungeonId !== dungeonId) return p;
+          const ratingOrder: Record<string, number> = { 'SS': 5, 'S': 4, 'A': 3, 'B': 2, 'C': 1, 'D': 0 };
+          const bestRating = (ratingOrder[battle.rating] || 0) > (ratingOrder[p.bestRating] || 0)
+            ? battle.rating
+            : p.bestRating;
           if (isBoss) {
-            return { ...p, bossDefeated: true, bestScore: Math.max(p.bestScore, battle.correctCount), bestRating: battle.rating };
+            return { ...p, bossDefeated: true, bestScore: Math.max(p.bestScore, battle.correctCount), bestRating };
           }
-          const newCompleted = Math.min(p.completedStages + 1, p.totalStages);
+          const stageIndex = Math.max(0, Number((battle.stageId.match(/stage-0(\d)$/) || [])[1] || p.completedStages + 1) - 1);
+          const newCompleted = Math.min(Math.max(p.completedStages, stageIndex + 1), p.totalStages);
           const allStagesDone = newCompleted >= p.totalStages;
           const status: DungeonProgress['status'] = allStagesDone ? 'cleared' : 'in_progress';
-          return { ...p, completedStages: newCompleted, status };
+          return { ...p, completedStages: newCompleted, status, bestScore: Math.max(p.bestScore, battle.correctCount), bestRating };
         });
         return { dungeonProgress: newProgress };
       });
@@ -345,21 +361,23 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     if (battle.isWon) {
       const s0 = get();
       import('../utils/api').then(({ reportBattle, syncProgress }) => {
-        reportBattle({
-          dungeon_id: dungeonId,
-          stage_id: stageIdForReport,
-          is_win: true,
-          rating: battle.rating,
-          questions_answered: totalAnswered,
-          correct_count: battle.correctCount,
-          // 同步客户端权威字段到服务端（供跨设备登录恢复）
-          player_level: s0.player.playerLevel,
-          exp: s0.player.exp,
-          rank_tier: s0.player.rankTier,
-          rank_points: s0.player.rankPoints,
-          current_streak: s0.player.currentStreak,
-          max_streak: s0.player.maxStreak,
-        }).catch(() => {});
+        if (s0.currentBattleEarnsRewards) {
+          reportBattle({
+            dungeon_id: dungeonId,
+            stage_id: stageIdForReport,
+            is_win: true,
+            rating: battle.rating,
+            questions_answered: totalAnswered,
+            correct_count: battle.correctCount,
+            // 同步客户端权威字段到服务端（供跨设备登录恢复）
+            player_level: s0.player.playerLevel,
+            exp: s0.player.exp,
+            rank_tier: s0.player.rankTier,
+            rank_points: s0.player.rankPoints,
+            current_streak: s0.player.currentStreak,
+            max_streak: s0.player.maxStreak,
+          }).catch(() => {});
+        }
         const s = get();
         // 仅同步本场副本的进度（report-battle 已在服务端推进通关状态，这里只补 best_score/best_rating）
         const changedDp = s.dungeonProgress.find(dp => dp.dungeonId === dungeonId);
@@ -488,6 +506,24 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         used: st.weeklyChallenges.used + 1,
       },
     }));
+  },
+
+  buyRewardChallenge: () => {
+    const cost = 120;
+    const state = get();
+    const currentWeekStart = getWeekStart();
+    if (state.weeklyChallenges.resetAt !== currentWeekStart) {
+      set({ weeklyChallenges: { used: 0, limit: 5, resetAt: currentWeekStart } });
+    }
+    if (!get().spendGold(cost)) return false;
+    set((s) => ({
+      weeklyChallenges: {
+        ...s.weeklyChallenges,
+        limit: s.weeklyChallenges.limit + 1,
+      },
+    }));
+    get().saveToLocalStorage();
+    return true;
   },
 
   bumpSchoolPassiveDaily: () => {

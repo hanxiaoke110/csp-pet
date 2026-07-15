@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { loadKnowledgePointData, getPrimaryKnowledgePoint } from '../../utils/knowledgePointHelp';
+import { openUrl } from '@tauri-apps/plugin-opener';
+import { loadKnowledgePointData, getPrimaryKnowledgePoint, getPrimaryKnowledgeLectures } from '../../utils/knowledgePointHelp';
 
 interface KnowledgePointHelpProps {
   /** 题目 ID，对应 question-knowledge-mapping.json 中的 key */
@@ -20,6 +21,7 @@ interface KnowledgePointHelpProps {
 export default function KnowledgePointHelp({ questionId, isCorrect }: KnowledgePointHelpProps) {
   const [loaded, setLoaded] = useState(false);
   const kp = loaded ? getPrimaryKnowledgePoint(questionId) : null;
+  const lectures = loaded ? getPrimaryKnowledgeLectures(questionId) : [];
 
   useEffect(() => {
     let cancelled = false;
@@ -32,21 +34,21 @@ export default function KnowledgePointHelp({ questionId, isCorrect }: KnowledgeP
   // 数据未加载或题目未映射 → 不显示
   if (!loaded || !kp) return null;
 
-  // 知识卡 URL 为空 → 不显示（飞书文档尚未创建）
   const cardUrl = kp.feishuCardUrl;
-  if (!cardUrl) {
-    // 知识卡 URL 未填入，只显示知识点名称提示
-    return null;
-  }
+  const primaryLecture = lectures[0] || null;
+  const lectureUrl = primaryLecture?.feishuUrl || kp.feishuLectureUrl;
+  if (!cardUrl && !lectureUrl) return null;
 
-  const handleOpen = () => {
+  const openLearningUrl = async (url: string) => {
+    if (!url) return;
     try {
-      // 在 Tauri WebView 中，飞书链接用浏览器默认行为打开
-      // @tauri-apps/plugin-shell 的 open 可打开外部链接
-      window.open(cardUrl, '_blank', 'noopener,noreferrer');
+      if (/^https?:\/\//.test(url)) {
+        await openUrl(url);
+        return;
+      }
+      window.open(url, '_blank', 'noopener,noreferrer');
     } catch {
-      // 兜底
-      window.open(cardUrl, '_blank');
+      window.open(url, '_blank');
     }
   };
 
@@ -61,7 +63,7 @@ export default function KnowledgePointHelp({ questionId, isCorrect }: KnowledgeP
       }}>
         💡 想巩固一下？
         <span
-          onClick={handleOpen}
+          onClick={() => openLearningUrl(cardUrl || lectureUrl)}
           style={{
             color: '#f59e0b',
             cursor: 'pointer',
@@ -72,6 +74,20 @@ export default function KnowledgePointHelp({ questionId, isCorrect }: KnowledgeP
         >
           看「{kp.name}」知识卡
         </span>
+        {lectureUrl && (
+          <span
+            onClick={() => openLearningUrl(lectureUrl)}
+            style={{
+              color: '#0f766e',
+              cursor: 'pointer',
+              marginLeft: 10,
+              textDecoration: 'underline',
+              fontWeight: 500,
+            }}
+          >
+            详细讲解
+          </span>
+        )}
       </div>
     );
   }
@@ -81,9 +97,9 @@ export default function KnowledgePointHelp({ questionId, isCorrect }: KnowledgeP
     <div style={{
       marginTop: 14,
       padding: '12px 16px',
-      background: 'linear-gradient(135deg, #fffbeb, #fef3c7)',
+      background: '#fff7ed',
       borderRadius: 10,
-      border: '1px solid #fcd34d',
+      border: '1px solid #fed7aa',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -95,24 +111,50 @@ export default function KnowledgePointHelp({ questionId, isCorrect }: KnowledgeP
         {' '}先花 1 分钟看看
         <span style={{ fontWeight: 700, color: '#d97706' }}>「{kp.name}」</span>
         知识卡，快速搞懂核心概念。
+        {primaryLecture && (
+          <span style={{ display: 'block', color: '#64748b', marginTop: 2 }}>
+            还想系统学，就继续看「{primaryLecture.title.replace(/^专题详解｜/, '')}」。
+          </span>
+        )}
       </div>
-      <button
-        onClick={handleOpen}
-        style={{
-          padding: '6px 16px',
-          background: '#f59e0b',
-          color: '#fff',
-          border: 'none',
-          borderRadius: 8,
-          fontSize: 13,
-          fontWeight: 700,
-          cursor: 'pointer',
-          whiteSpace: 'nowrap',
-          flexShrink: 0,
-        }}
-      >
-        📖 打开知识卡
-      </button>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {cardUrl && (
+          <button
+            onClick={() => openLearningUrl(cardUrl)}
+            style={{
+              padding: '6px 14px',
+              background: '#f59e0b',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            打开知识卡
+          </button>
+        )}
+        {lectureUrl && (
+          <button
+            onClick={() => openLearningUrl(lectureUrl)}
+            style={{
+              padding: '6px 14px',
+              background: '#fff',
+              color: '#0f766e',
+              border: '1px solid #99f6e4',
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            详细讲解
+          </button>
+        )}
+      </div>
     </div>
   );
 }
