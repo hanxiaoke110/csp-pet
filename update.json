@@ -3,8 +3,17 @@
   "notes": "Release v1.7.8 - 详见 Gitee Releases",
   "pub_date": "2026-07-15T11:17:42Z",
   "platforms": {
-    "darwin-aarch64":  { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzJueS9lR1IwVzlLSlllTXpocTV6UDg2Y2RaVXI3L2hPWFhrVndxZDlTdkYvcUFyYXNOdnNoRzIvT29RYU5RZ2xOZXRBa25IME5VeDJFQlNKU2tySlFnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTE0MjU3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuOF9hYXJjaDY0LmRtZwp6eW12MkZBaEdOZytmcEU4UmhHUU9VVDZZZzJVYklsNHFiU29rRXNOUmtFNXRueGROU2hPaGV0V1AxNU1KcWVjL0M5L3VubnJveEwxTHp2NzFoUDJCZz09Cg==",   "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.8/CSP._1.7.8_aarch64.dmg"   },
-    "darwin-x86_64":   { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzZMU3ZzNEV1a2VqSnIxaXY4OUJLVHBCQlRKUkxJd21LWEZlVmpzVnIzYnJ3b0R3MGRRSFFTMlRmNWdkN0hJTlE4OFI1SGh1bWRoRElDdXB2TFBXa3cwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTE0MjU4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuOF94NjQuZG1nCmNRQzJHVmFGTU9mNmorUlRtZGRaQTRjc2RKYWc2VmhtOFpzcUFYV3VJM1kzM2xvZFFnOGg4K1gvK3lNeHJJcFVnZVpFVmRqb05HaTl5eGUwZEJqdEJRPT0K", "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.8/CSP._1.7.8_x64.dmg" },
-    "windows-x86_64":  { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzBnb0paNytiZ0xKSlVJb0hSeGZhNWFVd29HT2orU3MzT08wdGwrUUFpS2g1TUxIREpBa3Y5YVdJRVNmNUdpZXl0US9NUnhTbXFsbzZsZ2lCNktxbXc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTE0MjYwCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuOF94NjQtc2V0dXAuZXhlCnJaVDBmV0pSaTJqOEVBanlCVU1kRkhFbnVXaHBncmxqT2dHS3V0bWpkUVpyQ3dWWGFOU0YwVFY3ZnBucWl6ZkxZVzYxalg1UE4zZDdIZk1uYkZidEJ3PT0K",       "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.8/CSP._1.7.8_x64-setup.exe"       }
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzJueS9lR1IwVzlLSlllTXpocTV6UDg2Y2RaVXI3L2hPWFhrVndxZDlTdkYvcUFyYXNOdnNoRzIvT29RYU5RZ2xOZXRBa25IME5VeDJFQlNKU2tySlFnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTE0MjU3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuOF9hYXJjaDY0LmRtZwp6eW12MkZBaEdOZytmcEU4UmhHUU9VVDZZZzJVYklsNHFiU29rRXNOUmtFNXRueGROU2hPaGV0V1AxNU1KcWVjL0M5L3VubnJveEwxTHp2NzFoUDJCZz09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.8/CSP._1.7.8_aarch64.dmg"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzZMU3ZzNEV1a2VqSnIxaXY4OUJLVHBCQlRKUkxJd21LWEZlVmpzVnIzYnJ3b0R3MGRRSFFTMlRmNWdkN0hJTlE4OFI1SGh1bWRoRElDdXB2TFBXa3cwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTE0MjU4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuOF94NjQuZG1nCmNRQzJHVmFGTU9mNmorUlRtZGRaQTRjc2RKYWc2VmhtOFpzcUFYV3VJM1kzM2xvZFFnOGg4K1gvK3lNeHJJcFVnZVpFVmRqb05HaTl5eGUwZEJqdEJRPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.8/CSP._1.7.8_x64.dmg"
+    },
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzBnb0paNytiZ0xKSlVJb0hSeGZhNWFVd29HT2orU3MzT08wdGwrUUFpS2g1TUxIREpBa3Y5YVdJRVNmNUdpZXl0US9NUnhTbXFsbzZsZ2lCNktxbXc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTE0MjYwCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuOF94NjQtc2V0dXAuZXhlCnJaVDBmV0pSaTJqOEVBanlCVU1kRkhFbnVXaHBncmxqT2dHS3V0bWpkUVpyQ3dWWGFOU0YwVFY3ZnBucWl6ZkxZVzYxalg1UE4zZDdIZk1uYkZidEJ3PT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.8/CSP._1.7.8_x64-setup.exe"
+    }
   }
 }
