@@ -247,7 +247,6 @@ export default function BattleScreen() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<BattlePhaserGame | null>(null);
-  const answerTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 题目弹窗状态
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -255,6 +254,7 @@ export default function BattleScreen() {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [pendingAnswer, setPendingAnswer] = useState<{ skillId: string; isCorrect: boolean } | null>(null);
   const [activeFable, setActiveFable] = useState<typeof fables[0] | null>(null);
 
   // 累计战斗数据（用于最终结算）
@@ -370,10 +370,6 @@ export default function BattleScreen() {
 
     return () => {
       cancelled = true;
-      if (answerTimeoutRef.current) {
-        clearTimeout(answerTimeoutRef.current);
-        answerTimeoutRef.current = null;
-      }
       if (gameRef.current) {
         gameRef.current.destroy();
         gameRef.current = null;
@@ -423,6 +419,7 @@ export default function BattleScreen() {
         setSelectedOption(null);
         setSubmitted(false);
         setIsCorrect(null);
+        setPendingAnswer(null);
         break;
       }
 
@@ -488,18 +485,20 @@ export default function BattleScreen() {
       if (matched) setActiveFable(matched);
     }
 
-    // 传给 Phaser 播放动画
-    answerTimeoutRef.current = setTimeout(() => {
-      if (!gameRef.current) return;
-      gameRef.current.setAnswerResult({ skillId: selectedSkillId!, isCorrect: correct });
-      setCurrentQuestion(null);
-      setSelectedSkillId(null);
-      setSelectedOption(null);
-      setSubmitted(false);
-      setIsCorrect(null);
-      answerTimeoutRef.current = null;
-    }, 400);
+    // 等学生读完解析后手动继续，再传给 Phaser 播放技能/伤害动画。
+    setPendingAnswer({ skillId: selectedSkillId, isCorrect: correct });
   }, [currentQuestion, selectedSkillId, submitted, store]);
+
+  const continueAfterAnswer = useCallback(() => {
+    if (!pendingAnswer) return;
+    gameRef.current?.setAnswerResult(pendingAnswer);
+    setCurrentQuestion(null);
+    setSelectedSkillId(null);
+    setSelectedOption(null);
+    setSubmitted(false);
+    setIsCorrect(null);
+    setPendingAnswer(null);
+  }, [pendingAnswer]);
 
   const handleBattleEnd = useCallback((result: BattleEndResult) => {
     const totalAnswered = statsRef.current.correctCount + statsRef.current.wrongCount;
@@ -634,7 +633,24 @@ export default function BattleScreen() {
 
             {submitted && (
               <div className={`battle-answer-feedback ${isCorrect ? 'correct' : 'wrong'}`}>
-                {isCorrect ? '✅ 回答正确！技能完美释放' : '❌ 回答错误，技能施法失败'}
+                <div>{isCorrect ? '✅ 回答正确！技能完美释放' : '❌ 回答错误，技能施法失败'}</div>
+                {selectedOption !== null && currentQuestion.correctIndex !== undefined && (
+                  <div className="battle-answer-detail">
+                    正确答案：{String.fromCharCode(65 + currentQuestion.correctIndex)}
+                    {selectedOption !== currentQuestion.correctIndex
+                      ? `；你的选择：${String.fromCharCode(65 + selectedOption)}`
+                      : ''}
+                  </div>
+                )}
+                {currentQuestion.explanation ? (
+                  <div className="battle-answer-explanation">
+                    {currentQuestion.explanation}
+                  </div>
+                ) : (
+                  <div className="battle-answer-explanation muted">
+                    这道题暂时没有详细解析，可以先看正确答案，再继续战斗。
+                  </div>
+                )}
                 {!isCorrect && currentQuestion && (
                   <div style={{ marginTop: 8, fontSize: 13 }}>
                     🤔 没懂？
@@ -648,6 +664,9 @@ export default function BattleScreen() {
                     </a>
                   </div>
                 )}
+                <button className="pixel-btn battle-continue-btn" onClick={continueAfterAnswer}>
+                  继续战斗
+                </button>
               </div>
             )}
           </div>

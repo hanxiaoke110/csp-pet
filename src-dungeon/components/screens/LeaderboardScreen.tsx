@@ -56,7 +56,7 @@ export default function LeaderboardScreen() {
     { key: 'power', label: '战力榜', icon: '🏆' },
     { key: 'streak', label: '连击榜', icon: '⚡' },
     { key: 'progress', label: '通关榜', icon: '🗺️' },
-    { key: 'badge', label: '成就榜', icon: '🏅' },
+    { key: 'warrior', label: '勇者榜', icon: '🔥' },
     { key: 'wins', label: '近30天胜场', icon: '⚔️' },
     { key: 'ss_count', label: 'SS副本', icon: '🛡️' },
   ];
@@ -67,7 +67,6 @@ export default function LeaderboardScreen() {
       case 'power': return `${entry.value || 0} 分`;
       case 'streak': return `${entry.value || 0} 连击`;
       case 'progress': return `${entry.value || 0} 副本`;
-      case 'badge': return `${entry.value || 0} 枚`;
       case 'wins': return `${entry.value || 0} 胜`;
       case 'ss_count': return `${entry.value || 0} 个`;
       case 'conquest': return `${entry.value || 0} 分`;
