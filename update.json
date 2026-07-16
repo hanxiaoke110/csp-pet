@@ -1,19 +1,19 @@
 {
-  "version": "1.7.9",
-  "notes": "智子试炼场：排行榜移除低价值成就榜，改为勇者榜；战斗答题后保留正确答案和解析，由学生点击继续战斗。",
-  "pub_date": "2026-07-15T12:09:11.181Z",
+  "version": "1.7.10",
+  "notes": "修复题后知识点救援精准跳转；修复 GESP 代码题重复显示原题截图；学习资料总导航改为打开总导航文档；补齐试炼场代码题文本代码。",
+  "pub_date": "2026-07-16T05:32:36.647Z",
   "platforms": {
     "darwin-aarch64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.9/CSP._1.7.9_aarch64.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.10/CSP._1.7.10_aarch64.dmg"
     },
     "darwin-x86_64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.9/CSP._1.7.9_x64.dmg"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.10/CSP._1.7.10_x64.dmg"
     },
     "windows-x86_64": {
       "signature": "",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.9/CSP._1.7.9_x64-setup.exe"
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.10/CSP._1.7.10_x64-setup.exe"
     }
   }
 }
