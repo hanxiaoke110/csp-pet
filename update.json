@@ -1,18 +1,18 @@
 {
   "version": "1.7.10",
   "notes": "修复题后知识点救援精准跳转；修复 GESP 代码题重复显示原题截图；学习资料总导航改为打开总导航文档；补齐试炼场代码题文本代码。",
-  "pub_date": "2026-07-16T05:32:36.647Z",
+  "pub_date": "2026-07-16T05:41:30.905Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzAzZGlQTWE1QlNDOFRoOEdKOXA5YkRGRlEyNk04Tkd2R0ZRYXBhRStxVUFaWm9wejZoUUs4MElaMWtuTUJVZ0RnMnMwd2JROENDWktFVHNmeWhzS3dBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTc5NzAzCWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuMTBfYWFyY2g2NC5kbWcKZml5Z1J6RVY0cGx5UHkraEUwY3RTVjh3WlVNRXBubUVqUHFlWFZuR3Z3N01mRkh2WHF6eWM0Y3BJUnZZc3h6bmNjTlE3aXpybXh6VFlIem5CNDlTQ2c9PQo=",
       "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.10/CSP._1.7.10_aarch64.dmg"
     },
     "darwin-x86_64": {
-      "signature": "",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3l5dCtuUnlPNXFPTXV3YnhQajQ5d05sRGJRKzZxOE1qS3JoSm4xb0ZseHZ0Zng4TmlFNTc4cmJrNUJ2TnROVExERkQwRzRNeW1LSjFTbThveHdRU0FRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTc5NzA1CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuMTBfeDY0LmRtZwpncDVid21nZ1hpZ1pKMWZSL3krZ0wwNmZTbTZUMzZaY0MzSDdGMHltQnpEdW9RaDV3Z2ZueEE4WlVZQ01adUMxZEJSZmZSY2d5ZytPQkhBQStrTjJEUT09Cg==",
       "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.10/CSP._1.7.10_x64.dmg"
     },
     "windows-x86_64": {
-      "signature": "",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3l0Y0FIeGhBZmY4cjhudTZxSGJQdkFEVGcrTXJhR1pDTExidFFBR2YzWHlDb09YL0RDcU5xV0lzb1dzMXFpYWtLeE1DMlBybmY0Rmg2akxoNW8wQUFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0MTc5NzA2CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuMTBfeDY0LXNldHVwLmV4ZQozQXZySi9mc09YR3hleHZ3Ky9yTkp0UCtTVnZveWY5ekdSeENBcFRTekFoYjJxeDk2SWlJWEVySEM3NlhIWWRLK3ZCd21LditROVZCTTZoV3ZHLzdDUT09Cg==",
       "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.10/CSP._1.7.10_x64-setup.exe"
     }
   }
