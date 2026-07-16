@@ -46,6 +46,13 @@ function QuestionImage({ src }: { src?: string | null }) {
   );
 }
 
+function shouldShowQuestionImage(q: ChoiceQuestion): boolean {
+  const src = q.image || q.codeImage;
+  if (!src) return false;
+  const isExtractedCodeScreenshot = /\/gesp-code-images\//.test(src);
+  return !isExtractedCodeScreenshot || !q.code;
+}
+
 export default function ExamChoice({ question: q, questionNum, onAnswer, onNext, onBack }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -71,7 +78,7 @@ export default function ExamChoice({ question: q, questionNum, onAnswer, onNext,
         {q.code && (
           <pre className="code-block"><code>{q.code}</code></pre>
         )}
-        <QuestionImage src={q.image || q.codeImage} />
+        {shouldShowQuestionImage(q) && <QuestionImage src={q.image || q.codeImage} />}
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderCodeText(q.question)} />
 
         <div className="quiz-options">

@@ -1,27 +1,27 @@
 {
   "_note": "题目 → 知识点映射。每题 1 个 primary，客户端题后按钮据此显示'没懂？看XX知识卡'。secondary 后续补充。_method 和 _needsReview 为生成时标注，发布前可删除。",
   "version": 1,
-  "updated": "2026-07-10",
+  "updated": "2026-07-16",
   "mappings": {
     "csp-j-2019-015": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "computer-history",
+      "_method": "inferred-override"
     },
     "csp-j-2020-002": {
-      "primary": "combinatorics",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "csp-j-2020-013": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-001": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "csp-j-2023-001": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "csp-j-2023-007": {
       "primary": "complexity",
@@ -33,19 +33,19 @@
     },
     "csp-j-2019-002": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2020-009": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2021-007": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-013": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "combinatorics",
+      "_method": "inferred-override"
     },
     "csp-j-2022-002": {
       "primary": "binary-and-bitwise",
@@ -56,20 +56,20 @@
       "_method": "existing-kp"
     },
     "csp-j-2019-003": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "csp-j-2021-003": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2023-013": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "csp-j-2019-004": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-003": {
       "primary": "data-types-and-units",
@@ -77,83 +77,83 @@
     },
     "csp-j-2023-003": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2019-005": {
       "primary": "binary-search",
       "_method": "existing-kp"
     },
     "csp-j-2023-004": {
-      "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "csp-j-2019-007": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2020-014": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2019-008": {
-      "primary": "tree",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "csp-j-2019-014": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2020-012": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2021-008": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-008": {
-      "primary": "tree",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "csp-j-2023-005": {
-      "primary": "tree",
-      "_method": "existing-kp"
+      "primary": "combinatorics",
+      "_method": "inferred-override"
     },
     "csp-j-2023-011": {
-      "primary": "tree",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "csp-j-2019-009": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2019-010": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2019-011": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "combinatorics",
+      "_method": "inferred-override"
     },
     "csp-j-2021-015": {
-      "primary": "complexity",
-      "_method": "existing-kp"
+      "primary": "combinatorics",
+      "_method": "inferred-override"
     },
     "csp-j-2019-012": {
-      "primary": "number-theory",
-      "_method": "existing-kp"
+      "primary": "combinatorics",
+      "_method": "inferred-override"
     },
     "csp-j-2019-013": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "csp-j-2020-003": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "csp-j-2021-009": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "csp-j-2022-006": {
       "primary": "data-types-and-units",
@@ -164,8 +164,8 @@
       "_method": "existing-kp"
     },
     "csp-j-2020-006": {
-      "primary": "complexity",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "csp-j-2021-004": {
       "primary": "binary-search",
@@ -173,47 +173,47 @@
     },
     "csp-j-2021-013": {
       "primary": "recursion",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-012": {
       "primary": "binary-search",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-015": {
       "primary": "recursion",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2020-008": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2021-006": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2021-014": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-009": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2023-012": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2020-010": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2020-015": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2021-010": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-014": {
       "primary": "array-and-string",
@@ -225,31 +225,31 @@
     },
     "csp-j-2023-014": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2021-005": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-005": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2021-011": {
-      "primary": "tree",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "csp-j-2022-007": {
-      "primary": "tree",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "csp-j-2023-010": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2022-004": {
-      "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "csp-j-2022-011": {
       "primary": "stack-and-queue",
@@ -257,11 +257,11 @@
     },
     "csp-j-2022-010": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-001": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "csp-j-2024-002": {
       "primary": "binary-and-bitwise",
@@ -273,27 +273,27 @@
     },
     "csp-j-2024-004": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-005": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-006": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "csp-j-2024-007": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "csp-j-2024-008": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "csp-j-2024-009": {
       "primary": "binary-search",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-010": {
       "primary": "computer-networks",
@@ -301,87 +301,87 @@
     },
     "csp-j-2024-011": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-012": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-013": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-014": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "csp-j-2024-015": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-2-01": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2023-03-2-02": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-2-03": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-2-04": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-2-05": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-2-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-2-07": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-2-08": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-2-09": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-2-10": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-2-11": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-2-12": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-2-13": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-2-14": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-2-15": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-1-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-1-02": {
       "primary": "computer-networks",
@@ -389,27 +389,27 @@
     },
     "gesp-2023-06-1-03": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-1-04": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-1-05": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-1-06": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-1-07": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-1-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-1-09": {
       "primary": "data-types-and-units",
@@ -417,343 +417,343 @@
     },
     "gesp-2023-06-1-10": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-1-11": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-1-12": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-1-13": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-1-14": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-1-15": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-02": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-03": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-2-04": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-05": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-07": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-2-08": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2023-06-2-09": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-10": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-11": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-2-12": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-06-2-13": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-14": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-06-2-15": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-01": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2023-09-1-02": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-04": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-05": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-09-1-06": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-09-1-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-09": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-13": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-1-15": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "computer-history",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-02": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "program-reading",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-03": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-04": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-05": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-09-2-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-09": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-11": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-12": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-09-2-15": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "program-reading",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-02": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-03": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-1-04": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-05": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-07": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-1-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-09": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-10": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-03-1-11": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2023-03-1-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-13": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-03-1-15": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-02": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-03": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-12-1-04": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-05": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-06": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-09": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-14": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-1-15": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "computer-history",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-02": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-03": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-05": {
       "primary": "computer-networks",
@@ -761,27 +761,27 @@
     },
     "gesp-2023-12-2-06": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-12-2-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-08": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-12-2-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-12": {
       "primary": "data-types-and-units",
@@ -789,55 +789,55 @@
     },
     "gesp-2023-12-2-13": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-12-2-14": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-2-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-02": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-1-03": {
-      "primary": "array-and-string",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-04": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-1-05": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-09": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-11": {
       "primary": "data-types-and-units",
@@ -845,195 +845,195 @@
     },
     "gesp-2024-03-1-12": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-1-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-1-14": {
       "primary": "computer-networks",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-1-15": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "computer-history",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-01": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-2-02": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-07": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-2-08": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-2-09": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-2-10": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-2-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-13": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2024-03-2-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-2-15": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-1-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-02": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-03": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-1-04": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-05": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-1-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-11": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-12": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-14": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-1-15": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "computer-history",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-02": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-04": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-2-05": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-06": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "greedy",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-11": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-2-12": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-2-13": {
-      "primary": "array-and-string",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-14": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-2-15": {
       "primary": "computer-networks",
@@ -1044,60 +1044,60 @@
       "_method": "existing-kp"
     },
     "gesp-2024-09-1-02": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "encoding-and-decoding",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-03": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-1-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-05": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-1-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-07": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-11": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-13": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-1-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-2-01": {
       "primary": "computer-networks",
@@ -1105,7 +1105,7 @@
     },
     "gesp-2024-09-2-02": {
       "primary": "computer-networks",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-2-03": {
       "primary": "data-types-and-units",
@@ -1113,279 +1113,279 @@
     },
     "gesp-2024-09-2-04": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-2-05": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-2-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-2-07": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2024-09-2-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-2-09": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-2-10": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-2-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-2-12": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-2-13": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-2-14": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-2-15": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-1-01": {
       "primary": "computer-networks",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-1-02": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2024-12-1-03": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-1-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-1-05": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-1-06": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-1-07": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2024-12-1-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-1-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-1-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-1-11": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-1-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-1-13": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2024-12-1-14": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-1-15": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-01": {
       "primary": "computer-networks",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-2-02": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-03": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-2-04": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-05": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-08": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-2-09": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2024-12-2-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-11": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "combinatorics",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-2-13": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-2-14": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2024-12-2-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-01": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2025-03-1-02": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-04": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-05": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-1-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-07": {
-      "primary": "array-and-string",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-12": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-1-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-1-14": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-1-15": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-01": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2025-03-2-02": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-03": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-2-04": {
-      "primary": "combinatorics",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-05": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-06": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-09": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-2-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-11": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "combinatorics",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-2-12": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-2-13": {
       "primary": "control-structures",
@@ -1396,556 +1396,556 @@
       "_method": "existing-kp"
     },
     "gesp-2025-03-2-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-02": {
       "primary": "programming-languages",
       "_method": "existing-kp"
     },
     "gesp-2025-06-1-03": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-06": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-1-07": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2025-06-1-08": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-09": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-11": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-12": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-13": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-1-14": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-1-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "control-structures",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-02": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2025-06-2-03": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-04": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2025-06-2-05": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-06": {
       "primary": "data-types-and-units",
       "_method": "existing-kp"
     },
     "gesp-2025-06-2-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-10": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "program-reading",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-2-12": {
       "primary": "number-theory",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-2-13": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-2-14": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2025-06-2-15": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "super-2024-reading-1": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "super-2024-reading-2": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "super-2024-reading-3": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "super-2024-completion-1": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "super-2024-completion-2": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "super-2023-reading-1": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "super-2023-reading-2": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "super-2023-reading-3": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "super-2022-reading-1": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "super-2022-reading-2": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "super-2022-reading-3": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "super-2021-reading-1": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "super-2021-reading-2": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "super-2021-reading-3": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "super-2021-completion-1": {
-      "primary": "program-reading",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-02": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-12-3-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-12": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-3-14": {
       "primary": null,
       "_needsReview": true
     },
     "gesp-2023-12-3-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "computer-history",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-01": {
       "primary": "recursion",
       "_method": "existing-kp"
     },
     "gesp-2023-12-4-02": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-06": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2023-12-4-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-10": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-13": {
       "primary": null,
       "_needsReview": true
     },
     "gesp-2023-12-4-14": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "computer-history",
+      "_method": "inferred-override"
     },
     "gesp-2023-12-4-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-01": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-3-02": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-3-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-05": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-12": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-3-14": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2024-03-3-15": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "computer-history",
+      "_method": "inferred"
     },
     "gesp-2024-03-4-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-02": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-04": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-05": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-03-4-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-09": {
-      "primary": "binary-search",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-13": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-03-4-14": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2024-03-4-15": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "computer-history",
+      "_method": "inferred"
     },
     "gesp-2024-06-3-01": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "programming-languages",
+      "_method": "inferred"
     },
     "gesp-2024-06-3-02": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-03": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-04": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-05": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-3-06": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "program-reading",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-07": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-3-08": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-09": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-12": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-14": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-3-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-01": {
-      "primary": "program-reading",
+      "primary": "programming-languages",
       "_method": "inferred"
     },
     "gesp-2024-06-4-02": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-03": {
-      "primary": "program-reading",
+      "primary": "programming-languages",
       "_method": "inferred"
     },
     "gesp-2024-06-4-04": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-08": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-search",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-09": {
       "primary": "recursion",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-4-10": {
       "primary": "binary-search",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-4-11": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-06-4-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-06-4-14": {
       "primary": null,
       "_needsReview": true
     },
     "gesp-2024-06-4-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-3-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-3-02": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-3-03": {
       "primary": "binary-and-bitwise",
@@ -1953,19 +1953,19 @@
     },
     "gesp-2024-09-3-04": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-09-3-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-3-06": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "program-reading",
+      "_method": "inferred"
     },
     "gesp-2024-09-3-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-3-08": {
       "primary": null,
@@ -1976,36 +1976,36 @@
       "_needsReview": true
     },
     "gesp-2024-09-3-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-3-11": {
       "primary": null,
       "_needsReview": true
     },
     "gesp-2024-09-3-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-3-13": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-09-3-14": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "control-structures",
+      "_method": "inferred"
     },
     "gesp-2024-09-3-15": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-01": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-3-02": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-3-03": {
       "primary": "binary-and-bitwise",
@@ -2013,183 +2013,183 @@
     },
     "gesp-2024-12-3-04": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-3-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-06": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-3-07": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-08": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-3-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-10": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-11": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-14": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-3-15": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "combinatorics",
+      "_method": "inferred"
     },
     "gesp-2024-12-4-01": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-4-02": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-07": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-08": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-11": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-4-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2024-12-4-14": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2024-12-4-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-02": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-03": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-3-04": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-3-05": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-06": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-3-07": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-08": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-3-09": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-10": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-14": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-3-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-4-01": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-4-02": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-4-03": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-4-04": {
       "primary": "recursion",
@@ -2197,51 +2197,51 @@
     },
     "gesp-2025-03-4-05": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
-    },
-    "gesp-2025-03-4-06": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
-    },
-    "gesp-2025-03-4-07": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
-    },
-    "gesp-2025-03-4-08": {
-      "primary": "data-types-and-units",
       "_method": "inferred"
     },
+    "gesp-2025-03-4-06": {
+      "primary": "array-and-string",
+      "_method": "inferred-override"
+    },
+    "gesp-2025-03-4-07": {
+      "primary": "array-and-string",
+      "_method": "inferred-override"
+    },
+    "gesp-2025-03-4-08": {
+      "primary": null,
+      "_needsReview": true
+    },
     "gesp-2025-03-4-09": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-4-10": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-4-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-4-12": {
-      "primary": "array-and-string",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-4-13": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-03-4-14": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-03-4-15": {
       "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-3-01": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-3-02": {
       "primary": "binary-and-bitwise",
@@ -2249,11 +2249,11 @@
     },
     "gesp-2025-06-3-03": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-3-04": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-3-05": {
       "primary": "binary-and-bitwise",
@@ -2261,7 +2261,7 @@
     },
     "gesp-2025-06-3-06": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-3-07": {
       "primary": "binary-and-bitwise",
@@ -2269,163 +2269,163 @@
     },
     "gesp-2025-06-3-08": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-3-09": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-3-10": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-3-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-3-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-3-13": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-3-14": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-3-15": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-01": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-02": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-03": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-04": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-05": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-06": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-07": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-4-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "binary-search",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-09": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-4-10": {
       "primary": "recursion",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-06-4-11": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-12": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-13": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-14": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-06-4-15": {
-      "primary": "data-types-and-units",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "csp-j-2021-012": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-1-01": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "graph",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-02": {
-      "primary": "programming-languages",
+      "primary": "data-types-and-units",
       "_method": "inferred"
     },
     "gesp-2026-06-1-03": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-1-04": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-1-05": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-1-06": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-1-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-1-15": {
       "primary": "number-theory",
       "_method": "inferred"
     },
     "gesp-2026-06-2-01": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "graph",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-02": {
       "primary": null,
@@ -2433,139 +2433,139 @@
     },
     "gesp-2026-06-2-03": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-2-04": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-05": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-2-06": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-13": {
-      "primary": "complexity",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-2-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-01": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-02": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-03": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-04": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-05": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-3-06": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-07": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-3-08": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-09": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-10": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-11": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-12": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "program-reading",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-3-13": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-3-14": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-3-15": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-4-01": {
-      "primary": "program-reading",
+      "primary": "programming-languages",
       "_method": "inferred"
     },
     "gesp-2026-06-4-02": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "expression-evaluation",
+      "_method": "inferred"
     },
     "gesp-2026-06-4-03": {
-      "primary": "program-reading",
+      "primary": "programming-languages",
       "_method": "inferred"
     },
     "gesp-2026-06-4-04": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "programming-languages",
+      "_method": "inferred"
     },
     "gesp-2026-06-4-05": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-4-06": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-4-07": {
       "primary": "expression-evaluation",
@@ -2573,19 +2573,19 @@
     },
     "gesp-2026-06-4-08": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-4-09": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-4-10": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-4-11": {
-      "primary": "complexity",
-      "_method": "existing-kp"
+      "primary": "binary-search",
+      "_method": "inferred-override"
     },
     "gesp-2026-06-4-12": {
       "primary": "recursion",
@@ -2593,15 +2593,15 @@
     },
     "gesp-2026-06-4-13": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-4-14": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-06-4-15": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-307": {
       "primary": "data-types-and-units",
@@ -2612,20 +2612,20 @@
       "_method": "existing-kp"
     },
     "noip-2015-p-311": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "binary-and-bitwise",
+      "_method": "inferred"
     },
     "noip-2015-p-312": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "computer-networks",
+      "_method": "inferred"
     },
     "noip-2015-p-313": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-316": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-317": {
       "primary": null,
@@ -2645,11 +2645,11 @@
     },
     "noip-2015-p-321": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-322": {
-      "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "noip-2015-p-323": {
       "primary": "computer-networks",
@@ -2657,15 +2657,15 @@
     },
     "noip-2015-p-324": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-325": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-326": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-327": {
       "primary": null,
@@ -2673,7 +2673,7 @@
     },
     "noip-2015-p-328": {
       "primary": "recursion",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2015-p-329": {
       "primary": null,
@@ -2685,7 +2685,7 @@
     },
     "noip-2016-p-380": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2016-p-382": {
       "primary": null,
@@ -2700,44 +2700,44 @@
       "_method": "existing-kp"
     },
     "noip-2016-p-390": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "noip-2016-p-391": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2016-p-392": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2016-p-393": {
       "primary": null,
       "_needsReview": true
     },
     "noip-2016-p-395": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "array-and-string",
+      "_method": "inferred"
     },
     "noip-2016-p-398": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "noip-2016-p-405": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "noip-2016-p-409": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "noip-2016-p-412": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "noip-2016-p-420": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2016-p-421": {
       "primary": "number-theory",
@@ -2761,19 +2761,19 @@
     },
     "noip-2017-p-451": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2017-p-452": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "noip-2017-p-453": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "stack-and-queue",
+      "_method": "inferred-override"
     },
     "noip-2017-p-454": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "noip-2017-p-455": {
       "primary": null,
@@ -2796,8 +2796,8 @@
       "_needsReview": true
     },
     "noip-2017-p-460": {
-      "primary": "tree",
-      "_method": "existing-kp"
+      "primary": "graph",
+      "_method": "inferred-override"
     },
     "noip-2017-p-461": {
       "primary": null,
@@ -2809,7 +2809,7 @@
     },
     "noip-2017-p-463": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2017-p-464": {
       "primary": null,
@@ -2817,15 +2817,15 @@
     },
     "noip-2017-p-465": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2017-p-466": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2017-p-467": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2017-p-468": {
       "primary": "computer-networks",
@@ -2833,11 +2833,11 @@
     },
     "noip-2017-p-469": {
       "primary": "combinatorics",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2017-p-470": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "computer-history",
+      "_method": "inferred"
     },
     "noip-2018-p-706": {
       "primary": null,
@@ -2860,28 +2860,28 @@
       "_needsReview": true
     },
     "noip-2018-p-711": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "program-reading",
+      "_method": "inferred-override"
     },
     "noip-2018-p-712": {
       "primary": "tree",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2018-p-713": {
-      "primary": "binary-search",
-      "_method": "existing-kp"
+      "primary": "tree",
+      "_method": "inferred-override"
     },
     "noip-2018-p-714": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2018-p-715": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "recursion",
+      "_method": "inferred"
     },
     "noip-2018-p-716": {
       "primary": "graph",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2018-p-717": {
       "primary": null,
@@ -2893,11 +2893,11 @@
     },
     "noip-2018-p-719": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "noip-2018-p-720": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "stack-and-queue",
+      "_method": "inferred"
     },
     "noip-2018-p-721": {
       "primary": null,
@@ -2908,100 +2908,100 @@
       "_method": "existing-kp"
     },
     "gesp-2025-09-1-02": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "control-structures",
+      "_method": "inferred"
     },
     "gesp-2025-09-1-03": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-1-04": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-05": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-1-06": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-11": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-15": {
       "primary": null,
       "_needsReview": true
     },
     "gesp-2025-09-1-16": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-17": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-18": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-19": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-20": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-21": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-22": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-23": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-24": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-1-25": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-01": {
       "primary": "number-theory",
@@ -3009,175 +3009,175 @@
     },
     "gesp-2025-09-2-02": {
       "primary": "computer-networks",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-2-03": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-2-04": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-05": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-06": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "encoding-and-decoding",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-14": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-16": {
       "primary": null,
       "_needsReview": true
     },
     "gesp-2025-09-2-17": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-18": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-19": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-20": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-21": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-22": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-23": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-24": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-2-25": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-01": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-02": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-03": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-04": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-05": {
-      "primary": null,
-      "_needsReview": true
+      "primary": "programming-languages",
+      "_method": "inferred"
     },
     "gesp-2025-09-3-06": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-07": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-10": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-11": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-13": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-15": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-16": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-17": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-18": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-19": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-20": {
       "primary": "programming-languages",
@@ -3185,79 +3185,79 @@
     },
     "gesp-2025-09-3-21": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-3-22": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-23": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-24": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-3-25": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-01": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-02": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-03": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-04": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-05": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-07": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-08": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-09": {
       "primary": "binary-search",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-12": {
-      "primary": "binary-search",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-14": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-15": {
       "primary": null,
@@ -3268,136 +3268,136 @@
       "_method": "existing-kp"
     },
     "gesp-2025-09-4-17": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-18": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-19": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-20": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-21": {
       "primary": "recursion",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-22": {
-      "primary": "binary-search",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-23": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-09-4-24": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-09-4-25": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-1-01": {
       "primary": "program-reading",
       "_method": "inferred"
     },
     "gesp-2025-12-1-02": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-03": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-04": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-05": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-1-06": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-07": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-15": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2025-12-1-16": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-17": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-18": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-19": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-20": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-21": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-22": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-23": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-1-24": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-01": {
       "primary": "program-reading",
@@ -3408,56 +3408,56 @@
       "_method": "inferred"
     },
     "gesp-2025-12-2-03": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-04": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-05": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-06": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-16": {
       "primary": "computer-networks",
@@ -3465,139 +3465,139 @@
     },
     "gesp-2025-12-2-17": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-2-18": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-2-19": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-20": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-21": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-22": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-23": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-24": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-2-25": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-01": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-02": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-03": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-04": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-05": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-06": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-07": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-08": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-10": {
-      "primary": "program-reading",
+      "primary": "binary-and-bitwise",
       "_method": "inferred"
     },
     "gesp-2025-12-3-11": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-12": {
-      "primary": "binary-and-bitwise",
+      "primary": "programming-languages",
       "_method": "inferred"
     },
     "gesp-2025-12-3-13": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-14": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-16": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-17": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-18": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-19": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-20": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-21": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-22": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-23": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-3-24": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-3-25": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-01": {
       "primary": null,
@@ -3609,291 +3609,291 @@
     },
     "gesp-2025-12-4-03": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-4-04": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-05": {
       "primary": "control-structures",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-4-06": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-08": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-10": {
-      "primary": "binary-search",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-14": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-4-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-16": {
-      "primary": "graph",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-17": {
       "primary": "programming-languages",
       "_method": "inferred"
     },
     "gesp-2025-12-4-18": {
-      "primary": "computer-networks",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-19": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-20": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-21": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-22": {
       "primary": "binary-search",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2025-12-4-23": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-24": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2025-12-4-25": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-01": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-1-02": {
       "primary": null,
       "_needsReview": true
     },
     "gesp-2026-03-1-03": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-04": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-1-05": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-06": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-16": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2026-03-1-17": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-18": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-19": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-20": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-21": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-22": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-23": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-24": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-1-25": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-01": {
       "primary": "stack-and-queue",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-2-02": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-03": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-04": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-2-05": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-06": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-07": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "binary-and-bitwise",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-08": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-10": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-13": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-15": {
       "primary": "computer-networks",
       "_method": "existing-kp"
     },
     "gesp-2026-03-2-16": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-17": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-18": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-19": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-20": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-21": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-22": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-23": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-2-24": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-01": {
       "primary": "programming-languages",
@@ -3904,16 +3904,16 @@
       "_needsReview": true
     },
     "gesp-2026-03-3-03": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-04": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-05": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-06": {
       "primary": "binary-and-bitwise",
@@ -3921,51 +3921,51 @@
     },
     "gesp-2026-03-3-07": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-08": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-09": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-10": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-11": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-12": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-13": {
-      "primary": "complexity",
-      "_method": "existing-kp"
+      "primary": "number-theory",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-14": {
-      "primary": "complexity",
-      "_method": "existing-kp"
+      "primary": "expression-evaluation",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-15": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-16": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-17": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-18": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-19": {
       "primary": null,
@@ -3976,88 +3976,88 @@
       "_needsReview": true
     },
     "gesp-2026-03-3-21": {
-      "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-22": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-23": {
-      "primary": "programming-languages",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-3-24": {
       "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-3-25": {
       "primary": "binary-and-bitwise",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-01": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-02": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-03": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-04": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-05": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-06": {
       "primary": "programming-languages",
       "_method": "inferred"
     },
     "gesp-2026-03-4-07": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-08": {
       "primary": "recursion",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-09": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "data-types-and-units",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-10": {
       "primary": "binary-search",
       "_method": "existing-kp"
     },
     "gesp-2026-03-4-11": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-12": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-13": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-14": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-15": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "array-and-string",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-16": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-17": {
       "primary": null,
@@ -4065,35 +4065,35 @@
     },
     "gesp-2026-03-4-18": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-19": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-20": {
-      "primary": "recursion",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-21": {
-      "primary": "expression-evaluation",
-      "_method": "existing-kp"
+      "primary": "programming-languages",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-22": {
       "primary": "array-and-string",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-23": {
       "primary": "programming-languages",
-      "_method": "existing-kp"
+      "_method": "inferred"
     },
     "gesp-2026-03-4-24": {
-      "primary": "binary-search",
-      "_method": "existing-kp"
+      "primary": "complexity",
+      "_method": "inferred-override"
     },
     "gesp-2026-03-4-25": {
-      "primary": "control-structures",
-      "_method": "existing-kp"
+      "primary": "recursion",
+      "_method": "inferred-override"
     }
   }
 }

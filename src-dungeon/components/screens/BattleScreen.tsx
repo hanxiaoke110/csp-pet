@@ -21,6 +21,7 @@ import { loadWebPet } from '../../utils/webPet';
 import { formatCppCode } from '../../utils/codeFormat';
 import { isWorkshopPet, loadWorkshopThumbUrl } from '../../utils/petPreview';
 import FableCard from '../shared/FableCard';
+import KnowledgePointHelp from '../../../src/components/shared/KnowledgePointHelp';
 import fables from '../../data/fables.json';
 import './BattleScreen.css';
 
@@ -652,17 +653,7 @@ export default function BattleScreen() {
                   </div>
                 )}
                 {!isCorrect && currentQuestion && (
-                  <div style={{ marginTop: 8, fontSize: 13 }}>
-                    🤔 没懂？
-                    <a
-                      href="https://scncdgmg7m6w.feishu.cn/docx/GxWbddqOno4LcVxKD7LcqalrnTb"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#f59e0b', fontWeight: 700, marginLeft: 4 }}
-                    >
-                      打开「真题知识点救援」→
-                    </a>
-                  </div>
+                  <KnowledgePointHelp questionId={currentQuestion.id} isCorrect={false} />
                 )}
                 <button className="pixel-btn battle-continue-btn" onClick={continueAfterAnswer}>
                   继续战斗

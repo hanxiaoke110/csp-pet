@@ -40,15 +40,16 @@ for (const item of kpCatalog.items) {
 // ============================================================
 
 const KP_KEYWORD_RULES = [
-  { id: 'binary-and-bitwise', re: /二进制|位运算|补码|原码|反码|异或|按位|移位|bit|AND|OR|XOR|NOT(?=\s|$|，|。)/i },
+  { id: 'binary-and-bitwise', re: /二进制|位运算|补码|原码|反码|异或|按位|移位|bit|\b(AND|OR|XOR|NOT)\b/i },
   { id: 'number-theory', re: /质数|素数|质因数|约数|公约数|公倍数|gcd|lcm|同余|整除|模运算|埃氏筛/i },
-  { id: 'data-types-and-units', re: /int\b|double\b|float\b|long\s+long|char\b|bool\b|unsigned|short\b|字节|存储.*大小|sizeof|取值范围|溢出|类型转换|强制.*转换|ASCII.*码|GB|MB|KB|TB|内存.*大小/i },
+  { id: 'recursion', re: /递归|递推|斐波那契|Fibonacci|fib\b|f\[\s*i\s*\]\s*=\s*f\[\s*i\s*-\s*1\s*\]\s*\+\s*f\[\s*i\s*-\s*2\s*\]|f\(n\s*-\s*1\)|f\(n\s*-\s*2\)|自调用|return.*f\(|回溯|递归.*深度|间接递归|mutual recursion/i },
+  { id: 'array-and-string', re: /数组|一维|二维|下标|a\[\d+\]|strcmp|strlen|strcpy|strcat|字符串.*比较|字符串.*拷贝|字符.*数组|char\s*\*|string\b|s\[|p\s*\+\s*\d+/i },
+  { id: 'data-types-and-units', re: /数据类型|常量.*类型|类型转换|强制.*转换|sizeof|取值范围|溢出|ASCII.*码|字节|存储.*大小|内存.*大小|GB|MB|KB|TB|\b(int|double|float|long\s+long|char|bool|unsigned|short)\b.*(类型|取值|范围|存储|字节)/i },
   { id: 'stack-and-queue', re: /栈|stack|push|pop|top\(|队列|queue|enqueue|dequeue|front\(|rear|FIFO|LIFO|后进先出|先进先出/i },
   { id: 'expression-evaluation', re: /表达式.*值|前缀.*后缀.*中缀|逆波兰|运算符.*优先|a\s*\+\s*b|逻辑表达式|短路求值|&&|\|\||!\s*\(/i },
   { id: 'tree', re: /二叉树|二叉.*树|先序|中序|后序|前序|遍历.*树|叶子.*节点|叶子.*结点|深度.*高度|二叉.*搜索|BST|哈夫曼|堆|heap|完全.*树|满.*树/i },
   { id: 'graph', re: /图.*有向|无向图|邻接矩阵|邻接表|DFS|BFS|拓扑排序|最短路径|连通|度数|度\s/i },
   { id: 'complexity', re: /时间复杂度|空间复杂度|O\(n\)|O\(n\^2\)|O\(n\s*log\s*n\)|O\(log\s*n\)|大O|算法.*复杂度/ },
-  { id: 'recursion', re: /递归|递推|f\(n\s*-\s*1\)|f\(n\s*-\s*2\)|自调用|return.*f\(|回溯|递归.*深度|间接递归|mutual recursion/i },
   { id: 'greedy', re: /贪心|局部最优|找零钱|活动选择|区间调度|最优.*策略/i },
   { id: 'binary-search', re: /二分|binary.search|mid\s*=|left\s*=|right\s*=|排序.*查找|查找.*排序|冒泡|选择.*排序|插入.*排序|快速.*排序|归并/i },
   { id: 'flood-fill', re: /洪水填充|flood.fill|连通块|迷宫|染色/i },
@@ -57,7 +58,6 @@ const KP_KEYWORD_RULES = [
   { id: 'computer-networks', re: /IP\s|域名|DNS|TCP|UDP|HTTP|HTTPS|FTP|SMTP|局域网|广域网|OSI|协议|URL.*组成|网络|Internet|上网/i },
   { id: 'computer-history', re: /计算机.*发展|电子管|晶体管|集成电路|冯.*诺依曼|图灵|ENIAC|第一台|诞生|发明|摩尔定律|发展.*阶段/i },
   { id: 'programming-languages', re: /#include|using\s+namespace|编译|链接|预处理|解释.*语言|面向对象|C\+\+|Python|Java|机器.*语言|汇编|高级语言|低级语言|标识符|关键字|保留字|注释|变量.*定义|变量.*声明|常量|const|#define|cin\s*>>|cout\s*<<|scanf|printf|输入.*输出|文件.*读写|string|struct|结构体|函数.*定义|函数.*声明|void\s+\w+\s*\(/i },
-  { id: 'array-and-string', re: /数组|一维|二维|下标|a\[\d+\]|strcmp|strlen|strcpy|strcat|字符串.*比较|字符串.*拷贝|字符.*数组|s\[/i },
   { id: 'control-structures', re: /if\s*\(|else|switch\s*\(|分支|条件|for\s*\(|while\s*\(|do\s*{|break|continue|循环.*嵌套|循环.*执行|循环.*次数|循环体/i },
   { id: 'combinatorics', re: /排列|组合|C\(\d|P\(\d|阶乘|方案数|概率|互斥|对立|染色|骨牌|走法|路径数|鸽巢|加法原理|乘法原理|抽屉/i },
   { id: 'program-reading', re: /程序.*输出|运行.*结果|以下.*代码.*输出|执行.*后.*输出|程序.*功能|代码.*运行|输出.*是|结果.*是/i },
@@ -83,31 +83,29 @@ for (const q of questions) {
   const oldKp = q.knowledgePoint || '';
   let primary = null;
   let method = '';
+  const textForInference = [
+    q.question,
+    q.code,
+    Array.isArray(q.options) ? q.options.join(' ') : '',
+    q.explanation,
+  ].filter(Boolean).join('\n');
+  const inferred = inferKpId(textForInference);
 
-  // 1. Try direct oldKp → newKp mapping
-  if (oldToNew[oldKp]) {
+  // 1. Strong keyword inference first. Some imported banks use a very broad
+  // old knowledgePoint such as "数据类型与运算" for pointer, string, and
+  // Fibonacci-recursion questions, so trusting oldKp first makes rescue cards
+  // feel random to students.
+  if (inferred) {
+    primary = inferred;
+    method = oldToNew[oldKp] && oldToNew[oldKp] !== inferred ? 'inferred-override' : 'inferred';
+    stats.byInference++;
+  }
+
+  // 2. Fall back to direct oldKp → newKp mapping.
+  if (!primary && oldToNew[oldKp]) {
     primary = oldToNew[oldKp];
     method = 'existing-kp';
     stats.byOldKp++;
-  }
-
-  // 2. If oldKp is "其他" or unmapped, try keyword inference
-  if (!primary || oldKp === '其他') {
-    const inferred = inferKpId(q.question || '');
-    if (inferred) {
-      if (!primary) {
-        primary = inferred;
-        method = 'inferred';
-        stats.byInference++;
-      }
-      // else: already had a primary from oldKp, keep it. But if oldKp was "其他", prefer inferred
-    }
-    if (oldKp === '其他' && inferred && (!primary || primary === oldToNew['其他'])) {
-      primary = inferred;
-      method = 'inferred-override';
-      stats.byInference++;
-      stats.byOldKp--;
-    }
   }
 
   if (primary) {

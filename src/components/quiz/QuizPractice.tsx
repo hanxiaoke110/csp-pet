@@ -94,6 +94,13 @@ function QuizImage({ src }: { src?: string | null }) {
   );
 }
 
+function shouldShowQuizImage(q: QuizQuestion): boolean {
+  const src = q.image || q.codeImage;
+  if (!src) return false;
+  const isExtractedCodeScreenshot = /\/gesp-code-images\//.test(src);
+  return !isExtractedCodeScreenshot || !q.code;
+}
+
 export default function QuizPractice() {
   const [mode, setMode] = useState<Mode | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -787,7 +794,7 @@ export default function QuizPractice() {
 
       <div className="quiz-question-card">
         {q.code && <pre className="code-block"><code>{q.code}</code></pre>}
-        <QuizImage src={q.image || q.codeImage} />
+        {shouldShowQuizImage(q) && <QuizImage src={q.image || q.codeImage} />}
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderText(q.question)} />
 
         <div className="quiz-options">
