@@ -5,8 +5,8 @@ import { usePetStore } from '../../stores/petStore';
 import ExamChoice from './ExamChoice';
 import ExamMultiPart from './ExamMultiPart';
 import { emit } from '@tauri-apps/api/event';
-import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
+import { loadVersionedRemoteJson } from '../../utils/versionedRemoteJson';
 
 interface ExamQuestion {
   id: string;
@@ -28,6 +28,10 @@ interface ExamQuestion {
 
 type View = 'group' | 'type-select' | 'choice-answer' | 'multipart-answer';
 
+interface ExamBankData {
+  questions: ExamQuestion[];
+}
+
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -38,6 +42,27 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const STORAGE_KEY = 'csp_exam_group';
+
+function isExamBankData(data: unknown): data is ExamBankData {
+  return Boolean(
+    data &&
+    typeof data === 'object' &&
+    Array.isArray((data as ExamBankData).questions) &&
+    (data as ExamBankData).questions.length > 0
+  );
+}
+
+async function loadExamBank(): Promise<ExamQuestion[]> {
+  const data = await loadVersionedRemoteJson<ExamBankData>({
+    cacheKey: 'csp_exam_bank_v4',
+    versionKey: 'csp_exam_version',
+    versionFile: 'exam-version.json',
+    dataFile: 'csp-exam-bank.json',
+    bundledUrl: '/course-data/csp-exam-bank.json',
+    validate: isExamBankData,
+  });
+  return data.questions;
+}
 
 export default function ExamTraining() {
   const [bank, setBank] = useState<ExamQuestion[]>([]);
@@ -57,48 +82,15 @@ export default function ExamTraining() {
   // autoCheck=true：进入页面即自动校验班级码（6 小时本地缓存），未通过则显示门禁
   const classAccess = useClassAccess(true);
 
-  // Load bank：localStorage 缓存优先 + 后台检查 Gitee 更新
-  const CACHE_KEY = 'csp_exam_bank_v3';
-  const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
+  // Load bank：版本检查 + 本地缓存 + 内置兜底，避免每次启动拉取大题库
   useEffect(() => {
     let cancelled = false;
-    let hasData = false;
     const load = async () => {
-      // 1. 先读缓存，秒开
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        try { const d = JSON.parse(cached); if (d.questions?.length) { setBank(d.questions); hasData = true; setLoading(false); } } catch {}
-      }
-      // 2. 后台检查远程版本
       try {
-        const verResp = await tauriFetch(`${REMOTE_BASE}/exam-version.json`, { connectTimeout: 10_000 });
-        if (verResp.ok && !cancelled) {
-          const remoteVer = await verResp.json() as { version: number };
-          const localVer = parseInt(localStorage.getItem('csp_exam_version') || '0');
-          if (remoteVer.version > localVer) {
-            const bankResp = await tauriFetch(`${REMOTE_BASE}/csp-exam-bank.json`, { connectTimeout: 15_000 });
-            if (bankResp.ok && !cancelled) {
-              const data = await bankResp.json() as { questions: any[] };
-              if (data.questions?.length) {
-                setBank(data.questions);
-                localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-                localStorage.setItem('csp_exam_version', String(remoteVer.version));
-                hasData = true;
-              }
-            }
-          }
-        }
-      } catch { /* 网络错误，回退到内置题库 */ }
-      // 3. 缓存和远程都不可用时，加载 App 内置题库
-      if (!cancelled && !hasData) {
-        try {
-          const resp = await fetch('/course-data/csp-exam-bank.json');
-          const data = await resp.json();
-          if (data.questions?.length) {
-            setBank(data.questions);
-            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-          }
-        } catch { /* 内置文件也加载失败 */ }
+        const loaded = await loadExamBank();
+        if (!cancelled) setBank(loaded);
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : '题库加载失败');
       }
       if (!cancelled) setLoading(false);
     };
@@ -148,7 +140,14 @@ export default function ExamTraining() {
   if (error) return (
     <div className="oj-training" style={{ textAlign: 'center', paddingTop: 60 }}>
       <p style={{ color: '#ef4444' }}>题库加载失败：{error}</p>
-      <button className="mode-btn" onClick={() => { setError(null); setLoading(true); fetch('/course-data/csp-exam-bank.json').then(r => r.json()).then(d => { setBank(d.questions || []); setLoading(false); }).catch(e => { setError(e.message); setLoading(false); }); }}>重试</button>
+      <button className="mode-btn" onClick={() => {
+        setError(null);
+        setLoading(true);
+        loadExamBank()
+          .then(setBank)
+          .catch(e => setError(e instanceof Error ? e.message : '题库加载失败'))
+          .finally(() => setLoading(false));
+      }}>重试</button>
     </div>
   );
 

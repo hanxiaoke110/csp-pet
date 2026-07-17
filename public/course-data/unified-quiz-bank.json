@@ -4659,7 +4659,7 @@
     "hasImage": false,
     "code": "for(int i=2;i<=8;i+=2) cout<<i;",
     "level": 2,
-    "image": "/course-data/gesp-code-images/gesp-2024-03-2-14.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1613037396033568.pdf",
     "sourcePage": 5,
     "examDate": "2024-03"
@@ -6081,10 +6081,11 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 1,
-    "image": "/course-data/gesp-code-images/gesp-2024-12-1-07.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
     "sourcePage": 2,
-    "examDate": "2024-12"
+    "examDate": "2024-12",
+    "code": "int N, nowDay, afterDays;\ncout << \"今天星期几？\" << endl;\ncin >> nowDay;\ncout << \"求几天后星期几？\" << endl;\ncin >> afterDays;\n\nN = nowDay + afterDays;\n\nif (__________)\n    printf(\"星期天\");\nelse\n    printf(\"星期%d\", N % 7);"
   },
   "gesp-2024-12-1-08": {
     "id": "gesp-2024-12-1-08",
@@ -6167,10 +6168,11 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 1,
-    "image": "/course-data/gesp-code-images/gesp-2024-12-1-11.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1652740757389344.pdf",
     "sourcePage": 3,
-    "examDate": "2024-12"
+    "examDate": "2024-12",
+    "code": "int N;\ncin >> N;\n\nif (__________)\n    cout << \"能被3整除的偶数\" << endl;\nelse\n    cout << \"其他情形\" << endl;\n\ncout << endl;"
   },
   "gesp-2024-12-1-12": {
     "id": "gesp-2024-12-1-12",
@@ -6437,10 +6439,11 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 2,
-    "image": "/course-data/gesp-code-images/gesp-2024-12-2-09.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1650239656165408.pdf",
     "sourcePage": 3,
-    "examDate": "2024-12"
+    "examDate": "2024-12",
+    "code": "int tnt, N;\nprintf(\"请输入正整数：\");\ncin >> N;\ntnt = 0;\nwhile (N != 0) {\n    __________;\n    N /= 10;\n}\ncout << tnt;"
   },
   "gesp-2024-12-2-10": {
     "id": "gesp-2024-12-2-10",
@@ -6540,7 +6543,8 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 2,
-    "examDate": "2024-12"
+    "examDate": "2024-12",
+    "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int height;\n    cin >> height;\n    for (int i = 0; i < height; i++) {\n        for (int j = 0; j < __________; j++) {\n            cout << \" \";\n        }\n        for (int j = 0; j < __________; j++) {\n            cout << \"*\";\n        }\n        cout << endl;\n    }\n    return 0;\n}"
   },
   "gesp-2024-12-2-15": {
     "id": "gesp-2024-12-2-15",
@@ -7081,13 +7085,13 @@
     "knowledgePoint": "函数与递归",
     "question": "判断数字的某位是否为3，横线处应填入（ ）。找到3则____，没找到则____。",
     "options": [
-      "A. continue; j/=10",
-      "B. break; j/=10",
-      "C. break; j=j%10",
-      "D. return; j/=10"
+      "A. continue; j /= 10",
+      "B. break; j /= 10",
+      "C. continue; j %= 10",
+      "D. break; j %= 10"
     ],
     "correctIndex": 1,
-    "explanation": "找到3用break跳出；没找到用j/=10去掉最后一位继续检查。",
+    "explanation": "找到数字3后，说明当前数已经符合条件，应执行 break 跳出 while，避免同一个数重复计数；没找到则执行 j /= 10 去掉个位，继续检查下一位。答案 B。",
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
@@ -7095,7 +7099,8 @@
     "image": "/course-data/gesp-code-images/gesp-2025-03-2-10.png",
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1669256796176416.pdf",
     "sourcePage": 3,
-    "examDate": "2025-03"
+    "examDate": "2025-03",
+    "code": "int i,j;\nint cnt = 0, N;\ncout << \"请输入正整数N：\";\ncin >> N;\nfor (i = 1; (j=i) < N; i++)\n    while (j != 0)\n        if (j % 10 == 3){\n            cnt += 1;\n            __________;\n        }\n        else\n            __________;\ncout << cnt << \" \";"
   },
   "gesp-2025-03-2-11": {
     "id": "gesp-2025-03-2-11",
@@ -7135,7 +7140,8 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 2,
-    "examDate": "2025-03"
+    "examDate": "2025-03",
+    "code": "#include <iostream>\nusing namespace std;\n\nbool isPrime(int x) {\n    if (x < 2) return false;\n    for (int i = 2; i * i <= x; i++) {\n        if (x % i == 0) return false;\n    }\n    return true;\n}\n\nint main() {\n    for (int i = 4; i < 1000; i += 2) {\n        for (int j = 2; j < i; j++) {\n            if (isPrime(j) && isPrime(i - j)) {\n                cout << i << \"=\" << j << \"+\" << i - j << endl;\n                break;\n            }\n        }\n    }\n    return 0;\n}"
   },
   "gesp-2025-03-2-13": {
     "id": "gesp-2025-03-2-13",
@@ -7831,7 +7837,8 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 2,
-    "examDate": "2025-06"
+    "examDate": "2025-06",
+    "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int line_number, now_number;\n    cin >> line_number;\n    now_number = 0;        // L1\n    for (int i = 1; i <= line_number; i++) {  // L2\n        for (int j = 1; j <= i; j++) {\n            cout << now_number;\n            now_number += 1;\n            if (now_number == 10) now_number = 0;  // L3\n        }\n        cout << endl;\n    }\n    return 0;\n}"
   },
   "super-2024-reading-1": {
     "id": "super-2024-reading-1",
@@ -8188,7 +8195,7 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 3,
-    "image": "/course-data/gesp-code-images/gesp-2023-12-3-03.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1584917876047904.pdf",
     "sourcePage": 1,
     "examDate": "2023-12"
@@ -8616,7 +8623,7 @@
     "hasImage": false,
     "code": "int point(int *p) {\n    return *p * *p;\n}\nint main() {\n    int a = 20;\n    int *p = &a;\n    *p = point(p);\n    cout << *p << endl;\n}",
     "level": 4,
-    "image": "/course-data/gesp-code-images/gesp-2023-12-4-07.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1601236293910560.pdf",
     "sourcePage": 2,
     "examDate": "2023-12"
@@ -9268,9 +9275,9 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "{\n    int rc;\n    cout << ++rc << endl;",
+    "code": "#include <iostream>\nusing namespace std;\n\nint rc = 5;\n\nint main() {\n    int rc;\n    cout << ++rc << endl;\n    return 0;\n}",
     "level": 4,
-    "image": "/course-data/gesp-code-images/gesp-2024-03-4-07.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
     "sourcePage": 2,
     "examDate": "2024-03"
@@ -9944,10 +9951,11 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 4,
-    "image": "/course-data/gesp-code-images/gesp-2024-06-4-08.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
     "sourcePage": 4,
-    "examDate": "2024-06"
+    "examDate": "2024-06",
+    "code": "#include <iostream>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    int a[100], n;\n    cin >> n;\n    for (int i = 0; i < n; i++) cin >> a[i];\n    for (int i = 0; i < n - 1; i++) {\n        for (int j = 0; j < n - i - 1; j++) {\n            if (a[j] > a[j + 1]) {\n                __________;\n            }\n        }\n    }\n    for (int i = 0; i < n; i++) cout << a[i] << \" \";\n    return 0;\n}"
   },
   "gesp-2024-06-4-09": {
     "id": "gesp-2024-06-4-09",
@@ -10341,7 +10349,7 @@
     "questionType": "choice",
     "hasImage": false,
     "level": 3,
-    "image": "/course-data/gesp-code-images/gesp-2024-09-3-12.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1644702761746464.pdf",
     "sourcePage": 3,
     "examDate": "2024-09"
@@ -10661,7 +10669,7 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "// A\nint n,m,res,d;\ncin >> n >> m>>d;\nfor(int i = n+1; i <= m; i++){\nint temp = i;\nwhile(temp){\nif(temp % 10 == d) res++;\ntemp /= 10; 8 } 9 }\ncout << res << endl;\nreturn 0;\n// B\nint n,m,res,d;\ncin >> n >> m>>d;\nfor(int i = n; i <= m; i++){\nint temp = i;\nwhile(temp){\nif(temp % 10 = d) res++;\ntemp /= 10; 8 } 9 }\ncout << res << endl;\nreturn 0;\n// C\nint n,m,res=0,d;\ncin >> n >> m>>d;\nfor(int i = n; i <= m; i++){\nint temp = i;\nwhile(temp){\nif(temp % 10 == d) res++;\ntemp /= 10; 8 } 9 }\ncout << res << endl;\nreturn 0;\n// D\nint n,m,res=0,d;\ncin >> n >> m>>d;\nfor(int i = n; i <= m; i++){\nwhile(temp){\nif(temp % 10 == d) res++;\ntemp /= 10; 7 } 8 }\ncout << res << endl;\nreturn 0;",
+    "code": "// 程序A\nint n, m, res = 0, d;\ncin >> n >> m >> d;\nfor (int i = n + 1; i <= m; i++) {\n    int temp = i;\n    while (temp) {\n        if (temp % 10 == d) res++;\n        temp /= 10;\n    }\n}\ncout << res << endl;\n\n// 程序B\nint n, m, res = 0, d;\ncin >> n >> m >> d;\nfor (int i = n; i <= m; i++) {\n    int temp = i;\n    while (temp) {\n        if (temp % 10 = d) res++;\n        temp /= 10;\n    }\n}\ncout << res << endl;\n\n// 程序C\nint n, m, res = 0, d;\ncin >> n >> m >> d;\nfor (int i = n; i <= m; i++) {\n    int temp = i;\n    while (temp) {\n        if (temp % 10 == d) res++;\n        temp /= 10;\n    }\n}\ncout << res << endl;\n\n// 程序D\nint n, m, res = 0, d;\ncin >> n >> m >> d;\nfor (int i = n; i <= m; i++) {\n    while (temp) {\n        if (temp % 10 == d) res++;\n        temp /= 10;\n    }\n}\ncout << res << endl;",
     "level": 3,
     "examDate": "2024-12"
   },
@@ -11591,7 +11599,7 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int sum = 0;\nfor (int j = 0;\n    j < n;\n    j++) {\n        if (i & (1 << j)) {\n            sum += arr[j];\n            }\n        }\n    if (sum == target) return true;\n        }\n    return false;",
+    "code": "bool check(int arr[], int n, int target) {\n    for (int i = 0; i < (1 << n); i++) {\n        int sum = 0;\n        for (int j = 0; j < n; j++) {\n            if (i & (1 << j)) {\n                sum += arr[j];\n            }\n        }\n        if (sum == target) return true;\n    }\n    return false;\n}",
     "level": 4,
     "examDate": "2025-03"
   },
@@ -11894,9 +11902,9 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int main() {\n    int count = 0;\n    for (int i = 100;\n        i <= 999;\n        i++) {\n            int a = i / 100;\n            ———————————————————— int c = i % 10;\n            if (a * a + b * b == c * c) {\n                count++;\n                }\n            }\n        cout << count << endl;\n        return 0;",
+    "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int count = 0;\n    for (int i = 100; i <= 999; i++) {\n        int a = i / 100;\n        __________;\n        int c = i % 10;\n        if (a * a + b * b == c * c) {\n            count++;\n        }\n    }\n    cout << count << endl;\n    return 0;\n}",
     "level": 3,
-    "image": "/course-data/gesp-code-images/gesp-2025-06-3-11.png",
+    "image": null,
     "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1699464809021472.pdf",
     "sourcePage": 2,
     "examDate": "2025-06"
@@ -12202,7 +12210,7 @@
     "difficulty": 1,
     "questionType": "choice",
     "hasImage": false,
-    "code": "int sum = 0;\nfor (int j = 0;\n    j < n;\n    j++) {\n        if (i & (1 << j)) {\n            sum += arr[j];\n            }\n        }\n    if (sum == target) return true;\n        }\n    return false;",
+    "code": "bool check(int arr[], int n, int target) {\n    for (int i = 0; i < (1 << n); i++) {\n        int sum = 0;\n        for (int j = 0; j < n; j++) {\n            if (i & (1 << j)) {\n                sum += arr[j];\n            }\n        }\n        if (sum == target) return true;\n    }\n    return false;\n}",
     "level": 4,
     "examDate": "2025-06"
   },

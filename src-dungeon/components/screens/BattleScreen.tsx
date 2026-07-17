@@ -130,6 +130,13 @@ function resolveQuestionImage(src?: string | null): string | null {
   return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
 }
 
+function shouldShowQuestionImage(q: Question): boolean {
+  const src = q.image || q.codeImage;
+  if (!src) return false;
+  const isExtractedCodeScreenshot = /\/gesp-code-images\//.test(src);
+  return !isExtractedCodeScreenshot || !q.code;
+}
+
 // 战斗题目图片：加载失败时降级提示，不让 broken image 破坏战斗 UI
 function BattleImage({ src, className }: { src: string; className?: string }) {
   const [errored, setErrored] = useState(false);
@@ -579,7 +586,7 @@ export default function BattleScreen() {
             {currentQuestion.code && (
               <pre className="battle-question-code"><code>{formatCppCode(currentQuestion.code)}</code></pre>
             )}
-            {resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
+            {shouldShowQuestionImage(currentQuestion) && resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
               <div className="battle-question-image-wrap">
                 <BattleImage
                   className="battle-question-image"

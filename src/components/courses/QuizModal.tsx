@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Problem } from '../../types/course';
 import { TYPE_CONFIG, type SectionType } from './ProblemViewer';
 import { renderCodeText } from '../../utils/markdown';
+import { loadVersionedRemoteJson } from '../../utils/versionedRemoteJson';
 
 interface Props {
   problem: Problem;
@@ -21,13 +22,23 @@ let quizBank: Record<string, QuizQuestion> | null = null;
 let quizBankLoading = false;
 let quizBankPromise: Promise<void> | null = null;
 
+function isQuizBankData(data: unknown): data is Record<string, QuizQuestion> {
+  return Boolean(data && typeof data === 'object' && !Array.isArray(data));
+}
+
 async function loadQuizBank(): Promise<Record<string, QuizQuestion>> {
   if (quizBank) return quizBank;
   if (quizBankLoading) { await quizBankPromise; return quizBank || {}; }
   quizBankLoading = true;
-  quizBankPromise = fetch('/course-data/unified-quiz-bank.json')
-    .then(r => r.json())
-    .then(data => { quizBank = data as Record<string, QuizQuestion>; })
+  quizBankPromise = loadVersionedRemoteJson<Record<string, QuizQuestion>>({
+    cacheKey: 'csp_quiz_bank',
+    versionKey: 'csp_quiz_bank_version',
+    versionFile: 'version.json',
+    dataFile: 'unified-quiz-bank.json',
+    bundledUrl: '/course-data/unified-quiz-bank.json',
+    validate: isQuizBankData,
+  })
+    .then(data => { quizBank = data; })
     .catch(() => { quizBank = {}; })
     .finally(() => { quizBankLoading = false; });
   await quizBankPromise;

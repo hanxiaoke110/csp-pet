@@ -4,6 +4,7 @@ import { usePetStore } from '../../stores/petStore';
 import { emit } from '@tauri-apps/api/event';
 import { renderCodeText } from '../../utils/markdown';
 import { loadExcludedQuestionIds } from '../../utils/excludedQuestions';
+import { loadVersionedRemoteJson } from '../../utils/versionedRemoteJson';
 import { useNavigate } from 'react-router-dom';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
 import KnowledgePointHelp from '../shared/KnowledgePointHelp';
@@ -36,27 +37,26 @@ function isUsableBank(bank: QuizQuestion[]): boolean {
   return bank.some(q => q.source === 'csp_exam' || q.source === 'gesp' || q.source === 'super_challenge');
 }
 
+function isQuizBankData(data: unknown): data is Record<string, QuizQuestion> {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
+  const values = Object.values(data);
+  return values.length > 0 && isUsableBank(values as QuizQuestion[]);
+}
+
 async function loadBank(): Promise<QuizQuestion[]> {
   if (questionBank) return questionBank;
   // 读取统一排除配置（单一数据源 /course-data/excluded-question-ids.json），失败降级为空集
   const excluded = await loadExcludedQuestionIds();
   const filterExcluded = (bank: QuizQuestion[]) => bank.filter(q => !excluded.has(q.id));
-  // Try remote quiz bank from localStorage first
-  try {
-    const cached = localStorage.getItem('csp_quiz_bank');
-    if (cached) {
-      const data = JSON.parse(cached);
-      const cachedBank = Object.values(data) as QuizQuestion[];
-      if (cachedBank.length > 0 && isUsableBank(cachedBank)) {
-        questionBank = filterExcluded(cachedBank);
-        return questionBank;
-      }
-    }
-  } catch {}
-  // Fallback to bundled quiz bank
-  const resp = await fetch('/course-data/unified-quiz-bank.json');
-  const data = await resp.json();
-  questionBank = filterExcluded(Object.values(data) as QuizQuestion[]);
+  const data = await loadVersionedRemoteJson<Record<string, QuizQuestion>>({
+    cacheKey: 'csp_quiz_bank',
+    versionKey: 'csp_quiz_bank_version',
+    versionFile: 'version.json',
+    dataFile: 'unified-quiz-bank.json',
+    bundledUrl: '/course-data/unified-quiz-bank.json',
+    validate: isQuizBankData,
+  });
+  questionBank = filterExcluded(Object.values(data));
   return questionBank!;
 }
 

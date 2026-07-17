@@ -357,6 +357,7 @@ function App() {
                 try {
                   const quizData = await quizResp.json();
                   localStorage.setItem('csp_quiz_bank', JSON.stringify(quizData));
+                  localStorage.setItem('csp_quiz_bank_version', String(remoteVer.version));
                 } catch {}
               }
             }

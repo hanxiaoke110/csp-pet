@@ -12,6 +12,13 @@ function resolveQuestionImage(src?: string | null): string | null {
   return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
 }
 
+function shouldShowQuestionImage(q: Question): boolean {
+  const src = q.image || q.codeImage;
+  if (!src) return false;
+  const isExtractedCodeScreenshot = /\/gesp-code-images\//.test(src);
+  return !isExtractedCodeScreenshot || !q.code;
+}
+
 export default function HealingScreen() {
   const navigate = useNavigate();
   const store = useDungeonStore();
@@ -177,7 +184,7 @@ export default function HealingScreen() {
                   {currentQuestion.code}
                 </pre>
               )}
-              {resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
+              {shouldShowQuestionImage(currentQuestion) && resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
                 <div style={{ marginBottom: '12px' }}>
                   <img
                     src={resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage)!}

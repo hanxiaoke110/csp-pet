@@ -2,9 +2,9 @@
 import type { Question, DungeonDefinition } from '../types/dungeon';
 import type { KnowledgeTag } from '../data/skills';
 import { loadExcludedQuestionIds, getCachedExcludedQuestionIds } from '../../src/utils/excludedQuestions';
+import { loadVersionedRemoteJson } from '../../src/utils/versionedRemoteJson';
 
 const CACHE_PREFIX = 'dungeon_';
-const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
 
 async function tryLoad(path: string): Promise<Response | null> {
   try {
@@ -33,22 +33,24 @@ function saveToCache<T>(key: string, data: T): void {
   } catch { /* ignore */ }
 }
 
-// Level 2: Remote fetch (Gitee)
-async function loadFromRemote<T>(filename: string): Promise<T | null> {
-  const resp = await tryLoad(`${REMOTE_BASE}/${filename}`);
-  if (resp) {
-    const data = await resp.json();
-    saveToCache(filename, data);
-    return data as T;
-  }
-  return null;
-}
-
-// Level 3: Bundled fallback
+// Level 2: Bundled fallback
 async function loadBundled<T>(filename: string): Promise<T | null> {
   const resp = await tryLoad(`/course-data/${filename}`);
   if (resp) return resp.json() as Promise<T>;
   return null;
+}
+
+interface DungeonQuestionBankData {
+  questions: Question[];
+}
+
+function isDungeonQuestionBankData(data: unknown): data is DungeonQuestionBankData {
+  return Boolean(
+    data &&
+    typeof data === 'object' &&
+    Array.isArray((data as DungeonQuestionBankData).questions) &&
+    (data as DungeonQuestionBankData).questions.length > 0
+  );
 }
 
 // ── Public API ──
@@ -57,27 +59,15 @@ export async function loadQuestionBank(): Promise<Question[]> {
   // 预加载统一排除配置（与 /quiz 共用 /course-data/excluded-question-ids.json），
   // 供后续同步过滤 isBrokenCodeQuestion 使用。失败降级为空集，不影响题库加载。
   await loadExcludedQuestionIds();
-  const cacheKey = 'csp_exam_bank_v4';
-
-  // Try cache first
-  const cached = loadFromCache<{ questions: Question[] }>(cacheKey);
-  if (cached?.questions?.length) return cached.questions;
-
-  // Try bundled import first (works in both dev and IIFE builds)
-  try {
-    const mod = await import('../data/csp-exam-bank.json');
-    const data = (mod as any).default || mod;
-    if (data?.questions?.length) {
-      saveToCache(cacheKey, data);
-      return data.questions;
-    }
-  } catch { /* fall through */ }
-
-  // Try remote
-  const remote = await loadFromRemote<{ questions: Question[] }>('csp-exam-bank.json');
-  if (remote?.questions?.length) return remote.questions;
-
-  throw new Error('无法加载题库');
+  const data = await loadVersionedRemoteJson<DungeonQuestionBankData>({
+    cacheKey: 'dungeon_exam_bank_v1',
+    versionKey: 'dungeon_exam_bank_version',
+    versionFile: 'dungeon-exam-version.json',
+    dataFile: 'dungeon-exam-bank.json',
+    bundledUrl: '/course-data/dungeon-exam-bank.json',
+    validate: isDungeonQuestionBankData,
+  });
+  return data.questions;
 }
 
 export async function loadDungeons(): Promise<DungeonDefinition[]> {
