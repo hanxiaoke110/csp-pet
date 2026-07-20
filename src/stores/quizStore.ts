@@ -106,6 +106,25 @@ function getWeekKeyStr(): string {
   return `${d.getFullYear()}-W${weekNum}`;
 }
 
+function getDateKeyStr(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function isTrainingCampActiveNow(): boolean {
+  try {
+    const petState = usePetStore.getState();
+    if (!petState.trainingCampActive || !petState.trainingCampEndDate) return false;
+    const today = getDateKeyStr();
+    return today <= petState.trainingCampEndDate;
+  } catch {
+    return false;
+  }
+}
+
+export function getSuperChallengeKey(): string {
+  return isTrainingCampActiveNow() ? getDateKeyStr() : getWeekKeyStr();
+}
+
 function isLastWeekOfMonth(): boolean {
   const d = new Date();
   const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0);
@@ -220,34 +239,21 @@ export const useQuizStore = create<QuizState>((set, get) => {
       const s = get();
       const completions = (s.superCompletions || 0) + 1;
       const best = Math.max(s.superBestScore || 0, correct);
-      set({ lastSuperDate: getWeekKeyStr(), superCompletions: completions, superBestScore: best });
+      set({ lastSuperDate: getSuperChallengeKey(), superCompletions: completions, superBestScore: best });
       get().save();
     },
 
     canDoSuperChallenge: () => {
-      // Check if training camp is active (unlimited attempts)
-      try {
-        const petState = usePetStore.getState();
-        if (petState.trainingCampActive && petState.trainingCampEndDate) {
-          const end = new Date(petState.trainingCampEndDate).getTime();
-          if (Date.now() < end) return true;
-        }
-      } catch {}
-      return get().lastSuperDate !== getWeekKeyStr();
+      return get().lastSuperDate !== getSuperChallengeKey();
     },
 
     superDaysLeft: () => {
       const s = get();
+      if (isTrainingCampActiveNow()) {
+        return s.lastSuperDate === getDateKeyStr() ? 1 : 0;
+      }
       if (s.lastSuperDate === getWeekKeyStr()) return 0;
       if (!s.lastSuperDate) return 0;
-      // Check if training camp is active (unlimited)
-      try {
-        const petState = usePetStore.getState();
-        if (petState.trainingCampActive && petState.trainingCampEndDate) {
-          const end = new Date(petState.trainingCampEndDate).getTime();
-          if (Date.now() < end) return 0;
-        }
-      } catch {}
       // Calculate days until next week
       const wPart = s.lastSuperDate.split('-W')[1];
       const lastWeek = parseInt(wPart || '0');

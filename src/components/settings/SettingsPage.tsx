@@ -119,7 +119,7 @@ export default function SettingsPage() {
 
       <div className="settings-section">
         <h3>🏕️ 集训模式</h3>
-        <p className="settings-desc">输入教师提供的激活码，开启 12 天集训模式：所有奖励 ×1.5，每日额外 3 份食物</p>
+        <p className="settings-desc">输入教师提供的激活码，开启 12 天集训模式：所有奖励 ×1.5，每日额外 3 份食物，超级挑战每日可完成 1 次</p>
         <TrainingCampSection />
       </div>
 
@@ -139,7 +139,7 @@ function TrainingCampSection() {
   const handleActivate = () => {
     if (!code.trim()) { setMsg('请输入激活码'); return; }
     if (activate(code.trim())) {
-      setMsg('✅ 集训模式已开启！12 天内所有奖励 ×1.5');
+      setMsg('✅ 集训模式已开启！12 天内所有奖励 ×1.5，超级挑战每日 1 次');
       setCode('');
     } else {
       setMsg('❌ 激活码错误');
@@ -158,7 +158,7 @@ function TrainingCampSection() {
       {campActive ? (
         <div style={{ background: '#065f46', borderRadius: 10, padding: '10px 14px', color: '#d1fae5' }}>
           <strong>🏕️ 集训进行中</strong> · 剩余 <strong>{daysLeft}</strong> 天
-          <br /><span style={{ fontSize: 12 }}>所有奖励 ×1.5 · 每日可领 3 份食物</span>
+          <br /><span style={{ fontSize: 12 }}>所有奖励 ×1.5 · 每日可领 3 份食物 · 超级挑战每日 1 次</span>
           <div style={{ marginTop: 6 }}>
             <button onClick={handleClaim} style={{ padding: '4px 12px', borderRadius: 6, border: 'none', background: '#34d399', color: '#000', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>🍞 领取今日食物</button>
           </div>

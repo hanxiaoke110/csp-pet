@@ -41,6 +41,16 @@ function MultiPartImage({ src }: { src?: string | null }) {
   );
 }
 
+function isTrueFalseItem(item: SubItem): boolean {
+  const first = item.options[0]?.trim();
+  const second = item.options[1]?.trim();
+  return /^判断[:：]/.test(item.label.trim()) && first === '正确' && second === '错误';
+}
+
+function getEffectiveCorrectIndex(item: SubItem): number {
+  return isTrueFalseItem(item) && item.correctIndex > 1 ? 1 : item.correctIndex;
+}
+
 export default function ExamMultiPart({ title, code, image, codeImage, question, subItems, questionId, onSubmit, onBack }: Props) {
   const [answers, setAnswers] = useState<number[]>(Array(subItems.length).fill(-1));
   const [submitted, setSubmitted] = useState(false);
@@ -52,14 +62,14 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
     setSubmitted(true);
     let correct = 0;
     for (let i = 0; i < subItems.length; i++) {
-      if (answers[i] === subItems[i].correctIndex) correct++;
+      if (answers[i] === getEffectiveCorrectIndex(subItems[i])) correct++;
     }
     onSubmit(correct, subItems.length);
   };
 
   const passThreshold = subItems.length >= 5 ? 3 : 2;
   const correctCount = submitted
-    ? subItems.reduce((sum, item, i) => sum + (answers[i] === item.correctIndex ? 1 : 0), 0)
+    ? subItems.reduce((sum, item, i) => sum + (answers[i] === getEffectiveCorrectIndex(item) ? 1 : 0), 0)
     : 0;
 
   return (
@@ -97,7 +107,7 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
           {subItems.map((item, i) => (
             <div key={i} className="super-answer-row" style={{
               background: submitted
-                ? (answers[i] === item.correctIndex ? '#f0fdf4' : '#fef2f2')
+                ? (answers[i] === getEffectiveCorrectIndex(item) ? '#f0fdf4' : '#fef2f2')
                 : 'transparent',
               borderRadius: 8, padding: 8, marginBottom: 4,
             }}>
@@ -105,11 +115,12 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 14, marginBottom: 6, fontWeight: 500 }}>{item.label}</div>
                 <div className="super-options">
-                  {['A', 'B', 'C', 'D'].map((opt, oi) => {
+                  {(isTrueFalseItem(item) ? ['A', 'B'] : ['A', 'B', 'C', 'D']).map((opt, oi) => {
                     let className = 'super-opt';
+                    const correctIndex = getEffectiveCorrectIndex(item);
                     if (submitted) {
-                      if (oi === item.correctIndex) className += ' selected';
-                      else if (answers[i] === oi && oi !== item.correctIndex) className += ' wrong';
+                      if (oi === correctIndex) className += ' selected';
+                      else if (answers[i] === oi && oi !== correctIndex) className += ' wrong';
                     } else if (answers[i] === oi) {
                       className += ' selected';
                     }
@@ -123,7 +134,7 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
                         }}
                       >
                         <span>{opt}.</span>{' '}
-                        <span dangerouslySetInnerHTML={renderCodeText(item.options[oi])} />
+                        <span dangerouslySetInnerHTML={renderCodeText(item.options[oi] || '')} />
                       </label>
                     );
                   })}
