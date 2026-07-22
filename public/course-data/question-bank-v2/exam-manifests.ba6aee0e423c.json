@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "contentRevision": 500,
+  "verificationRevision": 500,
+  "channelRulesRevision": 1,
+  "generatedAt": "2026-07-22T05:42:29.516Z",
+  "papers": [
+    {
+      "id": "2019-S",
+      "year": 2019,
+      "group": "S",
+      "questionIds": [
+        "csp-s-2019-c03",
+        "csp-s-2019-c06",
+        "csp-s-2019-c10"
+      ]
+    },
+    {
+      "id": "2020-S",
+      "year": 2020,
+      "group": "S",
+      "questionIds": [
+        "csp-s-2020-c02",
+        "csp-s-2020-c09"
+      ]
+    },
+    {
+      "id": "2021-S",
+      "year": 2021,
+      "group": "S",
+      "questionIds": [
+        "csp-s-2021-c03"
+      ]
+    }
+  ]
+}

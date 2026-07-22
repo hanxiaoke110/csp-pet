@@ -68,7 +68,9 @@ export function decideVerdict(question, evidence = {}) {
   const modelAnswers = Array.isArray(evidence.modelAnswers)
     ? evidence.modelAnswers.filter(Number.isInteger)
     : [];
-  if (Number.isInteger(evidence.extractedAnswerIndex) && evidence.extractedAnswerIndex !== expected) {
+  if (evidence.textSimilarity >= 0.92
+      && Number.isInteger(evidence.extractedAnswerIndex)
+      && evidence.extractedAnswerIndex !== expected) {
     return { status: 'disputed', blockers: ['official_answer_conflict'], warnings: structural.warnings, evidence };
   }
   if (Number.isInteger(evidence.deterministicAnswer) && evidence.deterministicAnswer !== expected) {
