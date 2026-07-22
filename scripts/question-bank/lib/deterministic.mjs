@@ -61,7 +61,7 @@ export async function solveDeterministically(question) {
     fs.writeFileSync(sourcePath, question.code);
     const compiled = spawnSync(compiler, ['-std=c++17', '-O0', sourcePath, '-o', binaryPath], {
       encoding: 'utf8',
-      timeout: 5_000,
+      timeout: 10_000,
       maxBuffer: 1024 * 1024,
     });
     if (compiled.error?.code === 'ETIMEDOUT') return { answerIndex: null, supported: true, reason: 'compile_timeout' };
@@ -69,7 +69,7 @@ export async function solveDeterministically(question) {
 
     const executed = spawnSync(binaryPath, [], {
       encoding: 'utf8',
-      timeout: 2_000,
+      timeout: 5_000,
       maxBuffer: 1024 * 1024,
     });
     if (executed.error?.code === 'ETIMEDOUT') return { answerIndex: null, supported: true, reason: 'run_timeout' };
