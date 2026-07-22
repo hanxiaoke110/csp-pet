@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { normalizeLegacyQuestion, stableContentHash } from './lib/normalize.mjs';
 import { buildExamManifests, mergeCanonicalInputs } from './build-canonical.mjs';
 import { validateReviewedExport } from './export-reviewed-bank.mjs';
+import { decideVerdict, validateQuestion } from './lib/validate.mjs';
 
 describe('canonical question normalization', () => {
   it('normalizes a GESP choice question', () => {
@@ -53,6 +54,54 @@ describe('canonical question normalization', () => {
 
   it('produces the same content hash for object keys in a different order', () => {
     expect(stableContentHash({ b: 2, a: 1 })).toBe(stableContentHash({ a: 1, b: 2 }));
+  });
+});
+
+describe('automatic structural verdicts', () => {
+  it('blocks missing referenced code and answer-sheet images', () => {
+    const missingCode = normalizeLegacyQuestion({
+      id: 'missing',
+      question: '阅读下面代码，执行后输出是（ ）。',
+      options: ['A', 'B', 'C', 'D'],
+      correctIndex: 0,
+    });
+    const leakedImage = {
+      ...missingCode,
+      id: 'leak',
+      assets: ['/course-data/gesp-code-images/leak.png'],
+    };
+
+    expect(validateQuestion(missingCode).blockers).toContain('missing_code_context');
+    expect(validateQuestion(leakedImage).blockers).toContain('untrusted_answer_sheet_image');
+  });
+
+  it('does not mistake an inline code expression for missing context', () => {
+    const inlineCode = normalizeLegacyQuestion({
+      id: 'inline',
+      question: 'C++语句 cout << 5 % 2; 执行后输出是（ ）。',
+      options: ['0', '1', '2', '5'],
+      correctIndex: 1,
+    });
+    expect(validateQuestion(inlineCode).blockers).not.toContain('missing_code_context');
+  });
+
+  it('requires verified explanation and strong answer evidence', () => {
+    const question = normalizeLegacyQuestion({
+      id: 'valid',
+      source: 'gesp',
+      question: '2+2等于（ ）。',
+      options: ['3', '4', '5', '6'],
+      correctIndex: 1,
+      explanation: '2+2=4。',
+    });
+    const base = { deterministicAnswer: null, modelAnswers: [], modelComplete: false };
+
+    expect(decideVerdict(question, { ...base, officialMatch: true, explanationVerified: true }).status)
+      .toBe('auto_verified');
+    expect(decideVerdict(question, { ...base, officialMatch: true, explanationVerified: false }).status)
+      .toBe('auto_probable');
+    expect(decideVerdict(question, { ...base, officialMatch: false, modelAnswers: [1, 2], modelComplete: true, explanationVerified: true }).status)
+      .toBe('disputed');
   });
 });
 
