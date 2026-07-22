@@ -1,14 +1,14 @@
 const EXTERNAL_CODE_REFERENCE = /(?:阅读|观察|分析)?(?:下面|下列|以下|上面)(?:的)?(?:C\+\+)?(?:代码|程序)|横线处|空白处|代码如下/;
 const EXTERNAL_VISUAL_REFERENCE = /(?:右边|左边|下方|上方|下图|上图|图中)(?:的)?(?:无向图|有向图|示意图|图|表格|图片)/;
 const INLINE_CODE = /(?:cout|cin|printf|scanf|for\s*\(|while\s*\(|if\s*\(|#include|int\s+main|[;{}])/;
-const OPTION_PREFIX = /^[A-DＡ-Ｄ][.、．:\s)]*/i;
+const OPTION_PREFIX = /^[A-DＡ-Ｄ](?:[.、．:)]|\s)+/i;
 
 function optionPayload(option) {
   return String(option || '').trim().replace(OPTION_PREFIX, '').trim();
 }
 
 function hasPlaceholderOptions(options) {
-  return options.length > 0 && options.every(option => !optionPayload(option) || /^[A-DＡ-Ｄ]$/i.test(optionPayload(option)));
+  return options.length > 0 && options.every(option => !optionPayload(option) || /^[A-DＡ-Ｄ]$/.test(optionPayload(option)));
 }
 
 function validateAnswer(options, correctIndex) {

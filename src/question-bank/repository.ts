@@ -157,6 +157,22 @@ export async function beginQuestionBankSession(requiredChannels: QuestionChannel
 
 export async function refreshQuestionBankV2(): Promise<boolean> {
   const manifest = JSON.parse(await fetchText(`${REMOTE_BASE}/manifest`)) as QuestionBankManifest;
+  const current = readCache(V2_KEYS.current);
+  if (current?.manifest.contentRevision === manifest.contentRevision
+      && current.manifest.verificationRevision === manifest.verificationRevision
+      && current.manifest.channelRulesRevision === manifest.channelRulesRevision) {
+    return false;
+  }
+  try {
+    const bundled = JSON.parse(await fetchText(`${BUNDLED_BASE}/manifest.json`)) as QuestionBankManifest;
+    if (bundled.contentRevision === manifest.contentRevision
+        && bundled.verificationRevision === manifest.verificationRevision
+        && bundled.channelRulesRevision === manifest.channelRulesRevision) {
+      return false;
+    }
+  } catch {
+    // A remote snapshot can still recover an installation with a damaged bundle.
+  }
   const logicalNames = Object.keys(manifest.files);
   const files = Object.fromEntries(await Promise.all(logicalNames.map(async logicalName => {
     const raw = await fetchText(`${REMOTE_BASE}/${logicalName}`);

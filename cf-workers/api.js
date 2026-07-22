@@ -6,6 +6,42 @@ const MONTHLY_SUBMIT_LIMIT = 3;
 const ACTIVE_WISH_LIMIT = 3;  // max active wishes per student — freed when teacher deletes/completes
 const CLEANUP_PROTECT_DAYS = 7;
 const CLEANUP_MIN_KEEP = 20;
+const QUESTION_BANK_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
+const QUESTION_BANK_V2_BASE = `${QUESTION_BANK_BASE}/question-bank-v2`;
+const QUESTION_BANK_V2_FILES = new Set([
+  'daily-gesp.json', 'super-cspj.json', 'exam-questions.json',
+  'exam-manifests.json', 'dungeon-mixed.json', 'verification-summary.json',
+]);
+const QUESTION_BANK_PERMISSION = 'question_bank_review';
+// Confirmed corrections made before the cloud review layer existed. Keeping these
+// here makes production consistent immediately, even before the source JSON is released.
+const BUILTIN_QUESTION_PATCHES = {
+  'csp-j-2022-001': {
+    correctIndex: 0,
+    explanation: 'printf是C标准库函数，调用printf只是普通函数调用，没有用到类、对象、继承或多态等C++面向对象特性。B涉及类成员函数，C涉及class/struct，D涉及继承和派生类，因此答案A。',
+  },
+  'csp-j-2022-005': {
+    correctIndex: 1,
+    explanation: '队列出队顺序就是入队顺序，因此栈的出栈顺序需为e2、e4、e3、e6、e5、e1。按进栈顺序模拟，最大栈深为3，因此栈S的容量至少为3，答案B。',
+  },
+  'gesp-2025-09-4-11': {
+    question: '下面程序实现插入排序（升序排序），则横线上应分别填写（ ）。',
+    options: ['A. arr[j] > key\narr[j + 1] = key', 'B. arr[j] < key\narr[j + 1] = key', 'C. arr[j] > key\narr[j] = key', 'D. arr[j] < key\narr[j] = key'],
+    correctIndex: 0,
+    explanation: '升序插入排序中，需要把所有大于key的元素向后移动，因此while条件应为arr[j] > key；循环结束后j停在插入位置的前一位，所以应执行arr[j + 1] = key。答案A。',
+  },
+  'gesp-2025-12-2-10': {
+    question: '与下面 C++ 输出效果不一致的代码是（ ）。',
+    options: [
+      'A. int i = 0;\nwhile (i < 10) {\n    cout << i;\n    i += 1;\n}',
+      'B. int i = 0;\nwhile (i < 10) {\n    i += 1;\n    cout << i;\n}',
+      'C. int i = 0;\nwhile (true) {\n    cout << i;\n    i += 1;\n    if (i >= 10)\n        break;\n}',
+      'D. int i = 0;\nwhile (true) {\n    if (i >= 10)\n        break;\n    cout << i;\n    i += 1;\n}',
+    ],
+    correctIndex: 1,
+    explanation: '原代码输出0123456789。A、C、D都是先输出当前i，再把i加1，输出相同；B先把i加1再输出，会输出12345678910，因此与原代码输出效果不一致，答案B。',
+  },
+};
 
 // Rate limiting
 const RATE_WISH_POST = 5;       // 5 wishes per minute per device
@@ -158,7 +194,7 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
@@ -177,6 +213,8 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS generated_codes (code TEXT PRIMARY KEY, type TEXT, teacher_id TEXT, level TEXT, created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, title TEXT, description TEXT, teacher_id TEXT, teacher_name TEXT, submitter TEXT DEFAULT 'teacher', status TEXT DEFAULT 'open', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS workshop_pets (id TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT, name TEXT, element TEXT, style TEXT, description TEXT, tier TEXT, price INTEGER, pet_json TEXT, spritesheet_url TEXT, thumbnail_url TEXT, status TEXT DEFAULT 'active', created_at TEXT)`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_overrides (question_id TEXT PRIMARY KEY, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', updated_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_history (id INTEGER PRIMARY KEY AUTOINCREMENT, question_id TEXT NOT NULL, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`ALTER TABLE feedback ADD COLUMN submitter TEXT DEFAULT 'teacher'`); } catch {}
   // Migrations for existing tables
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN phone_enc TEXT DEFAULT ''`); } catch {}
@@ -211,6 +249,8 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_votes_wish ON votes(wish_id)`); } catch {}
   // Rate limit table
   try { await db.exec(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, count INTEGER DEFAULT 0, reset_at TEXT)`); } catch {}
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_question_bank_history_question ON question_bank_history(question_id, created_at DESC)`); } catch {}
+  try { await db.exec(`INSERT OR IGNORE INTO meta(key,value) VALUES('question_bank_revision','0')`); } catch {}
   // Record schema version so future cold starts skip these ~25 statements
   try { await db.exec(`INSERT OR REPLACE INTO meta(key,value) VALUES('schema_version','${SCHEMA_VERSION}')`); } catch {}
   _schemaEnsured = true;
@@ -284,6 +324,73 @@ async function hashPassword(pw) {
   return btoa(String.fromCharCode(...new Uint8Array(hash)));
 }
 
+let _questionBankCache = { bank: null, version: 0, ts: 0 };
+async function fetchQuestionBankBase() {
+  if (_questionBankCache.bank && Date.now() - _questionBankCache.ts < 120000) return _questionBankCache;
+  const [bankResp, versionResp] = await Promise.all([
+    fetch(`${QUESTION_BANK_BASE}/unified-quiz-bank.json`, { cf: { cacheTtl: 120, cacheEverything: true } }),
+    fetch(`${QUESTION_BANK_BASE}/version.json`, { cf: { cacheTtl: 120, cacheEverything: true } }),
+  ]);
+  if (!bankResp.ok) throw new Error('题库源暂时不可用');
+  const bank = await bankResp.json();
+  if (!bank || Array.isArray(bank) || typeof bank !== 'object') throw new Error('题库源格式错误');
+  for (const [id, patch] of Object.entries(BUILTIN_QUESTION_PATCHES)) {
+    if (bank[id]) bank[id] = { ...bank[id], ...patch, id };
+  }
+  let version = 0;
+  if (versionResp.ok) {
+    try { version = Number((await versionResp.json()).version) || 0; } catch {}
+  }
+  _questionBankCache = { bank, version, ts: Date.now() };
+  return _questionBankCache;
+}
+
+async function getQuestionBankRevision(db) {
+  const row = await db.prepare("SELECT value FROM meta WHERE key='question_bank_revision'").first();
+  return Number(row?.value) || 0;
+}
+
+async function getQuestionBankEditor(request, env, db) {
+  if (checkAdmin(request, env)) return { id: 'admin', name: '管理员' };
+  const teacher = await checkTeacher(request, db);
+  if (!teacher || !hasPermission(teacher, QUESTION_BANK_PERMISSION)) return null;
+  return { id: teacher.teacher_id, name: teacher.name || teacher.teacher_id };
+}
+
+function parseJsonObject(raw, fallback = {}) {
+  try {
+    const value = JSON.parse(raw || '{}');
+    return value && !Array.isArray(value) && typeof value === 'object' ? value : fallback;
+  } catch { return fallback; }
+}
+
+async function loadQuestionBankOverrides(db) {
+  const rows = await db.prepare('SELECT question_id, patch_json, review_status, review_note, updated_by, updated_at FROM question_bank_overrides').all();
+  return (rows.results || []).map(row => ({ ...row, patch: parseJsonObject(row.patch_json) }));
+}
+
+function mergeQuestionBank(base, overrides) {
+  const merged = { ...base };
+  for (const item of overrides) {
+    if (merged[item.question_id]) merged[item.question_id] = { ...merged[item.question_id], ...item.patch, id: item.question_id };
+  }
+  return merged;
+}
+
+function sanitizeQuestionPatch(input) {
+  const allowed = ['question', 'code', 'options', 'correctIndex', 'explanation', 'knowledgePoint', 'difficulty', 'questionType', 'image', 'hasImage', 'level', 'examGroup'];
+  const patch = {};
+  for (const key of allowed) {
+    if (!Object.prototype.hasOwnProperty.call(input, key)) continue;
+    const value = input[key];
+    if (key === 'options') patch.options = Array.isArray(value) ? value.slice(0, 8).map(v => String(v ?? '').slice(0, 8000)) : [];
+    else if (key === 'correctIndex' || key === 'difficulty' || key === 'level') patch[key] = Number.isFinite(Number(value)) ? Number(value) : null;
+    else if (key === 'hasImage') patch[key] = Boolean(value);
+    else patch[key] = String(value ?? '').slice(0, key === 'code' || key === 'explanation' ? 30000 : 12000);
+  }
+  return patch;
+}
+
 // ═══════════════════════════════════════
 export default {
   async fetch(request, env, ctx) {
@@ -303,6 +410,7 @@ export default {
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
 
+    try {
     // Health check
     if (path === '/api/health') {
       try {
@@ -313,7 +421,104 @@ export default {
       }
     }
 
-    try {
+    // Public merged bank used by the desktop hot-update client.
+    if (path === '/api/question-bank/v2/manifest' && request.method === 'GET') {
+      const upstream = await fetch(`${QUESTION_BANK_V2_BASE}/manifest.json`, { cf: { cacheTtl: 300, cacheEverything: true } });
+      return new Response(upstream.body, {
+        status: upstream.status,
+        headers: { ...cors, 'Cache-Control': 'public, max-age=300' },
+      });
+    }
+    const questionBankV2Match = path.match(/^\/api\/question-bank\/v2\/([^/]+)$/);
+    if (questionBankV2Match && request.method === 'GET') {
+      const logicalName = decodeURIComponent(questionBankV2Match[1]);
+      if (!QUESTION_BANK_V2_FILES.has(logicalName)) {
+        return new Response(JSON.stringify({ error: '未知题库快照' }), { status: 404, headers: cors });
+      }
+      const manifestResponse = await fetch(`${QUESTION_BANK_V2_BASE}/manifest.json`, { cf: { cacheTtl: 300, cacheEverything: true } });
+      if (!manifestResponse.ok) return new Response(JSON.stringify({ error: '题库清单暂不可用' }), { status: 503, headers: cors });
+      const manifest = await manifestResponse.json();
+      const fileName = manifest?.files?.[logicalName]?.path;
+      if (!/^[a-z0-9-]+\.[a-f0-9]{12}\.json$/.test(String(fileName || ''))) {
+        return new Response(JSON.stringify({ error: '题库清单无效' }), { status: 503, headers: cors });
+      }
+      const upstream = await fetch(`${QUESTION_BANK_V2_BASE}/${fileName}`, { cf: { cacheTtl: 86400, cacheEverything: true } });
+      return new Response(upstream.body, {
+        status: upstream.status,
+        headers: { ...cors, 'Cache-Control': 'public, max-age=86400, immutable' },
+      });
+    }
+
+    if (path === '/api/question-bank/version' && request.method === 'GET') {
+      const [{ version }, revision] = await Promise.all([fetchQuestionBankBase(), getQuestionBankRevision(db)]);
+      return new Response(JSON.stringify({ baseVersion: version, revision }), { headers: { ...cors, 'Cache-Control': 'no-store' } });
+    }
+    if (path === '/api/question-bank/data' && request.method === 'GET') {
+      const [{ bank }, overrides] = await Promise.all([fetchQuestionBankBase(), loadQuestionBankOverrides(db)]);
+      return new Response(JSON.stringify(mergeQuestionBank(bank, overrides)), { headers: { ...cors, 'Cache-Control': 'no-store' } });
+    }
+
+    // Admins and explicitly-authorized teachers can review and correct shared questions.
+    if (path === '/api/question-bank/reviews' && request.method === 'GET') {
+      const editor = await getQuestionBankEditor(request, env, db);
+      if (!editor) return new Response(JSON.stringify({ error: '无权维护公共题库' }), { status: 403, headers: cors });
+      const [overrides, revision] = await Promise.all([loadQuestionBankOverrides(db), getQuestionBankRevision(db)]);
+      return new Response(JSON.stringify({ revision, reviews: overrides.map(({ patch_json, ...item }) => item) }), { headers: cors });
+    }
+
+    const questionBankMatch = path.match(/^\/api\/question-bank\/questions\/([^/]+)$/);
+    if (questionBankMatch && request.method === 'PUT') {
+      const editor = await getQuestionBankEditor(request, env, db);
+      if (!editor) return new Response(JSON.stringify({ error: '无权维护公共题库' }), { status: 403, headers: cors });
+      const questionId = decodeURIComponent(questionBankMatch[1]);
+      const body = await request.json();
+      const incomingPatch = sanitizeQuestionPatch(body.patch || {});
+      const reviewStatus = ['pending', 'verified', 'problem'].includes(body.reviewStatus) ? body.reviewStatus : 'pending';
+      const reviewNote = String(body.reviewNote || '').trim().slice(0, 4000);
+      const [{ bank }, existingOverride] = await Promise.all([
+        fetchQuestionBankBase(),
+        db.prepare('SELECT patch_json FROM question_bank_overrides WHERE question_id=?').bind(questionId).first(),
+      ]);
+      const patch = { ...parseJsonObject(existingOverride?.patch_json), ...incomingPatch };
+      const baseQuestion = bank[questionId];
+      if (!baseQuestion) return new Response(JSON.stringify({ error: '题目不存在或题库尚未同步' }), { status: 404, headers: cors });
+      const candidate = { ...baseQuestion, ...patch, id: questionId };
+      if (!String(candidate.question || '').trim()) return new Response(JSON.stringify({ error: '题干不能为空' }), { status: 400, headers: cors });
+      if (Array.isArray(baseQuestion.options)) {
+        if (!Array.isArray(candidate.options) || candidate.options.length < 2 || candidate.options.some(v => !String(v || '').trim())) {
+          return new Response(JSON.stringify({ error: '选择题选项不能为空' }), { status: 400, headers: cors });
+        }
+        if (!Number.isInteger(candidate.correctIndex) || candidate.correctIndex < 0 || candidate.correctIndex >= candidate.options.length) {
+          return new Response(JSON.stringify({ error: '请选择有效的正确答案' }), { status: 400, headers: cors });
+        }
+      }
+      const patchJson = JSON.stringify(patch);
+      await db.batch([
+        db.prepare(`INSERT INTO question_bank_overrides(question_id,patch_json,review_status,review_note,updated_by,updated_at)
+          VALUES(?,?,?,?,?,datetime('now')) ON CONFLICT(question_id) DO UPDATE SET patch_json=excluded.patch_json,review_status=excluded.review_status,review_note=excluded.review_note,updated_by=excluded.updated_by,updated_at=datetime('now')`)
+          .bind(questionId, patchJson, reviewStatus, reviewNote, editor.name),
+        db.prepare('INSERT INTO question_bank_history(question_id,patch_json,review_status,review_note,updated_by) VALUES(?,?,?,?,?)')
+          .bind(questionId, patchJson, reviewStatus, reviewNote, editor.name),
+        db.prepare("UPDATE meta SET value=CAST(COALESCE(value,'0') AS INTEGER)+1 WHERE key='question_bank_revision'"),
+      ]);
+      await incrWriteBudget(db, 3);
+      return new Response(JSON.stringify({ success: true, question: candidate, reviewStatus, updatedBy: editor.name }), { headers: cors });
+    }
+
+    if (questionBankMatch && request.method === 'DELETE') {
+      const editor = await getQuestionBankEditor(request, env, db);
+      if (!editor) return new Response(JSON.stringify({ error: '无权维护公共题库' }), { status: 403, headers: cors });
+      const questionId = decodeURIComponent(questionBankMatch[1]);
+      await db.batch([
+        db.prepare('DELETE FROM question_bank_overrides WHERE question_id=?').bind(questionId),
+        db.prepare('INSERT INTO question_bank_history(question_id,patch_json,review_status,review_note,updated_by) VALUES(?,?,?,?,?)')
+          .bind(questionId, '{}', 'pending', '撤销云端修订，恢复源题库', editor.name),
+        db.prepare("UPDATE meta SET value=CAST(COALESCE(value,'0') AS INTEGER)+1 WHERE key='question_bank_revision'"),
+      ]);
+      await incrWriteBudget(db, 3);
+      return new Response(JSON.stringify({ success: true }), { headers: cors });
+    }
+
       // ═══ TEACHER AUTH ═══
       if (path === '/api/teacher/register' && request.method === 'POST') {
         const { phone, password, name } = await request.json();

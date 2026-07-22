@@ -1510,3 +1510,33 @@
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes scaleIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+@media (max-width: 640px) {
+  .app-shell { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo, .checkin-bar, .sidebar-section, .sidebar-spacer { display: none; }
+  .sidebar .nav-item {
+    width: auto !important;
+    flex: 0 0 auto;
+    padding: 10px 12px !important;
+    border-left: 0;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    text-align: center !important;
+  }
+  .sidebar .nav-item:hover { transform: none; }
+  .sidebar .nav-item.active { border-bottom-color: var(--primary-dark); }
+  .nav-tag, .nav-count { display: none; }
+  .main-content { width: 100%; padding: 12px; }
+  .quiz-question-card { padding: 14px; }
+  .super-options { flex-wrap: wrap; }
+  .super-opt { flex: 1 1 calc(50% - 6px); min-width: 0; overflow-wrap: anywhere; }
+}

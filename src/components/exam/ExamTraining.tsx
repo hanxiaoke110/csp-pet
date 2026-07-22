@@ -6,7 +6,8 @@ import ExamChoice from './ExamChoice';
 import ExamMultiPart from './ExamMultiPart';
 import { emit } from '@tauri-apps/api/event';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
-import { loadVersionedRemoteJson } from '../../utils/versionedRemoteJson';
+import { beginQuestionBankSession } from '../../question-bank/repository';
+import { toLegacyQuestion } from '../../question-bank/adapters';
 
 interface ExamQuestion {
   id: string;
@@ -28,10 +29,6 @@ interface ExamQuestion {
 
 type View = 'group' | 'type-select' | 'choice-answer' | 'multipart-answer';
 
-interface ExamBankData {
-  questions: ExamQuestion[];
-}
-
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -43,25 +40,9 @@ function shuffle<T>(arr: T[]): T[] {
 
 const STORAGE_KEY = 'csp_exam_group';
 
-function isExamBankData(data: unknown): data is ExamBankData {
-  return Boolean(
-    data &&
-    typeof data === 'object' &&
-    Array.isArray((data as ExamBankData).questions) &&
-    (data as ExamBankData).questions.length > 0
-  );
-}
-
 async function loadExamBank(): Promise<ExamQuestion[]> {
-  const data = await loadVersionedRemoteJson<ExamBankData>({
-    cacheKey: 'csp_exam_bank_v4',
-    versionKey: 'csp_exam_version',
-    versionFile: 'exam-version.json',
-    dataFile: 'csp-exam-bank.json',
-    bundledUrl: '/course-data/csp-exam-bank.json',
-    validate: isExamBankData,
-  });
-  return data.questions;
+  const session = await beginQuestionBankSession(['exam']);
+  return (session.channels.exam || []).map(question => toLegacyQuestion(question)) as ExamQuestion[];
 }
 
 export default function ExamTraining() {
@@ -77,10 +58,15 @@ export default function ExamTraining() {
   const [currentIdx, setCurrentIdx] = useState(0);
 
   const examStore = useQuizStore();
+  const setExamGroup = useQuizStore(s => s.setExamGroup);
   const hasPet = usePetStore(s => s.ownedPets.length > 0);
   const navigate = useNavigate();
   // autoCheck=true：进入页面即自动校验班级码（6 小时本地缓存），未通过则显示门禁
   const classAccess = useClassAccess(true);
+
+  useEffect(() => {
+    setExamGroup(group);
+  }, [group, setExamGroup]);
 
   // Load bank：版本检查 + 本地缓存 + 内置兜底，避免每次启动拉取大题库
   useEffect(() => {
@@ -231,7 +217,7 @@ export default function ExamTraining() {
         <div style={{ background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
           <h4 style={{ margin: '0 0 8px 0', color: '#0369a1', fontSize: 15 }}>📋 每日任务规则</h4>
           <div style={{ fontSize: 13, color: '#0c4a6e', lineHeight: 2 }}>
-            <div>🎯 <b>任务目标：</b>答对 3 道选择题 + (1 道程序阅读题 或 1 道程序填空题)</div>
+            <div>🎯 <b>任务目标：</b>{group === 'S' ? '答对 3 道已核验选择题' : '答对 3 道选择题 + (1 道程序阅读题 或 1 道程序填空题)'}</div>
             <div>💰 <b>基础奖励：</b>+20 EXP +12 金币</div>
             <div>⭐ <b>正确率加成：</b></div>
             <div style={{ paddingLeft: 16 }}>
@@ -285,7 +271,7 @@ export default function ExamTraining() {
         {/* Daily task progress */}
         <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 12, padding: '12px 16px', marginBottom: 16 }}>
           <div style={{ fontWeight: 700, color: '#92400e', marginBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>📝 今日任务：3 选择 + 1 阅读/填空 → +20 EXP +12g</span>
+            <span>📝 今日任务：{group === 'S' ? '3 道已核验选择题' : '3 选择 + 1 阅读/填空'} → +20 EXP +12g</span>
             {canClaim && (
               <button onClick={claimReward} style={{ padding: '6px 14px', fontSize: 13, fontWeight: 700, background: 'linear-gradient(135deg, #f59e0b, #fbbf24)', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer' }}>
                 🎁 领取奖励
@@ -294,7 +280,7 @@ export default function ExamTraining() {
           </div>
           <div style={{ display: 'flex', gap: 14, fontSize: 13, color: '#78350f' }}>
             <span>选择 [{choiceDone >= 3 ? '✅' : '⬜'.repeat(choiceDone) + '⬜'.repeat(Math.max(0, 3 - choiceDone))}] {choiceDone}/3</span>
-            <span>阅读/填空 [{readingOrFillDone ? '✅' : '⬜'}] {readingOrFillDone ? 1 : 0}/1</span>
+            {group === 'J' && <span>阅读/填空 [{readingOrFillDone ? '✅' : '⬜'}] {readingOrFillDone ? 1 : 0}/1</span>}
             <span>正确率 [{accuracyPct}%]</span>
           </div>
           {canClaim && <p style={{ color: '#f59e0b', fontWeight: 600, fontSize: 12, marginTop: 6 }}>🎉 今日任务完成！点击上方按钮领取奖励</p>}

@@ -50,6 +50,7 @@ h3{font-size:15px;margin-bottom:8px}
 .pet-thumb{width:60px;height:60px;border-radius:8px;background:#f1f5f9;overflow:hidden}
 .pet-thumb img{width:100%;height:100%;object-fit:contain}
 .pet-thumb canvas{width:100%;height:100%;object-fit:contain}
+.qb-shell{width:100%}.qb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}.qb-head h2{font-size:22px;margin-bottom:4px}.qb-muted{font-size:12px;color:#64748b}.qb-stats{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:8px;margin-bottom:12px}.qb-stat{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px}.qb-stat strong{display:block;font-size:20px;line-height:1.15}.qb-stat span{font-size:11px;color:#64748b}.qb-filters{display:grid;grid-template-columns:minmax(240px,2fr) repeat(5,minmax(120px,1fr));gap:8px;padding:12px 0;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;margin-bottom:12px}.qb-filters .input{height:40px;padding:8px 10px}.qb-list{display:grid;gap:10px}.qb-card{background:#fff;border:1px solid #dbe3ec;border-radius:8px;padding:16px}.qb-card.has-issue{border-left:4px solid #f59e0b}.qb-card.is-verified{border-left:4px solid #16a34a}.qb-card.is-problem{border-left:4px solid #ef4444}.qb-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}.qb-chip{font-size:11px;line-height:20px;padding:0 7px;border-radius:4px;background:#f1f5f9;color:#475569}.qb-chip.warn{background:#fff7ed;color:#c2410c}.qb-chip.good{background:#ecfdf5;color:#047857}.qb-chip.bad{background:#fef2f2;color:#b91c1c}.qb-question{font-size:15px;font-weight:650;white-space:pre-wrap;margin-bottom:10px}.qb-code{background:#172033;color:#e5edf7;border-radius:6px;padding:12px;white-space:pre-wrap;overflow:auto;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:10px}.qb-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-bottom:10px}.qb-option{border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;white-space:pre-wrap;min-width:0}.qb-option.correct{border-color:#86efac;background:#f0fdf4;color:#166534}.qb-explanation{background:#f8fafc;border-left:3px solid #94a3b8;padding:10px 12px;white-space:pre-wrap;font-size:13px;margin:10px 0}.qb-image{max-width:520px;max-height:280px;object-fit:contain;border:1px solid #e2e8f0;border-radius:6px;margin:0 0 10px}.qb-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}.qb-actions>div{display:flex;gap:6px;flex-wrap:wrap}.qb-editor{border-top:1px solid #e2e8f0;margin-top:14px;padding-top:14px}.qb-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.qb-editor .form-group{margin-bottom:10px}.qb-editor textarea{min-height:84px;resize:vertical}.qb-editor .code-input{min-height:140px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.qb-option-edit{display:grid;grid-template-columns:34px 1fr;gap:6px;align-items:start;margin-bottom:6px}.qb-option-edit input[type=radio]{margin-top:13px;accent-color:#16a34a}.qb-review{display:grid;grid-template-columns:180px 1fr;gap:10px}.qb-pager{display:flex;align-items:center;justify-content:space-between;margin:14px 0 4px}.wide-dashboard{width:100%}@media(min-width:1100px){#app:has(.wide-dashboard){max-width:1380px}}@media(max-width:760px){.tabs{overflow-x:auto;justify-content:flex-start}.tab{flex:0 0 auto;white-space:nowrap}.qb-stats{grid-template-columns:1fr 1fr}.qb-filters,.qb-editor-grid,.qb-review,.qb-options{grid-template-columns:1fr}.qb-head{display:block}.qb-head .btn{margin-top:10px}.qb-card{padding:12px}}
 </style>
 </head>
 <body>
@@ -58,7 +59,9 @@ h3{font-size:15px;margin-bottom:8px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
-const API = 'https://api.cspstudy.top';
+const API = location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+  ? (new URLSearchParams(location.search).get('api') || 'https://api.cspstudy.top')
+  : 'https://api.cspstudy.top';
 let state = { page: 'login', token: '', teacher: null, _adminToken: '' };
 
 function toast(msg, type='success') {
@@ -100,6 +103,7 @@ const TIERS = [{ key:'common', label:'⭐ 普通', price:150 },{ key:'rare', lab
 
 // Permission definitions — add new features here, Admin + Teacher UI auto-pickup
 const PERM_DEFS = [
+  { key:'question_bank_review', tab:'question-bank', icon:'✓', label:'题库质检' },
   // { key:'summer2026', icon:'☀️', label:'暑期集训' },  ← 未来功能示例
 ];
 
@@ -191,7 +195,7 @@ function LoginPage() {
 
 // ═══ Dashboard ═══
 function Dashboard() {
-  const [tab, setTab] = React.useState('teachers');
+  const [tab, setTab] = React.useState(new URLSearchParams(location.search).get('tab') || 'teachers');
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
@@ -295,6 +299,7 @@ function Dashboard() {
       { key:'wishes', label:'💡 许愿管理' },
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求收集' },
+      { key:'question-bank', label:'✓ 题库质检' },
     ];
     const base = [
       { key:'teachers', label:'📋 班级管理' },
@@ -305,7 +310,7 @@ function Dashboard() {
     // Inject permission-gated tabs
     const teacherPerms = state.teacher?.permissions || [];
     PERM_DEFS.forEach(p => {
-      if (teacherPerms.includes(p.key)) base.push({ key: p.key, label: p.icon + ' ' + p.label });
+      if (teacherPerms.includes(p.key)) base.push({ key: p.tab || p.key, label: p.icon + ' ' + p.label });
     });
     return base;
   }
@@ -316,7 +321,7 @@ function Dashboard() {
   }
 
   // ═══ RENDER ═══
-  return React.createElement('div', null,
+  return React.createElement('div', { className:tab==='question-bank'?'wide-dashboard':'' },
     React.createElement('div', { className:'header' },
       React.createElement('h1', null, isAdmin ? '🎓 管理员后台' : '📋 班级管理'),
       React.createElement('div', { className:'row', style:{ gap:12 } },
@@ -559,11 +564,228 @@ function Dashboard() {
     ),
     // ═══ FEEDBACK TAB ═══
     tab === 'feedback' && !loading && React.createElement(FeedbackPanel),
+    tab === 'question-bank' && !loading && React.createElement(QuestionBankPanel),
     // ═══ PERMISSION-GATED TABS ═══
     tab === 'qianlong' && !loading && React.createElement(QianLongPanel),
     // ═══ WORKSHOP TABS ═══
     tab==='workshop-import' ? React.createElement(ImportPanel, { onCreated:loadWorkshopPets }) : null,
     tab==='workshop-my' ? React.createElement(MyPetsPanel, { pets:workshopPets, onRefresh:loadWorkshopPets }) : null,
+  );
+}
+
+const QB_ISSUE_LABELS = {
+  'missing-options':'选项缺失', 'placeholder-options':'占位选项', 'duplicate-options':'选项重复',
+  'invalid-answer':'答案无效', 'missing-explanation':'缺少解析', 'weak-explanation':'解析过短',
+  'answer-conflict':'解析答案冲突', 'broken-option-text':'题干含空选项', 'suspicious-code':'代码疑似乱码'
+};
+const QB_CRITICAL_ISSUES = new Set(['missing-options','placeholder-options','invalid-answer','broken-option-text','suspicious-code']);
+
+function inspectQuestion(q) {
+  const issues = [];
+  const options = Array.isArray(q.options) ? q.options : null;
+  if (options) {
+    if (options.length < 2 || options.some(v => !String(v || '').trim())) issues.push('missing-options');
+    const placeholderCount = options.filter((v,index) => String(v || '').trim() === `${String.fromCharCode(65 + index)}. ${String.fromCharCode(65 + index)}`).length;
+    const selfLabelOptionsArePlausible = /字母|字符|谁(?:是|为)|哪[个位]人|小偷/.test(String(q.question || ''));
+    if (placeholderCount >= Math.min(3, options.length) && !selfLabelOptionsArePlausible) issues.push('placeholder-options');
+    const normalized = options.map(v => String(v || '').replace(/^\s*[A-H][.、:]\s*/,'').trim()).filter(Boolean);
+    if (new Set(normalized).size !== normalized.length) issues.push('duplicate-options');
+    if (!Number.isInteger(q.correctIndex) || q.correctIndex < 0 || q.correctIndex >= options.length) issues.push('invalid-answer');
+  }
+  const exp = String(q.explanation || '').trim();
+  if (!exp) issues.push('missing-explanation');
+  else if (exp.length < 16 || /^官方答案[：:]?\s*[A-H]?[。.]?$/.test(exp)) issues.push('weak-explanation');
+  if (options && Number.isInteger(q.correctIndex)) {
+    const matches = [...exp.matchAll(/(?<!原)答案\s*(?:是|为|选)?\s*[：:]?\s*([A-H])/g)];
+    if (matches.length && matches[matches.length - 1][1].toUpperCase().charCodeAt(0) - 65 !== q.correctIndex) issues.push('answer-conflict');
+  }
+  if (/\n\s*A\.\s*\n\s*\n?B\.\s*\n/i.test(String(q.question || ''))) issues.push('broken-option-text');
+  if (/\bVv\b|^v\s{2,}|�|锟斤拷/m.test(String(q.code || ''))) issues.push('suspicious-code');
+  return [...new Set(issues)];
+}
+
+function questionSourceLabel(q) {
+  if (q.source === 'gesp') return `GESP ${q.level || '?'}级`;
+  if (q.source === 'csp_exam') return q.examGroup || 'CSP-J';
+  if (q.source === 'noip') return 'NOIP';
+  if (q.source === 'super_challenge') return '专项挑战';
+  return q.source || '未分类';
+}
+
+function questionImageUrl(path) {
+  if (!path) return '';
+  if (/^https?:\/\//.test(path)) return path;
+  return 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public' + (path.startsWith('/') ? path : '/' + path);
+}
+
+function QuestionBankPanel() {
+  const h = React.createElement;
+  const [bank, setBank] = React.useState({});
+  const [reviews, setReviews] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState('');
+  const [editing, setEditing] = React.useState('');
+  const [draft, setDraft] = React.useState(null);
+  const [search, setSearch] = React.useState('');
+  const [source, setSource] = React.useState('all');
+  const [level, setLevel] = React.useState('all');
+  const [knowledge, setKnowledge] = React.useState('all');
+  const [issueFilter, setIssueFilter] = React.useState('critical');
+  const [statusFilter, setStatusFilter] = React.useState('all');
+  const [page, setPage] = React.useState(0);
+  const pageSize = 12;
+
+  async function loadBank() {
+    setLoading(true);
+    const [bankData, reviewData] = await Promise.all([api('/api/question-bank/data'), api('/api/question-bank/reviews')]);
+    if (bankData.error) toast(bankData.error, 'error'); else setBank(bankData);
+    if (reviewData.error) toast(reviewData.error, 'error');
+    else setReviews(Object.fromEntries((reviewData.reviews || []).map(item => [item.question_id, item])));
+    setLoading(false);
+  }
+  React.useEffect(() => { loadBank(); }, []);
+  React.useEffect(() => { setPage(0); }, [search, source, level, knowledge, issueFilter, statusFilter]);
+
+  const questions = Object.values(bank);
+  const knowledgeOptions = [...new Set(questions.map(q => q.knowledgePoint || '未分类'))].sort((a,b)=>a.localeCompare(b,'zh-CN'));
+  const enriched = questions.map(q => ({ q, issues:inspectQuestion(q), review:reviews[q.id] || null }));
+  const filtered = enriched.filter(({q,issues,review}) => {
+    const text = `${q.id} ${q.question || ''} ${q.code || ''} ${(q.options || []).join(' ')} ${q.explanation || ''}`.toLowerCase();
+    if (search.trim() && !text.includes(search.trim().toLowerCase())) return false;
+    if (source !== 'all' && q.source !== source) return false;
+    if (level !== 'all' && String(q.level || '') !== level) return false;
+    if (knowledge !== 'all' && (q.knowledgePoint || '未分类') !== knowledge) return false;
+    if (issueFilter === 'critical' && !issues.some(code => QB_CRITICAL_ISSUES.has(code))) return false;
+    if (issueFilter === 'quality' && !issues.some(code => !QB_CRITICAL_ISSUES.has(code))) return false;
+    if (issueFilter === 'issues' && issues.length === 0) return false;
+    if (issueFilter === 'clean' && issues.length > 0) return false;
+    if (!['all','critical','quality','issues','clean'].includes(issueFilter) && !issues.includes(issueFilter)) return false;
+    if (statusFilter === 'unreviewed' && review) return false;
+    if (statusFilter === 'edited' && (!review || !review.patch || Object.keys(review.patch).length === 0)) return false;
+    if (!['all','unreviewed','edited'].includes(statusFilter) && (review?.review_status || 'unreviewed') !== statusFilter) return false;
+    return true;
+  }).sort((a,b) => (b.issues.length-a.issues.length) || String(a.q.id).localeCompare(String(b.q.id)));
+  const maxPage = Math.max(0, Math.ceil(filtered.length / pageSize) - 1);
+  const visible = filtered.slice(page * pageSize, (page + 1) * pageSize);
+  const criticalCount = enriched.filter(x => x.issues.some(code => QB_CRITICAL_ISSUES.has(code))).length;
+  const qualityCount = enriched.filter(x => x.issues.some(code => !QB_CRITICAL_ISSUES.has(code))).length;
+  const verifiedCount = enriched.filter(x => x.review?.review_status === 'verified').length;
+  const changedCount = enriched.filter(x => x.review?.patch && Object.keys(x.review.patch).length).length;
+
+  function beginEdit(q, review) {
+    setEditing(q.id);
+    setDraft({ ...q, options:Array.isArray(q.options)?[...q.options]:null, _reviewStatus:review?.review_status || 'pending', _reviewNote:review?.review_note || '' });
+  }
+  function setField(key, value) { setDraft(prev => ({ ...prev, [key]:value })); }
+  function setOption(index, value) { setDraft(prev => ({ ...prev, options:prev.options.map((v,i)=>i===index?value:v) })); }
+
+  async function saveQuestion(q, forcedStatus) {
+    const value = editing === q.id && draft ? draft : { ...q, _reviewStatus:reviews[q.id]?.review_status || 'pending', _reviewNote:reviews[q.id]?.review_note || '' };
+    const patch = {};
+    ['question','code','options','correctIndex','explanation','knowledgePoint','difficulty','questionType','image','hasImage','level','examGroup'].forEach(key => {
+      if (Object.prototype.hasOwnProperty.call(value, key)) patch[key] = value[key];
+    });
+    setSaving(q.id);
+    const result = await api('/api/question-bank/questions/' + encodeURIComponent(q.id), {
+      method:'PUT', body:JSON.stringify({ patch, reviewStatus:forcedStatus || value._reviewStatus || 'pending', reviewNote:value._reviewNote || '' })
+    });
+    setSaving('');
+    if (result.error) return toast(result.error, 'error');
+    toast(forcedStatus === 'verified' ? '已标记为核验通过，桌宠端将自动热更新' : '题目修订已保存');
+    setEditing(''); setDraft(null); await loadBank();
+  }
+
+  async function revertQuestion(q) {
+    if (!confirm(`撤销 ${q.id} 的云端修订并恢复源题库？`)) return;
+    setSaving(q.id);
+    const result = await api('/api/question-bank/questions/' + encodeURIComponent(q.id), { method:'DELETE' });
+    setSaving('');
+    if (result.error) return toast(result.error, 'error');
+    toast('已恢复源题库版本'); setEditing(''); setDraft(null); await loadBank();
+  }
+
+  function option(label, value) { return h('option', { key:value, value }, label); }
+  function renderEditor(q, review) {
+    if (editing !== q.id || !draft) return null;
+    return h('div', { className:'qb-editor' },
+      h('div', { className:'qb-editor-grid' },
+        h('div', { className:'form-group' }, h('label', null, '题干'), h('textarea', { className:'input', value:draft.question || '', onChange:e=>setField('question',e.target.value) })),
+        h('div', { className:'form-group' }, h('label', null, '代码'), h('textarea', { className:'input code-input', value:draft.code || '', onChange:e=>setField('code',e.target.value), placeholder:'无代码可留空' })),
+      ),
+      Array.isArray(draft.options) && h('div', { className:'form-group' },
+        h('label', null, '选项与正确答案'),
+        draft.options.map((text,index)=>h('div',{className:'qb-option-edit',key:index},
+          h('input',{type:'radio',name:'correct-'+q.id,checked:draft.correctIndex===index,onChange:()=>setField('correctIndex',index),'aria-label':'设为正确答案'}),
+          h('textarea',{className:'input',value:text,onChange:e=>setOption(index,e.target.value),rows:2})
+        ))
+      ),
+      h('div', { className:'qb-editor-grid' },
+        h('div', { className:'form-group' }, h('label', null, '知识点分类'), h('input', { className:'input', value:draft.knowledgePoint || '', onChange:e=>setField('knowledgePoint',e.target.value) })),
+        h('div', { className:'form-group' }, h('label', null, '难度（1-3）'), h('input', { className:'input', type:'number', min:1, max:3, value:draft.difficulty ?? 2, onChange:e=>setField('difficulty',Number(e.target.value)) })),
+      ),
+      h('div', { className:'form-group' }, h('label', null, '答案解析'), h('textarea', { className:'input', value:draft.explanation || '', onChange:e=>setField('explanation',e.target.value), rows:5 })),
+      h('div', { className:'qb-review' },
+        h('div', { className:'form-group' }, h('label', null, '审核状态'), h('select', { className:'input', value:draft._reviewStatus, onChange:e=>setField('_reviewStatus',e.target.value) }, option('待复核','pending'),option('核验通过','verified'),option('确认有问题','problem'))),
+        h('div', { className:'form-group' }, h('label', null, '审核备注'), h('input', { className:'input', value:draft._reviewNote, onChange:e=>setField('_reviewNote',e.target.value), placeholder:'记录依据、待确认点或修改原因' })),
+      ),
+      h('div', { className:'qb-actions' }, h('span',{className:'qb-muted'},review?.updated_by?`上次由 ${review.updated_by} 更新`:'尚无人工审核记录'),
+        h('div',null,
+          review && h('button',{className:'btn btn-danger',onClick:()=>revertQuestion(q),disabled:saving===q.id},'恢复源题'),
+          h('button',{className:'btn btn-outline',onClick:()=>{setEditing('');setDraft(null)}},'取消'),
+          h('button',{className:'btn btn-primary',onClick:()=>saveQuestion(q),disabled:saving===q.id},saving===q.id?'保存中...':'保存修订')
+        )
+      )
+    );
+  }
+
+  function renderQuestion({q,issues,review}) {
+    const status = review?.review_status || 'unreviewed';
+    const answer = Array.isArray(q.options) && Number.isInteger(q.correctIndex) ? String.fromCharCode(65 + q.correctIndex) : '';
+    return h('article', { key:q.id, className:`qb-card ${issues.length?'has-issue':''} ${status==='verified'?'is-verified':''} ${status==='problem'?'is-problem':''}` },
+      h('div',{className:'qb-meta'},
+        h('span',{className:'qb-chip'},q.id), h('span',{className:'qb-chip'},questionSourceLabel(q)),
+        h('span',{className:'qb-chip'},q.year || '年份未知'), h('span',{className:'qb-chip'},q.knowledgePoint || '未分类'),
+        answer && h('span',{className:'qb-chip good'},'答案 '+answer),
+        h('span',{className:`qb-chip ${status==='verified'?'good':status==='problem'?'bad':''}`},status==='verified'?'已核验':status==='problem'?'确认有问题':review?'待复核':'未审核'),
+        issues.map(code=>h('span',{className:'qb-chip warn',key:code},QB_ISSUE_LABELS[code]))
+      ),
+      h('div',{className:'qb-question'},q.question || '（题干为空）'),
+      q.code && h('pre',{className:'qb-code'},q.code),
+      q.image && h('img',{className:'qb-image',src:questionImageUrl(q.image),alt:'题目配图',loading:'lazy',onError:e=>{e.currentTarget.style.display='none'}}),
+      Array.isArray(q.options) && h('div',{className:'qb-options'},q.options.map((text,index)=>h('div',{className:`qb-option ${q.correctIndex===index?'correct':''}`,key:index},text))),
+      q.explanation && h('div',{className:'qb-explanation'},q.explanation),
+      h('div',{className:'qb-actions'},
+        h('span',{className:'qb-muted'},review?.review_note || (issues.length ? `自动检查发现 ${issues.length} 项` : '自动检查未发现结构问题')),
+        h('div',null,
+          h('button',{className:'btn btn-outline',onClick:()=>beginEdit(q,review)},editing===q.id?'编辑中':'编辑'),
+          status!=='verified' && h('button',{className:'btn btn-primary',onClick:()=>saveQuestion(q,'verified'),disabled:saving===q.id},saving===q.id?'保存中...':'核验通过')
+        )
+      ),
+      renderEditor(q,review)
+    );
+  }
+
+  if (loading) return h('div',{className:'spinner'});
+  return h('section',{className:'qb-shell'},
+    h('div',{className:'qb-head'},h('div',null,h('h2',null,'题库质检'),h('div',{className:'qb-muted'},'统一检查题目、选项、答案、代码与解析，保存后进入桌宠热更新题库。')),h('button',{className:'btn btn-outline',onClick:loadBank},'刷新题库')),
+    h('div',{className:'qb-stats'},
+      h('div',{className:'qb-stat'},h('strong',null,questions.length),h('span',null,'题目总数')),
+      h('div',{className:'qb-stat'},h('strong',{style:{color:'#dc2626'}},criticalCount),h('span',null,'高风险题')),
+      h('div',{className:'qb-stat'},h('strong',{style:{color:'#c2410c'}},qualityCount),h('span',null,'解析待补强')),
+      h('div',{className:'qb-stat'},h('strong',{style:{color:'#047857'}},verifiedCount),h('span',null,'人工核验通过')),
+      h('div',{className:'qb-stat'},h('strong',{style:{color:'#2563eb'}},changedCount),h('span',null,'已有云端修订'))
+    ),
+    h('div',{className:'qb-filters'},
+      h('input',{className:'input',value:search,onChange:e=>setSearch(e.target.value),placeholder:'搜索题号、题干、代码、选项或解析'}),
+      h('select',{className:'input',value:source,onChange:e=>setSource(e.target.value)},option('全部来源','all'),option('GESP','gesp'),option('CSP-J','csp_exam'),option('NOIP','noip'),option('专项挑战','super_challenge')),
+      h('select',{className:'input',value:level,onChange:e=>setLevel(e.target.value)},option('全部等级','all'),...[1,2,3,4,5,6,7,8].map(n=>option(`GESP ${n}级`,String(n)))),
+      h('select',{className:'input',value:knowledge,onChange:e=>setKnowledge(e.target.value)},option('全部知识点','all'),...knowledgeOptions.map(k=>option(k,k))),
+      h('select',{className:'input',value:issueFilter,onChange:e=>setIssueFilter(e.target.value)},option('只看高风险题','critical'),option('只看解析质量','quality'),option('全部提醒','issues'),option('全部题目','all'),option('无自动提醒','clean'),...Object.entries(QB_ISSUE_LABELS).map(([v,l])=>option(l,v))),
+      h('select',{className:'input',value:statusFilter,onChange:e=>setStatusFilter(e.target.value)},option('全部审核状态','all'),option('未审核','unreviewed'),option('待复核','pending'),option('核验通过','verified'),option('确认有问题','problem'),option('已有云端修订','edited'))
+    ),
+    h('div',{className:'row',style:{marginBottom:10}},h('span',{className:'qb-muted'},`符合条件 ${filtered.length} 题`),h('span',{className:'qb-muted'},`第 ${Math.min(page+1,maxPage+1)} / ${maxPage+1} 页`)),
+    h('div',{className:'qb-list'},visible.length?visible.map(renderQuestion):h('div',{className:'empty'},'没有符合条件的题目')),
+    h('div',{className:'qb-pager'},h('button',{className:'btn btn-outline',disabled:page<=0,onClick:()=>setPage(p=>Math.max(0,p-1))},'上一页'),h('span',{className:'qb-muted'},`${page*pageSize+1}-${Math.min((page+1)*pageSize,filtered.length)} / ${filtered.length}`),h('button',{className:'btn btn-outline',disabled:page>=maxPage,onClick:()=>setPage(p=>Math.min(maxPage,p+1))},'下一页'))
   );
 }
 

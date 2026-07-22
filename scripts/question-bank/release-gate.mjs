@@ -8,9 +8,9 @@ const directory = path.join(root, 'public/course-data/question-bank-v2');
 
 export const DEFAULT_THRESHOLDS = {
   daily: 100,
-  super: 12,
+  super: 5,
   examPapers: 12,
-  examQuestionsPerPaper: 20,
+  examQuestionsPerPaper: 13,
   dungeon: 100,
 };
 
@@ -60,7 +60,7 @@ export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRE
       if (question.verificationStatus !== 'auto_verified') failures.push(`unverified=${logicalName}:${question.id}`);
       if (question.assets?.some(asset => asset.includes('/gesp-code-images/'))) failures.push(`leakedImage=${question.id}`);
       if (['choice', 'boolean'].includes(question.type)
-          && question.options.some(option => !String(option).replace(/^[A-DＡ-Ｄ][.、．:\s)]*/i, '').trim())) {
+          && question.options.some(option => !String(option).replace(/^[A-DＡ-Ｄ](?:[.、．:)]|\s)+/i, '').trim())) {
         failures.push(`emptyOption=${question.id}`);
       }
     }

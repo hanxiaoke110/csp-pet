@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T14:01:05.278Z",
+  "generatedAt": "2026-07-14T15:47:20.224Z",
   "summaries": [
     {
       "file": "public/course-data/csp-exam-bank.json",
@@ -11,10 +11,10 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "questions": 735,
-      "findings": 69,
+      "questions": 795,
+      "findings": 71,
       "bySeverity": {
-        "P2": 69
+        "P2": 71
       }
     },
     {
@@ -35,26 +35,26 @@
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
-      "questions": 590,
-      "findings": 54,
+      "questions": 1023,
+      "findings": 70,
       "bySeverity": {
-        "P2": 54
+        "P2": 70
       }
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
-      "questions": 590,
-      "findings": 54,
+      "questions": 1023,
+      "findings": 70,
       "bySeverity": {
-        "P2": 54
+        "P2": 70
       }
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
-      "questions": 590,
-      "findings": 54,
+      "questions": 1023,
+      "findings": 70,
       "bySeverity": {
-        "P2": 54
+        "P2": 70
       }
     },
     {
@@ -673,24 +673,6 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2023-12-1-05",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "对下面C++代码描述正确的是（ ）。",
-      "options": [
-        "A. 如果N<=2输出0",
-        "B. 如果N>=2输出N-1",
-        "C. 如果N>=2输出N",
-        "D. 以上均不正确"
-      ],
-      "explanation": "当N>=2时循环执行N-1次，输出N-1。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
       "id": "gesp-2023-12-1-12",
       "type": "choice",
       "group": "GESP",
@@ -778,24 +760,6 @@
         "D. 删除if并将i+=1改为i+=2同样能实现"
       ],
       "explanation": "将i+=1移到if前会导致i从2开始，丢失1的累加。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2024-06-2-02",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
-      "options": [
-        "A. (yr%400==0)||(yr%4==0)",
-        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
-        "C. (yr%400==0)&&(yr%4==0)",
-        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
-      ],
-      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
@@ -1464,6 +1428,78 @@
       "explanation": "优化冒泡：flag=false(假设有序)→有交换则flag=true→本轮结束若flag=false则已有序。横线1设flag=false，横线2(有交换时)设flag=true。答案B。"
     },
     {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2026-06-1-04",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列 C++ 表达式与 - 2 * 2 % 4 的值不同的是( )。",
+      "options": [
+        "A. - (2 * 2) % 4",
+        "B. (- 2 * 2) % 4",
+        "C. - 2 * (2 % 4)",
+        "D. (2 * 2) % - 4"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2026-06-2-04",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面选择项中,与 C++ 表达式 not (x > 5 or y <= 10) 等价的是( )。",
+      "options": [
+        "A. x <= 5 or y > 10",
+        "B. x > 5 and y <= 10",
+        "C. x <= 5 and y > 10",
+        "D. not x > 5 and not y <= 10"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2026-06-3-07",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于字符串和字符数组,下列说法正确的是( )。",
+      "options": [
+        "A. char str[] = \"GESP\"; int len1 = sizeof(str); int len2 = strlen(str); 上面程序能够正确",
+        "B. char str1[4] = \"GESP\"; char str2[4] = {'G', 'E', 'S', 'P'}; 这段程序将能够正确执行。",
+        "C. char str2[4] = {'G', 'E', 'S', 'P'}; strcpy(str2, \"HELLO,GESP\"); cout << str2",
+        "D. char dest[4] = {'G', 'E', 'S', 'P'}; char src[] = \"HELLO\"; strcat(dest, src);"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2026-06-3-13",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于 string 的成员函数,下面说法错误的是( )。",
+      "options": [
+        "A. size() :返回字符串长度(字符个数,不含 '\\0' )。",
+        "B. length() 与 size() 功能完全一致,返回字符串长度。",
+        "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
+        "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
       "file": "dist/course-data/csp-exam-bank.json",
       "id": "csp-j-2020-c03",
       "type": "choice",
@@ -2203,24 +2239,6 @@
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
-      "id": "gesp-2024-06-2-02",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
-      "options": [
-        "A. (yr%400==0)||(yr%4==0)",
-        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
-        "C. (yr%400==0)&&(yr%4==0)",
-        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
-      ],
-      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
-    },
-    {
-      "file": "public/course-data/unified-quiz-bank.json",
       "id": "gesp-2024-09-1-03",
       "type": "choice",
       "group": "",
@@ -2722,6 +2740,312 @@
         "D. ptr int;"
       ],
       "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-1-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列 C++ 表达式与 - 2 * 2 % 4 的值不同的是( )。",
+      "options": [
+        "A. - (2 * 2) % 4",
+        "B. (- 2 * 2) % 4",
+        "C. - 2 * (2 % 4)",
+        "D. (2 * 2) % - 4"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面选择项中,与 C++ 表达式 not (x > 5 or y <= 10) 等价的是( )。",
+      "options": [
+        "A. x <= 5 or y > 10",
+        "B. x > 5 and y <= 10",
+        "C. x <= 5 and y > 10",
+        "D. not x > 5 and not y <= 10"
+      ],
+      "explanation": "not (x > 5 or y <= 10) 根据德摩根律等价于 not (x > 5) and not (y <= 10)，即 x <= 5 and y > 10。答案C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-3-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于字符串和字符数组,下列说法正确的是( )。",
+      "options": [
+        "A. char str[] = \"GESP\"; int len1 = sizeof(str); int len2 = strlen(str); 上面程序能够正确",
+        "B. char str1[4] = \"GESP\"; char str2[4] = {'G', 'E', 'S', 'P'}; 这段程序将能够正确执行。",
+        "C. char str2[4] = {'G', 'E', 'S', 'P'}; strcpy(str2, \"HELLO,GESP\"); cout << str2",
+        "D. char dest[4] = {'G', 'E', 'S', 'P'}; char src[] = \"HELLO\"; strcat(dest, src);"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-3-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于 string 的成员函数,下面说法错误的是( )。",
+      "options": [
+        "A. size() :返回字符串长度(字符个数,不含 '\\0' )。",
+        "B. length() 与 size() 功能完全一致,返回字符串长度。",
+        "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
+        "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "noip-2017-p-462",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式 $\\texttt{a * (b + c) * d}$ 的后缀形式是（ ）。",
+      "options": [
+        "A. $\\texttt{a b c d * + *}$",
+        "B. $\\texttt{a b c + * d *}$",
+        "C. $\\texttt{a * b c + * d}$",
+        "D. $\\texttt{b + c * a * d}$"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-02",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列 C++ 表达式的结果为 `true` 的是（ ）。",
+      "options": [
+        "A. `(5 <= 5) && (7 < 5)`",
+        "B. `!(10 > 5)`",
+        "C. `(10 != 10) || (5 >= 3)`",
+        "D. `(5 == 3) && (4 > 2)`"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "要正确定义一个返回两个整数中较大值的函数 `max`，应该使用（ ）。",
+      "options": [
+        "A. `void max(int a, int b) { return a > b ? a : b; }`",
+        "B. `int max(int a, int b) { if (a > b) return a; else return b; }`",
+        "C. `int max(a, b) { if (a > b) return a; else return b; }`",
+        "D. `void max(a, b) { cout << (a > b ? a : b); }`"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 函数的说法，正确的是（ ）。",
+      "options": [
+        "A. 函数参数传递只有值传递一种方式。",
+        "B. 函数的形参在函数调用结束后依然占用内存空间",
+        "C. 没有返回值的函数必须声明为 `void` 类型，且不能包含 `return` 语句",
+        "D. C++11 及之后标准要求函数必须显式声明返回类型，不允许默认返回 `int`"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 中 `string` 类和字符数组（`char[]`）的说法，错误的是（ ）。",
+      "options": [
+        "A. `string` 对象可以使用 `=` 进行赋值，而字符数组需要使用 `strcpy`。",
+        "B. `string` 对象的长度可以使用 `length()` 成员函数获取，而字符数组需要使用 `strlen()` 函数。",
+        "C. `string` 对象在内存中是动态分配空间的，因此可以自动处理字符串长度的变化。",
+        "D. `string` 对象和字符数组都可以使用 `==` 运算符来直接比较两个字符串的内容是否相同。"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-4-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于插入排序的时间复杂度，下列说法正确的是（ ）。",
+      "options": [
+        "A. 最好情况和最坏情况的时间复杂度都是 $O(n^2)$",
+        "B. 最好情况是 $O(n)$，最坏情况是 $O(n^2)$",
+        "C. 最好情况是 $O(n)$，最坏情况是 $O(2^n)$",
+        "D. 最好情况是 $O(n^2)$，最坏情况是 $O(2^n)$"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-1-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+      "options": [
+        "A. 不可以用 `for` 作为变量名，因为 `for` 是 C++ 的关键字（保留字）。",
+        "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+        "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+        "D. 可以用 `printf` 作为变量名，因为 `printf` 是关键字，但这不是好习惯，因为 `printf` 有约定的功能与含义。"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-2-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+      "options": [
+        "A. 不可以用 for 作为变量名，因为 for 是 C++ 的关键字（保留字）。",
+        "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+        "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+        "D. 可以用 printf 作为变量名，因为 printf 是关键字，但这不是好习惯，因为 printf 有约定的功能与含义。"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-3-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 求最小值函数 `min()` 的描述，不正确的是（ ）",
+      "options": [
+        "A. 函数必须返回一个值",
+        "B. 该函数可以嵌套调用",
+        "C. 调用 `min(5)` 是错误的，不能通过编译",
+        "D. 调用 `min()`（不传任何参数）可以通过编译，结果为 $0$"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-3-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 中 `abs()` 函数的描述，正确的是（ ）",
+      "options": [
+        "A. `abs()` 函数可用于计算 `int` 类型整数的绝对值，头文件为 `<cmath>` 或 `<cstdlib>`",
+        "B. 调用 `abs(3.14)` 可以四舍五入得到 $3$",
+        "C. `abs(-1, -2)` 的返回值是 $1$",
+        "D. 若传入负数浮点数，`abs()` 会自动截断小数部分后返回整数绝对值"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "小杨想让指针 `p` 指向整数变量 `x`，正确写法是（ ）。",
+      "options": [
+        "A. `int p = &x;`",
+        "B. `int *p = x;`",
+        "C. `int *p = &x;`",
+        "D. `p = *x;`"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-3-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "补码的情况下，关于按位取反运算，用笔计算的情况下，以下说法错误的是：（ ）",
+      "options": [
+        "A. `~5` 的结果是 $-6$（`int` 类型，$32$ 位）",
+        "B. `~0` 的结果是 $0$（`int` 类型，$32$ 位）",
+        "C. `~(-3)` 的结果是 $2$（`int` 类型，$32$ 位）",
+        "D. `~8` 的结果是 $-9$（`int` 类型，$32$ 位）"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列关于结构体初始化的写法，正确的是（ ）。",
+      "options": [
+        "A. `struct Point { int x, y; }; Point p = (1,2);`",
+        "B. `struct Point { int x, y; }; Point p = {1,2};`",
+        "C. `struct Point { int x, y; }; Point p = new Point(1,2);`",
+        "D. `struct Point { int x, y; }; Point p = <1,2>;`"
+      ],
+      "explanation": "官方答案：B。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -3175,24 +3499,6 @@
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
-      "id": "gesp-2024-06-2-02",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
-      "options": [
-        "A. (yr%400==0)||(yr%4==0)",
-        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
-        "C. (yr%400==0)&&(yr%4==0)",
-        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
-      ],
-      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
-    },
-    {
-      "file": "dist/course-data/unified-quiz-bank.json",
       "id": "gesp-2024-09-1-03",
       "type": "choice",
       "group": "",
@@ -3694,6 +4000,312 @@
         "D. ptr int;"
       ],
       "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-1-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列 C++ 表达式与 - 2 * 2 % 4 的值不同的是( )。",
+      "options": [
+        "A. - (2 * 2) % 4",
+        "B. (- 2 * 2) % 4",
+        "C. - 2 * (2 % 4)",
+        "D. (2 * 2) % - 4"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面选择项中,与 C++ 表达式 not (x > 5 or y <= 10) 等价的是( )。",
+      "options": [
+        "A. x <= 5 or y > 10",
+        "B. x > 5 and y <= 10",
+        "C. x <= 5 and y > 10",
+        "D. not x > 5 and not y <= 10"
+      ],
+      "explanation": "not (x > 5 or y <= 10) 根据德摩根律等价于 not (x > 5) and not (y <= 10)，即 x <= 5 and y > 10。答案C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-3-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于字符串和字符数组,下列说法正确的是( )。",
+      "options": [
+        "A. char str[] = \"GESP\"; int len1 = sizeof(str); int len2 = strlen(str); 上面程序能够正确",
+        "B. char str1[4] = \"GESP\"; char str2[4] = {'G', 'E', 'S', 'P'}; 这段程序将能够正确执行。",
+        "C. char str2[4] = {'G', 'E', 'S', 'P'}; strcpy(str2, \"HELLO,GESP\"); cout << str2",
+        "D. char dest[4] = {'G', 'E', 'S', 'P'}; char src[] = \"HELLO\"; strcat(dest, src);"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-3-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于 string 的成员函数,下面说法错误的是( )。",
+      "options": [
+        "A. size() :返回字符串长度(字符个数,不含 '\\0' )。",
+        "B. length() 与 size() 功能完全一致,返回字符串长度。",
+        "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
+        "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "noip-2017-p-462",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式 $\\texttt{a * (b + c) * d}$ 的后缀形式是（ ）。",
+      "options": [
+        "A. $\\texttt{a b c d * + *}$",
+        "B. $\\texttt{a b c + * d *}$",
+        "C. $\\texttt{a * b c + * d}$",
+        "D. $\\texttt{b + c * a * d}$"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-02",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列 C++ 表达式的结果为 `true` 的是（ ）。",
+      "options": [
+        "A. `(5 <= 5) && (7 < 5)`",
+        "B. `!(10 > 5)`",
+        "C. `(10 != 10) || (5 >= 3)`",
+        "D. `(5 == 3) && (4 > 2)`"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "要正确定义一个返回两个整数中较大值的函数 `max`，应该使用（ ）。",
+      "options": [
+        "A. `void max(int a, int b) { return a > b ? a : b; }`",
+        "B. `int max(int a, int b) { if (a > b) return a; else return b; }`",
+        "C. `int max(a, b) { if (a > b) return a; else return b; }`",
+        "D. `void max(a, b) { cout << (a > b ? a : b); }`"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 函数的说法，正确的是（ ）。",
+      "options": [
+        "A. 函数参数传递只有值传递一种方式。",
+        "B. 函数的形参在函数调用结束后依然占用内存空间",
+        "C. 没有返回值的函数必须声明为 `void` 类型，且不能包含 `return` 语句",
+        "D. C++11 及之后标准要求函数必须显式声明返回类型，不允许默认返回 `int`"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 中 `string` 类和字符数组（`char[]`）的说法，错误的是（ ）。",
+      "options": [
+        "A. `string` 对象可以使用 `=` 进行赋值，而字符数组需要使用 `strcpy`。",
+        "B. `string` 对象的长度可以使用 `length()` 成员函数获取，而字符数组需要使用 `strlen()` 函数。",
+        "C. `string` 对象在内存中是动态分配空间的，因此可以自动处理字符串长度的变化。",
+        "D. `string` 对象和字符数组都可以使用 `==` 运算符来直接比较两个字符串的内容是否相同。"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-4-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于插入排序的时间复杂度，下列说法正确的是（ ）。",
+      "options": [
+        "A. 最好情况和最坏情况的时间复杂度都是 $O(n^2)$",
+        "B. 最好情况是 $O(n)$，最坏情况是 $O(n^2)$",
+        "C. 最好情况是 $O(n)$，最坏情况是 $O(2^n)$",
+        "D. 最好情况是 $O(n^2)$，最坏情况是 $O(2^n)$"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-1-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+      "options": [
+        "A. 不可以用 `for` 作为变量名，因为 `for` 是 C++ 的关键字（保留字）。",
+        "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+        "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+        "D. 可以用 `printf` 作为变量名，因为 `printf` 是关键字，但这不是好习惯，因为 `printf` 有约定的功能与含义。"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-2-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+      "options": [
+        "A. 不可以用 for 作为变量名，因为 for 是 C++ 的关键字（保留字）。",
+        "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+        "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+        "D. 可以用 printf 作为变量名，因为 printf 是关键字，但这不是好习惯，因为 printf 有约定的功能与含义。"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-3-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 求最小值函数 `min()` 的描述，不正确的是（ ）",
+      "options": [
+        "A. 函数必须返回一个值",
+        "B. 该函数可以嵌套调用",
+        "C. 调用 `min(5)` 是错误的，不能通过编译",
+        "D. 调用 `min()`（不传任何参数）可以通过编译，结果为 $0$"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-3-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 中 `abs()` 函数的描述，正确的是（ ）",
+      "options": [
+        "A. `abs()` 函数可用于计算 `int` 类型整数的绝对值，头文件为 `<cmath>` 或 `<cstdlib>`",
+        "B. 调用 `abs(3.14)` 可以四舍五入得到 $3$",
+        "C. `abs(-1, -2)` 的返回值是 $1$",
+        "D. 若传入负数浮点数，`abs()` 会自动截断小数部分后返回整数绝对值"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "小杨想让指针 `p` 指向整数变量 `x`，正确写法是（ ）。",
+      "options": [
+        "A. `int p = &x;`",
+        "B. `int *p = x;`",
+        "C. `int *p = &x;`",
+        "D. `p = *x;`"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-3-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "补码的情况下，关于按位取反运算，用笔计算的情况下，以下说法错误的是：（ ）",
+      "options": [
+        "A. `~5` 的结果是 $-6$（`int` 类型，$32$ 位）",
+        "B. `~0` 的结果是 $0$（`int` 类型，$32$ 位）",
+        "C. `~(-3)` 的结果是 $2$（`int` 类型，$32$ 位）",
+        "D. `~8` 的结果是 $-9$（`int` 类型，$32$ 位）"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列关于结构体初始化的写法，正确的是（ ）。",
+      "options": [
+        "A. `struct Point { int x, y; }; Point p = (1,2);`",
+        "B. `struct Point { int x, y; }; Point p = {1,2};`",
+        "C. `struct Point { int x, y; }; Point p = new Point(1,2);`",
+        "D. `struct Point { int x, y; }; Point p = <1,2>;`"
+      ],
+      "explanation": "官方答案：B。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -4147,24 +4759,6 @@
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
-      "id": "gesp-2024-06-2-02",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "判断闰年的流程图中菱形框应填入（ ）。 ![流程图](https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data/flowchart-gesp-2024-06-2-02.svg)",
-      "options": [
-        "A. (yr%400==0)||(yr%4==0)",
-        "B. (yr%400==0)||(yr%4==0&&yr%100!=0)",
-        "C. (yr%400==0)&&(yr%4==0)",
-        "D. (yr%400==0)&&(yr%4==0&&yr%100!=0)"
-      ],
-      "explanation": "闰年判断条件：年份能被4整除且不能被100整除，或者能被400整除。"
-    },
-    {
-      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
       "id": "gesp-2024-09-1-03",
       "type": "choice",
       "group": "",
@@ -4666,6 +5260,312 @@
         "D. ptr int;"
       ],
       "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-1-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列 C++ 表达式与 - 2 * 2 % 4 的值不同的是( )。",
+      "options": [
+        "A. - (2 * 2) % 4",
+        "B. (- 2 * 2) % 4",
+        "C. - 2 * (2 % 4)",
+        "D. (2 * 2) % - 4"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-2-04",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面选择项中,与 C++ 表达式 not (x > 5 or y <= 10) 等价的是( )。",
+      "options": [
+        "A. x <= 5 or y > 10",
+        "B. x > 5 and y <= 10",
+        "C. x <= 5 and y > 10",
+        "D. not x > 5 and not y <= 10"
+      ],
+      "explanation": "not (x > 5 or y <= 10) 根据德摩根律等价于 not (x > 5) and not (y <= 10)，即 x <= 5 and y > 10。答案C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-3-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于字符串和字符数组,下列说法正确的是( )。",
+      "options": [
+        "A. char str[] = \"GESP\"; int len1 = sizeof(str); int len2 = strlen(str); 上面程序能够正确",
+        "B. char str1[4] = \"GESP\"; char str2[4] = {'G', 'E', 'S', 'P'}; 这段程序将能够正确执行。",
+        "C. char str2[4] = {'G', 'E', 'S', 'P'}; strcpy(str2, \"HELLO,GESP\"); cout << str2",
+        "D. char dest[4] = {'G', 'E', 'S', 'P'}; char src[] = \"HELLO\"; strcat(dest, src);"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-06-3-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于 string 的成员函数,下面说法错误的是( )。",
+      "options": [
+        "A. size() :返回字符串长度(字符个数,不含 '\\0' )。",
+        "B. length() 与 size() 功能完全一致,返回字符串长度。",
+        "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
+        "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "noip-2017-p-462",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "表达式 $\\texttt{a * (b + c) * d}$ 的后缀形式是（ ）。",
+      "options": [
+        "A. $\\texttt{a b c d * + *}$",
+        "B. $\\texttt{a b c + * d *}$",
+        "C. $\\texttt{a * b c + * d}$",
+        "D. $\\texttt{b + c * a * d}$"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-02",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列 C++ 表达式的结果为 `true` 的是（ ）。",
+      "options": [
+        "A. `(5 <= 5) && (7 < 5)`",
+        "B. `!(10 > 5)`",
+        "C. `(10 != 10) || (5 >= 3)`",
+        "D. `(5 == 3) && (4 > 2)`"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-05",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "要正确定义一个返回两个整数中较大值的函数 `max`，应该使用（ ）。",
+      "options": [
+        "A. `void max(int a, int b) { return a > b ? a : b; }`",
+        "B. `int max(int a, int b) { if (a > b) return a; else return b; }`",
+        "C. `int max(a, b) { if (a > b) return a; else return b; }`",
+        "D. `void max(a, b) { cout << (a > b ? a : b); }`"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-13",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 函数的说法，正确的是（ ）。",
+      "options": [
+        "A. 函数参数传递只有值传递一种方式。",
+        "B. 函数的形参在函数调用结束后依然占用内存空间",
+        "C. 没有返回值的函数必须声明为 `void` 类型，且不能包含 `return` 语句",
+        "D. C++11 及之后标准要求函数必须显式声明返回类型，不允许默认返回 `int`"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-15",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 中 `string` 类和字符数组（`char[]`）的说法，错误的是（ ）。",
+      "options": [
+        "A. `string` 对象可以使用 `=` 进行赋值，而字符数组需要使用 `strcpy`。",
+        "B. `string` 对象的长度可以使用 `length()` 成员函数获取，而字符数组需要使用 `strlen()` 函数。",
+        "C. `string` 对象在内存中是动态分配空间的，因此可以自动处理字符串长度的变化。",
+        "D. `string` 对象和字符数组都可以使用 `==` 运算符来直接比较两个字符串的内容是否相同。"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-4-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于插入排序的时间复杂度，下列说法正确的是（ ）。",
+      "options": [
+        "A. 最好情况和最坏情况的时间复杂度都是 $O(n^2)$",
+        "B. 最好情况是 $O(n)$，最坏情况是 $O(n^2)$",
+        "C. 最好情况是 $O(n)$，最坏情况是 $O(2^n)$",
+        "D. 最好情况是 $O(n^2)$，最坏情况是 $O(2^n)$"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-1-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+      "options": [
+        "A. 不可以用 `for` 作为变量名，因为 `for` 是 C++ 的关键字（保留字）。",
+        "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+        "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+        "D. 可以用 `printf` 作为变量名，因为 `printf` 是关键字，但这不是好习惯，因为 `printf` 有约定的功能与含义。"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-2-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下面有关 C++ 变量的说法，正确的是（ ）。",
+      "options": [
+        "A. 不可以用 for 作为变量名，因为 for 是 C++ 的关键字（保留字）。",
+        "B. `_tnt` 不可以是变量名，因为变量名的第一个字符必须是英文字母。",
+        "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
+        "D. 可以用 printf 作为变量名，因为 printf 是关键字，但这不是好习惯，因为 printf 有约定的功能与含义。"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-3-07",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 求最小值函数 `min()` 的描述，不正确的是（ ）",
+      "options": [
+        "A. 函数必须返回一个值",
+        "B. 该函数可以嵌套调用",
+        "C. 调用 `min(5)` 是错误的，不能通过编译",
+        "D. 调用 `min()`（不传任何参数）可以通过编译，结果为 $0$"
+      ],
+      "explanation": "官方答案：D。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-3-14",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "以下关于 C++ 中 `abs()` 函数的描述，正确的是（ ）",
+      "options": [
+        "A. `abs()` 函数可用于计算 `int` 类型整数的绝对值，头文件为 `<cmath>` 或 `<cstdlib>`",
+        "B. 调用 `abs(3.14)` 可以四舍五入得到 $3$",
+        "C. `abs(-1, -2)` 的返回值是 $1$",
+        "D. 若传入负数浮点数，`abs()` 会自动截断小数部分后返回整数绝对值"
+      ],
+      "explanation": "官方答案：A。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-4-01",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "小杨想让指针 `p` 指向整数变量 `x`，正确写法是（ ）。",
+      "options": [
+        "A. `int p = &x;`",
+        "B. `int *p = x;`",
+        "C. `int *p = &x;`",
+        "D. `p = *x;`"
+      ],
+      "explanation": "官方答案：C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-3-09",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "补码的情况下，关于按位取反运算，用笔计算的情况下，以下说法错误的是：（ ）",
+      "options": [
+        "A. `~5` 的结果是 $-6$（`int` 类型，$32$ 位）",
+        "B. `~0` 的结果是 $0$（`int` 类型，$32$ 位）",
+        "C. `~(-3)` 的结果是 $2$（`int` 类型，$32$ 位）",
+        "D. `~8` 的结果是 $-9$（`int` 类型，$32$ 位）"
+      ],
+      "explanation": "官方答案：B。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-4-06",
+      "type": "choice",
+      "group": "",
+      "severity": "P2",
+      "reasons": [
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "下列关于结构体初始化的写法，正确的是（ ）。",
+      "options": [
+        "A. `struct Point { int x, y; }; Point p = (1,2);`",
+        "B. `struct Point { int x, y; }; Point p = {1,2};`",
+        "C. `struct Point { int x, y; }; Point p = new Point(1,2);`",
+        "D. `struct Point { int x, y; }; Point p = <1,2>;`"
+      ],
+      "explanation": "官方答案：B。"
     }
   ]
 }

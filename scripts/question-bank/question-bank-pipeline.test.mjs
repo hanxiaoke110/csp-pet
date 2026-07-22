@@ -107,7 +107,7 @@ describe('release cutover gate', () => {
       files: { 'verification-summary.json': summary, 'exam-manifests.json': exam },
     });
     expect(result.ready).toBe(false);
-    expect(result.failures).toContain('super=0<12');
+    expect(result.failures).toContain('super=0<5');
   });
 });
 
@@ -115,16 +115,16 @@ describe('verified channel publishing', () => {
   it('keeps quarantined questions out and applies channel rules', () => {
     const questions = [
       { id: 'g', source: 'gesp', type: 'choice', exam: { level: 2, group: null }, verificationStatus: 'auto_verified', children: [] },
-      { id: 'r', source: 'csp_exam', type: 'reading', exam: { level: null, group: 'J' }, verificationStatus: 'auto_verified', children: [{}] },
-      { id: 's', source: 'csp_exam', type: 'choice', exam: { level: null, group: 'S' }, verificationStatus: 'auto_verified', children: [] },
+      { id: 'csp-j-2019-reading-01', source: 'csp_exam', type: 'reading', exam: { level: null, group: 'J' }, verificationStatus: 'auto_verified', children: [{}] },
+      { id: 's', source: 'csp_exam', type: 'choice', exam: { level: null, group: 'S' }, provenance: { level: 'local_source_copy' }, verificationStatus: 'auto_verified', children: [] },
       { id: 'bad', source: 'gesp', type: 'choice', exam: { level: 2, group: null }, verificationStatus: 'disputed', children: [] },
     ];
     const channels = buildChannels(questions);
 
     expect(channels.daily.map(question => question.id)).toEqual(['g']);
-    expect(channels.super.map(question => question.id)).toEqual(['r']);
-    expect(channels.exam.map(question => question.id)).toEqual(['r', 's']);
-    expect(channels.dungeon.map(question => question.id)).toEqual(['g', 'r']);
+    expect(channels.super.map(question => question.id)).toEqual(['csp-j-2019-reading-01']);
+    expect(channels.exam.map(question => question.id)).toEqual(['csp-j-2019-reading-01', 's']);
+    expect(channels.dungeon.map(question => question.id)).toEqual(['g', 'csp-j-2019-reading-01']);
     expect(Object.values(channels).flat().some(question => question.id === 'bad')).toBe(false);
   });
 });

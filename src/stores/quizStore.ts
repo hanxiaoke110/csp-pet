@@ -79,6 +79,7 @@ export interface QuizState {
 
   // CSP 真题训练方法
   completeExamQuestion: (questionId: string, type: 'choice' | 'reading' | 'fillBlank', isCorrect: boolean) => void;
+  setExamGroup: (group: 'J' | 'S') => void;
   canClaimExamDaily: () => boolean;
   getExamDailyAccuracy: () => number;
   claimExamDailyReward: () => { exp: number; coins: number; bonusLabel: string } | null;
@@ -404,6 +405,11 @@ export const useQuizStore = create<QuizState>((set, get) => {
     },
 
     // CSP 真题训练方法
+    setExamGroup: (examGroup) => {
+      set({ examGroup });
+      get().save();
+    },
+
     completeExamQuestion: (questionId, type, isCorrect) => {
       const s = get();
       const todayDate = new Date().toISOString().slice(0, 10);
@@ -446,7 +452,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
         if (r.type === 'choice') choiceCount++;
         else hasReadingOrFill = true;
       }
-      return choiceCount >= 3 && hasReadingOrFill;
+      return choiceCount >= 3 && (s.examGroup === 'S' || hasReadingOrFill);
     },
 
     getExamDailyAccuracy: () => {

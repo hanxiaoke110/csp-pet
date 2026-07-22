@@ -3,11 +3,11 @@ import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import { emit } from '@tauri-apps/api/event';
 import { renderCodeText } from '../../utils/markdown';
-import { loadExcludedQuestionIds } from '../../utils/excludedQuestions';
-import { loadVersionedRemoteJson } from '../../utils/versionedRemoteJson';
 import { useNavigate } from 'react-router-dom';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
 import KnowledgePointHelp from '../shared/KnowledgePointHelp';
+import { beginQuestionBankSession } from '../../question-bank/repository';
+import { toLegacyQuestion } from '../../question-bank/adapters';
 
 // 月度复盘单次奖励封顶（金币/经验）
 const MONTHLY_REVIEW_COIN_CAP = 300;
@@ -27,36 +27,22 @@ interface QuizQuestion {
   options: string[];
   correctIndex: number;
   explanation: string;
+  type?: 'choice' | 'reading' | 'fillBlank';
+  subQuestions?: { label: string; options: string[]; correctIndex: number; explanation?: string }[];
+  blanks?: { label?: string; position: number; options: string[]; correctIndex: number; explanation?: string }[];
+  answers?: number[];
 }
 
 type Mode = 'weekly' | 'extra' | 'free' | 'review' | 'super';
 
 let questionBank: QuizQuestion[] | null = null;
 
-function isUsableBank(bank: QuizQuestion[]): boolean {
-  return bank.some(q => q.source === 'csp_exam' || q.source === 'gesp' || q.source === 'super_challenge');
-}
-
-function isQuizBankData(data: unknown): data is Record<string, QuizQuestion> {
-  if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
-  const values = Object.values(data);
-  return values.length > 0 && isUsableBank(values as QuizQuestion[]);
-}
-
 async function loadBank(): Promise<QuizQuestion[]> {
   if (questionBank) return questionBank;
-  // 读取统一排除配置（单一数据源 /course-data/excluded-question-ids.json），失败降级为空集
-  const excluded = await loadExcludedQuestionIds();
-  const filterExcluded = (bank: QuizQuestion[]) => bank.filter(q => !excluded.has(q.id));
-  const data = await loadVersionedRemoteJson<Record<string, QuizQuestion>>({
-    cacheKey: 'csp_quiz_bank',
-    versionKey: 'csp_quiz_bank_version',
-    versionFile: 'version.json',
-    dataFile: 'unified-quiz-bank.json',
-    bundledUrl: '/course-data/unified-quiz-bank.json',
-    validate: isQuizBankData,
-  });
-  questionBank = filterExcluded(Object.values(data));
+  const session = await beginQuestionBankSession(['daily', 'super']);
+  const daily = (session.channels.daily || []).map(question => toLegacyQuestion(question));
+  const superQuestions = (session.channels.super || []).map(question => toLegacyQuestion(question, 'super_challenge'));
+  questionBank = [...daily, ...superQuestions] as QuizQuestion[];
   return questionBank!;
 }
 
@@ -657,8 +643,9 @@ export default function QuizPractice() {
 
   // --- Super Challenge answering screen ---
   if (mode === 'super' && questions.length > 0) {
-    const q = questions[0] as QuizQuestion & { code?: string; subQuestions?: number; type?: string; answers?: (boolean | number)[] };
-    const subCount = q.subQuestions || 5;
+    const q = questions[0];
+    const subItems = q.type === 'fillBlank' ? (q.blanks || []) : (q.subQuestions || []);
+    const subCount = subItems.length;
 
     const handleSuperSubmit = () => {
       if (superAnswers.length < subCount) return;
@@ -710,28 +697,19 @@ export default function QuizPractice() {
           <h4 style={{ marginBottom: 16 }}>请作答（共 {subCount} 小问）</h4>
           <div className="super-answers">
             {Array.from({ length: subCount }, (_, i) => {
-              const isTF = i < 3 && q.type === 'reading';
+              const item = subItems[i];
               return (
                 <div key={i} className="super-answer-row">
-                  <span className="super-q-num">{i + 1}</span>
-                  {isTF ? (
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ marginBottom: 8, lineHeight: 1.6 }}><b>{i + 1}.</b> {item?.label}</div>
                     <div className="super-options">
-                      <label className={`super-opt ${superAnswers[i] === 0 ? 'selected' : ''}`} onClick={() => {
-                        const a = [...superAnswers]; a[i] = 0; setSuperAnswers(a);
-                      }}>√ 正确</label>
-                      <label className={`super-opt ${superAnswers[i] === 1 ? 'selected' : ''}`} onClick={() => {
-                        const a = [...superAnswers]; a[i] = 1; setSuperAnswers(a);
-                      }}>× 错误</label>
-                    </div>
-                  ) : (
-                    <div className="super-options">
-                      {['A', 'B', 'C', 'D'].map((opt, oi) => (
-                        <label key={opt} className={`super-opt ${superAnswers[i] === oi ? 'selected' : ''}`} onClick={() => {
+                      {(item?.options || []).map((opt, oi) => (
+                        <label key={`${oi}-${opt}`} className={`super-opt ${superAnswers[i] === oi ? 'selected' : ''}`} onClick={() => {
                           const a = [...superAnswers]; a[i] = oi; setSuperAnswers(a);
-                        }}>{opt}</label>
+                        }}><b>{String.fromCharCode(65 + oi)}.</b> {opt}</label>
                       ))}
                     </div>
-                  )}
+                  </div>
                 </div>
               );
             })}

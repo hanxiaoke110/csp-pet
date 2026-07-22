@@ -17,6 +17,7 @@ import AdminPage from './components/admin/AdminPage';
 import LearningResourcesPage from './components/resources/LearningResourcesPage';
 import DungeonEmbed from '../src-dungeon/DungeonEmbed';
 import { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/utils/routeBridge';
+import { refreshQuestionBankV2 } from './question-bank/repository';
 import { safeListen } from './lib/tauriEvents';
 import { useCourseStore } from './stores/courseStore';
 import { useHatchStore } from './stores/hatchStore';
@@ -168,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.7';
+  const VER = '1.7.12';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -179,12 +180,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>⚔️ 智子试炼场重打与排行榜优化</div>
-          <div>🧪 题库残缺代码题过滤与展示修复</div>
-          <div>📖 学习资料入口上线</div>
-          <div>🏅 CSP 真题与选择题题库可靠性增强</div>
-          <div>💰 金币消耗入口补充</div>
-          <div>🐛 多项体验与稳定性修复</div>
+          <div>✅ 日常、超级挑战、真题与试炼场统一使用已核验题库</div>
+          <div>📄 CSP-J/S 选择题按原卷恢复并内置离线快照</div>
+          <div>⚡ 超级挑战完整显示每个小问题干和选项</div>
+          <div>🛡️ 图表缺失、OCR 异常和未核验程序题自动隔离</div>
+          <div>🔄 新题库支持校验哈希、缓存回退与后续热更新</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -364,6 +364,30 @@ function App() {
           }
         }
       } catch { /* network error, use local */ }
+
+      // Teacher-reviewed corrections are stored as a cloud overlay. Check its tiny
+      // revision endpoint on every launch and download the merged bank only when needed.
+      try {
+        const reviewVersionResp = await tauriFetch('https://api.cspstudy.top/api/question-bank/version', { connectTimeout: 10_000 });
+        if (reviewVersionResp.ok) {
+          const reviewVersion = await reviewVersionResp.json();
+          const mergedVersion = `${Number(reviewVersion.baseVersion) || 0}:${Number(reviewVersion.revision) || 0}`;
+          if (mergedVersion !== localStorage.getItem('csp_reviewed_quiz_bank_version')) {
+            const mergedBankResp = await tauriFetch('https://api.cspstudy.top/api/question-bank/data', { connectTimeout: 20_000 });
+            if (mergedBankResp.ok) {
+              const mergedBank = await mergedBankResp.json();
+              if (mergedBank && typeof mergedBank === 'object' && !Array.isArray(mergedBank)) {
+                localStorage.setItem('csp_quiz_bank', JSON.stringify(mergedBank));
+                localStorage.setItem('csp_reviewed_quiz_bank_version', mergedVersion);
+              }
+            }
+          }
+        }
+      } catch { /* keep the Gitee or bundled question bank */ }
+
+      // V2 uses a tiny manifest check and downloads immutable snapshots only when
+      // their revision changes. A failed refresh never blocks bundled offline use.
+      refreshQuestionBankV2().catch(() => {});
 
       // 2. Check for imported course data
       const imported = localStorage.getItem('csp_imported_lessons');

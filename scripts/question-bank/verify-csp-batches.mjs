@@ -13,6 +13,7 @@ import { validateQuestion } from './lib/validate.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const API_URL = process.env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions';
 const MODEL = process.env.DEEPSEEK_MODEL || 'deepseek-v4-pro';
+const MAX_TOKENS = Math.max(1024, Number(process.env.DEEPSEEK_MAX_TOKENS || 16384));
 
 function readJson(filePath, fallback) {
   return fs.existsSync(filePath) ? JSON.parse(fs.readFileSync(filePath, 'utf8')) : fallback;
@@ -104,14 +105,14 @@ function normalizeUnanswerableResult(result, question) {
   };
 }
 
-async function callBatch(role, questions, apiKey, includeExplanation, retryDepth = 0) {
+export async function callBatch(role, questions, apiKey, includeExplanation, retryDepth = 0) {
   const isCritic = role.includes('批判器');
   const response = await fetchWithRetry(API_URL, {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: MODEL,
-      max_tokens: 16384,
+      max_tokens: MAX_TOKENS,
       temperature: isCritic ? 0 : 0.15,
       response_format: { type: 'json_object' },
       messages: [

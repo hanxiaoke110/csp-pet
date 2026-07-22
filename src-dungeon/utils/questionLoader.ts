@@ -3,6 +3,8 @@ import type { Question, DungeonDefinition } from '../types/dungeon';
 import type { KnowledgeTag } from '../data/skills';
 import { loadExcludedQuestionIds, getCachedExcludedQuestionIds } from '../../src/utils/excludedQuestions';
 import { loadVersionedRemoteJson } from '../../src/utils/versionedRemoteJson';
+import { beginQuestionBankSession } from '../../src/question-bank/repository';
+import { toLegacyQuestion } from '../../src/question-bank/adapters';
 
 const CACHE_PREFIX = 'dungeon_';
 const REVIEWED_BANK_API = 'https://api.cspstudy.top/api/question-bank';
@@ -64,6 +66,13 @@ function isDungeonQuestionBankData(data: unknown): data is DungeonQuestionBankDa
 // ── Public API ──
 
 export async function loadQuestionBank(): Promise<Question[]> {
+  try {
+    const session = await beginQuestionBankSession(['dungeon']);
+    const verified = (session.channels.dungeon || []).map(question => toLegacyQuestion(question)) as Question[];
+    if (verified.length > 0) return verified;
+  } catch {
+    // Older installations can still use the legacy three-level cache below.
+  }
   // 预加载统一排除配置（与 /quiz 共用 /course-data/excluded-question-ids.json），
   // 供后续同步过滤 isBrokenCodeQuestion 使用。失败降级为空集，不影响题库加载。
   await loadExcludedQuestionIds();

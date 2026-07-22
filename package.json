@@ -26,11 +26,15 @@
     "question-bank:csp": "node scripts/question-bank/verify-csp-batches.mjs",
     "question-bank:csp-sources": "node scripts/question-bank/index-csp-sources.mjs",
     "question-bank:csp-map": "node scripts/question-bank/map-csp-source-pages.mjs",
+    "question-bank:csp-extract": "node scripts/question-bank/extract-csp-choice-sources.mjs",
+    "question-bank:csp-prepare": "node scripts/question-bank/prepare-csp-choice-recovery.mjs",
+    "question-bank:csp-source-evidence": "node scripts/question-bank/seed-csp-source-evidence.mjs",
+    "question-bank:csp-recovery-answers": "node scripts/question-bank/verify-csp-recovery-answers.mjs",
     "question-bank:explanations": "node scripts/question-bank/verify-explanations-batch.mjs",
     "question-bank:verify": "node scripts/question-bank/verify-canonical.mjs",
     "question-bank:publish": "node scripts/question-bank/publish-snapshots.mjs",
     "question-bank:gate": "node scripts/question-bank/release-gate.mjs",
-    "question-bank:pipeline": "npm run question-bank:export && npm run question-bank:build && npm run question-bank:evidence && npm run question-bank:csp && npm run question-bank:explanations && npm run question-bank:verify && npm run question-bank:publish && npm run question-bank:gate"
+    "question-bank:pipeline": "npm run question-bank:export && npm run question-bank:build && npm run question-bank:csp-source-evidence && npm run question-bank:evidence && npm run question-bank:csp && npm run question-bank:explanations && npm run question-bank:verify && npm run question-bank:publish && npm run question-bank:gate"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",

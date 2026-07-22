@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -123,8 +124,16 @@ export function buildCanonicalBank({
   assertFreshReviewedExport(reviewedExport);
   const examRaw = readJson(path.join(root, 'public/course-data/csp-exam-bank.json'));
   const dungeonRaw = readJson(path.join(root, 'public/course-data/dungeon-exam-bank.json'));
+  const recoveryPath = path.join(root, 'scripts/question-bank/data/csp-choice-recovery.json');
+  const recoveryRaw = readJson(recoveryPath);
+  const recoveryRevision = Number.parseInt(
+    createHash('sha256').update(fs.readFileSync(recoveryPath)).digest('hex').slice(0, 6),
+    16,
+  );
+  const contentRevision = reviewedExport.revision * 100_000_000 + recoveryRevision;
 
   const groups = [
+    { priority: 120, origin: 'official_source_recovery', questions: recoveryRaw.questions },
     { priority: 100, origin: 'reviewed_cloud', questions: Object.values(reviewedExport.questions).map(normalizeLegacyQuestion) },
     { priority: 20, origin: 'legacy_exam', questions: examRaw.questions.map(normalizeLegacyQuestion) },
     { priority: 10, origin: 'legacy_dungeon', questions: dungeonRaw.questions.map(normalizeLegacyQuestion) },
@@ -134,7 +143,7 @@ export function buildCanonicalBank({
   const canonical = {
     schemaVersion: 2,
     baseVersion: reviewedExport.baseVersion,
-    contentRevision: reviewedExport.revision,
+    contentRevision,
     generatedAt,
     questionCount: merged.questions.length,
     conflictCount: merged.conflicts.length,
@@ -143,7 +152,7 @@ export function buildCanonicalBank({
   };
   const manifests = {
     schemaVersion: 2,
-    contentRevision: reviewedExport.revision,
+    contentRevision,
     generatedAt,
     papers: buildExamManifests(merged.questions),
   };
