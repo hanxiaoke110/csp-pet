@@ -7,6 +7,7 @@ import { decideVerdict, validateQuestion } from './lib/validate.mjs';
 import { mergeJuryResponses } from './lib/ai-jury.mjs';
 import { detectDeterministicCandidate, solveDeterministically } from './lib/deterministic.mjs';
 import { matchOfficialSource } from './lib/source-match.mjs';
+import { buildChannels } from './lib/channels.mjs';
 
 describe('canonical question normalization', () => {
   it('normalizes a GESP choice question', () => {
@@ -57,6 +58,24 @@ describe('canonical question normalization', () => {
 
   it('produces the same content hash for object keys in a different order', () => {
     expect(stableContentHash({ b: 2, a: 1 })).toBe(stableContentHash({ a: 1, b: 2 }));
+  });
+});
+
+describe('verified channel publishing', () => {
+  it('keeps quarantined questions out and applies channel rules', () => {
+    const questions = [
+      { id: 'g', source: 'gesp', type: 'choice', exam: { level: 2, group: null }, verificationStatus: 'auto_verified', children: [] },
+      { id: 'r', source: 'csp_exam', type: 'reading', exam: { level: null, group: 'J' }, verificationStatus: 'auto_verified', children: [{}] },
+      { id: 's', source: 'csp_exam', type: 'choice', exam: { level: null, group: 'S' }, verificationStatus: 'auto_verified', children: [] },
+      { id: 'bad', source: 'gesp', type: 'choice', exam: { level: 2, group: null }, verificationStatus: 'disputed', children: [] },
+    ];
+    const channels = buildChannels(questions);
+
+    expect(channels.daily.map(question => question.id)).toEqual(['g']);
+    expect(channels.super.map(question => question.id)).toEqual(['r']);
+    expect(channels.exam.map(question => question.id)).toEqual(['r', 's']);
+    expect(channels.dungeon.map(question => question.id)).toEqual(['g', 'r']);
+    expect(Object.values(channels).flat().some(question => question.id === 'bad')).toBe(false);
   });
 });
 

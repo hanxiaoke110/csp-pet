@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 2,
+  "contentRevision": 500,
+  "verificationRevision": 500,
+  "channelRulesRevision": 1,
+  "generatedAt": "2026-07-22T05:36:02.184Z",
+  "questionCount": 7,
+  "questions": [
+    {
+      "id": "gesp-2023-03-2-13",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-03",
+        "group": null,
+        "level": 2,
+        "originalNumber": 13
+      },
+      "type": "choice",
+      "question": "在下列代码横线处填写（ ），使得输出是50 10。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {\nint a = 10, b = 50;\n____;  // 在此处填入代码\nb -= a;\na += b;\ncout << a << \" \" << b << endl;\nreturn 0;\n}",
+      "assets": [],
+      "options": [
+        "A. a -= b",
+        "B. a += b",
+        "C. a = b - a",
+        "D. a = b"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "本题考察通过算术运算交换两个变量数值，可将选项带入进行计算，本 题正确答案为   C 。",
+      "knowledgePoint": "C++语法基础",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1569361305272352.pdf",
+        "page": 7,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "c0d16190165311ab39bd0e59689ccf9281052741e0c6614e7dcb31049f9f9598",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2023-06-2-13",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-06",
+        "group": null,
+        "level": 2,
+        "originalNumber": 13
+      },
+      "type": "choice",
+      "question": "在下列代码横线处填写（ ），使得输出是9。",
+      "code": "#include <iostream>\nusing namespace std;\nint main() {",
+      "assets": [],
+      "options": [
+        "A. (a+b)",
+        "B. (a+b-'0')",
+        "C. (char)(a+b)",
+        "D. (char)(a+b-'0')"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "本题考察数据类型转换中的类型提升以及数字字符的   ASCII   码；字符变 量   a   的值是 '3' ，相当于 '0' 加   3 ，字符变量   b   的值是 '6' ，相当于 '0' 加   6 ，因此   a+b  等于 '0'+3+'0'+6 ，再减掉 '0' 的结果就是字符 '9' ；由于加减法运算只能处理数值类 型，而   char   不是数值类型，因此会把   char   转换成   int   进行计算，结果也是   int   类 型，最终输出字符时需要强制转换成   char   类型，所以本题正确答案为   D 。",
+      "knowledgePoint": "C++语法基础",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1569361588387872.pdf",
+        "page": 7,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "57fec2a6e9ddf266c93006a81cb539ea4123d91b875203815ace4bbf1a9bf75e",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2023-09-1-07",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-09",
+        "group": null,
+        "level": 1,
+        "originalNumber": 7
+      },
+      "type": "choice",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int m=14,n=12;\nif(m%2==0&&n%2==0) cout<<\"都是偶数\";\n    else if(m%2==1&&n%2==1) cout<<\"都是奇数\";\n    else cout<<\"不都是偶数或奇数\";",
+      "assets": [],
+      "options": [
+        "A. 都是偶数",
+        "B. 都是奇数",
+        "C. 不都是偶数或奇数",
+        "D. 以上都不正确"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "本题考察程序模拟结果，考察   if   分支结构。 14   和   12   都是偶数，对   2   取 余结果都等于   0 ，因此   A   选项正确。",
+      "knowledgePoint": "函数与递归",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+        "page": 4,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "46e31a766eb5f301dd2d3f4727bbf8a663d2cd5133c33b9d152134e5f46665f9",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2023-09-1-09",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-09",
+        "group": null,
+        "level": 1,
+        "originalNumber": 9
+      },
+      "type": "choice",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int m=7;\nif(m/5||m/3) cout<<0;\n    else if(m/3) cout<<1;\n    else if(m/5) cout<<2;\n    else cout<<3;",
+      "assets": [],
+      "options": [
+        "A. 0",
+        "B. 1",
+        "C. 2",
+        "D. 3"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "本题考察程序模拟结果，考察   if   语句和除法运算。整数除以整数的答案 还是整数， 7/5==1,7/3==2 ，第   1   个   if   条件成立，输出   0 ，选   A 。",
+      "knowledgePoint": "函数与递归",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+        "page": 5,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "2bbd842b7a81cef27a5fc83113069a9ddfdaa6c6c5b86295d9623d6faeae22e2",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2023-09-1-11",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-09",
+        "group": null,
+        "level": 1,
+        "originalNumber": 11
+      },
+      "type": "choice",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int tnt=0;\nfor(int i=1;i<5;i+=2) tnt=tnt+i;\n    cout<<tnt;",
+      "assets": [],
+      "options": [
+        "A. 2",
+        "B. 4",
+        "C. 9",
+        "D. 10"
+      ],
+      "answer": {
+        "correctIndex": 1
+      },
+      "children": [],
+      "explanation": "本题考察   for   循环结构，循环执行了   i=1,i=3, 共   2   次，注意   i+=2;cnt   增加 了   1+3 ，答案选   B 。",
+      "knowledgePoint": "控制结构",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1580976041885728.pdf",
+        "page": 6,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "9043f9d588bac8c03da6313d52963ccf945f06a65102d48362c42351a9714fcc",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2023-09-2-11",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-09",
+        "group": null,
+        "level": 2,
+        "originalNumber": 11
+      },
+      "type": "choice",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int cnt=0;\nfor(int i=1;i<13;i+=3)\nfor(int j=1;j<i;j+=2){\n    if(i*j%2==0) break;\n        else cnt++;\n        }\n    cout<<cnt;",
+      "assets": [],
+      "options": [
+        "A. 1",
+        "B. 3",
+        "C. 15",
+        "D. 没有输出"
+      ],
+      "answer": {
+        "correctIndex": 1
+      },
+      "children": [],
+      "explanation": "本题属于考察程序填空，根据题意， i   的范围是 [1,12] ， i   每次累加   3 ； j  每次的范围是 [1,i-1] ， j   每次累加   2 。我们会发现， j   每次的值都是奇数，根据   if  条件， i   是偶数的时候不会累加，只有奇数的时候才会累加   cnt ，因此   i   的范围是  1,7 。 I=1 ， j   不会循环（ j<i ）； i=7 ， j   的合理范围是   1,3,5 ， cnt   会增加   3   次。选   B 。",
+      "knowledgePoint": "函数与递归",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+        "page": 7,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "c461f48da62f03f69ad3ab09eed85ddfccb8a09364d67ac0b972bd8153a66a16",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-06-4-01",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-06",
+        "group": null,
+        "level": 4,
+        "originalNumber": 1
+      },
+      "type": "choice",
+      "question": "下列代码中，输出结果是（ ）",
+      "code": "#include<iostream>\nusing namespace std;\n\nint func(int x, int y)\n{\n    int a = x, b = y;\n    int t;\n    t = a;\n    a = b;\n    b = t;\n    cout << a << \" \" << b << \" \";\n}\n\nint main()\n{\n    int c, d;\n    c = 12;\n    d = 24;\n    func(12, 24);\n    cout << c << \" \" << d << endl;\n}",
+      "assets": [],
+      "options": [
+        "A. 12 24 24 12",
+        "B. 24 12 12 24",
+        "C. 12 12 24 24",
+        "D. 24 24 12 12"
+      ],
+      "answer": {
+        "correctIndex": 1
+      },
+      "children": [],
+      "explanation": "func(int x,int y)值传递，交换的是形参a和b，不影响实参。main中x=12,y=24不变，输出24 12 12 24（func内a,b被交换，但main的x,y未变）。答案B。",
+      "knowledgePoint": "其他",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "f452f025f9a8333eb95f4711c3288067d15c7ee67e8e255357e72bd9bb5ee849",
+      "verificationStatus": "auto_verified"
+    }
+  ]
+}
