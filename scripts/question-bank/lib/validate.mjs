@@ -39,7 +39,8 @@ export function validateQuestion(question) {
   }
 
   if (question.assets.some(source => /\/gesp-code-images\//.test(source))) {
-    blockers.push('untrusted_answer_sheet_image');
+    if (question.code) warnings.push('drop_untrusted_answer_sheet_image');
+    else blockers.push('untrusted_answer_sheet_image');
   }
 
   if (['reading', 'fillBlank'].includes(question.type)) {

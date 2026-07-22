@@ -4,6 +4,9 @@ import { normalizeLegacyQuestion, stableContentHash } from './lib/normalize.mjs'
 import { buildExamManifests, mergeCanonicalInputs } from './build-canonical.mjs';
 import { validateReviewedExport } from './export-reviewed-bank.mjs';
 import { decideVerdict, validateQuestion } from './lib/validate.mjs';
+import { mergeJuryResponses } from './lib/ai-jury.mjs';
+import { detectDeterministicCandidate, solveDeterministically } from './lib/deterministic.mjs';
+import { matchOfficialSource } from './lib/source-match.mjs';
 
 describe('canonical question normalization', () => {
   it('normalizes a GESP choice question', () => {
@@ -54,6 +57,65 @@ describe('canonical question normalization', () => {
 
   it('produces the same content hash for object keys in a different order', () => {
     expect(stableContentHash({ b: 2, a: 1 })).toBe(stableContentHash({ a: 1, b: 2 }));
+  });
+});
+
+describe('strong evidence collectors', () => {
+  it('requires official page content and answer evidence', async () => {
+    const question = normalizeLegacyQuestion({
+      id: 'gesp-2024-03-2-14',
+      source: 'gesp',
+      year: 2024,
+      level: 2,
+      originalNumber: 14,
+      sourceUrl: 'https://gesp.ccf.org.cn/paper.pdf',
+      sourcePage: 2,
+      question: '2+2等于（ ）。',
+      options: ['3', '4', '5', '6'],
+      correctIndex: 1,
+    });
+    const unrelated = await matchOfficialSource(question, {
+      extractPage: async () => ({ text: '无关内容 【答案】 B', sha256: 'a'.repeat(64), pageNumber: 2 }),
+    });
+    const matched = await matchOfficialSource(question, {
+      extractPage: async () => ({
+        text: '14. 2+2等于（ ）。 A.3 B.4 C.5 D.6 【答案】 B 【解析】2加2得到4。',
+        sha256: 'b'.repeat(64),
+        pageNumber: 2,
+      }),
+    });
+
+    expect(unrelated.officialMatch).toBe(false);
+    expect(matched).toMatchObject({
+      officialMatch: true,
+      extractedAnswerIndex: 1,
+      explanationVerified: true,
+    });
+  });
+
+  it('executes only a complete no-input C++ program', async () => {
+    const question = normalizeLegacyQuestion({
+      id: 'cpp',
+      question: '输出是（ ）。',
+      code: '#include <iostream>\nint main(){std::cout << 4;}',
+      options: ['3', '4', '5', '6'],
+      correctIndex: 1,
+    });
+
+    expect(detectDeterministicCandidate(question).supported).toBe(true);
+    expect(await solveDeterministically(question)).toMatchObject({ answerIndex: 1, supported: true });
+    expect(detectDeterministicCandidate({ ...question, code: 'int main(){std::cin >> n;}' }).supported)
+      .toBe(false);
+  });
+
+  it('accepts only complete parseable jury responses', () => {
+    const merged = mergeJuryResponses([
+      { answerIndex: 1, complete: true, ambiguous: false },
+      { answerIndex: 1, complete: true, ambiguous: false },
+      { answerIndex: 1, complete: true, ambiguous: false },
+      { answerIndex: '1', complete: true, ambiguous: false },
+    ], 4);
+    expect(merged).toMatchObject({ modelAnswers: [1, 1, 1], modelComplete: true });
   });
 });
 
