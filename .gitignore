@@ -33,6 +33,7 @@ pet素材/
 .tmp/reviewed-question-bank.json
 .tmp/question-bank-v2-evidence.json
 .tmp/question-bank-source-cache/
+reports/csp-sources/
 
 # Agent local config
 .claude/

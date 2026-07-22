@@ -10,6 +10,8 @@ import { detectDeterministicCandidate, solveDeterministically } from './lib/dete
 import { matchOfficialSource } from './lib/source-match.mjs';
 import { buildChannels } from './lib/channels.mjs';
 import { evaluateReleaseGate } from './release-gate.mjs';
+import { parsePdfInfo } from './index-csp-sources.mjs';
+import { normalizeMatchText, scoreQuestionPage } from './map-csp-source-pages.mjs';
 import {
   canonicalAnswerVector,
   collectImportConsensus,
@@ -65,6 +67,27 @@ describe('canonical question normalization', () => {
 
   it('produces the same content hash for object keys in a different order', () => {
     expect(stableContentHash({ b: 2, a: 1 })).toBe(stableContentHash({ a: 1, b: 2 }));
+  });
+});
+
+describe('CSP source indexing', () => {
+  it('parses page and byte counts from pdfinfo', () => {
+    expect(parsePdfInfo('Title: exam\nPages:           13\nFile size:       287800 bytes\n'))
+      .toEqual({ pages: 13, bytes: 287800 });
+  });
+
+  it('matches OCR text despite spacing and punctuation differences', () => {
+    expect(normalizeMatchText('二进制数 1011（  ）')).toBe('二进制数1011');
+    const question = {
+      question: '一个32位整型变量占用（ ）个字节。',
+      code: null,
+      options: ['32', '128', '4', '8'],
+      children: [],
+    };
+    const matching = scoreQuestionPage(question, '3、一个 32 位整型变量占用（）个字节。 A.32 B.128 C.4 D.8');
+    const unrelated = scoreQuestionPage(question, '这是一道关于二叉树遍历的题目。');
+    expect(matching.score).toBeGreaterThan(0.8);
+    expect(matching.score).toBeGreaterThan(unrelated.score);
   });
 });
 
