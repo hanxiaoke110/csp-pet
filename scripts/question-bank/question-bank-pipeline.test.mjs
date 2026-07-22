@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 
 import { normalizeLegacyQuestion, stableContentHash } from './lib/normalize.mjs';
@@ -8,6 +9,7 @@ import { mergeJuryResponses } from './lib/ai-jury.mjs';
 import { detectDeterministicCandidate, solveDeterministically } from './lib/deterministic.mjs';
 import { matchOfficialSource } from './lib/source-match.mjs';
 import { buildChannels } from './lib/channels.mjs';
+import { evaluateReleaseGate } from './release-gate.mjs';
 
 describe('canonical question normalization', () => {
   it('normalizes a GESP choice question', () => {
@@ -58,6 +60,26 @@ describe('canonical question normalization', () => {
 
   it('produces the same content hash for object keys in a different order', () => {
     expect(stableContentHash({ b: 2, a: 1 })).toBe(stableContentHash({ a: 1, b: 2 }));
+  });
+});
+
+describe('release cutover gate', () => {
+  it('blocks a bank with an empty super channel', () => {
+    const summary = JSON.stringify({ publishedBlockers: 0, channelCounts: { daily: 120, super: 0, dungeon: 120 } });
+    const exam = JSON.stringify({ papers: [] });
+    const hash = value => createHash('sha256').update(value).digest('hex');
+    const manifest = {
+      files: {
+        'verification-summary.json': { sha256: hash(summary) },
+        'exam-manifests.json': { sha256: hash(exam) },
+      },
+    };
+    const result = evaluateReleaseGate({
+      manifest,
+      files: { 'verification-summary.json': summary, 'exam-manifests.json': exam },
+    });
+    expect(result.ready).toBe(false);
+    expect(result.failures).toContain('super=0<12');
   });
 });
 

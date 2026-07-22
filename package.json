@@ -19,7 +19,14 @@
     "apply:question-code-fixes": "node scripts/apply-question-code-fixes.mjs",
     "audit:reliability": "node scripts/audit-question-reliability.mjs",
     "normalize:question-images": "node scripts/normalize-question-images.mjs",
-    "import:gesp-2026-06": "node scripts/import-gesp-2026-06.mjs"
+    "import:gesp-2026-06": "node scripts/import-gesp-2026-06.mjs",
+    "question-bank:export": "node scripts/question-bank/export-reviewed-bank.mjs",
+    "question-bank:build": "node scripts/question-bank/build-canonical.mjs",
+    "question-bank:evidence": "node scripts/question-bank/collect-evidence.mjs",
+    "question-bank:verify": "node scripts/question-bank/verify-canonical.mjs",
+    "question-bank:publish": "node scripts/question-bank/publish-snapshots.mjs",
+    "question-bank:gate": "node scripts/question-bank/release-gate.mjs",
+    "question-bank:pipeline": "npm run question-bank:export && npm run question-bank:build && npm run question-bank:evidence && npm run question-bank:verify && npm run question-bank:publish && npm run question-bank:gate"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
