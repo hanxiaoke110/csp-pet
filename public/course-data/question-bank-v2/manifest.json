@@ -3,42 +3,42 @@
   "contentRevision": 500,
   "verificationRevision": 500,
   "channelRulesRevision": 1,
-  "generatedAt": "2026-07-22T05:54:06.546Z",
+  "generatedAt": "2026-07-22T08:56:03.550Z",
   "files": {
     "daily-gesp.json": {
-      "path": "daily-gesp.3fa29620163c.json",
-      "sha256": "3fa29620163cec98e57fb0bd3df4a422fe266a04934c174aeb428578cb329151",
+      "path": "daily-gesp.2047934ad214.json",
+      "sha256": "2047934ad2146a3b52e13a4e04f0d97258a5adad5d5ecf75379ba4e1f3bc3366",
       "bytes": 274120,
       "count": 215
     },
     "super-cspj.json": {
-      "path": "super-cspj.ef6a353f501b.json",
-      "sha256": "ef6a353f501b8957e3fe007da189d46a8e4a2a4fb00f52d23b547a602b05858a",
-      "bytes": 197,
-      "count": 0
+      "path": "super-cspj.e7d959a3de7b.json",
+      "sha256": "e7d959a3de7bcdf1f24c7ff0b3f596b47747e74214040fc0cecf95e63f6c5bed",
+      "bytes": 74796,
+      "count": 17
     },
     "exam-questions.json": {
-      "path": "exam-questions.9f46f21cc18e.json",
-      "sha256": "9f46f21cc18ef092aea66ae66aa3b5c85ba529abd7f104edf78d31abdd95f545",
-      "bytes": 8105,
-      "count": 6
+      "path": "exam-questions.d709ba7d88a5.json",
+      "sha256": "d709ba7d88a534421cc3c19168b075c5092d590732f66be16f839089920882f1",
+      "bytes": 345768,
+      "count": 188
     },
     "exam-manifests.json": {
-      "path": "exam-manifests.8e8ab2ae633b.json",
-      "sha256": "8e8ab2ae633b103996f8c752e5a4b129dcec770dc9f56dffe39fc917272e1fca",
-      "bytes": 645,
-      "count": 3
+      "path": "exam-manifests.22b8db4c88fc.json",
+      "sha256": "22b8db4c88fc712c525d30a6624421965d00acdd5c261622da7334fc39688fab",
+      "bytes": 6329,
+      "count": 12
     },
     "dungeon-mixed.json": {
-      "path": "dungeon-mixed.3fa29620163c.json",
-      "sha256": "3fa29620163cec98e57fb0bd3df4a422fe266a04934c174aeb428578cb329151",
-      "bytes": 274120,
-      "count": 215
+      "path": "dungeon-mixed.868087f16b9d.json",
+      "sha256": "868087f16b9d9e300bfa99552a5e017835aa73082e22f2c5e2e7e0af6e30f031",
+      "bytes": 437236,
+      "count": 305
     },
     "verification-summary.json": {
-      "path": "verification-summary.ecbf6c25141d.json",
-      "sha256": "ecbf6c25141d901f7c0a892c3a6205a751b813f12440fef252721f5d6732c11f",
-      "bytes": 415,
+      "path": "verification-summary.9847795fbdd0.json",
+      "sha256": "9847795fbdd04a8ff700c694bb74cbee6432094541d628063c1716b755e664c1",
+      "bytes": 419,
       "count": 1
     }
   }

@@ -10,6 +10,11 @@ import { detectDeterministicCandidate, solveDeterministically } from './lib/dete
 import { matchOfficialSource } from './lib/source-match.mjs';
 import { buildChannels } from './lib/channels.mjs';
 import { evaluateReleaseGate } from './release-gate.mjs';
+import {
+  canonicalAnswerVector,
+  collectImportConsensus,
+  isQuestionContentCompatible,
+} from './lib/csp-evidence.mjs';
 
 describe('canonical question normalization', () => {
   it('normalizes a GESP choice question', () => {
@@ -178,6 +183,16 @@ describe('automatic structural verdicts', () => {
     expect(validateQuestion(leakedImage).blockers).toContain('untrusted_answer_sheet_image');
   });
 
+  it('blocks a question that refers to an absent graph', () => {
+    const missingGraph = normalizeLegacyQuestion({
+      id: 'graph',
+      question: '以a为起点，对右边的无向图进行深度优先遍历，结果是（ ）。',
+      options: ['1', '2', '3', '4'],
+      correctIndex: 0,
+    });
+    expect(validateQuestion(missingGraph).blockers).toContain('missing_visual_context');
+  });
+
   it('does not mistake an inline code expression for missing context', () => {
     const inlineCode = normalizeLegacyQuestion({
       id: 'inline',
@@ -205,6 +220,68 @@ describe('automatic structural verdicts', () => {
       .toBe('auto_probable');
     expect(decideVerdict(question, { ...base, officialMatch: false, modelAnswers: [1, 2], modelComplete: true, explanationVerified: true }).status)
       .toBe('disputed');
+  });
+});
+
+describe('CSP batch evidence', () => {
+  const multipart = normalizeLegacyQuestion({
+    id: 'csp-j-2024-r01',
+    source: 'csp_exam',
+    year: 2024,
+    group: 'J',
+    type: 'reading',
+    question: '阅读程序并回答问题。',
+    code: 'int main() { return 0; }',
+    subQuestions: [
+      { label: '判断一', options: ['正确', '错误'], correctIndex: 0, explanation: '正确。' },
+      { label: '选择二', options: ['1', '2', '3', '4'], correctIndex: 2, explanation: '答案为3。' },
+    ],
+    explanation: '逐项分析。',
+  });
+
+  it('uses one answer vector for choice and multipart questions', () => {
+    expect(canonicalAnswerVector(multipart)).toEqual([0, 2]);
+  });
+
+  it('accepts compatible padded snapshot options and counts matching imports', () => {
+    const padded = normalizeLegacyQuestion({
+      id: multipart.id,
+      source: 'csp_exam',
+      year: 2024,
+      group: 'J',
+      type: 'reading',
+      question: multipart.question,
+      code: multipart.code,
+      subQuestions: [
+        { label: '判断一', options: ['正确', '错误', '无法判断', '其他'], correctIndex: 0 },
+        { label: '选择二', options: ['1', '2', '3', '4'], correctIndex: 2 },
+      ],
+    });
+    expect(isQuestionContentCompatible(padded, multipart)).toBe(true);
+    const snapshots = ['a', 'b'].map(origin => ({ origin, questions: new Map([[multipart.id, padded]]) }));
+    expect(collectImportConsensus(multipart, snapshots)).toMatchObject({ count: 2, contentCompatible: true });
+  });
+
+  it('verifies multipart only when all four model vectors and both critics agree', () => {
+    const evidence = {
+      importConsensus: { count: 2, contentCompatible: true, answerVector: [0, 2] },
+      multipartModelAnswers: [[0, 2], [0, 2], [0, 2], [0, 2]],
+      modelComplete: true,
+      explanationVerified: true,
+    };
+    expect(decideVerdict(multipart, evidence).status).toBe('auto_verified');
+    expect(decideVerdict(multipart, { ...evidence, importConsensus: { count: 0 } }).status)
+      .toBe('auto_verified');
+    expect(decideVerdict(multipart, { ...evidence, multipartModelAnswers: [[1, 2], [1, 2], [1, 2], [1, 2]] }).status)
+      .toBe('disputed');
+    expect(decideVerdict(multipart, { ...evidence, modelComplete: false, modelAmbiguous: true }).status)
+      .toBe('disputed');
+    expect(decideVerdict(multipart, {
+      ...evidence,
+      multipartModelAnswers: [[null, null], [null, null], [null, null], [null, null]],
+      modelComplete: false,
+      explanationVerified: false,
+    }).status).toBe('auto_probable');
   });
 });
 

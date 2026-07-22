@@ -1,4 +1,5 @@
 const EXTERNAL_CODE_REFERENCE = /(?:阅读|观察|分析)?(?:下面|下列|以下|上面)(?:的)?(?:C\+\+)?(?:代码|程序)|横线处|空白处|代码如下/;
+const EXTERNAL_VISUAL_REFERENCE = /(?:右边|左边|下方|上方|下图|上图|图中)(?:的)?(?:无向图|有向图|示意图|图|表格|图片)/;
 const INLINE_CODE = /(?:cout|cin|printf|scanf|for\s*\(|while\s*\(|if\s*\(|#include|int\s+main|[;{}])/;
 const OPTION_PREFIX = /^[A-DＡ-Ｄ][.、．:\s)]*/i;
 
@@ -12,6 +13,19 @@ function hasPlaceholderOptions(options) {
 
 function validateAnswer(options, correctIndex) {
   return Number.isInteger(correctIndex) && correctIndex >= 0 && correctIndex < options.length;
+}
+
+function answerVector(question) {
+  return question.children.length > 0
+    ? question.children.map(child => child.correctIndex)
+    : [question.answer.correctIndex];
+}
+
+function vectorsEqual(left, right) {
+  return Array.isArray(left)
+    && Array.isArray(right)
+    && left.length === right.length
+    && left.every((value, index) => value === right[index]);
 }
 
 export function validateQuestion(question) {
@@ -36,6 +50,9 @@ export function validateQuestion(question) {
       && question.assets.length === 0
       && !INLINE_CODE.test(question.question)) {
     blockers.push('missing_code_context');
+  }
+  if (EXTERNAL_VISUAL_REFERENCE.test(question.question) && question.assets.length === 0) {
+    blockers.push('missing_visual_context');
   }
 
   if (question.assets.some(source => /\/gesp-code-images\//.test(source))) {
@@ -65,6 +82,7 @@ export function decideVerdict(question, evidence = {}) {
   }
 
   const expected = question.answer.correctIndex;
+  const expectedVector = answerVector(question);
   const modelAnswers = Array.isArray(evidence.modelAnswers)
     ? evidence.modelAnswers.filter(Number.isInteger)
     : [];
@@ -79,10 +97,28 @@ export function decideVerdict(question, evidence = {}) {
   if (modelAnswers.length >= 2 && new Set(modelAnswers).size > 1) {
     return { status: 'disputed', blockers: ['model_conflict'], warnings: structural.warnings, evidence };
   }
+  const cspVectors = Array.isArray(evidence.multipartModelAnswers)
+    ? evidence.multipartModelAnswers.filter(Array.isArray)
+    : [];
+  const cspModelsAgree = evidence.modelComplete
+    && cspVectors.length >= 4
+    && cspVectors.every(vector => vectorsEqual(vector, expectedVector));
+  if (cspVectors.length >= 2
+      && cspVectors.every(vector => vector.every(Number.isInteger))
+      && cspVectors.every(vector => vectorsEqual(vector, cspVectors[0]))
+      && !vectorsEqual(cspVectors[0], expectedVector)) {
+    return { status: 'disputed', blockers: ['csp_model_answer_conflict'], warnings: structural.warnings, evidence };
+  }
+  if (evidence.modelAmbiguous) {
+    return { status: 'disputed', blockers: ['model_reports_ambiguity'], warnings: structural.warnings, evidence };
+  }
   if (!evidence.explanationVerified) {
     return { status: 'auto_probable', blockers: ['explanation_unverified'], warnings: structural.warnings, evidence };
   }
   if (evidence.officialMatch) {
+    return { status: 'auto_verified', blockers: [], warnings: structural.warnings, evidence };
+  }
+  if (question.source === 'csp_exam' && cspModelsAgree) {
     return { status: 'auto_verified', blockers: [], warnings: structural.warnings, evidence };
   }
 

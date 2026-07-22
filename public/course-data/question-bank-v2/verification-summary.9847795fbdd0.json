@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 2,
+  "contentRevision": 500,
+  "verificationRevision": 500,
+  "channelRulesRevision": 1,
+  "generatedAt": "2026-07-22T08:56:03.550Z",
+  "canonicalCount": 1183,
+  "statusCounts": {
+    "auto_verified": 404,
+    "auto_probable": 723,
+    "disputed": 36,
+    "broken": 20
+  },
+  "channelCounts": {
+    "daily": 215,
+    "super": 17,
+    "exam": 188,
+    "dungeon": 305
+  },
+  "publishedBlockers": 0
+}
