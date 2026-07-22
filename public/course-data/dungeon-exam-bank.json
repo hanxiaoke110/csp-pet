@@ -8050,7 +8050,7 @@
       "difficulty": 2,
       "question": "在下列代码横线处填写（ ），使得输出是50 10。",
       "code": "#include <iostream>\nusing namespace std;\nint main() {\nint a = 10, b = 50;\n____;  // 在此处填入代码\nb -= a;\na += b;\ncout << a << \" \" << b << endl;\nreturn 0;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-03-2-13.png",
+      "image": null,
       "options": [
         "A. a -= b",
         "B. a += b",
@@ -8072,7 +8072,7 @@
       "difficulty": 2,
       "question": "在下列代码横线处填写（ ），使得输出是5。",
       "code": "#include <iostream>\nusing namespace std;\nVv int main() {\nint cnt = 0;\nv    for (char ch = '1'; ch <= '9'; ch++)\nif (____)  // 在此处填入代码\ncnt++;\ncout << cnt << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2023-03-2-14.png",
+      "image": null,
       "options": [
         "A. ch < '5'",
         "B. ch >= 5",
@@ -8094,7 +8094,7 @@
       "difficulty": 2,
       "question": "执行以下程序后输出结果是（ ）。",
       "code": "#include <iostream>\nusing namespace std;\nint main() {\nint n = 17;\nbool isprime = true;\nfor (int i = 2; i <= n; i++)\nif (n % i == 0)\nisprime = false;\ncout << isprime << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2023-03-2-15.png",
+      "image": null,
       "options": [
         "A. false",
         "B. true",
@@ -8356,7 +8356,7 @@
       "difficulty": 1,
       "question": "在下列代码横线处填写（ ），使得输出是\"20 10\"。",
       "code": "int a = 10, b = 20;\na = ___________;\nb = a + b;\na = b - a;\ncout << a << \" \" << b << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-06-1-13.png",
+      "image": null,
       "options": [
         "A. a + b",
         "B. b",
@@ -8378,7 +8378,7 @@
       "difficulty": 1,
       "question": "在下列代码横线处填写（ ），使得输出是\"147\"。",
       "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (int i = 1; i <= 8; i++)\nif (____)  // 在此处填入代码\ncout << i;\nreturn 0;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-06-1-14.png",
+      "image": null,
       "options": [
         "A. i % 2 == 1",
         "B. i % 3 == 1",
@@ -8400,7 +8400,7 @@
       "difficulty": 1,
       "question": "执行以下C++程序后输出结果是（ ）。",
       "code": "#include <iostream>\nusing namespace std;\nint main() {\nint sum;\nfor (int i = 1; i <= 20; i++)\nif (i%3 ==0 || i%5 == 0)\nsum += i;\ncout << sum << endl;\nreturn 0;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-06-1-15.png",
+      "image": null,
       "options": [
         "A. 63",
         "B. 98",
@@ -8662,7 +8662,7 @@
       "difficulty": 2,
       "question": "在下列代码横线处填写（ ），使得输出是9。",
       "code": "#include <iostream>\nusing namespace std;\nint main() {",
-      "image": "/course-data/gesp-code-images/gesp-2023-06-2-13.png",
+      "image": null,
       "options": [
         "A. (a+b)",
         "B. (a+b-'0')",
@@ -8684,7 +8684,7 @@
       "difficulty": 2,
       "question": "在下列代码横线处填写（ ），使得输出是42。",
       "code": "int sum=0;\nfor(int i=1;i<=20;i++)\nif(________) sum+=i;\n    cout<<sum<<endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-06-2-14.png",
+      "image": null,
       "options": [
         "A. i%3==0",
         "B. 20%i==0",
@@ -8706,7 +8706,7 @@
       "difficulty": 2,
       "question": "执行以下C++程序后输出结果是（ ）。",
       "code": "#include <iostream>\nusing namespace std;\nint main() {\nfor (char x = 'A'; << = 'D'$ x++)\nif ((x != 'A') + (x == 'C') + (x == 'D') + (* != 'D') == 3)\ncout << x;\nreturn 0;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-06-2-15.png",
+      "image": null,
       "options": [
         "A. A",
         "B. B",
@@ -8788,7 +8788,7 @@
       "difficulty": 1,
       "question": "下面C++代码段执行后输出是（ ）。",
       "code": "int a=3,b=4;\ncout<<\"a+b=\"<<a+b;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-04.png",
+      "image": null,
       "options": [
         "A. 3+4= 7",
         "B. 3+4=7",
@@ -8850,7 +8850,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int m=14,n=12;\nif(m%2==0&&n%2==0) cout<<\"都是偶数\";\n    else if(m%2==1&&n%2==1) cout<<\"都是奇数\";\n    else cout<<\"不都是偶数或奇数\";",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-07.png",
+      "image": null,
       "options": [
         "A. 都是偶数",
         "B. 都是奇数",
@@ -8872,7 +8872,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int m=14,n=12;\nif(m%2&&n%2) cout<<\"都是偶数\";\n    else if(m%2==1&&n%2==1) cout<<\"都是奇数\";\n    else cout<<\"不都是偶数或奇数\";",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-08.png",
+      "image": null,
       "options": [
         "A. 都是偶数",
         "B. 都是奇数",
@@ -8894,7 +8894,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int m=7;\nif(m/5||m/3) cout<<0;\n    else if(m/3) cout<<1;\n    else if(m/5) cout<<2;\n    else cout<<3;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-09.png",
+      "image": null,
       "options": [
         "A. 0",
         "B. 1",
@@ -8916,7 +8916,7 @@
       "difficulty": 1,
       "question": "下面C++代码段执行后输出是（ ）。",
       "code": "int cnt=0;\nfor(int i=1;i<=5;i++) cnt=cnt+1;\n    cout<<cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-10.png",
+      "image": null,
       "options": [
         "A. 1",
         "B. 4",
@@ -8938,7 +8938,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int tnt=0;\nfor(int i=1;i<5;i+=2) tnt=tnt+i;\n    cout<<tnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-11.png",
+      "image": null,
       "options": [
         "A. 2",
         "B. 4",
@@ -8960,7 +8960,7 @@
       "difficulty": 1,
       "question": "下面代码执行后cnt的值是（ ）。",
       "code": "int cnt = 0, n = 10;\nwhile (n >= 0) {\n    cnt += 1;\n    n -= 2;\n    }\ncout << cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-12.png",
+      "image": null,
       "options": [
         "A. 3",
         "B. 4",
@@ -8982,7 +8982,7 @@
       "difficulty": 1,
       "question": "下面C++代码用于求正整数所有因数，横线处应填入（ ）。",
       "code": "a, #7 A10, WTA 1, 2. 5. 10; M7A12, WHA 1. 2. 3. 4, 6, 12;\n____;  // 在此处填入代码\nint n = 0;\ncout << \"iff A—PIEMR: \";\ncin >> n;\nfor (              ) // 在此处填入代码\nif (n % i == 0)\ncout << i << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-13.png",
+      "image": null,
       "options": [
         "A. `int i=1;i<n;i+1`",
         "B. `int i=1;i<n+1;i+1`",
@@ -9004,7 +9004,7 @@
       "difficulty": 1,
       "question": "在下列代码横线处填写（ ），输出正整数1234各位数字平方和。",
       "code": "int n=1234,s=0;\nfor(;n;n/=10) s+=___________;\n    cout<<s<<endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-14.png",
+      "image": null,
       "options": [
         "A. n/10",
         "B. (n/10)*(n/10)",
@@ -9026,7 +9026,7 @@
       "difficulty": 1,
       "question": "执行以下C++程序后输出是（ ）。",
       "code": "int n=0,s=1;\nfor(;n=0;) s*=n;\n    cout<<s;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-1-15.png",
+      "image": null,
       "options": [
         "A. 1",
         "B. 0",
@@ -9148,7 +9148,7 @@
       "difficulty": 2,
       "question": "从大到小输出N所有因子（如N=18输出18 9 6 3 2 1），横线处应填入（ ）。",
       "code": "int N;cin>>N;\nfor(________) if(!(N%i)) cout<<i<<' ';",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-06.png",
+      "image": null,
       "options": [
         "A. ;;",
         "B. `int i=1;i<N;i++`",
@@ -9170,7 +9170,7 @@
       "difficulty": 2,
       "question": "输出N行N列矩阵，对角线为1，横线处应填入（ ）。",
       "code": "int N = 0;\ncout << \"ims A tT 7B: \";\ncin >> N;\nfor (int i=1; i<N +41; i++) {\nfor (int j = 1; j < N+ 1; j++)\nif (____)  // 在此处填入代码\ncout << 1 << \" \";\nelse\ncout << 0 << \" \";\ncout << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-07.png",
+      "image": null,
       "options": [
         "A. i=j",
         "B. j!=j",
@@ -9192,7 +9192,7 @@
       "difficulty": 2,
       "question": "判断N是否为质数，横线处填入（ ）。",
       "code": "intN=0, i=2;\ncout << \"i#MA—TAKFS FAN ESR |\";\ncin >> N;\nfor (i = 2; i < N; i++)\nif (N% i == 0) {\ncout << \"SEAR\";\n____;  // 在此处填入代码\n}\nif (i == N)\ncout << \"Az\";",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-08.png",
+      "image": null,
       "options": [
         "A. break",
         "B. continue",
@@ -9214,7 +9214,7 @@
       "difficulty": 2,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int N=9;\nfor(int i=2;i<9;i++)\nif(N%i) cout<<\"1#\";\n    cout<<0;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-09.png",
+      "image": null,
       "options": [
         "A. 1#0",
         "B. 1#",
@@ -9236,7 +9236,7 @@
       "difficulty": 2,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int cnt=0;\nfor(int i=1;i<9;i++)\nfor(int j=1;j<i;j+=2)\n    cnt+=1;\n    cout<<cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-10.png",
+      "image": null,
       "options": [
         "A. 16",
         "B. 28",
@@ -9258,7 +9258,7 @@
       "difficulty": 2,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int cnt=0;\nfor(int i=1;i<13;i+=3)\nfor(int j=1;j<i;j+=2){\n    if(i*j%2==0) break;\n        else cnt++;\n        }\n    cout<<cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-11.png",
+      "image": null,
       "options": [
         "A. 1",
         "B. 3",
@@ -9280,7 +9280,7 @@
       "difficulty": 2,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int x=1;\nwhile(true){\n    if(!(x%3)) cout<<x<<\",\";\n        else if(x/10) break;\n        x+=2;\n        }\n    cout<<x;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-12.png",
+      "image": null,
       "options": [
         "A. 1",
         "B. 3,9,11",
@@ -9302,7 +9302,7 @@
       "difficulty": 2,
       "question": "每一行从A开始以ABC方式重复，横线处填入（ ）。",
       "code": "____;  // 在此处填入代码\nint N = 0;\ncout << \"imiiATWRE:\";\ncin >> N;\nfor (int i=1; i<N+ 1; i++) {\nfor (int j = 0; j < i; j++)\n____;  // 在此处填入代码\ncout << endl;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-13.png",
+      "image": null,
       "options": [
         "A. 'A'+j/3",
         "B. (char)('A'+j/3)",
@@ -9324,7 +9324,7 @@
       "difficulty": 2,
       "question": "输入行数输出数字三角形，横线处应填入（ ）。",
       "code": "cin>>lineCount;\nfor(int i=0;i<lineCount;i++){\n    for(int j=0;j<________;j++)\n        cout<<' ';",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-14.png",
+      "image": null,
       "options": [
         "A. (lineCount-i-1)*2",
         "B. (lineCount-i)*2",
@@ -9346,7 +9346,7 @@
       "difficulty": 2,
       "question": "连续输入成绩直到负数停止求平均，横线处应填入（ ）。",
       "code": "____;  // 在此处填入代码\n____;  // 在此处填入代码\n____;  // 在此处填入代码\nwhile (____)  // 在此处填入代码\ncin >> score;\nif (score < 0)\n|   break;\ntotalScore += score;\nstudCount += 1;\n}\ncout << \"\"Fij4¢=\" << totalScore / studCount;",
-      "image": "/course-data/gesp-code-images/gesp-2023-09-2-15.png",
+      "image": null,
       "options": [
         "A. true",
         "B. false",
@@ -9708,7 +9708,7 @@
       "difficulty": 1,
       "question": "假设现在是上午十点，求出N小时后是第几天几时。横线处应填写（ ）。",
       "code": "int N,dayX,hourX;\ncin>>N;\ndayX=_________,hourX=_________;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-1-03.png",
+      "image": null,
       "options": [
         "A. (10+N)%24,(10+N)/24",
         "B. (10+N)/24,(10+N)%24",
@@ -9730,7 +9730,7 @@
       "difficulty": 1,
       "question": "判断N是否为偶数，横线处应填入（ ）。",
       "code": "if(______) cout<<\"偶数\";\n    else cout<<\"奇数\";",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-1-04.png",
+      "image": null,
       "options": [
         "A. N%2==0",
         "B. N%2=0",
@@ -9772,7 +9772,7 @@
       "difficulty": 1,
       "question": "下面代码执行后输出是（ ）。",
       "code": "int cnt = 0;\nfor (int i = 1; i < 10; i++) {\n    cnt += 1;\n    i += 2;\n    }\ncout << cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-1-06.png",
+      "image": null,
       "options": [
         "A. 10",
         "B. 9",
@@ -9794,7 +9794,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "cnt=0;\nfor(int i=1;i<20;i++){\n    if(i%2) continue;\n        else if(i%3==0&&i%5==0) break;\n        cnt+=i;\n        }\n    cout<<cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-1-07.png",
+      "image": null,
       "options": [
         "A. 90",
         "B. 44",
@@ -9816,7 +9816,7 @@
       "difficulty": 1,
       "question": "下面代码执行后cnt的值是（ ）。",
       "code": "int cnt = 0, N = 10;\nwhile (1) {\n    if (N == 0) break;\n        cnt += 1;\n        N -= 2;\n        }\n    cout << cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-1-08.png",
+      "image": null,
       "options": [
         "A. 11",
         "B. 10",
@@ -9838,7 +9838,7 @@
       "difficulty": 1,
       "question": "判断一个数是否为质数，横线处应填入（ ）。",
       "code": "cin>>N;cnt=0;\nfor(int i=1;i<N+1;i++)\nif(N%i==0) ________;\nif(cnt==2) cout<<\"是质数\";\n    else cout<<\"不是质数\";",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-1-09.png",
+      "image": null,
       "options": [
         "A. cnt=1",
         "B. cnt=2",
@@ -9880,7 +9880,7 @@
       "difficulty": 1,
       "question": "执行下面C++代码后输出是（ ）。",
       "code": "cnt=0;\nfor(i=10;i>3;i-=3) cnt=cnt+i;\n    cout<<cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-1-11.png",
+      "image": null,
       "options": [
         "A. 3",
         "B. 21",
@@ -10022,7 +10022,7 @@
       "difficulty": 2,
       "question": "从1到N顺序输出能整除N的数（N的因数），横线处应填（ ）。",
       "code": "cin>>N;\nfor(________) if(N%i==0) cout<<i<<\" \";",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-2-03.png",
+      "image": null,
       "options": [
         "A. `int i=0;i<N;i++`",
         "B. `int i=1;i<N;i++`",
@@ -10244,7 +10244,7 @@
       "difficulty": 2,
       "question": "下列代码输出是（ ）。",
       "code": "int sum=0;\nfor(int i=1;i<=10;i++){\n    if(i%2==0) continue;\n        sum+=i;\n        }\n    cout<<sum;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-2-14.png",
+      "image": null,
       "options": [
         "A. 30",
         "B. 25",
@@ -10426,7 +10426,7 @@
       "difficulty": 1,
       "question": "下面代码的输出是（ ）。",
       "code": "int tnt=0;\nfor(int i=1;i<=10;i++)\nif(i%3&&i%7) tnt+=i;\n    cout<<tnt;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-1-08.png",
+      "image": null,
       "options": [
         "A. 30",
         "B. 27",
@@ -10448,7 +10448,7 @@
       "difficulty": 1,
       "question": "下面代码执行后输出是（ ）。",
       "code": "int N=10;\nwhile(N){if(N%3==0)cout<<N<<\"#\";N--;} cout<<0<<\"#\";",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-1-09.png",
+      "image": null,
       "options": [
         "A. 9#6#3#",
         "B. 9#6#3#0#",
@@ -10470,7 +10470,7 @@
       "difficulty": 1,
       "question": "判断质数的代码横线处应填入（ ）。",
       "code": "|int N;\n(cin >> N;\n____;  // 在此处填入代码\n|for(int i=1; i<N+1; i++)\nif (             )\ncnt +=1;\n\\|if(cnt == 2)\ncout << N << \"S2fRaX\";\nelse\ncout << N << \"AIR\";",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-1-10.png",
+      "image": null,
       "options": [
         "A. N%i!=0",
         "B. N%i==0",
@@ -10692,7 +10692,7 @@
       "difficulty": 2,
       "question": "下列代码输出是（ ）。",
       "code": "int n, a, m, i;\n\nn = 3, a = 5;\nm = (a - 1) * 2;\nfor (i = 0; i < n - 1; i++)\n    m = (m - 1) * 2;\n\ncout << m;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-2-06.png",
+      "image": null,
       "options": [
         "A. 3",
         "B. 4",
@@ -10996,7 +10996,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "float a;\na=101.101;a=101;\nprintf(\"a+1={%.0f}\",a+1);",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-1-06.png",
+      "image": null,
       "options": [
         "A. 102={102}",
         "B. a+1={a+1}",
@@ -11058,7 +11058,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int Sum=0,i=0;\nfor(;i<10;) Sum+=i++;\n    cout<<i<<\" \"<<Sum;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-1-09.png",
+      "image": null,
       "options": [
         "A. 9 45",
         "B. 10 55",
@@ -11120,7 +11120,7 @@
       "difficulty": 1,
       "question": "判断N是否为完全平方数，横线处应填入（ ）。",
       "code": "int N;cin>>N;\nfor(int i=0;i<=N;i++)\nif(___________) cout<<N<<\"是平方数\";",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-1-12.png",
+      "image": null,
       "options": [
         "A. i==N*N",
         "B. i*10==N",
@@ -11342,7 +11342,7 @@
       "difficulty": 2,
       "question": "货币由5元、2元、1元组成求最少数量。横线处应填入（ ）。",
       "code": "M5=N/5;\nM2=______;\nM1=______;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-2-08.png",
+      "image": null,
       "options": [
         "A. N/2和N-M5-M2",
         "B. (N-M5*5)/2和N-M5*5-M2*2",
@@ -11644,7 +11644,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int Sum=0;\nfor(int i=0;i<10;i++) Sum+=i;\n    cout<<Sum;",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-1-08.png",
+      "image": null,
       "options": [
         "A. 55",
         "B. 45",
@@ -11666,7 +11666,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int N=0;\nfor(int i=0;i<10;i++) N+=1;\n    cout<<N;",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-1-09.png",
+      "image": null,
       "options": [
         "A. 55",
         "B. 45",
@@ -11688,7 +11688,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int N=0;\nfor(int i=1;i<10;i+=2){\n    if(i%2==1) continue;\n        N+=1;\n        }\n    cout<<N;",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-1-10.png",
+      "image": null,
       "options": [
         "A. 5",
         "B. 4",
@@ -12010,7 +12010,7 @@
       "difficulty": 2,
       "question": "输出数字三角形横线处应填入（ ）。",
       "code": "for(int i=1;i<=N;i++){\n    for(int j=___1___;j<___2___;j++) cout<<j<<\" \";\n        cout<<endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-2-11.png",
+      "image": null,
       "options": [
         "A. 1;i+1",
         "B. i;N+1",
@@ -12032,7 +12032,7 @@
       "difficulty": 2,
       "question": "求逆序数横线处应填入（ ）。",
       "code": "while(N>0){\n    ______;  // 先填入\n    ______;  // 后填入",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-2-12.png",
+      "image": null,
       "options": [
         "A. rst=rst*10+N%10;N=N/10",
         "B. N=N/10;rst=rst*10+N%10",
@@ -12074,7 +12074,7 @@
       "difficulty": 2,
       "question": "判断质数横线处填（ ）。",
       "code": "for(int i=2;i<num;i++)\nif(________) {flag=0;break;}",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-2-14.png",
+      "image": null,
       "options": [
         "A. num/i==0",
         "B. num%i==0",
@@ -12400,7 +12400,7 @@
       "difficulty": 1,
       "question": "判断位增数的程序横线处填入（ ）。",
       "code": "int N,n1,n2;\ncin>>N;\nbool flag=true;\nwhile(N>=10){\n    n1=N%10;\n    ______;\n    n2=N%10;\n    if(n1!=n2+1) flag=false;",
-      "image": "/course-data/gesp-code-images/gesp-2024-12-1-15.png",
+      "image": null,
       "options": [
         "A. N%10;N/10",
         "B. N=N%10",
@@ -12904,7 +12904,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int a=10,b=20;\nprintf(\"a=%d,b=%d\",a,b);",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-1-10.png",
+      "image": null,
       "options": [
         "A. a=10,b=20",
         "B. \"a=%d,b=%d\"",
@@ -12966,7 +12966,7 @@
       "difficulty": 1,
       "question": "下面代码执行后Sum的值是（ ）。",
       "code": "int Sum=0;\nfor(int i=-1000;i<1000;i++) Sum+=i;\n    cout<<Sum;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-1-13.png",
+      "image": null,
       "options": [
         "A. -1000",
         "B. 0",
@@ -13008,7 +13008,7 @@
       "difficulty": 1,
       "question": "下面代码执行后输出是（ ）。",
       "code": "int cnt=0;\nfor(int i=0;i<10;i++){\n    if(i%3==0) continue;\n    if(i%4==0) break;\n        cnt++;\n        }\n    cout<<cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-1-15.png",
+      "image": null,
       "options": [
         "A. 2",
         "B. 3",
@@ -13070,7 +13070,7 @@
       "difficulty": 2,
       "question": "下面代码执行后a和b的值是（ ）。",
       "code": "int a = 3, b = 4;\na = b;\nb = a;\ncout << a << ' ' << b << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-2-03.png",
+      "image": null,
       "options": [
         "A. 3 4",
         "B. 4 3",
@@ -13112,7 +13112,7 @@
       "difficulty": 2,
       "question": "下面代码执行后tnt的值是（ ）。",
       "code": "int tnt=0;\nfor(int i=0;i<10;i++)\nif(i%3) tnt+=1;\n    else tnt+=2;\n    cout<<tnt;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-2-05.png",
+      "image": null,
       "options": [
         "A. 10",
         "B. 12",
@@ -13134,7 +13134,7 @@
       "difficulty": 2,
       "question": "下面代码输出是（ ）。",
       "code": "for(i=10;i>0;i-=2) break;\n    cout<<i;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-2-06.png",
+      "image": null,
       "options": [
         "A. 10",
         "B. 8",
@@ -13156,7 +13156,7 @@
       "difficulty": 2,
       "question": "下面代码输出是（ ）。",
       "code": "for(i=0;i<10;i++){\n    if(i%3==0) continue;\n        cout<<\"0\"<<\"#\";\n        }\n    if(i>=10) cout<<\"1#\";",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-2-07.png",
+      "image": null,
       "options": [
         "A. 0#0#0#0#0#0#",
         "B. 0#0#0#0#0#0#0#1#",
@@ -13178,7 +13178,7 @@
       "difficulty": 2,
       "question": "下面代码输出是（ ）。",
       "code": "for(i=0;i<5;i++)\nfor(j=i;j>0;j-=1)\n    printf(\"%d-\",j);",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-2-08.png",
+      "image": null,
       "options": [
         "A. 1-2-1-3-2-1-4-3-2-1-",
         "B. 1-2-3-4-",
@@ -13220,7 +13220,7 @@
       "difficulty": 2,
       "question": "判断数字的某位是否为3，横线处应填入（ ）。找到3则____，没找到则____。",
       "code": "int i,j;\nint cnt = 0, N;\ncout << \"请输入正整数N：\";\ncin >> N;\nfor (i = 1; (j=i) < N; i++)\n    while (j != 0)\n        if (j % 10 == 3){\n            cnt += 1;\n            __________;\n        }\n        else\n            __________;\ncout << cnt << \" \";",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-2-10.png",
+      "image": null,
       "options": [
         "A. continue; j /= 10",
         "B. break; j /= 10",
@@ -13442,7 +13442,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int x=10,y=20;\nx=x+y;\ny=x-y;\nx=x-y;\ncout<<x<<' '<<y;",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-1-06.png",
+      "image": null,
       "options": [
         "A. 10 20",
         "B. 20 10",
@@ -13504,7 +13504,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int a,b;\na=3;b=4;\nprintf(\"a+b=%02d#a+b={a+b}\",a+b,a+b);",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-1-09.png",
+      "image": null,
       "options": [
         "A. a+b=07#a+b={a+b}",
         "B. a+b= 7#a+b=7",
@@ -13546,7 +13546,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "for(i=1;i<11;i+=3){\n    continue;\n    if(i%2==0) break;\n        printf(\"%d#\",i);\n        }\n    if(i>=11) printf(\"END\");",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-1-11.png",
+      "image": null,
       "options": [
         "A. END",
         "B. 1#",
@@ -13568,7 +13568,7 @@
       "difficulty": 1,
       "question": "求N的所有因数（从大到小输出），while循环横线处应填入（ ）。",
       "code": "i=N;\nwhile(______){\n    if(N%i==0) cout<<i<<\" \";\n        i--;",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-1-12.png",
+      "image": null,
       "options": [
         "A. i-=1",
         "B. i==1",
@@ -13590,7 +13590,7 @@
       "difficulty": 1,
       "question": "下面C++代码执行后输出是（ ）。",
       "code": "int Sum=0;\nfor(int i=0;i<10;i++){\n    if(i%2==0) continue;\n    if(i%5==0) break;\n        Sum+=i;\n        }\n    cout<<Sum;",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-1-13.png",
+      "image": null,
       "options": [
         "A. 55",
         "B. 15",
@@ -13612,7 +13612,7 @@
       "difficulty": 1,
       "question": "执行下面C++代码描述正确的是（ ）。",
       "code": "float x;\nx=101;\nx++;\ncout<<++x;",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-1-14.png",
+      "image": null,
       "options": [
         "A. 输出101",
         "B. 输出102",
@@ -13634,7 +13634,7 @@
       "difficulty": 1,
       "question": "找出百位、十位和个位满足特定条件的三位数横线处应填入（ ）。",
       "code": "int a=i%10;\nint b=______;\nint c=i/100;",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-1-15.png",
+      "image": null,
       "options": [
         "A. (i/10)/10",
         "B. (i/10)%10",
@@ -13816,7 +13816,7 @@
       "difficulty": 2,
       "question": "下面代码执行后cnt输出是（ ）。",
       "code": "for(i=-99;i<100;i+=2) cnt=1+cnt;\n    cout << cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2025-06-2-09.png",
+      "image": null,
       "options": [
         "A. 99",
         "B. 100",
@@ -14020,7 +14020,7 @@
       "difficulty": 3,
       "question": "执行下面C++代码输出是（ ）。",
       "code": "int temp = 0;\nfor (int i = 1; i < 7; i++) {\n    for (int j = 1; j < 5; j++) {\n        if (i / j == 2) {\n            temp++;\n        }\n    }\n}\ncout << temp << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-3-04.png",
+      "image": null,
       "options": [
         "A. 10",
         "B. 8",
@@ -14062,7 +14062,7 @@
       "difficulty": 3,
       "question": "执行下面C++代码后输出的是（ ）。",
       "code": "string str(\"chen\");\nint x = str.length();\ncout << x << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-3-06.png",
+      "image": null,
       "options": [
         "A. 4",
         "B. 3",
@@ -14084,7 +14084,7 @@
       "difficulty": 3,
       "question": "执行下面C++代码后输出的是（ ）。",
       "code": "string str = \"chen\";\ncout << str[5] << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-3-07.png",
+      "image": null,
       "options": [
         "A. 输出未知的数",
         "B. 输出'n'",
@@ -14106,7 +14106,7 @@
       "difficulty": 3,
       "question": "下面C++代码执行后的输出是（ ）。",
       "code": "char ch[10] = {'1'};\ncout << ch[2] << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-3-08.png",
+      "image": null,
       "options": [
         "A. 0",
         "B. 1",
@@ -14128,7 +14128,7 @@
       "difficulty": 3,
       "question": "下面C++代码用于统计每种字符出现的次数，当输出为3时，横线上不能填入的代码是（ ）。",
       "code": "string str = \"GESP is a good programming test!\";\nint x = 0;\nfor (int i = 0; i < str.length(); i++) {\n    if (____________) x++;\n}\ncout << x << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-3-09.png",
+      "image": null,
       "options": [
         "A. str[i]=='o'",
         "B. str[i]=='a'+14",
@@ -14170,7 +14170,7 @@
       "difficulty": 3,
       "question": "下面C++程序执行的结果是（ ）。",
       "code": "int cnt = 0;\nfor(int i = 0; i <= 20; i++) {\n    if(i % 3 == 0 && i % 5 == 0)\n        cnt++;\n}\ncout << cnt;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-3-11.png",
+      "image": null,
       "options": [
         "A. 2",
         "B. 3",
@@ -14192,7 +14192,7 @@
       "difficulty": 3,
       "question": "C++的数据类型转换让人很难琢磨透，下列代码输出的值是（ ）。",
       "code": "int a = 3, b = 2;\ncout << a / b * 1.0 << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-3-12.png",
+      "image": null,
       "options": [
         "A. 1.5",
         "B. 1",
@@ -14314,7 +14314,7 @@
       "difficulty": 4,
       "question": "下⾯C++代码最后执⾏后输出是（ ）。",
       "code": "int funl(int *n)\n{\nreturn *n**n;\n}\nint main()\n{\nint arr[10]={2};\narr[1]=funi(arr);\ncout<<arr[1]<<endl;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-4-03.png",
+      "image": null,
       "options": [
         "A. 1",
         "B. 2",
@@ -14336,7 +14336,7 @@
       "difficulty": 4,
       "question": "下面C++代码执行后的结果是（ ）。",
       "code": "int arr[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\nfor (int i = 0; i < 3; i++) {\n    for (int j = 2; j >= 0; j--) {\n        cout << arr[i][j] << \" \";\n    }\n    cout << endl;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-4-04.png",
+      "image": null,
       "options": [
         "A. 1 2 3 / 4 5 6 / 7 8 9",
         "B. 3 2 1 / 6 5 4 / 9 8 7",
@@ -14378,7 +14378,7 @@
       "difficulty": 4,
       "question": "如果变量x的地址是0x6ffe14，下面C++代码执行以后输出的是（ ）。",
       "code": "int *p = NULL;\nint x = 2;\np = &x;\np++;\ncout << p << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-4-06.png",
+      "image": null,
       "options": [
         "A. 0x6ffe11",
         "B. 0x6ffe14",
@@ -14482,7 +14482,7 @@
       "difficulty": 4,
       "question": "下列C++代码输入 1,2,3,4，执行后，将输出的是（ ）。",
       "code": "string str = \"\";\ncin >> str;\nint strlen = str.length();\nfor (int i = 0; i < strlen; i++) {\n    if (str[i] <= '9' && str[i] >= '0') {\n        cout << str[i];\n    } else {\n        cout << \"#\";\n    }\n}",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-4-11.png",
+      "image": null,
       "options": [
         "A. 1#4#",
         "B. 1#3#",
@@ -14504,7 +14504,7 @@
       "difficulty": 4,
       "question": "以下C++代码⽤于实现每个整数对应的因数，如输⼊12，则输出1 2 3 4 6 12；如输⼊18，则输出1 2 3 6 9 18。横线处应填⼊代码是（ ）。",
       "code": "int n, i;\ncin >> n;\nfor (i = 1; i <= n; i++)\n    ________\n        cout << i << \" \";",
-      "image": "/course-data/gesp-code-images/gesp-2023-12-4-12.png",
+      "image": null,
       "options": [
         "A. if(n%i==0)",
         "B. if(n/i==0)",
@@ -14626,7 +14626,7 @@
       "difficulty": 3,
       "question": "下⾯C++代码执⾏后的输出是( )。",
       "code": "| int main()\n{\ncout << (3|16) << endl;\ncout << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-3-03.png",
+      "image": null,
       "options": [
         "A. 3",
         "B. 16",
@@ -14668,7 +14668,7 @@
       "difficulty": 3,
       "question": "下面代码的输出是（ ）。",
       "code": "string s = \"316\";\nint n = s.length();\nint x = 0;\nfor (int i = 0; i < n; i++)\n    x += s[i];\n    cout << x << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-3-05.png",
+      "image": null,
       "options": [
         "A. 10",
         "B. 58",
@@ -14690,7 +14690,7 @@
       "difficulty": 3,
       "question": "下⾯C++代码执⾏后数组中⼤于0的数的特征是（ ）。",
       "code": "int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\nali] = i+1;\nfor(int i = 0; i < 20; i++)\nif ((ali]%2)8&&(a[i]%3))\nafi] = 9;\nfor(i = 0; i < 20; i++)\nif(a[i])\ncout << afi] << \"\";",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-3-06.png",
+      "image": null,
       "options": [
         "A. 2的倍数",
         "B. 3的倍数",
@@ -14712,7 +14712,7 @@
       "difficulty": 3,
       "question": "执⾏下⾯C++代码后输出的第⼀个数是（ ）。",
       "code": "| int main()\n{\nint a[20],i;\nfor(i = 0; i < 20; i++)\na[i] = i+1;\nfor( ; i > 0; i--)\ncout << a[i-1] << \" \"5\ncout << endl;\nreturn 0;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-3-07.png",
+      "image": null,
       "options": [
         "A. 20",
         "B. 19",
@@ -14734,7 +14734,7 @@
       "difficulty": 3,
       "question": "在下列代码的横线处填写（ ），可以使得输出是GESP IS INTERESTING。",
       "code": "int main()\n{\nstring str=\"gEsP is Interesting\";\nint x = str.length();\nfor(int i = 0; i < x; i++)\nif ((str[i]>='a') && (str[i]<=\"z'))\ncout << str << endl;\ncout << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-3-08.png",
+      "image": null,
       "options": [
         "A. str[i]+='a'-'A'",
         "B. str[i]+=20",
@@ -14756,7 +14756,7 @@
       "difficulty": 3,
       "question": "假设英⽂句⼦由若⼲词构成。下⾯C++代码统计输出的词数是（ ）。",
       "code": "int main()\nstring str=\"gEsP is Interesting !\";\nint x = str.length();\nint nwords = 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-3-09.png",
+      "image": null,
       "options": [
         "A. 1",
         "B. 2",
@@ -14798,7 +14798,7 @@
       "difficulty": 3,
       "question": "下⾯C++程序执⾏的结果是（ ）。",
       "code": "int a[20],i;\nint cnt=0;\nfor(i = 0;\n    i < 20;\n    i++) a[i] = i+1;\n    for( ;\n        i > 1;\n        i--) if((a[i-1]+a[i-2])%3) cnt++;\n        cout << cnt << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-3-11.png",
+      "image": null,
       "options": [
         "A. 5",
         "B. 6",
@@ -14920,7 +14920,7 @@
       "difficulty": 4,
       "question": "下⾯C++代码执⾏后，输出的是( )。",
       "code": "int main()\n{\nint x[]={2, 0, 2, 4};\nchar geSP[]=\"Grade Examination of SP\";\ncout << geSP[sizeof(x)] << endl;\ncout << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-4-02.png",
+      "image": null,
       "options": [
         "A. G",
         "B. e",
@@ -14942,7 +14942,7 @@
       "difficulty": 4,
       "question": "下⾯C++代码执⾏后输出是( )。",
       "code": "|int foo(float *f)\n{\nreturn int(*#*2);\nint main()",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-4-03.png",
+      "image": null,
       "options": [
         "A. 1",
         "B. 1.1",
@@ -15004,7 +15004,7 @@
       "difficulty": 4,
       "question": "下⾯C++代码执⾏后输出是（ ）。",
       "code": "int main()\nchar *p=\"I love GESP!\";\ncout << p+5 << endl;\ncout << endl;\nreturn 0;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-4-06.png",
+      "image": null,
       "options": [
         "A. e",
         "B. I lov",
@@ -15048,7 +15048,7 @@
       "difficulty": 4,
       "question": "下面代码用于计算斐波那契数列，横线处填写（ ）。",
       "code": "int f(int n) {\n    int f[n + 2];\n    f[0] = 0, f[1] = 1;\n    for (int i = 2; i <= n; i++)\n        f[i] = f[i - 1] + f[i - 2];\n        return f[n];",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-4-08.png",
+      "image": null,
       "options": [
         "A. 递推",
         "B. 递归",
@@ -15110,7 +15110,7 @@
       "difficulty": 4,
       "question": "如果文件1.txt中的内容如下，则执行下面C++代码时，注释了####那行代码所输出的x的值为（ ）。\n1.txt内容：50 2024 3.16 GESP",
       "code": "ifstream fin;\nstring line;\nint x;\nfin.open(\"1.txt\", ios::in);\nfor (int i = 0; i < 2; i++) {\n    fin >> line;\n    cout << line << endl;\n    }\nfin >> x;\ncout << x << endl; //####",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-4-11.png",
+      "image": null,
       "options": [
         "A. 5",
         "B. 2024",
@@ -15132,7 +15132,7 @@
       "difficulty": 4,
       "question": "下面代码的输出是（ ）。",
       "code": "char *s[] = {(char*)\"2024\", (char*)\"3.16\", (char*)\"GESP\"};\nfor (int i = 0; i < 2; i++) {\n    cout << *s + i << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-03-4-12.png",
+      "image": null,
       "options": [
         "A. 2024",
         "B. 3.16",
@@ -15274,7 +15274,7 @@
       "difficulty": 3,
       "question": "下列代码将⼗进制转化成⼋进制，则横线上应填⼊（ ）。",
       "code": "#include <iostream>\nusing namespace std;\n| void decimal2octal(int decimal) {\nint oct_number[100];\nint i = 0;\nwhile (decimal > 0) {\n____;  // 在此处填入代码\n}\n1;\nfor (int j = i- 1; j >= 0; j--) f{\ncout << oct_number[j];\n}\ncout << endl;\n() A. oct_number[i] = decimal % 8;    decimal /= 8;\n() B. oct_number[i] = decimal / 8;    decimal %/= 8;\nOC C. oct_number[i++] = decimal % 8;    decimal /= 8;\n() D. oct_number[i++] = decimal / 8;    decimal %= 8;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-3-04.png",
+      "image": null,
       "options": [
         "A. oct_number[i] = decimal % 8; decimal /= 8;",
         "B. oct_number[i] = decimal / 8; decimal %/= 8;",
@@ -15336,7 +15336,7 @@
       "difficulty": 3,
       "question": "下列代码的输出结果是（ ）。",
       "code": "#include <iostream>\n(using namespace std;\n|int main() {\nint a = 12;\nint result = a >> 2;\ncout << result << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-3-07.png",
+      "image": null,
       "options": [
         "A. 12",
         "B. 6",
@@ -15358,7 +15358,7 @@
       "difficulty": 3,
       "question": "下列代码的输出结果是（ ）。",
       "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint a = 5;\nint b = 10;\na=a%*b;\nb=a%*b;\na=a%*b;\ncout << \"a=\"<<a<< \", b=\" << b << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-3-08.png",
+      "image": null,
       "options": [
         "A. a = 5, b = 10",
         "B. a = 5, b = 5",
@@ -15400,7 +15400,7 @@
       "difficulty": 3,
       "question": "在下列代码的横线处填写( )，可以使得输出是“7”。",
       "code": "#include <iostream>\n|using namespace std;\n|int main() {\nint array[5] = {3, 7, 5, 2, 4};\nint max = 0;\nfor(int i=0; i<5; i++)\nif (____)  // 在此处填入代码\nmax = array[il];\ncout << max << endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-3-10.png",
+      "image": null,
       "options": [
         "A. max > array[i]",
         "B. max < array[i]",
@@ -15422,7 +15422,7 @@
       "difficulty": 3,
       "question": "⼩杨在做数学题，题⽬要求找出从1到35中能被7整除的数字，即[7, 14, 21, 28, 35]，则横线处应填⼊哪个代 码？（ ）",
       "code": "int main() {\n    int arr[35];\n    int count = 0;\n    for (int i = 1;\n        i <= 35;\n        i++) {\n            if (i % == 0) __________________________ // 在此处填入代码 } for (int i = 0; i < count; i++) cout << arr[i] << endl;\n            return 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-3-11.png",
+      "image": null,
       "options": [
         "A. arr[count++] = i;",
         "B. arr[i] = count++;",
@@ -15444,7 +15444,7 @@
       "difficulty": 3,
       "question": "已知字符 '0' 的ASCII编码的⼗进制表⽰为48，则执⾏下⾯C++代码后，输出是( )。",
       "code": "#include <iostream>\n|using namespace std;\n|int main() {\nstring s = \"0629\";\nint n = s.length();\nint x = 0;\nfor(int i = 0; i <n; i++)\nx += s[i];\ncout << << < endl;\nreturn 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-3-12.png",
+      "image": null,
       "options": [
         "A. 17",
         "B. 158",
@@ -15506,7 +15506,7 @@
       "difficulty": 3,
       "question": "如果执⾏下⾯C++代码后，输出的结果是“gesp ccf org cn ”，则横线上应填⼊哪个代码？（ ）",
       "code": "int main() {\n    string str = \"gesp.ccf.org.cn\";\n    string delimiter = \".\";\n    string result=\"\";\n    string token;\n    size_t found = str.find(delimiter);\n    while (found != string::npos) {\n        token = str.substr(0, found);\n        result += token;\n        result += \" \";\n        __________________________ // 在此处填入代码 found = str.find(delimiter);\n        }\n    19 //最后一部分 result += str;\n    result += \" \";\n    cout << result << endl;\n    return 0;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-3-15.png",
+      "image": null,
       "options": [
         "A. str = str.substr(found + delimiter.length(), str.length() - 1);",
         "B. str = str.substr(found, str.length() );",
@@ -15588,7 +15588,7 @@
       "difficulty": 4,
       "question": "假设变量a的地址是0x6ffe14，下面程序的输出是（ ）。",
       "code": "#include<iostream>\nusing namespace std;\nint main()\nint *p;\nint a=1ée;\np=&a;\n&      pt+;\ncout<<p<<endl;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-4-04.png",
+      "image": null,
       "options": [
         "A. 10",
         "B. 0x6ffe14",
@@ -15752,7 +15752,7 @@
       "difficulty": 4,
       "question": "下⾯的排序算法程序中，横线处应该填⼊的是（ ）。",
       "code": "{\n    int key = a[i];\n    int j=i-1;\n    while(a[j]>key && j>=0) {\n        ________;\n        j -= 1;\n        12 }\n    a[j + 1]= key;",
-      "image": "/course-data/gesp-code-images/gesp-2024-06-4-12.png",
+      "image": null,
       "options": [
         "A. a[j]=a[j-1];",
         "B. a[j]=a[j+1];",
@@ -15834,7 +15834,7 @@
       "difficulty": 3,
       "question": "下列代码中，输出结果是（ ）",
       "code": "#include<iostream>\n|using namespace std;\nint main()\n{\ndouble a=0.9;\ndouble b=1.0;\nif(((b-a)==0.1))\n{\ncout<<\"Equal\"<<endl;\n}\nelse\n{\ncout<<\"Not equal\"<<endl;\n}",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-3-01.png",
+      "image": null,
       "options": [
         "A. Equal",
         "B. Not equal",
@@ -16016,7 +16016,7 @@
       "difficulty": 3,
       "question": "下列程序中，result和result2输出分别是( ) 1 long a = 123;",
       "code": "cout<<result<<endl;\nlong a2 = -123;\nunsigned int b2 = -1;\nlong result2 = a2 & b2;\ncout<<result2<<endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-3-10.png",
+      "image": null,
       "options": [
         "A. 123 -1",
         "B. 123 -123",
@@ -16120,7 +16120,7 @@
       "difficulty": 3,
       "question": "下列程序输出的是（）",
       "code": "string str = \"Hello,CHAD\";\ncout << str.find(\"A\") << '\\n';",
-      "image": "/course-data/gesp-code-images/gesp-2024-09-3-15.png",
+      "image": null,
       "options": [
         "A. 9",
         "B. 8",
@@ -16262,7 +16262,7 @@
       "difficulty": 3,
       "question": "下列代码输出的是（ ）。",
       "code": "string s = \"1234@@chenadai\";\nstring str = \"12345\";\ns.replace(1, 5, str);\ncout << s << endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-12-3-07.png",
+      "image": null,
       "options": [
         "A. 12345",
         "B. 2345@",
@@ -16304,7 +16304,7 @@
       "difficulty": 3,
       "question": "下列程序输出的是（ ）",
       "code": "{\n    cout<<\"right\"<<endl;\n    }\nelse if (ch[5]=='\\0') {\n    cout<<\"wrong\"<<endl;\n    }\nelse {\n    cout<<\"hello\"<<endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-12-3-09.png",
+      "image": null,
       "options": [
         "A. right",
         "B. wrong",
@@ -16346,7 +16346,7 @@
       "difficulty": 3,
       "question": "下列程序最后输出的是（）",
       "code": "int a=65;\ncout<<tolower(a)<<endl;",
-      "image": "/course-data/gesp-code-images/gesp-2024-12-3-11.png",
+      "image": null,
       "options": [
         "A. 65",
         "B. A",
@@ -16508,7 +16508,7 @@
       "difficulty": 4,
       "question": "运⾏下⾯代码，屏幕上输出是（ ）。 1 double* p_arr = new double [3]; 2 p_arr[0] = 0.2; 3 p_arr[1] = 0.5; 4 p_arr[2] = 0.8; 5 p_arr += 1;",
       "code": "cout << p_arr[0] << endl;\np_arr -= 1;\ndelete p_arr;",
-      "image": "/course-data/gesp-code-images/gesp-2024-12-4-04.png",
+      "image": null,
       "options": [
         "A. 0.2",
         "B. 0.5",
@@ -16870,7 +16870,7 @@
       "difficulty": 3,
       "question": "在C++中，以下代码的输出是什么()",
       "code": "int a = -5;\nunsigned int b = a;\ncout << b;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-3-07.png",
+      "image": null,
       "options": [
         "A. -5",
         "B. 5",
@@ -16912,7 +16912,7 @@
       "difficulty": 3,
       "question": "下⾯程序是将⼗进制转⼗六进制，横线处应该填⼊的是（）",
       "code": "int main() {\n    int decimal = 255;\n    —————————————————— return 0;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-3-09.png",
+      "image": null,
       "options": [
         "A. `cout << oct << decimal;`",
         "B. `cout << decimal << decimal;`",
@@ -16954,7 +16954,7 @@
       "difficulty": 3,
       "question": "下⾯枚举法查找最⼤值索引程序中，横线处应该填写的是（）",
       "code": "int main() {\n    int arr[] = {\n        3, 7, 2, 9, 5}\n    int maxIndex = 0;\n    for (int i = 1;\n        i < 5;\n        i++) {\n            ———————————————————————————————— {\n                maxIndex = i;\n                }\n            }\n        cout << maxIndex;\n        return 0;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-3-11.png",
+      "image": null,
       "options": [
         "A. if (arr[maxIndex] > arr[i])",
         "B. if (arr[i]-1 > arr[maxIndex])",
@@ -16976,7 +16976,7 @@
       "difficulty": 3,
       "question": "以下代码的功能是将数组中的奇数和偶数分别放在数组的前半部分和后半部分,横线处应该填⼊的是（）",
       "code": "#include <iostream>\nusing namespace std;\n|int main() {\nint arr[] = {1, 2, 3, 4, 5};\nint left = 0, right = 4;\nwhile (left < right) {\nwhile (arr[left] % 2 == 1 && left < right) left++;\nif (left < right) {\nswap(arr[left], arr[right]);\n}\n}\nfor (int i = 0; i < 5; i++) {\ncout << arr[i] << \" \"5\n}\nreturn 0;\n}\n() A. while (arr[left] % 2 == 0 & left < right) right--;\nCB. while (arr[right] % 2 == 0 && left < right) left--;\nOC. while (arr[right] % 2 != 0 && left < right) right--;\n© D. while (arr[right] % 2 == 0 && left < right) right--;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-3-12.png",
+      "image": null,
       "options": [
         "A. `while (arr[left] % 2 == 0 && left < right) right--;`",
         "B. `while (arr[right] % 2 == 0 && left < right) left--;`",
@@ -17018,7 +17018,7 @@
       "difficulty": 3,
       "question": "想要得到字符串world,下⾯程序横线处应该填⼊的是（）",
       "code": "#include <iostream>\n#include <string>\nusing namespace std;\n|int main() {\nstring str = \"HelloC++\";\nreturn 0;\nstr.insert(4, \"World\");\n9)     cnint ee etr cihetr(da aA).",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-3-14.png",
+      "image": null,
       "options": [
         "A.  `1 str.insert(4, \"World\"); 2 cout << str.substr(4, 4);`",
         "B.  `1 cout << str.substr(5, 5);`",
@@ -17040,7 +17040,7 @@
       "difficulty": 3,
       "question": "有 n 个正整数，假设⼀个正整数是美丽数字当且仅当该正整数是 9 的倍数但不是 8 的倍数。下⾯的程序是 编写计算 n 个正整数中美丽数字的数量，横线处应该填⼊的是（）",
       "code": "__________________________ cnt++;",
-      "image": "/course-data/gesp-code-images/gesp-2025-03-3-15.png",
+      "image": null,
       "options": [
         "A. if (a % 9 != 0 && a % 8 != 0)",
         "B. if (a % 9 == 0 & a % 8 == 0)",

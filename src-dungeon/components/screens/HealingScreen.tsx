@@ -4,19 +4,12 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import fables from '../../data/fables.json';
 import FableCard from '../shared/FableCard';
 import type { Question } from '../../types/dungeon';
-import { isUsableChoiceQuestion } from '../../utils/questionLoader';
+import { getTrustedQuestionImage, isUsableChoiceQuestion } from '../../utils/questionLoader';
 
 function resolveQuestionImage(src?: string | null): string | null {
   if (!src) return null;
   if (/^https?:\/\//.test(src)) return src;
   return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
-}
-
-function shouldShowQuestionImage(q: Question): boolean {
-  const src = q.image || q.codeImage;
-  if (!src) return false;
-  const isExtractedCodeScreenshot = /\/gesp-code-images\//.test(src);
-  return !isExtractedCodeScreenshot || !q.code;
 }
 
 export default function HealingScreen() {
@@ -184,12 +177,12 @@ export default function HealingScreen() {
                   {currentQuestion.code}
                 </pre>
               )}
-              {shouldShowQuestionImage(currentQuestion) && resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
+              {getTrustedQuestionImage(currentQuestion) && resolveQuestionImage(getTrustedQuestionImage(currentQuestion)) && (
                 <div style={{ marginBottom: '12px' }}>
                   <img
-                    src={resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage)!}
-                    alt=""
-                    style={{ maxWidth: '100%', border: '2px solid #333', background: '#fff' }}
+                    src={resolveQuestionImage(getTrustedQuestionImage(currentQuestion))!}
+                    alt="题目配图"
+                    style={{ display: 'block', width: '100%', maxHeight: '320px', objectFit: 'contain', border: '2px solid #333', background: '#fff' }}
                   />
                 </div>
               )}

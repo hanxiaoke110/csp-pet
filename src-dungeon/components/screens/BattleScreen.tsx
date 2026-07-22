@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById } from '../../data/skills';
-import { pickQuestionsByTag, pickBigMoveQuestions, getDungeonDifficulty } from '../../utils/questionLoader';
+import { getTrustedQuestionImage, pickQuestionsByTag, pickBigMoveQuestions, getDungeonDifficulty } from '../../utils/questionLoader';
 import { calculateStats } from '../../utils/combatLogic';
 import {
   applySchoolAnswerPassive,
@@ -128,13 +128,6 @@ function resolveQuestionImage(src?: string | null): string | null {
   if (!src) return null;
   if (/^https?:\/\//.test(src)) return src;
   return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
-}
-
-function shouldShowQuestionImage(q: Question): boolean {
-  const src = q.image || q.codeImage;
-  if (!src) return false;
-  const isExtractedCodeScreenshot = /\/gesp-code-images\//.test(src);
-  return !isExtractedCodeScreenshot || !q.code;
 }
 
 // 战斗题目图片：加载失败时降级提示，不让 broken image 破坏战斗 UI
@@ -586,11 +579,12 @@ export default function BattleScreen() {
             {currentQuestion.code && (
               <pre className="battle-question-code"><code>{formatCppCode(currentQuestion.code)}</code></pre>
             )}
-            {shouldShowQuestionImage(currentQuestion) && resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage) && (
+            {getTrustedQuestionImage(currentQuestion) && resolveQuestionImage(getTrustedQuestionImage(currentQuestion)) && (
               <div className="battle-question-image-wrap">
                 <BattleImage
+                  key={getTrustedQuestionImage(currentQuestion)!}
                   className="battle-question-image"
-                  src={resolveQuestionImage(currentQuestion.image || currentQuestion.codeImage)!}
+                  src={resolveQuestionImage(getTrustedQuestionImage(currentQuestion))!}
                 />
               </div>
             )}

@@ -5,6 +5,9 @@ import { loadExcludedQuestionIds, getCachedExcludedQuestionIds } from '../../src
 import { loadVersionedRemoteJson } from '../../src/utils/versionedRemoteJson';
 
 const CACHE_PREFIX = 'dungeon_';
+const REVIEWED_BANK_API = 'https://api.cspstudy.top/api/question-bank';
+const REVIEWED_BANK_CACHE_KEY = 'reviewed_exam_bank_v1';
+const REVIEWED_BANK_VERSION_KEY = 'dungeon_reviewed_exam_bank_version';
 
 async function tryLoad(path: string): Promise<Response | null> {
   try {
@@ -44,6 +47,11 @@ interface DungeonQuestionBankData {
   questions: Question[];
 }
 
+interface ReviewedBankVersion {
+  baseVersion: number;
+  revision: number;
+}
+
 function isDungeonQuestionBankData(data: unknown): data is DungeonQuestionBankData {
   return Boolean(
     data &&
@@ -67,7 +75,98 @@ export async function loadQuestionBank(): Promise<Question[]> {
     bundledUrl: '/course-data/dungeon-exam-bank.json',
     validate: isDungeonQuestionBankData,
   });
-  return data.questions;
+  let cachedReviewed = loadFromCache<Question[]>(REVIEWED_BANK_CACHE_KEY);
+
+  // The desktop shell already downloads the merged teacher-reviewed bank on launch.
+  // Reuse it immediately so entering the dungeon never falls back to an older answer set.
+  try {
+    const desktopVersion = localStorage.getItem('csp_reviewed_quiz_bank_version');
+    const desktopBankRaw = localStorage.getItem('csp_quiz_bank');
+    if (desktopVersion && desktopBankRaw) {
+      const desktopBank = JSON.parse(desktopBankRaw) as Record<string, unknown>;
+      cachedReviewed = mergeReviewedQuestionBank(data.questions, desktopBank);
+      saveToCache(REVIEWED_BANK_CACHE_KEY, cachedReviewed);
+      localStorage.setItem(REVIEWED_BANK_VERSION_KEY, desktopVersion);
+    }
+  } catch {
+    // Ignore a corrupt desktop cache and continue with the dungeon cache/API.
+  }
+
+  try {
+    const versionResponse = await fetch(`${REVIEWED_BANK_API}/version`, { cache: 'no-store' });
+    if (!versionResponse.ok) throw new Error(`题库版本请求失败：${versionResponse.status}`);
+    const version = await versionResponse.json() as ReviewedBankVersion;
+    const versionKey = `${Number(version.baseVersion) || 0}:${Number(version.revision) || 0}`;
+
+    if (cachedReviewed?.length && localStorage.getItem(REVIEWED_BANK_VERSION_KEY) === versionKey) {
+      return cachedReviewed;
+    }
+
+    const bankResponse = await fetch(`${REVIEWED_BANK_API}/data`, { cache: 'no-store' });
+    if (!bankResponse.ok) throw new Error(`题库数据请求失败：${bankResponse.status}`);
+    const reviewedBank = await bankResponse.json() as Record<string, unknown>;
+    const merged = mergeReviewedQuestionBank(data.questions, reviewedBank);
+    saveToCache(REVIEWED_BANK_CACHE_KEY, merged);
+    localStorage.setItem(REVIEWED_BANK_VERSION_KEY, versionKey);
+    return merged;
+  } catch {
+    return cachedReviewed?.length ? cachedReviewed : data.questions;
+  }
+}
+
+function inferReviewedGroup(raw: Record<string, unknown>, fallback?: Question): Question['group'] {
+  if (fallback?.group) return fallback.group;
+  if (raw.source === 'gesp') return 'GESP';
+  const examGroup = String(raw.examGroup || '');
+  return examGroup.includes('提高') ? 'S' : 'J';
+}
+
+function normalizeReviewedQuestion(raw: Record<string, unknown>, fallback?: Question): Question | null {
+  const id = String(raw.id || fallback?.id || '').trim();
+  if (!id) return null;
+
+  const rawType = String(raw.questionType || raw.type || fallback?.type || 'choice');
+  const type: Question['type'] = rawType === 'reading'
+    ? 'reading'
+    : (rawType === 'fillBlank' || rawType === 'completion' ? 'fillBlank' : 'choice');
+  const options = Array.isArray(raw.options) ? raw.options.map(String) : fallback?.options;
+  const correctIndex = typeof raw.correctIndex === 'number' ? raw.correctIndex : fallback?.correctIndex;
+
+  return {
+    ...fallback,
+    id,
+    year: Number(raw.year ?? fallback?.year ?? 0),
+    group: inferReviewedGroup(raw, fallback),
+    type,
+    knowledgePoint: String(raw.knowledgePoint ?? fallback?.knowledgePoint ?? '其他'),
+    difficulty: Number(raw.difficulty ?? raw.level ?? fallback?.difficulty ?? 1),
+    question: String(raw.question ?? fallback?.question ?? ''),
+    code: raw.code === null || typeof raw.code === 'string' ? raw.code : fallback?.code,
+    image: raw.image === null || typeof raw.image === 'string' ? raw.image : fallback?.image,
+    codeImage: raw.codeImage === null || typeof raw.codeImage === 'string' ? raw.codeImage : fallback?.codeImage,
+    options,
+    correctIndex,
+    subQuestions: Array.isArray(raw.subQuestions) ? raw.subQuestions as Question['subQuestions'] : fallback?.subQuestions,
+    blanks: Array.isArray(raw.blanks) ? raw.blanks as Question['blanks'] : fallback?.blanks,
+    explanation: typeof raw.explanation === 'string' ? raw.explanation : fallback?.explanation,
+    level: Number(raw.level ?? fallback?.level) || undefined,
+  };
+}
+
+/** Keep dungeon metadata while applying the teacher-reviewed public bank as the source of truth. */
+export function mergeReviewedQuestionBank(
+  baseQuestions: Question[],
+  reviewedBank: Record<string, unknown>
+): Question[] {
+  const merged = new Map(baseQuestions.map(question => [question.id, question]));
+  for (const raw of Object.values(reviewedBank)) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) continue;
+    const record = raw as Record<string, unknown>;
+    const id = String(record.id || '').trim();
+    const normalized = normalizeReviewedQuestion(record, merged.get(id));
+    if (normalized) merged.set(normalized.id, normalized);
+  }
+  return [...merged.values()];
 }
 
 export async function loadDungeons(): Promise<DungeonDefinition[]> {
@@ -198,13 +297,24 @@ export function isBrokenCodeQuestion(q: Question): boolean {
   if (q.id && getCachedExcludedQuestionIds().has(q.id)) return true;
   const stem = q.question || '';
   if (q.code) return false;                // 有独立 code 字段 → 不残缺
-  if (q.image || q.codeImage) return false; // 官方代码截图可作为完整代码上下文
+  if (getTrustedQuestionImage(q)) return false; // 流程图等不可文本化素材可作为完整上下文
   if (hasInlineCode(stem)) return false;   // 题干自带可执行代码片段 → 不残缺
   if (needsCodeBlock(stem)) return true;   // 明确引用代码块/程序/横线 → 残缺
   // 循环输出/执行后结果类：题干要求算某段循环的输出，但既无 code 也无完整循环结构
   // 如「cnt+=i++循环输出cnt是」「循环执行后输出是」——原题循环代码丢失
   if (/循环/.test(stem) && /输出|执行后|结果是|的值是/.test(stem)) return true;
   return false;
+}
+
+/**
+ * GESP code screenshots were extracted from answer PDFs by page position. Some files contain
+ * neighbouring questions and even official answers, so they must never be shown in gameplay.
+ * Structured code is the canonical representation; only diagrams and other trusted assets remain.
+ */
+export function getTrustedQuestionImage(q: Question): string | null {
+  const src = q.image || q.codeImage;
+  if (!src || /\/gesp-code-images\//.test(src)) return null;
+  return src;
 }
 
 export function isUsableChoiceQuestion(q: Question | undefined): q is Question {

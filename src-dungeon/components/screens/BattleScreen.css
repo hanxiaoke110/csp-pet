@@ -105,9 +105,9 @@
 
 .battle-question-image-wrap {
   width: 100%;
-  max-height: 360px;
+  max-height: 320px;
   margin-bottom: 16px;
-  overflow: auto;
+  overflow: hidden;
   background: #f8fafc;
   border: 2px solid #2a2a3a;
 }
@@ -115,8 +115,9 @@
 .battle-question-image {
   display: block;
   width: 100%;
-  min-width: min(560px, 100%);
-  height: auto;
+  height: 100%;
+  max-height: 316px;
+  object-fit: contain;
 }
 
 .battle-options {
