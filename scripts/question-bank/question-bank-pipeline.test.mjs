@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { normalizeLegacyQuestion, stableContentHash } from './lib/normalize.mjs';
+import { buildExamManifests, mergeCanonicalInputs } from './build-canonical.mjs';
+import { validateReviewedExport } from './export-reviewed-bank.mjs';
 
 describe('canonical question normalization', () => {
   it('normalizes a GESP choice question', () => {
@@ -51,5 +53,56 @@ describe('canonical question normalization', () => {
 
   it('produces the same content hash for object keys in a different order', () => {
     expect(stableContentHash({ b: 2, a: 1 })).toBe(stableContentHash({ a: 1, b: 2 }));
+  });
+});
+
+describe('canonical bank generation', () => {
+  it('keeps reviewed corrections while enriching multipart structure', () => {
+    const reviewed = normalizeLegacyQuestion({
+      id: 'same',
+      source: 'csp_exam',
+      year: 2023,
+      questionType: 'choice',
+      question: 'reviewed',
+      options: ['A', 'B', 'C', 'D'],
+      correctIndex: 2,
+      explanation: 'teacher reviewed explanation',
+    });
+    const multipart = normalizeLegacyQuestion({
+      id: 'same',
+      year: 2023,
+      group: 'J',
+      type: 'reading',
+      question: 'parent',
+      subQuestions: [{ label: 'q1', options: ['A', 'B', 'C', 'D'], correctIndex: 1 }],
+    });
+
+    const result = mergeCanonicalInputs([
+      { priority: 100, origin: 'reviewed_cloud', questions: [reviewed] },
+      { priority: 20, origin: 'legacy_exam', questions: [multipart] },
+    ]);
+
+    expect(result.questions).toHaveLength(1);
+    expect(result.questions[0].children).toHaveLength(1);
+    expect(result.questions[0].answer.correctIndex).toBe(2);
+    expect(result.questions[0].explanation).toBe('teacher reviewed explanation');
+    expect(result.conflicts).toHaveLength(1);
+  });
+
+  it('orders an exam manifest by section and question number', () => {
+    const questions = ['csp-j-2023-r01', 'csp-j-2023-c10', 'csp-j-2023-c02', 'csp-j-2023-f01']
+      .map(id => normalizeLegacyQuestion({ id, year: 2023, group: 'J', question: 'q' }));
+
+    expect(buildExamManifests(questions)[0].questionIds).toEqual([
+      'csp-j-2023-c02',
+      'csp-j-2023-c10',
+      'csp-j-2023-r01',
+      'csp-j-2023-f01',
+    ]);
+  });
+
+  it('rejects an export without revision metadata', () => {
+    expect(() => validateReviewedExport({ data: { q: { id: 'q' } }, version: {} }))
+      .toThrow(/revision/);
   });
 });

@@ -32,19 +32,36 @@ function asNullableNumber(value) {
 }
 
 function normalizeGroup(raw) {
-  const value = asText(raw.group || raw.examGroup).toUpperCase();
+  const idGroup = String(raw.id || '').match(/^csp-([js])-/i)?.[1];
+  const value = asText(raw.group || raw.examGroup || idGroup).toUpperCase();
   if (value === 'J' || value.includes('入门')) return 'J';
   if (value === 'S' || value.includes('提高')) return 'S';
   return null;
 }
 
+function normalizeId(raw) {
+  const id = String(raw?.id ?? '').trim();
+  const legacyChoice = id.match(/^csp-([js])-(\d{4})-(\d{3})$/i);
+  if (!legacyChoice) return id;
+  return `csp-${legacyChoice[1].toLowerCase()}-${legacyChoice[2]}-c${Number(legacyChoice[3]).toString().padStart(2, '0')}`;
+}
+
+function inferOriginalNumber(id, explicitValue) {
+  if (explicitValue !== undefined && explicitValue !== null && explicitValue !== '') return explicitValue;
+  const match = id.match(/-(?:c|r|f|reading-|fillblank-)?(\d+)$/i);
+  return match ? Number(match[1]) : null;
+}
+
 function normalizeType(raw) {
   const value = asText(raw.questionType || raw.type || 'choice').toLowerCase();
+  const id = asText(raw.id).toLowerCase();
   if (['completion', 'fill', 'fillblank', 'fill_blank', 'programming-fill'].includes(value)) {
     return 'fillBlank';
   }
   if (['reading', 'program-reading', 'program_reading'].includes(value)) return 'reading';
   if (['boolean', 'judge', 'true-false', 'true_false'].includes(value)) return 'boolean';
+  if (/-f\d+$|-fillblank-\d+$/.test(id)) return 'fillBlank';
+  if (/-r\d+$|-reading-\d+$/.test(id)) return 'reading';
   return 'choice';
 }
 
@@ -77,7 +94,7 @@ function collectAssets(raw) {
 }
 
 export function normalizeLegacyQuestion(raw) {
-  const id = String(raw?.id ?? '').trim();
+  const id = normalizeId(raw);
   const group = normalizeGroup(raw || {});
   const source = asText(raw?.source) || (raw?.level || raw?.group === 'GESP' ? 'gesp' : 'csp_exam');
   const subQuestions = Array.isArray(raw?.subQuestions)
@@ -95,7 +112,7 @@ export function normalizeLegacyQuestion(raw) {
       date: asNullableText(raw?.examDate || raw?.date),
       group,
       level: asNullableNumber(raw?.level),
-      originalNumber: raw?.originalNumber ?? raw?.questionNumber ?? null,
+      originalNumber: inferOriginalNumber(id, raw?.originalNumber ?? raw?.questionNumber),
     },
     type: normalizeType(raw || {}),
     question: asText(raw?.question || raw?.stem),

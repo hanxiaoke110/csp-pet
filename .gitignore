@@ -29,5 +29,10 @@ src-tauri/target
 pet素材/
 .env
 
+# Local question-bank exports and evidence caches
+.tmp/reviewed-question-bank.json
+.tmp/question-bank-v2-evidence.json
+.tmp/question-bank-source-cache/
+
 # Agent local config
 .claude/
