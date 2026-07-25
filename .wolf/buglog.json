@@ -1014,6 +1014,30 @@
         "codex",
         "404"
       ]
+    },
+    {
+      "id": "BUG-2026-0724-pet-swallows-clicks",
+      "title": "桌宠窗口吞掉主窗口点击（知识卡按钮没反应）",
+      "status": "fixed",
+      "found": "2026-07-24",
+      "fixed": "2026-07-24",
+      "detail": "pet 窗口 alwaysOnTop 且未 ignoreCursorEvents，覆盖主窗口按钮时点击被吞。修复：主窗口 Focused 时 pet set_ignore_cursor_events(true)，失焦恢复。src-tauri/src/lib.rs"
+    },
+    {
+      "id": "BUG-2026-0724-knowledge-mapping-wrong",
+      "title": "知识卡推荐不准确（参数传递题推递归与递推）",
+      "status": "fixed",
+      "found": "2026-07-24",
+      "fixed": "2026-07-24",
+      "detail": "kp 目录只有 21 张高阶卡片，自动推断映射把基础题强行挂到相近卡片。修复：规则化重建映射（remap-question-knowledge.mjs），无把握的置 null 隐藏，645 精确/427 隐藏。"
+    },
+    {
+      "id": "BUG-2026-0724-ocr-answer-misattribution",
+      "title": "OCR 答案错位归因导致 16 道答案被误改",
+      "status": "fixed",
+      "found": "2026-07-24",
+      "fixed": "2026-07-24",
+      "detail": "questionSegment 只认 n+1 题号边界，跳号时下一题【答案】归到当前题。修复：边界改任意后续编号 + qStartRe 后瞻。教训：禁止单一 OCR 来源改答案，必须 jury 交叉验证。"
     }
   ]
 }

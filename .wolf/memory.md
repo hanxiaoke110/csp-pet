@@ -1681,3 +1681,34 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 
 ### 文档
 - 完整报告: docs/adjustments/csp-bank-v2-adjustments-2026-07-23.md (新第九至十七章)
+
+---
+
+## 2026-07-24 下午 — Kimi Code 全面修复 + 全部隔离题处理 + v1.7.13 发版
+
+### 反转：16 道"答案修正"是误改
+- 凌晨的 16 道 OCR 答案修正全部错误（questionSegment 错位归因，下一题答案记到当前题）
+- 三方验证确认旧答案全对：Kimi 盲解 16/16、DeepSeek 5-jury 80/80 票、源数据解析+官方来源
+- 已干净重建回滚；16 题 5/5 jury 转正发布
+
+### 隔离题全部处理（873→1099 auto_verified）
+- 194 auto_probable：jury 补票到 5 票（jury-topup.mjs 8 并发），176/176 完成
+- 72 disputed：21 道一致冲突复核（8 真错录修正、5 jury 错白名单、8 人工）；49 道重投
+- 20 broken：15 super 从官方卷恢复 87 子题（2021-2023 CCF 官方、2024 洛谷 SCP-J 模拟卷）；
+  2 道 validate 误报修规则；csp-j-2021-c14 改答案 B + 补官方原图；仅剩 noip-2018-p-721
+- 最终：daily=703 super=19 exam=177 dungeon=793（去重 894），12 卷全部在架且 ≥12 题
+
+### 管道加固
+- multi-jury/verify-explanations-only：contentHash 洗票链修复（旧票必须校验新鲜度）
+- publish-snapshots：publishedBlockers 真实统计；<5 题试卷自动下架
+- validate：model_canonical_conflict（jury 一致反对 canonical → disputed）+ manualVerified 白名单通道
+- source-match：题号边界从只认 n+1 改为任意后续编号（根治错位归因）
+- release-gate：12 卷、每卷 ≥5、blockers=0（真实）
+
+### 知识卡
+- P0-1：question-knowledge-mapping 重建（remap-question-knowledge.mjs）——645 道精确映射、427 道隐藏，错配清零；参数传递题不再错推「递归与递推」
+- P0-2：pet 窗口在主窗口聚焦时 set_ignore_cursor_events(true)（always-on-top 桌宠吞点击导致"打开知识卡"按钮没反应）；openLearningUrl 失败不再静默
+
+### 发版
+- v1.7.13 已提交并推送 Gitee master + tag（github 因本机代理未启动待补推）
+- CF Worker api.cspstudy.top /api/question-bank/v2/* 已部署上线，指纹与本地一致
