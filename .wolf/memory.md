@@ -1,4 +1,43 @@
-## 2026-07-23 — GESP PaddleOCR 重处理（进行中）
+## 2026-07-25 — 发版前收尾：CSP 程序题全上架 + 答案纠错 + 知识卡映射 + CSP-S opt-out
+
+### 最终状态
+- **auto_verified: 1,126** / auto_probable: 0 / disputed: 56 / broken: 1
+- **Channels**: daily=705, super=19, exam=234, dungeon=820
+- **去重可用: 944 题** (+45 from program question fix)
+- **全链路测试: 85 Passed / 0 Failed / 1 Warning**
+- **单元测试: 51/51 Passed**
+- **Release Gate: PASSED**
+- **知识卡映射: 939/939 已发布题全部映射** (411 道之前未映射的已自动匹配)
+
+### 变更文件
+- `scripts/question-bank/lib/channels.mjs` — isPublishableCsp 加 reading/fillBlank + secondary 来源放行
+- `scripts/question-bank/test-full-chain.mjs` — 同步 isPublishableCsp 校验逻辑
+- `src/components/quiz/QuizPractice.tsx` — CSP-S 默认 opt-out (includeSGroup checkbox)
+- `public/course-data/question-knowledge-mapping.json` — 411 道自动映射 (新增)
+- `scripts/question-bank/auto-map-kps.mjs` — 自动映射脚本 (新建)
+- `scripts/question-bank/fix-disputed-answers.mjs` — 争议答案修复脚本 (新建)
+- `public/course-data/question-bank-v2/canonical.json` — 答案重建 (csp-j-2019-c08 A→C, csp-j-2023-c08 C→A)
+- `public/course-data/question-bank-v2/verification.json` — 25 道 jury 误判转正 + 18 道阅读填空转正
+- `public/course-data/question-bank-v2/manifest.json` — 渠道快照更新
+- `docs/knowledge-cards/` — 8 张新知识卡生图 spec (新建)
+- `.tmp/question-bank-v2-evidence.json` — manualVerified + contentHash 修正
+- `.tmp/reviewed-question-bank.json` — source answer 修正
+
+### 关键修复
+1. **CSP 程序阅读/填空题缺失**：S 组 23 道 + J 组 22 道 auto_verified 程序题被 isPublishableCsp 白名单挡住
+2. **答案纠错 2 道**：csp-j-2019-c08 (A→C，官方答案 15)、csp-j-2023-c08 (C→A，后缀表达式)
+3. **jury 误判转正 25 道**：7 道 choice (官方答案确认 canonical 正确) + 18 道阅读填空 (recovery 来源)
+4. **gesp-2024-03-1-06 伪造题**：canonical 代码/选项与官方 PDF 完全不符，标记需替换
+5. **gesp-2024-09-2-04 双正确答案**：B (i<=9) 和 C (++i) 都等价，标记歧义
+
+### 知识卡缺口 (8 张需生图)
+- P0: computer-hardware (89题), cpp-basics (64题), sorting (11+题), enumeration (8+题), linked-list (3+题)
+- P1: string, searching, struct-and-class (7题)
+- 图片嵌入飞书文档，feishuCardUrl 指向飞书链接
+
+### 清理
+- 删除 20+ 个历史 hashed snapshot 文件 (question-bank-v2/ 下未被 manifest.json 引用的)
+- 删除 workspace root 空目录 docs/knowledge-cards/
 
 ### 当前状态
 - **CSP 已完成**：359 auto_verified (102 recovery + 111 choice), 4-role jury standard

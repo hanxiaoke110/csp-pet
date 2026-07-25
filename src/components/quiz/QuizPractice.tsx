@@ -20,6 +20,7 @@ interface QuizQuestion {
   knowledgePoint: string;
   difficulty: number;
   level?: number;
+  group?: string | null;
   question: string;
   code?: string;
   image?: string | null;
@@ -39,10 +40,14 @@ let questionBank: QuizQuestion[] | null = null;
 
 async function loadBank(): Promise<QuizQuestion[]> {
   if (questionBank) return questionBank;
-  const session = await beginQuestionBankSession(['daily', 'super']);
+  const session = await beginQuestionBankSession(['daily', 'super', 'exam']);
   const daily = (session.channels.daily || []).map(question => toLegacyQuestion(question));
   const superQuestions = (session.channels.super || []).map(question => toLegacyQuestion(question, 'super_challenge'));
-  questionBank = [...daily, ...superQuestions] as QuizQuestion[];
+  // 自由练习只放选择题；阅读/填空大题走 CSP 真题页和超级挑战
+  const examChoices = (session.channels.exam || [])
+    .filter(question => question.type === 'choice')
+    .map(question => toLegacyQuestion(question));
+  questionBank = [...daily, ...superQuestions, ...examChoices] as QuizQuestion[];
   return questionBank!;
 }
 
@@ -99,6 +104,15 @@ export default function QuizPractice() {
   const [kpResults, setKpResults] = useState<Map<string, { correct: number; total: number }>>(new Map());
   const [levelFilter, setLevelFilter] = useState<number | 'all'>('all');
   const [sourceFilter, setSourceFilter] = useState<string | 'all'>('all');
+  const [groupFilter, setGroupFilter] = useState<'all' | 'J' | 'S'>('all');
+  const [includeSGroup, setIncludeSGroup] = useState(false); // CSP-S opt-in: too hard for most students
+
+  // 来源切换时让级别选择跟着适配：GESP 按等级（1-4 级），CSP 按组别（J/S）
+  const handleSourceFilter = (key: string) => {
+    setSourceFilter(key);
+    setLevelFilter('all');
+    setGroupFilter('all');
+  };
   const freeStreakRef = useRef(0); // 自由练习连续答对计数（学霸时刻成就）
   const [classGate, setClassGate] = useState<{ title: string; description: string; message?: string } | null>(null);
 
@@ -186,6 +200,13 @@ export default function QuizPractice() {
       let pool = bank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
       if (sourceFilter !== 'all') {
         pool = pool.filter(q => q.source === sourceFilter);
+      }
+      if (sourceFilter === 'csp_exam' && groupFilter !== 'all') {
+        pool = pool.filter(q => q.exam?.group === groupFilter);
+      }
+      // CSP-S 提高级难度太大，默认不选，主动勾选才加入
+      if (!includeSGroup) {
+        pool = pool.filter(q => q.exam?.group !== 'S');
       }
       if (levelFilter !== 'all') {
         pool = pool.filter(q => q.level === levelFilter);
@@ -386,37 +407,61 @@ export default function QuizPractice() {
 
         <div className="quiz-filter-bar">
           <div className="quiz-filter-group">
-            <span className="quiz-filter-label">等级</span>
-            <div className="quiz-filter-options">
-              {(['all', 1, 2, 3, 4] as const).map(lv => (
-                <button
-                  key={String(lv)}
-                  className={`quiz-filter-btn ${levelFilter === lv ? 'active' : ''}`}
-                  onClick={() => setLevelFilter(lv)}
-                >
-                  {lv === 'all' ? '全部' : `GESP ${lv}级`}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="quiz-filter-group">
             <span className="quiz-filter-label">来源</span>
             <div className="quiz-filter-options">
               {[
                 { key: 'all', label: '全部' },
                 { key: 'gesp', label: 'GESP' },
-                { key: 'csp_exam', label: 'CSP' },
+                { key: 'csp_exam', label: 'CSP 真题' },
               ].map(({ key, label }) => (
                 <button
                   key={key}
                   className={`quiz-filter-btn ${sourceFilter === key ? 'active' : ''}`}
-                  onClick={() => setSourceFilter(key)}
+                  onClick={() => handleSourceFilter(key)}
                 >
                   {label}
                 </button>
               ))}
             </div>
           </div>
+          <div className="quiz-filter-group">
+            <span className="quiz-filter-label">{sourceFilter === 'csp_exam' ? '组别' : '等级'}</span>
+            <div className="quiz-filter-options">
+              {sourceFilter === 'csp_exam'
+                ? ([
+                    { key: 'all', label: '全部' },
+                    { key: 'J', label: 'CSP-J 入门级' },
+                    { key: 'S', label: 'CSP-S 提高级' },
+                  ] as const).map(({ key, label }) => (
+                    <button
+                      key={key}
+                      className={`quiz-filter-btn ${groupFilter === key ? 'active' : ''}`}
+                      onClick={() => setGroupFilter(key)}
+                    >
+                      {label}
+                    </button>
+                  ))
+                : (['all', 1, 2, 3, 4] as const).map(lv => (
+                    <button
+                      key={String(lv)}
+                      className={`quiz-filter-btn ${levelFilter === lv ? 'active' : ''}`}
+                      onClick={() => setLevelFilter(lv)}
+                    >
+                      {lv === 'all' ? '全部' : `GESP ${lv}级`}
+                    </button>
+                  ))}
+            </div>
+          </div>
+          {/* CSP-S opt-in: too hard for most students, default off */}
+          <label className="quiz-filter-s-toggle" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 14, color: '#666', paddingTop: 4 }}>
+            <input
+              type="checkbox"
+              checked={includeSGroup}
+              onChange={e => setIncludeSGroup(e.target.checked)}
+              style={{ width: 16, height: 16, cursor: 'pointer' }}
+            />
+            包含 CSP-S 提高级（难度较大，默认不选）
+          </label>
         </div>
 
         <p className="quiz-filter-hint">
@@ -424,10 +469,13 @@ export default function QuizPractice() {
             if (!questionBank) return '加载题库中...';
             let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
             if (sourceFilter !== 'all') pool = pool.filter(q => q.source === sourceFilter);
+            if (sourceFilter === 'csp_exam' && groupFilter !== 'all') pool = pool.filter(q => q.exam?.group === groupFilter);
+            if (!includeSGroup) pool = pool.filter(q => q.exam?.group !== 'S');
             if (levelFilter !== 'all') pool = pool.filter(q => q.level === levelFilter);
             const parts: string[] = [];
+            if (sourceFilter !== 'all') parts.push(sourceFilter === 'gesp' ? 'GESP' : 'CSP 真题');
+            if (sourceFilter === 'csp_exam' && groupFilter !== 'all') parts.push(groupFilter === 'J' ? '入门级' : '提高级');
             if (levelFilter !== 'all') parts.push(`GESP ${levelFilter}级`);
-            if (sourceFilter !== 'all') parts.push(sourceFilter === 'gesp' ? 'GESP' : 'CSP');
             const scope = parts.length > 0 ? parts.join(' · ') : '全部';
             return `当前练习范围：${scope}，共 ${pool.length} 道题`;
           })()}

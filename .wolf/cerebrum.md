@@ -155,6 +155,34 @@
 - **绝不**: 在关键设计决策上自行脑补——如"图上不写字"vs"完整知识卡片"，应先和用户确认
 - **绝不**: 在 21 vs 71、Codex vs Seedream 之间反复横跳——先定范围，再推细节
 
+## 2026-07-25 — 发版收尾：程序题补全 + 答案纠错 + 知识卡映射
+
+### Preferences
+- **CSP-S 默认不选**：提高级难度太大，学生主动勾选才加入练习池
+- **知识卡图片托管飞书**：图片嵌入飞书文档，通过 `feishuCardUrl` 引用，不存本地
+- **isPublishableCsp 新规则**：choice=secondary/local_source_copy + reading/fillBlank=auto_verified+secondary+有子题 + VERIFIED_PROGRAM_IDS
+- **发版前必清理旧 hashed snapshot**：`question-bank-v2/` 下未被 manifest.json 引用的 hash 文件应清除
+
+### Learnings
+- canonical 中 1183 题全有 reading/fillBlank (每卷 20 题结构完整)，但 channels.mjs 的 isPublishableCsp 白名单只放 choice，导致 S 组 0 道程序题上架
+- `question-knowledge-mapping.json` 的 `existingQuizKps` 字段是 canonical knowledgePoint→KP ID 的桥梁，自动映射时用它做关键词匹配
+- CSP-J 2023 Q8 后缀表达式 canonical 答案 C 是错的，应为 A (搜索官方答案确认)
+- CSP-J 2019 Q8 二叉树存储 canonical 答案 A(6) 是错的，应为 C(15) (搜索确认)
+- gesp-2024-03-1-06 canonical 代码/选项与官方 PDF 完全不同——题面伪造，不是简单的答案错
+- gesp-2024-09-2-04 for 循环等价的题 B 和 C 都正确——题本身有歧义
+- 知识卡只有 21 个分类，GESP L1-2 大量基础题 (计算机硬件、C++语法) 没有对应卡片
+- 166 道 `knowledgePoint: "待复核"` 的题全是 CSP 程序阅读/填空题，每题自带极细致的知识点名
+
+### Do-Not-Repeat
+- **绝不**: isPublishableCsp 只放 choice 不放 reading/fillBlank——CSP 试卷每卷有 3 阅读+2 填空，全被挡
+- **绝不**: question-knowledge-mapping 覆盖不足就发版——44% 发布题无知识卡映射，学生点"知识卡"按钮看不到内容
+- **绝不**: 信任 canonical 答案不需要外部验证——本轮发现 2 道答案错误 + 1 道题面伪造 + 1 道双正确答案
+- **绝不**: Write 工具输出路径不显式 check——文件可能写到 workspace root 而不是 csp-desktop-pet/
+- **绝不**: 发版前不跑全链路 `test-full-chain.mjs`——渠道变更后没测试的话 48 道程序题丢失不会被发现
+
+### 测试班级码
+- 测试班级码 `6WB74A1ZPP9E` 用于 ClassAccessGate 校验，发版时确认在白名单内
+
 ## 2026-07-23/24 — PaddleOCR + 5-Jury + 题库升级
 
 ### Preferences

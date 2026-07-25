@@ -3,8 +3,8 @@
   "contentRevision": 50005479322,
   "verificationRevision": 50005479322,
   "channelRulesRevision": 3,
-  "generatedAt": "2026-07-25T01:11:01.019Z",
-  "questionCount": 703,
+  "generatedAt": "2026-07-25T07:40:30.096Z",
+  "questionCount": 705,
   "questions": [
     {
       "id": "gesp-2023-03-1-01",
@@ -15617,6 +15617,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2025-03-4-01",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-03",
+        "group": null,
+        "level": 4,
+        "originalNumber": 1
+      },
+      "type": "choice",
+      "question": "关于下述代码，说法错误的是（ ）。",
+      "code": "int a = 4;\nint b = 5;\nint result = multiply(a, b);\nstd::cout << \"The result is: \" << result << std::endl;\nreturn 0;\n}\nint multiply(int x, int y) {\n    return x * y;",
+      "assets": [],
+      "options": [
+        "A. 函数multiply的定义应该放到函数main之前。",
+        "B. `函数声明int multiply(int x, int y);中明确指定了函数multiply()的返回值为整数类型。`",
+        "C. 在main函数中，函数multiply通过multiply(a, b)被调⽤，其中a和b是定义在main函数中的变 量，它们作为实参传递给了multiply函数的形参x和y。",
+        "D. 运⾏上述代码，将输出The result is: 20。"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "A说法错误。multiply可以定义在main之后，只需在main前声明即可（代码已有声明）。答案A。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "e8182fe95547188de6f5fad22bad73156cecb353dc89b9f77295eb8bd84176f5",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2025-03-4-02",
       "source": "gesp",
       "exam": {
@@ -17525,6 +17564,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "4afa94879bd8183301bd3e51b64fb69aac9c488afbcc18d3579d999cca8d8e13",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2025-06-3-10",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-06",
+        "group": null,
+        "level": 3,
+        "originalNumber": 10
+      },
+      "type": "choice",
+      "question": "如何正确定义⼀个长度为5的整型数组( )",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. `int array = new int[5];`",
+        "B. array int[5];",
+        "C. int[] array = {1,2,3,4,5};",
+        "D. `int array[5];`"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "C++定义数组：int array[5];。A/B/C语法错误。答案D。",
+      "knowledgePoint": "C++语法基础",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "28937cc46d4296a1b7b40062dfefb50fd4e3d438d4ec78b7e00ec780b7c31c80",
       "verificationStatus": "auto_verified"
     },
     {

@@ -680,68 +680,58 @@
       "_method": "rules-20260724"
     },
     "gesp-2023-03-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "program-reading"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-03": {
       "primary": "data-types-and-units",
       "_method": "inferred"
     },
     "gesp-2023-03-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-1-12": {
       "primary": "control-structures",
@@ -762,78 +752,67 @@
       "_was": "programming-languages"
     },
     "gesp-2023-03-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-02": {
       "primary": "control-structures",
       "_method": "inferred-override"
     },
     "gesp-2023-03-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-05": {
       "primary": "programming-languages",
       "_method": "inferred-override"
     },
     "gesp-2023-03-2-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-03-2-14": {
       "primary": "control-structures",
@@ -846,78 +825,67 @@
       "_was": "programming-languages"
     },
     "gesp-2023-06-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-03": {
       "primary": "data-types-and-units",
       "_method": "inferred"
     },
     "gesp-2023-06-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-06": {
       "primary": "programming-languages",
       "_method": "inferred-override"
     },
     "gesp-2023-06-1-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-1-14": {
       "primary": "control-structures",
@@ -930,50 +898,43 @@
       "_was": "expression-evaluation"
     },
     "gesp-2023-06-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-05": {
       "primary": "programming-languages",
       "_method": "inferred-override"
     },
     "gesp-2023-06-2-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-09": {
       "primary": "control-structures",
@@ -985,22 +946,19 @@
       "_method": "inferred-override"
     },
     "gesp-2023-06-2-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-06-2-14": {
       "primary": "control-structures",
@@ -1013,40 +971,34 @@
       "_was": "programming-languages"
     },
     "gesp-2023-09-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-1-07": {
       "primary": "control-structures",
@@ -1098,26 +1050,23 @@
       "_method": "inferred-override"
     },
     "gesp-2023-09-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "program-reading"
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "control-structures"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-2-04": {
       "primary": "programming-languages",
       "_method": "inferred-override"
     },
     "gesp-2023-09-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-09-2-06": {
       "primary": "control-structures",
@@ -1169,22 +1118,19 @@
       "_was": "programming-languages"
     },
     "gesp-2023-12-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-1-04": {
       "primary": "control-structures",
@@ -1232,28 +1178,24 @@
       "_was": "programming-languages"
     },
     "gesp-2023-12-1-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-1-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-1-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-history"
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-02": {
       "primary": "control-structures",
@@ -1266,42 +1208,37 @@
       "_was": "number-theory"
     },
     "gesp-2023-12-2-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-06": {
       "primary": "control-structures",
       "_method": "inferred"
     },
     "gesp-2023-12-2-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-08": {
       "primary": "control-structures",
       "_method": "inferred"
     },
     "gesp-2023-12-2-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-11": {
       "primary": "control-structures",
@@ -1309,16 +1246,14 @@
       "_was": "programming-languages"
     },
     "gesp-2023-12-2-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "control-structures"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-2-14": {
       "primary": "control-structures",
@@ -1335,16 +1270,14 @@
       "_method": "inferred-override"
     },
     "gesp-2023-12-3-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-3-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-3-04": {
       "primary": "control-structures",
@@ -1357,22 +1290,19 @@
       "_was": "array-and-string"
     },
     "gesp-2023-12-3-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-3-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-3-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-3-09": {
       "primary": "control-structures",
@@ -1398,28 +1328,24 @@
       "_method": "inferred-override"
     },
     "gesp-2023-12-3-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-history"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "recursion"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-04": {
       "primary": "control-structures",
@@ -1427,28 +1353,24 @@
       "_was": "array-and-string"
     },
     "gesp-2023-12-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-09": {
       "primary": "array-and-string",
@@ -1470,46 +1392,39 @@
       "_was": "programming-languages"
     },
     "gesp-2023-12-4-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-history"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2023-12-4-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-06": {
       "primary": "control-structures",
@@ -1540,10 +1455,9 @@
       "_method": "existing-kp"
     },
     "gesp-2024-03-1-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-13": {
       "primary": null,
@@ -1552,46 +1466,39 @@
       "_was": "programming-languages"
     },
     "gesp-2024-03-1-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-1-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-history"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-06": {
       "primary": "control-structures",
@@ -1611,26 +1518,23 @@
       "_method": "inferred"
     },
     "gesp-2024-03-2-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "control-structures"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-11": {
       "primary": "expression-evaluation",
       "_method": "inferred-override"
     },
     "gesp-2024-03-2-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-2-14": {
       "primary": "control-structures",
@@ -1647,22 +1551,19 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2024-03-3-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-3-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-3-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-3-05": {
       "primary": "control-structures",
@@ -1691,10 +1592,9 @@
       "_was": "array-and-string"
     },
     "gesp-2024-03-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-3-11": {
       "primary": "control-structures",
@@ -1711,22 +1611,19 @@
       "_was": "expression-evaluation"
     },
     "gesp-2024-03-3-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-3-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-history"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-4-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-4-02": {
       "primary": "data-types-and-units",
@@ -1748,16 +1645,14 @@
       "_method": "inferred"
     },
     "gesp-2024-03-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-4-08": {
       "primary": "control-structures",
@@ -1790,40 +1685,34 @@
       "_method": "inferred-override"
     },
     "gesp-2024-03-4-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-03-4-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-history"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-1-05": {
       "primary": "data-types-and-units",
@@ -1831,10 +1720,9 @@
       "_was": "programming-languages"
     },
     "gesp-2024-06-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-1-07": {
       "primary": null,
@@ -1872,48 +1760,42 @@
       "_was": "programming-languages"
     },
     "gesp-2024-06-1-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-1-15": {
       "primary": "computer-history",
       "_method": "inferred-override"
     },
     "gesp-2024-06-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-2-04": {
       "primary": "control-structures",
       "_method": "inferred"
     },
     "gesp-2024-06-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-2-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-2-07": {
       "primary": "control-structures",
@@ -1921,10 +1803,9 @@
       "_was": "expression-evaluation"
     },
     "gesp-2024-06-2-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "greedy"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-2-09": {
       "primary": "control-structures",
@@ -1960,16 +1841,14 @@
       "_was": "computer-networks"
     },
     "gesp-2024-06-3-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-3-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-3-03": {
       "primary": "data-types-and-units",
@@ -1982,28 +1861,24 @@
       "_was": "array-and-string"
     },
     "gesp-2024-06-3-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-3-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "program-reading"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-3-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-3-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-3-09": {
       "primary": "array-and-string",
@@ -2030,10 +1905,9 @@
       "_was": "programming-languages"
     },
     "gesp-2024-06-3-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-3-15": {
       "primary": "control-structures",
@@ -2041,16 +1915,14 @@
       "_was": "array-and-string"
     },
     "gesp-2024-06-4-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-03": {
       "primary": "control-structures",
@@ -2058,28 +1930,24 @@
       "_was": "programming-languages"
     },
     "gesp-2024-06-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-08": {
       "primary": "control-structures",
@@ -2091,10 +1959,9 @@
       "_method": "inferred"
     },
     "gesp-2024-06-4-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-search"
+      "primary": "binary-search",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-11": {
       "primary": "array-and-string",
@@ -2106,58 +1973,49 @@
       "_was": "expression-evaluation"
     },
     "gesp-2024-06-4-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-06-4-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "encoding-and-decoding"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-1-08": {
       "primary": "control-structures",
@@ -2195,38 +2053,33 @@
       "_was": "programming-languages"
     },
     "gesp-2024-09-1-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-2-04": {
       "primary": "control-structures",
       "_method": "inferred"
     },
     "gesp-2024-09-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-2-06": {
       "primary": null,
@@ -2235,10 +2088,9 @@
       "_was": "programming-languages"
     },
     "gesp-2024-09-2-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-2-08": {
       "primary": "control-structures",
@@ -2288,28 +2140,24 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2024-09-3-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-3-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-3-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-3-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "program-reading"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-3-07": {
       "primary": "control-structures",
@@ -2317,68 +2165,58 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2024-09-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-3-12": {
       "primary": "array-and-string",
       "_method": "inferred-override"
     },
     "gesp-2024-09-3-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-3-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "control-structures"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-09-3-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-07": {
       "primary": "control-structures",
@@ -2411,16 +2249,14 @@
       "_was": "programming-languages"
     },
     "gesp-2024-12-1-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-1-15": {
       "primary": "control-structures",
@@ -2428,22 +2264,19 @@
       "_was": "programming-languages"
     },
     "gesp-2024-12-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-2-04": {
       "primary": "control-structures",
@@ -2465,10 +2298,9 @@
       "_was": "programming-languages"
     },
     "gesp-2024-12-2-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "number-theory",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-2-09": {
       "primary": "control-structures",
@@ -2481,10 +2313,9 @@
       "_was": "programming-languages"
     },
     "gesp-2024-12-2-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-2-12": {
       "primary": "recursion",
@@ -2501,34 +2332,29 @@
       "_was": "data-types-and-units"
     },
     "gesp-2024-12-2-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-05": {
       "primary": null,
@@ -2542,16 +2368,14 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2024-12-3-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-09": {
       "primary": "control-structures",
@@ -2559,16 +2383,14 @@
       "_was": "array-and-string"
     },
     "gesp-2024-12-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-3-12": {
       "primary": "control-structures",
@@ -2585,38 +2407,33 @@
       "_method": "inferred-override"
     },
     "gesp-2024-12-3-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "combinatorics"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-4-01": {
       "primary": "data-types-and-units",
       "_method": "inferred"
     },
     "gesp-2024-12-4-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-4-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-4-06": {
       "primary": "array-and-string",
@@ -2636,10 +2453,9 @@
       "_was": "recursion"
     },
     "gesp-2024-12-4-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "complexity"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2024-12-4-11": {
       "primary": "array-and-string",
@@ -2667,74 +2483,63 @@
       "_was": "expression-evaluation"
     },
     "gesp-2025-03-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-04": {
       "primary": "programming-languages",
       "_method": "inferred-override"
     },
     "gesp-2025-03-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "control-structures"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "number-theory",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-1-13": {
       "primary": "control-structures",
@@ -2751,22 +2556,19 @@
       "_was": "programming-languages"
     },
     "gesp-2025-03-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-2-04": {
       "primary": null,
@@ -2795,10 +2597,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-03-2-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "number-theory",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-2-10": {
       "primary": "control-structures",
@@ -2820,10 +2621,9 @@
       "_was": "control-structures"
     },
     "gesp-2025-03-2-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-2-15": {
       "primary": null,
@@ -2846,10 +2646,9 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2025-03-3-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-3-05": {
       "primary": "encoding-and-decoding",
@@ -2862,28 +2661,24 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2025-03-3-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-3-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-3-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-3-11": {
       "primary": "control-structures",
@@ -2895,62 +2690,53 @@
       "_method": "inferred-override"
     },
     "gesp-2025-03-3-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-3-14": {
       "primary": "array-and-string",
       "_method": "inferred-override"
     },
     "gesp-2025-03-3-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "recursion"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-09": {
       "primary": "array-and-string",
@@ -2966,10 +2752,9 @@
       "_method": "inferred-override"
     },
     "gesp-2025-03-4-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "complexity"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-03-4-13": {
       "primary": "array-and-string",
@@ -2987,10 +2772,9 @@
       "_was": "data-types-and-units"
     },
     "gesp-2025-06-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-02": {
       "primary": null,
@@ -2999,46 +2783,39 @@
       "_was": "programming-languages"
     },
     "gesp-2025-06-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-10": {
       "primary": "control-structures",
@@ -3061,50 +2838,43 @@
       "_was": "programming-languages"
     },
     "gesp-2025-06-1-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-1-15": {
       "primary": "control-structures",
       "_method": "inferred-override"
     },
     "gesp-2025-06-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-07": {
       "primary": "control-structures",
@@ -3132,20 +2902,18 @@
       "_was": "program-reading"
     },
     "gesp-2025-06-2-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "number-theory",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-13": {
       "primary": "control-structures",
       "_method": "inferred"
     },
     "gesp-2025-06-2-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "computer-networks"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-2-15": {
       "primary": "dynamic-programming",
@@ -3173,10 +2941,9 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2025-06-3-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-3-06": {
       "primary": "encoding-and-decoding",
@@ -3184,16 +2951,14 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2025-06-3-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-3-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-3-09": {
       "primary": "binary-and-bitwise",
@@ -3219,10 +2984,9 @@
       "_was": "array-and-string"
     },
     "gesp-2025-06-3-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-3-15": {
       "primary": "array-and-string",
@@ -3243,22 +3007,19 @@
       "_method": "inferred-override"
     },
     "gesp-2025-06-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "data-types-and-units",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-4-07": {
       "primary": null,
@@ -3272,10 +3033,9 @@
       "_was": "binary-search"
     },
     "gesp-2025-06-4-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-4-10": {
       "primary": "recursion",
@@ -3296,32 +3056,28 @@
       "_was": "array-and-string"
     },
     "gesp-2025-06-4-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-06-4-15": {
       "primary": "array-and-string",
       "_method": "inferred-override"
     },
     "gesp-2025-09-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "number-theory",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "control-structures"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-1-04": {
       "primary": "data-types-and-units",
@@ -3329,10 +3085,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-1-06": {
       "primary": "data-types-and-units",
@@ -3360,10 +3115,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-1-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-1-12": {
       "primary": "control-structures",
@@ -3433,20 +3187,18 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2025-09-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "number-theory",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-2-02": {
       "primary": "computer-networks",
       "_method": "inferred"
     },
     "gesp-2025-09-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-2-04": {
       "primary": "control-structures",
@@ -3454,10 +3206,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-2-06": {
       "primary": "control-structures",
@@ -3501,10 +3252,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-2-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-2-15": {
       "primary": "control-structures",
@@ -3560,16 +3310,14 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-3-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-3-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-3-03": {
       "primary": "array-and-string",
@@ -3581,20 +3329,18 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-3-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-3-06": {
       "primary": "array-and-string",
       "_method": "inferred"
     },
     "gesp-2025-09-3-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-3-08": {
       "primary": "control-structures",
@@ -3607,10 +3353,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-3-11": {
       "primary": "control-structures",
@@ -3621,10 +3366,9 @@
       "_method": "inferred-override"
     },
     "gesp-2025-09-3-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-3-14": {
       "primary": "control-structures",
@@ -3688,10 +3432,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-09-4-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-4-02": {
       "primary": "array-and-string",
@@ -3702,40 +3445,34 @@
       "_method": "inferred"
     },
     "gesp-2025-09-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-4-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-4-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-search"
+      "primary": "binary-search",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-09-4-10": {
       "primary": "array-and-string",
@@ -3814,22 +3551,19 @@
       "_was": "programming-languages"
     },
     "gesp-2025-12-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "program-reading"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-1-04": {
       "primary": "data-types-and-units",
@@ -3837,22 +3571,19 @@
       "_was": "programming-languages"
     },
     "gesp-2025-12-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-1-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-1-08": {
       "primary": "control-structures",
@@ -3943,20 +3674,18 @@
       "_method": "inferred-override"
     },
     "gesp-2025-12-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "program-reading"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-2-02": {
       "primary": "computer-networks",
       "_method": "inferred"
     },
     "gesp-2025-12-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-2-04": {
       "primary": "control-structures",
@@ -3964,10 +3693,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-12-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-2-06": {
       "primary": "control-structures",
@@ -4076,10 +3804,9 @@
       "_was": "programming-languages"
     },
     "gesp-2025-12-3-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-3-02": {
       "primary": "array-and-string",
@@ -4100,16 +3827,14 @@
       "_was": "programming-languages"
     },
     "gesp-2025-12-3-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-3-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-3-08": {
       "primary": "data-types-and-units",
@@ -4120,10 +3845,9 @@
       "_method": "inferred-override"
     },
     "gesp-2025-12-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-3-11": {
       "primary": "data-types-and-units",
@@ -4131,20 +3855,18 @@
       "_was": "programming-languages"
     },
     "gesp-2025-12-3-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-3-13": {
       "primary": "control-structures",
       "_method": "inferred"
     },
     "gesp-2025-12-3-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-3-15": {
       "primary": "array-and-string",
@@ -4200,42 +3922,37 @@
       "_was": "programming-languages"
     },
     "gesp-2025-12-4-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-4-03": {
       "primary": "array-and-string",
       "_method": "inferred"
     },
     "gesp-2025-12-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-4-05": {
       "primary": "control-structures",
       "_method": "inferred"
     },
     "gesp-2025-12-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-4-08": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-4-09": {
       "primary": "control-structures",
@@ -4243,10 +3960,9 @@
       "_was": "data-types-and-units"
     },
     "gesp-2025-12-4-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "binary-search",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-4-11": {
       "primary": "control-structures",
@@ -4263,10 +3979,9 @@
       "_method": "inferred-override"
     },
     "gesp-2025-12-4-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2025-12-4-15": {
       "primary": "control-structures",
@@ -4332,16 +4047,14 @@
       "_method": "inferred"
     },
     "gesp-2026-03-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-1-05": {
       "primary": "data-types-and-units",
@@ -4349,10 +4062,9 @@
       "_was": "programming-languages"
     },
     "gesp-2026-03-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-1-07": {
       "primary": "control-structures",
@@ -4463,22 +4175,19 @@
       "_was": "programming-languages"
     },
     "gesp-2026-03-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-2-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-2-06": {
       "primary": "control-structures",
@@ -4578,10 +4287,9 @@
       "_was": "programming-languages"
     },
     "gesp-2026-03-3-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-3-02": {
       "primary": "data-types-and-units",
@@ -4594,10 +4302,9 @@
       "_was": "array-and-string"
     },
     "gesp-2026-03-3-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-3-05": {
       "primary": "encoding-and-decoding",
@@ -4605,10 +4312,9 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2026-03-3-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "encoding-and-decoding",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-3-07": {
       "primary": "encoding-and-decoding",
@@ -4626,10 +4332,9 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2026-03-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-3-11": {
       "primary": "data-types-and-units",
@@ -4641,16 +4346,14 @@
       "_was": "array-and-string"
     },
     "gesp-2026-03-3-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "number-theory"
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-3-14": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-3-15": {
       "primary": "encoding-and-decoding",
@@ -4699,46 +4402,39 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2026-03-4-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-08": {
       "primary": "recursion",
@@ -4750,10 +4446,9 @@
       "_was": "data-types-and-units"
     },
     "gesp-2026-03-4-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-search"
+      "primary": "binary-search",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-03-4-11": {
       "primary": "array-and-string",
@@ -4830,40 +4525,34 @@
       "_was": "recursion"
     },
     "gesp-2026-06-1-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "graph"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-1-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-1-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-1-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-1-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-1-06": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-1-07": {
       "primary": "control-structures",
@@ -4910,28 +4599,24 @@
       "_method": "inferred"
     },
     "gesp-2026-06-2-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "graph"
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-2-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-2-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-2-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-2-06": {
       "primary": "control-structures",
@@ -4984,16 +4669,14 @@
       "_was": "programming-languages"
     },
     "gesp-2026-06-3-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-3-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "data-types-and-units"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-3-03": {
       "primary": "encoding-and-decoding",
@@ -5028,26 +4711,23 @@
       "_method": "inferred-override"
     },
     "gesp-2026-06-3-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-and-bitwise"
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-3-11": {
       "primary": "binary-and-bitwise",
       "_method": "inferred-override"
     },
     "gesp-2026-06-3-12": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "program-reading"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-3-13": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-3-14": {
       "primary": "array-and-string",
@@ -5059,66 +4739,57 @@
       "_was": "binary-and-bitwise"
     },
     "gesp-2026-06-4-01": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-02": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-03": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-04": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "programming-languages"
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-05": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-06": {
       "primary": "array-and-string",
       "_method": "inferred-override"
     },
     "gesp-2026-06-4-07": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-08": {
       "primary": "array-and-string",
       "_method": "inferred"
     },
     "gesp-2026-06-4-09": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-10": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-11": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "binary-search"
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "gesp-2026-06-4-12": {
       "primary": "control-structures",
@@ -5135,10 +4806,9 @@
       "_method": "inferred"
     },
     "gesp-2026-06-4-15": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "array-and-string"
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "noip-2015-p-307": {
       "primary": "data-types-and-units",
@@ -5440,10 +5110,9 @@
       "_was": "data-types-and-units"
     },
     "super-2023-reading-1": {
-      "primary": null,
-      "_method": "rules-20260724",
-      "_needsReview": true,
-      "_was": "expression-evaluation"
+      "primary": "program-reading",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     },
     "super-2023-reading-2": {
       "primary": "control-structures",
@@ -5479,6 +5148,406 @@
       "primary": "graph",
       "_method": "rules-20260724",
       "_was": "array-and-string"
+    },
+    "gesp-2023-12-3-14": {
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2023-12-4-13": {
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2024-06-4-14": {
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2024-09-3-08": {
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2024-09-3-09": {
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2024-09-3-11": {
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2025-03-4-08": {
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2025-09-4-15": {
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2025-12-4-01": {
+      "primary": "recursion",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2026-03-1-02": {
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "gesp-2026-06-2-02": {
+      "primary": "control-structures",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2019-c02": {
+      "primary": "binary-and-bitwise",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2019-c06": {
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2019-c07": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2019-c11": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2019-c12": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2019-c13": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2019-c15": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c01": {
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c03": {
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c04": {
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c07": {
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c09": {
+      "primary": "binary-and-bitwise",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c10": {
+      "primary": "combinatorics",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c11": {
+      "primary": "stack-and-queue",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c13": {
+      "primary": "combinatorics",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c14": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2020-c15": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2021-c02": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2021-c03": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2021-c04": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2021-c07": {
+      "primary": "binary-and-bitwise",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2021-c10": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2021-c12": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2021-c15": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2022-c03": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2022-c10": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2022-c12": {
+      "primary": "binary-search",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c04": {
+      "primary": "array-and-string",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c05": {
+      "primary": "tree",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c06": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c07": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c09": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c13": {
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c14": {
+      "primary": "combinatorics",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2023-c15": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2024-c01": {
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2024-c02": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2024-c03": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2024-c08": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2024-c09": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2024-c10": {
+      "primary": "programming-languages",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-j-2024-c14": {
+      "primary": "combinatorics",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2019-c01": {
+      "primary": "expression-evaluation",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2019-c02": {
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2019-c03": {
+      "primary": "binary-and-bitwise",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2019-c05": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2019-c07": {
+      "primary": "binary-search",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2019-c10": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2019-c14": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2020-c01": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2020-c02": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2021-c01": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2021-c04": {
+      "primary": "binary-search",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2021-c13": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2021-c15": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2022-c02": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2022-c08": {
+      "primary": "graph",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2023-c01": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2023-c02": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2023-c04": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2023-c05": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2023-c11": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2023-c14": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2024-c01": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2024-c03": {
+      "primary": "computer-networks",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2024-c06": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2024-c09": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2024-c13": {
+      "primary": "complexity",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
+    },
+    "csp-s-2024-c15": {
+      "primary": "computer-history",
+      "_method": "auto-mapped-by-knowledgePoint",
+      "_needsReview": true
     }
   }
 }

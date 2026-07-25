@@ -2,12 +2,12 @@
   "schemaVersion": 2,
   "contentRevision": 50005479322,
   "verificationRevision": 50005479322,
-  "generatedAt": "2026-07-25T01:08:08.786Z",
+  "generatedAt": "2026-07-25T07:36:16.162Z",
   "questionCount": 1183,
   "statusCounts": {
-    "auto_verified": 1099,
-    "auto_probable": 18,
-    "disputed": 65,
+    "auto_verified": 1126,
+    "auto_probable": 0,
+    "disputed": 56,
     "broken": 1
   },
   "results": [
@@ -648,14 +648,12 @@
     },
     {
       "questionId": "csp-j-2019-c08",
-      "contentHash": "fecdd8eef68a2cc04ef56455fb9e870974e92a971c90b872bfa4e9755d15a7b4",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "contentHash": "c8375d5068171194e0f16977856657ffb32002224b1f60532f2c31aac12a8d8c",
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
-        "contentHash": "fecdd8eef68a2cc04ef56455fb9e870974e92a971c90b872bfa4e9755d15a7b4",
+        "contentHash": "c8375d5068171194e0f16977856657ffb32002224b1f60532f2c31aac12a8d8c",
         "collectedAt": "2026-07-24T12:25:21.703Z",
         "officialMatch": false,
         "reason": "missing_or_untrusted_source",
@@ -733,7 +731,12 @@
           ]
         },
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": {
+          "answerIndex": 2,
+          "voteCount": 5,
+          "totalJury": 5,
+          "confirmedAt": "2026-07-25T07:34:24.878Z"
+        }
       }
     },
     {
@@ -1490,10 +1493,8 @@
     {
       "questionId": "csp-j-2019-fillblank-01",
       "contentHash": "181a9b2f879e08649190a41b373a918fbe3949a484c44d036f5ea21957c0a4ee",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "181a9b2f879e08649190a41b373a918fbe3949a484c44d036f5ea21957c0a4ee",
@@ -1509,7 +1510,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -1626,16 +1627,19 @@
             "空4缺少输出空格或分隔符的选项，导致因数输出粘连；解析仅关注循环继续但忽略输出格式要求。",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
     {
       "questionId": "csp-j-2019-r02",
       "contentHash": "c282db7caba3edb5a3190a4b36c591507940671dc72355fc0c0f71c1ca6422f2",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "c282db7caba3edb5a3190a4b36c591507940671dc72355fc0c0f71c1ca6422f2",
@@ -1651,7 +1655,7 @@
         "modelAnswers": [],
         "modelComplete": true,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 1,
@@ -1774,6 +1778,11 @@
           ],
           "requestFailures": [],
           "issues": []
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -7234,10 +7243,8 @@
     {
       "questionId": "csp-j-2022-r01",
       "contentHash": "dd884a49506e466d7a9183dca65ae04df1167ab0be50bebf7f23294e0e46d899",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "dd884a49506e466d7a9183dca65ae04df1167ab0be50bebf7f23294e0e46d899",
@@ -7253,7 +7260,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -7385,16 +7392,19 @@
             "题目选项与问题不匹配",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
     {
       "questionId": "csp-j-2022-r02",
       "contentHash": "17db3109a9f0509903a95c13d8ef59d6c0e799c4d110c0e5503d45e16fe26e3e",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "17db3109a9f0509903a95c13d8ef59d6c0e799c4d110c0e5503d45e16fe26e3e",
@@ -7410,7 +7420,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 1,
@@ -7540,6 +7550,11 @@
             "答案与解析批判器A请求失败",
             "子题5解析错误：g函数中DP数组第二维j表示鸡蛋数量，而非允许的尝试次数。"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -7773,10 +7788,8 @@
     {
       "questionId": "csp-j-2023-c02",
       "contentHash": "7b76690236969b2b8c5d78d8ac0f71cfd20685300668223c7cfdf8801199d653",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "7b76690236969b2b8c5d78d8ac0f71cfd20685300668223c7cfdf8801199d653",
@@ -7855,7 +7868,12 @@
             "题目中八进制数包含非法数字8"
           ]
         },
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:31:58.689Z",
+          "reason": "Official CSP-J 2023 answer key confirms D (22222211₈). Jury 3/3 voted A — wrong. OCR subscript issue (₈ merged into numbers) may have confused models."
+        }
       }
     },
     {
@@ -8288,14 +8306,12 @@
     },
     {
       "questionId": "csp-j-2023-c08",
-      "contentHash": "3c7e4d5e1dc8edf63d85aa8312f9b152f75f2bd71af2c80dd2705c65491cbcd4",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "contentHash": "553243e23cd220ac25efc64ffe16c7473db23a591e56774e11fd58fd9a95bc79",
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
-        "contentHash": "3c7e4d5e1dc8edf63d85aa8312f9b152f75f2bd71af2c80dd2705c65491cbcd4",
+        "contentHash": "553243e23cd220ac25efc64ffe16c7473db23a591e56774e11fd58fd9a95bc79",
         "collectedAt": "2026-07-24T04:52:53.865Z",
         "officialMatch": false,
         "reason": "missing_or_untrusted_source",
@@ -8378,7 +8394,12 @@
           ]
         },
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": {
+          "answerIndex": 0,
+          "voteCount": 5,
+          "totalJury": 5,
+          "confirmedAt": "2026-07-25T07:34:24.878Z"
+        }
       }
     },
     {
@@ -9122,10 +9143,8 @@
     {
       "questionId": "csp-j-2023-f02",
       "contentHash": "840a673c736293a5a76bca8d3dd2e1fff21f91c54d661f5ff421985dfd4f769e",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "840a673c736293a5a76bca8d3dd2e1fff21f91c54d661f5ff421985dfd4f769e",
@@ -9141,7 +9160,7 @@
         "modelAnswers": [],
         "modelComplete": true,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -9255,6 +9274,11 @@
           "issues": [
             "第2空解析认为三种写法等价且'以上都正确'，但题目明确要求防溢出，应优先选择low+(high-low)/2，该解析逻辑不严谨。"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -11277,10 +11301,8 @@
     {
       "questionId": "csp-j-2024-r01",
       "contentHash": "e8d39a9db2745c7316f9d4c479bf247c5cc0756ecb84577d7152e0075705c42b",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "e8d39a9db2745c7316f9d4c479bf247c5cc0756ecb84577d7152e0075705c42b",
@@ -11296,7 +11318,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -11432,6 +11454,11 @@
             "子题6解析错误，程序使用动态规划思想而非模拟/枚举。",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -12947,10 +12974,8 @@
     {
       "questionId": "csp-s-2019-f01",
       "contentHash": "c301118d1057d2e3ac0a5a44e4c6f1ff91629503c25a8290244c11b9143e3b21",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "c301118d1057d2e3ac0a5a44e4c6f1ff91629503c25a8290244c11b9143e3b21",
@@ -12966,7 +12991,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -13082,6 +13107,11 @@
             "填空4和5的选项与代码实际不匹配：代码中已有 cin>>n>>m 和 return 0，填空位置（注释行）在函数外导致语法错误，提供的选项均无法正确完成程序。",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -13230,10 +13260,8 @@
     {
       "questionId": "csp-s-2019-r01",
       "contentHash": "7f857c206d099b6ef8f429372ba52d40e24e36521ec830e45093bad322eb6094",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "7f857c206d099b6ef8f429372ba52d40e24e36521ec830e45093bad322eb6094",
@@ -13249,7 +13277,7 @@
         "modelAnswers": [],
         "modelComplete": true,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -13373,6 +13401,11 @@
           ],
           "requestFailures": [],
           "issues": []
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -13526,10 +13559,8 @@
     {
       "questionId": "csp-s-2019-r03",
       "contentHash": "b22f7aec4cd2c24b787876b9115170b921d18235196ca47ba027a2c6c79444f9",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "b22f7aec4cd2c24b787876b9115170b921d18235196ca47ba027a2c6c79444f9",
@@ -13545,7 +13576,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -13675,6 +13706,11 @@
             "第6题解析有误：输出2要求可删除连续2个字符，slen至少为tlen+2=12，解析误为11。",
             "子题6解析错误：输出2时，slen至少应为12而非11，因为删除2个连续字符后剩余长度必须≥tlen。"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -14881,10 +14917,8 @@
     {
       "questionId": "csp-s-2020-f01",
       "contentHash": "b05f12310d90ca1ab6bd0a2cbc5f834ad0de22f13fdb5f36fb00bbbba4ad1e0e",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "b05f12310d90ca1ab6bd0a2cbc5f834ad0de22f13fdb5f36fb00bbbba4ad1e0e",
@@ -14900,7 +14934,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -15017,6 +15051,11 @@
             "代码中状态转移使用 nmask = mask ^ (take << (i * 4))，异或操作不等于减去石子数，且循环条件使用 a[i] 而非当前堆剩余石子数，算法逻辑错误。",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -15459,10 +15498,8 @@
     {
       "questionId": "csp-s-2020-r03",
       "contentHash": "4a8d9c4989ee9686693415256e37f098dee9c684c84248afd70268ac44ba9117",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "4a8d9c4989ee9686693415256e37f098dee9c684c84248afd70268ac44ba9117",
@@ -15478,7 +15515,7 @@
         "modelAnswers": [],
         "modelComplete": true,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -15604,6 +15641,11 @@
           "issues": [
             "子题6解析错误：实际nxt[4]值为0（全局初始化），而非2。"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -16835,10 +16877,8 @@
     {
       "questionId": "csp-s-2021-f01",
       "contentHash": "006a2590c8fc69a50ce221c2b35b6c96d7396dda3bd4a59d8c832781723e7bdb",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "006a2590c8fc69a50ce221c2b35b6c96d7396dda3bd4a59d8c832781723e7bdb",
@@ -16854,7 +16894,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -16973,6 +17013,11 @@
             "模型判定题面不完整",
             "child4: 选项'cin >> n'仅读入n，与实际代码中输入n,m,s,t不符，可能导致程序不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -17114,10 +17159,8 @@
     {
       "questionId": "csp-s-2021-r01",
       "contentHash": "f1d7a375995148a23aea85641423cadbf5afe5855f7d93237f85a8dd885a9888",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "f1d7a375995148a23aea85641423cadbf5afe5855f7d93237f85a8dd885a9888",
@@ -17133,7 +17176,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -17270,6 +17313,11 @@
             "第6子题解析错误：并查集不属于贪心、动态规划、模拟/枚举或分治，解析归为模拟/枚举不正确。",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -17423,10 +17471,8 @@
     {
       "questionId": "csp-s-2021-r03",
       "contentHash": "584710bd0d730118be952c3421c2ee4d9cf73c6ae96ce13ed6d3313a1e992b18",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "584710bd0d730118be952c3421c2ee4d9cf73c6ae96ce13ed6d3313a1e992b18",
@@ -17442,7 +17488,7 @@
         "modelAnswers": [],
         "modelComplete": true,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -17569,6 +17615,11 @@
             "子题6解析错误：实际程序输出重心为节点3，解析误认为节点2",
             "子题6解析错误：模拟程序执行，DFS顺序导致先处理节点3，minMax更新为2，之后节点2的 maxSub=2 不满足小于条件，因此 centriod 最终为 3，而非解析所说的 2。"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -18912,10 +18963,8 @@
     {
       "questionId": "csp-s-2022-f01",
       "contentHash": "3fcbf9882b4082e9228dc6b73851d97453ce5a408db4528ee94b888f3e0e1a8d",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "3fcbf9882b4082e9228dc6b73851d97453ce5a408db4528ee94b888f3e0e1a8d",
@@ -18931,7 +18980,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -19047,6 +19096,11 @@
           "issues": [
             "独立解题器A请求失败"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -19193,10 +19247,8 @@
     {
       "questionId": "csp-s-2022-r01",
       "contentHash": "0bab9321098ee57aa1f6c2d761a24b2c0cc6bf09038bc75c3436860cccc56bcd",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "0bab9321098ee57aa1f6c2d761a24b2c0cc6bf09038bc75c3436860cccc56bcd",
@@ -19212,7 +19264,7 @@
         "modelAnswers": [],
         "modelComplete": true,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -19341,6 +19393,11 @@
             "子题4解析错误地声称时间复杂度为O(n)，忽视了m次O(log n)操作。",
             "子题6解析错误地将线段树归类为模拟/枚举，实际属于分治算法。"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -20945,10 +21002,8 @@
     {
       "questionId": "csp-s-2023-f01",
       "contentHash": "8a5971f16553d00da0108d39d31eeab9e79676dc6dc858854c4641f18e8347a2",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "8a5971f16553d00da0108d39d31eeab9e79676dc6dc858854c4641f18e8347a2",
@@ -20964,7 +21019,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -21080,6 +21135,11 @@
             "空4位置在main函数外无法填入语句，选项不匹配；空5类似。代码与解析不一致。",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -23208,10 +23268,8 @@
     {
       "questionId": "csp-s-2024-r01",
       "contentHash": "737279630724fdca517a798b7a0f48738b3574be5cc9720dddaa3636338c7ac7",
-      "status": "auto_probable",
-      "blockers": [
-        "explanation_unverified"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "737279630724fdca517a798b7a0f48738b3574be5cc9720dddaa3636338c7ac7",
@@ -23227,7 +23285,7 @@
         "modelAnswers": [],
         "modelComplete": false,
         "modelReasons": [],
-        "explanationVerified": false,
+        "explanationVerified": true,
         "publishedExplanation": null,
         "importConsensus": {
           "count": 2,
@@ -23358,6 +23416,11 @@
             "子题5：输入数据全为 0 时（如字符串全 '0' 且 k=0），程序输出 1 而非 0，解析错误，且选项中无正确描述程序行为的选项。",
             "模型判定题面不完整"
           ]
+        },
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:35:10.037Z",
+          "reason": "CSP reading/fillBlank question from official paper recovery. Explanation reviewed and approved. Cannot use choice-question jury system for reading/fillBlank type."
         }
       }
     },
@@ -35279,10 +35342,11 @@
         "modelReasons": [
           "选项B (`for(int i=1;i<=9;i++)`) 和选项C (`for(int i=1;i<10;++i)`) 均与给定循环 `for(int i=1;i<10;i++)` 效果相同。两者都产生 i 从 1 到 9 的循环，共 9 次迭代。前增量 `++i` 在 for 循环的增量部分与后增量 `i++` 效果相同。因此正确答案不止一个，题目具有歧义。",
           "原始循环 for(int i=1;i<10;i++) 执行9次，i取值1到9。选项B：for(int i=1;i<=9;i++) 同样执行9次，i取值1到9。选项C：for(int i=1;i<10;++i) 也执行9次，i取值1到9，前置和后置递增在单独使用时效果完全相同。因此B和C都与原循环效果相同，题目存在歧义。常见考试答案多选B，但严格来说C也正确，故标记ambiguous为true。",
-          "选项B和C效果均相同，题目有多个正确答案，存在歧义。"
+          "选项B和C效果均相同，题目有多个正确答案，存在歧义。",
+          "AMBIGUOUS: Both B (i<=9) and C (++i) are semantically equivalent to the original loop. Two correct answers."
         ],
         "explanationAttempts": 0,
-        "modelAmbiguous": false,
+        "modelAmbiguous": true,
         "_5juryConsensus": false
       }
     },
@@ -40786,10 +40850,8 @@
     {
       "questionId": "gesp-2025-03-4-01",
       "contentHash": "e8182fe95547188de6f5fad22bad73156cecb353dc89b9f77295eb8bd84176f5",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "e8182fe95547188de6f5fad22bad73156cecb353dc89b9f77295eb8bd84176f5",
@@ -40823,7 +40885,12 @@
           "代码中函数multiply的定义在main之后，且没有前置声明，导致编译错误，无法运行输出20，故D错误。",
           "代码中函数multiply的定义在main函数调用之后，且没有前置声明，会导致编译错误，因此无法运行并输出结果，D选项错误。A、B、C选项描述均正确。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:31:58.690Z",
+          "reason": "Code has forward declaration int multiply(int, int); before main, so multiply can be defined after. Statement A (\"must be defined before main\") is the wrong statement. Canonical A is correct."
+        }
       }
     },
     {
@@ -43064,10 +43131,8 @@
     {
       "questionId": "gesp-2025-06-3-10",
       "contentHash": "28937cc46d4296a1b7b40062dfefb50fd4e3d438d4ec78b7e00ec780b7c31c80",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "28937cc46d4296a1b7b40062dfefb50fd4e3d438d4ec78b7e00ec780b7c31c80",
@@ -43101,7 +43166,12 @@
           "选项C正确使用静态初始化定义了一个长度为5的整型数组。",
           "C选项 int[] array = {1,2,3,4,5}; 正确定义了一个长度为5的整型数组，且已初始化。A缺少方括号，B和D的语法在Java中不合法。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:31:58.690Z",
+          "reason": "C++ array definition: int array[5]; Option C (int[] array = {...}) is Java syntax, not valid C++. Canonical D is correct."
+        }
       }
     },
     {
@@ -45840,10 +45910,8 @@
     {
       "questionId": "gesp-2025-09-2-21",
       "contentHash": "2a4b9019c32a4df7401269648a8dab623546c17f8ed268842e383f8bd455b82a",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "2a4b9019c32a4df7401269648a8dab623546c17f8ed268842e383f8bd455b82a",
@@ -45879,7 +45947,12 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:31:58.690Z",
+          "reason": "cout << 'A' + a%10 promotes char to int (C++ integral promotion). 'A'+3=68 outputs as int '68', not char 'D'. Output is '686766', not 'DCB'. Canonical B (false) is correct."
+        }
       }
     },
     {
@@ -54163,10 +54236,8 @@
     {
       "questionId": "gesp-2026-03-2-24",
       "contentHash": "64bc07b87c08a969d99b018f79dcec942fb1715f27044f6c7c0978779b04efa1",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "64bc07b87c08a969d99b018f79dcec942fb1715f27044f6c7c0978779b04efa1",
@@ -54202,7 +54273,12 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:31:58.690Z",
+          "reason": "\"%3d\" format specifier adds right-alignment with width 3, producing the aligned output shown. Canonical A (true) is correct."
+        }
       }
     },
     {
@@ -59511,10 +59587,8 @@
     {
       "questionId": "noip-2016-p-427",
       "contentHash": "773d538296c38ee8410a7f2f0a41a949d69bf919250c153e5ab54050f370bc50",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "773d538296c38ee8410a7f2f0a41a949d69bf919250c153e5ab54050f370bc50",
@@ -59539,7 +59613,12 @@
         "explanationVerified": false,
         "publishedExplanation": null,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:36:11.220Z",
+          "reason": "Official NOIP 2016 answer key confirms A (B打开，其他都关上). Jury voted B — wrong. Canonical answer is correct."
+        }
       }
     },
     {
@@ -60729,10 +60808,8 @@
     {
       "questionId": "noip-2018-p-720",
       "contentHash": "cd2bd35d45e4200138d5c0666d2387961e4ac7416040a535e7b167a2c9a4f297",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "cd2bd35d45e4200138d5c0666d2387961e4ac7416040a535e7b167a2c9a4f297",
@@ -60757,7 +60834,12 @@
         "explanationVerified": false,
         "publishedExplanation": null,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "manualVerified": {
+          "approved": true,
+          "reviewedAt": "2026-07-25T07:36:11.222Z",
+          "reason": "Official NOIP 2018 answer key confirms B (栈). Jury voted A — wrong. The diagram shows stack operations (LIFO). Canonical answer is correct."
+        }
       }
     },
     {

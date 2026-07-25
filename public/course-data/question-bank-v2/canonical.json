@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "baseVersion": 21,
   "contentRevision": 50005479322,
-  "generatedAt": "2026-07-24T11:44:00.024Z",
+  "generatedAt": "2026-07-25T07:34:17.833Z",
   "questionCount": 1183,
   "conflictCount": 1008,
   "conflicts": [
@@ -143,14 +143,14 @@
       "id": "csp-j-2019-c08",
       "preferredOrigin": "reviewed_cloud",
       "secondaryOrigin": "legacy_exam",
-      "preferredHash": "fecdd8eef68a2cc04ef56455fb9e870974e92a971c90b872bfa4e9755d15a7b4",
+      "preferredHash": "c8375d5068171194e0f16977856657ffb32002224b1f60532f2c31aac12a8d8c",
       "secondaryHash": "eeadc7da4afa40d7e434cb2cfff464e1491020a76763d3e29ea96911ac67b80c"
     },
     {
       "id": "csp-j-2019-c08",
       "preferredOrigin": "reviewed_cloud",
       "secondaryOrigin": "legacy_dungeon",
-      "preferredHash": "fecdd8eef68a2cc04ef56455fb9e870974e92a971c90b872bfa4e9755d15a7b4",
+      "preferredHash": "c8375d5068171194e0f16977856657ffb32002224b1f60532f2c31aac12a8d8c",
       "secondaryHash": "eeadc7da4afa40d7e434cb2cfff464e1491020a76763d3e29ea96911ac67b80c"
     },
     {
@@ -1389,14 +1389,14 @@
       "id": "csp-j-2023-c08",
       "preferredOrigin": "reviewed_cloud",
       "secondaryOrigin": "legacy_exam",
-      "preferredHash": "3c7e4d5e1dc8edf63d85aa8312f9b152f75f2bd71af2c80dd2705c65491cbcd4",
+      "preferredHash": "553243e23cd220ac25efc64ffe16c7473db23a591e56774e11fd58fd9a95bc79",
       "secondaryHash": "9d196a694f53b7c75f8de262fc7d80fe0493b2aaf2b85cfbef7bcc3ca566356a"
     },
     {
       "id": "csp-j-2023-c08",
       "preferredOrigin": "reviewed_cloud",
       "secondaryOrigin": "legacy_dungeon",
-      "preferredHash": "3c7e4d5e1dc8edf63d85aa8312f9b152f75f2bd71af2c80dd2705c65491cbcd4",
+      "preferredHash": "553243e23cd220ac25efc64ffe16c7473db23a591e56774e11fd58fd9a95bc79",
       "secondaryHash": "9d196a694f53b7c75f8de262fc7d80fe0493b2aaf2b85cfbef7bcc3ca566356a"
     },
     {
@@ -7351,10 +7351,10 @@
         "D. 12"
       ],
       "answer": {
-        "correctIndex": 0
+        "correctIndex": 2
       },
       "children": [],
-      "explanation": "二叉树顺序存储，根下标1，左孩子2i右孩子2i+1。根据树形结构，最大下标为6。答案A(6)。",
+      "explanation": "二叉树顺序存储，根下标1，沿最右侧分支：根1→右孩子3→右孩子7→右孩子15。最大下标至少为15。答案C。",
       "knowledgePoint": "数据结构-树",
       "difficulty": 2,
       "provenance": {
@@ -7366,7 +7366,7 @@
       },
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
-      "contentHash": "fecdd8eef68a2cc04ef56455fb9e870974e92a971c90b872bfa4e9755d15a7b4"
+      "contentHash": "c8375d5068171194e0f16977856657ffb32002224b1f60532f2c31aac12a8d8c"
     },
     {
       "id": "csp-j-2019-c09",
@@ -11717,10 +11717,10 @@
         "D. 6-((2+3)*(3+8/2))^2+3"
       ],
       "answer": {
-        "correctIndex": 2
+        "correctIndex": 0
       },
       "children": [],
-      "explanation": "后缀转中缀：623+- → (6-(2+3))；382/+ → (3+8/2)；* → ((6-(2+3))*(3+8/2))；2^3 → ((6-(2+3))*((3+8/2)^2))；+3 → ((6-(2+3))*((3+8/2)^2))+3。",
+      "explanation": "后缀转中缀：6 2 3 + - → (6-(2+3))；3 8 2 / + → (3+8/2)；* → ((6-(2+3))*(3+8/2))；2 ^ → ((6-(2+3))*(3+8/2))^2；3 + → ((6-(2+3))*(3+8/2))^2+3。答案A。",
       "knowledgePoint": "排序与查找",
       "difficulty": 2,
       "provenance": {
@@ -11732,7 +11732,7 @@
       },
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
-      "contentHash": "3c7e4d5e1dc8edf63d85aa8312f9b152f75f2bd71af2c80dd2705c65491cbcd4"
+      "contentHash": "553243e23cd220ac25efc64ffe16c7473db23a591e56774e11fd58fd9a95bc79"
     },
     {
       "id": "csp-j-2023-c09",

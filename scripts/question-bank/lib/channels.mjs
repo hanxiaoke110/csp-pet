@@ -36,13 +36,32 @@ const VERIFIED_PROGRAM_IDS = new Set([
 // pre-filters to auto_verified, so relaxing the provenance check here lets through
 // questions that passed AI verification but whose paper-source audit is incomplete.
 function isPublishableCsp(question) {
-  return (question.type === 'choice'
-      && (question.provenance?.level === 'local_source_copy' || question.provenance?.level === 'secondary'))
-    || VERIFIED_PROGRAM_IDS.has(question.id);
+  // Choice questions: need verified provenance (local_source_copy or secondary)
+  if (question.type === 'choice'
+      && (question.provenance?.level === 'local_source_copy' || question.provenance?.level === 'secondary')) {
+    return true;
+  }
+  // Reading / fill-in-the-blank program questions: auto_verified + has children + secondary provenance
+  if (['reading', 'fillBlank'].includes(question.type)
+      && question.children?.length > 0
+      && (question.provenance?.level === 'local_source_copy' || question.provenance?.level === 'secondary')) {
+    return true;
+  }
+  // Explicitly whitelisted program questions (super-challenge recovery, etc.)
+  if (VERIFIED_PROGRAM_IDS.has(question.id)) {
+    return true;
+  }
+  return false;
 }
 
 export function buildChannels(questions) {
   const verified = questions.filter(question => question.verificationStatus === 'auto_verified');
+  // Official-paper super_* program questions (2021-2023 CCF CSP-J papers) are real
+  // past-exam content and belong in the exam channel alongside csp_exam questions.
+  // super-2024 ids come from a LUOGU mock paper and stay exclusive to super.
+  const isOfficialSuperProgram = question => question.source === 'super_challenge'
+    && !question.id.startsWith('super-2024-')
+    && VERIFIED_PROGRAM_IDS.has(question.id);
   return {
     daily: verified.filter(question => question.source === 'gesp' && question.type === 'choice'),
     super: verified.filter(question => ['csp_exam', 'super_challenge'].includes(question.source)
@@ -50,9 +69,10 @@ export function buildChannels(questions) {
       && ['reading', 'fillBlank'].includes(question.type)
       && question.children.length > 0
       && VERIFIED_PROGRAM_IDS.has(question.id)),
-    exam: verified.filter(question => question.source === 'csp_exam'
+    exam: verified.filter(question => (question.source === 'csp_exam'
       && ['J', 'S'].includes(question.exam.group)
-      && isPublishableCsp(question)),
+      && isPublishableCsp(question))
+      || (isOfficialSuperProgram(question) && ['J', 'S'].includes(question.exam.group))),
     dungeon: verified.filter(question => (
       question.source === 'gesp'
         && question.type === 'choice'

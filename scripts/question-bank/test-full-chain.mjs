@@ -311,21 +311,27 @@ if (channelFiles.exam) {
     examQs.every(q => q.verificationStatus === 'auto_verified'),
     `${examQs.filter(q => q.verificationStatus !== 'auto_verified').length} non-auto_verified`);
 
-  test('exam: all questions are CSP exam source',
-    examQs.every(q => q.source === 'csp_exam'),
-    `${examQs.filter(q => q.source !== 'csp_exam').length} non-csp_exam`);
+  test('exam: all questions are CSP exam or official super source',
+    examQs.every(q => q.source === 'csp_exam' || q.source === 'super_challenge'),
+    `${examQs.filter(q => q.source !== 'csp_exam' && q.source !== 'super_challenge').length} unexpected`);
 
   // Only CSP choice/reading/fillBlank questions should be here
   const nonPublishableInExam = examQs.filter(q => {
+    if (q.source === 'super_challenge') return false; // official super programs accepted
     if (q.type === 'choice') {
       const provOk = q.provenance?.level === 'local_source_copy' || q.provenance?.level === 'secondary';
       return !provOk;
     }
-    // Non-choice in exam channel must be VERIFIED_PROGRAM_IDS
-    return !['csp-j-2019-reading-01', 'csp-j-2019-r03', 'csp-j-2020-r02', 'csp-j-2020-r03', 'csp-j-2021-r03'].includes(q.id);
+    // Non-choice (reading/fillBlank): auto_verified + children + secondary/local_source_copy provenance
+    if (['reading', 'fillBlank'].includes(q.type)) {
+      const provOk = q.provenance?.level === 'local_source_copy' || q.provenance?.level === 'secondary';
+      const hasChildren = (q.children?.length || 0) > 0;
+      return !(provOk && hasChildren);
+    }
+    return true; // unknown type — reject
   });
 
-  test('exam: all questions pass provenance filter (local_source_copy or secondary for choice, VERIFIED_PROGRAM_IDS for programs)',
+  test('exam: all questions pass provenance filter (choice=secondary/local_source_copy, reading/fillBlank=secondary+children)',
     nonPublishableInExam.length === 0,
     `${nonPublishableInExam.length} unexpected: ${nonPublishableInExam.map(q => `${q.id}(${q.provenance?.level})`).slice(0, 5).join(', ')}`);
 
