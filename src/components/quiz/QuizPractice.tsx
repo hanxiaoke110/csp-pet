@@ -202,11 +202,11 @@ export default function QuizPractice() {
         pool = pool.filter(q => q.source === sourceFilter);
       }
       if (sourceFilter === 'csp_exam' && groupFilter !== 'all') {
-        pool = pool.filter(q => q.exam?.group === groupFilter);
+        pool = pool.filter(q => q.group === groupFilter);
       }
       // CSP-S 提高级难度太大，默认不选，主动勾选才加入
       if (!includeSGroup) {
-        pool = pool.filter(q => q.exam?.group !== 'S');
+        pool = pool.filter(q => q.group !== 'S');
       }
       if (levelFilter !== 'all') {
         pool = pool.filter(q => q.level === levelFilter);
@@ -469,8 +469,8 @@ export default function QuizPractice() {
             if (!questionBank) return '加载题库中...';
             let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
             if (sourceFilter !== 'all') pool = pool.filter(q => q.source === sourceFilter);
-            if (sourceFilter === 'csp_exam' && groupFilter !== 'all') pool = pool.filter(q => q.exam?.group === groupFilter);
-            if (!includeSGroup) pool = pool.filter(q => q.exam?.group !== 'S');
+            if (sourceFilter === 'csp_exam' && groupFilter !== 'all') pool = pool.filter(q => q.group === groupFilter);
+            if (!includeSGroup) pool = pool.filter(q => q.group !== 'S');
             if (levelFilter !== 'all') pool = pool.filter(q => q.level === levelFilter);
             const parts: string[] = [];
             if (sourceFilter !== 'all') parts.push(sourceFilter === 'gesp' ? 'GESP' : 'CSP 真题');
