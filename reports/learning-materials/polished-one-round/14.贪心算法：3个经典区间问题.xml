@@ -1,0 +1,56 @@
+<title>专题讲解｜贪心算法：3个经典区间问题</title>
+
+<h1>贪心算法：3个经典区间问题</h1>
+
+<p>区间问题是贪心最常见的应用之一。孩子要把题目先翻译成线段：每个任务、活动、覆盖范围都可以看成一个区间，再根据目标选择排序方式。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>适合“最多选不重叠区间”。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>最多不重叠区间</td><td>最多选多少个活动</td><td>按右端点从小到大</td></tr><tr><td>区间覆盖</td><td>用最少区间覆盖目标段</td><td>每步选能覆盖当前位置且右端最远的</td></tr><tr><td>区间合并</td><td>合并重叠区间后剩几个</td><td>按左端点排序后维护当前右端</td></tr><tr><td>边界判断</td><td>端点相等算不算重叠</td><td>按题目定义处理开闭区间</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>右端点优先。</b>适合“最多选不重叠区间”。</p>
+
+<p><b>左端点排序。</b>适合合并区间和扫描覆盖。</p>
+
+<p><b>当前覆盖右边界。</b>区间覆盖题中，记录已经覆盖到哪里。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="合并重叠区间"><code>sort(seg.begin(), seg.end());
+vector&lt;pair&lt;int,int&gt;&gt; res;
+
+for (auto [l, r] : seg) {
+    if (res.empty() || l &gt; res.back().second) {
+        res.push_back({l, r});
+    } else {
+        res.back().second = max(res.back().second, r);
+    }
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：区间 [1,3] 和 [2,5] 合并后是什么？</b></p>
+
+<p><b>解析：</b>它们有重叠，合并为 [1,5]。</p>
+
+<p><b>例 2：最多不重叠活动为什么不按开始时间排序？</b></p>
+
+<p><b>解析：</b>开始早不代表结束早，可能占用太长时间，影响后面选择。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>区间题先画数轴，别直接写代码。</li><li>端点相等是否冲突要看题目，比如 [1,2] 和 [2,3] 是否能同时选。</li><li>覆盖问题每一步要选能让右边界走最远的区间。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">合并 [1,4]、[2,3]、[6,8]。</li><li seq="auto">说明最多活动问题为什么按右端点排序。</li><li seq="auto">给出一个按开始时间排序会失败的例子。</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/DYMOdLnySoLxoQxsUXUcgM27nz2">知识卡｜贪心算法</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

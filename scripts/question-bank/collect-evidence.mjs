@@ -41,6 +41,7 @@ export async function collectEvidence({
     if (evidence[question.id]?.contentHash === question.contentHash) continue;
     if (validateQuestion(question).blockers.length > 0) continue;
 
+    try {
     const sourceEvidence = await matchOfficialSource(question, { cache: pdfCache });
     const deterministic = await solveDeterministically(question);
     let jury = { modelAnswers: [], modelComplete: false, modelReasons: [] };
@@ -75,6 +76,25 @@ export async function collectEvidence({
     writeJsonAtomic(evidencePath, evidence);
     processed += 1;
     if (processed % 25 === 0) console.log(`Collected evidence for ${processed} questions.`);
+    } catch (error) {
+      console.error(`Error on ${question.id}: ${error.message.slice(0, 150)}`);
+      // Save a minimal evidence record to avoid reprocessing the same failing question
+      evidence[question.id] = {
+        contentHash: question.contentHash,
+        collectedAt: new Date().toISOString(),
+        officialMatch: false,
+        reason: `collect_error: ${error.message.slice(0, 100)}`,
+        deterministicAnswer: null,
+        deterministic: {},
+        modelAnswers: [],
+        modelComplete: false,
+        modelReasons: [],
+        explanationVerified: false,
+        publishedExplanation: null,
+      };
+      writeJsonAtomic(evidencePath, evidence);
+      processed += 1;
+    }
   }
   return { processed, cached: Object.keys(evidence).length, evidence };
 }

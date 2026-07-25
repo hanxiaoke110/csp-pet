@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P62 计数排序｜知识总览 v3</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1024px; height: 1536px; overflow: hidden; }
+    body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: #27221e; }
+    .poster { position: relative; width: 1024px; height: 1536px; overflow: hidden; padding: 42px 46px 34px; background: radial-gradient(circle at 16% 12%, rgba(255,190,87,.14) 0 3px, transparent 4px), radial-gradient(circle at 83% 30%, rgba(49,142,165,.10) 0 3px, transparent 4px), repeating-linear-gradient(0deg, rgba(102,74,46,.025) 0 1px, transparent 1px 7px), #fffaf0; border: 11px solid #2c8ca0; }
+    .poster::after { content: ""; position: absolute; inset: 18px; border: 2px dashed rgba(167,112,57,.28); pointer-events: none; }
+    .hero { position: relative; height: 166px; padding: 20px 180px 18px 30px; background: #fffdf6; border: 4px solid #352c27; box-shadow: 8px 8px 0 #ffd66d; transform: rotate(-.25deg); }
+    .pno { display: inline-block; padding: 5px 13px; margin-right: 9px; color: #fff; background: #ef694f; font-size: 32px; font-weight: 900; }
+    h1 { display: inline; margin: 0; font-size: 58px; line-height: 1; letter-spacing: 0; }
+    .subtitle { margin-top: 13px; font-size: 25px; font-weight: 700; color: #a44e30; }
+    .mascot-sticker { position: absolute; right: 24px; top: 12px; width: 132px; height: 132px; padding: 8px; border: 4px solid #2b2724; border-radius: 50%; background: white; box-shadow: 5px 5px 0 #78ccd6; transform: rotate(5deg); }
+    .mascot-sticker img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+    .goal { margin: 22px 5px 16px; font-size: 25px; font-weight: 800; text-align: center; }
+    .goal span { background: linear-gradient(transparent 56%, #ffe18c 56%); }
+    .row { display: grid; gap: 18px; margin-bottom: 17px; }
+    .row.top { grid-template-columns: minmax(0, 1fr) 280px; }
+    .row.mid { grid-template-columns: 1fr 1fr; }
+    .row.low { grid-template-columns: .95fr 1.05fr; }
+    .paper { position: relative; padding: 14px 17px 13px; background: white; border: 3px solid #3c332e; box-shadow: 5px 5px 0 rgba(54,42,34,.16); }
+    .paper.blue { background: #eefaff; box-shadow: 5px 5px 0 #9ed9e4; }
+    .paper.green { background: #effbf0; box-shadow: 5px 5px 0 #a4d8a5; }
+    .paper.yellow { background: #fff7d9; box-shadow: 5px 5px 0 #f1c85f; }
+    .paper.pink { background: #fff0ee; box-shadow: 5px 5px 0 #efa99e; }
+    .paper.purple { background: #f5f0ff; box-shadow: 5px 5px 0 #c5b5e5; }
+    .paper:nth-child(odd) { transform: rotate(.18deg); }
+    .paper:nth-child(even) { transform: rotate(-.18deg); }
+    .tape { position: absolute; width: 72px; height: 22px; top: -12px; left: calc(50% - 36px); background: rgba(255,214,105,.72); transform: rotate(-2deg); }
+    h2 { margin: 0 0 10px; font-size: 29px; line-height: 1.15; }
+    h2 .n { display: inline-grid; place-items: center; width: 39px; height: 39px; margin-right: 7px; color: white; background: #ef694f; border-radius: 50%; font-size: 22px; }
+    p { margin: 5px 0; font-size: 19px; line-height: 1.35; }
+    .note { color: #655951; font-size: 18px; }
+    .flow { display: grid; grid-template-columns: 1fr 36px 1fr 36px 1fr; align-items: center; gap: 7px; margin-top: 10px; }
+    .flow-box { min-height: 136px; padding: 10px 6px; text-align: center; border: 3px solid #32859a; background: rgba(255,255,255,.78); }
+    .flow-box strong { display: block; margin-bottom: 7px; color: #17697c; font-size: 20px; }
+    .arrow { font-size: 34px; font-weight: 900; color: #e55b43; text-align: center; }
+    .array { display: flex; justify-content: center; gap: 3px; margin: 8px 0; }
+    .cell { min-width: 27px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #3f88bd; background: white; font: 800 18px/1 "SFMono-Regular", Consolas, monospace; }
+    .cnt { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 7px; }
+    .cnt div { padding: 7px 2px; border: 2px solid #73aeb7; background: white; text-align: center; font-size: 17px; }
+    .cnt b { display: block; color: #a65323; font-family: monospace; font-size: 19px; }
+    pre { margin: 9px 0 0; padding: 12px 14px; color: #eefaff; background: #172435; border: 4px solid #2b2927; box-shadow: inset 7px 0 #46c1a0; font: 15px/1.32 "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; }
+    ul, ol { margin: 6px 0 0; padding-left: 24px; }
+    li { margin: 4px 0; font-size: 18px; line-height: 1.3; }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+    .chip { padding: 6px 9px; border: 2px solid #568db3; background: white; font-size: 17px; font-weight: 800; }
+    .danger { color: #bc3f32; font-weight: 800; }
+    .quiz { display: grid; grid-template-columns: 1.25fr .75fr; gap: 14px; align-items: stretch; margin-top: 2px; }
+    .quiz .paper { padding: 13px 17px; }
+    .quiz h2 { font-size: 25px; }
+    .quiz p { font-size: 18px; }
+    .answer { font-size: 28px !important; font-weight: 900; color: #16805f; }
+    .footer { position: absolute; left: 46px; right: 46px; bottom: 25px; height: 74px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; border: 4px solid #342d28; background: #ffe27f; box-shadow: 5px 5px 0 #e56c50; font-size: 25px; font-weight: 900; }
+    .footer small { font-size: 16px; color: #735d32; }
+  </style>
+</head>
+<body>
+  <main class="poster">
+    <header class="hero">
+      <div><span class="pno">P62</span><h1>计数排序 · 知识总览</h1></div>
+      <div class="subtitle">不反复比较，能不能直接数出来？</div>
+      <div class="mascot-sticker"><img src="../../public/course-data/generated-images/zhizi-logo-source.png" alt="智子小麒麟" /></div>
+    </header>
+    <div class="goal"><span>目标：理解 cnt 数组，会判断计数排序什么时候划算。</span></div>
+
+    <section class="row top">
+      <article class="paper blue">
+        <div class="tape"></div><h2><span class="n">1</span>核心模型</h2>
+        <p><b>计数排序：</b>先统计每个值出现几次，再按值从小到大输出。</p>
+        <div class="flow">
+          <div class="flow-box"><strong>原数组</strong><div class="array"><span class="cell">3</span><span class="cell">1</span><span class="cell">2</span><span class="cell">3</span><span class="cell">0</span><span class="cell">1</span></div><p class="note">逐个读取</p></div>
+          <div class="arrow">→</div>
+          <div class="flow-box"><strong>计数表</strong><div class="cnt"><div><b>0</b>1次</div><div><b>1</b>2次</div><div><b>2</b>1次</div><div><b>3</b>2次</div></div><p class="note">cnt[值]</p></div>
+          <div class="arrow">→</div>
+          <div class="flow-box"><strong>有序输出</strong><div class="array"><span class="cell">0</span><span class="cell">1</span><span class="cell">1</span><span class="cell">2</span><span class="cell">3</span><span class="cell">3</span></div><p class="note">按下标顺序</p></div>
+        </div>
+      </article>
+      <article class="paper green">
+        <div class="tape"></div><h2><span class="n">2</span>最小代码</h2>
+        <pre>for (int x : a)
+    cnt[x]++;
+
+for (int v = 0; v <= m; v++)
+    while (cnt[v]--)
+        cout << v << ' ';</pre>
+        <p class="note">把“值”当作数组下标，把“次数”存进格子。</p>
+      </article>
+    </section>
+
+    <section class="row mid">
+      <article class="paper yellow">
+        <div class="tape"></div><h2><span class="n">3</span>什么时候用？</h2>
+        <div class="chips"><span class="chip">整数</span><span class="chip">值域较小</span><span class="chip">重复值较多</span><span class="chip">成绩统计</span><span class="chip">频次统计</span></div>
+        <p class="note">如果有负数，先整体加偏移，让它们变成非负下标。</p>
+      </article>
+      <article class="paper purple">
+        <div class="tape"></div><h2><span class="n">4</span>复杂度</h2>
+        <p><b>时间：</b>O(n + m)，n 是数据量，m 是值域大小。</p>
+        <p><b>空间：</b>O(m)，需要开出计数数组。</p>
+        <p class="note">值域越大，空格子越多，越不划算。</p>
+      </article>
+    </section>
+
+    <section class="row low">
+      <article class="paper pink">
+        <div class="tape"></div><h2><span class="n">5</span>高频陷阱</h2>
+        <ul><li><span class="danger">cnt 未初始化</span>，旧数据会混进来</li><li>数组下标越界：值大于 m</li><li>负数没有加偏移量</li><li>值域太大，空间爆炸</li></ul>
+      </article>
+      <article class="paper blue">
+        <div class="tape"></div><h2><span class="n">6</span>做题三步法</h2>
+        <ol><li>先找最小值、最大值和值域</li><li>确认能否把值映射成下标</li><li>统计次数，再按下标顺序输出</li></ol>
+      </article>
+    </section>
+
+    <section class="quiz">
+      <article class="paper"><h2>一分钟自测</h2><p>100 个数，取值范围是 0 到 1 亿，适合直接用计数排序吗？</p></article>
+      <article class="paper green"><h2>答案</h2><p class="answer">不适合</p><p>空格子太多，空间远大于数据量。</p></article>
+    </section>
+
+    <footer class="footer"><span>口诀：不比大小，先数个数；值域小才划算。</span><small>智子知识卡 · P62 v3</small></footer>
+  </main>
+</body>
+</html>

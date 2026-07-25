@@ -1,0 +1,63 @@
+<title>专题讲解｜洪水填充算法</title>
+
+<h1>洪水填充算法</h1>
+
+<p>洪水填充是网格搜索的经典模型：从一个起点出发，把所有连通的位置都访问一遍。它常用于迷宫、岛屿数量、区域面积、染色等问题。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>从一个格子能通过合法移动到另一个格子。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>连通块</td><td>数有几个区域</td><td>每遇到未访问位置就启动一次搜索</td></tr><tr><td>区域面积</td><td>一个连通块有多少格</td><td>搜索时计数</td></tr><tr><td>四方向/八方向</td><td>上下左右还是含斜方向</td><td>看题目定义</td></tr><tr><td>边界判断</td><td>防止越界和重复访问</td><td>先判范围，再判障碍和 visited</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>连通。</b>从一个格子能通过合法移动到另一个格子。</p>
+
+<p><b>四方向。</b>上、下、左、右。</p>
+
+<p><b>八方向。</b>四方向再加四个斜方向。</p>
+
+<p><b>visited。</b>记录哪些格子已经访问过，避免重复搜索。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="DFS 洪水填充"><code>int n, m;
+char a[105][105];
+bool vis[105][105];
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
+
+void dfs(int x, int y) {
+    vis[x][y] = true;
+    for (int k = 0; k &lt; 4; k++) {
+        int nx = x + dx[k], ny = y + dy[k];
+        if (nx &lt; 0 || nx &gt;= n || ny &lt; 0 || ny &gt;= m) continue;
+        if (vis[nx][ny] || a[nx][ny] == '#') continue;
+        dfs(nx, ny);
+    }
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：地图中 <code>#</code> 是墙，<code>.</code> 是空地，从某个空地能到达多少格？</b></p>
+
+<p><b>解析：</b>从起点做 DFS 或 BFS，每访问一个空地就计数。</p>
+
+<p><b>例 2：要数岛屿数量怎么做？</b></p>
+
+<p><b>解析：</b>遍历所有格子，遇到未访问的陆地就答案加 1，并搜索掉整座岛。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>越界判断要放在访问数组之前。</li><li>搜索前或刚进入搜索时要标记 visited，否则可能互相递归。</li><li>四方向和八方向一定按题目来，不要默认。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">写出四方向数组。</li><li seq="auto">说明数连通块时为什么每次搜索后答案只加 1。</li><li seq="auto">把 DFS 版本改成 BFS 版本。</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/OQJhdbTqpoSZvGxmg8qc1US8nwe">知识卡｜洪水填充与搜索</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

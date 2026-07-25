@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P62 计数排序｜九格寓言 v3</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1024px; height: 1536px; overflow: hidden; }
+    body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: #30251e; }
+    .poster { width: 1024px; height: 1536px; padding: 38px 42px 30px; background: radial-gradient(circle at 14% 10%, rgba(255,209,102,.18) 0 3px, transparent 4px), radial-gradient(circle at 82% 18%, rgba(52,160,164,.13) 0 3px, transparent 4px), repeating-linear-gradient(0deg, rgba(80,56,33,.025) 0 1px, transparent 1px 7px), #fffaf0; border: 11px solid #2c8ca0; position: relative; }
+    .poster::after { content: ""; position: absolute; inset: 18px; border: 2px dashed rgba(123,89,50,.26); pointer-events: none; }
+    header { height: 132px; padding: 16px 26px; border: 4px solid #342d28; background: #fffdf6; box-shadow: 8px 8px 0 #ffd66d; transform: rotate(-.2deg); }
+    .pno { display: inline-block; padding: 5px 13px; color: white; background: #ef694f; font-size: 31px; font-weight: 900; }
+    h1 { display: inline; margin: 0 0 0 9px; font-size: 55px; line-height: 1; letter-spacing: 0; }
+    .sub { margin-top: 11px; color: #a44e30; font-size: 24px; font-weight: 800; }
+    .grid { margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 14px; height: 1116px; }
+    .panel { position: relative; padding: 12px 12px 10px; border: 3px solid #352c27; background: white; box-shadow: 4px 4px 0 rgba(54,42,34,.16); overflow: hidden; }
+    .panel:nth-child(2n) { background: #eefaff; transform: rotate(-.15deg); }
+    .panel:nth-child(3n) { background: #fff7d9; transform: rotate(.16deg); }
+    .panel:nth-child(5) { background: #fff0ee; }
+    .panel:nth-child(8) { background: #effbf0; }
+    .tag { position: absolute; top: 8px; left: 9px; min-width: 34px; height: 34px; display: grid; place-items: center; color: white; background: #ef694f; border-radius: 50%; font-size: 20px; font-weight: 900; z-index: 3; }
+    .caption { position: absolute; left: 12px; right: 12px; bottom: 9px; padding: 7px 9px; background: rgba(255,255,255,.92); border: 2px solid #473a32; font-size: 21px; line-height: 1.25; font-weight: 800; z-index: 4; }
+    .scene { position: absolute; inset: 42px 10px 58px; }
+    .zhizi { position: absolute; width: 72px; height: 72px; right: 10px; top: 4px; border-radius: 50%; border: 3px solid #342d28; background: white; padding: 5px; box-shadow: 3px 3px 0 #78ccd6; z-index: 3; }
+    .zhizi img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+    .bubble { position: absolute; right: 78px; top: 8px; max-width: 150px; padding: 7px 9px; border: 2px solid #2f2a26; border-radius: 8px; background: #fff; font-size: 17px; font-weight: 800; line-height: 1.18; z-index: 3; }
+    .apprentice { position: absolute; width: 78px; height: 128px; left: 22px; bottom: 24px; }
+    .head { width: 54px; height: 48px; margin: auto; border: 3px solid #30251e; border-radius: 50%; background: #ffd7a8; position: relative; }
+    .head::before, .head::after { content: ""; position: absolute; top: 20px; width: 6px; height: 6px; border-radius: 50%; background: #30251e; }
+    .head::before { left: 14px; } .head::after { right: 14px; }
+    .body { width: 64px; height: 70px; margin: -2px auto 0; border: 3px solid #30251e; border-radius: 18px 18px 10px 10px; background: #4fa3d1; }
+    .sweat { position: absolute; top: 26px; right: 2px; color: #2582bf; font-size: 28px; font-weight: 900; }
+    .bag { position: absolute; width: 66px; height: 54px; border: 3px solid #473a32; border-radius: 18px 18px 14px 14px; background: #d9a441; display: grid; place-items: center; font: 900 26px/1 monospace; color: #4a3110; box-shadow: inset 0 8px rgba(255,255,255,.25); }
+    .bag::before { content: ""; position: absolute; top: -8px; left: 19px; width: 28px; height: 13px; border: 3px solid #473a32; border-bottom: 0; border-radius: 50% 50% 0 0; background: #d9a441; }
+    .bag.b1 { background: #f0c45a; } .bag.b2 { background: #86c76f; } .bag.b3 { background: #5ba6d9; } .bag.b4 { background: #d9856a; } .bag.b5 { background: #b995d7; } .bag.b6 { background: #e7b555; }
+    .floor { position: absolute; left: 0; right: 0; bottom: 18px; height: 10px; background: #6fb5bf; border: 2px solid #342d28; }
+    .bins { position: absolute; left: 8px; right: 8px; bottom: 22px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .bin { height: 82px; border: 3px solid #32859a; background: rgba(255,255,255,.74); text-align: center; font: 900 22px/1.1 monospace; padding-top: 7px; position: relative; }
+    .bin span { position: absolute; bottom: 7px; left: 0; right: 0; color: #16805f; font: 900 26px/1 monospace; }
+    .arrow { position: absolute; color: #e55b43; font-size: 46px; font-weight: 900; }
+    .boom { position: absolute; color: #e55b43; font-size: 44px; font-weight: 900; transform: rotate(-12deg); }
+    .tiny { position: absolute; font-size: 18px; font-weight: 900; color: #6a4b21; }
+    .million { position: absolute; inset: 38px 12px 70px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+    .dot { border: 2px solid #9fc4ca; background: rgba(255,255,255,.78); }
+    footer { position: absolute; left: 42px; right: 42px; bottom: 25px; height: 82px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; border: 4px solid #342d28; background: #ffe27f; box-shadow: 5px 5px 0 #e56c50; font-size: 25px; font-weight: 900; }
+    footer small { font-size: 16px; color: #735d32; }
+  </style>
+</head>
+<body>
+  <main class="poster">
+    <header>
+      <span class="pno">P62</span><h1>粮仓里的计数魔法</h1>
+      <div class="sub">智子来到谷粒驿站，邀请你一起帮学徒把粮袋排好队。</div>
+    </header>
+
+    <section class="grid">
+      <article class="panel"><div class="tag">1</div><div class="scene"><div class="apprentice"><div class="head"></div><div class="body"></div><div class="sweat">汗</div></div><div class="bag b3" style="left:105px;bottom:72px;">3</div><div class="bag b1" style="left:173px;bottom:36px;">1</div><div class="floor"></div></div><div class="caption">学徒一袋袋比较，越搬越累。</div></article>
+      <article class="panel"><div class="tag">2</div><div class="scene"><div class="bag b3" style="left:32px;bottom:52px;">3</div><div class="bag b1" style="left:104px;bottom:52px;">1</div><div class="bag b2" style="left:176px;bottom:52px;">2</div><div class="arrow" style="left:116px;top:16px;">?</div><div class="floor"></div></div><div class="caption">“每两个都比一次，太慢了！”</div></article>
+      <article class="panel"><div class="tag">3</div><div class="zhizi"><img src="../../public/course-data/generated-images/zhizi-logo-source.png" alt="智子" /></div><div class="bubble">你发现了吗？编号只有 0-3。</div><div class="scene"><div class="bins"><div class="bin">0</div><div class="bin">1</div><div class="bin">2</div><div class="bin">3</div><div class="bin">4</div><div class="bin">5</div></div></div><div class="caption">智子摆出按编号分开的格子。</div></article>
+      <article class="panel"><div class="tag">4</div><div class="scene"><div class="bag b3" style="left:26px;top:24px;">3</div><div class="arrow" style="left:96px;top:46px;">→</div><div class="bins"><div class="bin">0</div><div class="bin">1</div><div class="bin">2</div><div class="bin">3<span>1</span></div><div class="bin">4</div><div class="bin">5</div></div></div><div class="caption">看到 3 号粮袋，就给 3 号格加一。</div></article>
+      <article class="panel"><div class="tag">5</div><div class="scene"><div class="bag b1" style="left:30px;top:32px;">1</div><div class="bag b1" style="left:92px;top:32px;">1</div><div class="boom" style="left:158px;top:30px;">叮</div><div class="bins"><div class="bin">0</div><div class="bin">1<span>2</span></div><div class="bin">2</div><div class="bin">3<span>1</span></div><div class="bin">4</div><div class="bin">5</div></div></div><div class="caption">重复出现没关系，只增加次数。</div></article>
+      <article class="panel"><div class="tag">6</div><div class="zhizi"><img src="../../public/course-data/generated-images/zhizi-logo-source.png" alt="智子" /></div><div class="bubble">不用比大小，先数个数。</div><div class="scene"><div class="bins"><div class="bin">0<span>1</span></div><div class="bin">1<span>2</span></div><div class="bin">2<span>1</span></div><div class="bin">3<span>2</span></div><div class="bin">4</div><div class="bin">5</div></div></div><div class="caption">计数表完成：cnt[值] 就是次数。</div></article>
+      <article class="panel"><div class="tag">7</div><div class="scene"><div class="bins" style="bottom:94px;"><div class="bin">0<span>1</span></div><div class="bin">1<span>2</span></div><div class="bin">2<span>1</span></div><div class="bin">3<span>2</span></div><div class="bin">4</div><div class="bin">5</div></div><div class="bag b1" style="left:24px;bottom:18px;">0</div><div class="bag b2" style="left:86px;bottom:18px;">1</div><div class="bag b2" style="left:148px;bottom:18px;">1</div></div><div class="caption">按格子顺序搬出，队伍自然变有序。</div></article>
+      <article class="panel"><div class="tag">8</div><div class="scene"><div class="bag b1" style="left:20px;bottom:28px;">0</div><div class="bag b2" style="left:78px;bottom:28px;">1</div><div class="bag b2" style="left:136px;bottom:28px;">1</div><div class="bag b3" style="left:194px;bottom:28px;">2</div><div class="bag b4" style="left:50px;bottom:92px;">3</div><div class="bag b4" style="left:118px;bottom:92px;">3</div><div class="boom" style="right:18px;top:16px;">好！</div></div><div class="caption">结果：0 1 1 2 3 3，没做两两比较。</div></article>
+      <article class="panel"><div class="tag">9</div><div class="zhizi"><img src="../../public/course-data/generated-images/zhizi-logo-source.png" alt="智子" /></div><div class="bubble">若编号到一百万呢？</div><div class="scene"><div class="million"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div class="tiny" style="left:42px;top:18px;">空格子太多</div><div class="boom" style="left:130px;top:90px;">不划算</div></div><div class="caption">反转：值域太大，计数格会浪费空间。</div></article>
+    </section>
+
+    <footer><span>口诀：不比大小，先数个数；值域小才划算。</span><small>智子寓言卡 · P62 v3</small></footer>
+  </main>
+</body>
+</html>

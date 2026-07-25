@@ -1,0 +1,63 @@
+<title>专题讲解｜二分答案</title>
+
+<h1>二分答案</h1>
+
+<p>二分答案不是在数组里找数，而是在可能的答案范围里找最优值。关键是写出 check 函数：给定一个答案 x，判断它是否可行。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>先确定答案最小可能值和最大可能值。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>最大最小值</td><td>让最小值尽量大，或最大值尽量小</td><td>答案范围有单调性</td></tr><tr><td>check 函数</td><td>判断某个答案是否可行</td><td>把题目变成 true/false</td></tr><tr><td>边界</td><td>最终返回 l 还是 r</td><td>取决于寻找最大可行还是最小可行</td></tr><tr><td>单调性</td><td>可行与不可行分成两段</td><td>没有单调性不能二分答案</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>答案范围。</b>先确定答案最小可能值和最大可能值。</p>
+
+<p><b>可行性判断。</b>用 <code>check(mid)</code> 判断 mid 是否满足条件。</p>
+
+<p><b>最大可行值。</b>如果 mid 可行，就尝试更大。</p>
+
+<p><b>最小可行值。</b>如果 mid 可行，就尝试更小。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="寻找最大可行答案模板"><code>bool check(int x) {
+    // 判断答案 x 是否可行
+    return true;
+}
+
+int l = 0, r = 1000000, ans = 0;
+while (l &lt;= r) {
+    int mid = l + (r - l) / 2;
+    if (check(mid)) {
+        ans = mid;      // mid 可行，记录答案
+        l = mid + 1;    // 尝试更大
+    } else {
+        r = mid - 1;
+    }
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：找“最大可行距离”，如果距离 10 可行，下一步往哪边找？</b></p>
+
+<p><b>解析：</b>尝试更大，所以往右半边找。</p>
+
+<p><b>例 2：找“最小可行时间”，如果时间 10 可行，下一步往哪边找？</b></p>
+
+<p><b>解析：</b>尝试更小，所以往左半边找。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>二分答案的核心不是 mid，而是 check。</li><li>先判断单调性，不能把所有最优化题都二分。</li><li>最大可行和最小可行的边界更新方向不同。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">举一个可以二分答案的问题。</li><li seq="auto">说明 check 函数应该返回什么。</li><li seq="auto">最大可行值问题中，check(mid)=true 时为什么要 l=mid+1？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/OiVedCjFeoETprxQd6ZcZMLfnJe">知识卡｜二分查找与二分答案</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

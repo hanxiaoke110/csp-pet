@@ -1,0 +1,35 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>复习 <code>cout</code> 输出、算式输出和多个内容连接输出。</li><li>理解变量是用来保存会变化的数据。</li><li>掌握 <code>cin</code> 输入，并能写出输入、处理、输出的完整流程。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>输入一个数并输出一句完整的话。关键是先定义变量，再用 <code>cin &gt;&gt;</code> 读入。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P2 cin 输入 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int age;
+    cin &gt;&gt; age;
+    cout &lt;&lt; "小明今年" &lt;&lt; age &lt;&lt; "岁。";
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li>输入方向是 <code>cin &gt;&gt; a</code>，输出方向是 <code>cout &lt;&lt; a</code>。</li><li>使用变量前要先定义变量。</li><li><code>cout</code> 可以用多个 <code>&lt;&lt;</code> 把文字和变量接起来。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">用自己的话解释“变量像盒子”是什么意思。</li><li seq="auto">写一个输入身高并输出“身高：xxx”的程序。</li><li seq="auto">检查自己是否能分清 <code>&gt;&gt;</code> 和 <code>&lt;&lt;</code>。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

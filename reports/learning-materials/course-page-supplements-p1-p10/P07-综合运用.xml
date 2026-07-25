@@ -1,0 +1,35 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>复习前六课：基础框架、输入输出、变量、整型、浮点型、字符型和类型转换。</li><li>通过 OJ 题训练输入、处理、输出的解题流程。</li><li>能根据数据范围和题目要求选择合适类型。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>两数之和、大小写转换、求十位数、温度转换。每题都按“输入-处理-输出”拆解。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P7 综合运用 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a, b;
+    cin &gt;&gt; a &gt;&gt; b;
+    cout &lt;&lt; (long long)a + b;
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li>OJ 题不要只看样例，要考虑隐藏测试点和数据范围。</li><li>大整数相加要主动想到 <code>long long</code>。</li><li>字符转换题要确认输入一定是小写还是需要分类讨论。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">每做一道题前先写出输入、处理、输出。</li><li seq="auto">把两数之和改成三个数之和。</li><li seq="auto">复写大小写转换代码并解释为什么减 32。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

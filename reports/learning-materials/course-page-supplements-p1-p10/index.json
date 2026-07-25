@@ -1,0 +1,62 @@
+[
+  {
+    "no": 1,
+    "title": "基础框架",
+    "doc": "PDtpdjcijoyjbDxPVDscY93onMh",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P01-基础框架.xml"
+  },
+  {
+    "no": 2,
+    "title": "cin 输入",
+    "doc": "NCCRdOReJoKXm5xDOYHcFQBGnxd",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P02-cin 输入.xml"
+  },
+  {
+    "no": 3,
+    "title": "数据类型（整型）",
+    "doc": "YbB2dG1jboYZmOxU0NPci7ofnEh",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P03-数据类型（整型）.xml"
+  },
+  {
+    "no": 4,
+    "title": "数据类型（浮点型）",
+    "doc": "XoAjde0cPoPj0AxIUL2cbbzin3d",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P04-数据类型（浮点型）.xml"
+  },
+  {
+    "no": 5,
+    "title": "数据类型（字符型）",
+    "doc": "PdwNdiOQPok6BzxAj9AcsNG1nYc",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P05-数据类型（字符型）.xml"
+  },
+  {
+    "no": 6,
+    "title": "类型转换",
+    "doc": "TeqkdyaGvo37RUxqUoxci5wBnxh",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P06-类型转换.xml"
+  },
+  {
+    "no": 7,
+    "title": "综合运用",
+    "doc": "KLSbdriQHob9FXxXgsvcrc6fnbc",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P07-综合运用.xml"
+  },
+  {
+    "no": 8,
+    "title": "关系运算符与分支结构",
+    "doc": "Ymzndk2b6oYPKWxHMr4chPOJneb",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P08-关系运算符与分支结构.xml"
+  },
+  {
+    "no": 9,
+    "title": "逻辑运算符",
+    "doc": "OSoHdH9rfolLsixvHMxcNtXZnkO",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P09-逻辑运算符.xml"
+  },
+  {
+    "no": 10,
+    "title": "多分支结构",
+    "doc": "KV9Ad2HkooVZuYx1rhIcZszlnhc",
+    "file": "reports/learning-materials/course-page-supplements-p1-p10/P10-多分支结构.xml"
+  }
+]

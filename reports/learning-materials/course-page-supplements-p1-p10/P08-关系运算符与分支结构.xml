@@ -1,0 +1,39 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>认识六个关系运算符：<code>&lt;</code>、<code>&gt;</code>、<code>&lt;=</code>、<code>&gt;=</code>、<code>==</code>、<code>!=</code>。</li><li>理解条件表达式结果是真或假，在 C++ 中也对应 1 或 0。</li><li>掌握单分支和双分支 <code>if/else</code>。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>比较两个数、判断是否为某个数的倍数。关键是把题目条件翻译成表达式。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P8 关系运算符与分支结构 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a, b;
+    cin &gt;&gt; a &gt;&gt; b;
+    if (a &gt; b) {
+        cout &lt;&lt; a;
+    } else {
+        cout &lt;&lt; b;
+    }
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li>判断相等用 <code>==</code>，不是 <code>=</code>。</li><li>判断倍数常用 <code>n % k == 0</code>。</li><li><code>else</code> 对应的是“前面条件不成立”的情况。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">写一个判断偶数的程序。</li><li seq="auto">输出两个数中的较大值。</li><li seq="auto">解释 <code>true</code> 和 <code>false</code> 在输出时为什么可能显示 1 和 0。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

@@ -1,0 +1,94 @@
+<title>专题讲解｜质数判断和质因数分解</title>
+
+<h1>质数判断和质因数分解</h1>
+<p>这一节是 CSP-J 初赛和复赛都常见的基础算法。孩子需要理解整除、因数、质数、合数，再掌握两个核心写法：用试除法判断质数，用试除法分解质因数。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue">
+  <p><b>先抓主线：</b>判断质数时，不需要从 2 一直试到 n-1，只要试到 sqrt(n)。分解质因数时，每找到一个质因子，就把 n 不断除掉它。</p>
+</callout>
+
+<h2>一、考试怎么考</h2>
+<table>
+  <thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead>
+  <tbody>
+    <tr><td>概念判断</td><td>某个数是不是质数、合数</td><td>1 既不是质数也不是合数</td></tr>
+    <tr><td>代码补全</td><td>补全 <code>i * i &lt;= n</code>、<code>n % i == 0</code></td><td>理解循环边界和整除条件</td></tr>
+    <tr><td>质因数分解</td><td>把 n 分解成若干质因子的乘积</td><td>找到因子后用 while 连续除</td></tr>
+    <tr><td>复杂度分析</td><td>为什么是 O(sqrt(n))</td><td>因数成对出现，小因子一定不超过 sqrt(n)</td></tr>
+  </tbody>
+</table>
+
+<h2>二、核心概念</h2>
+<p><b>整除。</b>如果 b 能写成 a × q，其中 a、q 都是整数，就说 a 能整除 b，记作 a | b。写代码时，通常用 <code>b % a == 0</code> 判断。</p>
+<p><b>因数和倍数。</b>如果 a 能整除 b，那么 a 是 b 的因数，b 是 a 的倍数。例如 3 是 12 的因数，12 是 3 的倍数。</p>
+<p><b>质数。</b>大于 1，并且除了 1 和它本身以外没有其他正因数的整数，叫质数。2 是最小的质数，也是唯一的偶质数。</p>
+<p><b>合数。</b>大于 1，但不是质数的整数，叫合数。注意：1 不是质数，也不是合数。</p>
+
+<h2>三、为什么只试到 sqrt(n)</h2>
+<p>如果 n 是合数，那么它可以写成 a × b。假设 a 和 b 都大于 sqrt(n)，那么 a × b 就会大于 n，这与 a × b = n 矛盾。所以，只要 n 有非 1 和自身的因数，就一定能在 2 到 sqrt(n) 之间找到一个。</p>
+<p>这就是试除法优化的核心：把“试到 n-1”改成“试到 sqrt(n)”。代码里常写成 <code>i * i &lt;= n</code>，可以避免浮点数误差。</p>
+
+<h2>四、带注释代码</h2>
+<pre lang="cpp" caption="判断一个数是否为质数"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+bool isPrime(long long n) {
+    if (n &lt; 2) return false;             // 0 和 1 都不是质数
+    for (long long i = 2; i * i &lt;= n; i++) {
+        if (n % i == 0) return false;    // 找到非 1 和自身的因数
+    }
+    return true;
+}
+
+int main() {
+    long long n;
+    cin &gt;&gt; n;
+    cout &lt;&lt; (isPrime(n) ? "prime" : "not prime") &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+<pre lang="cpp" caption="分解质因数"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    long long n;
+    cin &gt;&gt; n;
+
+    for (long long i = 2; i * i &lt;= n; i++) {
+        while (n % i == 0) {
+            cout &lt;&lt; i &lt;&lt; " "; // i 是当前找到的质因子
+            n /= i;            // 把这个因子从 n 中去掉
+        }
+    }
+
+    if (n &gt; 1) {
+        cout &lt;&lt; n &lt;&lt; " ";     // 剩下的大于 1 的数也是质因子
+    }
+    return 0;
+}</code></pre>
+
+<h2>五、典型例题</h2>
+<p><b>例 1：</b>判断 97 是否为质数。</p>
+<p><b>解析：</b>sqrt(97) 约等于 9.8，只需要检查 2 到 9。97 不能被 2、3、4、5、6、7、8、9 整除，所以 97 是质数。</p>
+<p><b>例 2：</b>分解 120 的质因数。</p>
+<p><b>解析：</b>120 能被 2 整除，连续除：120 → 60 → 30 → 15，得到三个 2。接着 15 能被 3 整除，变成 5。最后剩下 5，所以 120 = 2 × 2 × 2 × 3 × 5。</p>
+
+<h2>六、易错点</h2>
+<ul>
+  <li>不要把 1 判断为质数。</li>
+  <li>循环条件建议写 <code>i * i &lt;= n</code>，不要依赖 <code>sqrt(n)</code> 的浮点结果。</li>
+  <li>分解质因数时要用 <code>while</code>，不是只用一次 <code>if</code>，否则会漏掉重复因子。</li>
+  <li>如果 n 的范围很大，<code>i * i</code> 可能溢出，要使用 <code>long long</code>。</li>
+</ul>
+
+<h2>七、课后小练习</h2>
+<ol>
+  <li seq="auto">判断 91、97、100 是否为质数。</li>
+  <li seq="auto">把 84 分解成质因数。</li>
+  <li seq="auto">为什么判断 101 是否为质数时，只需要试到 10？</li>
+  <li seq="auto">把分解质因数代码中的 <code>while</code> 改成 <code>if</code>，输入 72 会漏掉什么？</li>
+</ol>
+
+<h2>八、配套资料</h2>
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/DoZBds5MioeHjfxz3rqcjYWOnOg">知识卡｜初等数论</a></p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

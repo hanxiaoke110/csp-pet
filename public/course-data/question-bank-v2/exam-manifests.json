@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50001920951,
-  "generatedAt": "2026-07-22T11:50:45.586Z",
+  "contentRevision": 50005479322,
+  "generatedAt": "2026-07-24T11:44:00.024Z",
   "papers": [
     {
       "id": "2019-J",
@@ -132,9 +132,13 @@
         "csp-j-2021-c14",
         "csp-j-2021-c15",
         "csp-j-2021-r01",
+        "super-2021-reading-1",
         "csp-j-2021-r02",
+        "super-2021-reading-2",
         "csp-j-2021-r03",
+        "super-2021-reading-3",
         "csp-j-2021-f01",
+        "super-2021-completion-1",
         "csp-j-2021-f02"
       ]
     },
@@ -186,8 +190,11 @@
         "csp-j-2022-c14",
         "csp-j-2022-c15",
         "csp-j-2022-r01",
+        "super-2022-reading-1",
         "csp-j-2022-r02",
+        "super-2022-reading-2",
         "csp-j-2022-r03",
+        "super-2022-reading-3",
         "csp-j-2022-f01",
         "csp-j-2022-f02"
       ]
@@ -240,8 +247,11 @@
         "csp-j-2023-c14",
         "csp-j-2023-c15",
         "csp-j-2023-r01",
+        "super-2023-reading-1",
         "csp-j-2023-r02",
+        "super-2023-reading-2",
         "csp-j-2023-r03",
+        "super-2023-reading-3",
         "csp-j-2023-f01",
         "csp-j-2023-f02"
       ]
@@ -294,10 +304,15 @@
         "csp-j-2024-c14",
         "csp-j-2024-c15",
         "csp-j-2024-r01",
+        "super-2024-reading-1",
         "csp-j-2024-r02",
+        "super-2024-reading-2",
         "csp-j-2024-r03",
+        "super-2024-reading-3",
         "csp-j-2024-f01",
-        "csp-j-2024-f02"
+        "super-2024-completion-1",
+        "csp-j-2024-f02",
+        "super-2024-completion-2"
       ]
     },
     {

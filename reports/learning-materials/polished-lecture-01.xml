@@ -1,0 +1,101 @@
+<title>专题讲解｜二进制和位运算</title>
+
+<h1>二进制和位运算</h1>
+<p>这一节解决两个问题：计算机为什么喜欢用 0 和 1 表示信息，以及 C++ 里的位运算到底在“按哪一位”进行计算。学完后，孩子应该能完成进制转换、补码判断、按位与或异或、左移右移这几类 CSP-J 初赛常见题。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue">
+  <p><b>先抓主线：</b>二进制是“逢二进一”；位运算是“把整数写成二进制后，逐位操作”。遇到题目时，先把数转成二进制，再一位一位算，很多题就会变简单。</p>
+</callout>
+
+<h2>一、考试怎么考</h2>
+<table>
+  <thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead>
+  <tbody>
+    <tr><td>进制转换</td><td>二进制、八进制、十六进制互转</td><td>看清基数，按位权展开或分组转换</td></tr>
+    <tr><td>补码表示</td><td>8 位补码表示的十进制数是多少</td><td>最高位为 1 时，通常表示负数</td></tr>
+    <tr><td>位运算</td><td>a &amp; b、a | b、a ^ b 的结果</td><td>写成二进制，逐位计算</td></tr>
+    <tr><td>移位运算</td><td>x &lt;&lt; k、x &gt;&gt; k 后的值</td><td>非负整数左移相当于乘 2^k，右移相当于整除 2^k</td></tr>
+  </tbody>
+</table>
+
+<h2>二、核心知识</h2>
+<p><b>1. 二进制的位权。</b>十进制的每一位权重是 1、10、100；二进制的每一位权重是 1、2、4、8、16……所以二进制 1011 的值是 1×8 + 0×4 + 1×2 + 1×1 = 11。</p>
+<p><b>2. 十进制转二进制。</b>整数部分用“除 2 取余，倒序读余数”。例如 13：13÷2 余 1，6÷2 余 0，3÷2 余 1，1÷2 余 1，倒过来是 1101。</p>
+<p><b>3. 二、八、十六进制的分组关系。</b>1 个八进制位等于 3 个二进制位，1 个十六进制位等于 4 个二进制位。例如二进制 10111100 可以分成 1011 1100，对应十六进制 B C，也就是 0xBC。</p>
+<p><b>4. 原码、反码、补码。</b>在有符号整数里，最高位通常作为符号位。正数的补码就是它本身；负数的补码可以理解为“按位取反后加 1”。CSP-J 初赛常考 8 位补码范围：-128 到 127。</p>
+
+<h2>三、位运算速查</h2>
+<table>
+  <thead><tr><th background-color="light-gray">运算</th><th background-color="light-gray">含义</th><th background-color="light-gray">例子</th></tr></thead>
+  <tbody>
+    <tr><td>&amp;</td><td>按位与：两个都是 1 才是 1</td><td>1100 &amp; 1010 = 1000</td></tr>
+    <tr><td>|</td><td>按位或：至少一个是 1 就是 1</td><td>1100 | 1010 = 1110</td></tr>
+    <tr><td>^</td><td>按位异或：不同为 1，相同为 0</td><td>1100 ^ 1010 = 0110</td></tr>
+    <tr><td>~</td><td>按位取反：0 变 1，1 变 0</td><td>受整数位数和补码影响，初学先理解规则</td></tr>
+    <tr><td>&lt;&lt;</td><td>左移：二进制整体向左移动</td><td>5 &lt;&lt; 1 = 10</td></tr>
+    <tr><td>&gt;&gt;</td><td>右移：二进制整体向右移动</td><td>13 &gt;&gt; 1 = 6</td></tr>
+  </tbody>
+</table>
+
+<h2>四、带注释代码</h2>
+<pre lang="cpp" caption="把十进制整数转成二进制字符串"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+string toBinary(int x) {
+    if (x == 0) return "0";
+    string s;
+    while (x &gt; 0) {
+        s.push_back(char('0' + x % 2)); // 记录当前最低位
+        x /= 2;                         // 去掉当前最低位
+    }
+    reverse(s.begin(), s.end());        // 余数要倒序读
+    return s;
+}
+
+int main() {
+    int x;
+    cin &gt;&gt; x;
+    cout &lt;&lt; toBinary(x) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+<pre lang="cpp" caption="判断二进制某一位是不是 1"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int x, k;
+    cin &gt;&gt; x &gt;&gt; k; // k 从 0 开始，0 表示最低位
+
+    if ((x &amp; (1 &lt;&lt; k)) != 0) {
+        cout &lt;&lt; "第 k 位是 1" &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; "第 k 位是 0" &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+
+<h2>五、典型例题</h2>
+<p><b>例 1：</b>二进制数 1011 转换成十进制是多少？</p>
+<p><b>解析：</b>从右往左看，位权分别是 1、2、4、8，所以 1011 = 1×8 + 0×4 + 1×2 + 1×1 = 11。</p>
+<p><b>例 2：</b>在 8 位二进制补码中，10101011 表示多少？</p>
+<p><b>解析：</b>最高位是 1，说明它是负数。求绝对值时，先按位取反得到 01010100，再加 1 得到 01010101，也就是 85，所以原数是 -85。</p>
+
+<h2>六、易错点</h2>
+<ul>
+  <li>十六进制 A 表示十进制 10，不是字母本身。</li>
+  <li>左移右移要看移动的是二进制位，不是十进制数字的位置。</li>
+  <li>补码题先看最高位。最高位为 1 时，不要直接按普通二进制转十进制。</li>
+  <li>写代码时，位移表达式常需要括号，例如 <code>x &amp; (1 &lt;&lt; k)</code>。</li>
+</ul>
+
+<h2>七、课后小练习</h2>
+<ol>
+  <li seq="auto">把十进制 37 转成二进制。</li>
+  <li seq="auto">计算 1100 &amp; 1010、1100 | 1010、1100 ^ 1010。</li>
+  <li seq="auto">8 位补码 11111111 表示多少？</li>
+  <li seq="auto">若 x = 12，x &gt;&gt; 2 的结果是多少？</li>
+</ol>
+
+<h2>八、配套资料</h2>
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/R2XGdA7gzok7K2xVKJTclIr4nPh">知识卡｜二进制与位运算</a></p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

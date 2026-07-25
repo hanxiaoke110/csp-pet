@@ -1,0 +1,60 @@
+{
+  "super-2024-reading-1": {
+    "officialQuestion": "阅读以下C++程序（字节交换）。假设输入的 n 是 32 位无符号整数范围内的整数，x,y 是不超过 3 的自然数，完成下面的判断题和单选题。",
+    "officialCode": "#include <bits/stdc++.h>\nusing namespace std;\n\nint x, y;\nunsigned int n;\n\nint main() {\n    cin >> n >> x >> y;\n    unsigned int mask = 0xff;\n    int x8 = x << 3;\n    int y8 = y << 3;\n    unsigned int nx = (n >> x8) & mask, ny = (n >> y8) & mask;\n    n &= (~(mask << x8));\n    n &= (~(mask << y8));\n    n |= (nx << y8);\n    n |= (ny << x8);\n    cout << \"0x\";\n    cout << std::hex << n << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "判断题16：代码中 mask 变量的值转化为二进制的低 16 位结果是 0000 0000 1111 1111。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "mask=0xff，低 16 位即 0000 0000 1111 1111。" },
+      { "label": "判断题17：当输入 x=0 的时候，nx 表示 n 中最低八位对应的字节的数据。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "x=0 时 x8=0，nx=(n>>0)&0xff 即最低 8 位。" },
+      { "label": "判断题18：去掉程序第 11 行至第 12 行中 (~(mask << x8)) 和 (~(mask << y8)) 两处中的最内层括号不会改变程序的结果。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "去掉括号后 ~mask << x8 按优先级等价于 (~mask) << x8，与 ~(mask << x8) 含义不同，结果会改变。" },
+      { "label": "单选题19：当输入为“15078 0 1”时，变量 nx, ny 的值分别为多少？（提示：十进制数 15078 与十六进制数 3AE6 相同）", "options": ["0xE6, 0x3A", "0x6, 0xE0", "0x6, 0xE", "0x6, 0xA"], "correctIndex": 0, "explanation": "nx=15078&0xff=0xE6；ny=(15078>>8)&0xff=0x3A。" },
+      { "label": "单选题20：当输入为“23270 0 1”时，输出为（ ）。（提示：十进制数 23270 与十六进制数 5AE6 相同）", "options": ["0x5A6E", "0x5E6A", "0xA56E", "0xE65A"], "correctIndex": 3, "explanation": "交换最低两字节：0x5AE6 → 0xE65A。" },
+      { "label": "单选题21：以下哪一个变量的类型修改可能影响程序的输出？", "options": ["将 x,y 修改为 unsigned int 类型。", "将 x8,y8 修改为 short 类型。", "将 mask 修改为 int 类型。", "将 nx,ny 修改为 unsigned long long 类型。"], "correctIndex": 2, "explanation": "mask 改为 int 后，mask<<24 会把 1 移入符号位，属于有符号溢出（未定义行为），可能影响输出；其余修改在给定输入范围内均不改变结果。" }
+    ]
+  },
+  "super-2024-reading-2": {
+    "officialQuestion": "阅读以下C++程序。假设输入的 n,k 是不超过 100000 的正整数，输入的 a[i] 是不超过 10⁹ 的整数，k 小于等于 n，完成下面的判断题和单选题。",
+    "officialCode": "#include <bits/stdc++.h>\nusing namespace std;\n\nint n, k;\n\nint func(vector<int> &nums) {\n    int ret = 0;\n    for (int i = n; i > k; i--) {\n        if (nums[i] > nums[i - k]) {\n            swap(nums[i], nums[i - k]);\n            ret++;\n        }\n    }\n    return ret;\n}\n\nint main() {\n    cin >> n >> k;\n    vector<int> a(n + 1, 0);\n    for (int i = 1; i <= n; i++)\n        cin >> a[i];\n    int counter = 0, previous = -1;\n    while (counter != previous) {\n        previous = counter;\n        counter += func(a);\n    }\n    for (int i = 1; i <= n; i++)\n        cout << a[i] << \",\";\n    cout << endl << counter << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "判断题22：当输入的 k 为 1，程序将 a 从小到大排序。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "k=1 时较大元素被换到左边，程序将 a 从大到小排序，不是从小到大。" },
+      { "label": "判断题23：在题目限制的输入规模下，counter 可能会溢出。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "最坏情况交换次数约 n²/4=2.5×10⁹，超过 int 上限 2.1×10⁹，可能溢出。" },
+      { "label": "判断题24：（1分）当输入为“8 1 1 9 2 3 4 6 8 7”，输出共有 18 个可见字符。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "降序排列输出 9,8,7,6,4,3,2,1,（16 个字符），交换次数 21（2 个字符），共 18 个。" },
+      { "label": "单选题25：当输入的 k 为 1，该程序的排序方法最接近（ ）。", "options": ["冒泡排序", "选择排序", "计数排序", "插入排序"], "correctIndex": 0, "explanation": "k=1 时反复比较交换相邻元素，最接近冒泡排序。" },
+      { "label": "单选题26：该程序的时间复杂度为（ ）。", "options": ["O(n + k²)", "O(n²)", "O(nk)", "O(n²/k)"], "correctIndex": 3, "explanation": "间隔 k 的比较使排序所需趟数约为 n/k，每趟 O(n)，总体 O(n²/k)。" },
+      { "label": "单选题27：当输入为“8 3 1 5 2 6 3 7 4 8”，输出的第一行第三个数字为（ ）。", "options": ["2", "6", "7", "8"], "correctIndex": 2, "explanation": "官方答案为 C（7），可编译运行程序验证。" }
+    ]
+  },
+  "super-2024-reading-3": {
+    "officialQuestion": "阅读以下C++程序（差分约束转图求最短路）。假设输入的 n,m 是不超过 200000 的正整数，程序第 13 行每次输入的 l,r 保证 l<=r，完成下面的判断题和单选题。",
+    "officialCode": "#include <iostream>\n#include <vector>\n#include <queue>\nusing namespace std;\n\nconst int MAXN = 200001;\n\nint main() {\n    int n, m, l, r, w;\n    cin >> n >> m;\n    vector<int> dist(MAXN, -1);\n    vector<bool> vis(MAXN, false);\n    vector<vector<pair<int, int>>> go(MAXN);\n    for (int i = 1; i <= m; i++) {\n        cin >> l >> r >> w;\n        go[l].push_back(make_pair(r + 1, w));\n        go[r + 1].push_back(make_pair(l, -w));\n    }\n    queue<int> q;\n    dist[1] = 0, vis[1] = true;\n    q.push(1);\n    while (!q.empty()) {\n        int x = q.front(); q.pop();\n        for (auto i : go[x]) {\n            if (!vis[i.first]) {\n                vis[i.first] = true;\n                dist[i.first] = dist[x] + i.second;\n                q.push(i.first);\n            }\n        }\n    }\n    if (dist[n + 1] == -1) cout << \"sorry\" << endl;\n    else cout << dist[n + 1] << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "判断题28：交换程序的第 14 行与第 15 行，不影响程序运行的结果。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "第 14、15 行是两条相互独立的 push_back，交换顺序不影响结果。" },
+      { "label": "判断题29：输入的 r 的最大值为 n 时，程序可以正常运行。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "r=n 时 go[r+1]=go[n+1]，而 n+1 最大可达 200001，超出大小为 200001 的数组下标范围（0~200000），越界。" },
+      { "label": "判断题30：在程序的第 17 行至第 29 行，相同的数可能重复进入队列。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "节点入队前已标记 vis，每个节点最多入队一次，不会重复。" },
+      { "label": "单选题31：当输入的 l 最小值为 x，输入的 r 的最大值为 y，最多有（ ）个元素进入过队列。", "options": ["1", "y - x", "y - x + 1", "y - x + 2"], "correctIndex": 3, "explanation": "可达节点范围是 x 到 y+1，共 y-x+2 个。" },
+      { "label": "单选题32：当输入的 n 为偶数，且 r=l+1 时，m 至少为（ ）时输出不为 sorry。", "options": ["n / 2", "n / 2 + 1", "n / 2 - 1", "n"], "correctIndex": 0, "explanation": "r=l+1 时边连接 l 与 l+2，奇偶各成一条链；1 到 n+1（奇数）走奇数链需 n/2 条边。" },
+      { "label": "单选题33：当输入为“5 3 1 3 4 3 4 2 4 5 3”时，输出为（ ）。", "options": ["4", "5", "6", "7"], "correctIndex": 3, "explanation": "建图后 BFS：dist[1]=0→dist[4]=4→dist[6]=7，输出 dist[n+1]=dist[6]=7。" }
+    ]
+  },
+  "super-2024-completion-1": {
+    "officialQuestion": "（优美的进制）问题：给出整数 n；k 进制是优美的，当且仅当 n 在 k 进制下至少有两位，且每一位的数值都不同。求对于给定的 n，有哪些进制是优美的，不存在则输出 -1。试补全程序。",
+    "officialCode": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MAXN = 100000;\nint n;\nint vis[MAXN], a[MAXN];\nvector<int> ans;\n\nint check(int k) {\n    int x = n, top = 0;\n    for (int i = 0; i <= k; i++) vis[i] = 0;\n    while (①) {\n        a[++top] = ②;\n        x = ③;\n    }\n    if (top < 2)\n        return 0;\n    for (int i = 1; i <= top; i++) {\n        if (④)\n            return 0;\n        vis[a[i]] = 1;\n    }\n    return 1;\n}\n\nint main() {\n    cin >> n;\n    for (int i = ⑤; i <= n; i++) {\n        if (check(i))\n            ans.push_back(i);\n    }\n    if (ans.empty()) {\n        cout << -1;\n    }\n    for (int i = 0; i < ans.size(); i++)\n        cout << ans[i] << \" \";\n    return 0;\n}",
+    "children": [
+      { "label": "单选题34：①处应填（ ）", "options": ["x > 0", "x > 1", "x / k > 0", "x / k > 1"], "correctIndex": 0, "explanation": "逐位拆分 n，直到 x 变为 0，循环条件 x > 0。" },
+      { "label": "单选题35：②处应填（ ）", "options": ["x / k", "x % k", "(x - 1) / k + 1", "(x - 1) % k + 1"], "correctIndex": 1, "explanation": "当前位数字为 x % k。" },
+      { "label": "单选题36：③处应填（ ）", "options": ["x / k", "x % k", "(x - 1) / k + 1", "(x - 1) % k + 1"], "correctIndex": 0, "explanation": "去掉已处理的最低位：x = x / k。" },
+      { "label": "单选题37：④处应填（ ）", "options": ["vis[i] == 1", "vis[a[i]] == 0", "vis[i] == 0", "vis[a[i]] == 1"], "correctIndex": 3, "explanation": "若该位数字已出现过（vis[a[i]]==1），则数字有重复，不优美，返回 0。" },
+      { "label": "单选题38：⑤处应填（ ）", "options": ["1", "n - 1", "2", "0"], "correctIndex": 2, "explanation": "进制 k 最小为 2，从 2 开始枚举。" }
+    ]
+  },
+  "super-2024-completion-2": {
+    "officialQuestion": "（好运的日期）一个日期可以用 x 年 y 月 z 日来表示。我们称一个日期是好运的，当且仅当 x·y·(w-z+1) 为质数，其中 w 为 x 年 y 月的总天数。输入 x,y,z，判断其对应的日期是否好运。保证 x 是不超过 2024 的正整数，y 是不超过 12 的正整数，x,y,z 可以构成一个合法的日期。试补全线性筛法算法，空间限制 512MiB。",
+    "officialCode": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MAXW = ①;\nconst int days[13] = {0, 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};\nint prime[MAXW], cnt;\nbool not_prime[MAXW];\n\nvoid linear_prime(int n) {\n    --n;\n    not_prime[0] = not_prime[1] = true;\n    for (int i = 2; i <= n; i++) {\n        if (not_prime[i] == false)\n            prime[++cnt] = i;\n        for (int j = 1; ②; j++) {\n            not_prime[i * prime[j]] = 1;\n            if (i % prime[j] == 0)\n                ③;\n        }\n    }\n}\n\nbool check(int n) {\n    return ④;\n}\n\nint main() {\n    linear_prime(MAXW);\n    int x, y, z, w;\n    cin >> x >> y >> z;\n    if (y == ⑤)\n        w = check(x) ? 29 : 28;\n    else\n        w = days[y];\n    if (not_prime[x * y * (w - z + 1)])\n        cout << \"unlucky\" << endl;\n    else\n        cout << \"lucky\" << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "单选题39：①处可以填（ ）", "options": ["753005", "10000000000", "725041", "2024"], "correctIndex": 0, "explanation": "x·y·(w-z+1) 最大为 2024×12×31=752928，MAXW 需不小于它且不超内存限制，753005 合适；725041 不够，1e10 数组超内存。" },
+      { "label": "单选题40：②处应填（ ）", "options": ["j <= cnt", "i * prime[j] <= n", "(j <= cnt) && (i * prime[j] <= n)", "(i <= cnt) && (prime[i] * prime[j] <= n)"], "correctIndex": 1, "explanation": "官方答案为 B 或 C：因循环会在 prime[j] 整除 i 时 break，j 不会越出 cnt，故仅 i*prime[j]<=n 亦可；加 j<=cnt 更稳妥。" },
+      { "label": "单选题41：③处应填（ ）", "options": ["not_prime[i] = true", "return", "continue", "break"], "correctIndex": 3, "explanation": "线性筛中当 prime[j] 整除 i 时 break，保证每个合数只被最小质因子筛去一次。" },
+      { "label": "单选题42：④处应填（ ）", "options": ["n % 4 == 0", "(n % 400 == 0 || (n % 4 == 0 && n % 100 != 0))", "(n % 4 == 0 && n % 100 != 0)", "(n % 100 == 0 || (n % 4 == 0 && n % 100 != 0))"], "correctIndex": 1, "explanation": "闰年判断：能被 400 整除，或能被 4 整除但不能被 100 整除。" },
+      { "label": "单选题43：⑤处应填（ ）", "options": ["1", "7", "8", "2"], "correctIndex": 3, "explanation": "只有 2 月的天数与闰年有关，y==2 时需判断闰年。" }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>认识 switch 结构，能说出 switch 和 if - else if - else 多分支结构不同的运行效果。</li><li>熟悉 switch 的基础语法，明白 case 后只能接常量或常量表达式，明白 break 的作用。</li><li>了解 switch 的更多用法，例如：可以合并多个 case、可以省略 default。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>多选一分类判断。适合菜单、星期、等级这类离散值判断。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P11 switch 语句 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int day;
+    cin &gt;&gt; day;
+    switch (day) {
+        case 1: cout &lt;&lt; "Monday"; break;
+        case 2: cout &lt;&lt; "Tuesday"; break;
+        default: cout &lt;&lt; "Other";
+    }
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li><code>case</code> 后面要写常量值。</li><li>每个分支通常要写 <code>break</code>，否则会继续执行后面的分支。</li><li><code>default</code> 用来处理没有匹配到的情况。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">写一个输入月份输出季节的程序。</li><li seq="auto">解释 <code>break</code> 的作用。</li><li seq="auto">比较 <code>switch</code> 和多分支 <code>if</code> 的适用场景。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

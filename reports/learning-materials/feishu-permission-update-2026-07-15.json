@@ -1,0 +1,1497 @@
+{
+  "summary": {
+    "total": 119,
+    "ok": 119,
+    "failed": 0,
+    "failedItems": []
+  },
+  "results": [
+    {
+      "token": "A3aXdiBn5oalfuxyLEGc9K87n4d",
+      "title": "差分",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "A6I1de0QpoCIygx2nu2cyDcinqe",
+      "title": "for 循环（二）",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "AKXXdCYBfokhqLxCFB8cXSZgnpd",
+      "title": "二分查找（一）",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "ANw4dpoKDoG94UxYp9XcnlfNncg",
+      "title": "贪心算法（一）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "AzzcdcJJCoA4InxsuovcKEx4nLd",
+      "title": "算术基本定理·质因数分解",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "B2UNdVgHgoh7uPx9I69cxK5snhd",
+      "title": "知识卡｜计算机发展史",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "B4qOd65rFoB43kxfKBtcJvk5nIh",
+      "title": "综合运用一",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Binwd1RAVoixUoxWMrrczaahnSc",
+      "title": "最大公因数·辗转相除",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "BtDddDg4potoi3xXqcMcHVoVnKf",
+      "title": "前缀和",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "BycmdgtDLoopLHx5zYbcOaXdnEe",
+      "title": "switch 语句",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "C9Lodp3hroJCtfxxVi6cSyVcnph",
+      "title": "知识卡｜控制结构",
+      "sources": [
+        "knowledge-points.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "CB2pdzxGXoDapQx0o7Vc4pHPnUf",
+      "title": "凯撒加密",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "CCztdovH4oFIucxiWPHcpb9nnUe",
+      "title": "二维数组初识",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "D4IcdSDwdoTyVzxRIQucnPX3njf",
+      "title": "枚举算法的优化",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "DfdDdBLpTowtDYx68icchlaCnzc",
+      "title": "进制转换（二）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "DoZBds5MioeHjfxz3rqcjYWOnOg",
+      "title": "知识卡｜初等数论",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "DqL5dBD8xoyqphxQ0BkcLTQ8nrh",
+      "title": "专题讲解｜数据类型、存储单位、指针",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Dr1ndqnT8ov6UVxJtgncozt7nrs",
+      "title": "标记数组",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "DYMOdLnySoLxoQxsUXUcgM27nz2",
+      "title": "知识卡｜贪心算法",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "E34Td76uooIqZnxVyPgcattyn5c",
+      "title": "专题讲解｜计算机语言",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "EAV7d1e62oQGL3xvdnQcjoBknKA",
+      "title": "变量的盒子寓言",
+      "sources": [
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "EEbhdjzzkoCJCyxOafGcuZNgnTf",
+      "title": "结构体应用",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "EhNPdP3fFoegbrxdxhhc9Umnnpb",
+      "title": "专题讲解｜计算机诞生和发展",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "FE4Sdc39boOA4ZxNVLRcqcxInnc",
+      "title": "知识卡｜编码与解码",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "FL4rdY9cvoErchxhw0dcV7vanfc",
+      "title": "知识卡｜组合数学与概率",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "FLu4dSVxeoZ5Uvx7ANScj9ObnQf",
+      "title": "专题讲解｜递归复杂度分析",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "FpWnd8hNmoExYZxx6KkcLRphnpg",
+      "title": "专题讲解｜编码解码",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Fx4Ldpsg5oiV1IxKawJcetNRnxg",
+      "title": "知识卡｜栈与队列",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Gaefd6ZVvo4JBzxts6dc0xLGn7c",
+      "title": "知识卡｜动态规划",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "GVYndkPjvoaQR9xEVmTcriqGnSc",
+      "title": "字符串综合应用",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "GxWbddqOno4LcVxKD7LcqalrnTb",
+      "title": "CSP-J 一轮知识点",
+      "sources": [
+        "known.first-round"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "HB76d6vR7o79aCxgrUwcY47TnKg",
+      "title": "计数排序",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "HfkKdm1OgoaQ3Zx9RNgcDzY2n0g",
+      "title": "初等排序（选择/冒泡/插入）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "HhzsdN5hvoD5jLxuul3ckDN8nvf",
+      "title": "知识卡｜树",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "HvB7dvF7zojkl1xWoQbcnlW8nxc",
+      "title": "专题讲解｜贪心算法：3个经典区间问题",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "HwGfd31cKoA38yxGuCtcbudnnHf",
+      "title": "专题讲解｜动态规划的基本概念",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "I0CZdX7ICoxeY4xpcfRcITnWnpg",
+      "title": "循环嵌套（一）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "I5FxdmbLqo1VSgxbIlkcTnGeneg",
+      "title": "二分查找（二）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "ICwGdxbAzoYSmlxZOaAcFxN0nAc",
+      "title": "知识卡｜数据类型与存储单位",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Iex9djrBooBkJtxxxczchKHlnse",
+      "title": "贪心算法（二）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "IMSPdsW2aoyMV2xRVkqc2mStnAf",
+      "title": "专题详解｜二分查找的边界分析",
+      "sources": [
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "IN3Ddh437oLonOxo9rOc3RqPnoe",
+      "title": "循环嵌套（二）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "IPpTdbqBmoRJ0mx2INqcjnWDnOg",
+      "title": "智子学习资料库｜CSP 学习导航",
+      "sources": [
+        "known.total-nav"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "IVamd6TOdoJZ7HxUCzFcNkein0g",
+      "title": "string 字符串",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "JDA9dsnGsoTsouxqGOYcXraMn5f",
+      "title": "知识卡｜程序阅读与分析",
+      "sources": [
+        "knowledge-points.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "JkwpdaeceovKQ7xgN7bcAhpSnvh",
+      "title": "专题讲解｜排列组合",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Joamd7W7foFWlYxpMJMc0T87nOg",
+      "title": "知识卡｜时间复杂度与算法复杂度",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "KaHnd9YRgooGeHxp9HgcPsgPnGx",
+      "title": "自定义函数",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "KLSbdriQHob9FXxXgsvcrc6fnbc",
+      "title": "综合运用",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Kogod4koSouxgkx1UdicTEL4n9f",
+      "title": "知识卡｜递归与递推",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "KsN7df8SooVd7qxiUgtc4NDMnbb",
+      "title": "知识卡｜编程语言与编译原理",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "KV9Ad2HkooVZuYx1rhIcZszlnhc",
+      "title": "多分支结构",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Latddv7xJoxqqaxlf8HcJ9rFn7d",
+      "title": "for 循环（一）",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Lb9idzVyOoCLkpx2n4Gcd7QRnzb",
+      "title": "基础语法配套练习",
+      "sources": [
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "LcGmdU64Oo5y9OxQ7xHczFtxnOe",
+      "title": "字符数组常用函数",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "MAsAddaCSopngwxcrVMcuWC6nYf",
+      "title": "递推算法（二）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "MBHrdUWzDopjxqxII8ncEJbEnqf",
+      "title": "专题讲解｜洪水填充算法",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "MIJTdhUn6og4MExv5akcrPZUnKb",
+      "title": "专题讲解｜质数判断和质因数分解",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "MLGQdSE6kohI1txlhrdcSWAhntf",
+      "title": "进制与编码综合",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Mmb5dIlAPory4bxALDVcenaGnCP",
+      "title": "桶数组",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "MrbidyQuLoPf2yxFUTUcTu6qnuf",
+      "title": "函数初识（二）·值传递",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "N1HodDqGbo8LAEx8NmvcvEnPnxe",
+      "title": "循环综合应用（一）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "N72BdZ09BosK3CxddzScOWUJnmb",
+      "title": "一轮基础复盘材料",
+      "sources": [
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "NCCRdOReJoKXm5xDOYHcFQBGnxd",
+      "title": "cin 输入",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "NRsyd2S2koAO1fxVTuRcejcQnNd",
+      "title": "专题讲解｜图的基础概念和深搜广搜",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "O6r9ddpbeoR9ArxU9zpcBGqpndf",
+      "title": "栈",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "OCXcdvHopoSc4hx2WZFc0Hslnjc",
+      "title": "单层循环应用",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "OiVedCjFeoETprxQd6ZcZMLfnJe",
+      "title": "知识卡｜二分查找与二分答案",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "OLnxdFM8aoUXC1xxyxucvj9AnYd",
+      "title": "函数综合应用",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "OQJhdbTqpoSZvGxmg8qc1US8nwe",
+      "title": "知识卡｜洪水填充与搜索",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "OSoHdH9rfolLsixvHMxcNtXZnkO",
+      "title": "逻辑运算符",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Ov6Ed8YDBoxiK9xV34JcX1S7nNe",
+      "title": "埃氏筛法",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "OZh2d0njzo6ybJx7x7PcuGeVnDf",
+      "title": "专题讲解｜二分答案",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "P9RBdFsAEomKGHxrkS2cusnYnJe",
+      "title": "知识卡｜图",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "PDtpdjcijoyjbDxPVDscY93onMh",
+      "title": "基础框架",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "PdwNdiOQPok6BzxAj9AcsNG1nYc",
+      "title": "数据类型（字符型）",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Pjs4dLRfSorncHxhnBqc4e3Mnme",
+      "title": "专题讲解｜表达式求值",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "PuQkdDaUxoK9M8xRv76cpJW9njf",
+      "title": "位权",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Q489d5GQwoVkGVxhVHqc0xBqnne",
+      "title": "补码",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Q8eNdizQVoMMK0xizd9cCKTAnrg",
+      "title": "CSP-J 模考讲评（教师开启）",
+      "sources": [
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "QcmIdB3asorlRcxf1PMcYSb3nYc",
+      "title": "结构体初识",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "QcRkd0FqQo9OeUxXh1McEM2Vnae",
+      "title": "一维数组遍历",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Qf6hdsMq2oUi65xfqoLc5Jpzned",
+      "title": "枚举应用",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "QGkXdQJlRogJzZxMMoqc7u1nnWf",
+      "title": "专题详解｜常见贪心算法类型",
+      "sources": [
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "QkLCdiCxzoSX0pxzVfUcHOsPnxd",
+      "title": "枚举算法",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "R2XGdA7gzok7K2xVKJTclIr4nPh",
+      "title": "知识卡｜二进制与位运算",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "R4G6dimuvoEoHNxZnjMczUu6npf",
+      "title": "位运算（异或）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "R8erd5xCzoozGkxBCL9cgV5QnHd",
+      "title": "进制转换（一）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "RPUjd3sDPodwXGxDMo3cISXnnIh",
+      "title": "专题讲解｜数组和链表",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Rrd2dst3mofyvsxUIfVcT41snec",
+      "title": "sort 应用",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "RVTOdrCa8oh2bYxWAaKcGEdvn8k",
+      "title": "循环综合应用（二）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Se5LdxYqzovi39xe0q5cSPTpnNc",
+      "title": "专题讲解｜二进制和位运算",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "SPQxd6CAtojK9bxKYkVcDNn3n4c",
+      "title": "二维数组遍历",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Sz7Jdrx2MouVTTxTd51cAiTHnfe",
+      "title": "二维数组应用",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "T61Nd0s3hogaoGxeH49cu8NvnVc",
+      "title": "模拟算法（二）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "TeqkdyaGvo37RUxqUoxci5wBnxh",
+      "title": "类型转换",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "TGUZdNLH6oN109xoeWFc41JPnIb",
+      "title": "结构体排序",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "U3rZdXg13ovLQXxImldc0qNynCf",
+      "title": "知识卡｜数组与字符串",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "U8Uid72Yao61FzxbfM7c0hpenVe",
+      "title": "递推算法（一）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "UHIOdn8jOo4Lqkx98AScdsmqnre",
+      "title": "CSP-J 二轮知识点",
+      "sources": [
+        "known.second-round"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "UIE4dEp65oWNeVxYGtZc2ki4nBN",
+      "title": "知识卡｜表达式求值",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "UjdbdZ6VKoLjNCxFCGxc9aqEnbh",
+      "title": "知识卡｜计算机网络基础",
+      "sources": [
+        "knowledge-points.card",
+        "knowledge-lectures.card"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "UnLpdUwLOo5FikxcP7EcKoVZnED",
+      "title": "常用数学函数",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "VAeLdMzJGoMIpTxDoiKcf9qxnKe",
+      "title": "一维数组初识（一）",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Vw1qdSHhtoWVgvxR63Zc95fXneg",
+      "title": "字符数组",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "WeIUdwO0AoyNhbxwS8PcI6UznBg",
+      "title": "专题讲解｜栈和队列",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "WngRdXjTyoQ27IxoCdHchUb8nmg",
+      "title": "函数初识（一）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "X1ISdZNhBoxUasxJ0ZRcr08Bnmd",
+      "title": "专题讲解｜算法复杂度分析",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "X4DadWzB2oBM6uxsDXncTZfQnid",
+      "title": "专题讲解｜计算机网络的诞生和发展",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "X4K8drryjo02CexI09sc2y6AnSc",
+      "title": "认识排序（选择）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "XesTdaXZEoCjJMxREb9cnwEAn0d",
+      "title": "动态数组与队列",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "XnsMd3XAao4459x3ZKXcbArrnCd",
+      "title": "专题讲解｜二叉树的形态与遍历",
+      "sources": [
+        "knowledge-points.lecture",
+        "knowledge-lectures.lecture"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "XoAjde0cPoPj0AxIUL2cbbzin3d",
+      "title": "数据类型（浮点型）",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "XPhAdX6Svo7u4QxClFNcWdV1nif",
+      "title": "模拟算法（一）",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "YbB2dG1jboYZmOxU0NPci7ofnEh",
+      "title": "数据类型（整型）",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "YeeZd62XWoG5XTx0P22cmUORnhd",
+      "title": "while 循环",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "Ymzndk2b6oYPKWxHMr4chPOJneb",
+      "title": "关系运算符与分支结构",
+      "sources": [
+        "course-card-index.feishuUrl",
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "YxIydNRSmoYYtUx9W9dcgUJOnMd",
+      "title": "贪心算法（三）·邻项交换",
+      "sources": [
+        "course-card-index.feishuUrl"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    },
+    {
+      "token": "ZIVad7dpmooD64xmhywcKbmynRd",
+      "title": "循环的跑步机寓言",
+      "sources": [
+        "course-card-index.url"
+      ],
+      "ok": true,
+      "status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"identity\": \"user\",\n  \"data\": {\n    \"permission_public\": {\n      \"comment_entity\": \"anyone_can_view\",\n      \"external_access\": true,\n      \"invite_external\": false,\n      \"link_share_entity\": \"anyone_readable\",\n      \"security_entity\": \"only_full_access\",\n      \"share_entity\": \"only_full_access\"\n    }\n  }\n}",
+      "stderr": "",
+      "error": null
+    }
+  ]
+}

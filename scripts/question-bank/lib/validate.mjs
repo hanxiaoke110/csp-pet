@@ -11,6 +11,12 @@ function hasPlaceholderOptions(options) {
   return options.length > 0 && options.every(option => !optionPayload(option) || /^[A-DＡ-Ｄ]$/.test(optionPayload(option)));
 }
 
+// Single-letter options are genuinely meaningful when the question stem treats
+// the letters as entities (e.g. logic puzzles "有ABCD4个人…A说：…").
+function stemReferencesLetterEntities(questionText) {
+  return /[A-DＡ-Ｄ]{4}/.test(questionText) || /[A-DＡ-Ｄ]\s*(?:说|问|答|猜)/.test(questionText);
+}
+
 function validateAnswer(options, correctIndex) {
   return Number.isInteger(correctIndex) && correctIndex >= 0 && correctIndex < options.length;
 }
@@ -40,14 +46,26 @@ export function validateQuestion(question) {
     const minimum = question.type === 'boolean' ? 2 : 4;
     if (question.options.length < minimum) blockers.push('insufficient_options');
     if (!validateAnswer(question.options, question.answer.correctIndex)) blockers.push('answer_out_of_range');
-    if (hasPlaceholderOptions(question.options)) blockers.push('placeholder_options');
+    // Placeholder options signal a failed options recovery — but single-letter
+    // options are legitimate when the program prints a letter (code present)
+    // or when the stem references lettered entities (logic puzzles).
+    if (hasPlaceholderOptions(question.options)
+        && !question.code
+        && question.assets.length === 0
+        && !stemReferencesLetterEntities(question.question)) {
+      blockers.push('placeholder_options');
+    }
     const normalized = question.options.map(optionPayload);
     if (new Set(normalized).size !== normalized.length) blockers.push('duplicate_options');
   }
 
+  // Code referenced by the stem may legitimately live inside the options
+  // (e.g. "下列程序能够正确执行的是" with code in each option).
+  const optionsHaveCode = question.options.some(option => INLINE_CODE.test(String(option)));
   if (EXTERNAL_CODE_REFERENCE.test(question.question)
       && !question.code
       && question.assets.length === 0
+      && !optionsHaveCode
       && !INLINE_CODE.test(question.question)) {
     blockers.push('missing_code_context');
   }
@@ -81,6 +99,14 @@ export function decideVerdict(question, evidence = {}) {
     return { status: 'broken', blockers: structural.blockers, warnings: structural.warnings, evidence };
   }
 
+  // Human adjudication wins over every automated conflict check below. Only
+  // honored when the reviewer recorded an explicit approval with provenance
+  // (who/when/why) — used after a documented multi-source review resolves a
+  // dispute in favor of the canonical answer.
+  if (evidence.manualVerified?.approved === true) {
+    return { status: 'auto_verified', blockers: [], warnings: structural.warnings, evidence };
+  }
+
   const expected = question.answer.correctIndex;
   const expectedVector = answerVector(question);
   const modelAnswers = Array.isArray(evidence.modelAnswers)
@@ -97,6 +123,14 @@ export function decideVerdict(question, evidence = {}) {
   if (modelAnswers.length >= 2 && new Set(modelAnswers).size > 1) {
     return { status: 'disputed', blockers: ['model_conflict'], warnings: structural.warnings, evidence };
   }
+  // Models unanimously agree with each other but contradict the canonical
+  // answer: this is how the 16 mis-keyed canonical answers were found. Treat
+  // it as disputed (needs human adjudication), not merely auto_probable.
+  if (modelAnswers.length >= 3
+      && modelAnswers.every(answer => answer === modelAnswers[0])
+      && modelAnswers[0] !== expected) {
+    return { status: 'disputed', blockers: ['model_canonical_conflict'], warnings: structural.warnings, evidence };
+  }
   const cspVectors = Array.isArray(evidence.multipartModelAnswers)
     ? evidence.multipartModelAnswers.filter(Array.isArray)
     : [];
@@ -112,7 +146,11 @@ export function decideVerdict(question, evidence = {}) {
   if (evidence.modelAmbiguous) {
     return { status: 'disputed', blockers: ['model_reports_ambiguity'], warnings: structural.warnings, evidence };
   }
-  if (!evidence.explanationVerified) {
+  const fiveJuryConsensus = evidence._5juryConsensus
+    && modelAnswers.length >= 5
+    && modelAnswers.every(answer => answer === expected);
+
+  if (!evidence.explanationVerified && !fiveJuryConsensus) {
     return { status: 'auto_probable', blockers: ['explanation_unverified'], warnings: structural.warnings, evidence };
   }
   if (evidence.officialMatch) {
@@ -129,6 +167,9 @@ export function decideVerdict(question, evidence = {}) {
     return { status: 'auto_verified', blockers: [], warnings: structural.warnings, evidence };
   }
   if (modelsAgree && Array.isArray(evidence.knowledgeSources) && evidence.knowledgeSources.length >= 2) {
+    return { status: 'auto_verified', blockers: [], warnings: structural.warnings, evidence };
+  }
+  if (fiveJuryConsensus) {
     return { status: 'auto_verified', blockers: [], warnings: structural.warnings, evidence };
   }
   return { status: 'auto_probable', blockers: ['insufficient_evidence'], warnings: structural.warnings, evidence };

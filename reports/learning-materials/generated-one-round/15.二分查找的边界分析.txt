@@ -1,0 +1,104 @@
+‏二分
+‏难易度：中等
+‏备考建议
+‏二分查找又称为折半查找，对已排序的数组，重复执行“将目标数据和数组中间的数据进行比较后将查找范围减半”的操作，直到找到目标数据或其不存在。
+‏理解二分查找很容易，很多时候有编译器的情况下，自己调试也非难事。但是在初赛的赛场上，同学们还会在二分丢分就是因为平时写题用一个写法就足够，但是初赛题换一种写法，对于边界的分析就容易出错，所以想要初赛二分不丢分，务必理解下面二分的3种写法6个模板。
+‏二分的3种写法6个模板
+‏设数组a长度为n，第一个元素下标为0，最后一个元素下标为n-1。二分查找x在数组中第一个符合条件的位置和最后一个。
+‏三种写法用L和R指针二分结束后的位置进行区分
+‏//第一种写法
+‏while (L + 1 < R)
+‏//第二种写法
+‏while (L < R)
+‏//第三种写法
+‏while (L <= R)
+‏第一种写法
+‏//查找第一个符合条件的位置
+‏int find(int x) {
+‏    int L = -1, R = n;
+‏    while (L + 1 < R) {
+‏        int mid = (L + R) / 2; // 若用位运算写作 L + R >> 1;
+‏        if (a[mid] >= x) {
+‏            R = mid;
+‏        } else {
+‏            L = mid;
+        }
+    }
+‏    return R;
+}
+
+‏//查找最后一个符合条件的位置
+‏int find(int x) {
+‏    int L = -1, R = n;
+‏    while (L + 1 < R) {
+‏        int mid = (L + R) / 2; // 若用位运算写作 L + R >> 1;
+‏        if (a[mid] <= x) {
+‏            L = mid;
+‏        } else {
+‏            R = mid;
+        }
+    }
+‏    return L;
+}
+‏第二种写法
+‏//查找第一个符合条件的位置
+‏int find(int x) {
+‏    int L = 0, R = n - 1;
+‏    while (L < R) {
+‏        int mid = (L + R) / 2;
+‏        if (a[mid] >= x) {
+‏            R = mid;
+‏        } else {
+‏            L = mid + 1;
+        }
+    }
+‏    return R; // 返回R和L都行，因为循环结束时，必有L==R
+}
+
+‏//查找最后一个符合条件的位置
+‏int find(int x) {
+‏    int L = 0, R = n - 1;
+‏    while (L < R) {
+‏        int mid = (L + R + 1) / 2; // 注意这里加了 1
+‏        if (a[mid] <= x) {
+‏            L = mid;
+‏        } else {
+‏            R = mid - 1;
+        }
+    }
+‏    return L;
+}
+‏第三种写法
+‏//查找第一个符合条件的位置
+‏int find(int x) {
+‏    int L = 0, R = n - 1;
+‏    int ans = 0;
+‏    while (L <= R) {
+‏        int mid = (L + R) / 2;
+‏        if (a[mid] >= x) {
+‏            ans = mid;
+‏            R = mid - 1;
+‏        } else {
+‏            L = mid + 1;
+        }
+    }
+‏    return ans; // 
+}
+
+‏//查找最后一个符合条件的位置
+‏int find(int x) {
+‏    int L = 0, R = n - 1;
+‏    int ans = 0;
+‏    while (L <= R) {
+‏        int mid = (L + R) / 2; 
+‏        if (a[mid] <= x) {
+‏            ans = mid;
+‏            L = mid + 1;
+‏        } else {
+‏            R = mid - 1;
+        }
+    }
+‏    return ans;
+}
+
+

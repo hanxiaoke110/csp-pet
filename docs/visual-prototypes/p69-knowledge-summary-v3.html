@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P69 栈｜知识总览 v3</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1024px; height: 1536px; overflow: hidden; }
+    body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: #27221e; }
+    .poster {
+      position: relative;
+      width: 1024px;
+      height: 1536px;
+      overflow: hidden;
+      padding: 42px 46px 34px;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(255,190,87,.14) 0 3px, transparent 4px),
+        radial-gradient(circle at 83% 30%, rgba(49,142,165,.10) 0 3px, transparent 4px),
+        repeating-linear-gradient(0deg, rgba(102,74,46,.025) 0 1px, transparent 1px 7px),
+        #fffaf0;
+      border: 11px solid #2c8ca0;
+    }
+    .poster::after { content: ""; position: absolute; inset: 18px; border: 2px dashed rgba(167,112,57,.28); pointer-events: none; }
+    .hero {
+      position: relative;
+      height: 166px;
+      padding: 20px 180px 18px 30px;
+      background: #fffdf6;
+      border: 4px solid #352c27;
+      box-shadow: 8px 8px 0 #ffd66d;
+      transform: rotate(-.25deg);
+    }
+    .pno { display: inline-block; padding: 5px 13px; margin-right: 9px; color: #fff; background: #ef694f; font-size: 32px; font-weight: 900; }
+    h1 { display: inline; margin: 0; font-size: 61px; line-height: 1; letter-spacing: 0; }
+    .subtitle { margin-top: 13px; font-size: 25px; font-weight: 700; color: #a44e30; }
+    .mascot-sticker {
+      position: absolute;
+      right: 24px;
+      top: 12px;
+      width: 132px;
+      height: 132px;
+      padding: 8px;
+      border: 4px solid #2b2724;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 5px 5px 0 #78ccd6;
+      transform: rotate(5deg);
+    }
+    .mascot-sticker img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+    .goal { margin: 22px 5px 16px; font-size: 25px; font-weight: 800; text-align: center; }
+    .goal span { background: linear-gradient(transparent 56%, #ffe18c 56%); }
+    .row { display: grid; gap: 18px; margin-bottom: 17px; }
+    .row.top { grid-template-columns: .92fr 1.08fr; }
+    .row.mid { grid-template-columns: 1.05fr .95fr; }
+    .row.low { grid-template-columns: 1fr 1fr; }
+    .paper {
+      position: relative;
+      padding: 14px 17px 13px;
+      background: white;
+      border: 3px solid #3c332e;
+      box-shadow: 5px 5px 0 rgba(54,42,34,.16);
+    }
+    .paper.blue { background: #eefaff; box-shadow: 5px 5px 0 #9ed9e4; }
+    .paper.green { background: #effbf0; box-shadow: 5px 5px 0 #a4d8a5; }
+    .paper.yellow { background: #fff7d9; box-shadow: 5px 5px 0 #f1c85f; }
+    .paper.pink { background: #fff0ee; box-shadow: 5px 5px 0 #efa99e; }
+    .paper.purple { background: #f5f0ff; box-shadow: 5px 5px 0 #c5b5e5; }
+    .paper:nth-child(odd) { transform: rotate(.18deg); }
+    .paper:nth-child(even) { transform: rotate(-.18deg); }
+    .tape { position: absolute; width: 72px; height: 22px; top: -12px; left: calc(50% - 36px); background: rgba(255,214,105,.72); transform: rotate(-2deg); }
+    h2 { margin: 0 0 10px; font-size: 29px; line-height: 1.15; }
+    h2 .n { display: inline-grid; place-items: center; width: 39px; height: 39px; margin-right: 7px; color: white; background: #ef694f; border-radius: 50%; font-size: 22px; }
+    p { margin: 5px 0; font-size: 19px; line-height: 1.35; }
+    .note { color: #655951; font-size: 18px; }
+    .stack-demo { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; gap: 8px; margin-top: 10px; }
+    .stack-wrap { text-align: center; }
+    .stack {
+      width: 128px;
+      min-height: 166px;
+      margin: 0 auto 7px;
+      padding: 34px 13px 8px;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 6px;
+      border: 6px solid #32859a;
+      border-top: 0;
+      background: rgba(255,255,255,.7);
+      position: relative;
+    }
+    .stack::before { content: "栈顶"; position: absolute; top: 7px; left: 0; right: 0; font-weight: 800; color: #247184; }
+    .item { padding: 6px; color: #fff; background: #32a083; font: 800 21px/1 monospace; }
+    .item:nth-child(2) { background: #3c84c2; }
+    .item:nth-child(3) { background: #8c69bd; }
+    .arrow { font-size: 44px; font-weight: 900; color: #e55b43; text-align: center; }
+    .opline { font-size: 17px; font-weight: 800; color: #2b6c76; }
+    table { width: 100%; border-collapse: collapse; }
+    td { padding: 5px 8px; border-bottom: 1px dashed #91b8be; font-size: 18px; }
+    td:first-child { width: 33%; color: #075e75; font-family: monospace; font-weight: 900; }
+    pre {
+      margin: 9px 0 0;
+      padding: 12px 16px;
+      color: #eefaff;
+      background: #172435;
+      border: 4px solid #2b2927;
+      box-shadow: inset 7px 0 #46c1a0;
+      font: 16px/1.27 "SFMono-Regular", Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .trace { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 13px; }
+    .trace div { padding: 9px 4px; text-align: center; border: 2px solid #de9b3d; background: #fff; font-size: 17px; }
+    .trace b { display: block; color: #a65323; font-size: 18px; }
+    ul { margin: 6px 0 0; padding-left: 24px; }
+    li { margin: 4px 0; font-size: 18px; line-height: 1.3; }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+    .chip { padding: 6px 9px; border: 2px solid #568db3; background: white; font-size: 17px; font-weight: 800; }
+    .danger { color: #bc3f32; font-weight: 800; }
+    .quiz {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 2px;
+    }
+    .quiz .paper { padding: 13px 17px; }
+    .quiz h2 { font-size: 25px; }
+    .quiz p { font-size: 18px; }
+    .answer { font-size: 28px !important; font-weight: 900; color: #16805f; }
+    .footer {
+      position: absolute;
+      left: 46px;
+      right: 46px;
+      bottom: 25px;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      border: 4px solid #342d28;
+      background: #ffe27f;
+      box-shadow: 5px 5px 0 #e56c50;
+      font-size: 25px;
+      font-weight: 900;
+    }
+    .footer small { font-size: 16px; color: #735d32; }
+  </style>
+</head>
+<body>
+  <main class="poster">
+    <header class="hero">
+      <div><span class="pno">P69</span><h1>栈 · 知识总览</h1></div>
+      <div class="subtitle">最后进入的元素，为什么最先离开？</div>
+      <div class="mascot-sticker"><img src="../../public/course-data/generated-images/zhizi-logo-source.png" alt="智子小麒麟" /></div>
+    </header>
+    <div class="goal"><span>目标：看懂栈顶操作，会用 C++ stack 解决典型问题。</span></div>
+
+    <section class="row top">
+      <article class="paper blue">
+        <div class="tape"></div><h2><span class="n">1</span>灵魂规则</h2>
+        <p><b>栈（Stack）</b>是一种只能在同一端进行插入和删除的线性结构。</p>
+        <p><b>后进先出 LIFO：</b>最后进去，最先出来。</p>
+        <div class="stack-demo">
+          <div class="stack-wrap"><div class="stack"><div class="item">A</div><div class="item">B</div><div class="item">C</div></div><div class="opline">push A → B → C</div></div>
+          <div class="arrow">→</div>
+          <div class="stack-wrap"><div class="stack"><div class="item">A</div><div class="item">B</div></div><div class="opline">pop 得到 C</div></div>
+        </div>
+      </article>
+      <article class="paper green">
+        <div class="tape"></div><h2><span class="n">2</span>五个基本操作</h2>
+        <table><tr><td>push(x)</td><td>把 x 放到栈顶</td></tr><tr><td>pop()</td><td>删除栈顶元素</td></tr><tr><td>top()</td><td>查看栈顶，不删除</td></tr><tr><td>empty()</td><td>判断栈是否为空</td></tr><tr><td>size()</td><td>查看元素个数</td></tr></table>
+        <pre>#include &lt;stack&gt;
+stack&lt;int&gt; s;
+s.push(10);
+s.push(20);
+cout &lt;&lt; s.top(); // 20
+s.pop();           // 删除 20</pre>
+        <p class="note">栈顶操作通常都是 <b>O(1)</b>。</p>
+      </article>
+    </section>
+
+    <section class="row mid">
+      <article class="paper yellow">
+        <div class="tape"></div><h2><span class="n">3</span>跟着栈跑一遍</h2>
+        <p>依次执行：<code>push(4), push(7), push(9), pop()</code></p>
+        <div class="trace"><div><b>[4]</b>栈顶 4</div><div><b>[4,7]</b>栈顶 7</div><div><b>[4,7,9]</b>栈顶 9</div><div><b>[4,7]</b>弹出 9</div></div>
+        <p class="note">读取顺序从左到右，真正能操作的始终是最后一个元素。</p>
+      </article>
+      <article class="paper purple">
+        <div class="tape"></div><h2><span class="n">4</span>它能解决什么？</h2>
+        <div class="chips"><span class="chip">括号匹配</span><span class="chip">表达式求值</span><span class="chip">函数调用</span><span class="chip">撤销操作</span><span class="chip">深度优先搜索</span></div>
+        <p class="note">共同点：任务暂时压住，最后到来的通常要优先处理。</p>
+      </article>
+    </section>
+
+    <section class="row low">
+      <article class="paper pink">
+        <div class="tape"></div><h2><span class="n">5</span>高频陷阱</h2>
+        <ul><li><span class="danger">空栈</span>调用 <code>top()</code> 或 <code>pop()</code></li><li>误以为 <code>top()</code> 会删除元素</li><li>把栈当成先进先出的队列</li><li>试图直接访问栈底或中间元素</li></ul>
+      </article>
+      <article class="paper blue">
+        <div class="tape"></div><h2><span class="n">6</span>做题三步法</h2>
+        <ol><li>先判断当前动作是“放入”还是“取出”</li><li>只追踪栈顶，不必反复扫描全部元素</li><li>取出或查看前，先用 <code>empty()</code> 判空</li></ol>
+      </article>
+    </section>
+
+    <section class="quiz">
+      <article class="paper"><h2>一分钟自测</h2><p>A、B、C 依次入栈；执行一次 <code>pop()</code> 后再 <code>push(D)</code>，此时栈顶是谁？</p></article>
+      <article class="paper green"><h2>答案</h2><p class="answer">D</p><p>C 被弹出，D 最后入栈。</p></article>
+    </section>
+
+    <footer class="footer"><span>口诀：只碰栈顶，后进先出；取前判空。</span><small>智子知识卡 · P69 v3</small></footer>
+  </main>
+</body>
+</html>

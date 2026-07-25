@@ -1,0 +1,73 @@
+<title>专题讲解｜图的基础概念和深搜广搜</title>
+
+<h1>图的基础概念和深搜广搜</h1>
+
+<p>图用来表示对象之间的连接关系。城市和道路、同学和好友关系、迷宫格子的相邻关系都可以抽象成图。孩子需要掌握顶点、边、度、连通、邻接矩阵/邻接表，以及 DFS、BFS 的基本区别。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>边没有方向，A 连到 B 也表示 B 连到 A。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>图概念</td><td>顶点数、边数、度数</td><td>无向图中所有度数之和等于 2 倍边数</td></tr><tr><td>存储方式</td><td>邻接矩阵和邻接表区别</td><td>稠密图可用矩阵，稀疏图常用表</td></tr><tr><td>DFS</td><td>按深度优先顺序访问</td><td>一路走到底，再回溯</td></tr><tr><td>BFS</td><td>求最短步数或层次</td><td>一层一层扩展，常用队列</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>无向图。</b>边没有方向，A 连到 B 也表示 B 连到 A。</p>
+
+<p><b>有向图。</b>边有方向，A 指向 B 不代表 B 指向 A。</p>
+
+<p><b>连通。</b>两个点之间存在路径。</p>
+
+<p><b>搜索。</b>DFS 像走迷宫一条路走到底；BFS 像水波一样一圈圈扩散。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="邻接表 DFS"><code>vector&lt;int&gt; g[1005];
+bool vis[1005];
+
+void dfs(int u) {
+    vis[u] = true;
+    cout &lt;&lt; u &lt;&lt; " ";
+    for (int v : g[u]) {
+        if (!vis[v]) dfs(v);
+    }
+}</code></pre>
+
+<pre lang="cpp" caption="队列 BFS"><code>queue&lt;int&gt; q;
+q.push(start);
+vis[start] = true;
+
+while (!q.empty()) {
+    int u = q.front();
+    q.pop();
+    for (int v : g[u]) {
+        if (!vis[v]) {
+            vis[v] = true;
+            q.push(v);
+        }
+    }
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：无向图有 5 条边，所有点度数之和是多少？</b></p>
+
+<p><b>解析：</b>每条边贡献两个端点的度数，所以总度数是 10。</p>
+
+<p><b>例 2：迷宫最少走几步通常用 DFS 还是 BFS？</b></p>
+
+<p><b>解析：</b>如果每一步代价相同，用 BFS 更适合求最短步数。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>无向图建边要加两次：u 到 v，v 到 u。</li><li>搜索时一定要标记 visited，避免反复绕圈。</li><li>DFS 不天然保证最短路，BFS 在等权图中才适合求最短步数。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">说出邻接矩阵和邻接表各自适合什么图。</li><li seq="auto">无向图 6 条边，所有顶点度数和是多少？</li><li seq="auto">为什么 BFS 要用队列？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/P9RBdFsAEomKGHxrkS2cusnYnJe">知识卡｜图</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

@@ -26,7 +26,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "中国的国家顶级域名是.cn，这是由国际互联网域名体系规定的，属于国家代码顶级域名（ccTLD）。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -64,7 +64,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "逻辑与运算规则：对应位均为1时结果才为1。逐位计算两个二进制数，得到结果01 0010 1000 0011，对应选项D。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -102,7 +102,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "32位整型变量占4个字节（1字节=8位），32位÷8=4字节，故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -140,7 +140,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "循环从b=1到c，每次s减1，共减c次，等价于s = a - c，故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -178,7 +178,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "折半查找最大比较次数为⌊log₂n⌋+1，n=100时，log₂100≈6.64，取整加1得7，故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -216,7 +216,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "链表只能顺序访问，不能随机访问，故D错误。链表插入删除只需修改指针，不需移动元素，且动态分配空间，空间与节点数成正比。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -254,7 +254,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "本题为整数划分问题，求将8拆分成最多5个正整数之和的方案数，且顺序无关。枚举可得18种，对应C选项。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -292,7 +292,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "100以内最大素数为97，因为97只能被1和自身整除，而91=7×13，89和93均小于97。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -330,7 +330,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "用辗转相除法：377÷319=1余58，319÷58=5余29，58÷29=2余0，最大公约数为29。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -368,7 +368,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "设周一到周四跑x次3公里，周五到周日跑y次5公里，约束3x+5y≤21，x≤4，y≤3，求300x+600y最大值，得x=2,y=3时消耗2400千卡。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -406,7 +406,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "根据鸽巢原理，13张牌分到4种花色，13÷4=3余1，至少有一种花色有3+1=4张。考查抽屉原理。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -444,7 +444,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "车牌倒过来相同，需对称位置数字互为颠倒对。5位车牌，中间位只能取0、1、8；第1、2位各有5种选择（0、1、6、8、9），共5×5×3=75。考查组合计数。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -482,7 +482,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "由后序知根为A，中序左子树DBGEHJ、右子树CIF；递归构建得前序ABDEGHJCFI。考查二叉树遍历与重构。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -520,7 +520,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "图灵奖是计算机科学最高奖，由ACM颁发。鲁班奖为建筑奖，诺贝尔奖不含计算机，普利策奖为新闻奖。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -558,7 +558,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "a%3=1，(int)(x+y)=7，1*7%2=1，x+1=3.5，结果为float型3.500000。考查运算符优先级与类型转换。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -596,7 +596,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "JPEG是常见的图像文件格式，而WMV、MPEG、AVI均为视频文件格式。本题考察常见文件格式的分类。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -634,7 +634,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "逻辑或运算规则：对应位有1则结果为1。逐位计算两个二进制数，所有位均为1或0与1得1，最终结果为11 1111 1111 1111。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -672,7 +672,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "编译器将高级语言（如C++）翻译成低级语言（如机器码），以便计算机执行。本题考察编译器的基本功能定义。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -710,7 +710,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "先乘以100并加0.5，再取整后除以100，可实现四舍五入保留两位小数。选项B正确使用了(int)强制类型转换。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -748,7 +748,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "考虑数字重复情况，分三类：无重复（4!）、两个相同（C(3,1)×C(4,2)×2!）、两对相同（C(3,2)×4!/(2!2!)），总和为102。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -786,7 +786,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "不稳定排序指相等元素排序后相对顺序可能改变。快速排序因分区交换可能破坏相等元素顺序，故不稳定。冒泡、插入、归并均为稳定排序。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -824,7 +824,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "非连通无向图至少有两个连通分量。边数最多时为一个完全图加孤立点，完全图边数≤28，顶点数n满足n(n-1)/2≥28，得n=8时边数28，再加一个孤立点共9顶点。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -862,7 +862,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "车牌倒过来相同要求第1、5位互为颠倒对，第2、4位互为颠倒对，第3位自颠倒（0/1/8）。共5×5×3=75种。能被3整除需各位和模3为0，枚举得25种。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -900,7 +900,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "至少一门满分人数=数学满分+语文满分-两门满分=15+12-4=23人。这是容斥原理的直接应用。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -938,7 +938,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "归并两个有序数组最坏情况需比较2n-1次。例如A最大小于B最小时，每次比较取走一个元素，最后剩一个元素无需比较，故比较次数为2n-1。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -976,7 +976,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "邻接矩阵是图的一种常用存储结构，通过二维数组表示顶点间的邻接关系。栈、二叉树、队列均非专门存储图的结构，故选D。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1014,7 +1014,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "Floyd算法是动态规划算法，用于求多源最短路径，不属于贪心算法。Dijkstra、Prim、Kruskal均为贪心算法，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1052,7 +1052,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "设公比为q，首项2，末项118098，中间项486。由等比数列性质，中间项平方等于首项与末项之积，验证得q=3，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -1090,7 +1090,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "内存中每个存储单元有唯一编号，称为地址，用于CPU按地址访问数据。下标、序号、编号均非专业术语，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -1128,7 +1128,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "编译器将高级语言源程序翻译成机器指令代码（目标程序），以便计算机执行。其他选项描述均不正确，故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1166,7 +1166,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "选项C中，(x∧y)为真，(z∨x)为真，真值或运算结果为真。考查逻辑与、或运算规则。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1204,7 +1204,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "图像数据量=2048×1024×32位=64M位，1字节=8位，故64M位÷8=8MB。考查存储容量计算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1242,7 +1242,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "最好情况下数组已有序，第一轮比较n-1次后无交换，FLAG=1循环结束。考查冒泡排序最优比较次数。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1280,7 +1280,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "递归每次比较当前元素与前面子数组的最小值，最终返回整个数组的最小值。考查递归求最小值算法。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1318,7 +1318,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "链表节点通过指针链接，访问元素需从头遍历，不支持随机访问。考查链表基本特性。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -1356,7 +1356,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "n个顶点的无向连通图至少需要n-1条边（树结构），10个顶点至少9条边，故选C。考查图论基础。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1394,7 +1394,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "二进制1011按位权展开：1×2³+0×2²+1×2¹+1×2⁰=8+0+2+1=11，故选C。考查进制转换。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1432,7 +1432,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "将双胞胎捆绑视为一个整体，与其余3人共4个元素排列有4!种，双胞胎内部有2!种，共4!×2!=24×2=48种，故选D。考查排列组合中的捆绑法。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1470,7 +1470,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "完全二叉树结点数n满足2^h-1≥n>2^(h-1)-1，61在2^6-1=63和2^5-1=31之间，故高度为6，选D。考查完全二叉树高度计算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1508,7 +1508,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "用隔板法：10个名额排成一排，中间9个空位插入6个隔板分成7份，每份至少1个，方案数为C(9,6)=84，故选B。考查组合数学中的隔板法。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1546,7 +1546,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "先选两副完整手套：C(5,2)=10种；再从剩下3副中各取1只，每副有2种取法，共2^3=8种；总取法10×8=80，但需排除配成第三副的情况，实际正确计算为120种。考查组合计数与容斥原理。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1584,7 +1584,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "将各数统一为十进制：A为550，B为7×8^2+7×8+8=504，C为1024，D为2×16+2=34，最大的是C。考查进制转换与比较。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -1622,7 +1622,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "操作系统核心功能是控制和管理计算机系统的硬件与软件资源，合理调度各类资源，为用户提供便捷接口。B选项准确概括。考查操作系统基本概念。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -1660,7 +1660,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "总帧数=8×60×24=11520帧；每帧大小=2048×1024×32/8=8MB；总大小=11520×8MB=92160MB≈90GB。考查视频存储容量计算。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -1698,7 +1698,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "操作序列：进a，进b，出b（栈底a），进c，进d，出d（栈底仍为a）。最终栈底元素是a。考查栈的LIFO特性及操作模拟。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1736,7 +1736,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "将各数代入选项D：2/2=1,7/2=3,10/2=5,18/2=9，模11后分别为1,3,5,9，无冲突。考查哈希函数设计及取整运算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1774,7 +1774,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "0-1背包问题无法通过局部最优得到全局最优，需用动态规划求解。贪心法适用于霍夫曼编码、最小生成树、单源最短路径（Dijkstra）。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1812,7 +1812,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "深度优先遍历需访问每个顶点和每条边一次，邻接表下时间复杂度为O(n+e)。考查图遍历的时间复杂度分析。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1850,7 +1850,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "二分图边数最多时两部分顶点数分别为12和12，边数为12×12=144。考查二分图最大边数的计算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1888,7 +1888,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "广度优先搜索按层遍历，需用队列存储待访问节点。考查BFS的核心数据结构。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1926,7 +1926,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "根据题意，n满足n≡2(mod3)、n≡3(mod5)、n≡4(mod7)，且n<60。通过枚举或中国剩余定理得n=53，在50<n<60区间，故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -1964,7 +1964,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "从1层到第k+1层消耗热量为10+20+…+10k=5k(k+1)。令5k(k+1)≥1000，解得k≥14，此时爬到第15层，故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2002,7 +2002,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "后缀表达式按运算顺序将运算符置于操作数之后。先算b+c得bc+，再乘a得abc+*，最后减d得abc+*d-，故选D。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -2040,7 +2040,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "先选第一格有16种，再选第二格需不同行不同列有9种，但顺序无关，故总数为16×9÷2=72，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2078,7 +2078,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "未优化的Dijkstra算法每次需O(n)找最小距离点，共n次，每条边松弛一次，总复杂度O(n²+m)=O(n²)，故选D。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2116,7 +2116,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "香农于1948年发表《通信的数学理论》，首次将熵引入信息论，奠定现代通信基础。故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -2154,7 +2154,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "C语言是面向过程语言，不支持类和对象；C++、Python、Java均为面向对象语言。故选D。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -2192,7 +2192,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "图灵奖由ACM设立，专门表彰对计算机科学有重大贡献者，被誉为“计算机界的诺贝尔奖”。故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -2230,7 +2230,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "计算机内部采用二进制（0和1）表示数据，因其物理实现简单、可靠性高。故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2268,7 +2268,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "找出N个数中的最大数，至少需要比较N-1次：先取第一个数，再与其余N-1个数逐一比较。故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2306,7 +2306,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "栈的先进后出特性：D选项中c出栈后栈顶为b，但d出栈后a无法直接出栈（b在a上方），故不合法。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2344,7 +2344,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "树有n个顶点时边数为n-1，故需删除m-(n-1)=m-n+1条边，涉及图与树边数关系。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2382,7 +2382,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "二进制101.11=1×4+0×2+1×1+1×0.5+1×0.25=5.75，考查二进制转十进制。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2420,7 +2420,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "高度5的完全二叉树，第5层叶子节点可出现在任意位置，共2^(5-1)=16种形态，考查完全二叉树性质。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2458,7 +2458,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "中缀转后缀：按运算优先级和括号，先算b+c得bc+，再与a乘得abc+*，最后乘d得abc+*d*。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2496,7 +2496,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "将6人分成3组，每组2人，且组无编号，属于平均分组问题。总方案数为C(6,2)×C(4,2)×C(2,2)/A(3,3)=15，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2534,7 +2534,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "哈夫曼编码每次选择频率最小的两个节点合并，是典型的贪心策略，通过局部最优达到全局最优，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2572,7 +2572,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "数字有重复，需分类讨论：三个数字全不同有A(3,3)=6种；两个相同一个不同，先选重复数字和单独数字，再排列，共3×2×3=18种，故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2610,7 +2610,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "递归计算：solve(7)=7*solve(5)=7*5*solve(3)=7*5*3*solve(2)=7*5*3*2*solve(1)=7*5*3*2*1=210，故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2648,7 +2648,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "最优策略：1和2先过(2)，1回(1)；4和8过(8)，2回(2)；1和2再过(2)。总时间2+1+8+2+2=15，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2686,7 +2686,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "ls命令用于列出当前目录的文件和子目录，是Linux基本命令。cd切换目录，cp复制文件，故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -2724,7 +2724,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "递归调用使用系统栈存储返回地址和局部变量，层数过多会导致栈空间溢出，故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2762,7 +2762,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "堆排序在调整堆时可能改变相等元素的相对顺序，是不稳定排序；插入、冒泡、归并均为稳定排序，故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2800,7 +2800,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "采用两两比较法：先两两比较得到n个较大者和n个较小者（n次比较），再分别从较大者中找最大值（n-1次）、从较小者中找最小值（n-1次），共3n-2次，故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2838,7 +2838,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "计算h(7)=49 mod 11=5，地址5已被占，线性探测依次检查6、7，地址7为空，故7存储在地址7，选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2876,7 +2876,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "非连通简单无向图至少有两个连通分量，边数最多时每个分量是完全图。设点数为n，则边数≤C(n-1,2)+C(1,2)= (n-1)(n-2)/2，令其≥36解得n≥10。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2914,7 +2914,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "二叉树高度最小对应完全二叉树。2021个结点，完全二叉树高度为⌊log₂2021⌋+1=11。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2952,7 +2952,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "前序和中序遍历相同意味着每个结点都没有左子树，即所有非叶子结点只有右子树。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -2990,7 +2990,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "将字符串变为目标串，等价于求逆序数。DACFEB到ABCDEF的逆序对数为7，每次交换减少一个逆序对，故最少7次。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -3028,7 +3028,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "递归计算5^(t-1) mod n，当n=23时，由费马小定理5^22≡1 mod 23，故5^22 mod 23=1。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3066,7 +3066,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "递归计算斐波那契数列时，每个函数调用产生两个子调用，形成指数级递归树，时间复杂度为O(2^n)。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3104,7 +3104,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "转化为组合问题：设选k个苹果，间隔至少1个空位，用插空法得方案数为C(9-k, k)，k=1..4求和得54种。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3142,7 +3142,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "等腰三角形需两边相等且大于第三边。分类计数：等边9种；两腰相等时底边有2倍关系限制，共165种。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -3180,7 +3180,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "printf是C语言标准库函数，属于面向过程编程，不涉及类、对象、继承等面向对象特性。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3218,7 +3218,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "选项C中，3出栈后栈顶为4，但6无法在4之前出栈，违反栈后进先出原则，故非法。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3253,10 +3253,10 @@
         "将p 指向y 的地址"
       ],
       "answer": {
-        "correctIndex": 2
+        "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "p=q 是指针赋值：p 改为指向 q 所指的变量 y，即 p 指向 y 的地址。答案D。考查指针赋值与指向关系。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3294,7 +3294,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "数组在声明时大小固定，而链表可通过动态分配内存灵活增删节点，故 C 正确。考查数组与链表的基本特性。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3332,7 +3332,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "前缀表达式运算符在前，按运算顺序：先算 b-c 得 -bc，再乘 d 得 *-bcd，最后加 a 得 +a*-bcd，故选 B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3370,7 +3370,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "构造哈夫曼树后，d 的频率 16% 位于第二层，编码长度为 2 位。故选 B。考查哈夫曼编码的构建与深度计算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3408,7 +3408,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "完全二叉树数组存储中，位置 9 的父节点为 4，兄弟节点为 8，左子节点 18，右子节点 19。故选 C。考查完全二叉树下标规律。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3446,7 +3446,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "有向连通图至少需要N条边才能保证每个顶点都有入度或出度，邻接矩阵中非零元素对应边数，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3484,7 +3484,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "栈和队列本质都是线性表，可以用两个栈模拟队列，故D错误；其他选项描述正确。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3522,7 +3522,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "在p后插入s需先处理s的next和p->next->prev，再改p的next和s的prev，顺序不可乱，D正确。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3560,7 +3560,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "简单选择排序每次选最小元素与前面交换，可能破坏相等元素相对顺序，是不稳定的，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3598,7 +3598,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "八进制32.1转换为十进制：3×8+2+1/8=26.125，故选C。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3633,10 +3633,10 @@
         "15"
       ],
       "answer": {
-        "correctIndex": 1
+        "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "按长度枚举去重：a,b,c(3个)；ab,bc,ca(3个)；abc,bca,cab(3个)；abca,bcab(2个)；abcab(1个)，共12个。答案A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3674,7 +3674,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "递归是函数直接或间接调用自身的编程技术，通过将大问题分解为相同结构的小问题求解。B选项准确描述了递归的本质。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3712,7 +3712,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "cd（change directory）是Linux中切换工作目录的命令。ls列出目录内容，cp复制文件，all不是有效命令。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3750,7 +3750,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "time命令的real时间表示从程序开始到结束的实际经过时间，与秒表计时一致，故最接近30s。user+sys为CPU占用时间。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3788,7 +3788,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "D选项afedcb中，a进a出后，f需在e、d、c、b之前出栈，但栈中仅有f时连续三次退栈（f、e、d）违反规则。考查栈操作限制。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3826,7 +3826,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "归并排序最坏时间复杂度为O(n log n)，低于O(n²)；插入、冒泡和快速排序最坏均为O(n²)。考查常见排序算法的时间复杂度。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3864,7 +3864,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "基数排序按位稳定排序，单个数据异变仅影响其最终位置，其余数据相对顺序不变，移除后剩余数据仍有序。考查基数排序的稳定性。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3902,7 +3902,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "小端模式低地址存低位，*p取低地址字节0xEF；大端模式低地址存高位，*p取0xDE。考查大小端存储模式。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -3940,7 +3940,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "完全3叉树前序遍历编号，第100号结点父结点为第97号。可通过计算前几层结点数或利用父结点编号公式推导。考查树的前序遍历与编号关系。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -3978,7 +3978,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "强连通图要求任意两点有路径，但不一定直接有边相连，故B错误。A、D等价，C是定义。考查强连通图的基本性质。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4016,7 +4016,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "2正规图由若干个环构成，n个顶点的所有环排列数为(n-1)!/2，对应欧拉回路数量。知识点：图论、圆排列。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4054,7 +4054,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "从8人中选2人组队，组合数C(8,2)=28。知识点：组合计数，不区分顺序。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4092,7 +4092,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "前2位字母26×26种，后3位数字10×10×10种，总数为26²×10³=676000。知识点：乘法原理。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4130,7 +4130,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "依次插入71(1),23(3),73(3→4),99(9),44(4→5),79(9→0),89(9→0→1→2)。89存入地址2。知识点：哈希表线性探查。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4168,7 +4168,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "外层循环n次，内层循环次数为log₂n，总时间复杂度O(n log n)。知识点：循环嵌套与对数复杂度。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4206,7 +4206,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "找最大数至少需要n-1次比较，因为每次比较淘汰一个数，最终留下最大数。考查比较排序下界。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4244,7 +4244,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "计算ack(2,2)递归展开得ack(1,ack(2,1))，逐步计算最终返回7。考查Ackermann函数递归求值。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -4282,7 +4282,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "const用于声明常量，初始化后值不可修改。unsigned表示无符号，static改变存储周期，mutable允许在const对象中修改。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4320,7 +4320,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "八进制加法：12345678+07654321=222222118，注意进位和八进制表示。考查八进制加法运算。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -4358,7 +4358,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "联合体变量用点运算符访问成员，data.value=3.14正确。->用于指针，选项B/D语法错误。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4396,7 +4396,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "正确选项A。先创建新节点并赋值42，再将新节点的next指向原头节点，最后更新head为新节点，实现头插。涉及链表头插操作。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4434,7 +4434,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "正确选项C。三叉树高度最小时为完全三叉树，节点数满足1+3+…+3^(h-1)≥2023，解得h≥8。涉及树的高度与节点数关系。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4472,7 +4472,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "正确选项B。将问题转化为在7个位置中选至少1个，且任意两个选中位置间隔至少2个空位。枚举选1到3个的情况，总数为7+5+3+1=18。涉及组合计数与间隔约束。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4510,7 +4510,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "正确选项C。高精度乘法的时间复杂度与两个数的位数乘积有关，而非仅与较长者有关。涉及高精度运算的时间复杂度分析。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4548,7 +4548,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "正确选项D。101010₂=42₁₀，166₈=118₁₀，和为160₁₀=240₈=A0₁₆。涉及不同进制数的转换与加法。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4586,7 +4586,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "哈夫曼编码要求频率高的字符编码短，频率低的编码长。选项A中频率最高的f用1位0，其余用4位或3位，符合哈夫曼树构造规则。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4624,7 +4624,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "前序根左右，中序左根右。由前序知A为根，中序左子树DEB、右子树CFG，递归构造得后序EDBFGCA。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4662,7 +4662,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "拓扑排序要求每条边起点在终点之前。选项B中1→2→3→4满足所有边(1,2)(1,3)(2,4)(3,4)的顺序。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4700,7 +4700,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "比特(bit)是计算机最小存储单位，1字节=8比特，1千字节=1024字节，字通常为2或4字节，故比特最小。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4738,7 +4738,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "总组合C(22,3)=1540，减去全男生组合C(10,3)=120，得至少1女生的组合数为1420。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4776,7 +4776,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "HTML是一种超文本标记语言，用于创建网页，不是操作系统。Linux、Windows、Android均为操作系统。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4814,7 +4814,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "mkdir（make directory）是Linux中创建新目录的标准命令，其他选项均为干扰项。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4852,7 +4852,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "千位不能为0，有4种选择；剩余三位从剩下4个数字中选3个排列，共4×4×3×2=96个。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4890,7 +4890,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "对于m=Θ(n)的稀疏图，A项O(n√logn·loglogn)最小；B、C、D项至少为O(n²)或O(nlogn)，均更大。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4928,7 +4928,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "通过构造平方和序列（如1-3-6-10-15-21-28-36-45-55-66），4根柱子最多可放11个圆环。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -4966,7 +4966,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "哈夫曼树构造用于数据压缩（最优前缀编码），而非图的深度优先搜索，故B错误。考查常见数据结构的基本概念。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5004,7 +5004,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "完全三叉树是二分图，可用两种颜色染色（树无奇环）。其他选项可能含奇环，需三种或更多颜色。考查图染色与二分图判定。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -5042,7 +5042,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "动态规划求LCS，两序列长度均为9，通过DP表计算得最长公共子序列长度为6（如“ABABAB”或“ABCBAB”）。考查LCS算法。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -5080,7 +5080,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "已排序数组选首元素为基准，每次划分极不平衡，递归深度n，时间复杂度O(n²)。考查快速排序最坏情况分析。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -5118,7 +5118,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "已排序数组且选首元素为基准时，每次划分极不平衡，递归深度为n，比较次数约n²，因此时间复杂度退化为O(n²)。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5156,7 +5156,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "g++ -o 指定输出文件名，后跟源文件，故A正确。考查g++编译命令的基本用法。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -5194,7 +5194,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "结点数为奇数时，树的重心唯一。7为奇数，故C正确。考查树的重心性质。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -5232,7 +5232,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "f(n)为n的十六进制各位数字之和，不动点即各位和等于自身。在10016~1A016中，满足和为9的数有11个。考查进制与数位和。",
       "knowledgePoint": "待复核",
       "difficulty": 1,
       "provenance": {
@@ -5270,7 +5270,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "每次递归调用两次自身，递归深度为logn，但总调用次数为2^logn≈n，故时间复杂度O(n)。考查递归树分析。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5308,7 +5308,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "32位int范围是-2^31~2^31-1，即-2147483648~2147483647，C正确。考查整型数据范围。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5346,7 +5346,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "将各进制数统一转换为十进制计算：148(八进制)=12，10102(二进制)=10，D16(十六进制)=13，11012(二进制)=13，则(12-10)*13-13=13。考查进制转换与运算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5384,7 +5384,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "先计算总选法C(10,4)=210，再减去只有两个部门的情况：C(4,4)+C(3,4)+C(3,4)等，或直接分类枚举得126种。考查组合数学的容斥原理。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5422,7 +5422,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "格雷码相邻两个数仅有一位不同，且0至8共9个数，需4位二进制。选项D序列满足相邻仅变一位且包含0~8。考查格雷码的构造规则。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5460,7 +5460,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "1MB=1024KB=1024×1024字节=1048576字节，1字节=8位，故1MB=1048576×8=8388608位。考查存储单位换算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5498,7 +5498,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "struct是用户自定义的复合类型，不是C++基本数据类型；int、float、char均为基本数据类型。考查C++数据类型分类。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5536,7 +5536,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "C++循环语句有for、while、do-while，而repeat-until是Pascal中的循环结构，故选D。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5574,7 +5574,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "'a'+13得到字符'n'，因为'a'的ASCII码为97，加13得110对应'n'，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5612,7 +5612,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "二分查找最多比较次数为⌈log₂(1000)⌉=10，因为2^10=1024>1000，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5650,7 +5650,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "Notepad是Windows下的文本编辑器，不是操作系统；Linux、Windows、macOS均为操作系统，故选A。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5688,7 +5688,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "无向图中每条边贡献2个度数，因此所有顶点度数之和等于边数的两倍，故选B。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5726,7 +5726,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "栈是后进先出结构。D选项中，2出栈时1已在栈底，后续3、5、4、6无法按此顺序出栈，故不可能。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5764,7 +5764,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "将3个女生捆绑视为一个整体，与5个男生共6个元素排列，有6!种；女生内部有3!种排列，总数为6!×3!=4320。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5802,7 +5802,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "编译器将高级语言源代码翻译成机器可执行的机器代码，这是其核心功能。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5840,7 +5840,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "pwd（print working directory）命令用于显示当前工作目录的完整路径。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5878,7 +5878,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "无序数组中找最大元素需遍历所有元素，比较n-1次，时间复杂度为O(n)。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -5916,7 +5916,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "从10人中选3人并分配金银铜牌，即排列数P(10,3)=10×9×8=720，考查排列组合知识。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -5954,7 +5954,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "队列（Queue）遵循先进先出（FIFO）原则，栈是后进先出，线性表和二叉搜索树不保证FIFO。",
       "knowledgePoint": "待复核",
       "difficulty": 3,
       "provenance": {
@@ -5992,7 +5992,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "f(2)=f(1)+f(1)=2，f(3)=f(2)+f(1)=3，f(4)=f(3)+f(2)=5，考查递归计算。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6030,7 +6030,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "欧拉图要求所有顶点度数为偶数且连通，存在欧拉回路，但边数可为奇数或偶数，故D不一定正确。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6068,7 +6068,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "二分查找要求数组有序，才能根据中间元素与目标比较缩小查找范围，与长度、元素类型无关。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6106,7 +6106,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "扩展欧几里得算法可求解模逆元，适用于模数m与n互质的情况，时间复杂度O(log m)，比暴力尝试高效，比快速幂更通用。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6144,7 +6144,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "",
+      "explanation": "开放地址法最坏情况下所有键冲突，需遍历整个表，时间复杂度为O(n)。装载因子α仅影响平均性能，不影响最坏情况。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6182,7 +6182,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "",
+      "explanation": "h层完全二叉树节点数最多为满二叉树情况，节点数为2^h - 1。注意根节点为第1层，h层对应高度h。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6220,7 +6220,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "完全图10顶点中选4个顶点有C(10,4)=210种，每个4顶点环有(4-1)!/2=3种不同环，故总环数为210×3=630。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6258,7 +6258,7 @@
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "",
+      "explanation": "f(f(x))=10，则f(x)可能为19、28、37等，最小f(x)=19对应x各位和19，最小x为199（1+9+9=19）。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {
@@ -6296,7 +6296,7 @@
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "",
+      "explanation": "最坏情况是k个1全部在最左边，每个1需向右移动(n-k)次，总交换次数为k*(n-k)，对应选项C。考查冒泡排序交换次数与逆序对的关系。",
       "knowledgePoint": "待复核",
       "difficulty": 2,
       "provenance": {

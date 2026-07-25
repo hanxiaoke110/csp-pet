@@ -1,10 +1,14 @@
 import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const OFFICIAL_HOSTS = new Set(['gesp.ccf.org.cn', 'www.noi.cn', 'noi.cn', 'www.ccf.org.cn', 'ccf.org.cn']);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+// PaddleOCR is the default for accurate Chinese text extraction.
+// Set USE_PADDLEOCR=false to fall back to pdfjs-dist.
+const USE_PADDLEOCR = process.env.USE_PADDLEOCR !== 'false' && process.env.USE_PADDLEOCR !== '0';
 let defaultCatalog;
 
 export function normalizeSourceText(value) {
@@ -47,18 +51,67 @@ function questionSegment(text, originalNumber) {
   const number = Number(originalNumber);
   if (!Number.isInteger(number)) return text;
   const escaped = String(number).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const next = String(number + 1);
-  const start = new RegExp(`(?:^|\\s)${escaped}[.．、\\s]`).exec(text)?.index;
-  if (start === undefined) return text;
-  const remaining = text.slice(start);
-  const end = new RegExp(`(?:^|\\s)${next}[.．、\\s]`).exec(remaining.slice(2))?.index;
-  return end === undefined ? remaining : remaining.slice(0, end + 2);
+
+  // Find question start: number followed by . ． 、 or Chinese punctuation, preceded by line start or whitespace
+  const startRe = new RegExp(`(?:^|[\\n\\r]|\\s{2,})${escaped}[.．、](?=\\s*\\S)`, 'm');
+  const startMatch = startRe.exec(text);
+  if (!startMatch) return text;
+  const startIdx = startMatch.index + startMatch[0].length - startMatch[0].trimStart().length;
+  const remaining = text.slice(startIdx);
+
+  // Find question end: any subsequent numbered item at a logical boundary —
+  // not just number+1. OCR misreads and skipped numbers must not extend this
+  // question's span into the next one (that is how wrong 【答案】 entries got
+  // attributed to the wrong question). Search starts after this question's
+  // own number so the boundary regex cannot match it immediately.
+  const ownToken = new RegExp(`${escaped}[.．、]`).exec(remaining);
+  const searchFrom = ownToken ? ownToken.index + ownToken[0].length : 0;
+  const endRe = /(?:^|[\n\r]。；：]|\s{3,})\d{1,2}[.．、](?=\s*\S)/m;
+  const endMatch = endRe.exec(remaining.slice(searchFrom));
+  if (!endMatch) return remaining;
+  return remaining.slice(0, endMatch.index + searchFrom);
 }
 
 function extractAnswerAndExplanation(text, originalNumber) {
+  // First try: find 【答案】X anywhere in the full page text near the question number
+  const number = Number(originalNumber);
+  if (Number.isInteger(number)) {
+    // Search for the pattern: number. question... 【答案】X
+    const escaped = String(number).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Find the question's location (require a word character after the number
+    // so a number inside an answer table or header is not mistaken for it)
+    const qStartRe = new RegExp(`(?:^|[\\n\\r]|\\s{2,})${escaped}[.．、](?=\\s*\\S)`);
+    const qStart = qStartRe.exec(text);
+    if (qStart) {
+      // Look for 【答案】X after this position (within reasonable distance)
+      const afterQuestion = text.slice(qStart.index);
+      const answerMatch = afterQuestion.match(/【答案】\s*([A-D])/i);
+      if (answerMatch) {
+        // Make sure this answer belongs to THIS question (not a later one)
+        const answerPos = answerMatch.index;
+        // Any subsequent numbered item (not just number+1) ends this
+        // question's span; search starts after this question's own number.
+        const ownToken = new RegExp(`${escaped}[.．、]`).exec(afterQuestion);
+        const searchFrom = ownToken ? ownToken.index + ownToken[0].length : 0;
+        const nextQRe = /(?:^|[\n\r]。；：]|\s{3,})\d{1,2}[.．、](?=\s*\S)/m;
+        const nextQMatch = nextQRe.exec(afterQuestion.slice(searchFrom));
+        const nextQPos = nextQMatch ? nextQMatch.index + searchFrom : Infinity;
+        if (answerPos < nextQPos) {
+          // Answer belongs to this question
+          const explanationMatch = afterQuestion.slice(answerPos).match(/【解析】\s*([\s\S]*?)(?=(?:【答案】|\s*\d+[.．、]\s*[^\d]|$))/);
+          return {
+            extractedAnswerIndex: answerMatch[1].toUpperCase().charCodeAt(0) - 65,
+            officialExplanation: explanationMatch?.[1]?.trim() || null,
+          };
+        }
+      }
+    }
+  }
+
+  // Fallback: segment-based extraction (improved)
   const segment = questionSegment(text, originalNumber);
-  const answer = segment.match(/【?答案】?\s*[:：]?\s*([A-D])/i)?.[1];
-  const explanation = segment.match(/【解析】\s*([\s\S]*?)(?=(?:\s\d+[.．、]\s)|$)/)?.[1]?.trim() || null;
+  const answer = segment.match(/【答案】\s*([A-D])/i)?.[1];
+  const explanation = segment.match(/【解析】\s*([\s\S]*?)(?=(?:\s+\d+[.．、]\s+\S)|$)/)?.[1]?.trim() || null;
   return {
     extractedAnswerIndex: answer ? answer.toUpperCase().charCodeAt(0) - 65 : null,
     officialExplanation: explanation,
@@ -100,18 +153,66 @@ async function loadPdfDocument(url, localPath, cache = new Map()) {
       bytes = new Uint8Array(await response.arrayBuffer());
     }
     const sha256 = createHash('sha256').update(bytes).digest('hex');
-    const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-    const pdf = await pdfjs.getDocument({ data: bytes, disableWorker: true }).promise;
-    cached = {
-      pdf,
-      sha256,
-      pageCount: pdf.numPages,
-      pages: new Map(),
-      answerMap: null,
-    };
+
+    if (USE_PADDLEOCR) {
+      // Use PaddleOCR for accurate Chinese text extraction
+      cached = await loadPdfWithPaddleOCR(bytes, sha256, localPath, cacheKey);
+    } else {
+      const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+      const pdf = await pdfjs.getDocument({ data: bytes, disableWorker: true }).promise;
+      cached = {
+        pdf,
+        sha256,
+        pageCount: pdf.numPages,
+        pages: new Map(),
+        answerMap: null,
+      };
+    }
     cache.set(cacheKey, cached);
   }
   return cached;
+}
+
+async function loadPdfWithPaddleOCR(bytes, sha256, localPath, cacheKey) {
+  const tmpDir = fs.mkdtempSync(path.join(root, '.tmp/paddle-pdf-'));
+  const pdfPath = path.join(tmpDir, 'paper.pdf');
+  fs.writeFileSync(pdfPath, bytes);
+
+  const paddleScript = path.join(root, 'scripts/question-bank/paddle-extract-fast.sh');
+  const result = spawnSync('bash', [paddleScript, pdfPath], {
+    timeout: 600_000,  // 10 minutes for full PDF OCR
+    maxBuffer: 10 * 1024 * 1024,
+    encoding: 'utf8',
+  });
+
+  // Clean up temp files
+  try { fs.rmSync(tmpDir, { recursive: true }); } catch {}
+
+  if (result.error || result.status !== 0) {
+    const msg = result.error?.message || result.stderr?.slice(0, 200) || 'unknown';
+    throw new Error(`PaddleOCR failed: ${msg}`);
+  }
+
+  let ocrData;
+  try {
+    ocrData = JSON.parse(result.stdout.trim().split('\n').pop() || '{}');
+  } catch {
+    throw new Error(`PaddleOCR returned invalid JSON: ${result.stdout?.slice(0, 200)}`);
+  }
+
+  const pages = new Map();
+  for (const p of (ocrData.pages || [])) {
+    pages.set(p.page, p.text);
+  }
+
+  return {
+    pdfPath,
+    sha256,
+    pageCount: pages.size,
+    pages,
+    answerMap: ocrData.answerMap || {},
+    _paddleData: ocrData,
+  };
 }
 
 export async function extractPdfPage(url, pageNumber, cache = new Map(), localPath = null) {
@@ -119,6 +220,24 @@ export async function extractPdfPage(url, pageNumber, cache = new Map(), localPa
   if (!Number.isInteger(pageNumber) || pageNumber < 1 || pageNumber > cached.pageCount) {
     throw new Error('official PDF page is out of range');
   }
+
+  if (USE_PADDLEOCR) {
+    // PaddleOCR path: text is pre-extracted into pages map
+    if (!cached.pages.has(pageNumber)) {
+      // Page not extracted yet — need to re-run with specific page
+      // For now, throw; in practice pages are pre-loaded with --all
+      throw new Error(`PaddleOCR page ${pageNumber} not in pre-extracted set`);
+    }
+    return {
+      text: cached.pages.get(pageNumber),
+      sha256: cached.sha256,
+      pageNumber,
+      pageCount: cached.pageCount,
+      answerMap: cached.answerMap || {},
+    };
+  }
+
+  // pdfjs-dist path (original)
   if (!cached.pages.has(pageNumber)) {
     const page = await cached.pdf.getPage(pageNumber);
     const content = await page.getTextContent();
@@ -190,7 +309,7 @@ export async function matchOfficialSource(question, {
   catalog = loadCatalog(),
 } = {}) {
   const resolved = resolveSource(question, catalog);
-  if (!isOfficialUrl(resolved.url)) {
+  if (!isOfficialUrl(resolved.url) && !resolved.localPath) {
     return { officialMatch: false, reason: 'missing_or_untrusted_source' };
   }
   try {

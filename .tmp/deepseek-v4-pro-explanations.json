@@ -1,0 +1,2706 @@
+{
+  "model": "deepseek-v4-pro",
+  "generatedAt": "2026-07-20T04:02:39.279Z",
+  "results": {
+    "gesp-2023-03-2-04": {
+      "recommendedIndex": 3,
+      "explanation": "C++标识符只能由字母、数字、下划线组成，且不能以数字开头，故D错误。A、B、C均为正确叙述。易错点：可能误认为变量定义时可不指定类型（如auto），但auto仍为类型推导，且D错误更明显。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2023-09-1-01": {
+      "recommendedIndex": 2,
+      "explanation": "内存（主存）是计算机的存储设备，用于临时存放CPU中的运算数据及与外部存储器交换的数据。输出/输入设备如显示器、键盘；打印设备是输出设备。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2023-09-1-02": {
+      "recommendedIndex": 3,
+      "explanation": "C++变量名不能包含空格。redStar、RedStar、red_star均合法，而red star含空格，不合法。注意C++标识符区分大小写。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2023-09-1-07": {
+      "recommendedIndex": 0,
+      "explanation": "m=14为偶数，n=12为偶数，m%2==0且n%2==0均为真，因此执行第一个if分支，输出\"都是偶数\"。注意条件判断顺序及逻辑与。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2023-09-1-10": {
+      "recommendedIndex": 2,
+      "explanation": "循环i从1到5，执行5次，每次cnt加1，初始cnt=0，故最终cnt=5，输出5。注意循环体cnt=cnt+1可简写为cnt++，无多余操作。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2023-09-2-07": {
+      "recommendedIndex": 3,
+      "explanation": "要输出对角线为1的矩阵，对角线位置满足i==j。选项A为赋值（非判断），B永假，C表示下三角含对角线，D正确判断相等。代码外层循环上限疑似有误，但横线处仅需判断对角线。",
+      "confidence": "high",
+      "answerConcern": "代码中外层循环上限为N+41，与描述'输出N行N列矩阵'不一致，可能为题目错误。"
+    },
+    "gesp-2023-03-1-04": {
+      "recommendedIndex": 2,
+      "explanation": "C++中变量名不能是关键字，例如int、for等保留字。变量必须先定义后使用，定义时指定类型，赋值后类型不可变。A、B、D均正确，C错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2023-03-1-05": {
+      "recommendedIndex": 2,
+      "explanation": "C++标识符只能以字母或下划线开头，不能以数字开头。123abc以数字开头，不合法。_abc、abc123、abc_123均符合规则。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2023-12-1-01": {
+      "recommendedIndex": 0,
+      "explanation": "变量名不能包含空格，CCF GESP包含空格，不合法。其他选项均符合标识符命名规则。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-03-1-07": {
+      "recommendedIndex": 2,
+      "explanation": "i从-10开始，到9结束（i<10），共20个值，循环体cout执行20次。易错点：i<10不含10。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-03-2-07": {
+      "recommendedIndex": 1,
+      "explanation": "i从0到4（i<5），共5次循环。执行次数为5。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-03-2-08": {
+      "recommendedIndex": 1,
+      "explanation": "循环累加1到5，和是15。sum初值为0，最终为15。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-03-2-13": {
+      "recommendedIndex": 1,
+      "explanation": "%=是取模赋值运算符，a%=3等价于a=a%3，8除以3余2，因此a为2。易错：可能混淆除法和取余。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-03-2-14": {
+      "recommendedIndex": 1,
+      "explanation": "循环变量i从2开始，每次增加2，满足i<=8的值有2、4、6、8，共执行4次循环体。易错：误算为3次或包含10。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-03-2-15": {
+      "recommendedIndex": 1,
+      "explanation": "C++语言规定数组下标从0开始计数，不同语言可能不同，但C++遵循此规则。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-06-2-03": {
+      "recommendedIndex": 0,
+      "explanation": "变量名只能包含字母、数字和下划线，且不能以数字开头。A中含非法字符“-”。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-06-2-04": {
+      "recommendedIndex": 0,
+      "explanation": "i+=1与i++在循环中效果相同，循环10次，i从0到9。B范围不同，C递减，D循环0次。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-09-1-04": {
+      "recommendedIndex": 1,
+      "explanation": "乘号优先级高于减号，先计算3*2=6，再10-6=4。易错：若先减后乘得14。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-09-1-06": {
+      "recommendedIndex": 3,
+      "explanation": "printf中%是格式控制符，若要输出%需用%%。\"6%2={%d}\"中%2无效，多数编译器会原样输出%2，%d被替换为6%2的结果0，故输出6%2={0}。易错选A或B，误将%2当作普通字符。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-09-1-08": {
+      "recommendedIndex": 1,
+      "explanation": "循环变量i从0到9，累加到Sum，得0+1+2+…+9=45。易错选A(55)，可能误加了10。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-09-2-01": {
+      "recommendedIndex": 0,
+      "explanation": "磁心存储是早期随机存取存储器，断电丢失数据，功能类似现代内存。磁盘为外存，CPU为处理器，显示器为输出设备，均不匹配。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-09-2-03": {
+      "recommendedIndex": 0,
+      "explanation": "变量名只能含字母、数字、下划线，不能以数字开头。A含连字符'-'非法；B、C、D均合法。易错选D，误以为下划线开头不行。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-09-2-10": {
+      "recommendedIndex": 1,
+      "explanation": "i初值1，每次增加2，满足i<5的值为1和3，循环2次，loopCount自增2，假设初始0，输出2。易错选C，可能误算3次。",
+      "confidence": "medium",
+      "answerConcern": "题目未给出loopCount初始化，但按常规竞赛题默认初始为0。"
+    },
+    "gesp-2024-09-2-14": {
+      "recommendedIndex": 1,
+      "explanation": "判断质数：若num能被i整除(i从2到num-1)，则num非质数，需设flag=0并跳出。B选项num%i==0正确。A条件永假，C条件一般假，D逻辑反。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2024-12-1-07": {
+      "recommendedIndex": 1,
+      "explanation": "当N%7==0时应输出“星期天”，因为取余为0对应星期天，否则输出星期几。若错选N/7==0，则N<7时都会误输出星期天。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-03-1-08": {
+      "recommendedIndex": 2,
+      "explanation": "表达式从左到右计算：16/4=4，4%2=0，故值为0。注意除法和取余优先级相同，结合性从左到右。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-06-1-02": {
+      "recommendedIndex": 3,
+      "explanation": "题目缺失代码段，无法准确判断。根据常见调试规则，执行通常不会暂停在右括号行，因此D说法错误的可能性较高，但不确定性大。",
+      "confidence": "low",
+      "answerConcern": "题目未提供L1-L4代码段，考生无法作答，请提供完整题目。"
+    },
+    "gesp-2026-06-1-01": {
+      "recommendedIndex": 2,
+      "explanation": "湿度传感器将物理信号转换为数字数据并送入系统，相当于输入设备。易错选输出设备，但传感器是采集数据输入而非输出。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-02": {
+      "recommendedIndex": 3,
+      "explanation": "注释中可以混用中英文，D错误。A重命名、B多步撤销、C缩进调整均为IDE常见功能，描述正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-03": {
+      "recommendedIndex": 3,
+      "explanation": "3+3.5结果为6.5，赋给float正确，输出6.5；1/2是整数除法得0，不会报错。A、B误认为报错。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-04": {
+      "recommendedIndex": 2,
+      "explanation": "原式等同于((-2)*2)%4=0；选项C为-2*(2%4)=-4，值不同。注意负号优先级高于乘除，取余结果符号与被除数相同，易错选D。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-05": {
+      "recommendedIndex": 1,
+      "explanation": "b在a=4之前赋值为3，之后a变为4，所以输出4 3。易错选4 4，误认为b跟随a变化。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-06": {
+      "recommendedIndex": 3,
+      "explanation": "C++中cin读取int时，遇到非数字字符（如减号）停止读取。输入'2026-6-27'，N被赋值为2026，输出2026。选项A、B、C均错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-07": {
+      "recommendedIndex": 2,
+      "explanation": "代码中if (N > M) 输出A，否则（包括相等）输出B。输入3 3时N==M，执行else分支，应输出'B 0'，选项C输出'A 0'错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-08": {
+      "recommendedIndex": 2,
+      "explanation": "cnt =+ 1 被解析为 cnt = (+1)，即赋值1而非递增，循环结束后cnt为1，与原代码输出5不同。其他选项等价。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-09": {
+      "recommendedIndex": 0,
+      "explanation": "根据输出序列反推：num从1递增到11，当num>10时num/=2变为5，再递增。选项A的>、/=、+=符合此规律。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-10": {
+      "recommendedIndex": 0,
+      "explanation": "循环中偶数i执行continue跳过输出，奇数未进入if也不输出，故循环内无输出。退出时i=5，输出'5END#'。易错：忽视continue后代码不可达。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-11": {
+      "recommendedIndex": 1,
+      "explanation": "输入15：i=2输出'0#'；i=3整除，输出'1#'后break。输出'0#1#'。输入2或3分别无输出或仅输出'0#'，输入1无输出。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-12": {
+      "recommendedIndex": 0,
+      "explanation": "原循环i=0~9计10次，tot=10。修改条件为1<=i<10，i=0不满足直接退出，tot=0，输出非45。A明显错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-13": {
+      "recommendedIndex": 1,
+      "explanation": "十位数字需去掉个位后取模：int c = (n / 10) % 10。A得到百位和更高位，C和D错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-14": {
+      "recommendedIndex": 1,
+      "explanation": "秒针位置应为(start+n)%60，除以60取余数得到0~59的秒刻度；判断回到12点即pos==0，注意=是赋值，==是相等比较。易错：误用整除/或用赋值=。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-1-15": {
+      "recommendedIndex": 1,
+      "explanation": "填入i<=N会导致N%N==0，误判质数为非质数；其他选项均能在i达到N前停止，避免该错误。易错：未注意到i=N会整除自身。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-01": {
+      "recommendedIndex": 2,
+      "explanation": "传感器采集环境数据，类似计算机的输入设备（如键盘鼠标）。易错：误认为是输出设备或处理器。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-02": {
+      "recommendedIndex": 1,
+      "explanation": "物理内存即RAM，需购买内存条；硬盘属于外部存储，不能直接解决内存不足。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-03": {
+      "recommendedIndex": 3,
+      "explanation": "int与double运算时，int会隐式转换为double，结果为6.5，赋值给float可能警告但不报错，输出6.5。易错：误以为类型不匹配会报错。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-05": {
+      "recommendedIndex": 1,
+      "explanation": "二进制浮点数无法精确表示某些十进制小数，如2.2和2.1，导致累加后出现微小误差，是计算机浮点规范所致。易错：误以为是运算符错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-06": {
+      "recommendedIndex": 1,
+      "explanation": "外循环i递减至1，内循环输出1到i，最后一行i=1时仅输出1。易错：认为最后一行是i=4的输出。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-07": {
+      "recommendedIndex": 0,
+      "explanation": "i依次为1和4，分别累加1和4次tnt，每次输出tnt加#，最后单独输出tnt，结果为1#5#5。易错：忽略循环结束后仍有cout<<tnt。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-08": {
+      "recommendedIndex": 0,
+      "explanation": "循环i从-2到1，条件`not i % 3 == 0`等价于`i%3!=0`。i=-2,-1,1时满足，输出带#；i=0不输出。循环结束i=2，输出2。注意%负数的符号，易错在0的判断。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-09": {
+      "recommendedIndex": 0,
+      "explanation": "外循环i从0到2，内循环while(j)执行次数等于i值（0,1,2），cnt累加3。循环结束i=3,j=0。输出\"3 0 3\"。易错点：j在循环内递减，最后为0。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-10": {
+      "recommendedIndex": 3,
+      "explanation": "外循环i=1,2,3，内循环j从0开始，遇j%3==0时count++并break。每次内循环j=0满足条件，count增3，j保持0。i最终为4。输出\"4 0 3\"。易错：break只跳出内层，continue逻辑。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-11": {
+      "recommendedIndex": 0,
+      "explanation": "num从1开始，每次输出后若num>10则num/=2（11/2=5），否则num+=1。序列为1到11后循环5..11，35次输出最后停于5,6,7。选项A匹配。易错：=+是赋值正号，非自增。",
+      "confidence": "high",
+      "answerConcern": "题干输出序列疑似笔误（如缺少8），但通过代码逻辑可推断正确选项。"
+    },
+    "gesp-2026-06-2-12": {
+      "recommendedIndex": 1,
+      "explanation": "观察输出图形，值为1的位置包括第一行、最后一行、第一列、最后一列以及主对角线（i==j）。因此条件应为i==j或i==1或j==1或i==N或j==N，选项B正确。易错选A或D，用and连接导致条件永假。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-13": {
+      "recommendedIndex": 3,
+      "explanation": "若用户一开始直接输入-1，循环立即结束，此时cnt为0，执行tnt/cnt将引发除零错误，属于典型的边界情况（corner case）。选项A、B、C均不构成实际错误或极端案例。选项D正确指出这一隐患。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-14": {
+      "recommendedIndex": 1,
+      "explanation": "输入n=4，外层循环i从4递减至1。每行先输出(n-i)个“0 ”，再输出i个从1开始的连续数字。模拟得第一行1 2 3 4，第二行0 1 2 3，第三行0 0 1 2，第四行0 0 0 1，对应选项B。易错：混淆循环顺序或数字起始值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-2-15": {
+      "recommendedIndex": 0,
+      "explanation": "代码对每位选手初始化max=0、min=100、total=0，正确读取8个分数并更新最值，累加总分后减去最高和最低分，得到去掉极值后的总分。输出格式与题目描述一致，能完成要求。B、C、D均无必要或错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-01": {
+      "recommendedIndex": 0,
+      "explanation": "A正确，机器数的真值取决于编码方式：10001101B作为原码为-13，作为无符号数为141。B错误，计算机内部只使用二进制，八/十六进制仅是书写形式。C错误，位是最小数据单位，字节是常用存储单位。D错误，计算机中1KB通常为1024字节。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-02": {
+      "recommendedIndex": 1,
+      "explanation": "厂商1TB=1000^4 B，操作系统以1024为进制，实际容量为1000^4/1024^3≈931GB。选项A单位错为Gb，C采用1024^4基数错误，D计算混乱。易错点：单位与进制换算关系。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-03": {
+      "recommendedIndex": 2,
+      "explanation": "采用高低4位压缩，将两个4位十六进制数合并为一个字节。0x1和0x2合并通常高4位放第一个数，得0x12 H；0x3和0x4得0x34 H。C选项符合。A、B进制不符，D二进制值错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-04": {
+      "recommendedIndex": 1,
+      "explanation": "B错误，n位二进制数若为补码范围是[-2^(n-1), 2^(n-1)-1]，原码/反码范围为[-(2^(n-1)-1), 2^(n-1)-1]；选项给出[-(2^(n-1))-1, …]实为-2^(n-1)-1，超出正常范围。A是补码速算口诀，C是反码加法特性，D指出0的表示不唯一，均正确。易错：混淆原码、反码、补码的表示范围。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-05": {
+      "recommendedIndex": 0,
+      "explanation": "根据示例运算'G'|0或|2保持为'G'，'E'-2得'C'，'S'^0保持'S'，'P'+2得'R'，得到密文\"GCSR\"。密钥2026中数字2、0、2被用到，但6未体现，可能为题目瑕疵，但A选项最符合。易错：误用密钥全部数字或顺序。",
+      "confidence": "medium",
+      "answerConcern": "题目描述与代码片段拼接混乱，运算数字与给定密钥对应关系不明确，可能缺失部分内容。"
+    },
+    "gesp-2026-06-3-06": {
+      "recommendedIndex": 2,
+      "explanation": "左移n位等价于乘2^n仅在不溢出时成立；若溢出，结果不等于乘法结果，且对有符号数左移是未定义行为，所以C说法不严谨。A、B、D均为正确位运算性质。易错：认为D公式~n=-n-1有误。",
+      "confidence": "medium",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-07": {
+      "recommendedIndex": 2,
+      "explanation": "C中str2仅4字节，strcpy复制长字符串会导致缓冲区溢出，覆盖相邻内存，引发未定义行为，描述正确。A中sizeof包含'\\0'；B初始化数组长度不足；D中strcat要求dest有结束符且长度不够，均错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-08": {
+      "recommendedIndex": 0,
+      "explanation": "2 KB = 2 × 1024 bytes = 2048 bytes，1 byte = 8 bit，故总bit = 2048 × 8 = 16384。注意KB按1024计算。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-09": {
+      "recommendedIndex": 1,
+      "explanation": "~n = -n - 1 成立：~6 = -7 = -6-1，~0 = -1 = -0-1，~(-2) = 1 = -(-2)-1。A、C、D 均错误。易错：误以为 ~6 = 5。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-10": {
+      "recommendedIndex": 3,
+      "explanation": "补码的表示范围为 [-2^(n-1), 2^(n-1)-1]，不是 +2^(n-1)。D 项范围错误。A、B、C 均为正确说法。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-11": {
+      "recommendedIndex": 3,
+      "explanation": "对于正整数，左移溢出后结果不符合简单乘法规律，有符号整数溢出是未定义行为。C 正确：按位与结果不会大于原数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-12": {
+      "recommendedIndex": 1,
+      "explanation": "运算符优先级：! > << > & > ^ > |。!7 = 0，0<<3 = 0，0&14 = 0，0^15 = 15，15|8 = 15。结果为 15。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-13": {
+      "recommendedIndex": 2,
+      "explanation": "C++ string 的 empty() 函数在字符串为空时返回 true，非空返回 false。选项 C 将返回值说反，因此错误。其他选项均正确描述 string 成员函数功能。易错：混淆 empty() 返回值逻辑。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-14": {
+      "recommendedIndex": 1,
+      "explanation": "数组大小必须为整型常量表达式。A 语法错误（应 int a[10]）；B 中 '&' 为整型常量，正确；C 中 * 非常量；D 中 10.0 为浮点型。易错：误以为字符不能作数组大小。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-3-15": {
+      "recommendedIndex": 1,
+      "explanation": "程序找出最大字符 max，判断进制可能性的条件应为 max≤该进制最大允许字符（二进制'1',八进制'7',十进制'9',十六进制'F'）。B 用 <= 正确；A 用 >= 反；C 用 = 赋值；D 用 < 漏等号。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-01": {
+      "recommendedIndex": 1,
+      "explanation": "exchange 通过指针 a 和引用 b 交换值：t = *a(100)，*a = b(200)，b = t(100)，所以 x=200,y=100，输出 200 100。注意引用和指针的使用。无编译错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-02": {
+      "recommendedIndex": 1,
+      "explanation": "函数调用需要函数名和实参列表，B选项正确传递了chinese, math, english。A缺少参数列表，C在调用时错误地加上了类型声明，D使用了未定义的变量a,b,c。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-03": {
+      "recommendedIndex": 2,
+      "explanation": "addOne(a) 传入6返回7，addOne(3) 传入3返回4，两者相加得11。注意函数调用顺序不影响加法结果。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-04": {
+      "recommendedIndex": 2,
+      "explanation": "stars是show函数内的局部变量，作用域仅限于show函数内，main中无法访问，导致编译错误。选项A、B错误，D中cout可输出变量。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-05": {
+      "recommendedIndex": 1,
+      "explanation": "初始p指向lv，执行*p=*p+1后lv变为6；然后p指向next_lv，而next_lv从未修改，因此*p的值仍是6。注意题目问的是最终*p的值而非lv的值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-06": {
+      "recommendedIndex": 2,
+      "explanation": "map 为 int[5][4] 类型，&map 是指向整个数组的指针，+1 跳过一个完整数组的大小，即 5×4×4=80 字节，十六进制 0x50，0x2000 + 0x50 = 0x2050。易错点是误当作 &map[0][0]+1 或 map+1，后者步长仅为一行。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-07": {
+      "recommendedIndex": 1,
+      "explanation": "ptr 指向 data[2]（值为 30），ptr-1 指向 data[1]（20），ptr+1 指向 data[3]（40），*(ptr-1)+*(ptr+1)=20+40=60。注意不要误算为 30+40 或 20+50。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-08": {
+      "recommendedIndex": 2,
+      "explanation": "score[1] 是第二行 {90,91,92,93}，索引从 0 开始，[2] 是第三列，值为 92。注意行、列索引分别从 0 计，避免混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-09": {
+      "recommendedIndex": 2,
+      "explanation": "选项 C 中 new 返回 Hero* 指针，不能直接赋值给 Hero 对象，类型不匹配，编译错误。A 是聚合初始化，B 是逐成员赋值，D 正确使用指针接收 new 返回值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-10": {
+      "recommendedIndex": 1,
+      "explanation": "books[1]对应第二个元素{\"Science\",150}，输出其title成员“Science”。易错选A或C、D，需注意数组下标从0开始。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-11": {
+      "recommendedIndex": 2,
+      "explanation": "选择排序不稳定，因为选出最小元素后与前面元素交换可能打乱相同元素的原始顺序。冒泡和插入排序是稳定的，D为定义。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-12": {
+      "recommendedIndex": 1,
+      "explanation": "递推式f(1)=1,f(2)=2,f(3)=3,f(4)=5,f(5)=8。代码模拟迭代，n=5时c=8。注意n<=2直接返回n，初始a=1,b=2正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-13": {
+      "recommendedIndex": 2,
+      "explanation": "throw \"Zero Error\"抛出const char*类型，被catch(const char* msg)捕获，输出Caught: Zero Error。int类型catch不匹配。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-14": {
+      "recommendedIndex": 2,
+      "explanation": "代码每次从未排序部分选出最小元素索引，再与当前i位置交换，这是经典的选择排序算法。易错点：与冒泡排序（相邻交换）混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-06-4-15": {
+      "recommendedIndex": 0,
+      "explanation": "文件内容'Level 10'用>>读取，s得到'Level'（长度5），v得到10，5*10=50。易错点：误将空格或数字计入字符串长度。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-307": {
+      "recommendedIndex": 3,
+      "explanation": "1 MB = 1024 KB，1 KB = 1024 B，所以1 MB = 1024×1024 字节。易错点：与十进制单位（1000×1000）混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-310": {
+      "recommendedIndex": 2,
+      "explanation": "操作系统核心功能是管理计算机硬件与软件资源。A是编译器功能，B是数据库管理系统用途，D过于底层。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-311": {
+      "recommendedIndex": 0,
+      "explanation": "计算机内部所有数据与指令均以二进制形式表示、存储和处理，这是由数字电路的开/关状态决定的。选项B、C为其他进制，D为输入法编码，均不符合。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-312": {
+      "recommendedIndex": 0,
+      "explanation": "CPU由运算器和控制器组成，主要执行算术逻辑运算和程序控制。B错：存储器中RAM断电信息丢失；C错：屏幕尺寸与分辨率无直接关系；D错：还有有线等方式。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-313": {
+      "recommendedIndex": 3,
+      "explanation": "二进制加法：00100100(36) + 00010100(20) = 00111000(56)。逐位相加，注意进位。易错选C，可能误作按位或。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-316": {
+      "recommendedIndex": 0,
+      "explanation": "二进制小数0.1为十进制0.5；十六进制小数0.8为8/16=0.5，两者相等。易错选D，因数字相同而忽略进制。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-317": {
+      "recommendedIndex": 1,
+      "explanation": "中断是指CPU在执行程序时，由于出现某种紧急事件（如I/O请求），暂时停止当前程序，转去执行相应处理程序，处理完毕后再返回原程序继续执行的过程。选项B描述准确；A中“随意停止”不准确；C和D与中断概念无关。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-318": {
+      "recommendedIndex": 1,
+      "explanation": "计算机病毒是人为编写的、具有自我复制传播能力并能破坏计算机功能的程序代码。选项B正确；A混淆了生物病毒；C是电子垃圾或老化问题；D是正面应用，不符合病毒定义。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-319": {
+      "recommendedIndex": 0,
+      "explanation": "FTP（文件传输协议）专门用于在网络上进行文件的上传和下载，实现远程文件传输。A正确；发送电子邮件使用SMTP/POP3；浏览网页用HTTP；网上聊天用即时通信协议。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-320": {
+      "recommendedIndex": 3,
+      "explanation": "QQ、MSN、微信都是典型的即时通信软件；P2P（点对点）是一种网络技术模式，不是指具体的通信软件，通常用于文件共享等，因此不属于即时通信软件。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-321": {
+      "recommendedIndex": 1,
+      "explanation": "n个顶点的连通图的生成树有n-1条边，最小生成树也是生成树，故6个顶点边数为5。易错选为6，忽略生成树性质。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-322": {
+      "recommendedIndex": 0,
+      "explanation": "链表不能随机访问元素，只能顺序遍历。插入删除不需移动元素、存储空间与元素个数成正比、动态分配是其特点。易混淆静态数组特性。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-323": {
+      "recommendedIndex": 3,
+      "explanation": "链表通过指针链接，节点可存储在任意地址，不要求连续。连续或不连续均可。注意与顺序存储区别，顺序表要求连续。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-324": {
+      "recommendedIndex": 1,
+      "explanation": "模拟操作：进a,进b,出b(栈顶a),进c,进d,出d。此时栈中从底到顶为a,c，栈顶为c。易误判为a，忽略最后一次出栈后的新栈顶。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-325": {
+      "recommendedIndex": 3,
+      "explanation": "前序（根左右）与中序（左根右）相同，要求任意结点都没有左子树，即只有根结点或非叶子结点只有右子树。选项C（只有左子树）会导致序列相反。易错点：忽略递归结构而错选C。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-326": {
+      "recommendedIndex": 1,
+      "explanation": "高度为h的满二叉树结点数为2^h-1。h=5时31，h=6时63，61在31和63之间，因此高度为6。易错点：误以为高度从0开始或混淆满二叉树与完全二叉树高度计算。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-327": {
+      "recommendedIndex": 0,
+      "explanation": "TXT是纯文本文件格式，不属于视频格式；AVI、MOV、RMVB均为常见视频文件格式。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-328": {
+      "recommendedIndex": 3,
+      "explanation": "展开递推式：T(n)=T(0)+1+2+…+n=1+n(n+1)/2，故时间复杂度为O(n^2)。易错点：错误展开或误认为T(0)=0导致求和结果偏差。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2015-p-329": {
+      "recommendedIndex": 0,
+      "explanation": "根据NOI系列赛事规则，选手不得自带外部设备，鼠标属于外部设备，必须使用统一提供的；笔、身份证、准考证允许自带。易错点：可能误以为笔或证件不能带，实际是禁止自带硬件外设。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-378": {
+      "recommendedIndex": 3,
+      "explanation": "Powerpoint、Word、Excel均为微软Office组件，Acrobat Reader属于Adobe公司软件，非微软出品。易错点：可能混淆软件所属公司。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-380": {
+      "recommendedIndex": 2,
+      "explanation": "256种颜色需用二进制表示，2^8=256，因此至少需要8位。若用7位最多128种，9位可表示512种但非最少。易错点：计算指数时可能误算为7或9。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-382": {
+      "recommendedIndex": 3,
+      "explanation": "蓝牙、WiFi、GPRS均为无线通信技术，以太网是通过线缆传输的有线网络技术，不属于无线通信。易错点：可能混淆GPRS为有线，实际是移动数据无线技术。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-386": {
+      "recommendedIndex": 2,
+      "explanation": "Intel、AMD、IBM均为CPU生产厂商，Microsoft主要生产软件，不生产CPU。易错选IBM，但IBM也生产Power系列CPU。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-704": {
+      "recommendedIndex": 3,
+      "explanation": "光盘、磁盘、固态硬盘均为存储设备，鼠标是输入设备，不属于存储设备。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-390": {
+      "recommendedIndex": 2,
+      "explanation": "初始小写，按CapsLock切换大写，依次输出A、S、D；再按CapsLock切回小写，依次输出a、s、d。输出周期为6：A,S,D,a,s,d。81÷6余3，对应第3个字符D。",
+      "confidence": "medium",
+      "answerConcern": ""
+    },
+    "noip-2016-p-391": {
+      "recommendedIndex": 1,
+      "explanation": "二进制加法：00101100 + 00010101 = 01000001。逐位相加，注意进位即可。选项B为正确结果。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-392": {
+      "recommendedIndex": 1,
+      "explanation": "二进制0.1=2^{-1}=0.5(十进制);八进制小数0.4=4×8^{-1}=0.5。八进制无8，故A错；0.2=0.25，0.1=0.125。易错选C或D。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-393": {
+      "recommendedIndex": 2,
+      "explanation": "32位与64位指CPU位宽，主要影响寻址空间大小；64位支持更大内存，与显示器、硬盘、输入法无关。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-395": {
+      "recommendedIndex": 0,
+      "explanation": "字符串是字符序列，属于线性表结构，A正确。空串长度可为0，B错；字符串可用字符数组表示，C错；空格串包含空格字符，不是空串，D错。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-405": {
+      "recommendedIndex": 1,
+      "explanation": "程序段先将a赋给s，然后循环c次每次加1，最终s=a+c。b在循环后为c+1，因此s=a+b得a+c+1，不选。C中s未初始化，不能直接s+c。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-409": {
+      "recommendedIndex": 3,
+      "explanation": "初始k=4,n=0。循环条件n<k。每次n自增1，若n%3!=0则continue跳过k--；否则执行k--。当n=1,2时跳过；n=3时不跳过，k变为3；此时n=3,k=3，循环条件3<3不成立退出。输出3,3。易错：误认为continue后直接判断循环条件，其实会跳过本次剩余语句。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-412": {
+      "recommendedIndex": 0,
+      "explanation": "算法是单峰数组二分查找。若L[k]大于左右邻居，则找到峰顶返回c；若L[k]大于左侧但小于右侧，说明在上升段，峰顶在右，递归a；否则在下降段，峰顶在左，递归b。因此顺序c,a,b。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-420": {
+      "recommendedIndex": 3,
+      "explanation": "每个顶点度数为2，总度数为2V。根据握手定理总度数等于2倍边数，即2V=2×16，解得V=16。易错：误用其他公式。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-421": {
+      "recommendedIndex": 1,
+      "explanation": "7个相同苹果放入3个相同盘子，允许空盘，等价于将7划分成不超过3个正整数之和。划分数为：一个盘7；两个盘：6+1,5+2,4+3；三个盘：5+1+1,4+2+1,3+3+1,3+2+2。共1+3+4=8种。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-434": {
+      "recommendedIndex": 2,
+      "explanation": "三道菜需要依次经过洗、切、炒各10分钟，相同步骤不能并行。流水线排程：菜1洗0-10，菜2洗10-20并菜1切10-20，菜3洗20-30、菜2切20-30、菜1炒20-30，菜3切30-40、菜2炒30-40，菜3炒40-50，总时间50分钟。易错选90分钟（忽略流水线重叠）。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2016-p-436": {
+      "recommendedIndex": 2,
+      "explanation": "NOI考场规定禁止携带任何存储设备，U盘属于移动存储，不能带入。钢笔、衣服、铅笔是允许的。易错混淆可能认为铅笔不可带，但铅笔用于填涂答题卡。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-451": {
+      "recommendedIndex": 1,
+      "explanation": "8位补码10101011，最高位为1是负数。求原码：减1得10101010，取反得11010101，其无符号值为64+16+4+1=85，故为-85。选B。易错选C（-43）因误算。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-452": {
+      "recommendedIndex": 1,
+      "explanation": "计算机存储数据的基本单位是字节（Byte），由8个二进制位（bit）组成。bit是最小单位，但存储容量等通常以Byte为基本单位。GB、KB是Byte的倍数。选B。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-453": {
+      "recommendedIndex": 2,
+      "explanation": "POP3、SMTP、IMAP均为电子邮件相关协议；WTO是世界贸易组织，与邮件无关。易错点：不了解IMAP也是邮件协议。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-454": {
+      "recommendedIndex": 0,
+      "explanation": "总像素800×600=480000，16位色需2字节/像素，总字节960000，除以1024得937.5 KB。易错点：单位换算（位与字节、字节与KB）及位数理解错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-455": {
+      "recommendedIndex": 0,
+      "explanation": "第一台电子计算机ENIAC主要用于弹道数值计算，因此最早领域是数值计算。易错点：误选过程控制等后期应用。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-456": {
+      "recommendedIndex": 0,
+      "explanation": "C语言是面向过程的，不支持类与继承等面向对象特性；C++、Java、C#均为面向对象语言。易错点：混淆C与C++的性质。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-457": {
+      "recommendedIndex": 1,
+      "explanation": "NOI 全称“全国青少年信息学奥林匹克竞赛”，选项B正确。选项A为NOIP，选项C“中国”应为“全国”，选项D是CCF。易错点：混淆NOI与NOIP的中文名称。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-458": {
+      "recommendedIndex": 2,
+      "explanation": "1999.10.1至2017.10.1共18年，其中闰年5个（2000、2004、2008、2012、2016），总天数6575天，6575 mod 7=2。2017.10.1为周日，向前推2天为周五。易忽视2000年是闰年。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-459": {
+      "recommendedIndex": 2,
+      "explanation": "甲选2门：C(4,2)=6；乙选3门：C(4,3)=4；丙选3门：C(4,3)=4。乘法原理得6×4×4=96。易错点：误用排列而忘记是组合。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-460": {
+      "recommendedIndex": 0,
+      "explanation": "树的边数为n-1，连通图有m条边，需删去m-(n-1)=m-n+1条边。易错点：混淆树与连通图的边数关系。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-461": {
+      "recommendedIndex": 1,
+      "explanation": "检查每一对(i,j)满足i<j且a[i]>a[j]：7与2,3,5,4共4对，5与4一对，总计5对。易错：遗漏(5,4)或重复计数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-462": {
+      "recommendedIndex": 1,
+      "explanation": "中缀转后缀：先计算b+c得bc+，然后a乘以该结果得abc+*，最后乘以d得abc+*d*。运算符顺序严格，易错：错写成abc*d*+等。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-463": {
+      "recommendedIndex": 1,
+      "explanation": "链式栈栈顶在链表头部，插入新结点s：s->next指向原栈顶hs，再更新hs=s。选项B正确，A和C未改变栈顶，D导致断链。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-464": {
+      "recommendedIndex": 2,
+      "explanation": "字符串'copyright'长9，子串包括空串和非空串，总数=9*10/2+1=46。不含空串为45，但题目未限定非空，按惯例含空串。易错：漏算空串或长度数错。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-465": {
+      "recommendedIndex": 0,
+      "explanation": "13的二进制为1101；0.375×2=0.75取0，0.75×2=1.5取1，0.5×2=1.0取1，得0.011，故13.375为1101.011。易错：小数部分乘2取整顺序。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-466": {
+      "recommendedIndex": 2,
+      "explanation": "模拟栈操作：选项C中，d出栈后栈内自底向上为b,c，栈顶为c，无法在c之前出b，故不合法。易错：需严格按栈后进先出特性验证。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-467": {
+      "recommendedIndex": 3,
+      "explanation": "归并两个长度为n的有序数组，最坏情况每次比较确定一个元素，最后一个元素不需比较，共2n-1次。易错：忘记减1或误以为比较次数为2n。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-468": {
+      "recommendedIndex": 2,
+      "explanation": "根据CCF公告，NOIP竞赛从2022年起停止支持Pascal语言。易错：年份记忆混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-469": {
+      "recommendedIndex": 2,
+      "explanation": "至少两人同月份概率=1-四人生日月份各不相同的概率。各不相同概率：12×11×10×9/12⁴=55/96，故所求为1-55/96=41/96。易错：误用排列或因未考虑月份可重复而算错总情况数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2017-p-470": {
+      "recommendedIndex": 1,
+      "explanation": "图灵奖是计算机科学领域的最高奖项。奥斯卡奖侧重于电影，诺贝尔奖不包含计算机科学，普利策奖表彰新闻。在计算机领域，图灵奖最具代表性。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-706": {
+      "recommendedIndex": 3,
+      "explanation": "打印机将计算机处理后的信息输出到纸张等介质上，属于输出设备。扫描仪、键盘、鼠标均用于向计算机输入数据，为输入设备。区分输入/输出设备的易错点在于功能方向。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-707": {
+      "recommendedIndex": 3,
+      "explanation": "A (269)₁₆=617，B (617)₁₀=617，C (1151)₈=1×512+64+40+1=617，D (1001101011)₂=512+64+32+8+2+1=619，因此D与其他三项数值不相等。易错：二进制计算时忽略低位导致错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-708": {
+      "recommendedIndex": 3,
+      "explanation": "1MB=1024KB，1KB=1024字节，故1MB=1024×1024字节，即选项D。易错点：混淆二进制与十进制单位。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-709": {
+      "recommendedIndex": 1,
+      "explanation": "广域网英文全称Wide Area Network，缩写WAN。LAN是局域网，MAN是城域网，LNA不存在。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-710": {
+      "recommendedIndex": 1,
+      "explanation": "中国计算机学会（CCF）于1984年创办全国青少年计算机程序设计竞赛，即NOI前身。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-711": {
+      "recommendedIndex": 0,
+      "explanation": "初始小写，按CapsLock切换大小写。5个键为一组：CapsLock、A、S、D、F。每两组10个键输出8个字符，循环为A,S,D,F,a,s,d,f。81÷8余1，故为'A'。选项A是A（大写）。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-712": {
+      "recommendedIndex": 0,
+      "explanation": "满k叉树深度h（根深0）共h+1层，节点总数=1+k+k^2+...+k^h=(k^{h+1}-1)/(k-1)，故选A。注意勿与仅h层混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-713": {
+      "recommendedIndex": 0,
+      "explanation": "基数排序通过分配和收集实现，不进行关键字比较。冒泡、堆、直接插入均基于比较。故选A。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-714": {
+      "recommendedIndex": 0,
+      "explanation": "同时找最大最小值的最优算法：每两个元素比较3次，总比较次数为ceil(3N/2)-2。例如N=4时需4次，符合公式。选项B为向下取整，易误选。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-715": {
+      "recommendedIndex": 1,
+      "explanation": "故事中不断重复相同情节，体现了函数自调用的递归思想。枚举、贪心、分治均不匹配。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-716": {
+      "recommendedIndex": 0,
+      "explanation": "四个无区别点的简单连通图需按边数分类：3边（树）有P4和星K₁,₃共2种；4边有四边形C₄和三角形加叶共2种；5边有K₄-e共1种；6边有K₄共1种。总计6种。易漏树或误判同构。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-717": {
+      "recommendedIndex": 1,
+      "explanation": "S=2¹⁰=1024，T=C(10,7)=120。T/S=120/1024=15/128。注意约分和组合数计算，不可将C(10,7)误算为C(10,3)。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-718": {
+      "recommendedIndex": 1,
+      "explanation": "10000=2⁴·5⁴，φ(10000)=10000×(1−½)×(1−⅕)=4000。利用欧拉函数直接计算，注意分解质因数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-719": {
+      "recommendedIndex": 1,
+      "explanation": "x&=x-1 每次消去最低位1，循环次数等于1的个数。若用x>>=1，则统计总位数，结果错误。该技巧常见于位运算优化。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "noip-2018-p-721": {
+      "recommendedIndex": 0,
+      "explanation": "由丙去和③得丁没去；由④逆否得甲去；由②逆否得乙没去；再由①得周末没下雨。故甲A,乙B,丁B,周末B。易错点：遗漏逆否推理或混淆充分必要条件。",
+      "confidence": "high",
+      "answerConcern": "题目含四个填空，此处仅回答甲的去向（A.去了），完整答案：甲A,乙B,丁B,周末B。"
+    },
+    "gesp-2025-09-1-01": {
+      "recommendedIndex": 3,
+      "explanation": "人工智能领域的“大模型”最贴切指大语言模型（LLM），如GPT、BERT等，其他选项均不准确。易错点：将“大模型”误解为硬件或抽象概念。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-02": {
+      "recommendedIndex": 2,
+      "explanation": "累加10001个偶数需重复操作，顺序结构无法实现循环，最不合适。循环结构（A）、循环分支组合（B）均可行；不使用分支（D）可通过步长2实现，故合理。易错点：认为必须用分支判断偶数，而忽略直接设置步长。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-03": {
+      "recommendedIndex": 2,
+      "explanation": "C++变量名可含字母、数字和下划线，不能含空格或连字符，大小写敏感。xingming是合法标识符，其余选项均有语法错误。易错点：误认为拼音不能作变量名。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-04": {
+      "recommendedIndex": 3,
+      "explanation": "代码中 `a %// b` 的 `//` 是单行注释，导致 `a %` 缺失右操作数，编译错误，无输出。易错：误认为 `%//` 是合法运算符。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-05": {
+      "recommendedIndex": 3,
+      "explanation": "乘、除、模同级且左结合：3*4=12，12%5=2，2/6=0（整数除法）。易错：忽略优先级或整数除法规则。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-06": {
+      "recommendedIndex": 0,
+      "explanation": "scanf的%d会自动跳过空白字符（空格、制表符、换行），因此正确读取10和20，和为30，输出{30}。易错：误以为制表符会中断读取。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-07": {
+      "recommendedIndex": 3,
+      "explanation": "当前9月，N个月后月份为(9+N)%12，结果为0时输出12月，代码逻辑匹配。A未加9，B先模后加顺序错，C是商。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-08": {
+      "recommendedIndex": 2,
+      "explanation": "i从0到99，i%2在奇数为1偶数为0，共50个奇数故n累加50，输出50。易误算总和。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-09": {
+      "recommendedIndex": 2,
+      "explanation": "i从-100到99，i%10结果符号与被除数相同，负数余负，正数余正。每10个为一组，负数组和-45，正数组和45，各10组总和为0。注意负余数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-10": {
+      "recommendedIndex": 0,
+      "explanation": "循环1到4，i=3时break，故输出1#2#；循环后i=3<=5，不输出END。注意break后i值及输出末尾有#。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-11": {
+      "recommendedIndex": 3,
+      "explanation": "D选项使用a,b=b,a试图交换，但C++不支持此语法（Python用法），无法交换；A、B、C均可实现。易受Python影响。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-12": {
+      "recommendedIndex": 3,
+      "explanation": "div = 10^(M-1)。通过 N / div 将第M位移至个位，再 % 10 取出该位数字。A、B、C分别错误地使用了取模或多余除法。易错：将 / 和 % 的顺序搞反。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-13": {
+      "recommendedIndex": 0,
+      "explanation": "循环内 num 先自增，遇 num==3 时 continue 跳过输出。最终输出序列为 1#2#4#5#6#，末尾有 #。注意 while 条件 num<=5，最后一次 num=6 仍输出后才退出。易错：误以为 continue 会跳过自增或混淆循环条件。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-14": {
+      "recommendedIndex": 3,
+      "explanation": "移动 cin 语句后，-999 会被当作有效数据参与比较，导致 min 可能被错误更新为 -999。A 正确，-999 作为第一个数直接输出。B、C 中用户仍可输入 -999 作为结束标记，程序能正确求出已输入数的最大最小值（数据中无有效 -999）。D 明显错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-15": {
+      "recommendedIndex": 1,
+      "explanation": "调试时修改源程序通常只需停止调试并重新编译运行，不一定需要关闭文件并重新打开。说法过于绝对，因此错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-16": {
+      "recommendedIndex": 0,
+      "explanation": "C++ 中取模运算符 `%` 要求操作数均为整数，浮点数 `0.5` 会导致编译错误，题目描述正确。易错点：误以为可对浮点数取模。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-17": {
+      "recommendedIndex": 1,
+      "explanation": "循环体中的 `break` 会立即终止循环，不会执行 `i++`，因此循环结束后 `i` 仍为 0，输出 0 而非 9。易错点：误以为 `break` 后还会执行递增操作。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-18": {
+      "recommendedIndex": 1,
+      "explanation": "循环变量 i 从 0 递减到 -9，累加 `i * -1` 得到 0+1+2+…+9=45，而非 55。易错点：错误计算项数或符号。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-19": {
+      "recommendedIndex": 0,
+      "explanation": "原代码累加 0~99，修改后累加 1~99，两者和均为 4950，因为加 0 不影响结果。易错点：认为去掉 0 会改变总和。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-20": {
+      "recommendedIndex": 1,
+      "explanation": "原循环计算0+1+…+9=45，改为i<=10后多执行一次加10，结果为55，输出不同。易错點：忽略最后一次循环会增加累加值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-21": {
+      "recommendedIndex": 1,
+      "explanation": "先自增i再加到n，实际计算1+2+…+10=55，而非45。易错點：混淆i++位置导致求和起始值不同。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-22": {
+      "recommendedIndex": 1,
+      "explanation": "C++允许int与float/double混合运算，会自动进行隐式类型转换，12+12.12结果为24.12，不会报错。易错點：误以为不同类型禁止运算。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-23": {
+      "recommendedIndex": 1,
+      "explanation": "continue只跳过本次输出，count仍会递增到5以上，循环终止，没有死循环。易错點：误认为continue会跳过递增造成无限。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-24": {
+      "recommendedIndex": 0,
+      "explanation": "代码利用变量交换迭代斐波那契数列：初始a=0,b=1，每次输出a后执行b=b+a, a=b-a，此时a变为原b，b变为原a+b，从而正确输出前n项。当n>1时能正常输出前两个数为0,1，符合题意，因此正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-1-25": {
+      "recommendedIndex": 2,
+      "explanation": "选项C中 `N=0` 是赋值表达式，其值为0，循环条件为假，不会执行循环体，无法求逆序数。其他选项A、B、D均可正确判断N非零，因此错误的选项是C。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-01": {
+      "recommendedIndex": 3,
+      "explanation": "当前人工智能领域提到的“大模型”通常指“大语言模型”（Large Language Model，LLM），如GPT系列，是规模大、参数多的语言模型，而非泛指的智能或电脑模型。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-02": {
+      "recommendedIndex": 2,
+      "explanation": "TCP协议通过三次握手（SYN，SYN-ACK，ACK）建立可靠连接，确保双方收发能力正常。这是网络基础知识，易错为四次挥手或两次握手。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-03": {
+      "recommendedIndex": 2,
+      "explanation": "C++ 变量名只能包含字母、数字和下划线，拼音符合命名规则，但不能含有空格或连字符。因此“XingMing”合法，改为小写“xingming”也合法，选项 C 正确。易错点：误认为拼音不能用作变量名。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-04": {
+      "recommendedIndex": 3,
+      "explanation": "循环使 div = 10^(M-1)，要取出第 M 位（从右数），常用方法为 N / div % 10，即先丢掉后 M-1 位，再取个位。选项 D 正确。A、B、C 均会产生错误结果。易错：混淆除法和取模的顺序。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-05": {
+      "recommendedIndex": 3,
+      "explanation": "C++ 中“a, b = 3, 4;”是逗号表达式，实际为 (a), (b = 3), (4)，a 未被赋值，其值未定义。c = a == b 的结果也不确定，输出无固定值，故选项 D 正确。易错：误以为逗号表达式会同时给 a 和 b 赋值。",
+      "confidence": "high",
+      "answerConcern": "代码中 a, b = 3, 4; 语法虽可编译，但 a 未初始化，行为未定义，题目可能意在考察逗号表达式，容易造成误解。"
+    },
+    "gesp-2025-09-2-06": {
+      "recommendedIndex": 0,
+      "explanation": "编号规则：XX 循环 0~11，Y 循环 0~9，每 12 个编号 Y 递增。代码期望输入 0-based 位置，则 XX = N % 12，Y = N % 10，故填 12 和 10。若基于 1 则需 (N-1) 取余，但横线只能填数字，选项 A 对应 0-based 情况。易错：混淆 1-based 与 0-based 索引。",
+      "confidence": "medium",
+      "answerConcern": "题目描述使用“第 1 个编号”，但代码逻辑暗示输入应从 0 开始计数，存在不一致，需根据代码上下文推断。"
+    },
+    "gesp-2025-09-2-07": {
+      "recommendedIndex": 3,
+      "explanation": "外层i从-10到9，内层j从0到j<i。当i≤0时内层不执行，仅i=1~9时执行，i次计数，合计1+2+…+9=45。易错：忽略i为负或零时循环0次。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-08": {
+      "recommendedIndex": 1,
+      "explanation": "i从1到11，偶数i跳过；奇数i内层j从0开始，i*j为奇数则break；j=1时i*j为奇数，故终值j=1。最后i=12，输出12*1=12。易错：误认为j会变化或输出不确定。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-09": {
+      "recommendedIndex": 3,
+      "explanation": "欧几里得算法。输入a=0，b≠0时一次循环后a=b,b=0，输出b；b=0时循环跳过，输出0。输出的绝对值均为|b|。A错：b输入0时循环不执行，不除零；C错：可用于负数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-10": {
+      "recommendedIndex": 0,
+      "explanation": "num初值0，循环体中num先加1，遇num==3则continue跳过输出。输出1、2、4、5、6，每次带“#”。最后num=6输出后循环结束，故结果为“1#2#4#5#6#”。易错：遗漏末尾的“#”。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-11": {
+      "recommendedIndex": 3,
+      "explanation": "原代码先读第一个数作为初始值，循环内先比较后读取；若将循环内 cin 移至循环体开头，会在第一次进入循环时立即读新数覆盖初始值，导致第一个数未参与比较，结果改变。A 正确，B、C 因缺少哨兵无法终止故错误，但 D 的改动直接破坏逻辑，是最典型的错误说法。",
+      "confidence": "high",
+      "answerConcern": "B 和 C 也有逻辑问题（无终止符时不能输出），但 D 的改动明显导致结果改变，本题应以 D 为错误选项。"
+    },
+    "gesp-2025-09-2-12": {
+      "recommendedIndex": 2,
+      "explanation": "删除 continue 会重复计数能被 5 整除且含 5 的数；B 中直接操作 i 会破坏外层循环；D 将条件改为 j>=0 会导致死循环；C 中 break 替换为 j=0 均可退出 while 且不改变逻辑，正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-13": {
+      "recommendedIndex": 1,
+      "explanation": "观察图形，第 i 行前导空格数为 N-i（最后一行为 0 空格），每行数字个数等于行号 i，故填入 N-i 和 i 可控制空格与数字个数。其他选项数字个数不符（如 i+1 使首行输出 2 个）。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-14": {
+      "recommendedIndex": 0,
+      "explanation": "'a' ASCII 97，'b' 98，故 a=195，b=-1；a=a-b=195-(-1)=196。最终输出 196 和 -1。易错点：字符参与运算会自动提升为 int，且注意减法顺序。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-15": {
+      "recommendedIndex": 3,
+      "explanation": "代码用周期9个环计算前N-1个环的重量，完整周期正确。但余数处理：L4（R=5~7）误用4*R，应为12+4*(R-4)；L5（R=8）误用6*(R-1)，应为24+6。L3正确。因此只需修改L4和L5，无需改L1、L2或同时改L3。故D对。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-16": {
+      "recommendedIndex": 1,
+      "explanation": "现代IDE多支持调试时编辑代码（如“编辑并继续”），不必终止调试、关闭文件重新打开。该说法过于绝对，错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-17": {
+      "recommendedIndex": 0,
+      "explanation": "C++整数除法对正数向下取整，N/100确实去掉个位和十位；当N<100时结果为0。说明正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-18": {
+      "recommendedIndex": 1,
+      "explanation": "代码输出1，但原因是(a<10)为true和20隐式转true逻辑与，而非因为a小于20和10。解释错误，所以整体陈述错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-19": {
+      "recommendedIndex": 1,
+      "explanation": "逗号表达式`x, y, z = 5, 10, 15;`中赋值优先级高，等价于`((x), (y), (z = 5)), 10, 15;`，仅z被赋值为5，x和y未初始化，值不确定。`x < y < z`是`(x < y) < z`，结果不确定，不一定输出1。易错点：误以为连续赋值或数学连比。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-20": {
+      "recommendedIndex": 0,
+      "explanation": "`cin >> score`读取整数时，遇小数点停止，score得整数部分99。99>=60成立，输出“及格”。输入浮点数不会导致读入失败，程序正常运行。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-21": {
+      "recommendedIndex": 0,
+      "explanation": "输入123，a=123。循环依次取个位3、2、1。`'A' + a%10`得到'D'、'C'、'B'，拼接输出为DCB。注意字符加法不是字符串拼接，但输出为字符序列。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-22": {
+      "recommendedIndex": 0,
+      "explanation": "循环i=0,1时输出`+#`共两次，得`+#+#`；i=2时continue跳过输出；循环结束i=3，输出`3#`。最终为`+#+#3#`。注意continue只跳过本次循环体内剩余语句。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-23": {
+      "recommendedIndex": 0,
+      "explanation": "代码用a=0,b=1，循环n次：输出a后执行b=b+a, a=b-a。第一次输出0，更新后a=1,b=1；第二次输出1，更新后a=1,b=2；第三次输出1，更新后a=2,b=3…，符合斐波那契数列定义（0,1,1,2,3…）。易错：误以为更新逻辑有误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-24": {
+      "recommendedIndex": 0,
+      "explanation": "原代码i==j时输出i+1后continue跳过cout<<0，而i!=j时无输出0语句，故不能输出0。若将cout<<0移至L2（if块外），i!=j时执行输出0，i==j时continue跳过，能正确输出对角线数字及周围0。说法正确。易错：忽略continue后代码不可达。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-2-25": {
+      "recommendedIndex": 1,
+      "explanation": "'5'+4中字符'5'ASCII码53+4=57，表达式结果为整数57，cout输出整数57而非字符'9'。题目误以为输出9，故错误。易错：混淆字符与整数的运算结果类型。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-01": {
+      "recommendedIndex": 2,
+      "explanation": "a/b为整数除法，10/3=3，赋值给double c后c=3.0，不是小数。若需3.333应写(double)a/b或10.0/3。易错：误认为整型除法会自动提升精度。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-02": {
+      "recommendedIndex": 2,
+      "explanation": "C 选项：`(10 != 10)` 为 false，`(5 >= 3)` 为 true，逻辑或 `||` 只要有一个为 true 结果即为 true，因此整个表达式为 true。其他选项：A 有 false && ... 为 false；B 取非后 false；D 有 false && ... 为 false。易混淆点：注意逻辑与、或、非的运算规则。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-03": {
+      "recommendedIndex": 3,
+      "explanation": "数组大小为5时，有效下标范围是0~4，`arr[5]` 访问越界，属于未定义行为，并非最后一个元素。A、B正确；C在标准C++中要求编译时常量，正确。易错点：可能混淆索引从0开始导致认为最后一个下标是5。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-04": {
+      "recommendedIndex": 1,
+      "explanation": "外层 sum 初始 0。循环体内 `sum += i` 使用的是外层 sum（此时内层 sum 尚未定义）。随后 `int sum=0` 声明局部变量隐藏外层，但仅作用于其后，不影响已执行过的累加。i=1,3,5 累加得 9。易错点：误以为 `int sum=0` 会重新初始化外层 sum 或影响之前的累加。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-05": {
+      "recommendedIndex": 1,
+      "explanation": "函数要求返回两个整数中的较大值。A 返回类型为 void 不能返回值；C 参数缺少类型声明；D 返回类型 void 且只输出未返回值。B 正确定义返回 int，参数类型完整，函数体返回较大值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-06": {
+      "recommendedIndex": 1,
+      "explanation": "arr[0]=1，arr[2]=3，和为4，赋值给arr[3]，数组变为{1,2,3,4}。易错选A，误以为arr[2]是arr[1]即2。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-07": {
+      "recommendedIndex": 1,
+      "explanation": "C++函数可以没有参数（A错）；main函数不能被其他函数调用（C错）；C++不支持函数嵌套定义（D错）。B正确，可通过引用参数、指针等返回多个值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-08": {
+      "recommendedIndex": 3,
+      "explanation": "while循环执行4次（i=10,7,4,1），但每次continue立即跳过后面的count++，故count++执行次数为0。注意循环依然执行了4次。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-09": {
+      "recommendedIndex": 0,
+      "explanation": "外循环i从0到3，内循环j从0到i输出j，每次内循环结束输出#。i=0输出0#，i=1输出01#，i=2输出012#，i=3输出0123#，连接得0#01#012#0123#。选项D末尾多了'3'，易混淆但错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-10": {
+      "recommendedIndex": 0,
+      "explanation": "在for循环初始化部分声明的变量，其作用域是整个for语句（包括条件、迭代部分和循环体），并非仅限于循环体内，因此A错误。B、C、D均正确。易错点：误将循环体等同于for语句整体。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-11": {
+      "recommendedIndex": 3,
+      "explanation": "代码反转32位int整数，但反转后可能超出范围。1463847412反转后为2147483641，未溢出，且是满足条件的最大正整数。A：受int限制，不能反转任意位数；B、C：自身或反转后溢出。易忽略溢出问题。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-12": {
+      "recommendedIndex": 2,
+      "explanation": "查找最大值应初始化为第一个元素arr[0]，再依次比较。A：数组可能全负导致错误；B：下标越界；D：含义错误。易错选A，忽略了负数情况。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-13": {
+      "recommendedIndex": 3,
+      "explanation": "C++11起必须显式声明返回类型，禁止隐式int，D正确。A：还有引用传递、指针传递；B：形参调用结束后释放；C：void函数可包含return;语句。易误选C，认为void函数不能有return。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-14": {
+      "recommendedIndex": 2,
+      "explanation": "循环条件`i <= SIZE`导致数组越界写入`arr[5]`，这是一处错误；`cout << arr[SIZE]`再次越界读取，这是另一处错误。`using namespace std;`等语法正确。易错点：可能将两处越界合并计算，但它们是独立的错误语句。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-15": {
+      "recommendedIndex": 3,
+      "explanation": "`string`重载了`==`用于比较内容，而字符数组名退化为指针，`==`比较地址。A、B、C均正确。易错点：误认为字符数组能直接用`==`比较字符串内容。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-16": {
+      "recommendedIndex": 0,
+      "explanation": "在C++中，字符常量`'a'`的类型是`char`，`sizeof(char)`始终为1。C语言中字符常量为`int`，但本题明确为C++，因此正确。易错点：混淆C与C++的差异。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-17": {
+      "recommendedIndex": 0,
+      "explanation": "C++标准规定，所有具有静态存储期的变量（包括全局变量）若未显式初始化，则执行零初始化，数值类型为0。易错点：局部变量无此保证，不会自动初始化。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-18": {
+      "recommendedIndex": 0,
+      "explanation": "do-while 循环先执行循环体后判断条件，即使条件为 false，循环体也至少执行一次。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-19": {
+      "recommendedIndex": 0,
+      "explanation": "在 C++ 中，前置 ++ 返回自身引用（左值），后置 ++ 返回临时值（右值）。这是标准规定。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-20": {
+      "recommendedIndex": 1,
+      "explanation": "枚举常量 RED 的类型是 Color，而非 int，虽然可以隐式转换为 int，但类型本身不是 int。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-21": {
+      "recommendedIndex": 1,
+      "explanation": "宏 SQUARE(2+3) 展开为 2+3*2+3，乘法优先级高，结果是 11 而非 25，不安全。应加括号。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-22": {
+      "recommendedIndex": 1,
+      "explanation": "C++标准规定 char 的符号由实现定义，可能是 signed char（-128~127）或 unsigned char（0~255），因此取值范围并非总是 -128~127。易错点：误以为 char 一定是有符号类型。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-23": {
+      "recommendedIndex": 1,
+      "explanation": "表达式 `a > b ? a : b = 10;` 按优先级解析为 `a > b ? a : (b = 10);`。若 b 为 const 或类型不支持赋值等，代码将非法，因此并非“一定是合法的”。易错点：未考虑变量类型或修饰符导致赋值非法。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-24": {
+      "recommendedIndex": 1,
+      "explanation": "`#include \"file.h\"` 通常先在当前目录搜索，再搜索系统路径；`#include <file.h>` 直接搜索系统路径。搜索策略不同。易错点：以为两者仅写法不同。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-3-25": {
+      "recommendedIndex": 1,
+      "explanation": "extern 声明只是引入符号，不是定义；同一作用域内变量只允许一个定义，多次定义会导致重定义错误。易错点：混淆声明与定义，误以为 extern 允许多次定义。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-01": {
+      "recommendedIndex": 1,
+      "explanation": "p 指向 a，*p 等价于 a，执行 *p = *p + 1 即将 a 的值加 1，42 变为 43。易错点：可能误认为指针操作会改变地址。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-02": {
+      "recommendedIndex": 2,
+      "explanation": "数组名不能进行自增操作，因为数组名是指针常量（在表达式中退化为指向首元素的指针，但不可修改）。A 选项常被认为正确，但严格说数组名不是指针常量，然而 C 明显错误。易错点：混淆数组名与指针的可修改性。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-03": {
+      "recommendedIndex": 3,
+      "explanation": "arr 是二维数组，arr+1 指向第二行，*(arr+1) 是第二行首地址，加 2 指向该行第三个元素，解引用得到 6。易错点：误将 *(arr+1) 当作第一行元素处理。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-04": {
+      "recommendedIndex": 0,
+      "explanation": "函数声明设置了默认参数 b=1，定义无需重复。add(2) 使用默认值返回 3，add(2,3) 返回 5。C++ 允许声明和定义中只有一处有默认参数。易错点：认为定义必须重复默认参数导致编译失败。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-05": {
+      "recommendedIndex": 3,
+      "explanation": "foo() 中局部变量 x 覆盖全局变量，输出 10；bar() 无局部变量，输出全局变量 5。易错点：忽略变量作用域规则。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-06": {
+      "recommendedIndex": 2,
+      "explanation": "increaseA(a) 传值，a 不变；increaseB(&a) 传指针，*p++ 直接修改 a。程序输出 5 6。易错点：误以为传值能修改实参。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-07": {
+      "recommendedIndex": 1,
+      "explanation": "C++ 聚合初始化使用大括号列表，如 Point p = {1,2}; 或 Point p{1,2};。A 是逗号表达式最终得 2 并尝试构造，可能失败；C、D 语法错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-08": {
+      "recommendedIndex": 1,
+      "explanation": "birthday 通过引用修改 age，kitty.age 从 2 变为 3，name 不变。易错点：混淆引用与值传递，或把变量名 kitty 当成输出内容。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-09": {
+      "recommendedIndex": 2,
+      "explanation": "选择排序是不稳定的，因为在选择最小元素并交换的过程中，可能破坏相等元素的原有相对顺序。例如 (2a,2b,1) 排序后变为 (1,2b,2a)。冒泡排序和插入排序是稳定的。易错点：误认为选择排序稳定。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-10": {
+      "recommendedIndex": 0,
+      "explanation": "选择排序每轮寻找剩余元素中的最小值，需要条件 nums[j] < nums[minIndex] 来更新最小值下标，然后将该最小值与当前位置 i 交换（swap(nums[i], nums[minIndex])）。若误用 <= 或交换对象错误都会导致排序失败。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-12": {
+      "recommendedIndex": 1,
+      "explanation": "插入排序在数组已有序时，每个元素只需与已排序序列的最后一个元素比较一次，时间复杂度为 O(n)；逆序时需比较和移动所有已排序元素，为 O(n²)。易错点：混淆不同排序的最好/最坏复杂度。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-13": {
+      "recommendedIndex": 1,
+      "explanation": "斐波那契数列递推：f(n)=f(n-1)+f(n-2)。每次先计算 current，再将 prev1 赋给 prev2，current 赋给 prev1。顺序必须先更新 prev2 再更新 prev1，否则会丢失原 prev1。选项 B 正确，其他选项更新顺序错误导致结果错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-14": {
+      "recommendedIndex": 2,
+      "explanation": "三层嵌套循环，i 从 0 到 n-1，j 从 i+1 到 n-1，k 从 j+1 到 n-1，总循环次数为组合数 C(n,3)，数量级为 O(n³)。易错点：误判为 O(n²) 或 O(2ⁿ)，但实际是三次方。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-15": {
+      "recommendedIndex": 3,
+      "explanation": "选项 D 错误，未捕获的异常会导致 std::terminate 调用，但不要求所有异常都必须捕获，程序不一定会立即崩溃。A、B、C 均正确。易错点：误以为必须捕获所有异常。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-16": {
+      "recommendedIndex": 1,
+      "explanation": "int a=5; int *p=a; 类型不匹配，a 是 int，无法直接赋值给 int* 指针，应使用 &a 获取地址。编译器会报错，代码不正确。易错点：混淆指针与整型值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-17": {
+      "recommendedIndex": 1,
+      "explanation": "函数 f 内 int x = x + 1; 右侧的 x 引用刚刚声明的局部变量 x，但此时它尚未初始化，其值不确定，行为未定义，不一定输出 11。易错点：误以为右侧 x 是全局变量。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-18": {
+      "recommendedIndex": 1,
+      "explanation": "代码使用了 string，但未包含 <string> 头文件及 using namespace std;，导致编译错误，故不合法。易错：忽略头文件与命名空间。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-19": {
+      "recommendedIndex": 1,
+      "explanation": "代码使用了 cout，但缺少 <iostream> 头文件及 using namespace std;，无法编译执行，自然无法输出 10。易错：假设已包含头文件。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-20": {
+      "recommendedIndex": 1,
+      "explanation": "二维数组作参数时，除第一维外其他维长度必须指明，int arr[][4] 是正确的声明方式。题目说法错误，故选“错误”。易错：误以为这种声明不正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-21": {
+      "recommendedIndex": 0,
+      "explanation": "递推是指给定初始条件，通过已知项与递推关系导出后续项的过程，定义描述准确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-22": {
+      "recommendedIndex": 0,
+      "explanation": "插入排序在小数据量时因其常数因子小、实现简单，实际运行效率高，常被用于优化小规模排序（如快排的子数组）。题目说法正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-23": {
+      "recommendedIndex": 1,
+      "explanation": "冒泡排序一轮后数组应为{1,3,1,4,2,5}，而非{4,1,3,1,2,5}。相邻比较交换必须依次进行，不能跳跃。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-24": {
+      "recommendedIndex": 1,
+      "explanation": "catch(...)是捕获所有异常的通用处理器，并不限于int类型，因此‘只能捕获int类型异常’的说法错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-09-4-25": {
+      "recommendedIndex": 1,
+      "explanation": "代码中使用了cout而非文件流对象file进行输出，故‘Hello’被输出到屏幕，而非写入文件。应改为file << \"Hello\"。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-01": {
+      "recommendedIndex": 1,
+      "explanation": "飞行控制系统执行判断的核心部件是处理器（CPU），负责逻辑运算与决策。辐射传感器用于检测，内存单元用于存储，输出设备负责执行或显示。易错选A，但传感器只感知不判断。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-02": {
+      "recommendedIndex": 0,
+      "explanation": "'Invalid Character'错误通常由中文标点或不可见字符引起。代码中L1行逗号若为中文逗号则编译报错。B选项逗号表达式合法，C保存与否不影响编译，D分行无错。注意排查中文字符。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-03": {
+      "recommendedIndex": 0,
+      "explanation": "for是C++关键字，不可作变量名，A正确。变量名允许以下划线开头，B错误。_tnt_合法，C错误。printf是标准库函数名，非关键字，可作变量名但会覆盖函数，D中'printf是关键字'说法错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-04": {
+      "recommendedIndex": 2,
+      "explanation": "逗号表达式从左向右求值，返回最右值。X=3后X为3；X++返回3但X变为4；++X返回5，X为5，最终输出5。注意X++与++X的区别，表达式值为5，选C。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-05": {
+      "recommendedIndex": 1,
+      "explanation": "运算符优先级：乘除模高于加减，同级从左到右。先算 3*4=12，再 12%5=2，最后 2+2=4。易错点：忽略优先级或求余运算。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-06": {
+      "recommendedIndex": 0,
+      "explanation": "赋值表达式从右向左结合，a=4 的值是 4 并赋给 b，同时 a 被覆盖为 4，故 a、b 均为 4。易错：误以为 a 仍为初值 3。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-07": {
+      "recommendedIndex": 3,
+      "explanation": "printf 格式串 \"%(N+M)=%d\" 中 %(N+M) 不是合法的格式说明符，导致编译错误或未定义行为，无法正常输出。故选择“错误提示”。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-08": {
+      "recommendedIndex": 0,
+      "explanation": "序列为 1,2,3,2 循环，周期 4。第 N 位：N%4=1 得 1，2 得 2，3 得 3，0 得 2。代码 M=N%4，非 0 输出 M，否则输出 2，正合此规律。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-09": {
+      "recommendedIndex": 3,
+      "explanation": "循环执行100次（i从0到99），tnt累加至100；循环结束后i=100。输出100 100，选D。易错：误以为i最后为99。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-10": {
+      "recommendedIndex": 1,
+      "explanation": "原循环i取1,3,5,7,9求和25。B选项改为i=0则取0,2,4,6,8求和20，结果不同，故B错误。A正确因为i最大仍为9；C、D均正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-11": {
+      "recommendedIndex": 2,
+      "explanation": "循环中i始终为10的倍数，每次遇到continue跳过输出；循环结束后i=100，执行if输出“100 END”。选C。易错：误以为continue后仍会输出。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-12": {
+      "recommendedIndex": 0,
+      "explanation": "辗转相减法：若N>M，N更新为N-M；否则M更新为M-N。选项A正确。易错：选项B顺序反，选项C误用差值赋给较小数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-13": {
+      "recommendedIndex": 3,
+      "explanation": "判断个位数字能否被3整除，应取个位(N%10)再对3求余。选项D `N % 10 % 3 == 0` 正确。易错点：误以为直接判断N%3==0或混淆取位与整除。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-14": {
+      "recommendedIndex": 2,
+      "explanation": "奇因数需同时满足整除和奇数。选项C `(N % i == 0) && (i % 2)` 正确，i%2非0表示奇数。易错点：&&前后条件颠倒或混淆奇偶判断。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-15": {
+      "recommendedIndex": 1,
+      "explanation": "鸿蒙是操作系统，不是编译器，无法直接将源程序翻译为目标程序，需借助编译器。因此说法错误。易错点：混淆操作系统与编译器的功能。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-16": {
+      "recommendedIndex": 1,
+      "explanation": "10*4%6 = 40%6 = 4；10*2%3 = 20%3 = 2，结果不同，故错误。易错点：误认为乘法与取模的优先级导致结果不变。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-17": {
+      "recommendedIndex": 1,
+      "explanation": "初始i=0, 因0%3==0执行continue, i++后i=1; 再次循环1%3!=0执行break, i=1, 输出1而非0。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-18": {
+      "recommendedIndex": 1,
+      "explanation": "原循环因i值在-1和1之间被反复修改, 形成死循环无输出; 改为i<10;i++后正常求和输出45, 结果不同。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-19": {
+      "recommendedIndex": 1,
+      "explanation": "循环执行100次, cnt累加到100, 输出100而非99。i<100包括0~99共100个值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-20": {
+      "recommendedIndex": 1,
+      "explanation": "while循环将n修改为0, 再与逆序数new_number比较, 必输出'非对称数', 因未保留原始n。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-21": {
+      "recommendedIndex": 1,
+      "explanation": "循环从-100累加到99，总和为-100而非0。注意i<100不包含100，对称抵消后余-100。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-22": {
+      "recommendedIndex": 1,
+      "explanation": "%g默认输出6位有效数字，3+3.1415926535结果为6.1415926535，取6位有效数字即6.14159，属正常格式化输出，非计算机故障。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-1-23": {
+      "recommendedIndex": 1,
+      "explanation": "条件运算符的第二、三操作数可分别为int和double，int会隐式转换为double，编译不会报错。",
+      "confidence": "high",
+      "answerConcern": "题目描述中“12.12”应为“12.27”的笔误，但不影响答案。"
+    },
+    "gesp-2025-12-1-24": {
+      "recommendedIndex": 1,
+      "explanation": "“keyword”不是C++语言的保留关键字，因此可以作为变量名使用。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-01": {
+      "recommendedIndex": 1,
+      "explanation": "飞行控制系统需要处理传感器数据并做出判断，执行判断的核心部件是处理器（CPU）。传感器用于获取辐射数据，内存用于存储，输出设备用于执行动作。错误选项可能将传感器误认为判断部件，但题干明确是“执行判断”。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-02": {
+      "recommendedIndex": 1,
+      "explanation": "计算机网络按覆盖范围分类，教学楼内的网络覆盖范围小，属于局域网（LAN）。PAN 覆盖个人区域，MAN 覆盖城市，WAN 覆盖广域。易混淆为 MAN 或 WAN，但根据实际场景需选择 LAN。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-03": {
+      "recommendedIndex": 0,
+      "explanation": "C++ 变量名不能是关键字，for 是关键字，A 正确。下划线可作为首字符或出现在变量名任意位置，B、C 错误。printf 是库函数名，非关键字，D 错误。注意区分保留字与预定义标识符。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-04": {
+      "recommendedIndex": 1,
+      "explanation": "循环节为 “123”，第 N 位对应 (N-1)%3 的值：0→'1'，1→'2'，2→'3'。选项 B 正确。直接 N%3 在 N=3 时得到 0 输出 1 而正确为 3，易错选 A。需理解模运算与索引偏移。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-05": {
+      "recommendedIndex": 1,
+      "explanation": "%g格式符默认保留6位有效数字，6.1415926535四舍五入为6.14159，非二进制误差或无限小数导致，选项B最接近原因。易错点：误以为是浮点精度问题。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-06": {
+      "recommendedIndex": 3,
+      "explanation": "规则是每一位整除以3的商累加，再对10取余，所以L1填N/3，L2填rst%10。易错点：误用取余N%3。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-07": {
+      "recommendedIndex": 0,
+      "explanation": "i%2当i为负数时，-1%2=-1为真，-2%2=0为假，0%2=0，1%2=1，故输出-1#1#。易错点：疏忽负数取模结果。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-08": {
+      "recommendedIndex": 3,
+      "explanation": "外层i取1,3,5,7,9，内层循环i次，总次数1+3+5+7+9=25。易错点：i<10不含10，步长2，正确求和。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-09": {
+      "recommendedIndex": 2,
+      "explanation": "i为奇数时内层循环j=0时i*j=0为偶数立即break，故j>=i永不成立，循环内无输出。循环结束后i=12,j=0，输出12*0=0，因此输出为0。易错点：忽视j=0时乘积为偶数导致提前跳出。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-11": {
+      "recommendedIndex": 1,
+      "explanation": "外层i从0到4，内层j从i到3，执行次数分别为4,3,2,1,0，总和10。cnt=10输出10。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-12": {
+      "recommendedIndex": 1,
+      "explanation": "原代码中N在while循环后变为0，导致整除条件恒真，无法判断原N是否能被M整除。选项B提出保存原值并替换判断中的N，可正确判断三个条件。易错：A误认为代码正确；C会错误地将某位不是M就清零Flag；D输入0时因Flag=0而不满足完整漂亮数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-13": {
+      "recommendedIndex": 1,
+      "explanation": "num从0开始，循环内先加1，当num%3非0时continue跳过打印，因此只有num为3和6的倍数时打印num#，最后循环外打印num。输出序列：3#6#6。易错：误以为continue后还会打印或遗漏最后的6。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-14": {
+      "recommendedIndex": 1,
+      "explanation": "代码输出居中的等腰三角形，n=5时第一行4空格1星，第二行3空格3星，第三行2空格5星，第四行1空格7星，第五行0空格9星。选项B的图形与之最接近，但第一行前缺4个空格，整体仍是唯一可能选项。其他选项星数或空格数均不符。",
+      "confidence": "medium",
+      "answerConcern": "选项B第一行缺少4个前导空格，可能是排版问题，但总体图形最符合代码输出。"
+    },
+    "gesp-2025-12-2-15": {
+      "recommendedIndex": 2,
+      "explanation": "程序无需排序即可找出最大最小值，A错；初始化必须在外层循环内，B错；L1和L2可改为if或?:语句，C正确；+=和=+等价，D错。故选C。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-16": {
+      "recommendedIndex": 1,
+      "explanation": "鸿蒙是操作系统，提供运行环境，但不具备将源程序翻译成目标程序的能力，编译功能由编译器实现，故说法错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-17": {
+      "recommendedIndex": 0,
+      "explanation": "5<10为true，20非零转为true，true&&true为true，故表达式逻辑值为true。易错点：误以为20不参与布尔运算。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-18": {
+      "recommendedIndex": 1,
+      "explanation": "右边 1/3 是整数除法得 0，10/0 导致未定义行为；左边为浮点近似约 30。表达式既不正确也未必能执行，结果为 true 错误。易错：误认为 1/3 是浮点。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-19": {
+      "recommendedIndex": 0,
+      "explanation": "while(N) 循环将 N 不断除以 10（向零截断），无论正、负或零，最终 N 都会变为 0，输出总是 0。易错：怀疑负数除法不会终止。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-20": {
+      "recommendedIndex": 0,
+      "explanation": "a=4；b = (a == 5) 为 false，赋值给 int 得 0。cout 输出 “4 0”，与题目一致。易错：混淆 = 与 ==。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-21": {
+      "recommendedIndex": 1,
+      "explanation": "'Z'-'A'=25，'z'-'A'=57，25<57 为 true，默认输出 1 而非 0。题目说输出 0 错误。易错：误写成 'z'-'a' 或忽略 bool 输出为 1。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-22": {
+      "recommendedIndex": 0,
+      "explanation": "代码利用 N % N10 == N 判断 N 是否小于 N10，即当 N10 大于 N 时余数为 N。循环中 i 初始为 1，每次先判断后递增，位数正确。注意 N 为一位数时也能正确处理，易错点是误认为余数判断有问题。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-23": {
+      "recommendedIndex": 1,
+      "explanation": "原代码中 Flag = -Flag 实现正负交替，而改为 Flag -= Flag 后 Flag 变为 0，后续循环均为 0，tnt 始终加 0，结果恒为 0，效果完全不同。易错点在于未理解赋值与减自身的区别。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-24": {
+      "recommendedIndex": 0,
+      "explanation": "双重循环，内层循环 j 从 i 到 9，执行次数为 10 + 9 + ... + 1 = 55，cnt 输出 55，正确。易错点是误把内层循环上界当作固定值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-2-25": {
+      "recommendedIndex": 1,
+      "explanation": "printf(\"\\n\") 用于输出换行，删除后所有数字将连续输出，失去表格格式，输出效果完全不同。说法错误。易错点在于认为换行不影响内容，但实际上改变了显示结构。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-01": {
+      "recommendedIndex": 1,
+      "explanation": "整数部分1101=13，小数部分101=0.5+0+0.125=0.625，结果为13.625。易错点：误将小数每位权重算错，或整数部分误算为14。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-02": {
+      "recommendedIndex": 2,
+      "explanation": "C错误，标准C++中静态数组的长度必须是编译时常量，无法在运行时确定；只有动态数组（如new）才能在运行时指定长度。A、B、D均正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-03": {
+      "recommendedIndex": 3,
+      "explanation": "8>>2等于2，条件i%3==2时跳过。i从1到10，跳过2、5、8，剩下1+3+4+6+7+9+10=40。易错：误将移位结果当4或条件判断错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-04": {
+      "recommendedIndex": 1,
+      "explanation": "3>>2=0，x==0为假，不执行赋值；x保持5。即使执行8>>3=1，但条件不成立。易错：误以为移位优先级低或条件判断错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-05": {
+      "recommendedIndex": 1,
+      "explanation": "s.length()返回15，15二进制1111，3二进制0011，按位或运算后仍为15。易错：误数长度或错用按位与。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-06": {
+      "recommendedIndex": 3,
+      "explanation": "arr[1]值为2，赋值给p后p=2，p+2输出4。注意数组索引从0开始。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-07": {
+      "recommendedIndex": 3,
+      "explanation": "std::min要求至少两个参数或一个初始化列表，不传参无法编译，故D错误。A正确，函数必须返回；B可嵌套；C单参数错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-08": {
+      "recommendedIndex": 0,
+      "explanation": "2字节=16位，无符号范围0~2^16-1=0~65535。B包含65536多1，C有符号错误，D只到32767。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-09": {
+      "recommendedIndex": 0,
+      "explanation": "循环步长为2，对相邻元素进行加减法交换（arr[i]与arr[i+1]交换）。初始{1,2,3,4,5,6}，交换后为{2,1,4,3,6,5}。易错：误以为加法溢出或顺序错误，但实际是标准交换算法。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-10": {
+      "recommendedIndex": 0,
+      "explanation": "优先级：& 高于 ^ 高于 |，故计算 (a&b)|(c^d)。a=3(011),b=7(111),a&b=3。c=15(1111),d=4(0100),c^d=11。3|11=11，结果是十进制11。注意选项B是二进制11（十进制3），易混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-11": {
+      "recommendedIndex": 2,
+      "explanation": "x初始10，t=x--先将t赋值为10，x变为9；然后t-=x即t=10-9=1，输出1。易错：误认为x--先减再赋值，或误算为0或-1。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-13": {
+      "recommendedIndex": 1,
+      "explanation": "1|2是按位或，结果为3。arr[i]%3：2%3=2（sum+3），4%3=1（sum+2），6%3=0（sum+1），8%3=2（sum+3），10%3=1（sum+2），总计11。易错：误以为1|2是逻辑或（结果1）导致错误余数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-14": {
+      "recommendedIndex": 0,
+      "explanation": "C++ 中 abs() 对整数求绝对值，头文件 <cstdlib> 或 <cmath> 均可；浮点数 abs() 返回浮点绝对值，不截断小数。B、C、D 均错误。易错：将 abs() 与四舍五入混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-15": {
+      "recommendedIndex": 3,
+      "explanation": "字符加索引后做 toupper：'G'+0='G'，'E'+1='F'，'S'+2='U'，'P'+3='S'，结果为 \"GFUS\"。易错：误以为 toupper 只影响小写字母或忽略加法。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-16": {
+      "recommendedIndex": 0,
+      "explanation": "数组名在 C++ 中是常量指针，指向首元素，不允许被赋值。因此“不能改变”和“不能被赋值”正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-17": {
+      "recommendedIndex": 1,
+      "explanation": "a *= b 会隐式类型转换，a 为 int，乘得浮点结果 10.5，赋值回 int 时截断为 10，输出 10 而非 10.5。题干描述错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-18": {
+      "recommendedIndex": 1,
+      "explanation": "strcmp 返回 0 表示两字符串相等，返回正数表示 str1 大于 str2，返回负数表示小于。题干描述相反，故错误。易错：混淆返回值含义。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-19": {
+      "recommendedIndex": 1,
+      "explanation": "a++ 返回 5 后 a 变 6，++b 返回 4 后 b 变 4，c = 5 + 4 = 9，输出 9 而非 8，故错误。易错：混淆前置和后置自增。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-20": {
+      "recommendedIndex": 1,
+      "explanation": "算术运算符 +、-、*、/ 优先级高于位与 &、位或 |、位异或 ^，仅 ~ 优先级较高，但整体说法错误。易错：误记位运算符优先级。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-21": {
+      "recommendedIndex": 0,
+      "explanation": "初始化列表中 5 个元素，编译器自动推导数组长度为 5，语法正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-22": {
+      "recommendedIndex": 1,
+      "explanation": "题干表述不通顺，但代码块仅为赋值无输出语句，更不会输出2，即使变量未定义，因此“输出将会是2”错误。三元运算符等价性本正确，但陈述整体为假。",
+      "confidence": "high",
+      "answerConcern": "题干可能拼接错误，“输出将会是2”与代码不符，建议核实原题。"
+    },
+    "gesp-2025-12-3-23": {
+      "recommendedIndex": 1,
+      "explanation": "C++ 中自增、自减运算符可用于浮点类型（如float、double），虽可能损失精度但语法允许，故“只能用于整型”错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-24": {
+      "recommendedIndex": 0,
+      "explanation": "求补码的快捷方法：从右向左找到第一个1，保留该位及右侧所有位，左侧全部取反，即可得到 -a 的补码。此技巧正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-3-25": {
+      "recommendedIndex": 1,
+      "explanation": "for语句后跟分号，循环体为空；大括号内代码仅执行一次。因此Hello只输出1次，而非5次。易错点：误将分号当作语法错误而忽略。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-01": {
+      "recommendedIndex": 2,
+      "explanation": "指针变量声明时必须带星号，且初始化或赋值需用取地址符&获取变量的地址。选项A类型不匹配，B缺少&，D未声明指针且误用解引用。正确写法为`int *p = &x;`。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-02": {
+      "recommendedIndex": 2,
+      "explanation": "p1和p2均指向a，通过*p2=10直接修改了a的值。故a变为10，*p1和*p2也都为10。注意指针别名共用同一内存。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-03": {
+      "recommendedIndex": 1,
+      "explanation": "二维数组索引从0开始，第2行第3列对应a[1][2]。选项A的逗号运算符返回2，等价于a[2]；C和D语法错误。正确写法为方括号。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-04": {
+      "recommendedIndex": 3,
+      "explanation": "p指向arr[0][0]，p+5偏移5个int至arr[1][1]（按行优先存储）。故*(p+5)=6，arr[1][1]直接为6，两者均为6。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-05": {
+      "recommendedIndex": 1,
+      "explanation": "三层循环遍历三维数组，条件 (i+j+k) % 2 == 0 时累加。计算过程：i=0时加1,4,5共10；i=1时加8,9,12共29，总和39。易错：混淆三维索引与元素对应关系。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-06": {
+      "recommendedIndex": 0,
+      "explanation": "test函数内块中定义局部a并自增，离开块后该a销毁；外层test作用域的a初始为2，a++后变为3输出；全局a保持1。最终输出“3 1”。易错：误以为块内a影响外层。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-07": {
+      "recommendedIndex": 2,
+      "explanation": "byValue值传递不改变实参a(1)；byRef引用修改b为200；byPointer指针修改c为300。最终a=1,b=200,c=300。易错：混淆传值与传引用/指针的效果。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-08": {
+      "recommendedIndex": 0,
+      "explanation": "rect.topLeft.x改为5，bottomRight.y通过指针改为5，两者相加为10。注意指针修改成员的方式。易错：忽略指针操作对原结构体的直接影响。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-09": {
+      "recommendedIndex": 1,
+      "explanation": "climbStairs(5) 模拟斐波那契数列：f(1)=1, f(2)=2, f(3)=3, f(4)=5, f(5)=8，因此返回 8。易错点：误将初始 a=1,b=2 对应 n=1,2，忽略循环从 3 开始。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-10": {
+      "recommendedIndex": 1,
+      "explanation": "稳定排序要求等值元素保持原相对顺序。原数组中 value=3 的顺序为 {3,'B'} 在前、{3,'D'} 在后，排序后变为 {3,'D'} 在前、{3,'B'} 在后，相对顺序改变，因此不稳定。选项 B 理由准确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-11": {
+      "recommendedIndex": 1,
+      "explanation": "选择排序每轮在未排序区间 [i, n-1] 中找最大值，maxIdx 先初始化为 i，只需从 i+1 开始比较即可，无需包含 i 自身。选项 B 正确。易错点：写成 j=i 会产生无意义比较。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-12": {
+      "recommendedIndex": 0,
+      "explanation": "分数变大时向前移动：只要 i>0 且更新分数大于前一位分数，继续前移；分数变小时向后移动：只要 i<size-1 且更新分数小于后一位分数，继续后移。选项 A 对应两个正确条件。易错点：符号写反或移动方向判断错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-13": {
+      "recommendedIndex": 1,
+      "explanation": "外层循环 i 从 0 到 n-1，内层循环 j 从 0 到 n-1，执行 n×n 次，复杂度为 O(n²)。易错选 D，误以为算法枚举所有子集（2ⁿ），但 i 只取到 n-1，并非 2ⁿ。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-14": {
+      "recommendedIndex": 3,
+      "explanation": "写入文件为“Happy\\nNew Year”。fin>>s1 读取“Happy”，跳过前导空白，但换行符留在流中。getline 从换行开始读取，立即遇到换行，s2 为空，输出“Happy|”。易错选 B，以为 getline 会读取“ New Year”。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-15": {
+      "recommendedIndex": 1,
+      "explanation": "divide(10,0) 抛出 const char* 异常，被 catch 捕获，输出“B”并将 result 设为 -1，之后输出 result，因此输出“B-1”。易错选 D，以为程序崩溃或未捕获。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-16": {
+      "recommendedIndex": 0,
+      "explanation": "p 指向 x，*p+3 即 x+3，x 变为 8，描述正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-17": {
+      "recommendedIndex": 1,
+      "explanation": "C++中结构体可以嵌套包含另一个结构体作为成员，该说法错误。易错：误以为结构体不能自包含，但可以包含其他结构体。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-18": {
+      "recommendedIndex": 0,
+      "explanation": "C++二维数组采用行优先存储，同一行元素在内存中连续，a[0][0]到a[0][3]相邻。该说法正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-19": {
+      "recommendedIndex": 0,
+      "explanation": "add函数参数为引用，修改x会直接影响实参a，5+10=15。该说法正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-20": {
+      "recommendedIndex": 1,
+      "explanation": "指针相减返回元素个数差，p2-p1=2，而非字节差8。题目说法错误。易错点：混淆指针减法与地址差值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-21": {
+      "recommendedIndex": 0,
+      "explanation": "循环从2到n共执行n-1次，每次常数时间，故时间复杂度为O(n)。易错：有人认为递归才是O(2^n)，忽略递推是线性。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-22": {
+      "recommendedIndex": 0,
+      "explanation": "冒泡排序在相邻元素相等时不交换，插入排序在找到相等元素时不前移，两者均保持相等元素的相对顺序，故都是稳定排序。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-23": {
+      "recommendedIndex": 1,
+      "explanation": "代码中外层循环i从1开始，将a[i]作为key向前插入到有序区间，这是典型的插入排序，而非选择排序。易错：混淆选择排序的“选最小”与插入排序的“插合适位置”。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-24": {
+      "recommendedIndex": 1,
+      "explanation": "调用calculate(5)时，既有带默认参数y=10的两参数版本，又有单参数重载，编译器无法确定调用哪一个，产生歧义导致编译错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2025-12-4-25": {
+      "recommendedIndex": 0,
+      "explanation": "文件写入\"10 20\\n30 40\"，读取四个整数按空白分隔得到10、20、30、40，和为100。注意需包含头文件和命名空间，但在竞赛代码中默认可行。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-01": {
+      "recommendedIndex": 1,
+      "explanation": "输入设备用于向计算机输入数据，A、C、D均为外部设备，B是程序，属于软件，不是输入设备。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-02": {
+      "recommendedIndex": 0,
+      "explanation": "在图形界面中，右键菜单选择‘重命名’是标准操作；双击是打开，F1通常为帮助，回车可能打开文件。易错点：误以为双击可重命名，但双击是打开。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-03": {
+      "recommendedIndex": 3,
+      "explanation": "C++大小写敏感，PI与pi不同；PI可作为变量名；全部改写为Pai后声明与使用一致，代码正确。易错：误以为常量必须用大写，或忽略大小写。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-04": {
+      "recommendedIndex": 3,
+      "explanation": "乘法和取模优先级相同，左结合：3*3=9，9%2=1。易错：误以为%优先级高于*。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-05": {
+      "recommendedIndex": 0,
+      "explanation": "代码`a,b=3,4;`是逗号表达式，仅b被赋值为3，a仍为初值4。输出(4+2)=6,(3-2)=1 得61；再输出a=4,b=3得43。易错：误认为同时赋值a=3,b=4。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-06": {
+      "recommendedIndex": 0,
+      "explanation": "cin>>int遇合法整数正常输出；遇3.14读3不报错；遇ABC读取失败置0但不报错；-10合法。易错：误以为输入失败会报错或终止。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-07": {
+      "recommendedIndex": 1,
+      "explanation": "代码输出|M-N|，因此结果恒≥0。A仅说一正一负>0，但B更全面涵盖所有整数情况；C相等时有输出0；D输入小数可能导致后续读取失败，并非简单取整。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-08": {
+      "recommendedIndex": 3,
+      "explanation": "tnt初始为1，循环i=0时tnt*=0得0，后续乘何仍为0，循环结束i=5。输出格式%2d%2d结果形如 0 5。易错：误以为for从1开始或忽略乘0影响。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-09": {
+      "recommendedIndex": 3,
+      "explanation": "序列符号规律：第1、4、7…项为负，对应i%3==1；输入4时计算-1+2+3-4=0，代码条件与循环均正确。L1循环i=1..N符合题意，当前代码可实现目标。易错：误认为负号项是整除3余0。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-10": {
+      "recommendedIndex": 1,
+      "explanation": "原代码奇数输出i#，偶数continue。删除else后if(偶数)continue; cout<<i<<'#' 等效，因continue跳过输出。输出序列1#3#5#7#9#10END。易错：A漏10，C输出移入continue后不可达，D条件错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-11": {
+      "recommendedIndex": 1,
+      "explanation": "while(N)每次取个位N%10加入tnt，再N/=10去掉个位。选项A误加商，C、D误用取余导致死循环。易错：忘记更新N去除个位。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-16": {
+      "recommendedIndex": 0,
+      "explanation": "电话手表具备通话、收发信息等功能，属于智能设备，通常运行嵌入式操作系统（如Android Wear、RTOS等），故推测其装有特定操作系统是合理的。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-17": {
+      "recommendedIndex": 0,
+      "explanation": "4 % 2 = 0；2 * 2 % 2 = 4 % 2 = 0，两者结果相等。注意取模运算符%优先级与*相同，按从左到右结合。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-18": {
+      "recommendedIndex": 1,
+      "explanation": "循环从i=1开始，当i能被3整除时执行break，第一次满足是i=3，此时跳出循环，输出i值为3，不是0。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-19": {
+      "recommendedIndex": 1,
+      "explanation": "for语句后误加分号，导致循环体为空，total += i 仅执行一次（循环结束后i的值），无法求和1~N。此外变量未声明，但主要逻辑错误是分号。",
+      "confidence": "high",
+      "answerConcern": "代码中for行尾分号导致循环体为空，易被忽略。"
+    },
+    "gesp-2026-03-1-20": {
+      "recommendedIndex": 0,
+      "explanation": "若输入 N 非零，循环条件 while(N) 恒为真，且循环体内未修改 N，导致死循环；若 N 为零，则循环体一次都不执行。故执行次数为 0 或无数次，正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-21": {
+      "recommendedIndex": 0,
+      "explanation": "代码通过不断取出原数个位并构造反转数，最后与原数比较，完全符合对称数（回文数）的判断逻辑。注意整型变量未指定范围，但算法本身正确，不易错。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-22": {
+      "recommendedIndex": 0,
+      "explanation": "循环变量 i 从 -N 开始，步长 2，直到小于 N。该序列对称且项数恰好为 N，平均值为 -1，总和为 -N。因此输出恒为 -N，正确。注意不考虑整型溢出。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-23": {
+      "recommendedIndex": 1,
+      "explanation": "printf 不会因格式字符串与参数类型不匹配而报错（编译或运行时错误），只会产生未定义行为或警告。故“将报错”说法错误。",
+      "confidence": "medium",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-24": {
+      "recommendedIndex": 0,
+      "explanation": "循环体cnt+=i++和for的i++使得i依次取1,3,5,…,99，共50个奇数，和为(1+99)×50/2=2500。易错点：误以为i只自增一次，得到错误结果。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-25": {
+      "recommendedIndex": 1,
+      "explanation": "%-5d表示左对齐、宽度5，输出314后补两个空格，非-5314。易错点：误将负号理解为输出负号或未掌握格式控制符。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-01": {
+      "recommendedIndex": 1,
+      "explanation": "计算机系统的输入设备是硬件，如传感器、遥控器、摄像头。预装的AI算法程序属于软件，不能作为输入设备。易错点：混淆软件与硬件的功能分类。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-02": {
+      "recommendedIndex": 3,
+      "explanation": "L1是if(val>max)条件判断，流程图用菱形框表示。圆形/椭圆框用于开始/结束，平行四边形框用于输入/输出。易错点：对不同流程图形的作用记忆不清。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-03": {
+      "recommendedIndex": 3,
+      "explanation": "C++区分大小写，PI和pi不同；选项B变量名Pi未定义；选项C无限制；选项D将代码中全部PI改为Pai，即声明`double Pai=...`并输出Pai，符合语法，可正常执行。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-04": {
+      "recommendedIndex": 2,
+      "explanation": "根据德摩根律，!(A && B) 等价于 (!A) || (!B)。这里A为x>5，取反为x<=5；B为y<=10，取反为y>10。所以等价于 x<=5 || y>10。易错选A。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-05": {
+      "recommendedIndex": 1,
+      "explanation": "浮点数在计算机中以二进制存储，0.1、0.2、0.3无法精确表示，0.1+0.2的近似值与0.3的近似值存在微小误差，因此==比较为false输出0。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-06": {
+      "recommendedIndex": 0,
+      "explanation": "代码首行缺少类型声明，按语义应为`int tnt=0;`。外循环i从0到4，内循环j<i执行i次，每次tnt加1，故每次循环后tnt累加i，输出0#1#3#6#10#，最后输出tnt值10。输出为0#1#3#6#10#10。",
+      "confidence": "high",
+      "answerConcern": "代码首行 `tnt = 0;` 缺少类型声明，按题意假定为 `int tnt = 0;`，否则无法执行。"
+    },
+    "gesp-2026-03-2-07": {
+      "recommendedIndex": 0,
+      "explanation": "not 优先级高于 %，not i % 3 等价于 (!i) % 3。!i 当 i 非零时为 0，i 为 0 时为 1，再 %3 只可能在 i=0 时非零，输出 0#。易错：误以为是 not (i%3)。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-08": {
+      "recommendedIndex": 2,
+      "explanation": "外层 i 1~3，内层 j 1~4。j==3 时 continue 跳过本次 count++；i==2 时 break 跳出内层循环。模拟：i=1 时 j=1,2,4 各 +1（3次），i=2 时 j=1 触发 break 直接跳出内层，i=3 时 j=1,2,4 各 +1（3次），共 6。易错：误认为 break 跳出外层循环。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-09": {
+      "recommendedIndex": 0,
+      "explanation": "原 while 循环 i 从 0 到 4，输出 01234。A 选项 for(i=0;i<5;i++) 等价；B 从 1 开始，少 0；C i<6 多输出 5；D 起始和条件均不同。易错：未注意循环起始值和条件边界。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-10": {
+      "recommendedIndex": 1,
+      "explanation": "n 初始 10，每次循环先减 1 再判断。n=9 时 9%3==0 continue；n=8、7 无操作；n=6 时 continue；n=5 时满足 n==5 执行 break 跳出循环，输出 5。易错：忽略 continue 跳过后面的 break 判断。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-11": {
+      "recommendedIndex": 2,
+      "explanation": "模拟循环：i=0时不执行内层；i=1时内层循环2次，i=2时4次，i=3时6次，i=4时8次，累计cnt=2+4+6+8=20。易错：忽略i=0或误算循环次数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-12": {
+      "recommendedIndex": 1,
+      "explanation": "需要逐位累加前5位数字之和，即order_num%10加到tnt，然后order_num/=10。校验是tnt%10等于check_num。选项B正确。易错：混淆/和%的用途。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-13": {
+      "recommendedIndex": 0,
+      "explanation": "外层i从1到4，内层j从1到i，每次输出j，因此输出1,12,123,1234。选项A符合。易错：误以为j输出i或其他模式。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-14": {
+      "recommendedIndex": 0,
+      "explanation": "需要先累加总分total_score+=score，再判断score>=6时high_count加1。最后high_count>=5输出总分。选项A正确。易错：注意顺序，先累加再判断。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-15": {
+      "recommendedIndex": 0,
+      "explanation": "电话手表具备通话、信息等复杂功能，需要操作系统管理硬件和软件，因此推测装有特定操作系统是正确的。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-16": {
+      "recommendedIndex": 1,
+      "explanation": "字符'4'、'2'会转为ASCII码52和50，'4'%'2'=2，'2'*'2'=2500，2500%2=0，表达式2==0为false，输出0而非1。易错点：忽略字符隐式转换。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-17": {
+      "recommendedIndex": 1,
+      "explanation": "C++中bool可隐式转为int（true为1，false为0），10+a计算为11，不会报错。易错点：误认为bool不能参与算术运算。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-18": {
+      "recommendedIndex": 0,
+      "explanation": "循环i从0到9，当i%3不为0时continue跳过打印，因此仅i=0,3,6,9时输出，结果为'0-3-6-9-'。故意混淆：容易误以为continue会终止循环。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-19": {
+      "recommendedIndex": 0,
+      "explanation": "while(N) 循环，若输入非零则死循环，若为零则执行0次，描述正确。注意浮点等基本类型同样适用。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-20": {
+      "recommendedIndex": 0,
+      "explanation": "continue 在循环体末尾，后面无语句，删除后流程不变，for 的更新表达式仍会执行。易错：误以为 continue 会跳过 i++。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-21": {
+      "recommendedIndex": 0,
+      "explanation": "i 在循环中始终为非负整数，abs(i) 等价于 i，因此 while(abs(i)) 与 while(i!=0) 等效，结果相同。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-22": {
+      "recommendedIndex": 1,
+      "explanation": "break 仅跳出内层循环，外层循环正常结束 i 最终为 10，满足 if 条件输出 i*j（值为 0），故有输出。原推理错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-23": {
+      "recommendedIndex": 1,
+      "explanation": "代码分析：i=1时内层循环j从1到1，无break，j最终为2，输出2#；同理i=2输出6#，i=3输出12#，i=4输出20#，最后i=5时输出25，结果为2#6#12#20#25，与题目给出的1#4#9#16#16不符，故错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-2-24": {
+      "recommendedIndex": 1,
+      "explanation": "原代码printf(\"%d\")无空格，输出数字连续，不会得到左图有空格的结果。若要实现右图每个数字占3列左对齐的效果，应使用\"%-3d\"；\"%3d\"为右对齐，输出数字前补空格，与右图不符。因此原陈述错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-01": {
+      "recommendedIndex": 2,
+      "explanation": "字符'1'的ASCII码为49，强制类型转换(int)得到其ASCII值49，选项C正确。易错选A，混淆字符与数值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-02": {
+      "recommendedIndex": 1,
+      "explanation": "三次异或运算实现两变量值交换，无需临时变量。利用异或结合律和自反性。选项B正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-03": {
+      "recommendedIndex": 2,
+      "explanation": "str1以字符串常量初始化，包含'\\0'；str2用字符列表初始化，最后是'0'而非'\\0'且无自动补'\\0'，两者长度和内容均不同，故不相等。B项中输出str2会未定义行为，不一定每次不同。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-04": {
+      "recommendedIndex": 0,
+      "explanation": "(x++)+(++x)在两个序列点间多次修改x，是未定义行为，结果不可预测。C++标准不保证求值顺序，不同环境可能输出不同。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-05": {
+      "recommendedIndex": 3,
+      "explanation": "-15补码：15=00001111，取反得11110000，加1得11110001，即D。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-06": {
+      "recommendedIndex": 1,
+      "explanation": "2102(3)=2×27+1×9+0×3+2×1=54+9+0+2=65，选B。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-07": {
+      "recommendedIndex": 1,
+      "explanation": "8位补码10110101最高位1是负数，求绝对值：取反得01001010，加1得01001011=75，故原数为-75。易错点：直接当原码算会得-53。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-08": {
+      "recommendedIndex": 3,
+      "explanation": "0x0F（00001111）左移3位得01111000，即0x78=120。unsigned char左移高位丢弃，低位补0。易错点：误以为左移后变负数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-09": {
+      "recommendedIndex": 1,
+      "explanation": "按位取反公式：~x = -x-1。~0 = -1（所有位为1），不是0，故B错误。A、C、D均符合公式。易错点：误以为0取反还是0。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-10": {
+      "recommendedIndex": 0,
+      "explanation": "str.substr(4,2)从索引4（第5个字符）取2个字符，\"GESP2026\"索引4是'2'，索引5是'0'，得子串\"20\"。易错点：索引从0开始，别把位置数错。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-11": {
+      "recommendedIndex": 1,
+      "explanation": "sizeof(arr) 返回整个数组的字节数（6 个 int 通常 24 字节），sizeof(arr[0]) 返回单个元素的字节数（4），相除得元素个数 6。易错：误以为 sizeof 直接得到元素个数。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-12": {
+      "recommendedIndex": 1,
+      "explanation": "sizeof(s) 得到数组总大小 10 字节，strlen(s) 计算到 '\\0' 前的字符数 5，差为 5。易错：混淆 sizeof（数组容量）与 strlen（字符串长度）。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-13": {
+      "recommendedIndex": 2,
+      "explanation": "枚举法适合在有限解空间中逐一检验条件。A、B、D 都是典型的搜索满足条件元素的问题；而 C 是求和，有封闭公式，用枚举法虽然可行但不是高效解法，且不属于“找出解”类问题，因此最不适合。",
+      "confidence": "medium",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-14": {
+      "recommendedIndex": 0,
+      "explanation": "枚举鸡的数量（0~35）并根据头数算出兔子数量，直接验证脚数，范围准确且计算量最小。B 枚举兔子的范围过大（0~94），C 双循环范围过大且不成对，D 枚举脚数无关。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-15": {
+      "recommendedIndex": 3,
+      "explanation": "正确逻辑应为：若当前字符加3后超过‘z’(122)则需回绕。D选项条件为str[i]+3>'z'，操作等价于str[i]+3-26，实现了循环加密。其他选项条件或操作有误，如A、B条件仅判断当前字符，C操作漏加3。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-16": {
+      "recommendedIndex": 1,
+      "explanation": "arr[3]未显式初始化，在部分初始化时值为0，正确；但arr[5]下标越界（合法下标为0~4），不合法。整体说法错误，故选B。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-17": {
+      "recommendedIndex": 1,
+      "explanation": "局部数组未初始化时元素值不确定，非默认0.0；仅全局或静态数组才自动初始化为0。题目未指明定义位置，通常视为局部，故说法错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-18": {
+      "recommendedIndex": 0,
+      "explanation": "数组arr含3个int元素，每个占4字节，总大小为12字节，sizeof(arr)返回整个数组大小，结果为12。正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-21": {
+      "recommendedIndex": 0,
+      "explanation": "大写A的ASCII码为65，小写a为97，则m为109（97+12）。109转换为八进制：109÷8=13余5，13÷8=1余5，1÷8=0余1，得155，正确。易错：混淆大小写字母的码值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-22": {
+      "recommendedIndex": 0,
+      "explanation": "C++中位运算符（如&、|、^、~、<<、>>）有不同优先级，使用括号可明确运算顺序，避免因误解优先级导致错误。说法正确。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-23": {
+      "recommendedIndex": 1,
+      "explanation": "char x='1' 的ASCII码为49，int y=1 的值为1，两者数值不相等。尽管0~255范围内char与int可互换，但字符'1'不代表整数1。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-24": {
+      "recommendedIndex": 1,
+      "explanation": "0xff0十进制为4080，0x15为21，相加得4101，不等于255。因此表达式值为false，说法错误。易错：误将0xff0当作255或忘记十六进制转换。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-3-25": {
+      "recommendedIndex": 0,
+      "explanation": "a最低位为0，即a是偶数，无论正负补码最低位均为0。a & 3取低两位，结果最低位仍为0；再&1后必为0，故==0成立。易错：误以为负数的补码会影响按位与的结果。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-01": {
+      "recommendedIndex": 1,
+      "explanation": "f()使用默认参数2，返回6；f(4)返回12。输出\"6 12\"，对应选项B。易错：可能误认为默认参数不生效或计算错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-02": {
+      "recommendedIndex": 1,
+      "explanation": "p指向a，q指向p，**q即为a。**q+=7等价于a+=7，a变为12。*p也指向a，故输出12 12。易错：混淆指针层级，误以为*q是p。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-03": {
+      "recommendedIndex": 1,
+      "explanation": "p为数组指针，p+2指向第三行{9,10,11,12}。*(p+2)+1指向第二个元素10，解引用得10。选项B正确。易错：误将*(p+2)当作整个数组的值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-04": {
+      "recommendedIndex": 1,
+      "explanation": "fun中a按值传递，修改不影响x；b是引用，y变为3；c是指针，z变为4。最终x=1,y=3,z=4。易错点：忽略引用和指针修改实参。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-05": {
+      "recommendedIndex": 0,
+      "explanation": "主函数局部x隐藏全局x。f引用局部x，修改后变为12；::x访问全局x仍为3。输出12 3。易错点：混淆局部与全局作用域。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-06": {
+      "recommendedIndex": 1,
+      "explanation": "C++中结构体聚合初始化使用花括号{}。A逗号表达式非初始化；C用new返回指针；D尖括号语法不存在。B正确。易错点：误用其他语法。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-07": {
+      "recommendedIndex": 1,
+      "explanation": "g按值传递，修改副本不影响原s；h按引用传递，修改s.b直接影响原结构体。输出1 12。易错点：忘记值传递不改变实参。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-08": {
+      "recommendedIndex": 1,
+      "explanation": "递推（迭代）是从已知初值出发，利用递推关系逐步推导后续结果，通常用循环实现。A 描述的是递归，C、D 错误，递推不限于指数复杂度且无需回溯。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-09": {
+      "recommendedIndex": 1,
+      "explanation": "代码实现爬楼梯问题的递推：f(1)=1, f(2)=2, f(n)=f(n-1)+f(n-2)。手动计算：f(3)=3, f(4)=5, f(5)=8, f(6)=13。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-10": {
+      "recommendedIndex": 1,
+      "explanation": "稳定性指相同关键字的记录在排序后相对顺序不变。初始 90 的顺序为 A、B、D，排序后依然保持该顺序，故算法稳定。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-11": {
+      "recommendedIndex": 1,
+      "explanation": "升序插入排序，当待插入元素 key 小于已排序部分的元素 a[j] 时，需将 a[j] 后移，故条件为 a[j] > key。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-12": {
+      "recommendedIndex": 2,
+      "explanation": "两层嵌套循环各执行n次，总次数n²，if语句常数时间，整体O(n²)。易错：误以为if条件影响复杂度。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-13": {
+      "recommendedIndex": 1,
+      "explanation": "B选项使用cout输出，未重定向到文件；A用freopen，C修改cout缓冲区，D直接写入文件流。易错：混淆cout与文件流。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-14": {
+      "recommendedIndex": 1,
+      "explanation": "divi抛出int异常0，catch(const char*)不匹配，catch(int)捕获并输出B。易错：认为异常未捕获导致崩溃。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-15": {
+      "recommendedIndex": 0,
+      "explanation": "分数增加需向前移动，条件i>0且cur.score>前一个分数，A正确；B用于向后移动，C、D方向错误。易错：移动方向与比较逻辑混淆。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-16": {
+      "recommendedIndex": 0,
+      "explanation": "add10通过引用传递，对x的修改直接影响实参a，a从5变为15，正确。易错：误以为传值不修改原变量。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-17": {
+      "recommendedIndex": 0,
+      "explanation": "C++引用自初始化后即成为原变量的别名，不可重新绑定到其他变量，该说法正确。易错：误以为引用可以重新赋值。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-18": {
+      "recommendedIndex": 1,
+      "explanation": "二维数组连续存储，a[0][1]偏移1，a[1][2]偏移5，指针差为4，不是5。易错：误算地址差为5。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-19": {
+      "recommendedIndex": 1,
+      "explanation": "calc(5)既可匹配calc(int)又可匹配带默认参数的calc(int,int)，产生二义性，编译错误，不会输出10。易错：忽略默认参数引起的重载冲突。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-20": {
+      "recommendedIndex": 0,
+      "explanation": "f() 内局部变量 x 输出 20，main 中输出全局 x=10，连续输出 2010，正确。易错：误以为 f() 修改全局变量。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-21": {
+      "recommendedIndex": 1,
+      "explanation": "局部非静态指针不初始化则值为随机，不会自动为 nullptr；仅静态或全局指针会零初始化。易错：混淆不同存储期的初始化规则。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-22": {
+      "recommendedIndex": 1,
+      "explanation": "代码使用 string 但未包含 <string> 头文件且未用 std::string，编译错误。即使嵌套结构体语法正确，缺少头文件仍错误。易错：忽略头文件与命名空间。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-23": {
+      "recommendedIndex": 1,
+      "explanation": "cout 向标准输出写，并未写入文件流 fout；应使用 fout << \"Hello\";。易错：混淆 cout 与文件流对象。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-24": {
+      "recommendedIndex": 1,
+      "explanation": "选择排序和插入排序虽然最坏时间复杂度均为O(n²)，但在实际场景中性能差异明显。插入排序在部分有序数据上接近O(n)，且稳定；选择排序交换次数少但不稳定。两者不可任意互相替代。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-4-25": {
+      "recommendedIndex": 1,
+      "explanation": "该程序使用迭代循环计算斐波那契数列，单层循环从2到n，每次常数操作，时间复杂度为O(n)，而非O(2ⁿ)。题目描述错误。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-12": {
+      "recommendedIndex": 1,
+      "explanation": "循环每次通过 N % 10 获取个位数字，再 % 2 判断奇偶；若为奇数则计数加一。N 更新为 (N - N % 10) / 10 等价于 N /= 10，实现逐位剥离。选项 B 正确表达个位是奇数，A 为偶数判断，C、D 逻辑错误。易错点：混淆除法和取余的用途。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-13": {
+      "recommendedIndex": 3,
+      "explanation": "代码逻辑正确：根据大小拼接四位数Q，五位数计算为Q*10+Q%3，再判断是否被14整除。A错；B改条件会颠倒大小；C错在应取余数而非商；D对，可以直接在if条件中计算，不使用中间变量Q。易错点：误以为代码有逻辑错误或拼接方式不当。",
+      "confidence": "high",
+      "answerConcern": ""
+    },
+    "gesp-2026-03-1-14": {
+      "recommendedIndex": 1,
+      "explanation": "高3位为 N/1000，低3位为 N%1000，需判断差 (高-低) 是否为314的倍数，即 (N/1000 - N%1000) % 314 == 0。但选项 B 由于 % 优先级高于 -，实际等价于 (N/1000) - ((N%1000)%314) == 0，语义不符。其余选项更不合理。推测出题人意图为 B，但遗漏括号。易错：误认为减号优先级更高。",
+      "confidence": "low",
+      "answerConcern": "所有选项均有误，正确应为 ((N/1000 - N%1000) % 314 == 0)，但选项 B 最接近，可能为笔误。"
+    },
+    "gesp-2026-03-1-15": {
+      "recommendedIndex": 0,
+      "explanation": "代码在while循环中每次处理两位：第一行将N的个位累加到N1并移除该位，第二行将新的个位累加到N2并移除该位，从而实现奇数位和偶数位分别求和。A选项正确使用N%10取个位、N/=10移除个位；B、D误用N/10取高位；C误用N%=10导致死循环。注意算子优先级。",
+      "confidence": "high",
+      "answerConcern": ""
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # anatomy.md — CSP 学习助手项目结构
 
-> 最后更新：2026-07-10（最终审计通过 + 21 份知识卡文档全部创建完成 + Codex 生图规范交付；KnowledgePointHelp 组件接入4个答题入口 + 飞书知识卡联动；lark-cli 操作飞书文档排版；总导航结构调整为 00→01→02→03→04）
+> 最后更新：2026-07-23（全链路题库可靠性测试脚本 + 85 项检查全部通过；题库 V2 管道脚本完整目录）
 
 ## 项目目录
 
@@ -87,8 +87,26 @@ csp学习助手（师+生）/
 │   ├── csp-roadmap.md            # 升级路线图
 │   ├── 2026-06-02-wish-wall-design.md  # 许愿墙方案
 │   └── 2026-06-29-智子试炼场-design.md  # 智子试炼场（宠物回合制地牢战斗）
+├── scripts/question-bank/         # 题库 V2 管道脚本
+│   ├── build-canonical.mjs         # 构建 canonical bank
+│   ├── publish-snapshots.mjs       # 发布 channel 快照
+│   ├── release-gate.mjs            # 发布门禁
+│   ├── verify-csp-batches.mjs      # CSP 批量验证
+│   ├── generate-explanations.mjs   # DeepSeek v4-pro 解析生成
+│   ├── test-full-chain.mjs         # 🔑 全链路题库可靠性测试 (85项检查, npm run test:question-bank)
+│   ├── lib/
+│   │   ├── channels.mjs            # Channel 规则 + isPublishableCsp
+│   │   ├── validate.mjs            # 题目自动验证
+│   │   ├── ai-jury.mjs             # AI 评审
+│   │   ├── deterministic.mjs       # 确定性解答
+│   │   ├── source-match.mjs        # 原卷匹配
+│   │   ├── csp-evidence.mjs        # CSP 证据收集
+│   │   └── normalize.mjs           # 标准化
+│   └── data/
+│       └── csp-choice-recovery.json # 166 道官方原卷恢复题 (全部有解析)
+│
 ├── docs/release/                # 发版前手动测试清单 (2026-07-08 新增)
-│   └── manual-test-checklist-1.7.x.md  # 1.7.x 发版前人工/Tauri 实机验收清单（10 模块 + 最终结论，逐项打勾）
+│   └── manual-test-checklist-1.7.x.md  # 1.7.x 发版前人工/Tauri 实机验收清单
 ├── docs/codex-knowledge-card-spec.md  # Codex 知识卡生图+上传规范 (2026-07-10)
 │
 └── .wolf/                       # 项目记忆 (OpenWolf)
@@ -220,3 +238,10 @@ dungeon_players, dungeon_progress, dungeon_attempts, dungeon_badges, dungeon_dai
 - `GET /admin/teachers` — 返回含 `max_pets`(可空) + `pet_count` + class_count + student_count
 
 **上限解析**：`getTeacherPetLimit(db, teacher)` = 教师独立 `teachers.max_pets` > 全局 `meta.pet_limit_default` > 20（`_petLimitCache` 60s 内存缓存）。`checkTeacher` 的 SELECT 已含 `max_pets`（不加则独立上限永不生效）
+
+## 2026-07-17 评估+版本同步
+
+- `src/App.tsx` — 含 `ChangelogModal` 与 `VER` 常量，发版时必须同步
+- `update.json` — Tauri updater 远程元数据，发版时必须同步版本/日期/URL/signature
+- `.wolf/buglog.json` — 版本号不同步问题已记录
+- `.wolf/memory.md` — 本次修复已记录

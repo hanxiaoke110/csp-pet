@@ -1,0 +1,56 @@
+<title>专题讲解｜编码解码</title>
+
+<h1>编码解码</h1>
+
+<p>编码是把信息按规则变成另一种形式，解码是按规则还原。初赛常考 ASCII、二进制编码、凯撒加密、哈夫曼编码的基本思想。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>发送者和接收者都知道的转换规则。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>ASCII</td><td>字符与数字互转</td><td>A=65，a=97，0=48</td></tr><tr><td>凯撒加密</td><td>字母整体平移</td><td>注意超过 z 或 Z 后循环</td></tr><tr><td>二进制编码</td><td>固定长度编码能表示多少状态</td><td>k 位二进制能表示 2^k 种状态</td></tr><tr><td>哈夫曼编码</td><td>为什么常用字符编码短</td><td>频率高的字符用短编码</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>编码规则。</b>发送者和接收者都知道的转换规则。</p>
+
+<p><b>固定长度编码。</b>每个字符用相同位数表示，简单但可能浪费。</p>
+
+<p><b>可变长度编码。</b>不同字符编码长度不同，需要保证能唯一解码。</p>
+
+<p><b>加密与解密。</b>加密是隐藏原文，解密是还原原文。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="凯撒加密小写字母"><code>string caesar(string s, int k) {
+    for (char &amp;c : s) {
+        if ('a' &lt;= c &amp;&amp; c &lt;= 'z') {
+            c = char('a' + (c - 'a' + k) % 26);
+        }
+    }
+    return s;
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：<code>'A'</code> 的 ASCII 是 65，<code>'D'</code> 是多少？</b></p>
+
+<p><b>解析：</b>D 比 A 大 3，所以是 68。</p>
+
+<p><b>例 2：小写字母 z 右移 2 位是什么？</b></p>
+
+<p><b>解析：</b>z 后面循环回 a，所以是 b。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>字符 <code>'0'</code> 的 ASCII 不是整数 0，而是 48。</li><li>凯撒加密要处理字母循环。</li><li>可变长度编码必须能唯一解码，否则会产生歧义。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">写出字符 <code>'b'</code> 的 ASCII 码。</li><li seq="auto">把 <code>abc</code> 凯撒右移 2 位。</li><li seq="auto">3 位二进制最多能编码多少种状态？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/FE4Sdc39boOA4ZxNVLRcqcxInnc">知识卡｜编码与解码</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

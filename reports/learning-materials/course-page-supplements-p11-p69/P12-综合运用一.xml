@@ -1,0 +1,35 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>巩固单、双、多分支以及switch的基本语法规则。</li><li>运用分支结构和switch语句解决实际问题。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>围绕本课主题完成一道小题。先读题，再拆成输入、处理、输出。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P12 综合运用一 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    cout &lt;&lt; n;
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li>先确认变量含义，再写代码。</li><li>注意输入输出格式。</li><li>写完后用样例手动检查。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">复述本课核心知识。</li><li seq="auto">独立写一遍示例代码。</li><li seq="auto">做一道同类题巩固。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

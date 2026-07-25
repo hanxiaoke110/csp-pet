@@ -1,0 +1,55 @@
+<title>专题讲解｜计算机语言</title>
+
+<h1>计算机语言</h1>
+
+<p>计算机语言是人与计算机沟通的规则。从机器语言到汇编语言，再到高级语言，抽象程度越来越高，编写程序也越来越方便。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>由 0 和 1 组成，计算机可以直接执行，但人很难读写。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>语言层次</td><td>机器语言、汇编语言、高级语言</td><td>越接近机器越难写，越高级越接近人类表达</td></tr><tr><td>编译解释</td><td>编译型和解释型语言区别</td><td>编译先整体翻译，解释边翻译边执行</td></tr><tr><td>源程序目标程序</td><td>源代码如何变成可执行程序</td><td>编译、链接等过程</td></tr><tr><td>C++ 常识</td><td>C++ 属于高级语言</td><td>竞赛常用编译型语言</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>机器语言。</b>由 0 和 1 组成，计算机可以直接执行，但人很难读写。</p>
+
+<p><b>汇编语言。</b>用助记符表示机器指令，比机器语言稍易读。</p>
+
+<p><b>高级语言。</b>接近人类表达，需要编译或解释后才能执行。</p>
+
+<p><b>编译。</b>把源程序整体翻译成目标程序。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="C++ 源程序示例"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Hello, CSP!" &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：C++ 是机器语言吗？</b></p>
+
+<p><b>解析：</b>不是。C++ 是高级语言，需要编译后运行。</p>
+
+<p><b>例 2：为什么高级语言更适合人写程序？</b></p>
+
+<p><b>解析：</b>它更接近日常逻辑和数学表达，屏蔽了大量机器细节。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>源程序不是可执行程序，通常需要翻译。</li><li>编译和解释都是翻译程序的方法，但执行方式不同。</li><li>机器语言可以被计算机直接执行，但不适合人直接编写。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">按从低级到高级排列：高级语言、机器语言、汇编语言。</li><li seq="auto">解释编译器的作用。</li><li seq="auto">C++ 程序的入口函数通常叫什么？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/KsN7df8SooVd7qxiUgtc4NDMnbb">知识卡｜编程语言与编译原理</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

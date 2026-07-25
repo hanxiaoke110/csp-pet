@@ -1,0 +1,170 @@
+{
+  "summary": {
+    "total": 10,
+    "ok": 10,
+    "failed": 0,
+    "failedItems": []
+  },
+  "checks": [
+    {
+      "no": 1,
+      "title": "基础框架",
+      "doc": "PDtpdjcijoyjbDxPVDscY93onMh",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 2,
+      "title": "cin 输入",
+      "doc": "NCCRdOReJoKXm5xDOYHcFQBGnxd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 3,
+      "title": "数据类型（整型）",
+      "doc": "YbB2dG1jboYZmOxU0NPci7ofnEh",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 4,
+      "title": "数据类型（浮点型）",
+      "doc": "XoAjde0cPoPj0AxIUL2cbbzin3d",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 5,
+      "title": "数据类型（字符型）",
+      "doc": "PdwNdiOQPok6BzxAj9AcsNG1nYc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 6,
+      "title": "类型转换",
+      "doc": "TeqkdyaGvo37RUxqUoxci5wBnxh",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 7,
+      "title": "综合运用",
+      "doc": "KLSbdriQHob9FXxXgsvcrc6fnbc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 8,
+      "title": "关系运算符与分支结构",
+      "doc": "Ymzndk2b6oYPKWxHMr4chPOJneb",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 9,
+      "title": "逻辑运算符",
+      "doc": "OSoHdH9rfolLsixvHMxcNtXZnkO",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 10,
+      "title": "多分支结构",
+      "doc": "KV9Ad2HkooVZuYx1rhIcZszlnhc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    }
+  ]
+}

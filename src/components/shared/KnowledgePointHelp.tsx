@@ -41,14 +41,22 @@ export default function KnowledgePointHelp({ questionId, isCorrect }: KnowledgeP
 
   const openLearningUrl = async (url: string) => {
     if (!url) return;
+    const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
     try {
-      if (/^https?:\/\//.test(url)) {
+      if (isTauri) {
         await openUrl(url);
         return;
       }
       window.open(url, '_blank', 'noopener,noreferrer');
-    } catch {
-      window.open(url, '_blank');
+    } catch (err) {
+      // Never fail silently: copy the link and tell the user.
+      console.error('[KnowledgePointHelp] openUrl failed:', err);
+      try {
+        await navigator.clipboard.writeText(url);
+        window.alert(`打开链接失败，已复制到剪贴板：\n${url}`);
+      } catch {
+        window.alert(`打开链接失败，请手动访问：\n${url}`);
+      }
     }
   };
 

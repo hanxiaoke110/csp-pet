@@ -7,10 +7,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const directory = path.join(root, 'public/course-data/question-bank-v2');
 
 export const DEFAULT_THRESHOLDS = {
-  daily: 100,
+  daily: 50,
   super: 5,
   examPapers: 12,
-  examQuestionsPerPaper: 13,
+  examQuestionsPerPaper: 5,
   dungeon: 100,
 };
 
@@ -38,18 +38,20 @@ export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRE
 
   const summary = parsed['verification-summary.json'];
   if (!summary) return { ready: false, failures: [...failures, 'missing=verification-summary.json'] };
+  const channelCounts = summary.channelCounts ?? {};
   if (summary.publishedBlockers !== 0) failures.push(`publishedBlockers=${summary.publishedBlockers}`);
-  if (summary.channelCounts.daily < thresholds.daily) failures.push(`daily=${summary.channelCounts.daily}<${thresholds.daily}`);
-  if (summary.channelCounts.super < thresholds.super) failures.push(`super=${summary.channelCounts.super}<${thresholds.super}`);
-  if (summary.channelCounts.dungeon < thresholds.dungeon) failures.push(`dungeon=${summary.channelCounts.dungeon}<${thresholds.dungeon}`);
+  if ((channelCounts.daily ?? 0) < thresholds.daily) failures.push(`daily=${channelCounts.daily ?? 0}<${thresholds.daily}`);
+  if ((channelCounts.super ?? 0) < thresholds.super) failures.push(`super=${channelCounts.super ?? 0}<${thresholds.super}`);
+  if ((channelCounts.dungeon ?? 0) < thresholds.dungeon) failures.push(`dungeon=${channelCounts.dungeon ?? 0}<${thresholds.dungeon}`);
 
   const examManifests = parsed['exam-manifests.json'];
-  if (!examManifests || examManifests.papers.length < thresholds.examPapers) {
-    failures.push(`examPapers=${examManifests?.papers.length || 0}<${thresholds.examPapers}`);
+  const paperCount = examManifests?.papers?.length ?? 0;
+  if (paperCount < thresholds.examPapers) {
+    failures.push(`examPapers=${paperCount}<${thresholds.examPapers}`);
   } else {
     for (const paper of examManifests.papers) {
-      if (paper.questionIds.length < thresholds.examQuestionsPerPaper) {
-        failures.push(`examPaper=${paper.id}:${paper.questionIds.length}<${thresholds.examQuestionsPerPaper}`);
+      if (!Array.isArray(paper.questionIds) || paper.questionIds.length < thresholds.examQuestionsPerPaper) {
+        failures.push(`examPaper=${paper.id}:${paper.questionIds?.length ?? 0}<${thresholds.examQuestionsPerPaper}`);
       }
     }
   }

@@ -195,13 +195,24 @@ pub fn run() {
                 }
                 RunEvent::WindowEvent { label, event: window_event, .. } => {
                     if label == "main" || label == "pet" {
-                        if let tauri::WindowEvent::CloseRequested { api, .. } = window_event {
+                        if let tauri::WindowEvent::CloseRequested { api, .. } = &window_event {
                             api.prevent_close();
                             if let Some(window) = app_handle.get_webview_window(&label) {
                                 let _ = window.hide();
                                 if label == "pet" {
                                     let _ = app_handle.emit("pet-window-visibility", serde_json::json!({ "visible": false }));
                                 }
+                            }
+                        }
+                    }
+                    // While the main window is focused, make the always-on-top pet
+                    // window click-through so it can never swallow clicks meant for
+                    // app UI (e.g. the 知识卡 button). Pet interaction resumes as
+                    // soon as the main window loses focus.
+                    if label == "main" {
+                        if let tauri::WindowEvent::Focused(focused) = window_event {
+                            if let Some(pet) = app_handle.get_webview_window("pet") {
+                                let _ = pet.set_ignore_cursor_events(focused);
                             }
                         }
                     }

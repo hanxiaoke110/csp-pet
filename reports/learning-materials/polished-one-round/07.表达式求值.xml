@@ -1,0 +1,63 @@
+<title>专题讲解｜表达式求值</title>
+
+<h1>表达式求值</h1>
+
+<p>表达式求值的核心是“运算顺序”。孩子需要掌握运算符优先级、结合性、短路求值，以及前缀、中缀、后缀表达式的基本区别。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>平时写的 &lt;code&gt;a + b * c&lt;/code&gt; 就是中缀表达式。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>优先级</td><td>判断表达式先算哪一步</td><td>括号最高，其次乘除模，再加减，再比较和逻辑</td></tr><tr><td>短路求值</td><td>&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt; 和 &lt;code&gt;||&lt;/code&gt; 是否继续计算右边</td><td>结果已确定时右边不再执行</td></tr><tr><td>后缀表达式</td><td>给出后缀式求结果</td><td>遇数入栈，遇运算符弹出计算</td></tr><tr><td>代码阅读</td><td>表达式里自增、自减、赋值</td><td>初赛可能考但要谨慎逐步跟踪</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>中缀表达式。</b>平时写的 <code>a + b * c</code> 就是中缀表达式。</p>
+
+<p><b>后缀表达式。</b>运算符写在操作数后面，例如 <code>2 3 4 * +</code>。</p>
+
+<p><b>短路求值。</b><code>A &amp;&amp; B</code> 中 A 为假时不算 B；<code>A || B</code> 中 A 为真时不算 B。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="后缀表达式求值"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    vector&lt;string&gt; exp = {"2", "3", "4", "*", "+"};
+    stack&lt;int&gt; st;
+    for (string x : exp) {
+        if (isdigit(x[0])) st.push(stoi(x));
+        else {
+            int b = st.top(); st.pop();
+            int a = st.top(); st.pop();
+            if (x == "+") st.push(a + b);
+            if (x == "*") st.push(a * b);
+        }
+    }
+    cout &lt;&lt; st.top() &lt;&lt; endl; // 14
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：<code>2 + 3 * 4</code> 的值是多少？</b></p>
+
+<p><b>解析：</b>乘法优先，所以先算 3×4=12，再算 2+12=14。</p>
+
+<p><b>例 2：<code>0 &amp;&amp; f()</code> 会调用 f 吗？</b></p>
+
+<p><b>解析：</b>不会。左边为假，整个与表达式已经确定为假。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>不要从左到右机械计算，要先看优先级。</li><li>后缀表达式中，弹出的第二个数才是左操作数。</li><li>短路求值会影响函数调用和变量自增是否发生。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">计算 <code>5 + 2 * 3 - 4</code>。</li><li seq="auto">判断 <code>1 || f()</code> 是否会调用 f。</li><li seq="auto">求后缀表达式 <code>6 2 / 3 +</code> 的值。</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/UIE4dEp65oWNeVxYGtZc2ki4nBN">知识卡｜表达式求值</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

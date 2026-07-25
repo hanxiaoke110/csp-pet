@@ -193,6 +193,13 @@
       "sha256": "b7e9c17c562b99757a88c1909a96258f27b7f45145ad9f3a46b0d1d54c5deefa"
     },
     {
+      "key": "2025-03-4",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-03-4.pdf",
+      "sha256": "07cb7531f3b31cc19ce701cfa15ca6cdaf1a3c5f0271aa9240b75e054b2eb415"
+    },
+    {
       "key": "2025-06-1",
       "source": "gesp",
       "url": "https://gesp.ccf.org.cn/101/attach/1687195805024288.pdf",
@@ -212,6 +219,90 @@
       "url": "https://gesp.ccf.org.cn/101/attach/1699464809021472.pdf",
       "localPath": "reports/gesp-sources/pdfs/2025-06-3.pdf",
       "sha256": "c1214e7b1134f988ee8fa9b967be0d5d0bf48d51f836427048ce7e69c96f605a"
+    },
+    {
+      "key": "2025-06-4",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-06-4.pdf",
+      "sha256": "e162212428548e82ca81fd5629bd85f7291d2ebb5b600b1d6bee5f5ed28bb3d3"
+    },
+    {
+      "key": "2025-09-1",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-09-1.pdf",
+      "sha256": "3037786e3622cae3d17c529849d9e2386657479b5944287ffde124f4b2a701a5"
+    },
+    {
+      "key": "2025-09-2",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-09-2.pdf",
+      "sha256": "971907c6ba9e65e30fcf44893a02310331c9cfc3120e128044f9d0b83cafdc96"
+    },
+    {
+      "key": "2025-09-3",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-09-3.pdf",
+      "sha256": "9d498145166ef002cead99e73efa9ddc5c87e1c82a7cd7058e63f969800d768f"
+    },
+    {
+      "key": "2025-09-4",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-09-4.pdf",
+      "sha256": "8424f8c3ce4105ce2dae9bd6464107bf0c21e3342c80b4f1df3cef91625f7594"
+    },
+    {
+      "key": "2025-12-1",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-12-1.pdf",
+      "sha256": "2a1b1e7dc1581f3b75ab6d35fbc22ad18f8d6471c451d588eb1192d1329f0028"
+    },
+    {
+      "key": "2025-12-2",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-12-2.pdf",
+      "sha256": "dc4e684940c2b614388f6ee7ea34a6c76c40435566df3f97f471004459582982"
+    },
+    {
+      "key": "2025-12-4",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2025-12-4.pdf",
+      "sha256": "aeb55c9797044f51a1d63cb3601d081d6a3e150a94c2a5e2c0afd28aedd3544e"
+    },
+    {
+      "key": "2026-03-1",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2026-03-1.pdf",
+      "sha256": "cdcb4545778c07461ca32577bb0ad96e5a4db791d04b0e3127738e7023aadaf6"
+    },
+    {
+      "key": "2026-03-2",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2026-03-2.pdf",
+      "sha256": "baa3fd95cff964df3ce0b4d93dae70bc4dc4363ab6692fa2a8cd2a917136d9bb"
+    },
+    {
+      "key": "2026-03-3",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2026-03-3.pdf",
+      "sha256": "16be70a6edb8b7947285995bb18f0dd5c3c118113b14ae34c6c08da35984defe"
+    },
+    {
+      "key": "2026-03-4",
+      "source": "gesp",
+      "url": null,
+      "localPath": "reports/gesp-sources/pdfs/2026-03-4.pdf",
+      "sha256": "d7961807fc6bee11d1b105731fb18acaf4490c7a4408fcbaa0b83f0048db1d57"
     }
   ]
 }

@@ -1,0 +1,36 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>理解整数除法只保留整数部分。</li><li>认识模运算 <code>%</code>，会求商和余数。</li><li>掌握 <code>double</code> 浮点型变量和多变量输入。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>分小卡、求平均、求面积这类题。先找变量，再决定用整数运算还是小数运算。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P4 数据类型（浮点型） 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int cards, people;
+    cin &gt;&gt; cards &gt;&gt; people;
+    cout &lt;&lt; "每人分到" &lt;&lt; cards / people &lt;&lt; "张" &lt;&lt; endl;
+    cout &lt;&lt; "剩余" &lt;&lt; cards % people &lt;&lt; "张";
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li><code>7 / 2</code> 的结果是 3，不是 3.5。</li><li><code>%</code> 只能用于整数求余。</li><li>需要小数结果时，变量或参与运算的数要用 <code>double</code>。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">手算 <code>17 / 5</code> 和 <code>17 % 5</code>。</li><li seq="auto">写一个输入三门成绩并计算加权总分的程序。</li><li seq="auto">解释什么时候应该用 <code>double</code>。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

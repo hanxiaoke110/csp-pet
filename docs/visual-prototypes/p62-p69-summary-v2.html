@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智子知识总览卡 v2</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1024px; height: 1536px; overflow: hidden; }
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #172238;
+      background: #eef7ff;
+    }
+    .card {
+      position: relative;
+      width: 1024px;
+      height: 1536px;
+      padding: 44px 52px 40px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #f5fbff 0%, #fffef9 52%, #f7fbff 100%);
+      border: 10px solid #2168b5;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 2px solid #a9cee9;
+      pointer-events: none;
+    }
+    .header {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      min-height: 138px;
+      align-items: center;
+      padding: 20px 24px 20px 32px;
+      border: 3px solid #2b74bd;
+      background: #eaf6ff;
+      box-shadow: 0 5px 0 #c7e2f5;
+    }
+    .eyebrow { font-size: 25px; color: #2970ae; font-weight: 700; }
+    h1 { margin: 3px 0 0; font-size: 59px; line-height: 1.1; letter-spacing: 0; color: #123b74; }
+    .logo {
+      width: 96px;
+      height: 108px;
+      justify-self: center;
+      object-fit: contain;
+      image-rendering: auto;
+      filter: drop-shadow(0 4px 5px rgba(17, 52, 87, .2));
+    }
+    .goal {
+      margin: 18px 0;
+      padding: 14px 24px;
+      font-size: 28px;
+      line-height: 1.35;
+      font-weight: 700;
+      color: #603d00;
+      background: #fff0b8;
+      border-left: 8px solid #f0b323;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      min-height: 390px;
+    }
+    #p62 .hero { display: block; min-height: 0; }
+    #p62 .hero > .panel { min-height: 330px; }
+    .panel {
+      border: 3px solid #8bb8dc;
+      background: #fff;
+      padding: 20px 22px;
+    }
+    .panel.green { border-color: #7fc394; background: #f3fff5; }
+    .panel.yellow { border-color: #e6b94e; background: #fffaf0; }
+    .panel.red { border-color: #e98b7e; background: #fff7f5; }
+    .panel.purple { border-color: #a79ad7; background: #faf8ff; }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 13px;
+      font-size: 30px;
+      font-weight: 800;
+      color: #174f87;
+    }
+    .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      color: white;
+      background: #2774b8;
+      font-size: 24px;
+      flex: 0 0 auto;
+    }
+    p { margin: 8px 0; font-size: 24px; line-height: 1.48; }
+    .small { font-size: 21px; color: #526274; }
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr 38px 1fr 38px 1fr;
+      align-items: center;
+      gap: 5px;
+      margin-top: 18px;
+    }
+    .flow-box {
+      min-height: 205px;
+      padding: 14px 10px;
+      text-align: center;
+      border: 2px solid #82b2d8;
+      background: #f9fcff;
+    }
+    .flow-box strong { display: block; margin-bottom: 10px; font-size: 23px; color: #155888; }
+    .arrow { text-align: center; color: #3186c7; font-size: 42px; font-weight: 900; }
+    .array { display: flex; justify-content: center; gap: 3px; margin: 12px 0; }
+    .cell {
+      min-width: 34px;
+      height: 42px;
+      padding: 4px 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #3f88bd;
+      background: #fff;
+      font: 700 21px/1 "SFMono-Regular", Consolas, monospace;
+    }
+    pre {
+      margin: 8px 0 0;
+      padding: 15px 17px;
+      color: #e8f6ff;
+      background: #172840;
+      border-left: 7px solid #39b8a0;
+      font: 20px/1.42 "SFMono-Regular", Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .grid4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .p62-info {
+      display: grid;
+      grid-template-columns: 1.28fr 1fr 1fr;
+      grid-template-rows: 205px 205px;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .p62-info .code-panel { grid-row: 1 / span 2; }
+    .p62-info .panel { padding: 15px 17px; overflow: hidden; }
+    .p62-info .panel-title { margin-bottom: 7px; font-size: 26px; }
+    .p62-info p, .p62-info li { font-size: 19px; line-height: 1.35; }
+    .p62-info pre { font-size: 18px; }
+    ul { margin: 7px 0 0; padding-left: 28px; }
+    li { margin: 7px 0; font-size: 22px; line-height: 1.4; }
+    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag { padding: 6px 11px; background: #e5f4ff; border: 1px solid #76aad2; font-size: 19px; font-weight: 700; }
+    .quiz {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .quiz .panel { min-height: 145px; }
+    .quiz.compact { margin-top: 14px; margin-bottom: 105px; gap: 14px; }
+    .quiz.compact .panel { min-height: 105px; padding: 12px 18px; }
+    .quiz.compact .panel-title { margin-bottom: 3px; font-size: 25px; }
+    .quiz.compact p { margin: 3px 0; font-size: 20px; line-height: 1.32; }
+    .answer { color: #187a53; font-weight: 800; }
+    .footer {
+      position: absolute;
+      left: 52px;
+      right: 52px;
+      bottom: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      min-height: 84px;
+      padding: 15px 22px;
+      border: 3px solid #e0b33b;
+      background: #fff5ca;
+      color: #4d3b08;
+      font-size: 27px;
+      font-weight: 800;
+    }
+    .footer small { font-size: 18px; font-weight: 600; color: #6a6044; }
+    .hide { display: none; }
+    .stack-stage {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+    .stack-visual { display: grid; grid-template-columns: 1fr 44px 1fr; align-items: center; gap: 7px; }
+    .stack {
+      align-self: end;
+      min-height: 245px;
+      padding: 42px 13px 10px;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 7px;
+      border: 5px solid #4f8c9a;
+      border-top: 0;
+      background: #eefafa;
+      position: relative;
+    }
+    .stack::before { content: "栈顶"; position: absolute; top: 3px; left: 0; right: 0; text-align: center; color: #2a6573; font-weight: 800; font-size: 20px; }
+    .item { padding: 10px; text-align: center; color: #fff; background: #319b86; font: 800 24px/1 monospace; }
+    .item:nth-child(2) { background: #3582c4; }
+    .item:nth-child(3) { background: #8b68ba; }
+    .op { font-size: 18px; text-align: center; color: #345; }
+    .op b { display: block; color: #1d716b; font-size: 24px; }
+    .api-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .api-table td { border-bottom: 1px solid #bdd2df; padding: 7px 5px; font-size: 20px; }
+    .api-table td:first-child { width: 34%; font-family: monospace; font-weight: 800; color: #155888; }
+  </style>
+</head>
+<body>
+  <main id="p62" class="card">
+    <header class="header">
+      <div><div class="eyebrow">CSP-J · C3 进阶阶段</div><h1>P62 计数排序</h1></div>
+      <img class="logo" src="../../public/course-data/generated-images/zhizi-logo-source.png" alt="智子小麒麟" />
+    </header>
+    <div class="goal">本课目标：不用反复比较，通过“统计次数”快速完成排序。</div>
+    <section class="hero">
+      <article class="panel">
+        <h2 class="panel-title"><span class="num">1</span>核心流程</h2>
+        <div class="flow">
+          <div class="flow-box"><strong>原数组</strong><div class="array"><span class="cell">3</span><span class="cell">1</span><span class="cell">2</span><span class="cell">3</span><span class="cell">0</span><span class="cell">1</span></div><p class="small">逐个读取</p></div>
+          <div class="arrow">→</div>
+          <div class="flow-box"><strong>计数表</strong><div class="array"><span class="cell">0</span><span class="cell">1</span><span class="cell">2</span><span class="cell">3</span></div><div class="array"><span class="cell">1</span><span class="cell">2</span><span class="cell">1</span><span class="cell">2</span></div><p class="small">cnt[值] = 次数</p></div>
+          <div class="arrow">→</div>
+          <div class="flow-box"><strong>有序输出</strong><div class="array"><span class="cell">0</span><span class="cell">1</span><span class="cell">1</span><span class="cell">2</span><span class="cell">3</span><span class="cell">3</span></div><p class="small">按下标从小到大</p></div>
+        </div>
+      </article>
+    </section>
+    <section class="p62-info">
+      <article class="panel green code-panel"><h2 class="panel-title"><span class="num">2</span>最小代码</h2><pre>for (int x : a)
+    cnt[x]++;
+
+for (int v = 0; v &lt;= m; v++)
+    while (cnt[v]--)
+        cout &lt;&lt; v &lt;&lt; ' ';</pre><p><b>本质：</b>把“值”当作下标，用数组记录出现次数。</p></article>
+      <article class="panel green"><h2 class="panel-title">适用条件</h2><ul><li>整数或能映射为整数</li><li>值域 <code>0…m</code> 较小</li><li>重复值较多</li></ul></article>
+      <article class="panel yellow"><h2 class="panel-title">复杂度</h2><p><b>时间：</b>O(n + m)</p><p><b>空间：</b>O(m)</p><p class="small">n 为数据量，m 为值域。</p></article>
+      <article class="panel red"><h2 class="panel-title">易错提醒</h2><ul><li><code>cnt</code> 未初始化</li><li>负数未增加偏移量</li><li>值域太大浪费空间</li></ul></article>
+      <article class="panel purple"><h2 class="panel-title">举一反三</h2><div class="tagrow"><span class="tag">成绩统计</span><span class="tag">排名</span><span class="tag">桶数组</span></div><p class="small">计数数组也能统计频次。</p></article>
+    </section>
+    <section class="quiz compact">
+      <article class="panel"><h2 class="panel-title">一分钟自测</h2><p>只有 100 个数，但取值范围是 0 到 1 亿，适合计数排序吗？</p></article>
+      <article class="panel green"><h2 class="panel-title">答案</h2><p class="answer">不适合。</p><p class="small">要开一亿多个计数格，空间远大于数据量。</p></article>
+    </section>
+    <footer class="footer"><span>口诀：值当下标去数数，值域小才划算。</span><small>智子知识卡 · P62</small></footer>
+  </main>
+
+  <main id="p69" class="card hide">
+    <header class="header">
+      <div><div class="eyebrow">CSP-J · C3 进阶阶段</div><h1>P69 栈</h1></div>
+      <img class="logo" src="../../public/course-data/generated-images/zhizi-logo-source.png" alt="智子小麒麟" />
+    </header>
+    <div class="goal">本课目标：掌握“后进先出”，只在栈顶完成插入、删除和查看。</div>
+    <section class="hero stack-stage">
+      <article class="panel">
+        <h2 class="panel-title"><span class="num">1</span>状态变化</h2>
+        <div class="stack-visual">
+          <div><div class="stack"><div class="item">A</div><div class="item">B</div><div class="item">C</div></div><p class="op"><b>push A, B, C</b>依次入栈</p></div>
+          <div class="arrow">→</div>
+          <div><div class="stack"><div class="item">A</div><div class="item">B</div></div><p class="op"><b>pop → C</b>最后进入，最先出去</p></div>
+        </div>
+      </article>
+      <article class="panel green">
+        <h2 class="panel-title"><span class="num">2</span>五个基本操作</h2>
+        <table class="api-table"><tr><td>push(x)</td><td>把 x 放到栈顶</td></tr><tr><td>pop()</td><td>删除栈顶元素</td></tr><tr><td>top()</td><td>查看栈顶，不删除</td></tr><tr><td>empty()</td><td>判断栈是否为空</td></tr><tr><td>size()</td><td>查看元素个数</td></tr></table>
+        <pre>stack&lt;int&gt; s;
+s.push(10);
+s.push(20);
+cout &lt;&lt; s.top(); // 20
+s.pop();</pre>
+      </article>
+    </section>
+    <section class="grid4">
+      <article class="panel green"><h2 class="panel-title">核心规则</h2><p><b>后进先出（LIFO）</b></p><p>只能操作栈顶，不能直接访问栈底或中间元素。</p></article>
+      <article class="panel yellow"><h2 class="panel-title">复杂度</h2><p><code>push / pop / top</code></p><p><b>通常都是 O(1)</b></p><p class="small">只改变或查看栈顶。</p></article>
+      <article class="panel red"><h2 class="panel-title">易错提醒</h2><ul><li>空栈调用 <code>top/pop</code></li><li>误以为 <code>top</code> 会删除元素</li><li>把栈当成先进先出的队列</li></ul></article>
+      <article class="panel purple"><h2 class="panel-title">常见应用</h2><div class="tagrow"><span class="tag">括号匹配</span><span class="tag">表达式求值</span><span class="tag">函数调用</span><span class="tag">深度优先搜索</span></div></article>
+    </section>
+    <section class="quiz compact">
+      <article class="panel"><h2 class="panel-title">一分钟自测</h2><p>A、B、C 依次入栈，连续 <code>pop</code> 两次，栈顶是谁？</p></article>
+      <article class="panel green"><h2 class="panel-title">答案</h2><p><span class="answer">A。</span> 弹出 C、B，剩下 A。</p></article>
+    </section>
+    <footer class="footer"><span>口诀：只碰栈顶，后进先出；取前判空。</span><small>智子知识卡 · P69</small></footer>
+  </main>
+  <script>
+    const card = new URLSearchParams(location.search).get('card') || 'p62';
+    document.getElementById('p62').classList.toggle('hide', card !== 'p62');
+    document.getElementById('p69').classList.toggle('hide', card !== 'p69');
+  </script>
+</body>
+</html>

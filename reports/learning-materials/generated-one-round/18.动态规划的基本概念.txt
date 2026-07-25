@@ -1,0 +1,134 @@
+‏动态规划
+‏CCF考纲中，给动态规划划定的范围是简单的一维DP，简单背包问题，区间类型动态规划。
+‏对动态规划了解较少的同学，可以先从下面的三类DP模板入手。思考DP问题，其核心在于状态定义和状态转移方程，开始的时候想不到怎么办，那就是多积累状态转移方程。解决了50个DP题目，就自然理解了状态和状态转移的概念。
+‏最大子段和
+‏问题：给出一个长度为n的序列a，选出其中连续且非空的一段使得这段和最大。
+‏#include <bits/stdc++.h>
+‏using namespace std;
+‏//状态定义 dp[i]表示以第i个数为结尾的最大子段和
+‏//状态转移 dp[i] = max(dp[i-1]+a[i], a[i]);
+‏const int N = 2e5+10;
+‏int n, dp[N], a[N];
+‏int main() {
+‏	cin >> n;
+‏	for (int i = 1; i <= n; i++) {
+‏		scanf("%d", &a[i]);
+	}
+‏	int nmax = -2e9;
+‏	for (int i = 1; i <= n; i++) {
+‏		//     和i-1为结尾的最大子段合并 自己独立成段
+‏		dp[i] = max(dp[i-1] + a[i], a[i]);
+‏		nmax = max(nmax, dp[i]);
+	}
+‏	cout << nmax;
+‏	return 0;
+}
+‏最长上升子序列
+‏最长上升子序列，是指在一个数组中找到一个子序列，它的数值严格递增，并且使这个子序列的长度尽可能长。 最长递增子序列的元素在原序列中不一定是连续的。
+‏例如 A = [10,9,2,5,3,7,101,18] 的最长递增子序列是 [2,3,7,101]，其长度是 4 。
+‏#include <bits/stdc++.h>
+‏using namespace std;
+‏// 状态定义 dp[i]表示以第i个数做结尾时，最长上升子序列的长度
+‏// 转移方程 如果a[i] > a[j], dp[i] = max(dp[i], dp[j] + 1);
+‏int dp[1005]; 
+‏int a[1005];
+‏int main() {
+‏	int n;
+‏	cin >> n;
+‏	for (int i = 1; i <= n; i++) {
+‏		scanf("%d", &a[i]);
+	}	
+‏	int nmax = 0;
+‏	for (int i = 1; i <= n; i++) {
+‏		dp[i] = 1;
+‏		for (int j = 1; j < i; j++) {
+‏			if (a[i] > a[j]) dp[i] = max(dp[i], dp[j] + 1);
+		}
+‏		nmax = max(nmax, dp[i]);
+	}
+‏	cout << nmax;
+‏	return 0;	
+}
+‏0-1背包
+‏有n件物品和一个最多能背重量为w 的背包。第i件物品的重量是v[i]，得到的价值是w[i] 。每件物品只能用一次，求解将哪些物品装入背包里物品价值总和最大。
+‏#include <bits/stdc++.h>
+‏using namespace std;
+‏int n, V, ans, v[1005], w[1005];
+‏int dp[1005]; 
+‏// 状态定义 dp[i][j]表示讨论第i个物品，背包容量为j时，能取到的最大价值
+‏// 状态转移方程 dp[i][j] = max(dp[i-1][j], dp[i-1][j-v[i]] + w[i]);
+‏// 常用滚动数组优化一维 dp[j] = max(dp[j], dp[j-v[i]] + w[i]);
+‏int main() {
+‏	cin >> n >> V;
+‏	for (int i = 1; i <= n; i++) {
+‏		cin >> v[i] >> w[i];
+	}
+‏	for (int i = 1; i <= n; i++) {
+‏		for (int j = V; j >= v[i]; j--) {
+‏			dp[j] = max(dp[j], dp[j-v[i]] + w[i]);
+		}
+	}
+‏	cout << dp[V];
+‏	return 0;
+}
+‏完全背包
+‏有n件物品和一个最多能背重量为w 的背包。第i件物品的重量是v[i]，得到的价值是w[i] 。每件物品能取无限次，求解将哪些物品装入背包里物品价值总和最大。
+‏#include <bits/stdc++.h>
+‏using namespace std;
+‏int n, V, ans, v[1005], w[1005];
+‏int dp[1005]; 
+‏// 状态定义 dp[i][j]表示讨论第i个物品，背包容量为j时，能取到的最大价值
+‏// 状态转移方程 dp[i][j] = max(dp[i-1][j], dp[i-1][j-v[i]] + w[i]);
+‏// 常用滚动数组优化一维 dp[j] = max(dp[j], dp[j-v[i]] + w[i]);
+‏// 和 0-1背包不同是转移顺序变化
+‏int main() {
+‏	cin >> n >> V;
+‏	for (int i = 1; i <= n; i++) {
+‏		cin >> v[i] >> w[i];
+	}
+‏	for (int i = 1; i <= n; i++) {
+‏		for (int j = v[i]; j <= V; j++) {
+‏			dp[j] = max(dp[j], dp[j-v[i]] + w[i]);
+		}
+	}
+‏	cout << dp[V];
+‏	return 0;
+}
+‏区间DP
+‏区间DP的经典例题是出现在1995提高组的石子合并，下面以这个题目为例：
+‏在一个圆形操场的四周摆放 NN 堆石子，现要将石子有次序地合并成一堆，规定每次只能选相邻的 22 堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。
+‏试设计出一个算法,计算出将 NN 堆石子合并成 11 堆的最小得分和最大得分。
+‏#include <bits/stdc++.h>
+‏using namespace std;
+‏const int N = 505;
+‏//状态表示：f[i][j]表示将 i到 j这一段石子合并成一堆的方案的花费最小值
+‏//转移方程：
+‏// i < j 时 dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j] + s[j] - s[i-1]) 
+‏// i = j 时 dp[i][j] = 0 
+‏int a[N], s[N], dp[N][N];
+‏int main() {
+‏    int n;
+‏    cin >> n;
+‏    for (int i = 1; i <= n; i ++) {
+‏        cin >> a[i];
+‏        s[i] += s[i-1] + a[i];
+    }
+‏    memset(f, 0x3f, sizeof(f));
+‏    // 区间 DP 枚举：长度+左端点 
+‏    for (int len = 1; len <= n; len ++) { // len表示[i, j]的元素个数
+‏        for (int i = 1; i + len - 1 <= n; i ++) {
+‏            int j = i + len - 1; // 自动得到右端点
+‏            if (len == 1) {
+‏                dp[i][j] = 0;  // 边界初始化
+‏                continue;
+            }
+
+‏            for (int k = i; k <= j - 1; k ++) { // 必须满足k + 1 <= j
+‏                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j] + s[j] - s[i-1]);
+            }
+        }
+    }
+‏    cout << dp[1][n] << endl;
+‏    return 0;
+}
+

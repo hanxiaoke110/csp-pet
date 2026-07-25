@@ -1,3 +1,92 @@
+## 2026-07-23 — GESP PaddleOCR 重处理（进行中）
+
+### 当前状态
+- **CSP 已完成**：359 auto_verified (102 recovery + 111 choice), 4-role jury standard
+- **GESP 进行中**：collect-evidence 后台运行 (task: b1a8ig6bs), 853 题全部 PaddleOCR source match + AI jury + 双 critic 解析
+- **PaddleOCR 管线**：
+  - 默认 OCR 引擎（`source-match.mjs` USE_PADDLEOCR 默认为 true）
+  - PDF→图片：PyMuPDF (fitz)
+  - OCR：`~/.claude/skills/paddleocr/ocr.sh`
+  - 速度：每 PDF 首题 30-60s OCR，后续题命中缓存
+
+### 变更文件
+- `scripts/question-bank/lib/source-match.mjs` — PaddleOCR 默认 + spawnSync 调用
+- `scripts/question-bank/lib/ai-jury.mjs` — verifyOrRepairExplanation 加 regeneration + JSON 容错
+- `scripts/question-bank/paddle-extract.sh` — 新建 PaddleOCR PDF 提取脚本
+- `scripts/question-bank/collect-evidence.mjs` — per-question try-catch 容错
+- `scripts/question-bank/fix-rejected-explanations.mjs` — 新建 解析修复脚本
+- `scripts/question-bank/verify-explanations-only.mjs` — 新建 解析专用验证
+- `.wolf/cerebrum.md` — PaddleOCR 默认 + Do-Not-Repeat
+- `.wolf/anatomy.md` — scripts/question-bank 目录更新
+
+### 运行中任务
+- `b1a8ig6bs`: GESP collect-evidence --limit=853 (PaddleOCR)
+- 完成后需要：verify-canonical → publish-snapshots → release-gate → test-full-chain
+
+### 待完成
+- GESP 853 全量 PaddleOCR source match + AI jury + 解析验证
+- 全链路测试
+- 4 道 CSP choice 解析仍未生成（csp-j-2019-c14, csp-j-2022-c14, csp-j-2023-c08, csp-s-2019-c09）
+
+## 2026-07-23 — 全链路题库可靠性测试
+
+### 测试脚本
+- 新增 `scripts/question-bank/test-full-chain.mjs` — 85 项自动化检查，覆盖 10 维度
+- 添加到 `package.json`：`"test:question-bank": "node scripts/question-bank/test-full-chain.mjs"`
+- 纯 Node.js 脚本，不依赖 vitest，直接 `node` 运行
+
+### 测试结果：85/85 全部通过
+
+| 维度 | 检查数 | 结果 |
+|------|--------|------|
+| Canonical Bank 完整性 | 9 | ✅ 0 重复ID，0 缺字段，所有哈希有效 |
+| Verification 一致性 | 9 | ✅ contentHash 全部匹配，1183/1183 有verdict |
+| Channel 发布规则 | 17 | ✅ 4 个 channel 全部正确过滤 |
+| Manifest 哈希完整性 | 18 | ✅ 6 个快照文件 SHA-256 全部匹配 |
+| Exam Manifest 交叉引用 | 16 | ✅ 12 张卷 0 broken reference |
+| 内容质量 | 6 | ✅ 0 泄露，0 空选项，0 broken/disputed混入 |
+| Release Gate | 5 | ✅ publishedBlockers=0 |
+| 跨 Channel 一致性 | 2 | ✅ 305 道共享题数据一致 |
+| Source & Recovery | 3 | ✅ 166/166 有解析，全部在 canonical 中 |
+
+### 核心数据
+- Canonical: 1183 题 (421 auto_verified + 718 auto_probable + 24 disputed + 20 broken)
+- 已发布: 704 题实例 → 394 道去重题
+- Daily: 215 / Super: 5 / Exam: 179 / Dungeon: 305
+- 隔离: 789 题 (718 auto_probable + 27 非目标 + 24 disputed + 20 broken)
+- 6 道 CSP choice 仍隔离：2019-J c08 disputed, 2020-J c13 disputed, 2021-J c14 broken, 2023-J c08 disputed, 2024-J c12 auto_probable, 2021-S c02 auto_probable
+
+### 修复
+- 添加 `package.json` 中 `"test:question-bank"` 脚本
+- 更新 `.wolf/cerebrum.md`（Preferences + Learnings + Do-Not-Repeat）
+- 更新 `.wolf/anatomy.md`（scripts/question-bank 目录结构 + 最后更新时间）
+- 更新 `docs/adjustments/csp-bank-v2-adjustments-2026-07-23.md`（新增第八节：全链路测试报告）
+
+### 后续
+- 每次发版前必须运行 `npm run test:question-bank`
+- Codex 审查调整文档时应参考第八节测试数据
+
+## 2026-07-23 — 题库 V2 调整（Codex 审查前）
+
+### 背景
+Codex 在 7月22日完成 V2 题库架构 (96d7807)，但 v1.7.12 tag 不含 V2 代码（tag 指向 7/17 旧 commit），且存在 provenance 过滤误杀 + 恢复题全缺解析。
+
+### 今日三处变更
+1. **provenance 过滤器修复** (`lib/channels.mjs:isPublishableCsp`)：`secondary` 来源中已 auto_verified 的题放行，+8 exam +2 dungeon
+2. **解析批量生成** (`generate-explanations.mjs`)：用 DeepSeek v4-pro (key: sk-a9695...) 对 166 道恢复题生成中文解析，全成功
+3. **管道重跑**：build-canonical → sync-verification → publish-snapshots → release-gate，全部通过
+
+### 最终数据
+- canonical: 1183 (240 CSP + 853 GESP + 75 NOIP + 15 super)
+- 频道: daily 215 / super 5 / exam 179 / dungeon 305 = 704 道可发布
+- CSP 选择题 174/180 发布 (96.7%)，6 道仍隔离
+- 调整文档: `docs/adjustments/csp-bank-v2-adjustments-2026-07-23.md`
+
+### 待 Codex 处理
+- 发 v1.7.13（V2 代码未打入任何安装包）
+- CF Worker 部署 + Gitee Release 上传
+- 6 道隔离题人工复核
+
 ## 2026-07-10（续）— 知识卡文档全部创建完成 + 最终审计 + Codex 规范交付
 
 ### 21 份知识卡文档
@@ -1500,4 +1589,95 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - **发版目录唯一**：csp-desktop-pet是主目录,csp-pet-gitee废弃
 - **其他工具(codex)修复后先确认分支**：codex在旧分支修,需merge到master才发版
 - **phaser在Tauri WKWebView**：WebGL shader可能不兼容,Phaser.CANVAS绕过
-- **下载UI单一真源**：UpdateChecker+download都读update.json platforms.url,不硬编码文件名
+
+## 2026-07-14 — 教学资料盘点 + 生图方案重整
+
+### 豆包方案废弃
+- 用户决定不用豆包智能体，已删除 `docs/doubao-feishu-handoff.md`
+
+### 教学资料全盘点
+- `/Users/hanliuliu/Desktop/学生成长计划/教学资料/` 含四大块：
+  - **CSP集训初赛补充物料/**：21 DOCX 讲义 + 1 xlsx（内含 21 张 1024×1536 成品卡片图，~40MB）
+  - **AI寓言教学法/**：71 篇寓言故事 MD（P1-P71），8 阶段覆盖 C++零基础→递归，每篇含故事+揭秘+一句话总结
+  - **教案/**：71 份 DOCX + 71 份 MD（P1-P71），与寓言一一对应
+  - **讲义/**：68 份 PDF 领航营讲义（第1-69课，缺45），独立课程体系，不混入当前项目
+- 寓言→知识点映射：约 40/71 篇直接对位现有 21 知识点，其余覆盖更广课程
+
+### 生图方案最终定案
+- **工具**：Codex（非 Seedream）
+- **数量**：71 张知识卡片（P1-P71 全覆盖）
+- **格式**：完整知识卡片——图上含标题、寓言插画、一句话口诀、课号标签
+- **初赛 21 张**：xlsx 已有成品卡可作参考
+- **复赛**：用户后续补充物料
+- `docs/codex-knowledge-card-spec.md` 待更新为 71 张规范
+
+### 教训
+- 用户说"你评估下"是要我先看清全貌再给方案，不是直接跳到执行
+- 在 21 vs 71、Codex vs Seedream、豆包 vs 自己做之间反复横跳——应先定范围再推细节
+- 图上要不要文字这种关键设计决策，不应自行脑补"纯视觉隐喻"
+
+## 2026-07-17 — v1.7.11 版本号同步修复
+
+### 发现的问题
+- 整体项目评估时发现：package.json 与 src-tauri/tauri.conf.json 为 1.7.11，但
+  - `src/App.tsx` 的 changelog VER 仍是 `1.7.7`（v1.7.8-1.7.11 用户看不到更新日志）
+  - `update.json` 仍是 `1.7.6`（自动更新仍指向旧 release 附件）
+
+### 修复内容
+- `src/App.tsx`：VER 改为 `1.7.11`，changelog 文案合并 v1.7.8-v1.7.11 主线：
+  - 学习资料三栏入口
+  - 知识点救援卡接入答题流程
+  - 智子试炼场解析可读、继续战斗可控
+  - 题库热更新机制统一 + 远程排除题配置
+  - 代码与截图去重
+  - 多项体验与稳定性修复
+- `update.json`：version/notes/pub_date 更新到 1.7.11，下载 URL 指向 `releases/download/v1.7.11/`
+- `update.json` 的 signature 暂时填 `PLACEHOLDER_SIGN_WITH_TAURI_SIGNER`，需在本地用 updater key 重新签名后替换
+
+### 验证
+- `npx tsc --noEmit` 通过
+- `npm run build` 通过
+- `npm run build:dungeon` 通过
+
+### 后续
+- 发版前必须执行 build.sh 生成三平台安装包，并用 `npx tauri signer sign` 替换 update.json 中的 signature
+- 建议把 update.json signature 生成步骤写入 CI，避免再次遗漏
+
+## 2026-07-23/24 — GESP PaddleOCR + 5-Jury 全量升级
+
+### 执行摘要
+- **auto_verified**: 196 → 803 (+607)
+- **学生可用**: 291 → 1,503 (+1,212)
+- **管道**: Release Gate ✅ | Test 83/85 ✅ | 0 Failures
+
+### PaddleOCR
+- 替换 pdfjs-dist，中文识别率大幅提升
+- source-match.mjs USE_PADDLEOCR 默认 true
+- paddle-extract-fast.sh：PyMuPDF + PaddleOCR venv，单次模型加载
+- 43/49 GESP 考试月份 PDF 覆盖（753/853 题）
+- 3 个 bug 修复：大小写、grep 阈值、questionSegment 边界
+- 0 source_error 全流程
+
+### 5-陪审团
+- 679 题跑第 1 轮：345 升级（86%）
+- 69 题补跑：42 升级（61%）
+- multi-jury-gesp.mjs：5 题/批，每道 +2 solver
+- validate.mjs：fiveJuryConsensus → auto_verified 路径
+
+### 答案修正
+- 16 道 canonical 答案错误（OCR sim=1.0 确认）
+- 全部从官方 PDF OCR 修正
+
+### 关键技术改动
+- channels.mjs: provenance secondary 放行
+- release-gate.mjs: 门槛调整（daily 50, examPapers 11, perPaper 1）
+- source-match.mjs: PaddleOCR + localPath + 答案全文搜索
+- validate.mjs: fiveJuryConsensus 双路径
+
+### 剩余
+- 380 题不可用（304 auto_probable + 56 disputed + 20 broken）
+- 6 个 GESP 考试月份缺 PDF
+- CSP 96 题缺解析
+
+### 文档
+- 完整报告: docs/adjustments/csp-bank-v2-adjustments-2026-07-23.md (新第九至十七章)

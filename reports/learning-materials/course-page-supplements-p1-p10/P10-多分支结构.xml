@@ -1,0 +1,41 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>理解多分支 <code>if / else if / else</code> 的执行逻辑。</li><li>能用多分支处理多种互斥情况。</li><li>了解注释的作用，能给关键代码添加说明。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>字符分类、成绩分档、余数分类。条件按顺序判断，命中一个分支后后面不再执行。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P10 多分支结构 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    char c;
+    cin &gt;&gt; c;
+    if (c &gt;= 'A' &amp;&amp; c &lt;= 'Z') {
+        cout &lt;&lt; "upper";
+    } else if (c &gt;= 'a' &amp;&amp; c &lt;= 'z') {
+        cout &lt;&lt; "lower";
+    } else {
+        cout &lt;&lt; "number";
+    }
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li>多分支是从上到下依次判断，不是所有条件都会执行。</li><li>条件顺序会影响结果，尤其是分数段、范围判断题。</li><li>大括号中只有一条语句时虽然可以省略，但初学阶段建议保留。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">写一个成绩评级程序。</li><li seq="auto">解释 <code>else</code> 的隐藏条件是什么。</li><li seq="auto">给自己的代码加 2 行注释，说明输入和分支含义。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

@@ -1,0 +1,91 @@
+#什么是洪水填充算法？
+洪水填充(Flood fill)算法：从一个起始结点开始把附近与其连通的节点提取出或填充成不同颜色颜色，直到封闭区域内的所有节点都被处理过为止，是从一个区域中提取若干个连通的点与其他相邻区域区分开(或分别染成不同颜色)的经典算法。
+常见的洪水填充算法，一般是4邻域填充，或是8邻域填充。
+
+洪水填充算法的dfs实现
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, ans;
+char a[105][105]; //给定区域n行m列,并假设均小于100 
+void dfs(int x, int y) {
+	// 越界则结束 
+	if (x < 1 || y < 1 || x > n || y > m) return;
+	// 不是石油区域结束 
+	if (a[x][y] != '@') return;
+	a[x][y] = '*'; // 相当于标记已走过
+	//8个方向探索 
+	dfs(x-1, y-1);
+	dfs(x-1, y);
+	dfs(x-1, y+1);
+	dfs(x, y-1);
+	dfs(x, y+1);
+	dfs(x+1, y-1);
+	dfs(x+1, y);
+	dfs(x+1, y+1); 
+}
+int main() {
+	//保存地图 
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++) 
+		for (int j = 1; j <= m; j++) 
+			cin >> a[i][j];	
+	// 遍历地图
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			if (a[i][j] == '@') {
+				dfs(i, j);
+				ans++;
+			}
+		}
+	} 
+	cout << ans;
+	return 0;
+} 
+洪水填充算法的bfs实现
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, ans;
+char a[105][105]; //给定区域n行m列,并假设均小于100 
+void bfs(int x, int y) {
+	queue <int> qx, qy;
+	int dist[105][105];
+	int dx[8] = {-1,-1,-1,0,0,1,1,1};
+	int dy[8] = {-1,0,1,-1,1,-1,0,1};
+	qx.push(x), qy.push(y);
+	memset(dist, 0x3f, sizeof dist); //初始化为无限大，用来表示没走过
+	dist[x][y] = 0;
+	a[x][y] = '*';
+	while (!qx.empty()) {
+		int x = qx.front(), y = qy.front();
+		qx.pop(), qy.pop();
+		for (int i = 0; i < 8; i++) {
+			int nx = x + dx[i], ny = y + dy[i];
+			if (nx < 1 || ny < 1 || nx > n || ny > m) continue;
+			if (dist[nx][ny] != 0x3f3f3f3f) continue;
+			
+			dist[nx][ny] = dist[x][y] + 1;
+			a[nx][ny] = '*';
+			qx.push(nx), qy.push(ny);
+		}
+	}
+}
+int main() {
+	//保存地图 
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++) 
+		for (int j = 1; j <= m; j++) 
+			cin >> a[i][j];	
+	// 遍历地图
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			if (a[i][j] == '@') {
+				bfs(i, j);
+				ans++;
+			}
+		}
+	} 
+	cout << ans;
+	return 0;
+} 
+
+

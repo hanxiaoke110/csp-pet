@@ -1,0 +1,51 @@
+<title>专题讲解｜计算机诞生和发展</title>
+
+<h1>计算机诞生和发展</h1>
+
+<p>这一节属于计算机基础常识。孩子需要知道计算机发展的几个阶段、硬件核心变化，以及冯·诺依曼结构的基本思想。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>电子管计算机，体积大、耗电高。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>发展阶段</td><td>电子管、晶体管、集成电路、大规模集成电路</td><td>按硬件器件变化记忆</td></tr><tr><td>冯·诺依曼</td><td>存储程序思想</td><td>程序和数据都存储在内存中</td></tr><tr><td>五大部件</td><td>运算器、控制器、存储器、输入、输出</td><td>CPU 包含运算器和控制器</td></tr><tr><td>计算机特点</td><td>速度快、精度高、自动化</td><td>理解即可</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>第一代。</b>电子管计算机，体积大、耗电高。</p>
+
+<p><b>第二代。</b>晶体管计算机，可靠性提高。</p>
+
+<p><b>第三代。</b>集成电路计算机。</p>
+
+<p><b>第四代。</b>大规模和超大规模集成电路计算机。</p>
+
+<p><b>存储程序。</b>把程序像数据一样放进存储器，计算机按指令自动执行。</p>
+
+<h2>三、理解示意</h2>
+
+<p>本节偏计算机基础常识，重点不是背代码，而是能把概念讲清楚，并能在选择题中识别正确说法。</p>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：CPU 主要由哪两部分组成？</b></p>
+
+<p><b>解析：</b>运算器和控制器。</p>
+
+<p><b>例 2：冯·诺依曼结构的核心思想是什么？</b></p>
+
+<p><b>解析：</b>存储程序，程序和数据都存储在存储器中。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>不要把输入设备、输出设备和存储器混在一起。</li><li>CPU 不等于整台计算机，它是核心处理部件。</li><li>发展阶段主要按电子器件变化划分。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">列出冯·诺依曼计算机五大部件。</li><li seq="auto">第一代计算机主要使用什么器件？</li><li seq="auto">解释“存储程序”的含义。</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/B2UNdVgHgoh7uPx9I69cxK5snhd">知识卡｜计算机发展史</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

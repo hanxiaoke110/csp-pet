@@ -1,0 +1,146 @@
+{
+  "gesp-2025-09-1-11": {
+    "question": "下面 C++ 代码用于交换两个正整数 $a$ 和 $b$ 的值，不能实现交换的代码是（ ）。",
+    "options": [
+      "A. cout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\ntemp = a;\na = b;\nb = temp;\ncout << \"a=\" << a << \" b=\" << b << endl;",
+      "B. cout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\nb = a - b;\na = a - b;\nb = a + b;\ncout << \"a=\" << a << \" b=\" << b << endl;",
+      "C. cout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\na = a + b;\nb = a - b;\na = a - b;\ncout << \"a=\" << a << \" b=\" << b << endl;",
+      "D. cout << \"输入第一个正整数：\";\ncin >> a;\ncout << \"输入第二个正整数：\";\ncin >> b;\na, b = b, a;\ncout << \"a=\" << a << \" b=\" << b << endl;"
+    ]
+  },
+  "gesp-2025-09-2-13": {
+    "question": "下面 C++ 代码实现输出如下图形，应该在横线处填入的代码是（ ）。",
+    "options": [
+      "A. N - i + 1\ni + 1",
+      "B. N - i\ni",
+      "C. N\ni",
+      "D. N - i\ni + 1"
+    ]
+  },
+  "gesp-2025-09-4-10": {
+    "question": "下面代码试图实现选择排序，使其能对数组 `nums` 排序为升序，则横线上应分别填写（ ）。",
+    "options": [
+      "A. nums[j] < nums[minIndex]\nswap(nums[i], nums[minIndex])",
+      "B. nums[j] > nums[minIndex]\nswap(nums[i], nums[minIndex])",
+      "C. nums[j] <= nums[minIndex]\nswap(nums[j], nums[minIndex])",
+      "D. nums[j] <= nums[minIndex]\nswap(nums[i], nums[j])"
+    ]
+  },
+  "gesp-2025-09-4-13": {
+    "question": "小杨正在爬楼梯，需要 $n$ 阶才能到达楼顶，每次可以爬 $1$ 阶或 $2$ 阶，求小杨有多少种不同的方法可以爬到楼顶，横线上应填写（ ）。",
+    "options": [
+      "A. prev2 = prev1;\nprev1 = current;\ncurrent = prev1 + prev2;",
+      "B. current = prev1 + prev2;\nprev2 = prev1;\nprev1 = current;",
+      "C. current = prev1 + prev2;\nprev1 = current;\nprev2 = prev1;",
+      "D. prev1 = current;\nprev2 = prev1;\ncurrent = prev1 + prev2;"
+    ]
+  },
+  "gesp-2025-12-1-12": {
+    "question": "两个正整数，只要不相等，就一直进行如下操作：最大数减去最小数得到一个值，该值和两个数的最小数构成新的两个正整数，重复操作，直到两个数相等，此时输出该数。下面的 C++ 代码用于实现该操作，横线处应该填写的代码是（ ）。\n\nA.  \n1 `N = N - M`  \n2 `M = M - N`\n\nB.  \n1 `M = M - N`  \n2 `N = N - M`\n\nC.  \n1 `M = N - M`  \n2 `N = M - N`\n\nD.  \n1 `N, M = M, N`  \n2 `M, N = N, M`",
+    "options": [
+      "A. 1 `N = N - M`  \n2 `M = M - N`",
+      "B. 1 `M = M - N`  \n2 `N = N - M`",
+      "C. 1 `M = N - M`  \n2 `N = M - N`",
+      "D. 1 `N, M = M, N`  \n2 `M, N = N, M`"
+    ]
+  },
+  "gesp-2025-12-2-06": {
+    "question": "某单位工号的编码规则：编码总长 5 位，均为数字。前 4 位依次整除以 3 其值累加之和除以 10 的余数为第 5 位数字。如某工号为 76587，前 4 位分别整除以 3 后，商分别为 2、2、1、2，其累加之和为 7，除以 10 的余数为 7，故第 5 位为 7。下面代码依次输入前 4 位后，两个横线处分别应填的是（ ）。",
+    "options": [
+      "A. N % 3\nrst / 10",
+      "B. N % 3\nrst % 10",
+      "C. N / 3\nrst / 10",
+      "D. N / 3\nrst % 10"
+    ]
+  },
+  "gesp-2025-12-2-14": {
+    "question": "阅读下面的 C++ 代码。执行后如输入 $5$，其输出的字符图形是（ ）。",
+    "options": [
+      "A. *****\n ****\n  ***\n   **\n    *",
+      "B.     *\n   ***\n  *****\n *******\n*********",
+      "C. *\n**\n***\n****\n*****",
+      "D.     *\n   **\n  ***\n ****\n*****"
+    ]
+  },
+  "gesp-2025-12-4-12": {
+    "question": "某游戏的排行榜系统需要实时更新玩家分数。每次只有一个玩家的分数发生变化，排行榜已经是按分数降序排列的。现在需要将更新后的玩家调整到正确位置。下面的函数 `updateRanking()` 要实现上述功能，则两处横线上应分别填写（ ）。",
+    "options": [
+      "A. i > 0 && updatedPlayer.score > players[i - 1].score\ni < size - 1 && updatedPlayer.score < players[i + 1].score",
+      "B. i < size - 1 && updatedPlayer.score < players[i + 1].score\ni > 0 && updatedPlayer.score > players[i - 1].score",
+      "C. i > 0 && updatedPlayer.score < players[i - 1].score\ni < size - 1 && updatedPlayer.score < players[i + 1].score",
+      "D. i > 0 && updatedPlayer.score < players[i - 1].score\ni < size - 1 && updatedPlayer.score > players[i + 1].score"
+    ]
+  },
+  "gesp-2026-03-1-05": {
+    "question": "整型变量 a、b 的初值都是 4，则下面的 C++ 代码执行后的输出是（ ）。",
+    "options": [
+      "A. 61\n43",
+      "B. 52\n34",
+      "C. 62\n44",
+      "D. 62\n32"
+    ]
+  },
+  "gesp-2026-03-1-11": {
+    "question": "一个正整数的每位都是个位数，称为数位，最高位非 0。下面的 C++ 代码用于求正整数的所有数位之和，简称数位和。如 123 的各数位分别是 1、2、3，则其数位和为 $1+2+3$，结果为 6。为实现该目标，横线处应该填写的代码是（ ）。",
+    "options": [
+      "A. tnt += N / 10\nN /= 10",
+      "B. tnt += N % 10\nN /= 10",
+      "C. tnt += N / 10\nN %= 10",
+      "D. tnt = tnt + N % 10\nN %= 10"
+    ]
+  },
+  "gesp-2026-03-1-15": {
+    "question": "$N$ 是一个正整数。如果 $N$ 的所有奇数位的数位和等于所有偶数位的数位和，则称它是一个“双螺旋数”。例如 12375 的所有奇数位的数位和是 9，同时它的所有偶数位的数位和也是 9，则 12375 就是一个双螺旋数。下面的 C++ 代码用于判断输入的 $N$ 是否为双螺旋数。空白处应该填入的代码是（ ）。",
+    "options": [
+      "A. N1 += N%10, N /= 10;\nN2 += N%10, N /= 10;",
+      "B. N1 += N/10, N /= 10;\nN2 += N/10, N /= 10;",
+      "C. N1 += N%10, N %= 10;\nN2 += N%10, N %= 10;",
+      "D. N1 += N/10, N %= 10;\nN2 += N/10, N %= 10;"
+    ]
+  },
+  "gesp-2026-03-2-09": {
+    "question": "下面 4 个选项中，与下面 C++ 代码段具有相同效果的是（ ）。",
+    "options": [
+      "A. for (i = 0; i < 5; i++)\n    cout << i;",
+      "B. for (i = 1; i < 5; i++)\n    cout << i;",
+      "C. for (i = 0; i < 6; i++)\n    cout << i;",
+      "D. for (i = 1; i < 6; i++)\n    cout << i;"
+    ]
+  },
+  "gesp-2026-03-2-12": {
+    "question": "某学校图书馆的借阅卡号由 6 位整数组成。前 5 位是顺序编号，第 6 位是校验码，用于防止输错。校验码规则如下：将前 5 位数字相加，然后除以 $10$ 的余数，就是第 6 位数字。如卡号 $123455$ 的前 5 位之和为 $15$，除以 $10$ 的余数是 $5$，故第 6 位为 $5$。下面的 C++ 代码段用于判断卡号是否正确，横线处应填入的代码是（ ）。",
+    "options": [
+      "A. tnt += order_num / 10\ntnt / 10 == check_num",
+      "B. tnt += order_num % 10\ntnt % 10 == check_num",
+      "C. tnt = order_num / 10 + tnt\ntnt % 10 == check_num",
+      "D. tnt = order_num % 10\ntnt / 10 == check_num"
+    ]
+  },
+  "gesp-2026-03-2-13": {
+    "question": "下面的 C++ 代码段正常执行后其输出的数字图形是（ ）。",
+    "options": [
+      "A. 1\n12\n123\n1234",
+      "B. 1\n22\n333\n4444",
+      "C. 1\n21\n321\n4321",
+      "D. 4\n34\n234\n1234"
+    ]
+  },
+  "gesp-2026-03-2-14": {
+    "question": "某学校举办“校园演讲比赛”，每位选手由 8 位评委打分（分数为 $0$-$10$ 的整数），且每位评委必须打分。计分规则：若至少有 5 位评委给出大于等于 $6$ 分，则成绩有效，最终得分为所有 8 位评委的总分；如给出低于 $6$ 分的评委数量超过 5 位，则记为 $0$ 分。以下核心程序段依次输入 8 个分数，并计算最终得分。横线处应填入（ ）。",
+    "options": [
+      "A. total_score += score\nhigh_count += 1",
+      "B. total_score += score\nhigh_count += score",
+      "C. high_count += 1\ntotal_score += score",
+      "D. total_score *= score\nhigh_count *= 1"
+    ]
+  },
+  "gesp-2026-03-4-13": {
+    "question": "下面哪种方式不能实现将字符串 Welcome to 2026! 输出重定向到文件 log.txt（ ）。",
+    "options": [
+      "A. freopen(\"log.txt\", \"w\", stdout);\ncout << \"Welcome to 2026!\" << endl;\nfclose(stdout);",
+      "B. std::ofstream outFile(\"log.txt\");\ncout << \"Welcome to 2026!\" << endl;\noutFile.close();",
+      "C. ofstream log_file(\"log.txt\");\nstreambuf* org_cout = cout.rdbuf();\ncout.rdbuf(log_file.rdbuf());\ncout << \"Welcome to 2026!\" << endl;\ncout.rdbuf(org_cout);",
+      "D. std::ofstream outFile(\"log.txt\");\noutFile << \"Welcome to 2026!\" << endl;\noutFile.close();"
+    ]
+  }
+}

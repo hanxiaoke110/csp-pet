@@ -1,0 +1,62 @@
+<title>专题讲解｜动态规划的基本概念</title>
+
+<h1>动态规划的基本概念</h1>
+
+<p>动态规划适合有重复子问题和最优子结构的问题。对初学者来说，先不要追求复杂模型，重点掌握状态、转移、初值、答案四件事。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>用数组保存子问题答案。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>状态定义</td><td>&lt;code&gt;dp[i]&lt;/code&gt; 表示什么</td><td>先用一句话说清楚</td></tr><tr><td>转移方程</td><td>当前状态从哪些小状态来</td><td>找最后一步</td></tr><tr><td>初始值</td><td>边界状态是多少</td><td>没有初值无法递推</td></tr><tr><td>经典模型</td><td>爬楼梯、最长上升子序列、背包入门</td><td>先识别模型再写转移</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>状态。</b>用数组保存子问题答案。</p>
+
+<p><b>转移。</b>从已知的小问题推出大问题。</p>
+
+<p><b>初值。</b>最小规模问题的答案。</p>
+
+<p><b>答案。</b>最终要输出哪个状态。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="爬楼梯 DP"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    vector&lt;long long&gt; dp(n + 1);
+    dp[0] = 1; // 站在第 0 阶有 1 种方式
+    for (int i = 1; i &lt;= n; i++) {
+        dp[i] += dp[i - 1];
+        if (i &gt;= 2) dp[i] += dp[i - 2];
+    }
+    cout &lt;&lt; dp[n] &lt;&lt; endl;
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：一次能走 1 或 2 阶，走到第 i 阶的最后一步可能来自哪里？</b></p>
+
+<p><b>解析：</b>来自 i-1 阶走 1 步，或 i-2 阶走 2 步。</p>
+
+<p><b>例 2：为什么 DP 比朴素递归快？</b></p>
+
+<p><b>解析：</b>DP 把子问题答案存起来，避免重复计算。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li><code>dp[i]</code> 的含义不清楚，后面转移一定乱。</li><li>转移方程要从更小的已知状态来。</li><li>数组范围要覆盖初值和答案位置。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">定义“走到第 i 阶的方法数”的 dp 状态。</li><li seq="auto">写出爬楼梯的转移方程。</li><li seq="auto">解释记忆化搜索和 DP 的关系。</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/Gaefd6ZVvo4JBzxts6dc0xLGn7c">知识卡｜动态规划</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

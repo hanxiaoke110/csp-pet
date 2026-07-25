@@ -1,0 +1,57 @@
+<title>专题讲解｜递归复杂度分析</title>
+
+<h1>递归复杂度分析</h1>
+
+<p>递归是函数自己调用自己。分析递归复杂度时，要看每次调用产生几个子问题、子问题规模如何变化，以及递归什么时候停止。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>最小问题的答案，负责让递归停下来。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>递归出口</td><td>缺少出口会怎样</td><td>可能无限递归直到栈溢出</td></tr><tr><td>递归次数</td><td>每次 n-1 或 n/2</td><td>画递归链或递归树</td></tr><tr><td>斐波那契</td><td>朴素递归为什么慢</td><td>重复计算太多</td></tr><tr><td>分治</td><td>二分递归复杂度</td><td>看层数和每层工作量</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>递归出口。</b>最小问题的答案，负责让递归停下来。</p>
+
+<p><b>递归关系。</b>把大问题拆成更小的同类问题。</p>
+
+<p><b>递归深度。</b>从第一次调用到最深处一共有多少层。</p>
+
+<p><b>递归树。</b>把每次调用画成树，方便统计总调用数。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="阶乘递归"><code>long long fact(int n) {
+    if (n == 0) return 1;       // 递归出口
+    return n * fact(n - 1);     // 问题规模减 1
+}</code></pre>
+
+<pre lang="cpp" caption="朴素斐波那契递归"><code>int fib(int n) {
+    if (n &lt;= 1) return n;
+    return fib(n - 1) + fib(n - 2); // 会产生大量重复计算
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：<code>fact(n)</code> 的时间复杂度是多少？</b></p>
+
+<p><b>解析：</b>每层只调用一次，规模从 n 到 0，共 n 层，所以是 O(n)。</p>
+
+<p><b>例 2：每次把 n 除以 2 的递归深度是多少？</b></p>
+
+<p><b>解析：</b>大约是 log n 层。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>递归必须有出口，并且每次调用要更接近出口。</li><li>不要只看代码短，递归可能调用次数很多。</li><li>朴素斐波那契递归复杂度很高，因为重复计算。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">写出 <code>fact(4)</code> 的调用过程。</li><li seq="auto">分析 <code>solve(n/2)</code> 的递归深度。</li><li seq="auto">说明为什么 <code>fib(5)</code> 会重复计算 <code>fib(3)</code>。</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/Kogod4koSouxgkx1UdicTEL4n9f">知识卡｜递归与递推</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

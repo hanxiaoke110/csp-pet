@@ -1,0 +1,110 @@
+{
+  "updatedAt": "2026-07-15T10:10:20.364Z",
+  "results": [
+    {
+      "id": "binary-and-bitwise",
+      "ok": true,
+      "image": "card-01-binary-and-bitwise.png"
+    },
+    {
+      "id": "number-theory",
+      "ok": true,
+      "image": "card-02-number-theory.png"
+    },
+    {
+      "id": "data-types-and-units",
+      "ok": true,
+      "image": "card-03-data-types-and-units.png"
+    },
+    {
+      "id": "stack-and-queue",
+      "ok": true,
+      "image": "card-04-stack-and-queue.png"
+    },
+    {
+      "id": "expression-evaluation",
+      "ok": true,
+      "image": "card-05-expression-evaluation.png"
+    },
+    {
+      "id": "tree",
+      "ok": true,
+      "image": "card-06-tree.png"
+    },
+    {
+      "id": "graph",
+      "ok": true,
+      "image": "card-07-graph.png"
+    },
+    {
+      "id": "complexity",
+      "ok": true,
+      "image": "card-08-complexity.png"
+    },
+    {
+      "id": "recursion",
+      "ok": true,
+      "image": "card-09-recursion.png"
+    },
+    {
+      "id": "greedy",
+      "ok": true,
+      "image": "card-10-greedy.png"
+    },
+    {
+      "id": "binary-search",
+      "ok": true,
+      "image": "card-11-binary-search.png"
+    },
+    {
+      "id": "flood-fill",
+      "ok": true,
+      "image": "card-12-flood-fill.png"
+    },
+    {
+      "id": "encoding-and-decoding",
+      "ok": true,
+      "image": "card-13-encoding-and-decoding.png"
+    },
+    {
+      "id": "dynamic-programming",
+      "ok": true,
+      "image": "card-14-dynamic-programming.png"
+    },
+    {
+      "id": "computer-networks",
+      "ok": true,
+      "image": "card-15-computer-networks.png"
+    },
+    {
+      "id": "computer-history",
+      "ok": true,
+      "image": "card-16-computer-history.png"
+    },
+    {
+      "id": "programming-languages",
+      "ok": true,
+      "image": "card-17-programming-languages.png"
+    },
+    {
+      "id": "array-and-string",
+      "ok": true,
+      "image": "card-18-array-and-string.png"
+    },
+    {
+      "id": "control-structures",
+      "ok": true,
+      "image": "card-19-control-structures.png"
+    },
+    {
+      "id": "combinatorics",
+      "ok": true,
+      "image": "card-20-combinatorics.png"
+    },
+    {
+      "id": "program-reading",
+      "ok": true,
+      "image": "card-21-program-reading.png"
+    }
+  ]
+}

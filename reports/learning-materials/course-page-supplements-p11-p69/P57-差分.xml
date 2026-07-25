@@ -1,0 +1,41 @@
+<hr/>
+
+<h2>本课文字复习</h2>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>学习提示：</b>下面内容帮助你把卡片知识落到代码和练习里。</p></callout>
+
+<h3>一、本课要掌握什么</h3>
+
+<ul><li>掌握「差分」的核心概念和基本写法。</li><li>能根据题目要求选择合适的数据结构或控制结构。</li><li>能独立完成一题同类练习并检查边界。</li></ul>
+
+<h3>二、关键题型</h3>
+
+<ul><li>快速做区间加法。差分适合多次修改，最后再还原数组。</li></ul>
+
+<h3>三、示例代码</h3>
+
+<pre lang="cpp" caption="P57 差分 核心写法"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n, l, r, x, d[1005] = {};
+    cin &gt;&gt; n &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+    d[l] += x;
+    d[r + 1] -= x;
+    int cur = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        cur += d[i];
+        cout &lt;&lt; cur &lt;&lt; " ";
+    }
+    return 0;
+}</code></pre>
+
+<h3>四、易错点</h3>
+
+<ul><li>区间 [l,r] 加 x，要在 <code>d[l]</code> 加，在 <code>d[r+1]</code> 减。</li><li>最后需要做一次前缀累加还原。</li><li>注意 <code>r+1</code> 是否越界。</li></ul>
+
+<h3>五、复习建议</h3>
+
+<ol><li seq="auto">手算一次区间加法后的差分变化。</li><li seq="auto">说明差分和前缀和的关系。</li><li seq="auto">写一个支持多次区间加的程序。</li></ol>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

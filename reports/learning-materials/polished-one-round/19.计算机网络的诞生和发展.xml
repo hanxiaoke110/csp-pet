@@ -1,0 +1,49 @@
+<title>专题讲解｜计算机网络的诞生和发展</title>
+
+<h1>计算机网络的诞生和发展</h1>
+
+<p>计算机网络让不同计算机之间可以交换信息。初赛常考网络发展、互联网基础概念、IP、域名、协议、局域网和广域网等常识。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>范围较小，如学校机房、家庭网络。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>网络分类</td><td>LAN、WAN、互联网</td><td>按覆盖范围区分</td></tr><tr><td>地址</td><td>IP 地址和域名</td><td>域名便于人记忆，IP 便于机器定位</td></tr><tr><td>协议</td><td>HTTP、TCP/IP、DNS</td><td>协议是通信规则</td></tr><tr><td>网络设备</td><td>路由器、交换机</td><td>理解基本作用即可</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>局域网 LAN。</b>范围较小，如学校机房、家庭网络。</p>
+
+<p><b>广域网 WAN。</b>范围较大，可以跨城市甚至跨国家。</p>
+
+<p><b>互联网。</b>把大量网络连接起来形成的全球网络。</p>
+
+<p><b>DNS。</b>把域名解析成 IP 地址的系统。</p>
+
+<h2>三、理解示意</h2>
+
+<p>本节偏计算机基础常识，重点不是背代码，而是能把概念讲清楚，并能在选择题中识别正确说法。</p>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：为什么要有域名？</b></p>
+
+<p><b>解析：</b>IP 地址不方便记忆，域名更适合人使用。</p>
+
+<p><b>例 2：访问网页通常用到什么协议？</b></p>
+
+<p><b>解析：</b>常见是 HTTP 或 HTTPS。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>互联网不等于万维网，网页只是互联网的一种应用。</li><li>域名不是 IP，但可以通过 DNS 找到对应 IP。</li><li>局域网和广域网主要按覆盖范围区分。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">举一个局域网的例子。</li><li seq="auto">说明 DNS 的作用。</li><li seq="auto">HTTP 和 HTTPS 哪个更安全？为什么？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/UjdbdZ6VKoLjNCxFCGxc9aqEnbh">知识卡｜计算机网络基础</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

@@ -1,0 +1,66 @@
+<title>专题讲解｜排列组合</title>
+
+<h1>排列组合</h1>
+
+<p>这一节帮助孩子区分“排列”和“组合”，理解加法原理、乘法原理、阶乘和简单概率。CSP-J 初赛里，这类题通常不会让孩子写复杂程序，而是考能不能把题意拆成几个选择步骤。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>如果完成一件事可以分成互不重叠的几类情况，总方法数等于各类方法数相加。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>计数原理</td><td>“完成一件事有几种方法”</td><td>先判断是分情况相加，还是分步骤相乘</td></tr><tr><td>排列组合</td><td>从 n 个元素中选或排</td><td>看顺序是否重要</td></tr><tr><td>概率计算</td><td>某事件发生的概率是多少</td><td>有利情况数 ÷ 总情况数</td></tr><tr><td>鸽巢原理</td><td>至少有几个相同/重复</td><td>物品数超过盒子数时必有重复</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>加法原理。</b>如果完成一件事可以分成互不重叠的几类情况，总方法数等于各类方法数相加。</p>
+
+<p><b>乘法原理。</b>如果完成一件事需要连续做几步，总方法数等于每一步选择数相乘。</p>
+
+<p><b>排列。</b>从 n 个不同元素中取出 m 个并排成一列，顺序重要。</p>
+
+<p><b>组合。</b>从 n 个不同元素中取出 m 个组成一组，顺序不重要。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="计算阶乘和组合数"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+long long fact(int n) {
+    long long ans = 1;
+    for (int i = 1; i &lt;= n; i++) ans *= i;
+    return ans;
+}
+
+long long C(int n, int m) {
+    if (m &lt; 0 || m &gt; n) return 0;
+    return fact(n) / fact(m) / fact(n - m);
+}
+
+int main() {
+    cout &lt;&lt; C(5, 2) &lt;&lt; endl; // 从 5 个里选 2 个，共 10 种
+    return 0;
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：有 3 件上衣和 2 条裤子，一套衣服有几种搭配？</b></p>
+
+<p><b>解析：</b>上衣和裤子是两个连续步骤，用乘法原理：3 × 2 = 6。</p>
+
+<p><b>例 2：从 5 名同学中选 2 名参加活动，有多少种选法？</b></p>
+
+<p><b>解析：</b>只关心选了谁，不关心顺序，是组合：C(5,2)=10。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>看到“先后、排队、名次”通常顺序重要；看到“选出、组成一组”通常顺序不重要。</li><li>加法原理用于分情况，乘法原理用于分步骤，不要混用。</li><li>概率题要先数清总情况数，再数有利情况数。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">从 6 人中选 3 人，有多少种选法？</li><li seq="auto">3 名同学排队，有多少种不同顺序？</li><li seq="auto">抛两枚硬币，至少出现一个正面的概率是多少？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/FL4rdY9cvoErchxhw0dcV7vanfc">知识卡｜组合数学与概率</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

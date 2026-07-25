@@ -110,3 +110,79 @@
 - **绝不**: lark-cli docs +create 连续创建超过 13 个文档不加大于 2s 延迟——触发 99991400 限流
 - **绝不**: 在飞书 Docx 中使用 text_color ≥ 8——会触发 "field validation failed"
 - **绝不**: 尝试通过 children API 创建 divider 块——不支持，用文本分隔符替代
+
+- **默认 OCR 引擎：PaddleOCR**（`source-match.mjs` 中 `USE_PADDLEOCR` 默认为 true）
+  - 通过 `~/.claude/skills/paddleocr/ocr.sh` 调用，走独立 venv
+  - PDF→图片用 PyMuPDF (`fitz`)，图片→文本用 PaddleOCR
+  - 中文识别精度比 pdfjs-dist 高得多
+  - 关闭方式：`USE_PADDLEOCR=false` 环境变量回退到 pdfjs-dist
+- **PaddleOCR 提取速度**：每页约 5-10s（含 OCR 推理），整卷约 30-60s
+- **source-match.mjs 中的 PaddleOCR 缓存**：同一 PDF 只 OCR 一次，结果缓存在 `pdfCache` Map 中
+
+## 2026-07-23 — 全链路题库可靠性测试
+
+### Preferences
+- **每次发版前必须运行 `npm run test:question-bank`**，85 项检查全部通过才能发布
+- 题库管道变更（改 channels / canonical / verification / pipeline 脚本）后必须重跑全链路测试
+- 测试脚本 `scripts/question-bank/test-full-chain.mjs` 是题库可靠性的最终关卡
+
+### Learnings
+- 全链路测试覆盖 10 维度 85 项检查：Canonical 完整性(9) / Verification 一致性(9) / Channel 发布规则(17) / Manifest 哈希(18) / Exam Manifest 交叉引用(16) / 内容质量(6) / Release Gate(5) / 跨 Channel 一致性(2) / 源数据(3)
+- 题库计算公式：canonical 1183 → channels(daily 215 + super 5 + exam 179 + dungeon 305) = 704 题实例，394 道去重题
+- 隔离题分类：718 auto_probable (GESP) + 27 auto_verified 非目标 + 24 disputed + 20 broken
+- 6 道 CSP choice 隔离题明细：2019-J c08 disputed, 2020-J c13 disputed, 2021-J c14 broken, 2023-J c08 disputed, 2024-J c12 auto_probable, 2021-S c02 auto_probable
+- `test-full-chain.mjs` 是纯 Node.js 脚本，不依赖 vitest，直接 `node` 运行
+- Manifest SHA-256 哈希校验确保每个快照文件与 manifest.json 完全一致
+- 跨 channel 共享题目（305 道在多个 channel）数据一致性由 JSON 序列化比对验证
+- 所有 166 道 recovery 题现在都有解析，0 道缺失
+
+### Do-Not-Repeat
+- **绝不**: 发版前不跑 `npm run test:question-bank`——已有教训：provenance 过滤误杀 14 题、verification contentHash 不同步
+- **绝不**: 修改 channels.mjs 的 isPublishableCsp 后不重跑全链路测试——隔离/放行逻辑直接影响学生端可见题目
+- **绝不**: 手动改 verification.json 的 contentHash 对齐后不跑全链路测试——需要确认所有 verdict 与 canonical 完全一致
+
+## 2026-07-14 教学资料 + 生图方案新增
+
+### Learnings
+- 教学资料在 `/Users/hanliuliu/Desktop/学生成长计划/教学资料/`，不在项目目录内
+- AI寓言教学法 71 篇（P1-P71）覆盖完整 CSP 课程，每篇含故事+揭秘映射表+一句话口诀
+- 教案 71 份（DOCX + MD 双格式）与寓言一一对应
+- CSP集训初赛补充物料：21 DOCX + 1 xlsx（21 张 1024×1536 知识卡片成品图）
+- 讲义 68 份 PDF 是独立"领航营"课程体系，不与当前项目混用
+
+### Do-Not-Repeat
+- **绝不**: 在没看清全貌前直接跳到执行细节——用户说"评估下"时要先盘点再给方案
+- **绝不**: 在关键设计决策上自行脑补——如"图上不写字"vs"完整知识卡片"，应先和用户确认
+- **绝不**: 在 21 vs 71、Codex vs Seedream 之间反复横跳——先定范围，再推细节
+
+## 2026-07-23/24 — PaddleOCR + 5-Jury + 题库升级
+
+### Preferences
+- **OCR 默认 PaddleOCR**：`source-match.mjs` USE_PADDLEOCR 默认为 true，关闭需 `USE_PADDLEOCR=false`
+- **5-陪审团标准**：3-role（2 solver + 1 critic）→ 加 2 solver → 5/5 全票 = auto_verified
+- **发版前必跑**：`npm run test:question-bank` + release-gate 全部通过
+- **Canonical 答案修正优先 OCR**：sim=1.0 的 OCR 官方答案比 canonical 更可信
+
+### Learnings
+- PaddleOCR 每页 ~20 秒，15 页 PDF 约 5 分钟（spawnSync 阻塞 event loop）
+- ocr.sh 每图重载 PaddleOCR 模型（慢）；改为 Python 脚本单次加载 + 循环处理所有页（快 15%）
+- GESP PDF 答案格式均为 `【答案】X`，但 `questionSegment` 的边界检测被 `10.0` 等代码中的数字误判
+- `stableContentHash` Node.js vs Python 计算不一致 → 全部 node 端计算
+- evidence contentHash 必须与 canonical 严格一致，否则 verify-canonical 静默丢弃
+- 多人 jury 共识 > 正则匹配 OCR 答案（用户建议，执行验证有效）
+- 5-jury 升级率 86%（第一轮），61%（补跑轮，这些题本身争议更大）
+
+### Do-Not-Repeat
+- **绝不**: 在 Python subprocess 中跑 verify-canonical 然后以为文件已保存——cwd 可能不对
+- **绝不**: evidence contentHash 用不同语言/环境计算——只用 Node.js `stableContentHash`
+- **绝不**: `questionSegment` 用 `\s\d+[.．、\s]` 做边界——会误匹配 `10.0` 等代码数字
+- **绝不**: spawnSync timeout 设 300s——PaddleOCR 15 页 PDF 需要 ~350s，至少 600s
+- **绝不**: source-catalog 条目设 `url: null` 但不改 `isOfficialUrl` 检查——需同步加 `!resolved.localPath`
+
+### 修复的 Bug 记录
+1. bash `true` vs Python `'True'` 大小写 → `int('--all')` 崩溃
+2. grep `^\[0\.[0-9]+\]` 漏置信度 1.000 行
+3. `questionSegment` 被 `10.0` 截断 → 答案丢失
+4. `isOfficialUrl` 拒绝 url:null 的 localPath 条目 → 13 PDF 白费
+5. contentHash Node.js/Python 不一致 → evidence 全部被 discard
+6. verify-canonical cwd 错误 → 文件未保存

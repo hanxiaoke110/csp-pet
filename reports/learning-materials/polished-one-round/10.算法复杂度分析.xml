@@ -1,0 +1,58 @@
+<title>专题讲解｜算法复杂度分析</title>
+
+<h1>算法复杂度分析</h1>
+
+<p>复杂度用来估计算法随着数据规模变大时会变慢多少。孩子不用死记每段代码，而要学会看循环层数、数据规模和常见算法模式。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>只保留增长最快的主要部分，忽略常数和低阶项。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>单层循环</td><td>循环 n 次是多少复杂度</td><td>通常 O(n)</td></tr><tr><td>嵌套循环</td><td>两层都到 n</td><td>通常 O(n^2)</td></tr><tr><td>二分</td><td>每次规模减半</td><td>通常 O(log n)</td></tr><tr><td>排序</td><td>常见排序库函数</td><td>通常 O(n log n)</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>大 O 表示法。</b>只保留增长最快的主要部分，忽略常数和低阶项。</p>
+
+<p><b>时间复杂度。</b>估计运行步骤数量随 n 的增长。</p>
+
+<p><b>空间复杂度。</b>估计算法额外使用的内存随 n 的增长。</p>
+
+<p><b>复杂度排序。</b>常见从快到慢：O(1)、O(log n)、O(n)、O(n log n)、O(n^2)。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="几种常见复杂度"><code>// O(n)
+for (int i = 0; i &lt; n; i++) cout &lt;&lt; i;
+
+// O(n^2)
+for (int i = 0; i &lt; n; i++)
+    for (int j = 0; j &lt; n; j++)
+        cout &lt;&lt; i &lt;&lt; j;
+
+// O(log n)
+while (n &gt; 1) n /= 2;</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：两层循环，外层 n 次，内层 m 次，复杂度是多少？</b></p>
+
+<p><b>解析：</b>总次数约为 n×m，所以是 O(nm)。</p>
+
+<p><b>例 2：循环变量每次乘 2，直到超过 n，复杂度是多少？</b></p>
+
+<p><b>解析：</b>规模指数增长，次数约为 log n，所以是 O(log n)。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>不要把所有循环都看成 O(n)，要看循环变量怎么变化。</li><li>顺序执行的两段代码取较大的复杂度。</li><li>嵌套循环通常相乘，连续循环通常相加后取主项。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">判断一段三层 n 循环的复杂度。</li><li seq="auto">说明为什么二分查找是 O(log n)。</li><li seq="auto">O(n^2) 和 O(n log n) 哪个增长更快？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/Joamd7W7foFWlYxpMJMc0T87nOg">知识卡｜时间复杂度与算法复杂度</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

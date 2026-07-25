@@ -1,0 +1,298 @@
+{
+  "summary": {
+    "total": 18,
+    "ok": 18,
+    "failed": 0,
+    "failedItems": []
+  },
+  "checks": [
+    {
+      "no": "03",
+      "title": "排列组合",
+      "doc": "JkwpdaeceovKQ7xgN7bcAhpSnvh",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "04",
+      "title": "数据类型、存储单位、指针",
+      "doc": "DqL5dBD8xoyqphxQ0BkcLTQ8nrh",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "06",
+      "title": "栈和队列",
+      "doc": "WeIUdwO0AoyNhbxwS8PcI6UznBg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "07",
+      "title": "表达式求值",
+      "doc": "Pjs4dLRfSorncHxhnBqc4e3Mnme",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "08",
+      "title": "二叉树的形态与遍历",
+      "doc": "XnsMd3XAao4459x3ZKXcbArrnCd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "09",
+      "title": "图的基础概念和深搜广搜",
+      "doc": "NRsyd2S2koAO1fxVTuRcejcQnNd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "10",
+      "title": "算法复杂度分析",
+      "doc": "X1ISdZNhBoxUasxJ0ZRcr08Bnmd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "11",
+      "title": "递归复杂度分析",
+      "doc": "FLu4dSVxeoZ5Uvx7ANScj9ObnQf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "12",
+      "title": "洪水填充算法",
+      "doc": "MBHrdUWzDopjxqxII8ncEJbEnqf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "13",
+      "title": "常见贪心算法类型",
+      "doc": "QGkXdQJlRogJzZxMMoqc7u1nnWf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "14",
+      "title": "贪心算法：3个经典区间问题",
+      "doc": "HvB7dvF7zojkl1xWoQbcnlW8nxc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "15",
+      "title": "二分查找的边界分析",
+      "doc": "IMSPdsW2aoyMV2xRVkqc2mStnAf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "16",
+      "title": "二分答案",
+      "doc": "OZh2d0njzo6ybJx7x7PcuGeVnDf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "17",
+      "title": "编码解码",
+      "doc": "FpWnd8hNmoExYZxx6KkcLRphnpg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "18",
+      "title": "动态规划的基本概念",
+      "doc": "HwGfd31cKoA38yxGuCtcbudnnHf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "19",
+      "title": "计算机网络的诞生和发展",
+      "doc": "X4DadWzB2oBM6uxsDXncTZfQnid",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "20",
+      "title": "计算机诞生和发展",
+      "doc": "EhNPdP3fFoegbrxdxhhc9Umnnpb",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": "21",
+      "title": "计算机语言",
+      "doc": "E34Td76uooIqZnxVyPgcattyn5c",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    }
+  ]
+}

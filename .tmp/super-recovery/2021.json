@@ -1,0 +1,49 @@
+{
+  "super-2021-reading-1": {
+    "officialQuestion": "阅读以下C++程序（程序输入不超过数组定义的范围），完成下面的判断题和单选题。",
+    "officialCode": "#include <iostream>\nusing namespace std;\n\nint n;\nint a[1000];\n\nint f(int x)\n{\n    int ret = 0;\n    for (; x; x &= x - 1) ret++;\n    return ret;\n}\n\nint g(int x)\n{\n    return x & -x;\n}\n\nint main()\n{\n    cin >> n;\n    for (int i = 0; i < n; i++) cin >> a[i];\n    for (int i = 0; i < n; i++)\n        cout << f(a[i]) + g(a[i]) << ' ';\n    cout << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "判断题16：输入的 n 等于 1001 时，程序不会发生下标越界。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "数组 a 只有 1000 个元素（下标 0~999），n=1001 时 a[1000] 下标越界，故该说法错误。" },
+      { "label": "判断题17：输入的 a[i] 必须全为正整数，否则程序将陷入死循环。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "f 中 x &= x-1 每步清除最低位的 1，负数在补码表示下也会在有限步内变为 0，不会死循环。" },
+      { "label": "判断题18：当输入为“5 2 119 16 10”时，输出为“34317 5”。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "官方答案为×。逐值计算 f(x)+g(x)（1的个数+lowbit）与实际输出不符。" },
+      { "label": "判断题19：当输入为“1 511998”时，输出为“18”。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "511998=0x7CFFE，二进制共 16 个 1，lowbit=2，f+g=16+2=18。" },
+      { "label": "判断题20：将源代码中 g 函数的定义（14-17行）移到 main 函数的后面，程序可以正常编译运行。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "main 中调用 g 时 g 尚未声明或定义，编译报错。" },
+      { "label": "单选题21：当输入为“2 -65536 2147483647”时，输出为（）。", "options": ["“65532 33”", "“65552 32”", "“65535 34”", "“65554 33”"], "correctIndex": 1, "explanation": "-65536=0xFFFF0000 有 16 个 1，lowbit=65536，f+g=65552；2147483647 有 31 个 1，lowbit=1，f+g=32。" }
+    ]
+  },
+  "super-2021-reading-2": {
+    "officialQuestion": "阅读以下C++程序（Base64 解码），完成下面的判断题和单选题。",
+    "officialCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nchar base[64];\nchar table[256];\n\nvoid init()\n{\n    for (int i = 0; i < 26; i++) base[i] = 'A' + i;\n    for (int i = 0; i < 26; i++) base[26 + i] = 'a' + i;\n    for (int i = 0; i < 10; i++) base[52 + i] = '0' + i;\n    base[62] = '+', base[63] = '/';\n\n    for (int i = 0; i < 256; i++) table[i] = 0xff;\n    for (int i = 0; i < 64; i++) table[base[i]] = i;\n    table['='] = 0;\n}\n\nstring decode(string str)\n{\n    string ret;\n    int i;\n    for (i = 0; i < str.size(); i += 4) {\n        ret += table[str[i]] << 2 | table[str[i + 1]] >> 4;\n        if (str[i + 2] != '=')\n            ret += (table[str[i + 1]] & 0x0f) << 4 | table[str[i + 2]] >> 2;\n        if (str[i + 3] != '=')\n            ret += table[str[i + 2]] << 6 | table[str[i + 3]];\n    }\n    return ret;\n}\n\nint main()\n{\n    init();\n    cout << int(table[0]) << endl;\n    string str;\n    cin >> str;\n    cout << decode(str) << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "判断题22：输出的第二行一定是由小写字母、大写字母、数字和“+”、“/”、“=”构成的字符串。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "第二行是解码后的内容，可以是任意字符（如第 27 题解码结果含空格），不限于 Base64 字符集。" },
+      { "label": "判断题23：可能存在输入不同，但输出的第二行相同的情形。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "官方答案为√：含 '=' 填充的不同输入字符串可能解码出相同内容。" },
+      { "label": "判断题24：输出的第一行为“-1”。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "table[0]=0xff，char 为 signed 时 int(table[0])=-1，第一行输出 -1。" },
+      { "label": "单选题25：设输入字符串长度为 n，decode 函数的时间复杂度为（）。", "options": ["Θ(√n)", "Θ(n)", "Θ(nlogn)", "Θ(n²)"], "correctIndex": 1, "explanation": "decode 对输入线性扫描一遍，时间复杂度 Θ(n)。" },
+      { "label": "单选题26：当输入为“Y3Nx”时，输出的第二行为（）。", "options": ["“csp”", "“csq”", "“CSP”", "“Csp”"], "correctIndex": 1, "explanation": "按 Base64 表逐组解码，Y3Nx 解出 0x63 0x73 0x71，即“csq”。" },
+      { "label": "单选题27：（3.5分）当输入为“Y2NmIDIwMjE=”时，输出的第二行为（）。", "options": ["“ccf2021”", "“ccf2022”", "“ccf 2021”", "“ccf 2022”"], "correctIndex": 2, "explanation": "Y2Nm 解出“ccf”，IDIwMjE= 解出“ 2021”（注意 IDIw 首字节是空格 0x20），合计“ccf 2021”。" }
+    ]
+  },
+  "super-2021-reading-3": {
+    "officialQuestion": "阅读以下C++程序（线性筛求约数个数 f 与约数和 g）。假设输入的 x 是不超过 1000 的自然数，完成下面的判断题和单选题。",
+    "officialCode": "#include <iostream>\nusing namespace std;\n\nconst int n = 100000;\nconst int N = n + 1;\n\nint m;\nint a[N], b[N], c[N], d[N];\nint f[N], g[N];\n\nvoid init()\n{\n    f[1] = g[1] = 1;\n    for (int i = 2; i <= n; i++) {\n        if (!a[i]) {\n            b[m++] = i;\n            c[i] = 1, f[i] = 2;\n            d[i] = 1, g[i] = i + 1;\n        }\n        for (int j = 0; j < m && b[j] * i <= n; j++) {\n            int k = b[j];\n            a[i * k] = 1;\n            if (i % k == 0) {\n                c[i * k] = c[i] + 1;\n                f[i * k] = f[i] / c[i * k] * (c[i * k] + 1);\n                d[i * k] = d[i];\n                g[i * k] = g[i] * k + d[i];\n                break;\n            }\n            else {\n                c[i * k] = 1;\n                f[i * k] = 2 * f[i];\n                d[i * k] = g[i];\n                g[i * k] = g[i] * (k + 1);\n            }\n        }\n    }\n}\n\nint main()\n{\n    init();\n    int x;\n    cin >> x;\n    cout << f[x] << ' ' << g[x] << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "判断题28：若输入不为“1”，把第 13 行删去不会影响输出的结果。", "options": ["正确", "错误"], "correctIndex": 0, "explanation": "f[1]、g[1] 只在 x=1 时被输出；筛法递推从 i≥2 起步，不依赖第 13 行的初值。" },
+      { "label": "判断题29：（2分）第 25 行的“f[i] / c[i*k]”可能存在无法整除而向下取整的情况。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "约数个数函数具有乘性，f[i] 必被 c[i*k] 整除，不会出现向下取整。" },
+      { "label": "判断题30：（2分）在执行完 init() 后，f 数组不是单调递增的，但 g 数组是单调递增的。", "options": ["正确", "错误"], "correctIndex": 1, "explanation": "g 也不是单调递增的，例如 g[12]=28 而 g[13]=14。" },
+      { "label": "单选题31：init 函数的时间复杂度为（）。", "options": ["Θ(n)", "Θ(n log n)", "Θ(n√n)", "Θ(n²)"], "correctIndex": 0, "explanation": "线性筛每个合数只被其最小质因子筛去一次，时间复杂度 Θ(n)。" },
+      { "label": "单选题32：在执行完 init() 后，f[1]，f[2]，f[3]…f[100] 中有（ ）个等于 2。", "options": ["23", "24", "25", "26"], "correctIndex": 2, "explanation": "f[i]=2 当且仅当 i 为质数，100 以内共有 25 个质数。" },
+      { "label": "单选题33：（4分）当输入为“1000”时，输出为（）。", "options": ["“15 1340”", "“15 2340”", "“16 2340”", "“16 1340”"], "correctIndex": 2, "explanation": "1000=2³×5³，约数个数 (3+1)(3+1)=16，约数和 (1+2+4+8)(1+5+25+125)=15×156=2340。" }
+    ]
+  },
+  "super-2021-completion-1": {
+    "officialQuestion": "（Josephus 问题）有 n 个人围成一个圈，依次标号 0 至 n-1。从 0 号开始，依次 0,1,0,1... 交替报数，报到 1 的人会离开，直至圈中只剩下一个人。求最后剩下人的编号。试补全模拟程序。",
+    "officialCode": "#include <iostream>\n\nusing namespace std;\n\nconst int MAXN = 1000000;\nint F[MAXN];\n\nint main() {\n    int n;\n    cin >> n;\n    int i = 0, p = 0, c = 0;\n    while (①) {\n        if (F[i] == 0) {\n            if (②) {\n                F[i] = 1;\n                ③;\n            }\n            ④;\n        }\n        ⑤;\n    }\n    int ans = -1;\n    for (i = 0; i < n; i++)\n        if (F[i] == 0)\n            ans = i;\n    cout << ans << endl;\n    return 0;\n}",
+    "children": [
+      { "label": "单选题34：①处应填（）", "options": ["i < n", "c < n", "i < n - 1", "c < n - 1"], "correctIndex": 3, "explanation": "c 记录淘汰人数，淘汰 n-1 人后圈中只剩 1 人即停止，故循环条件为 c < n - 1。" },
+      { "label": "单选题35：②处应填（）", "options": ["i % 2 == 0", "i % 2 == 1", "p", "!p"], "correctIndex": 2, "explanation": "p 交替取值 0/1，报到 1（p 为真）的人离开，故条件为 p。" },
+      { "label": "单选题36：③处应填（）", "options": ["i++", "i = (i + 1) % n", "c++", "p ^= 1"], "correctIndex": 2, "explanation": "淘汰一人后淘汰计数 c 加 1。" },
+      { "label": "单选题37：④处应填（）", "options": ["i++", "i = (i + 1) % n", "c++", "p ^= 1"], "correctIndex": 3, "explanation": "无论是否淘汰，报数 0/1 都要切换：p ^= 1。" },
+      { "label": "单选题38：⑤处应填（）", "options": ["i++", "i = (i + 1) % n", "c++", "p ^= 1"], "correctIndex": 1, "explanation": "环形移动到下一个人：i = (i + 1) % n。" }
+    ]
+  }
+}

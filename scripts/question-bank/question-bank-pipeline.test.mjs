@@ -109,6 +109,57 @@ describe('release cutover gate', () => {
     expect(result.ready).toBe(false);
     expect(result.failures).toContain('super=0<5');
   });
+
+  it('blocks thin exam papers and non-zero published blockers', () => {
+    const summary = JSON.stringify({
+      publishedBlockers: 2,
+      channelCounts: { daily: 120, super: 5, dungeon: 120 },
+    });
+    const papers = Array.from({ length: 12 }, (_, index) => ({
+      id: `paper-${index}`,
+      questionIds: ['a', 'b', 'c', 'd'], // 4 questions — below the 5 minimum
+    }));
+    const exam = JSON.stringify({ papers });
+    const hash = value => createHash('sha256').update(value).digest('hex');
+    const manifest = {
+      files: {
+        'verification-summary.json': { sha256: hash(summary) },
+        'exam-manifests.json': { sha256: hash(exam) },
+      },
+    };
+    const result = evaluateReleaseGate({
+      manifest,
+      files: { 'verification-summary.json': summary, 'exam-manifests.json': exam },
+    });
+    expect(result.ready).toBe(false);
+    expect(result.failures).toContain('publishedBlockers=2');
+    expect(result.failures.some(f => f.startsWith('examPaper=paper-0:4<5'))).toBe(true);
+  });
+
+  it('passes a healthy bank', () => {
+    const summary = JSON.stringify({
+      publishedBlockers: 0,
+      channelCounts: { daily: 120, super: 5, dungeon: 120 },
+    });
+    const papers = Array.from({ length: 12 }, (_, index) => ({
+      id: `paper-${index}`,
+      questionIds: ['a', 'b', 'c', 'd', 'e'],
+    }));
+    const exam = JSON.stringify({ papers });
+    const hash = value => createHash('sha256').update(value).digest('hex');
+    const manifest = {
+      files: {
+        'verification-summary.json': { sha256: hash(summary) },
+        'exam-manifests.json': { sha256: hash(exam) },
+      },
+    };
+    const result = evaluateReleaseGate({
+      manifest,
+      files: { 'verification-summary.json': summary, 'exam-manifests.json': exam },
+    });
+    expect(result.ready).toBe(true);
+    expect(result.failures).toEqual([]);
+  });
 });
 
 describe('verified channel publishing', () => {
@@ -126,6 +177,19 @@ describe('verified channel publishing', () => {
     expect(channels.exam.map(question => question.id)).toEqual(['csp-j-2019-reading-01', 's']);
     expect(channels.dungeon.map(question => question.id)).toEqual(['g', 'csp-j-2019-reading-01']);
     expect(Object.values(channels).flat().some(question => question.id === 'bad')).toBe(false);
+  });
+
+  it('publishes secondary-provenance choices but not unlinked ones', () => {
+    const questions = [
+      { id: 'sec', source: 'csp_exam', type: 'choice', exam: { level: null, group: 'S' }, provenance: { level: 'secondary' }, verificationStatus: 'auto_verified', children: [] },
+      { id: 'unlinked', source: 'csp_exam', type: 'choice', exam: { level: null, group: 'S' }, provenance: { level: 'official_unlinked' }, verificationStatus: 'auto_verified', children: [] },
+      { id: 'noprov', source: 'csp_exam', type: 'choice', exam: { level: null, group: 'S' }, verificationStatus: 'auto_verified', children: [] },
+    ];
+    const channels = buildChannels(questions);
+
+    expect(channels.exam.map(question => question.id)).toEqual(['sec']);
+    expect(Object.values(channels).flat().some(question => question.id === 'unlinked')).toBe(false);
+    expect(Object.values(channels).flat().some(question => question.id === 'noprov')).toBe(false);
   });
 });
 
@@ -243,6 +307,78 @@ describe('automatic structural verdicts', () => {
       .toBe('auto_probable');
     expect(decideVerdict(question, { ...base, officialMatch: false, modelAnswers: [1, 2], modelComplete: true, explanationVerified: true }).status)
       .toBe('disputed');
+  });
+
+  it('verifies via five-jury consensus even without an explanation check', () => {
+    const question = normalizeLegacyQuestion({
+      id: 'fivejury',
+      source: 'gesp',
+      question: '2+2等于（ ）。',
+      options: ['3', '4', '5', '6'],
+      correctIndex: 1,
+      explanation: '2+2=4。',
+    });
+    const base = { deterministicAnswer: null, modelComplete: true, explanationVerified: false };
+
+    // 5/5 unanimous with canonical → auto_verified despite explanationVerified=false
+    expect(decideVerdict(question, { ...base, modelAnswers: [1, 1, 1, 1, 1], _5juryConsensus: true }).status)
+      .toBe('auto_verified');
+    // flag set but votes do not match canonical → must not verify
+    expect(decideVerdict(question, { ...base, modelAnswers: [0, 0, 0, 0, 1], _5juryConsensus: true }).status)
+      .not.toBe('auto_verified');
+    // fewer than 5 votes with the flag → falls through to auto_probable
+    expect(decideVerdict(question, { ...base, modelAnswers: [1, 1, 1, 1], _5juryConsensus: true }).status)
+      .toBe('auto_probable');
+  });
+
+  it('disputes when models unanimously contradict the canonical answer', () => {
+    const question = normalizeLegacyQuestion({
+      id: 'conflict',
+      source: 'gesp',
+      question: '2+2等于（ ）。',
+      options: ['3', '4', '5', '6'],
+      correctIndex: 1,
+      explanation: '2+2=4。',
+    });
+    const base = { deterministicAnswer: null, modelComplete: true, explanationVerified: false };
+
+    // 5 unanimous votes against canonical → disputed (model_canonical_conflict),
+    // NOT silently auto_probable — this is how mis-keyed answers surface.
+    const verdict = decideVerdict(question, { ...base, modelAnswers: [0, 0, 0, 0, 0] });
+    expect(verdict.status).toBe('disputed');
+    expect(verdict.blockers).toContain('model_canonical_conflict');
+    // 2 unanimous votes against canonical are too weak → still auto_probable
+    expect(decideVerdict(question, { ...base, modelAnswers: [0, 0] }).status)
+      .toBe('auto_probable');
+  });
+
+  it('lets documented human adjudication override automated conflicts', () => {
+    const question = normalizeLegacyQuestion({
+      id: 'manual',
+      source: 'gesp',
+      question: '2+2等于（ ）。',
+      options: ['3', '4', '5', '6'],
+      correctIndex: 1,
+      explanation: '2+2=4。',
+    });
+    const base = { deterministicAnswer: null, modelComplete: true, explanationVerified: false };
+
+    // Unanimous model conflict is normally disputed...
+    expect(decideVerdict(question, { ...base, modelAnswers: [0, 0, 0, 0, 0] }).status)
+      .toBe('disputed');
+    // ...but a recorded human approval resolves it in favor of canonical.
+    const reviewed = decideVerdict(question, {
+      ...base,
+      modelAnswers: [0, 0, 0, 0, 0],
+      manualVerified: { approved: true, by: 'reviewer', at: '2026-07-24T00:00:00Z', note: 'verified against official paper' },
+    });
+    expect(reviewed.status).toBe('auto_verified');
+    // An unapproved flag must NOT verify.
+    expect(decideVerdict(question, {
+      ...base,
+      modelAnswers: [0, 0, 0, 0, 0],
+      manualVerified: { approved: false },
+    }).status).toBe('disputed');
   });
 });
 

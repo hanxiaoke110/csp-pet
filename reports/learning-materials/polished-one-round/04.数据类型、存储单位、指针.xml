@@ -1,0 +1,68 @@
+<title>专题讲解｜数据类型、存储单位、指针</title>
+
+<h1>数据类型、存储单位、指针</h1>
+
+<p>这一节把 C++ 基础里最容易混的三件事放在一起：变量的数据类型、计算机存储单位、指针的基本含义。初赛常考取值范围、字节换算、ASCII 编码和指针概念。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>&lt;code&gt;int&lt;/code&gt; 常用于普通整数，范围不够时用 &lt;code&gt;long long&lt;/code&gt;。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>数据类型</td><td>int、long long、double、char 的区别</td><td>看范围、精度和存储字节</td></tr><tr><td>存储单位</td><td>bit、Byte、KB、MB、GB 换算</td><td>1 Byte = 8 bit，1 KB = 1024 Byte</td></tr><tr><td>字符编码</td><td>字符和 ASCII 码互转</td><td>字符本质上也能用整数编码表示</td></tr><tr><td>指针概念</td><td>地址、取地址、解引用</td><td>指针保存的是变量地址</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>整数类型。</b><code>int</code> 常用于普通整数，范围不够时用 <code>long long</code>。</p>
+
+<p><b>浮点类型。</b><code>double</code> 用于小数，但浮点数可能有精度误差。</p>
+
+<p><b>字符类型。</b><code>char</code> 保存一个字符，也可以参与 ASCII 码运算。</p>
+
+<p><b>指针。</b>指针变量保存另一个变量的地址，<code>&amp;x</code> 表示 x 的地址，<code>*p</code> 表示访问 p 指向的值。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="字符与 ASCII 码"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    char c = 'A';
+    cout &lt;&lt; int(c) &lt;&lt; endl;      // 输出 65
+    cout &lt;&lt; char(c + 1) &lt;&lt; endl; // 输出 B
+    return 0;
+}</code></pre>
+
+<pre lang="cpp" caption="指针的最小示例"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int x = 10;
+    int *p = &amp;x;       // p 保存 x 的地址
+    *p = 20;           // 修改 p 指向的位置，也就是修改 x
+    cout &lt;&lt; x &lt;&lt; endl; // 输出 20
+    return 0;
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：1 MB 等于多少 Byte？</b></p>
+
+<p><b>解析：</b>1 MB = 1024 KB，1 KB = 1024 Byte，所以 1 MB = 1024 × 1024 Byte。</p>
+
+<p><b>例 2：字符 <code>'A'</code> 的 ASCII 码是 65，那么 <code>'C'</code> 是多少？</b></p>
+
+<p><b>解析：</b>C 比 A 大 2，所以是 67。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>bit 是位，Byte 是字节，二者相差 8 倍。</li><li>浮点数不要直接用等号比较是否完全相等。</li><li>指针保存的是地址，不是普通整数值。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">计算 2 KB 等于多少 bit。</li><li seq="auto">写出 <code>'a' + 2</code> 对应的字符。</li><li seq="auto">解释 <code>int *p = &amp;x;</code> 中 <code>&amp;</code> 的作用。</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/ICwGdxbAzoYSmlxZOaAcFxN0nAc">知识卡｜数据类型与存储单位</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

@@ -1,7 +1,7 @@
 {
   "name": "csp-desktop-pet",
   "private": true,
-  "version": "1.7.12",
+  "version": "1.7.13",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -34,6 +34,7 @@
     "question-bank:verify": "node scripts/question-bank/verify-canonical.mjs",
     "question-bank:publish": "node scripts/question-bank/publish-snapshots.mjs",
     "question-bank:gate": "node scripts/question-bank/release-gate.mjs",
+    "test:question-bank": "node scripts/question-bank/test-full-chain.mjs",
     "question-bank:pipeline": "npm run question-bank:export && npm run question-bank:build && npm run question-bank:csp-source-evidence && npm run question-bank:evidence && npm run question-bank:csp && npm run question-bank:explanations && npm run question-bank:verify && npm run question-bank:publish && npm run question-bank:gate"
   },
   "dependencies": {

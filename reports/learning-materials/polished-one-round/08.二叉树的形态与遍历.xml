@@ -1,0 +1,66 @@
+<title>专题讲解｜二叉树的形态与遍历</title>
+
+<h1>二叉树的形态与遍历</h1>
+
+<p>树是一种层级结构，二叉树是每个结点最多有两个孩子的树。初赛最常考树的基本概念、结点关系、树高、叶子结点，以及先序、中序、后序遍历。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue"><p><b>先抓主线：</b>根 → 左 → 右。</p></callout>
+
+<h2>一、考试怎么考</h2>
+
+<table><thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead><tbody><tr><td>概念</td><td>根、父亲、孩子、叶子、深度、高度</td><td>先画出层级关系</td></tr><tr><td>二叉树形态</td><td>满二叉树、完全二叉树</td><td>看每层是否填满、最后一层是否靠左</td></tr><tr><td>遍历</td><td>给出树求先/中/后序</td><td>根的位置决定遍历类型</td></tr><tr><td>还原</td><td>根据遍历序列还原树</td><td>先序找根，中序分左右</td></tr></tbody></table>
+
+<h2>二、核心知识</h2>
+
+<p><b>先序遍历。</b>根 → 左 → 右。</p>
+
+<p><b>中序遍历。</b>左 → 根 → 右。</p>
+
+<p><b>后序遍历。</b>左 → 右 → 根。</p>
+
+<p><b>层序遍历。</b>从上到下、从左到右，通常用队列。</p>
+
+<h2>三、带注释代码</h2>
+
+<pre lang="cpp" caption="二叉树递归遍历"><code>struct Node {
+    char val;
+    Node *left, *right;
+};
+
+void preorder(Node *root) {
+    if (root == nullptr) return;
+    cout &lt;&lt; root-&gt;val;      // 先访问根
+    preorder(root-&gt;left);
+    preorder(root-&gt;right);
+}
+
+void inorder(Node *root) {
+    if (root == nullptr) return;
+    inorder(root-&gt;left);
+    cout &lt;&lt; root-&gt;val;      // 中间访问根
+    inorder(root-&gt;right);
+}</code></pre>
+
+<h2>四、典型例题</h2>
+
+<p><b>例 1：一棵树的根是 A，左孩子 B，右孩子 C，先序是什么？</b></p>
+
+<p><b>解析：</b>先根再左再右，所以是 A B C。</p>
+
+<p><b>例 2：同一棵树的中序是什么？</b></p>
+
+<p><b>解析：</b>左根右，所以是 B A C。</p>
+
+<h2>五、易错点</h2>
+
+<ul><li>先序、中序、后序名字里的“先/中/后”指的是根结点访问时机。</li><li>空子树也会影响还原树时左右边界，不能随便忽略。</li><li>完全二叉树不是每层都满，最后一层可以不满但必须靠左。</li></ul>
+
+<h2>六、课后小练习</h2>
+
+<ol><li seq="auto">画一棵根为 A、左子树 B、右子树 C 的二叉树，并写出三种遍历。</li><li seq="auto">解释满二叉树和完全二叉树的区别。</li><li seq="auto">层序遍历为什么适合用队列？</li></ol>
+
+<h2>七、配套资料</h2>
+
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/HhzsdN5hvoD5jLxuul3ckDN8nvf">知识卡｜树</a></p>
+
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>

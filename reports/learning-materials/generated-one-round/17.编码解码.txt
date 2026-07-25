@@ -1,0 +1,89 @@
+‏编码解码
+‏编解码题目由于便于命题和设问是初赛的阅读理解题目的常客,最近3年就有2次考察。
+‏常见的考察方法：
+‏1.和位运算进行结合
+‏2.和数据类型结合，如自然溢出等的处理
+‏编码解码的由来
+‏计算机只懂得0和1(即二进制)，但人与人的交流是通过字符进行交流。
+‏狭义的编码和解码就是字符和0与1之间进行转换。
+‏编码：将字符按照对应的编码类型转换成计算机能够识别的0或者1。
+‏解码：将0和1根据对应的解码类型转换成我们能够读懂的字符。
+‏广义上看，人类社会广泛使用的密码就是一种编码方式。而密码的历史甚至可以追溯到公元前400年的古希腊时代。
+‏解决编解码题目的思路和技巧
+‏编解码题目命题虽然灵活多变的，但形式上一般都是一种输入经过一些计算，而成为另一串字符或数字。
+‏首先是手算，如果编解码题目出现在阅读理解的第一题，建议可以硬算到底。而如果出现在阅读理解2，3题的位置，建议是通过硬算，寻找一些规律，即便最后没有寻找到规律也可以拿到题目中的部分分。
+‏同时编解码题目最近两年的命题趋势看，也是对位运算，数据类型，进制数字的值的综合考察，所以也要熟练掌握这三部分内容。
+‏历年真题
+‏#include <stdio.h>
+‏#include <string.h>
+‏char base[64];
+‏char table[256];
+‏char str[256];
+‏char ans[256];
+‏void init()
+{
+‏	for (int i = 0; i < 26; i++) base[i] = 'A' + i;
+‏	for (int i = 0; i < 26; i++) base[26 + i] = 'a' + i;
+‏	for (int i = 0; i < 10; i++) base[52 + i] = '0' + i;
+‏	base[62] = '+', base[63] = '/';
+‏	for (int i = 0; i < 256; i++) table[i] = 0xff;
+‏	for (int i = 0; i < 64; i++) table[base[i]] = i;
+‏	table['='] = 0;
+}
+‏void decode(char *str)
+{
+‏	char *ret = ans;
+‏	int i, len = strlen(str);
+‏	for (i = 0; i < len; i += 4) {
+‏		(*ret++) = table[str[i]] << 2 | table[str[i + 1]] >> 4;
+‏		if (str[i + 2] != '=')
+‏			(*ret++) = (table[str[i + 1]] & 0x0f) << 4 | table[str[i + 2]] >> 2;
+‏		if(str[i + 3] != '=')
+‏			(*ret++) = table[str[i + 2]] << 6 | table[str[i + 3]];
+	}
+}
+‏int main()
+{
+‏	init();
+‏	printf("%d\n", (int)table[0]);
+‏	scanf("%s", str);
+‏	decode(str);
+‏	printf("%s\n", ans);
+‏	return 0;
+}
+‏•判断题 1）输出的第二行一定是由小写字母、大写字母、数字和”+”、”/”、”=”构成的字符串。（） 2.）可能存在输入不同，但输出的第二行相同的情形。（） 3）输出的第一行为”-1”。（）
+‏•单选题 4）设输入字符串长度为n，decode函数的时间复杂度为（） 5）当输入为”Y3Nx”时，输出的第二行为（） 6）当输入为”Y2NmIDIwMjE=”时，输出的第二行为（） 1. A.正确 B.错误 2. A.正确 B.错误 3. A.正确 B.错误 4. A.O(√n) B.O(n) C.O(n log n) D.O(n^2)
+‏5. A.”csp” B.“csq” C.”CSP” D.“Csp” 6. A.”ccf2021” B.”ccf2022” C.”ccf 2021” D.”ccf 2022”
+
+‏#include <cstdlib>
+‏#include <iostream>
+‏using namespace std;
+‏char encoder[26] = {'C','S','P',0};
+‏char decoder[26];
+‏string st;
+‏int main()  {
+‏	int k = 0;
+‏	for (int i = 0; i < 26; ++i)
+‏		if (encoder[i] != 0) ++k;
+‏	for (char x ='A'; x <= 'Z'; ++x) {
+‏		bool flag = true;
+‏		for (int i = 0; i < 26; ++i)
+‏			if (encoder[i] ==x) {
+‏				flag = false;
+‏				break;
+			}
+‏			if (flag) {
+‏				encoder[k]= x;
+‏				++k;
+			}
+	}
+‏	for (int i = 0; i < 26; ++i)
+‏		decoder[encoder[i]- 'A'] = i + 'A';
+‏	cin >> st;
+‏	for (int i = 0; i < st.length( ); ++i)
+‏		st[i] = decoder[st[i] -'A'];
+‏	cout << st;
+‏	return 0;
+}  
+•判断题 1） 输入的字符串应当只由大写字母组成，否则在访问数组时可能越界。（ ） 2） 若输入的字符串不是空串，则输入的字符串与输出的字符串一定不一样。（） 3） 将第 12 行的“i < 26”改为“i < 16”，程序运行结果不会改变。（ ） 4） 将第 26 行的"i < 26”改为“i < 16”，程序运行结果不会改变。（ ）
+•单选题 5） 若输出的字符串为“ABCABCABCA”，则下列说法正确的是（ ）。 6）若输出的字符串为“CSPCSPCSPCSP”，则下列说法正确的是（ ）。 1. A. 正确 B. 错误 2. A. 正确 B. 错误 3. A. 正确 B. 错误 4. A. 正确 B. 错误 5. A. 输入的字符串中既有S又有P B. 输入的字符串中既有S又有B C. 输入的字符串中既有A又有P D. 输入的字符串中既有A又有B 6. A. 输入的字符串中既有P又有K B. 输入的字符串中既有J又有R C. 输入的字符串中既有J又有K D. 输入的字符串中既有P又有R

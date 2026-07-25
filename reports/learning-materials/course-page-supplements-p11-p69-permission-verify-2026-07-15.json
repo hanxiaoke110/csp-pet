@@ -1,0 +1,954 @@
+{
+  "summary": {
+    "total": 59,
+    "ok": 59,
+    "failed": 0,
+    "failedItems": []
+  },
+  "checks": [
+    {
+      "no": 11,
+      "title": "switch 语句",
+      "doc": "BycmdgtDLoopLHx5zYbcOaXdnEe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 12,
+      "title": "综合运用一",
+      "doc": "B4qOd65rFoB43kxfKBtcJvk5nIh",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 13,
+      "title": "常用数学函数",
+      "doc": "UnLpdUwLOo5FikxcP7EcKoVZnED",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 14,
+      "title": "for 循环（一）",
+      "doc": "Latddv7xJoxqqaxlf8HcJ9rFn7d",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 15,
+      "title": "for 循环（二）",
+      "doc": "A6I1de0QpoCIygx2nu2cyDcinqe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 16,
+      "title": "while 循环",
+      "doc": "YeeZd62XWoG5XTx0P22cmUORnhd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 17,
+      "title": "单层循环应用",
+      "doc": "OCXcdvHopoSc4hx2WZFc0Hslnjc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 18,
+      "title": "循环嵌套（一）",
+      "doc": "I0CZdX7ICoxeY4xpcfRcITnWnpg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 19,
+      "title": "循环嵌套（二）",
+      "doc": "IN3Ddh437oLonOxo9rOc3RqPnoe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 20,
+      "title": "循环综合应用（一）",
+      "doc": "N1HodDqGbo8LAEx8NmvcvEnPnxe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 21,
+      "title": "循环综合应用（二）",
+      "doc": "RVTOdrCa8oh2bYxWAaKcGEdvn8k",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 22,
+      "title": "一维数组初识（一）",
+      "doc": "VAeLdMzJGoMIpTxDoiKcf9qxnKe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 23,
+      "title": "一维数组遍历",
+      "doc": "QcRkd0FqQo9OeUxXh1McEM2Vnae",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 24,
+      "title": "标记数组",
+      "doc": "Dr1ndqnT8ov6UVxJtgncozt7nrs",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 25,
+      "title": "桶数组",
+      "doc": "Mmb5dIlAPory4bxALDVcenaGnCP",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 26,
+      "title": "字符数组",
+      "doc": "Vw1qdSHhtoWVgvxR63Zc95fXneg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 27,
+      "title": "字符数组常用函数",
+      "doc": "LcGmdU64Oo5y9OxQ7xHczFtxnOe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 28,
+      "title": "string 字符串",
+      "doc": "IVamd6TOdoJZ7HxUCzFcNkein0g",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 29,
+      "title": "字符串综合应用",
+      "doc": "GVYndkPjvoaQR9xEVmTcriqGnSc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 30,
+      "title": "凯撒加密",
+      "doc": "CB2pdzxGXoDapQx0o7Vc4pHPnUf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 31,
+      "title": "函数初识（一）",
+      "doc": "WngRdXjTyoQ27IxoCdHchUb8nmg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 32,
+      "title": "函数初识（二）·值传递",
+      "doc": "MrbidyQuLoPf2yxFUTUcTu6qnuf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 33,
+      "title": "自定义函数",
+      "doc": "KaHnd9YRgooGeHxp9HgcPsgPnGx",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 34,
+      "title": "函数综合应用",
+      "doc": "OLnxdFM8aoUXC1xxyxucvj9AnYd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 35,
+      "title": "位权",
+      "doc": "PuQkdDaUxoK9M8xRv76cpJW9njf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 36,
+      "title": "进制转换（一）",
+      "doc": "R8erd5xCzoozGkxBCL9cgV5QnHd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 37,
+      "title": "进制转换（二）",
+      "doc": "DfdDdBLpTowtDYx68icchlaCnzc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 38,
+      "title": "补码",
+      "doc": "Q489d5GQwoVkGVxhVHqc0xBqnne",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 39,
+      "title": "位运算（异或）",
+      "doc": "R4G6dimuvoEoHNxZnjMczUu6npf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 40,
+      "title": "进制与编码综合",
+      "doc": "MLGQdSE6kohI1txlhrdcSWAhntf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 41,
+      "title": "二维数组初识",
+      "doc": "CCztdovH4oFIucxiWPHcpb9nnUe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 42,
+      "title": "二维数组遍历",
+      "doc": "SPQxd6CAtojK9bxKYkVcDNn3n4c",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 43,
+      "title": "二维数组应用",
+      "doc": "Sz7Jdrx2MouVTTxTd51cAiTHnfe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 44,
+      "title": "认识排序（选择）",
+      "doc": "X4K8drryjo02CexI09sc2y6AnSc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 45,
+      "title": "sort 应用",
+      "doc": "Rrd2dst3mofyvsxUIfVcT41snec",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 46,
+      "title": "结构体初识",
+      "doc": "QcmIdB3asorlRcxf1PMcYSb3nYc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 47,
+      "title": "结构体排序",
+      "doc": "TGUZdNLH6oN109xoeWFc41JPnIb",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 48,
+      "title": "结构体应用",
+      "doc": "EEbhdjzzkoCJCyxOafGcuZNgnTf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 49,
+      "title": "递推算法（一）",
+      "doc": "U8Uid72Yao61FzxbfM7c0hpenVe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 50,
+      "title": "递推算法（二）",
+      "doc": "MAsAddaCSopngwxcrVMcuWC6nYf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 51,
+      "title": "枚举算法",
+      "doc": "QkLCdiCxzoSX0pxzVfUcHOsPnxd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 52,
+      "title": "枚举应用",
+      "doc": "Qf6hdsMq2oUi65xfqoLc5Jpzned",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 53,
+      "title": "枚举算法的优化",
+      "doc": "D4IcdSDwdoTyVzxRIQucnPX3njf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 54,
+      "title": "模拟算法（一）",
+      "doc": "XPhAdX6Svo7u4QxClFNcWdV1nif",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 55,
+      "title": "模拟算法（二）",
+      "doc": "T61Nd0s3hogaoGxeH49cu8NvnVc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 56,
+      "title": "前缀和",
+      "doc": "BtDddDg4potoi3xXqcMcHVoVnKf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 57,
+      "title": "差分",
+      "doc": "A3aXdiBn5oalfuxyLEGc9K87n4d",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 58,
+      "title": "贪心算法（一）",
+      "doc": "ANw4dpoKDoG94UxYp9XcnlfNncg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 59,
+      "title": "贪心算法（二）",
+      "doc": "Iex9djrBooBkJtxxxczchKHlnse",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 60,
+      "title": "贪心算法（三）·邻项交换",
+      "doc": "YxIydNRSmoYYtUx9W9dcgUJOnMd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 61,
+      "title": "初等排序（选择/冒泡/插入）",
+      "doc": "HfkKdm1OgoaQ3Zx9RNgcDzY2n0g",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 62,
+      "title": "计数排序",
+      "doc": "HB76d6vR7o79aCxgrUwcY47TnKg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 63,
+      "title": "最大公因数·辗转相除",
+      "doc": "Binwd1RAVoixUoxWMrrczaahnSc",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 64,
+      "title": "算术基本定理·质因数分解",
+      "doc": "AzzcdcJJCoA4InxsuovcKEx4nLd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 65,
+      "title": "埃氏筛法",
+      "doc": "Ov6Ed8YDBoxiK9xV34JcX1S7nNe",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 66,
+      "title": "二分查找（一）",
+      "doc": "AKXXdCYBfokhqLxCFB8cXSZgnpd",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 67,
+      "title": "二分查找（二）",
+      "doc": "I5FxdmbLqo1VSgxbIlkcTnGeneg",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 68,
+      "title": "动态数组与队列",
+      "doc": "XesTdaXZEoCjJMxREb9cnwEAn0d",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    },
+    {
+      "no": 69,
+      "title": "栈",
+      "doc": "O6r9ddpbeoR9ArxU9zpcBGqpndf",
+      "ok": true,
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "error": null
+    }
+  ]
+}

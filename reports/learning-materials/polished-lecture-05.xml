@@ -1,0 +1,129 @@
+<title>专题讲解｜数组和链表</title>
+
+<h1>数组和链表</h1>
+<p>数组和链表都是线性表，也就是“一个接一个排起来”的数据结构。区别在于：数组适合按下标快速访问，链表适合在已知位置附近插入和删除。CSP-J 初赛常考它们的特点对比，也会考数组模拟链表的代码理解。</p>
+
+<callout emoji="📌" background-color="light-blue" border-color="blue" text-color="blue">
+  <p><b>先抓主线：</b>数组靠“连续下标”定位，链表靠“next 指针”连接。数组找第 k 个元素很快；链表插入删除不需要整体搬家，但查找通常要从头走。</p>
+</callout>
+
+<h2>一、考试怎么考</h2>
+<table>
+  <thead><tr><th background-color="light-gray">题型</th><th background-color="light-gray">常见问法</th><th background-color="light-gray">做题关键</th></tr></thead>
+  <tbody>
+    <tr><td>概念对比</td><td>数组和链表哪个支持随机访问</td><td>数组支持，链表不支持</td></tr>
+    <tr><td>复杂度判断</td><td>查找、插入、删除的时间复杂度</td><td>要看是否已知位置</td></tr>
+    <tr><td>代码阅读</td><td>数组模拟链表中 <code>nxt[i]</code> 的变化</td><td><code>nxt[i]</code> 存的是下一个结点下标</td></tr>
+    <tr><td>删除操作</td><td>如何删除某个结点</td><td>让前一个结点跳过它</td></tr>
+  </tbody>
+</table>
+
+<h2>二、数组</h2>
+<p>数组是一段连续的存储空间，元素通过下标访问。例如 <code>a[0]</code>、<code>a[1]</code>、<code>a[2]</code>。因为下标能直接计算位置，所以数组支持随机访问，访问 <code>a[i]</code> 的时间复杂度是 O(1)。</p>
+<p>数组的弱点是插入和删除。如果要在中间插入一个元素，后面的元素通常要整体后移；如果删除中间元素，后面的元素通常要整体前移。因此，在普通数组里，中间插入和删除常常是 O(n)。</p>
+
+<h2>三、链表</h2>
+<p>链表的每个结点除了保存数据，还保存“下一个结点在哪里”。这些结点在内存中不一定连续，但通过 next 信息串成一条线。</p>
+<p>链表适合插入和删除。比如要删除结点 x，只要让 x 前面的结点直接指向 x 后面的结点即可，不需要移动一大片元素。链表的弱点是不能随机访问第 k 个元素，通常必须从头结点开始一步一步走过去。</p>
+
+<h2>四、数组和链表对比</h2>
+<table>
+  <thead><tr><th background-color="light-gray">能力</th><th background-color="light-gray">数组</th><th background-color="light-gray">链表</th></tr></thead>
+  <tbody>
+    <tr><td>存储方式</td><td>连续空间</td><td>结点之间用 next 连接，不要求连续</td></tr>
+    <tr><td>随机访问</td><td>支持，O(1)</td><td>不支持，通常 O(n)</td></tr>
+    <tr><td>中间插入</td><td>通常要移动元素，O(n)</td><td>已知位置时改指向即可，O(1)</td></tr>
+    <tr><td>中间删除</td><td>通常要移动元素，O(n)</td><td>已知前驱时改指向即可，O(1)</td></tr>
+    <tr><td>适合场景</td><td>频繁按下标读取</td><td>频繁插入删除</td></tr>
+  </tbody>
+</table>
+
+<h2>五、数组模拟链表</h2>
+<p>在竞赛里，为了写起来更稳定，常用数组来模拟链表。我们用 <code>val[i]</code> 存第 i 个结点的值，用 <code>nxt[i]</code> 存第 i 个结点的下一个结点下标。如果 <code>nxt[i] = -1</code>，表示后面没有结点。</p>
+
+<pre lang="cpp" caption="建立一条简单链表"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+const int N = 1005;
+int val[N], nxt[N];
+
+int main() {
+    int n;
+    cin &gt;&gt; n;
+
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; val[i];
+        nxt[i] = i + 1;       // 默认指向下一个位置
+    }
+    nxt[n - 1] = -1;          // 最后一个结点后面没有结点
+
+    for (int cur = 0; cur != -1; cur = nxt[cur]) {
+        cout &lt;&lt; val[cur] &lt;&lt; " ";
+    }
+    return 0;
+}</code></pre>
+
+<pre lang="cpp" caption="删除链表中第一个值为 x 的结点"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+const int N = 1005;
+int val[N], nxt[N];
+
+int main() {
+    int n, x;
+    cin &gt;&gt; n;
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; val[i];
+        nxt[i] = i + 1;
+    }
+    nxt[n - 1] = -1;
+    cin &gt;&gt; x;
+
+    int head = 0;
+
+    // 如果头结点就是 x，需要单独移动 head
+    if (head != -1 &amp;&amp; val[head] == x) {
+        head = nxt[head];
+    } else {
+        int cur = head;
+        while (cur != -1 &amp;&amp; nxt[cur] != -1) {
+            int nextNode = nxt[cur];
+            if (val[nextNode] == x) {
+                nxt[cur] = nxt[nextNode]; // 让 cur 跳过 nextNode
+                break;
+            }
+            cur = nxt[cur];
+        }
+    }
+
+    for (int cur = head; cur != -1; cur = nxt[cur]) {
+        cout &lt;&lt; val[cur] &lt;&lt; " ";
+    }
+    return 0;
+}</code></pre>
+
+<h2>六、典型例题</h2>
+<p><b>例 1：</b>链表不具备的特点是哪一个？A. 可随机访问任意元素 B. 插入删除不需要移动元素 C. 不要求内存地址连续 D. 所需空间与元素个数有关。</p>
+<p><b>解析：</b>链表不能像数组一样用下标直接访问任意元素，所以答案是 A。</p>
+<p><b>例 2：</b>如果 <code>nxt[2] = 5</code>，删除 5 号结点时应如何修改？</p>
+<p><b>解析：</b>让 2 号结点跳过 5 号结点，写成 <code>nxt[2] = nxt[5]</code>。</p>
+
+<h2>七、易错点</h2>
+<ul>
+  <li>“链表插入删除 O(1)”通常要求已经知道插入或删除的位置；如果还要先查找位置，查找本身可能是 O(n)。</li>
+  <li>数组模拟链表时，<code>nxt[i]</code> 存的是下一个结点的下标，不是下一个结点的值。</li>
+  <li>删除头结点要单独处理，因为它没有前驱结点。</li>
+  <li>看到 <code>-1</code> 常表示链表结束，不要继续访问 <code>val[-1]</code> 或 <code>nxt[-1]</code>。</li>
+</ul>
+
+<h2>八、课后小练习</h2>
+<ol>
+  <li seq="auto">数组和链表分别适合什么场景？各举一个例子。</li>
+  <li seq="auto">若 <code>nxt[0] = 3</code>，<code>nxt[3] = 4</code>，<code>nxt[4] = -1</code>，从头结点 0 开始会依次访问哪些结点？</li>
+  <li seq="auto">为什么删除链表头结点时不能写 <code>nxt[pre] = nxt[head]</code>？</li>
+  <li seq="auto">请修改示例代码，实现“删除所有值为 x 的结点”。</li>
+</ol>
+
+<h2>九、配套资料</h2>
+<p><a type="url-preview" href="https://scncdgmg7m6w.feishu.cn/docx/U3rZdXg13ovLQXxImldc0qNynCf">知识卡｜数组与字符串</a></p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回：智子学习资料库｜CSP 学习导航</a></p>
