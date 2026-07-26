@@ -1,0 +1,4 @@
+# Force LF line endings for question bank files — SHA-256 hashes in manifest.json
+# are computed on LF, and Windows git's core.autocrlf would otherwise convert to CRLF,
+# causing "Bundled hash mismatch" errors at runtime.
+public/course-data/question-bank-v2/*.json text eol=lf
