@@ -401,7 +401,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         let level = webPet.level;
         let remaining = (webPet.exp || 0) + snapshot.expEarned;
         let expToNext = webPet.expToNext || 100;
-        while (remaining >= expToNext && level < 100) {
+        while (remaining >= expToNext && level < 20) {
           remaining -= expToNext;
           level += 1;
           expToNext = Math.floor(expToNext * 1.3);

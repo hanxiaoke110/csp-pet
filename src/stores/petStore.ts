@@ -88,15 +88,18 @@ export const FOODS: Record<string, { name: string; price: number; hunger: number
   deluxe:  { name: '豪华食物', price: 150, hunger: 100, icon: '🍖' },
 };
 
+export const MAX_PET_LEVEL = 20;
+
 // Level milestones
 export function getLevelMilestone(level: number): { title: string; pityThreshold: number; dailyPassiveCoins: number } {
+  if (level >= 20) return { title: '大乘(满级)', pityThreshold: 30, dailyPassiveCoins: 8 };
   if (level >= 15) return { title: '化神', pityThreshold: 50, dailyPassiveCoins: 5 };
   if (level >= 10) return { title: '元婴', pityThreshold: 100, dailyPassiveCoins: 5 };
   if (level >= 5)  return { title: '金丹', pityThreshold: 100, dailyPassiveCoins: 0 };
   return { title: '筑基', pityThreshold: 100, dailyPassiveCoins: 0 };
 }
 
-// Display name with milestone prefix: [金丹] 小企鹅
+// Display name with milestone prefix: [大乘(满级)] 宠物名
 export function formatPetDisplayName(name: string, level: number): string {
   const title = getLevelMilestone(level).title;
   return `[${title}] ${name}`;
@@ -104,6 +107,7 @@ export function formatPetDisplayName(name: string, level: number): string {
 
 // Level badge color by tier
 export function getLevelBadgeColor(level: number): string {
+  if (level >= 20) return '#dc2626'; // red — max level
   if (level >= 15) return '#f59e0b'; // gold
   if (level >= 10) return '#3b82f6'; // blue
   if (level >= 5)  return '#22c55e'; // green
@@ -207,7 +211,7 @@ export const usePetStore = create<PetState>((set, get) => ({
         if (p.petId !== petId) return p;
         let { exp, expToNext, level } = p;
         exp += effectiveExp;
-        while (exp >= expToNext) {
+        while (exp >= expToNext && level < MAX_PET_LEVEL) {
           exp -= expToNext;
           level++;
           expToNext = Math.floor(expToNext * 1.3);
@@ -216,6 +220,11 @@ export const usePetStore = create<PetState>((set, get) => ({
           if (level === 5 || level === 10 || level === 15) {
             const tips: Record<number, string> = { 5: '🎉 突破金丹！抽卡功能已解锁，快去试试手气吧！', 10: '🎉 突破元婴！每周自动获得 20g，躺着也能赚钱~', 15: '🎉 突破化神！抽卡保底减半，传说不再是梦！' };
             emit('pet-bubble', { text: tips[level] || `突破 ${ms.title}！` }).catch(() => {});
+          }
+          if (level === MAX_PET_LEVEL) {
+            exp = 0;
+            expToNext = 0;
+            emit('pet-bubble', { text: '🎉 已达大乘之境，修行圆满！' }).catch(() => {});
           }
         }
         return { ...p, exp, expToNext, level, mood: Math.min(100, p.mood + 3), updatedAt: new Date().toISOString() };
@@ -599,7 +608,7 @@ export const usePetStore = create<PetState>((set, get) => ({
         if (p.petId !== petId) return p;
         let { exp, expToNext, level } = p;
         exp += clamped;
-        while (exp >= expToNext) {
+        while (exp >= expToNext && level < MAX_PET_LEVEL) {
           exp -= expToNext;
           level++;
           expToNext = Math.floor(expToNext * 1.3);
@@ -607,6 +616,11 @@ export const usePetStore = create<PetState>((set, get) => ({
           if (level === 5 || level === 10 || level === 15) {
             const tips: Record<number, string> = { 5: '🎉 突破金丹！抽卡功能已解锁！', 10: '🎉 突破元婴！每周自动获得 20g~', 15: '🎉 突破化神！保底减半至 50 抽！' };
             emit('pet-bubble', { text: tips[level] || `突破 ${ms.title}！` }).catch(() => {});
+          }
+          if (level === MAX_PET_LEVEL) {
+            exp = 0;
+            expToNext = 0;
+            emit('pet-bubble', { text: '🎉 已达大乘之境，修行圆满！' }).catch(() => {});
           }
         }
         return { ...p, exp, expToNext, level, updatedAt: new Date().toISOString() };
