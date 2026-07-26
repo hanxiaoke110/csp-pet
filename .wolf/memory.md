@@ -1,3 +1,32 @@
+## 2026-07-26 — v1.7.17 最终发版流程
+
+### 完整发版 Checklist
+```
+□ 1. 读 .wolf/cerebrum.md （避免踩坑）
+□ 2. 改版本号：package.json + tauri.conf.json + App.tsx VER
+□ 3. git commit + git tag -a vX.Y.Z
+□ 4. git push gitee master && git push gitee vX.Y.Z
+□ 5. git push origin master && git push origin vX.Y.Z （触发 CI）
+□ 6. 等 CI（3 平台 build + release job）
+□ 7. 检查 Gitee Release assets ≥ 3 个安装包
+□ 8. 补传缺失文件：从 GitHub Release 下载 → curl -F 上传 Gitee
+□ 9. 确认 update.json：版本号 + 全部 Gitee URL
+□ 10. 清理 Gitee 旧 Release（保留最近 2 个）
+□ 11. 更新 .wolf/memory.md + .wolf/cerebrum.md
+```
+
+### 关键配置
+- `productName: "CSP 学习助手"` — App 显示中文名
+- CI `rename_eng()` — 构建后把 "CSP 学习助手" → "CSP" 再签名
+- update.json — 全部 Gitee URL，不走 GitHub
+- `.gitattributes` — `public/course-data/question-bank-v2/*.json text eol=lf`
+- GitHub Token 需要 `workflow` scope
+
+### 本次完成
+- v1.7.17 Gitee Release: 3 个安装包 + update.json 全部 Gitee URL
+- 删除旧 Release v1.7.6-1.7.9, v1.7.14-1.7.15
+- memory 已清理错误条目（macOS Gitee 302 问题等）
+
 ## 2026-07-26 — v1.7.14/15/16 CRLF 修复 + 20级满级
 
 ### v1.7.14 (废弃)

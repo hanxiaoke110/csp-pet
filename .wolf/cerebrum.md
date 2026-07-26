@@ -1,13 +1,25 @@
 # cerebrum.md
 
+## 发版流程（v1.7.17 最终版）
+1. **改版本号**：`package.json` + `src-tauri/tauri.conf.json` + `src/App.tsx` 三个文件同步更新
+2. **读 cerebrum.md**：避免踩已知的坑
+3. **commit + tag**：`git tag -a vX.Y.Z -m "..."` 
+4. **push**：同时推 GitHub（触发 CI）+ Gitee（备用）
+5. **等 CI**：3 个平台构建 → release job 签名 + 上传 Gitee + 更新 update.json
+6. **检查 Gitee Release**：确认 3 个安装包都在（`CSP_${ver}_aarch64.dmg` / `_x64.dmg` / `_x64-setup.exe`）
+7. **补传缺失文件**：Gitee 大文件并发上传偶尔超时失败，从 GitHub Release 下载后手动 `curl -F` 补传
+8. **确认 update.json**：版本号正确 + 全部 Gitee URL（raw 有 CDN 缓存，API 验证）
+9. **清理旧 Release**：保留最近 2 个版本，释放 Gitee 1GB 配额
+10. **更新 .wolf/**：memory.md + cerebrum.md 记录教训
+
 ## Preferences
 - 修改代码前先分析根因，确认后再改
 - 大幅度改动前先和用户确认方案
 - macOS 未签名 DMG 需 `xattr -cr` 后才能打开
-- 发版流程：改版本号 → push + tag → 同时推 Gitee → CI 构建 → 手动上传 Gitee
-- **发版时 `package.json` 和 `src-tauri/tauri.conf.json` 两个文件都要更新版本号！**
-- Gitee 手动上传安装包时用 `filename=` 对齐 `csp-v${short}-${arch}.${ext}` 命名规则
 - 独立查询（跨文件搜索、GitHub 查资料、多文件探索）优先用 Agent subagent，不占主 context
+- **全部更新走 Gitee**：macOS/Windows 统一用 Gitee Release URL，不用 GitHub
+- **productName = "CSP 学习助手"**：App 显示中文名，CI 用 `rename_eng()` 把安装包文件名转英文后再签名
+- **安装包命名**：`CSP_${version}_aarch64.dmg` / `CSP_${version}_x64.dmg` / `CSP_${version}_x64-setup.exe`
 
 ## Learnings
 - 当需求本质是“游戏化功能”而非普通 Web 页面时，应在早期主动提出引擎/框架选型（如 Phaser.js、Godot、Canvas 等），不要默认只用 React DOM 实现
