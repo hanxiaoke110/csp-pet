@@ -22,14 +22,17 @@
 - 密钥生成后立即保存到 `~/.tauri/`，并更新 GitHub Secrets
 - Gitee git remote 可以带 token 避免认证问题：`https://user:token@gitee.com/owner/repo.git`
 - Tauri minisign 签名内嵌了文件名，上传时不能改名，否则验签失败
-- Gitee Release 下载经过 2 次 302 跳转，Tauri macOS updater 无法正确处理（下载卡死），Windows 可以用
 - `.app.tar.gz` 比 `.dmg` 更适合 Tauri updater（gzip 原生支持）
 - 版本号用 `@tauri-apps/api/app` 的 `getVersion()`，不要用不存在的 `/version` 接口
 - Gitee 仓库附件总配额 1GB，不发版时清理旧 Release
 - 新增精灵需要同时做：spritesheet → Gitee + preview → public/ + pet.ts 配置，缺一不可
-- **Gitee 上传安装包必须对齐 UpdateChecker.buildUrls 命名规则**：`csp-v${short}-arm.dmg`、`csp-v${short}-intel.dmg`、`csp-v${short}-win.exe`，否则旧版 App 手动下载链接 404
-- **CI 的 `npm ci` 只装 `csp-desktop-pet/package.json` 的依赖**，如果根目录 `package.json` 有额外依赖，必须同步到子项目
-- **CI `sign_file` 用 `grep '^dW50' | head -1` 提取纯签名**，不再读 `.sig` 文件（含说明文字）。GitHub Release 的文件名需 `sanitize_name()` 把非 ASCII 替换成点
+- **Gitee 安装包命名规则**：`CSP_${version}_${arch}.dmg` / `CSP_${version}_x64-setup.exe`。productName 用中文（`CSP 学习助手`），CI 构建后重命名为英文再签名。
+- **CI `npm ci` 只装 `csp-desktop-pet/package.json` 的依赖**，如果根目录 `package.json` 有额外依赖，必须同步到子项目
+- **CI `sign_file` 用 `grep '^dW50' | head -1` 提取纯签名**，不再读 `.sig` 文件（含说明文字）
+- **CI 构建文件名处理**：productName 保留中文 → Tauri 输出中文名 → CI rename_eng() 替换为英文 → 再签名 → 文件名/签名/URL 全部对齐
+- **GitHub Token 需 `workflow` scope** 才能 push `.github/workflows/` 下的文件
+- **update.json 统一走 Gitee**，所有平台都可用 Gitee Release URL
+- **发版后清理旧 Gitee Release**，保留最近 2 个版本，释放 1GB 配额
 
 ## Do-Not-Repeat
 - **绝不**: 将 C++ 代码塞进 quiz options 数组 — 应放在 `code` 字段，选项用简短标签
@@ -42,7 +45,6 @@
 - **绝不**: 路径字符串直接拼接而不加分隔符 — `${base}${subdir}` → 永远是 `${base}/${subdir}`
 - **绝不**: `cargo tauri signer sign --private-key` 传文件路径 — 该 flag 吃字符串不读文件，用 `--private-key "$PRIVKEY"` 或 `--private-key-path`
 - **绝不**: Tauri 签名后的文件改名 — 签名内嵌了原始文件名，改名就验签失败
-- **绝不**: macOS 更新用 Gitee Release 下载 URL — 多级 302 重定向 Tauri updater 处理不了
 - **绝不**: 用 `fetch('/version')` 取版本号 — 该接口不存在，用 `getVersion()`
 - **绝不**: 新增精灵只上传 spritesheet 不生成 preview — 商城和智子都会白屏
 - **绝不**: preview 用 48×52 — 原始素材预览都是 200×200，尺寸不一样就是糊的
@@ -214,3 +216,27 @@
 4. `isOfficialUrl` 拒绝 url:null 的 localPath 条目 → 13 PDF 白费
 5. contentHash Node.js/Python 不一致 → evidence 全部被 discard
 6. verify-canonical cwd 错误 → 文件未保存
+
+## 2026-07-26 — v1.7.17 发版流程迭代
+
+### Preferences
+- **全部走 Gitee**：macOS/Windows 更新 URL 统一用 Gitee，不再区分
+- **productName 保留中文**：`CSP 学习助手`，App 显示名不变
+- **CI 构建后重命名再签名**：`rename_eng()` 把中文替换为英文，签名嵌英文名，URL 用英文名
+- **发版前必读 `.wolf/cerebrum.md`**：避免踩已知的坑
+- **发版后清理 Gitee 旧 Release**：保留最近 2 个版本
+
+### Learnings
+- Windows git `core.autocrlf=true` 默认把 LF 转 CRLF → `question-bank-v2/*.json` hash 对不上 manifest → `Bundled hash mismatch` → 题库加载失败
+- `.gitattributes` 加 `text eol=lf` 可覆盖 Windows 的 CRLF 自动转换
+- productName 中文 → Tauri 输出中文文件名 → CI 上传 Gitee 成功但 URL 有中文编码 → 签名嵌中文名 vs URL 解码不一致
+- 方案：CI 中 `mv "CSP 学习助手_*" "CSP_*"` 再签名，签名/文件名/URL 全部英文，App 显示名仍是中文
+- Gitee Release API 并发上传大文件时可能部分失败（超时），需检查并补传
+- GitHub PAT 需要 `workflow` scope 才能 push `.github/workflows/`
+- `MAX_PET_LEVEL = 20`，满级称号「大乘(满级)」，不再升级
+
+### Do-Not-Repeat
+- **绝不**: 发版不给 `.gitattributes` 加 `text eol=lf` → Windows 构建 hash 必挂
+- **绝不**: productName 用英文 → App 显示名会变，学生困惑
+- **绝不**: 相信 CI 的 Gitee 上传一定全部成功 → 发版后必须检查 assets 数量
+- **绝不**: 用没有 `workflow` scope 的 GitHub token push workflow 文件
