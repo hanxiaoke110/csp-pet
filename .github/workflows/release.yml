@@ -88,6 +88,22 @@ jobs:
           MAC_INTEL=$(pkg macos-x86_64)
           WIN_MSI=$(pkg windows-x86_64)
 
+          # Rename to English filenames (productName is Chinese for App display name)
+          # Signature embeds the filename, so we must rename BEFORE signing
+          rename_eng() {
+            local f="$1"
+            if [ -z "$f" ] || [ ! -f "$f" ]; then echo ""; return; fi
+            local dir=$(dirname "$f")
+            local newname=$(basename "$f" | sed 's/CSP 学习助手/CSP/g')
+            if [ "$(basename "$f")" != "$newname" ]; then
+              mv "$f" "$dir/$newname"
+            fi
+            echo "$dir/$newname"
+          }
+          MAC_ARM=$(rename_eng "$MAC_ARM")
+          MAC_INTEL=$(rename_eng "$MAC_INTEL")
+          WIN_MSI=$(rename_eng "$WIN_MSI")
+
           echo "$PRIVKEY" > /tmp/privkey
 
           sign_file() {
