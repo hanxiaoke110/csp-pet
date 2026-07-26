@@ -128,9 +128,14 @@ export default function DungeonEntrance() {
         </div>
 
         {/* Boss dialog */}
-        <div className="dialog-box" style={{ marginBottom: '20px', borderColor: 'var(--hp-red)' }}>
-          <div className="dialog-speaker" style={{ color: 'var(--hp-red)' }}>👹 {dungeon.bossName}</div>
-          <div className="dialog-text">{dungeon.bossLine}</div>
+        <div className="dialog-box" style={{ marginBottom: '20px', borderColor: 'var(--hp-red)', display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {dungeon.bossImage && (
+            <img src={dungeon.bossImage} alt="" style={{ width: '86px', height: '108px', objectFit: 'cover', border: '2px solid var(--hp-red)', flex: '0 0 auto' }} />
+          )}
+          <div>
+            <div className="dialog-speaker" style={{ color: 'var(--hp-red)' }}>👹 {dungeon.bossName}</div>
+            <div className="dialog-text">{dungeon.bossLine}</div>
+          </div>
         </div>
 
         {/* Stages */}

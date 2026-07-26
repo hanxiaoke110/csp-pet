@@ -459,6 +459,15 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.shake(150, 0.01);
   }
 
+  public healPlayer(amount: number): void {
+    if (this.state.playerHp <= 0 || amount <= 0) return;
+    const healed = Math.min(amount, this.state.playerMaxHp - this.state.playerHp);
+    if (healed <= 0) return;
+    this.state.playerHp += healed;
+    this.playerHpBar.updateHp(this.state.playerHp);
+    this.showDamageText(this.playerPet.x, this.playerPet.y - 80, `+${healed}`, 'heal');
+  }
+
   private showDamageText(x: number, y: number, text: string, type: DamageTextType): void {
     new DamageText(this, x, y, text, type);
   }

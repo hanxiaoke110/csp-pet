@@ -1,6 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
 import { emit } from '@tauri-apps/api/event';
-import { usePetStore } from '../../stores/petStore';
 
 interface Props {
   petSize: string;
@@ -13,9 +12,6 @@ interface Props {
 }
 
 export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, petWinVisible, setPetWinVisible, showToast }: Props) {
-  const activePet = usePetStore(s => s.ownedPets.find(p => p.petId === s.activePetId));
-  const isWeak = activePet && activePet.hunger <= 10;
-
   return (
     <div className="pet-status">
       <div style={{
@@ -87,21 +83,18 @@ export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, 
           <div>
             <div style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>🪟 显示精灵</div>
             <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>
-              {isWeak ? '智子已进入虚弱状态，请先喂食！😿' : '关闭则隐藏桌面悬浮窗'}
+              关闭则隐藏桌面悬浮窗
             </div>
           </div>
           <button onClick={async () => {
-            if (isWeak) return;
             const result = await invoke('toggle_pet_window').catch(() => 'error');
             if (result === 'hidden') { setPetWinVisible(false); showToast('悬浮窗已隐藏'); }
             else if (result === 'shown') { setPetWinVisible(true); showToast('悬浮窗已显示'); }
             else showToast('操作失败');
           }} style={{
             width: 48, height: 28, borderRadius: 14, border: 'none',
-            cursor: isWeak ? 'not-allowed' : 'pointer',
-            background: isWeak ? '#e2e8f0' : (petWinVisible ? '#7c3aed' : '#cbd5e1'),
+            cursor: 'pointer', background: petWinVisible ? '#7c3aed' : '#cbd5e1',
             position: 'relative', transition: 'background .2s',
-            opacity: isWeak ? 0.5 : 1,
           }}>
             <span style={{
               position: 'absolute', top: 2, left: petWinVisible ? 22 : 2,

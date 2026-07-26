@@ -16,6 +16,7 @@ import RewardScreen from './components/screens/RewardScreen';
 import LeaderboardScreen from './components/screens/LeaderboardScreen';
 import ProfileScreen from './components/screens/ProfileScreen';
 import HealingScreen from './components/screens/HealingScreen';
+import TrialSupplyScreen from './components/screens/TrialSupplyScreen';
 
 export function AppContent() {
   const store = useDungeonStore();
@@ -135,6 +136,7 @@ export function AppContent() {
       <Route path="/leaderboard" element={<LeaderboardScreen />} />
       <Route path="/profile" element={<ProfileScreen />} />
       <Route path="/healing" element={<HealingScreen />} />
+      <Route path="/supplies" element={<TrialSupplyScreen />} />
       {/* /login 已废弃：桌面端复用班级绑定身份，无换设备登录场景。文件保留备用。 */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

@@ -240,6 +240,8 @@ export default function BattleScreen() {
   const player = store.player;
   const dungeons = store.dungeons;
   const questionBank = store.questionBank;
+  const trialInventory = useDungeonStore(s => s.trialInventory);
+  const consumeTrialItem = useDungeonStore(s => s.consumeTrialItem);
 
   const dungeon = dungeons.find(d => d.id === dungeonId) as DungeonDefinition | undefined;
   const isBoss = !stageId || stageId === 'boss';
@@ -257,6 +259,7 @@ export default function BattleScreen() {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [pendingAnswer, setPendingAnswer] = useState<{ skillId: string; isCorrect: boolean } | null>(null);
   const [activeFable, setActiveFable] = useState<typeof fables[0] | null>(null);
+  const [hintRevealed, setHintRevealed] = useState(false);
 
   // 累计战斗数据（用于最终结算）
   const statsRef = useRef({
@@ -421,6 +424,7 @@ export default function BattleScreen() {
         setSubmitted(false);
         setIsCorrect(null);
         setPendingAnswer(null);
+        setHintRevealed(false);
         break;
       }
 
@@ -574,6 +578,37 @@ export default function BattleScreen() {
             <div className="battle-question-banner">
               {selectedSkillId ? getSkillById(selectedSkillId)?.name : '施法中...'}
             </div>
+
+            {!submitted && (
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                <button
+                  className="pixel-btn"
+                  disabled={trialInventory.hintTickets <= 0 || hintRevealed}
+                  onClick={() => {
+                    if (consumeTrialItem('hint-ticket')) setHintRevealed(true);
+                  }}
+                  style={{ fontSize: '10px', padding: '5px 8px' }}
+                >
+                  💡 提示券 {trialInventory.hintTickets}
+                </button>
+                <button
+                  className="pixel-btn"
+                  disabled={trialInventory.healingPotions <= 0}
+                  onClick={() => {
+                    if (consumeTrialItem('healing-potion')) gameRef.current?.healPlayer(35);
+                  }}
+                  style={{ fontSize: '10px', padding: '5px 8px' }}
+                >
+                  🧪 回血 {trialInventory.healingPotions}
+                </button>
+              </div>
+            )}
+
+            {hintRevealed && (
+              <div style={{ marginBottom: '10px', padding: '8px 10px', fontSize: '12px', color: '#fde68a', background: 'rgba(245,158,11,0.14)', border: '1px solid #d97706' }}>
+                提示：先抓住「{currentQuestion.knowledgePoint || '题干中的关键条件'}」，再逐项排除与条件不符的选项。
+              </div>
+            )}
 
             <div className="battle-question-text">{renderBattleStem(currentQuestion.question)}</div>
             {currentQuestion.code && (

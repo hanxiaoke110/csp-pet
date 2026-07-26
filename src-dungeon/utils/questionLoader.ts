@@ -11,18 +11,6 @@ const REVIEWED_BANK_API = 'https://api.cspstudy.top/api/question-bank';
 const REVIEWED_BANK_CACHE_KEY = 'reviewed_exam_bank_v1';
 const REVIEWED_BANK_VERSION_KEY = 'dungeon_reviewed_exam_bank_version';
 
-async function tryLoad(path: string): Promise<Response | null> {
-  try {
-    const resp = await fetch(path);
-    // Only accept JSON responses (avoid HTML from SPA fallback)
-    const ct = resp.headers.get('content-type') || '';
-    if (resp.ok && ct.includes('json')) return resp;
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 // Level 1: localStorage cache
 function loadFromCache<T>(key: string): T | null {
   try {
@@ -36,13 +24,6 @@ function saveToCache<T>(key: string, data: T): void {
   try {
     localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(data));
   } catch { /* ignore */ }
-}
-
-// Level 2: Bundled fallback
-async function loadBundled<T>(filename: string): Promise<T | null> {
-  const resp = await tryLoad(`/course-data/${filename}`);
-  if (resp) return resp.json() as Promise<T>;
-  return null;
 }
 
 interface DungeonQuestionBankData {
@@ -179,21 +160,13 @@ export function mergeReviewedQuestionBank(
 }
 
 export async function loadDungeons(): Promise<DungeonDefinition[]> {
-  const cacheKey = 'dungeons_v1';
-
-  const cached = loadFromCache<DungeonDefinition[]>(cacheKey);
-  if (cached?.length) return cached;
-
-  // Dungeon definitions are small, always bundled
-  const bundled = await loadBundled<DungeonDefinition[]>('dungeons.json');
-  if (bundled?.length) {
-    saveToCache(cacheKey, bundled);
-    return bundled;
-  }
-
-  // Dynamic import fallback
+  // Dungeon definitions ship with the app and are small. Always read the
+  // current bundled version so an old localStorage cache cannot keep stale
+  // artwork, copy, or unlock rules after an application update.
+  try {
+    localStorage.removeItem(`${CACHE_PREFIX}dungeons_v1`);
+  } catch { /* ignore stale-cache cleanup */ }
   const mod = await import('../data/dungeons.json');
-  saveToCache(cacheKey, mod.default);
   return mod.default as DungeonDefinition[];
 }
 

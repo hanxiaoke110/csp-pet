@@ -76,9 +76,9 @@ export default function LeaderboardScreen() {
   };
 
   return (
-    <div style={{
+    <div className="dungeon-page-bg dungeon-subpage" style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #0a0015, #1a0a2e, #0a0a0a)',
+      backgroundImage: 'linear-gradient(180deg, rgba(5, 10, 18, 0.74), rgba(8, 10, 18, 0.93) 46%, rgba(7, 8, 12, 0.98)), url("/dungeon-art-v2/dungeon-06-bg.webp")',
       padding: '16px',
     }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>

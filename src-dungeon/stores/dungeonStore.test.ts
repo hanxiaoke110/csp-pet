@@ -109,6 +109,8 @@ beforeEach(() => {
     weeklyChallenges: { used: 0, limit: 5, resetAt: '' },
     currentBattleEarnsRewards: true,
     schoolPassiveDaily: { used: 0, limit: 50, resetAt: '' },
+    petCoinRewards: { dailyDate: '', dailyGranted: 0, weekStart: '', weeklyGranted: 0 },
+    trialInventory: { hintTickets: 0, healingPotions: 0, ownedCosmetics: [], equippedTitle: null, equippedAvatarFrame: null },
     _firstClears: {},
   });
 });
@@ -195,5 +197,25 @@ describe('智子试炼场核心结算', () => {
     const state = useDungeonStore.getState();
     expect(state.player.gold).toBe(0);
     expect(state.weeklyChallenges.limit).toBe(before.limit + 1);
+  });
+
+  it('桌宠金币奖励受每日上限限制', () => {
+    const first = useDungeonStore.getState().grantPetCoins(25);
+    const second = useDungeonStore.getState().grantPetCoins(25);
+
+    expect(first.granted).toBe(25);
+    expect(second.granted).toBe(5);
+    expect(second.dailyRemaining).toBe(0);
+    expect(useDungeonStore.getState().petCoinRewards.dailyGranted).toBe(30);
+  });
+
+  it('试炼金币可以购买并消耗提示券', () => {
+    useDungeonStore.setState({ player: makePlayer({ gold: 18 }) });
+
+    expect(useDungeonStore.getState().buyTrialItem('hint-ticket')).toBe(true);
+    expect(useDungeonStore.getState().player.gold).toBe(0);
+    expect(useDungeonStore.getState().trialInventory.hintTickets).toBe(1);
+    expect(useDungeonStore.getState().consumeTrialItem('hint-ticket')).toBe(true);
+    expect(useDungeonStore.getState().trialInventory.hintTickets).toBe(0);
   });
 });

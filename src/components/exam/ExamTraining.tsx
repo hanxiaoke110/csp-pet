@@ -5,6 +5,7 @@ import { usePetStore } from '../../stores/petStore';
 import ExamChoice from './ExamChoice';
 import ExamMultiPart from './ExamMultiPart';
 import { emit } from '@tauri-apps/api/event';
+import { petCopy } from '../pet/PetCopy';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
 import { beginQuestionBankSession } from '../../question-bank/repository';
 import { toLegacyQuestion } from '../../question-bank/adapters';
@@ -161,7 +162,7 @@ export default function ExamTraining() {
       examStore.addError(id, 0, (q as any).correctIndex || 0, kp);
     }
     if (!correct) {
-      emit('pet-bubble', { text: '没关系，再看看解析！💡' }).catch(() => {});
+      emit('pet-bubble', { text: petCopy.examWrong() }).catch(() => {});
     }
   };
 
@@ -184,9 +185,9 @@ export default function ExamTraining() {
     if (!pass) {
       const kp = (q as any).knowledgePoint || '';
       examStore.addError(q.id, total - correctCount, correctCount, kp);
-      emit('pet-bubble', { text: `答对 ${correctCount}/${total}，未过半，换一道试试？💪` }).catch(() => {});
+      emit('pet-bubble', { text: petCopy.examResult(correctCount, total, false) }).catch(() => {});
     } else {
-      emit('pet-bubble', { text: `答对 ${correctCount}/${total}，漂亮！🎉` }).catch(() => {});
+      emit('pet-bubble', { text: petCopy.examResult(correctCount, total, true) }).catch(() => {});
     }
   };
 
@@ -198,8 +199,7 @@ export default function ExamTraining() {
     const result = examStore.claimExamDailyReward();
     if (result) {
       emit('pet-anim', { anim: 'celebrate', duration: 3000 }).catch(() => {});
-      const bonusText = result.bonusLabel ? `\n${result.bonusLabel}` : '';
-      emit('pet-bubble', { text: `今日任务完成！+${result.exp} EXP +${result.coins} 金币 🎉${bonusText}` }).catch(() => {});
+      emit('pet-bubble', { text: petCopy.examReward(result.exp, result.coins, result.bonusLabel) }).catch(() => {});
     }
   };
 

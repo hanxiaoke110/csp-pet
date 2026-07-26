@@ -83,9 +83,9 @@ export default function ProfileScreen() {
   };
 
   return (
-    <div style={{
+    <div className="dungeon-page-bg dungeon-subpage" style={{
       minHeight: '100vh',
-      background: `linear-gradient(180deg, ${school?.bgGradient?.split(',')[0] || '#0a0015'}, #0a0a0a)`,
+      backgroundImage: 'linear-gradient(180deg, rgba(5, 14, 13, 0.76), rgba(7, 12, 12, 0.94) 46%, rgba(7, 8, 9, 0.98)), url("/dungeon-art-v2/dungeon-04-bg.webp")',
       padding: '16px',
     }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>

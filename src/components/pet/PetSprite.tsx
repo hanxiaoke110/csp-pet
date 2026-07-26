@@ -11,10 +11,19 @@ interface SpriteMeta { frameWidth: number; frameHeight: number; maxFrames: numbe
 interface SpriteData { img: HTMLImageElement; meta: SpriteMeta; }
 
 const ANIM_ORDER = ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhappy'];
-// csp 动画名 → Petdex 等非 csp 包的可能别名（按优先级），用于 animOrder 里没有 csp 名时回退
+// Behavior state → sprite row fallbacks. This keeps all existing seven-row
+// pets usable while allowing Codex-style nine-row pets to use their richer
+// direction and task states without an asset migration.
 const ANIM_ALIASES: Record<string, string[]> = {
   walk: ['running', 'running-right', 'running-left'],
-  sleep: ['waiting'],
+  'walk-left': ['running-left', 'walk', 'running', 'running-right'],
+  'walk-right': ['running-right', 'walk', 'running', 'running-left'],
+  greet: ['waving', 'celebrate'],
+  interact: ['jumping', 'celebrate', 'waving'],
+  failed: ['failed', 'unhappy'],
+  waiting: ['waiting', 'think', 'idle'],
+  working: ['running', 'walk', 'think'],
+  review: ['review', 'think'],
   celebrate: ['waving'],
   think: ['review'],
   unhappy: ['failed'],
@@ -100,8 +109,14 @@ export default function PetSprite({
   const [currentAnim, setCurrentAnim] = useState<PetAnimState>('idle');
   const [resolvedPngUrl, setResolvedPngUrl] = useState<string>('');
   const mountCountRef = useRef(0);
+  const [, setMetaVersion] = useState(0);
+  const frameWidth = spriteRef.current?.meta.frameWidth || 192;
+  const frameHeight = spriteRef.current?.meta.frameHeight || 208;
+  // Scale to the frame height, not its width: every 192×208 legacy/Codex cell
+  // remains fully visible inside the square pet canvas instead of losing feet.
+  const renderWidth = Math.round(sz * frameWidth / frameHeight);
 
-  // ─── Inject CSS @keyframes for sprite frame counts (dynamic, depends on sz) ───
+  // ─── Inject CSS @keyframes for sprite frame counts (dynamic, depends on cell width) ───
   useEffect(() => {
     const styleId = 'pet-sprite-keyframes';
     const old = document.getElementById(styleId);
@@ -109,14 +124,14 @@ export default function PetSprite({
     const style = document.createElement('style');
     style.id = styleId;
     style.textContent = `
-      @keyframes pet-spr-4 { to { background-position-x: -${sz * 4}px; } }
-      @keyframes pet-spr-5 { to { background-position-x: -${sz * 5}px; } }
-      @keyframes pet-spr-6 { to { background-position-x: -${sz * 6}px; } }
-      @keyframes pet-spr-8 { to { background-position-x: -${sz * 8}px; } }
+      @keyframes pet-spr-4 { to { background-position-x: -${renderWidth * 4}px; } }
+      @keyframes pet-spr-5 { to { background-position-x: -${renderWidth * 5}px; } }
+      @keyframes pet-spr-6 { to { background-position-x: -${renderWidth * 6}px; } }
+      @keyframes pet-spr-8 { to { background-position-x: -${renderWidth * 8}px; } }
     `;
     document.head.appendChild(style);
     return () => { style.remove(); };
-  }, [sz]);
+  }, [renderWidth]);
 
   // ─── 2D CSS sprite ───
   useEffect(() => {
@@ -137,6 +152,7 @@ export default function PetSprite({
           const { data, blobUrl } = await loadCachedSprite(petId);
           if (cancelled) return;
           spriteRef.current = data;
+          setMetaVersion(v => v + 1);
           setResolvedPngUrl(blobUrl);
           setStatus('ready');
           return;
@@ -154,29 +170,27 @@ export default function PetSprite({
       loadSpriteSheet(jsonUrl, pngUrl).then(data => {
         if (cancelled) return;
         spriteRef.current = data;
+        setMetaVersion(v => v + 1);
         setStatus('ready');
       }).catch(() => { if (!cancelled) setStatus('error'); });
     }
 
     load();
 
-    // Lightweight rAF — state machine tick only, no rendering
-    let raf = 0;
+    // CSS animates frames; the state scheduler only needs a modest cadence.
     let lastTick = performance.now();
-    function tickSm() {
-      raf = requestAnimationFrame(tickSm);
+    const stateTimer = window.setInterval(() => {
       const now = performance.now();
-      const dt = Math.min(now - lastTick, 100);
+      const dt = Math.min(now - lastTick, 250);
       lastTick = now;
       const anim = tick(smRef.current, dt);
       if (anim !== currentAnimRef.current) {
         currentAnimRef.current = anim;
         setCurrentAnim(anim);
       }
-    }
-    raf = requestAnimationFrame(tickSm);
+    }, 100);
 
-    return () => { cancelled = true; cancelAnimationFrame(raf); };
+    return () => { cancelled = true; window.clearInterval(stateTimer); };
   }, [modelPath]);
 
   // ─── Expose to window ───
@@ -201,14 +215,14 @@ export default function PetSprite({
   const frames = spr?.meta.anims[resolvedAnim] || 6;
   const duration = spr?.meta.durations?.[resolvedAnim] || 1100;
   const rowIdx = order.indexOf(resolvedAnim);
-  const displayH = Math.round(sz * (spr?.meta.frameHeight || 208) / (spr?.meta.frameWidth || 192));
+  const displayH = sz;
 
   return (
     <div ref={containerRef} style={{ width: sz, height: sz, borderRadius: 12, position: 'relative' }}>
       <div ref={spriteDivRef} style={{
-        width: sz, height: sz,
+        width: renderWidth, height: sz, marginLeft: Math.round((sz - renderWidth) / 2),
         backgroundImage: resolvedPngUrl ? `url("${resolvedPngUrl}")` : 'none',
-        backgroundSize: `${(spr?.meta.maxFrames || 8) * sz}px auto`,
+        backgroundSize: `${(spr?.meta.maxFrames || 8) * renderWidth}px auto`,
         backgroundPositionY: `-${rowIdx * displayH}px`,
         backgroundRepeat: 'no-repeat',
         imageRendering: 'pixelated',

@@ -70,6 +70,8 @@ export interface DungeonDefinition {
   bossLine: string;              // Boss 登场台词
   bossDescription: string;       // Boss 描述
   bgImage?: string;              // 副本背景图路径（可选，缺省用 color 渐变）
+  simulationBgImage?: string;    // 日常演算场背景（自由练习/周任务复用）
+  bossImage?: string;            // Boss 角色图路径（用于副本入口展示）
   color: string;                 // 主题色
   requiredDungeon: string | null; // 前置副本 id，null=无需前置
   unlockLevel: number;           // 所需玩家等级
@@ -201,6 +203,9 @@ export interface BattleState {
   isWon: boolean;
   expEarned: number;
   goldEarned: number;
+  petCoinsEarned?: number;
+  petCoinsDailyRemaining?: number;
+  petCoinsWeeklyRemaining?: number;
   rating: string;              // D/C/B/A/S/SS
   enemyHp: number;
   enemyMaxHp: number;
@@ -214,6 +219,14 @@ export interface BattleState {
   shield: number;              // 当前护盾值
   enemyIntent: EnemyIntent | null; // 敌方下回合意图
   burnStacks: BurnStack[];     // 灼烧层数
+}
+
+export interface TrialInventory {
+  hintTickets: number;
+  healingPotions: number;
+  ownedCosmetics: string[];
+  equippedTitle: string | null;
+  equippedAvatarFrame: string | null;
 }
 
 // Phaser 战斗新增：敌方意图

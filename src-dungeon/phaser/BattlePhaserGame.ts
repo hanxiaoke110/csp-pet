@@ -7,6 +7,7 @@ export type BattleEventCallback = (event: string, data: unknown) => void;
 export interface BattlePhaserGame {
   game: Phaser.Game;
   setAnswerResult: (result: SkillSelectResult) => void;
+  healPlayer: (amount: number) => void;
   pause: () => void;
   resume: () => void;
   destroy: () => void;
@@ -60,6 +61,10 @@ export function createBattleGame(
       if (scene) {
         scene.handleAnswerResult(result);
       }
+    },
+    healPlayer: (amount: number) => {
+      const scene = game.scene.getScene('BattleScene') as BattleScene | undefined;
+      if (scene) scene.healPlayer(amount);
     },
     pause: () => {
       // 真暂停：冻结 BattleScene 的 update 循环，避免暂停遮罩下战斗仍推进

@@ -31,6 +31,7 @@ export default function RewardScreen() {
   const won = battle.isWon;
   const expEarned = battle.expEarned;
   const goldEarned = battle.goldEarned;
+  const petCoinsEarned = battle.petCoinsEarned || 0;
   const rating = battle.rating;
   const totalAnswered = battle.correctCount + battle.wrongCount;
   const accuracy = totalAnswered > 0
@@ -90,7 +91,7 @@ export default function RewardScreen() {
         {won && (
           <div style={{ marginBottom: '20px' }}>
             <div style={{
-              display: 'grid', gridTemplateColumns: '1fr 1fr',
+              display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
               gap: '12px', marginBottom: '16px',
             }}>
               <div className="pixel-card" style={{ borderColor: 'var(--exp-blue)' }}>
@@ -105,6 +106,15 @@ export default function RewardScreen() {
                   +{goldEarned}
                 </div>
               </div>
+              <div className="pixel-card" style={{ borderColor: '#f97316' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>桌宠金币</div>
+                <div style={{ fontSize: '24px', color: '#f97316', fontWeight: 700 }}>
+                  +{petCoinsEarned}
+                </div>
+              </div>
+            </div>
+            <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '-8px', marginBottom: '12px' }}>
+              已同步到桌宠商城 · 今日还可获得 {battle.petCoinsDailyRemaining ?? 30}，本周还可获得 {battle.petCoinsWeeklyRemaining ?? 150}
             </div>
 
             {/* Rating */}

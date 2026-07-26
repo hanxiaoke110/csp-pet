@@ -1,171 +1,186 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { emit } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
-import { getCurrentWindow, PhysicalPosition, LogicalSize, availableMonitors } from '@tauri-apps/api/window';
+import { getCurrentWindow, PhysicalPosition, LogicalSize, currentMonitor } from '@tauri-apps/api/window';
 import PetSprite from './PetSprite';
 import type { PetAnimState } from './PetStateMachine';
+import { PetDialogueDirector } from './PetDialogueDirector';
 import type { OwnedPet } from '../../types/pet';
 import { safeListen } from '../../lib/tauriEvents';
 
 const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
-  small:  { canvas: 110, win: 122 },
+  small: { canvas: 110, win: 122 },
   medium: { canvas: 140, win: 154 },
-  large:  { canvas: 170, win: 188 },
+  large: { canvas: 170, win: 188 },
 };
 
-function getPetSize(): string {
-  try { return localStorage.getItem('csp_pet_size') || 'medium'; }
-  catch { return 'medium'; }
-}
-
-function getRoamingEnabled(): boolean {
-  try { return localStorage.getItem('csp_pet_roaming') === 'true'; }
-  catch { return false; }
-}
-
-const CLICK_LINES = [
-  '别点啦，好痒~', '我在认真看你学习呢！', '今天学了什么新知识？', '今天的每周任务做完了吗？',
-  '记得喂我吃东西哦~', '你今天的签到别忘了！', '加油，你是最棒的！', '这道题需要我帮你分析吗？',
-  '休息一下，劳逸结合~', 'C++ 真的很有趣！', '要不要去商店抽个新智子？', '今天还没去 OJ 刷题呢！',
-  '好好学习，天天向上！', '我陪你一起学 C++！', '有什么不懂的可以问 AI 教练', '你的灵犀智子会一直陪着你',
-  '冲冲冲！🏆', '这个 bug 一定能找到的！', '你好厉害，已经学了好多题了', '码代码的样子最帅了 ✨',
-  '想不想抽个传说智子？', '快去商店看看新伙伴吧', '要不要给我起个新名字？',
-  '看看你的成就解锁了多少？', 'CSP 获奖在向你招手', '今天的运势很不错哦 🍀',
-  '今天的课程验证做完了吗？📚', '去刷刷编程猫的题单吧！🐱',
-  '敢不敢挑战超级模式？5连击！⚡', '洛谷 AC 的感觉太爽了！', '你已经收集了多少只智子伙伴了？',
-  '递归、贪心、DP... 今天练了哪个？', '算法虐我千百遍，我待算法如初恋~', '代码写累了就摸摸我放松一下！',
-  '你怎么又摸鱼了 😏', '错题本等着你呢，该复习啦！',
-];
-const HUNGRY_LINES = ['好饿啊... 求投喂 😿', '再不喂我就要饿扁了', '我想吃豪华食物！', '饿得没力气陪你学习了...', '快去看看背包里有什么好吃的！'];
-const MOOD_LOW_LINES = ['心情不太好... 陪我玩会儿吧 😢', '你不理我了吗？', '好无聊啊，来刷一道题吧！', '是不是遇到让你头疼的题了？'];
-const MORNING_LINES = ['早上好！新的一天开始啦 ☀️', '今天也要元气满满地学 C++！', '早起的鸟儿有虫吃~', '今天打算刷几道题？先定个小目标！'];
-const NIGHT_LINES = ['夜深了，早点休息吧 🌙', '不要熬夜太晚哦，明天再学！', '晚安~ 明天见！', '回顾一下今天学到的知识再睡吧~'];
-function pickRandom(arr: string[]): string { return arr[Math.floor(Math.random() * arr.length)]; }
+const getPetSize = () => {
+  try { return localStorage.getItem('csp_pet_size') || 'medium'; } catch { return 'medium'; }
+};
+const getRoamingEnabled = () => {
+  try { return localStorage.getItem('csp_pet_roaming') === 'true'; } catch { return false; }
+};
+const sleep = (ms: number) => new Promise<void>(resolve => window.setTimeout(resolve, ms));
 
 export default function PetWindow() {
   const [bubble, setBubble] = useState('');
   const [clickCount, setClickCount] = useState(0);
   const [activePet, setActivePet] = useState<OwnedPet | null>(null);
+  const [petSize, setPetSize] = useState(getPetSize);
+  const [showActions, setShowActions] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const bubbleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const actionsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isDragging = useRef(false);
   const dragStarted = useRef(false);
-  const lastDragTime = useRef(0);
-  const defaultPos = useRef<{ x: number; y: number } | null>(null);
-  const [petSize, setPetSize] = useState(getPetSize);
   const lastClickTime = useRef(0);
-  const [showActions, setShowActions] = useState(false);
-  const actionsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const showActionBar = () => {
-    if (actionsTimer.current) clearTimeout(actionsTimer.current);
-    setShowActions(true);
-    actionsTimer.current = setTimeout(() => setShowActions(false), 5000);
-  };
+  const defaultPos = useRef<{ x: number; y: number } | null>(null);
+  const roamingPausedUntil = useRef(0);
+  const dialogue = useRef(new PetDialogueDirector());
+  const currentWindowSize = useRef({
+    width: (SIZE_MAP[getPetSize()] || SIZE_MAP.medium).win,
+    height: (SIZE_MAP[getPetSize()] || SIZE_MAP.medium).win,
+  });
 
   const size = SIZE_MAP[petSize] || SIZE_MAP.medium;
   const winSz = size.win;
   const canvasSz = size.canvas;
-  const uiScale = canvasSz / 200; // proportional to original 200px canvas
+  const uiScale = canvasSz / 200;
+  const bubbleWindowWidth = Math.max(260, winSz + 96);
+  const bubbleSpace = 76;
+  const windowWidth = bubble ? bubbleWindowWidth : winSz;
+  const windowHeight = bubble ? winSz + bubbleSpace : winSz;
 
-  // ─── ALL hooks must be called unconditionally ───
+  const pauseRoaming = useCallback((ms: number) => {
+    roamingPausedUntil.current = Math.max(roamingPausedUntil.current, Date.now() + ms);
+    window.__petTrigger__?.('idle');
+  }, []);
 
-  // Window dragging — only start drag when mouse moved > 5px (distinguish from click)
+  const showBubble = useCallback((text: string, urgent = false) => {
+    if (!text) return;
+    if (bubbleTimer.current) clearTimeout(bubbleTimer.current);
+    setBubble(text);
+    // Reading time is proportional to text length, bounded to avoid a sticky overlay.
+    const duration = urgent ? 6500 : Math.max(2800, Math.min(6500, 1500 + text.length * 180));
+    bubbleTimer.current = setTimeout(() => setBubble(''), duration);
+    pauseRoaming(urgent ? 120_000 : 45_000);
+  }, [pauseRoaming]);
+
+  const showActionBar = useCallback(() => {
+    if (actionsTimer.current) clearTimeout(actionsTimer.current);
+    setShowActions(true);
+    actionsTimer.current = setTimeout(() => setShowActions(false), 5000);
+  }, []);
+
+  const savePosition = useCallback(() => {
+    getCurrentWindow().outerPosition().then(position => {
+      localStorage.setItem('csp_pet_pos', JSON.stringify({ x: position.x, y: position.y }));
+    }).catch(() => {});
+  }, []);
+
+  // Drag only begins after a small movement threshold so ordinary clicks stay responsive.
   useEffect(() => {
-    let startX = 0, startY = 0;
-    const onMD = (e: MouseEvent) => {
-      if (e.button !== 0) return;
-      startX = e.clientX;
-      startY = e.clientY;
+    let startX: number | null = null;
+    let startY: number | null = null;
+    const onMouseDown = (event: MouseEvent) => {
+      if (event.button !== 0) return;
+      startX = event.clientX;
+      startY = event.clientY;
       isDragging.current = false;
       dragStarted.current = false;
     };
-    const onMM = (e: MouseEvent) => {
-      if (dragStarted.current || (startX === 0 && startY === 0)) return;
-      if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
+    const onMouseMove = (event: MouseEvent) => {
+      if (dragStarted.current || startX === null || startY === null) return;
+      if (Math.abs(event.clientX - startX) > 5 || Math.abs(event.clientY - startY) > 5) {
         isDragging.current = true;
         dragStarted.current = true;
+        pauseRoaming(5 * 60_000);
         getCurrentWindow().startDragging().catch(() => {});
       }
     };
-    const onMU = () => {
-      if (isDragging.current) { lastDragTime.current = Date.now(); savePosition(); }
+    const onMouseUp = () => {
+      if (isDragging.current) savePosition();
       dragStarted.current = false;
-      startX = startY = 0;
+      startX = startY = null;
     };
-    document.addEventListener('mousedown', onMD);
-    document.addEventListener('mousemove', onMM);
-    document.addEventListener('mouseup', onMU);
+    document.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
     return () => {
-      document.removeEventListener('mousedown', onMD);
-      document.removeEventListener('mousemove', onMM);
-      document.removeEventListener('mouseup', onMU);
+      document.removeEventListener('mousedown', onMouseDown);
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
     };
-  }, []);
+  }, [pauseRoaming, savePosition]);
 
-  // Data sync & events
+  // Data sync and product events.
   useEffect(() => {
     const load = async () => {
       try {
-        // Primary: SQLite
         let raw: string | null = null;
-        try {
-          raw = await invoke('get_setting', { key: 'pet_data' }) as string | null;
-        } catch { /* SQLite unavailable */ }
-        // Fallback: localStorage
-        if (!raw) {
-          raw = localStorage.getItem('csp_pet_data');
-          if (!raw) raw = localStorage.getItem('csp_pet_data_tmp');
-        }
-        const d = JSON.parse(raw || '{}');
-        if (d.activePetId && d.ownedPets) {
-          const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
-          if (p) setActivePet(p);
-        }
-      } catch {}
+        try { raw = await invoke('get_setting', { key: 'pet_data' }) as string | null; } catch { /* SQLite unavailable */ }
+        if (!raw) raw = localStorage.getItem('csp_pet_data') || localStorage.getItem('csp_pet_data_tmp');
+        const data = JSON.parse(raw || '{}');
+        const pet = data.activePetId && data.ownedPets?.find((item: OwnedPet) => item.petId === data.activePetId);
+        if (pet) setActivePet(pet);
+      } catch { /* keep window empty until a pet becomes available */ }
     };
     load();
-    const c: (() => void)[] = [];
-    c.push(safeListen('pet-data-sync', (e: any) => {
-      const d = e.payload;
-      // Data already persisted to SQLite by main window — just update UI
-      if (d.activePetId && d.ownedPets) {
-        const p = d.ownedPets.find((x: OwnedPet) => x.petId === d.activePetId);
-        if (p) setActivePet(p);
-      }
+    const listeners: (() => void)[] = [];
+    listeners.push(safeListen('pet-data-sync', (event: any) => {
+      const data = event.payload;
+      const pet = data.activePetId && data.ownedPets?.find((item: OwnedPet) => item.petId === data.activePetId);
+      if (pet) setActivePet(pet);
     }));
-
-    // Listen for size/preference changes from main window
-    c.push(safeListen('pet-settings-changed', () => {
-      setPetSize(getPetSize());
+    listeners.push(safeListen('pet-settings-changed', () => setPetSize(getPetSize())));
+    listeners.push(safeListen('pet-anim', (event: any) => {
+      const payload = event.payload as { anim: PetAnimState; duration?: number };
+      window.__petTrigger__?.(payload.anim, payload.duration);
     }));
-
-    // Poll for data until we get a pet
-    pollRef.current = setInterval(() => {
-      emit('pet-request-sync', {}).catch(() => {});
-    }, 2000);
-
-    c.push(safeListen('pet-anim', (e: any) => {
-      const p = e.payload as { anim: PetAnimState; duration?: number };
-      window.__petTrigger__?.(p.anim, p.duration);
+    listeners.push(safeListen('pet-bubble', (event: any) => {
+      showBubble(event.payload.text, Boolean(event.payload.urgent));
     }));
-    c.push(safeListen('pet-bubble', (e: any) => {
-      setBubble(e.payload.text);
-      setTimeout(() => setBubble(''), 4000);
-    }));
+    pollRef.current = setInterval(() => emit('pet-request-sync', {}).catch(() => {}), 2000);
     return () => {
-      c.forEach(fn => fn());
+      listeners.forEach(unlisten => unlisten());
       if (pollRef.current) clearInterval(pollRef.current);
+      if (bubbleTimer.current) clearTimeout(bubbleTimer.current);
+      if (actionsTimer.current) clearTimeout(actionsTimer.current);
     };
-  }, []);
+  }, [showBubble]);
 
-  // ─── Window size (use LogicalSize — CSS pixels match canvas) ───
   useEffect(() => {
-    getCurrentWindow().setSize(new LogicalSize(winSz, winSz)).catch(() => {});
-  }, [winSz]);
+    let cancelled = false;
+    const resizeWindow = async () => {
+      const windowRef = getCurrentWindow();
+      const previous = currentWindowSize.current;
+      const [position, monitor] = await Promise.all([windowRef.outerPosition(), currentMonitor()]);
+      if (cancelled) return;
+      const scale = Number(monitor?.scaleFactor) || 1;
+      let nextX = position.x + ((previous.width - windowWidth) * scale) / 2;
+      let nextY = position.y + (previous.height - windowHeight) * scale;
 
-  // ─── Save & restore position ───
+      if (monitor) {
+        const workPosition = (monitor.workArea.position as any).data || monitor.workArea.position;
+        const workSize = (monitor.workArea.size as any).data || monitor.workArea.size;
+        const minX = Number(workPosition.x);
+        const minY = Number(workPosition.y);
+        const maxX = minX + Number(workSize.width) - windowWidth * scale;
+        const maxY = minY + Number(workSize.height) - windowHeight * scale;
+        nextX = Math.max(minX, Math.min(maxX, nextX));
+        nextY = Math.max(minY, Math.min(maxY, nextY));
+      }
+
+      await windowRef.setSize(new LogicalSize(windowWidth, windowHeight));
+      await windowRef.setPosition(new PhysicalPosition(Math.round(nextX), Math.round(nextY)));
+      currentWindowSize.current = { width: windowWidth, height: windowHeight };
+    };
+    resizeWindow().catch(() => {});
+    return () => { cancelled = true; };
+  }, [windowHeight, windowWidth]);
+
   useEffect(() => {
-    getCurrentWindow().outerPosition().then(p => {
+    getCurrentWindow().outerPosition().then(position => {
       const saved = localStorage.getItem('csp_pet_pos');
       if (saved) {
         try {
@@ -173,57 +188,77 @@ export default function PetWindow() {
           getCurrentWindow().setPosition(new PhysicalPosition(x, y)).catch(() => {});
           defaultPos.current = { x, y };
           return;
-        } catch {}
+        } catch { /* use app-selected location */ }
       }
-      defaultPos.current = { x: p.x, y: p.y };
+      defaultPos.current = { x: position.x, y: position.y };
     }).catch(() => {});
   }, []);
 
-  // Save position on drag end
-  const savePosition = () => {
-    getCurrentWindow().outerPosition().then(p => {
-      localStorage.setItem('csp_pet_pos', JSON.stringify({ x: p.x, y: p.y }));
-    }).catch(() => {});
-  };
-
-  // ─── Roaming ───
+  // Low-disturbance roaming: remain on the current monitor, use its work area,
+  // travel short distances, and synchronize position with a left/right run.
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    const roam = async () => {
-      if (!getRoamingEnabled()) { timer = setTimeout(roam, 3000); return; }
-      if (Date.now() - lastDragTime.current < 60_000) { timer = setTimeout(roam, 3000); return; }
-      try {
-        const monitors = await availableMonitors();
-        if (!monitors || monitors.length === 0) { timer = setTimeout(roam, 5000); return; }
-        const m = monitors[0];
-        // monitor.size/position may arrive as { type: 'Physical', data: { width, height } }
-        // or as plain { width, height } / { x, y } depending on Tauri version
-        const rawSize = (m.size as any).data || m.size;
-        const rawPos = (m.position as any).data || m.position;
-        const mw = Number(rawSize.width);
-        const mh = Number(rawSize.height);
-        const mx = Number(rawPos.x);
-        const my = Number(rawPos.y);
-        const sf = Number(m.scaleFactor) || 1;
-        if (!mw || !mh) { timer = setTimeout(roam, 5000); return; }
-        // winSz is logical (CSS) pixels; monitor bounds are physical pixels
-        const physWinSz = winSz * sf;
-        const margin = 40;
-        const nx = Math.round(mx + margin + Math.random() * (mw - physWinSz - margin * 2));
-        const ny = Math.round(my + margin + Math.random() * (mh - physWinSz - margin * 2));
-        const safeX = Math.max(mx + margin, Math.min(mx + mw - physWinSz - margin, nx));
-        const safeY = Math.max(my + margin, Math.min(my + mh - physWinSz - margin, ny));
-        await getCurrentWindow().setPosition(new PhysicalPosition(safeX, safeY));
-      } catch { /* ignore */ }
-      // Next roam in 10-30 seconds
-      timer = setTimeout(roam, 10_000 + Math.random() * 20_000);
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    const schedule = (delay: number) => {
+      if (!cancelled) timer = setTimeout(run, delay);
     };
-    // First roam after 3 seconds so user sees it working
-    timer = setTimeout(roam, 3000);
-    return () => clearTimeout(timer);
+
+    const moveOnce = async () => {
+      const windowRef = getCurrentWindow();
+      const [position, monitor] = await Promise.all([windowRef.outerPosition(), currentMonitor()]);
+      if (!monitor || cancelled) return;
+      const area = monitor.workArea;
+      const areaPos = (area.position as any).data || area.position;
+      const areaSize = (area.size as any).data || area.size;
+      const scale = Number(monitor.scaleFactor) || 1;
+      const windowSize = winSz * scale;
+      const margin = Math.round(18 * scale);
+      const minX = Number(areaPos.x) + margin;
+      const maxX = Number(areaPos.x) + Number(areaSize.width) - windowSize - margin;
+      // Keep the default roaming lane in the lower half so code and reading stay visible.
+      const minY = Number(areaPos.y) + Math.max(margin, Number(areaSize.height) * 0.52);
+      const maxY = Number(areaPos.y) + Number(areaSize.height) - windowSize - margin;
+      if (maxX <= minX || maxY <= minY) return;
+
+      const maxStep = Math.min(340 * scale, (maxX - minX) * 0.35);
+      const targetX = Math.max(minX, Math.min(maxX, position.x + (Math.random() * 2 - 1) * maxStep));
+      const targetY = Math.max(minY, Math.min(maxY, position.y + (Math.random() * 2 - 1) * maxStep * 0.45));
+      const dx = targetX - position.x;
+      const dy = targetY - position.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance < 24 * scale) return;
+
+      const duration = Math.max(900, Math.min(4200, distance / (78 * scale) * 1000));
+      window.__petTrigger__?.(dx < 0 ? 'walk-left' : 'walk-right', duration + 250);
+      const startedAt = performance.now();
+      while (!cancelled && Date.now() >= roamingPausedUntil.current) {
+        const progress = Math.min(1, (performance.now() - startedAt) / duration);
+        // A short ease avoids an abrupt start/stop without making the walk look like teleporting.
+        const eased = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        await windowRef.setPosition(new PhysicalPosition(
+          Math.round(position.x + dx * eased),
+          Math.round(position.y + dy * eased),
+        ));
+        if (progress >= 1) break;
+        await sleep(40);
+      }
+      window.__petTrigger__?.('idle');
+    };
+
+    const run = async () => {
+      if (!getRoamingEnabled() || Date.now() < roamingPausedUntil.current) {
+        schedule(Math.max(30_000, roamingPausedUntil.current - Date.now()));
+        return;
+      }
+      try { await moveOnce(); } catch { /* a monitor can disappear while moving */ }
+      schedule(45_000 + Math.random() * 45_000);
+    };
+
+    schedule(30_000);
+    return () => { cancelled = true; if (timer) clearTimeout(timer); };
   }, [winSz]);
 
-  // Stop polling once we have a pet
   useEffect(() => {
     if (activePet && pollRef.current) {
       clearInterval(pollRef.current);
@@ -231,142 +266,107 @@ export default function PetWindow() {
     }
   }, [activePet]);
 
-  // Force-show pet window when pet is in weak state (hunger <= 10)
-  useEffect(() => {
-    if (activePet && activePet.hunger <= 10) {
-      invoke('show_pet_window').catch(() => {});
-    }
-  }, [activePet?.hunger]);
-
-  // Force unhappy animation when hunger <= 10
-  useEffect(() => {
-    if (activePet && activePet.hunger <= 10) {
-      // Re-trigger unhappy every 2.5s (duration is 3s) to keep it looping
-      const trigger = () => window.__petTrigger__?.('unhappy');
-      trigger();
-      const i = setInterval(trigger, 2500);
-      return () => clearInterval(i);
-    }
-  }, [activePet?.hunger, activePet]);
-
-  // Auto idle dialogue
+  // Ambient messages are intentionally sparse. Context-rich result messages
+  // continue to arrive from quiz/course screens through the pet-bubble event.
   useEffect(() => {
     if (!activePet) return;
-    const say = () => {
-      const h = new Date().getHours();
-      let l: string;
-      if (activePet.hunger <= 20) l = pickRandom(HUNGRY_LINES);
-      else if (activePet.mood <= 20) l = pickRandom(MOOD_LOW_LINES);
-      else if (h >= 6 && h <= 9) l = Math.random() < 0.3 ? pickRandom(MORNING_LINES) : pickRandom(CLICK_LINES);
-      else if (h >= 22 || h <= 1) l = Math.random() < 0.4 ? pickRandom(NIGHT_LINES) : pickRandom(CLICK_LINES);
-      else l = pickRandom(CLICK_LINES);
-      setBubble(l);
-      setTimeout(() => setBubble(''), 4000);
-    };
-    const i = setInterval(() => { if (Math.random() < 0.3) say(); }, 30000);
-    return () => clearInterval(i);
-  }, [activePet]);
+    const timer = setInterval(() => {
+      const next = dialogue.current.nextAmbient({
+        hunger: activePet.hunger,
+        mood: activePet.mood,
+        hour: new Date().getHours(),
+      });
+      if (next) showBubble(next.text, next.priority === 'urgent');
+    }, 60_000);
+    return () => clearInterval(timer);
+  }, [activePet, showBubble]);
 
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleClick = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
     if (isDragging.current) return;
-
-    // Double-click detection — return to default position
+    pauseRoaming(3 * 60_000);
     const now = Date.now();
     if (now - lastClickTime.current < 400) {
       lastClickTime.current = 0;
       if (defaultPos.current) {
         getCurrentWindow().setPosition(new PhysicalPosition(defaultPos.current.x, defaultPos.current.y)).catch(() => {});
-        setBubble('我回来啦~ 🏠');
-        setTimeout(() => setBubble(''), 3000);
+        showBubble('我回到原来的位置啦。');
       }
       return;
     }
     lastClickTime.current = now;
-
-    window.__petWake__?.(); window.__petUpdate__?.();
-    const c = clickCount + 1; setClickCount(c);
-    let l: string;
-    if (activePet?.hunger && activePet.hunger <= 20) l = pickRandom(HUNGRY_LINES);
-    else if (activePet?.mood && activePet.mood <= 20) l = pickRandom(MOOD_LOW_LINES);
-    else if (c % 10 === 0) l = `你戳了我 ${c} 次了！🤪`;
-    else if (c % 5 === 0) l = pickRandom(['好痒好痒~', '哈哈哈别戳了', '再戳我要生气了 😤', '你是戳戳怪吗']);
-    else l = pickRandom(CLICK_LINES);
-    setBubble(l); setTimeout(() => setBubble(''), 4000);
+    window.__petWake__?.();
+    window.__petUpdate__?.();
+    window.__petTrigger__?.('interact');
+    const nextCount = clickCount + 1;
+    setClickCount(nextCount);
+    if (activePet) {
+      const line = dialogue.current.nextClick({
+        hunger: activePet.hunger, mood: activePet.mood, hour: new Date().getHours(), clickCount: nextCount,
+      });
+      showBubble(line.text, line.priority === 'urgent');
+    }
     showActionBar();
-  }, [clickCount, activePet]);
+  }, [activePet, clickCount, pauseRoaming, showActionBar, showBubble]);
 
-  // ─── Render ───
   if (!activePet) return null;
-
   const barH = Math.round(22 * uiScale);
 
   return (
-    <div style={{ width: winSz, height: winSz, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="pet-interact" style={{ width: canvasSz, height: canvasSz, position: 'relative' }} onClick={handleClick}>
-        <PetSprite key={activePet.modelPath || 'empty'}
-          renderType={activePet.renderType} modelPath={activePet.modelPath} canvasSize={canvasSz} />
+    <div style={{ width: windowWidth, height: windowHeight, position: 'relative' }}>
+      {bubble && (
+        <div style={{
+          position: 'absolute', top: 4, left: '50%', transform: 'translateX(-50%)',
+          width: bubbleWindowWidth - 16, maxWidth: 244,
+          background: 'rgba(255,255,255,.98)', borderRadius: 12, padding: '9px 12px',
+          fontSize: Math.max(12, Math.round(13 * uiScale)), lineHeight: 1.5, fontWeight: 600,
+          boxShadow: '0 5px 18px rgba(15,23,42,.2)', zIndex: 20,
+          whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'left', animation: 'bubbleIn .2s ease',
+          border: '1.5px solid #f6c453', pointerEvents: 'none', color: '#1e293b',
+        }}>
+          {bubble}
+          <div style={{
+            position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)',
+            width: 0, height: 0, borderTop: '8px solid #fff',
+            borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
+          }} />
+        </div>
+      )}
 
-        {/* Bubble */}
-        {bubble && (
-          <div style={{ position: 'absolute',
-            top: Math.round(2 * uiScale),
-            left: '50%', transform: 'translateX(-50%)', background: '#fff',
-            borderRadius: Math.round(14 * uiScale), padding: `${Math.round(5 * uiScale)}px ${Math.round(10 * uiScale)}px`,
-            fontSize: Math.max(10, Math.round(11 * uiScale)), fontWeight: 600, boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
-            maxWidth: Math.round(190 * uiScale), zIndex: 10, whiteSpace: 'nowrap', animation: 'bubbleIn .2s ease',
-            border: `${Math.max(1, Math.round(2 * uiScale))}px solid #fde68a`, pointerEvents: 'none' }}>
-            {bubble}
-            <div style={{ position: 'absolute',
-              bottom: Math.round(-6 * uiScale), borderTop: `${Math.round(6 * uiScale)}px solid #fff`,
-              left: '50%', transform: 'translateX(-50%)',
-              width: 0, height: 0,
-              borderLeft: `${Math.round(6 * uiScale)}px solid transparent`,
-              borderRight: `${Math.round(6 * uiScale)}px solid transparent` }} />
-          </div>
-        )}
+      <div
+        className="pet-interact"
+        style={{
+          width: canvasSz,
+          height: canvasSz,
+          position: 'absolute',
+          left: '50%',
+          bottom: 0,
+          transform: 'translateX(-50%)',
+        }}
+        onClick={handleClick}
+      >
+        <PetSprite key={activePet.modelPath || 'empty'} renderType={activePet.renderType} modelPath={activePet.modelPath} canvasSize={canvasSz} />
 
-        {/* Action bar — overlaid at bottom of sprite, stays inside window */}
         {showActions && (
           <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0,
-            height: barH, zIndex: 10,
-            background: 'linear-gradient(transparent, rgba(0,0,0,0.45))',
-            display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: Math.round(6 * uiScale),
-            paddingBottom: Math.round(3 * uiScale),
-            borderRadius: '0 0 12px 12px',
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: barH, zIndex: 10,
+            background: 'linear-gradient(transparent, rgba(0,0,0,0.45))', display: 'flex', alignItems: 'flex-end',
+            justifyContent: 'center', gap: Math.round(6 * uiScale), paddingBottom: Math.round(3 * uiScale), borderRadius: '0 0 12px 12px',
           }}>
             {[
               { icon: '📂', label: '窗口', action: () => emit('pet-action', { action: 'open-window' }).catch(() => {}) },
               { icon: '🛒', label: '商城', action: () => emit('pet-action', { action: 'navigate', target: '/pet?tab=shop' }).catch(() => {}) },
-              { icon: '👁️', label: '隐藏', action: () => {
-                invoke('toggle_pet_window').then((result) => {
-                  emit('pet-visibility-toggled', { visible: result === 'shown' }).catch(() => {});
-                }).catch(() => {});
-              },
-                disabled: activePet && activePet.hunger <= 10,
-                tooltip: activePet && activePet.hunger <= 10 ? '虚弱状态，无法关闭' : undefined },
-            ].map(btn => {
-              const isDisabled = btn.disabled;
-              return (
-              <button key={btn.label}
-                disabled={isDisabled}
-                title={btn.tooltip}
-                onClick={(e) => { e.stopPropagation(); if (!isDisabled) btn.action(); }}
-                style={{
-                  background: isDisabled ? '#e2e8f0' : 'rgba(255,255,255,0.92)',
-                  border: 'none', borderRadius: Math.round(6 * uiScale),
-                  padding: `${Math.round(2 * uiScale)}px ${Math.round(5 * uiScale)}px`,
-                  fontSize: Math.max(10, Math.round(11 * uiScale)),
-                  cursor: isDisabled ? 'not-allowed' : 'pointer',
-                  display: 'flex', alignItems: 'center', gap: Math.round(2 * uiScale),
-                  color: isDisabled ? '#94a3b8' : '#334155', fontWeight: 600,
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
-                  opacity: isDisabled ? 0.6 : 1,
-                }}>
-                {btn.icon}
-              </button>
-            )})}
+              { icon: '👁️', label: '隐藏', action: () => invoke('toggle_pet_window').then(result => {
+                emit('pet-visibility-toggled', { visible: result === 'shown' }).catch(() => {});
+              }).catch(() => {}) },
+            ].map(button => (
+              <button key={button.label} onClick={event => { event.stopPropagation(); button.action(); }} style={{
+                background: 'rgba(255,255,255,0.92)', border: 'none', borderRadius: Math.round(6 * uiScale),
+                padding: `${Math.round(2 * uiScale)}px ${Math.round(5 * uiScale)}px`, fontSize: Math.max(10, Math.round(11 * uiScale)),
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: Math.round(2 * uiScale), color: '#334155', fontWeight: 600,
+                boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+              }}>{button.icon}</button>
+            ))}
           </div>
         )}
       </div>

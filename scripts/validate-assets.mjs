@@ -38,6 +38,13 @@ function hasCodeInQuestion(question) {
   return inlineCodeMarkers.some(marker => String(question || '').includes(marker));
 }
 
+function hasCodeInOptions(options) {
+  if (!Array.isArray(options)) return false;
+  const combined = options.map(option => String(option || '')).join('\n');
+  const markers = ['int ', 'string ', 'cout', 'cin', 'for(', 'for (', 'while(', 'while (', ';'];
+  return markers.filter(marker => combined.includes(marker)).length >= 2;
+}
+
 function requireCode(question) {
   const stem = String(question || '').normalize('NFKC').replace(/\s+/g, '');
   if (/流程图/.test(stem)) return false;
@@ -96,7 +103,12 @@ function validateQuestionFile(file) {
     if (q.type === 'choice') {
       validateOptionSet(id, q.options, q.correctIndex ?? q.answer, failures);
       if (!String(q.explanation || '').trim()) failures.push(`${id}: explanation empty`);
-      if (!q.code && !q.image && !q.codeImage && requireCode(q.question) && !hasCodeInQuestion(q.question)) {
+      if (
+        !q.code && !q.image && !q.codeImage
+        && requireCode(q.question)
+        && !hasCodeInQuestion(q.question)
+        && !hasCodeInOptions(q.options)
+      ) {
         failures.push(`${id}: referenced code is missing`);
       }
     } else if (q.type === 'reading') {

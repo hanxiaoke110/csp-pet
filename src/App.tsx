@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { emit } from '@tauri-apps/api/event';
+import { petCopy } from './components/pet/PetCopy';
 import { invoke } from '@tauri-apps/api/core';
 import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 import { MemoryRouter } from 'react-router-dom';
@@ -13,6 +14,7 @@ import AchievementsPanel from './components/achievements/AchievementsPanel';
 import OJTraining from './components/oj/OJTraining';
 import ExamTraining from './components/exam/ExamTraining';
 import SettingsPage from './components/settings/SettingsPage';
+import WindowSkinsPage from './components/skins/WindowSkinsPage';
 import AdminPage from './components/admin/AdminPage';
 import LearningResourcesPage from './components/resources/LearningResourcesPage';
 import DungeonEmbed from '../src-dungeon/DungeonEmbed';
@@ -107,7 +109,7 @@ function doCheckinFromPet() {
     const thisWeek = getWeekKey();
     const data = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
     if (data.week === thisWeek) {
-      emit('pet-bubble', { text: '本周已经签到过啦~ 🎁' }).catch(() => {});
+      emit('pet-bubble', { text: petCopy.checkinAlready() }).catch(() => {});
       return;
     }
     let streak = (data.streak || 0) + 1;
@@ -116,10 +118,10 @@ function doCheckinFromPet() {
     else if (streak % 4 === 0) { bonus = 100; }
     usePetStore.getState().addCoins(bonus);
     localStorage.setItem('csp_checkin', JSON.stringify({ week: thisWeek, streak }));
-    emit('pet-bubble', { text: `🔥 连续 ${streak} 周！+${bonus}g` }).catch(() => {});
+    emit('pet-bubble', { text: petCopy.checkinSuccess(streak, bonus) }).catch(() => {});
     setTimeout(() => usePetStore.getState().save(), 100);
   } catch {
-    emit('pet-bubble', { text: '签到成功！🎁' }).catch(() => {});
+    emit('pet-bubble', { text: petCopy.checkinFallback() }).catch(() => {});
   }
 }
 
@@ -169,7 +171,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.17';
+  const VER = '1.7.18';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,11 +182,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>✅ 日常、超级挑战、真题与试炼场统一使用已核验题库</div>
-          <div>📄 CSP-J/S 选择题按原卷恢复并内置离线快照</div>
-          <div>⚡ 超级挑战完整显示每个小问题干和选项</div>
-          <div>🛡️ 图表缺失、OCR 异常和未核验程序题自动隔离</div>
-          <div>🔄 新题库支持校验哈希、缓存回退与后续热更新</div>
+          <div>🖼️ 新增窗口皮肤图鉴，14种场景按学习与试炼进度永久解锁</div>
+          <div>🏯 智子试炼场更新中国奇境副本背景与 Boss 形象</div>
+          <div>🪙 试炼金币接入桌宠金币，并新增提示、回血等试炼补给</div>
+          <div>💬 优化桌宠动画、对话气泡和日常互动体验</div>
+          <div>🛡️ 修复试炼场旧素材缓存及部分程序题显示问题</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -489,6 +491,7 @@ function App() {
           <Route path="/exam" element={<ExamTraining />} />
           <Route path="/oj-training" element={<OJTraining />} />
           <Route path="/resources" element={<LearningResourcesPage />} />
+          <Route path="/window-skins" element={<WindowSkinsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/admin" element={<AdminPage />} />
           {/* 兜底：未知路径回课程页 */}

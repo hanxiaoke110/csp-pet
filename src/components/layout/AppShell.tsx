@@ -4,6 +4,11 @@ import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import RedeemCode from '../courses/RedeemCode';
 import { navigateToMainApp } from '../../../src-dungeon/utils/routeBridge';
+import {
+  getWindowSkin,
+  WINDOW_SKIN_CHANGE_EVENT,
+  type WindowSkin,
+} from '../../utils/windowSkin';
 
 interface Props { children: ReactNode; }
 
@@ -97,9 +102,18 @@ export default function AppShell({ children }: Props) {
   const errorCount = errors.length;
   const canSuper = useQuizStore(s => s.canDoSuperChallenge());
   const [showRedeem, setShowRedeem] = useState(false);
+  const [windowSkin, setWindowSkin] = useState<WindowSkin>(getWindowSkin);
+
+  useEffect(() => {
+    const handleSkinChange = (event: Event) => {
+      setWindowSkin((event as CustomEvent<WindowSkin>).detail);
+    };
+    window.addEventListener(WINDOW_SKIN_CHANGE_EVENT, handleSkinChange);
+    return () => window.removeEventListener(WINDOW_SKIN_CHANGE_EVENT, handleSkinChange);
+  }, []);
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" data-window-skin={windowSkin}>
       <nav className="sidebar">
         <div className="sidebar-logo">CSP 学习助手</div>
 
@@ -160,6 +174,10 @@ export default function AppShell({ children }: Props) {
           onClick={() => setShowRedeem(true)}>
           🎁 神秘代码
         </button>
+
+        <NavLink to="/window-skins" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          🖼️ 窗口皮肤
+        </NavLink>
 
         <NavLink to="/settings" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           ⚙️ 设置

@@ -7,6 +7,7 @@ import type { ShopItem } from '../types/pet';
 import { calculateStats } from '../../src-dungeon/utils/combatLogic';
 import { validatePetName } from '../utils/validateName';
 import { useHatchStore } from './hatchStore';
+import { petCopy } from '../components/pet/PetCopy';
 
 interface PetState {
   activePetId: string | null;
@@ -218,13 +219,12 @@ export const usePetStore = create<PetState>((set, get) => ({
           // Milestone bubble
           const ms = getLevelMilestone(level);
           if (level === 5 || level === 10 || level === 15) {
-            const tips: Record<number, string> = { 5: '🎉 突破金丹！抽卡功能已解锁，快去试试手气吧！', 10: '🎉 突破元婴！每周自动获得 20g，躺着也能赚钱~', 15: '🎉 突破化神！抽卡保底减半，传说不再是梦！' };
-            emit('pet-bubble', { text: tips[level] || `突破 ${ms.title}！` }).catch(() => {});
+            emit('pet-bubble', { text: petCopy.levelUp(level, ms.title) }).catch(() => {});
           }
           if (level === MAX_PET_LEVEL) {
             exp = 0;
             expToNext = 0;
-            emit('pet-bubble', { text: '🎉 已达大乘之境，修行圆满！' }).catch(() => {});
+            emit('pet-bubble', { text: petCopy.maxLevel() }).catch(() => {});
           }
         }
         return { ...p, exp, expToNext, level, mood: Math.min(100, p.mood + 3), updatedAt: new Date().toISOString() };
@@ -301,15 +301,15 @@ export const usePetStore = create<PetState>((set, get) => ({
     const newHunger = get().ownedPets.find(p => p.petId === activePetId)?.hunger ?? 100;
     if (newHunger <= 0) {
       try {
-        emit('pet-bubble', { text: '我快饿晕了...再不喂食我就要消失了！😿💔', urgent: true }).catch(() => {});
+        emit('pet-bubble', { text: petCopy.hunger('empty'), urgent: true }).catch(() => {});
       } catch {}
     } else if (newHunger <= 10) {
       try {
-        emit('pet-bubble', { text: '我太饿了，进入虚弱状态...快给我喂食吧！😿', urgent: true }).catch(() => {});
+        emit('pet-bubble', { text: petCopy.hunger('veryLow'), urgent: true }).catch(() => {});
       } catch {}
     } else if (newHunger <= 15) {
       try {
-        emit('pet-bubble', { text: '我有点饿了...请及时喂食给我补充饥饿值 🍖', urgent: true }).catch(() => {});
+        emit('pet-bubble', { text: petCopy.hunger('low'), urgent: true }).catch(() => {});
       } catch {}
     }
     get().save();
@@ -614,13 +614,12 @@ export const usePetStore = create<PetState>((set, get) => ({
           expToNext = Math.floor(expToNext * 1.3);
           const ms = getLevelMilestone(level);
           if (level === 5 || level === 10 || level === 15) {
-            const tips: Record<number, string> = { 5: '🎉 突破金丹！抽卡功能已解锁！', 10: '🎉 突破元婴！每周自动获得 20g~', 15: '🎉 突破化神！保底减半至 50 抽！' };
-            emit('pet-bubble', { text: tips[level] || `突破 ${ms.title}！` }).catch(() => {});
+            emit('pet-bubble', { text: petCopy.levelUp(level, ms.title) }).catch(() => {});
           }
           if (level === MAX_PET_LEVEL) {
             exp = 0;
             expToNext = 0;
-            emit('pet-bubble', { text: '🎉 已达大乘之境，修行圆满！' }).catch(() => {});
+            emit('pet-bubble', { text: petCopy.maxLevel() }).catch(() => {});
           }
         }
         return { ...p, exp, expToNext, level, updatedAt: new Date().toISOString() };

@@ -1,8 +1,9 @@
 // 潜龙闭关 — 核心状态管理
 import { create } from 'zustand';
+import { usePetStore } from '../../src/stores/petStore';
 import type {
   PlayerState, DungeonProgress, DungeonDefinition, Question,
-  BattleState, BadgeDefinition, DailyTasks, School,
+  BattleState, BadgeDefinition, DailyTasks, School, TrialInventory,
 } from '../types/dungeon';
 import {
   applySchoolClearPassive,
@@ -26,6 +27,13 @@ function getWeekStart(): string {
 function todayStr(): string {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+const PET_COIN_DAILY_LIMIT = 30;
+const PET_COIN_WEEKLY_LIMIT = 150;
+
+function defaultTrialInventory(): TrialInventory {
+  return { hintTickets: 0, healingPotions: 0, ownedCosmetics: [], equippedTitle: null, equippedAvatarFrame: null };
 }
 
 // ── Default player ──
@@ -90,6 +98,8 @@ interface DungeonState {
     limit: number;
     resetAt: string; // YYYY-MM-DD 本地日期
   };
+  petCoinRewards: { dailyDate: string; dailyGranted: number; weekStart: string; weeklyGranted: number };
+  trialInventory: TrialInventory;
 
   // Actions
   setView: (v: DungeonState['view']) => void;
@@ -142,6 +152,10 @@ interface DungeonState {
   getWeakPointsAboveThreshold: (threshold: number) => string[];
   // 流派被动每日上限：未达上限则计数+1 并返回 true（允许触发被动），达上限返回 false（只发基础奖励）
   bumpSchoolPassiveDaily: () => boolean;
+  grantPetCoins: (amount: number) => { granted: number; dailyRemaining: number; weeklyRemaining: number };
+  buyTrialItem: (itemId: 'hint-ticket' | 'healing-potion' | 'title-data-scout' | 'frame-crystal') => boolean;
+  consumeTrialItem: (itemId: 'hint-ticket' | 'healing-potion') => boolean;
+  equipTrialCosmetic: (itemId: 'title-data-scout' | 'frame-crystal') => void;
 
   // Persistence
   saveToLocalStorage: () => void;
@@ -168,6 +182,8 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   weeklyChallenges: { used: 0, limit: 5, resetAt: '' },
   currentBattleEarnsRewards: true,
   schoolPassiveDaily: { used: 0, limit: 50, resetAt: '' },
+  petCoinRewards: { dailyDate: '', dailyGranted: 0, weekStart: '', weeklyGranted: 0 },
+  trialInventory: defaultTrialInventory(),
   // Track if this dungeon has been cleared before (for first-clear bonus)
   _firstClears: {} as Record<string, boolean>,
 
@@ -322,6 +338,13 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       if (isFirstClear) {
         set((s) => ({ _firstClears: { ...s._firstClears, [dungeonId]: true } }));
       }
+      // 内部金币用于试炼补给；桌宠金币按固定额度结算并受日/周上限限制，避免重复刷关破坏主商城平衡。
+      const petCoinBase = isBoss ? 12 : 5;
+      const petCoinFirstClearBonus = isFirstClear ? (isBoss ? 8 : 3) : 0;
+      const petCoinReward = get().grantPetCoins(earnsRewards ? petCoinBase + petCoinFirstClearBonus : 0);
+      snapshot.petCoinsEarned = petCoinReward.granted;
+      snapshot.petCoinsDailyRemaining = petCoinReward.dailyRemaining;
+      snapshot.petCoinsWeeklyRemaining = petCoinReward.weeklyRemaining;
     }
 
     // 2. 更新副本进度（在徽章检查之前，避免读 stale progress）
@@ -526,6 +549,71 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     return true;
   },
 
+  grantPetCoins: (amount) => {
+    const today = todayStr();
+    const weekStart = getWeekStart();
+    const current = get().petCoinRewards;
+    const dailyGranted = current.dailyDate === today ? current.dailyGranted : 0;
+    const weeklyGranted = current.weekStart === weekStart ? current.weeklyGranted : 0;
+    const granted = Math.max(0, Math.min(amount, PET_COIN_DAILY_LIMIT - dailyGranted, PET_COIN_WEEKLY_LIMIT - weeklyGranted));
+    const next = {
+      dailyDate: today,
+      dailyGranted: dailyGranted + granted,
+      weekStart,
+      weeklyGranted: weeklyGranted + granted,
+    };
+    set({ petCoinRewards: next });
+    if (granted > 0) usePetStore.getState().addCoins(granted);
+    return {
+      granted,
+      dailyRemaining: PET_COIN_DAILY_LIMIT - next.dailyGranted,
+      weeklyRemaining: PET_COIN_WEEKLY_LIMIT - next.weeklyGranted,
+    };
+  },
+
+  buyTrialItem: (itemId) => {
+    const catalog = {
+      'hint-ticket': { cost: 18, key: 'hintTickets' as const },
+      'healing-potion': { cost: 24, key: 'healingPotions' as const },
+      'title-data-scout': { cost: 90 },
+      'frame-crystal': { cost: 120 },
+    };
+    const item = catalog[itemId];
+    const state = get();
+    const isCosmetic = itemId === 'title-data-scout' || itemId === 'frame-crystal';
+    if (isCosmetic && state.trialInventory.ownedCosmetics.includes(itemId)) return false;
+    if (!state.spendGold(item.cost)) return false;
+    set((s) => {
+      if (isCosmetic) {
+        return { trialInventory: { ...s.trialInventory, ownedCosmetics: [...s.trialInventory.ownedCosmetics, itemId] } };
+      }
+      const key: 'hintTickets' | 'healingPotions' = itemId === 'hint-ticket' ? 'hintTickets' : 'healingPotions';
+      return { trialInventory: { ...s.trialInventory, [key]: s.trialInventory[key] + 1 } };
+    });
+    get().saveToLocalStorage();
+    return true;
+  },
+
+  consumeTrialItem: (itemId) => {
+    const key = itemId === 'hint-ticket' ? 'hintTickets' : 'healingPotions';
+    if (get().trialInventory[key] <= 0) return false;
+    set((s) => ({ trialInventory: { ...s.trialInventory, [key]: s.trialInventory[key] - 1 } }));
+    get().saveToLocalStorage();
+    return true;
+  },
+
+  equipTrialCosmetic: (itemId) => {
+    if (!get().trialInventory.ownedCosmetics.includes(itemId)) return;
+    set((s) => ({
+      trialInventory: {
+        ...s.trialInventory,
+        equippedTitle: itemId === 'title-data-scout' ? itemId : s.trialInventory.equippedTitle,
+        equippedAvatarFrame: itemId === 'frame-crystal' ? itemId : s.trialInventory.equippedAvatarFrame,
+      },
+    }));
+    get().saveToLocalStorage();
+  },
+
   bumpSchoolPassiveDaily: () => {
     const today = todayStr();
     const st = get().schoolPassiveDaily;
@@ -581,7 +669,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   },
 
   saveToLocalStorage: () => {
-    const { player, dungeonProgress, earnedBadges, weakPoints, mistakeNotebook, _firstClears, weeklyChallenges, schoolPassiveDaily } = get();
+    const { player, dungeonProgress, earnedBadges, weakPoints, mistakeNotebook, _firstClears, weeklyChallenges, schoolPassiveDaily, petCoinRewards, trialInventory } = get();
     try {
       localStorage.setItem('dungeon_player', JSON.stringify(player));
       localStorage.setItem('dungeon_progress', JSON.stringify(dungeonProgress));
@@ -591,6 +679,8 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       localStorage.setItem('dungeon_first_clears', JSON.stringify(_firstClears));
       localStorage.setItem('dungeon_weekly_challenges', JSON.stringify(weeklyChallenges));
       localStorage.setItem('dungeon_school_passive_daily', JSON.stringify(schoolPassiveDaily));
+      localStorage.setItem('dungeon_pet_coin_rewards', JSON.stringify(petCoinRewards));
+      localStorage.setItem('dungeon_trial_inventory', JSON.stringify(trialInventory));
     } catch { /* ignore */ }
   },
 
@@ -672,6 +762,24 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         }
       }
     } catch { /* ignore schoolPassiveDaily */ }
+    try {
+      const rewards = localStorage.getItem('dungeon_pet_coin_rewards');
+      if (rewards) {
+        const parsed = JSON.parse(rewards);
+        const today = todayStr();
+        const weekStart = getWeekStart();
+        set({ petCoinRewards: {
+          dailyDate: today,
+          dailyGranted: parsed.dailyDate === today ? Number(parsed.dailyGranted) || 0 : 0,
+          weekStart,
+          weeklyGranted: parsed.weekStart === weekStart ? Number(parsed.weeklyGranted) || 0 : 0,
+        } });
+      }
+    } catch { /* ignore pet coin rewards */ }
+    try {
+      const inventory = localStorage.getItem('dungeon_trial_inventory');
+      if (inventory) set({ trialInventory: { ...defaultTrialInventory(), ...JSON.parse(inventory) } });
+    } catch { /* ignore trial inventory */ }
 
     return hasAny;
   },

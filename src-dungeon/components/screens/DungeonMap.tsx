@@ -12,8 +12,10 @@ export default function DungeonMap() {
   const isUnlocked = useDungeonStore(s => s.isDungeonUnlocked);
   const weeklyChallenges = useDungeonStore(s => s.weeklyChallenges);
   const buyRewardChallenge = useDungeonStore(s => s.buyRewardChallenge);
+  const trialInventory = useDungeonStore(s => s.trialInventory);
 
   const rankName = getRankName(player.school, player.rankTier);
+  const rewardChallengesRemaining = Math.max(0, weeklyChallenges.limit - weeklyChallenges.used);
 
   const getDungeonStatus = (dungeonId: string): DungeonProgress | undefined => {
     return progress.find(p => p.dungeonId === dungeonId);
@@ -26,9 +28,9 @@ export default function DungeonMap() {
   };
 
   return (
-    <div style={{
+    <div className="dungeon-page-bg dungeon-map-page" style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #0a2005 0%, #0a1500 30%, #0a0a0a 100%)',
+      backgroundImage: 'linear-gradient(180deg, rgba(3, 13, 18, 0.78) 0%, rgba(3, 12, 10, 0.91) 50%, rgba(5, 7, 8, 0.98) 100%), url("/dungeon-art-v2/dungeon-01-bg.webp")',
       padding: '16px',
     }}>
       {/* Status bar */}
@@ -53,24 +55,30 @@ export default function DungeonMap() {
           <span className="status-label">💰</span>
           <span className="status-value gold-text">{player.gold}</span>
         </div>
-        <button
-          className="pixel-btn"
-          style={{ fontSize: '10px', padding: '4px 10px' }}
-          title={`本周奖励次数 ${weeklyChallenges.used}/${weeklyChallenges.limit}`}
-          onClick={() => {
-            const ok = buyRewardChallenge();
-            if (!ok) window.alert('金币不足，需要 120 金币。');
-          }}
-        >
-          🎟️ +1奖励 120金
-        </button>
+        <div className="reward-pass">
+          <div className="reward-pass-status" title="本周仍可获得完整结算奖励的挑战次数">
+            <span>🎟️ 本周奖励</span>
+            <strong>{rewardChallengesRemaining}/{weeklyChallenges.limit}</strong>
+          </div>
+          <button
+            className="pixel-btn reward-pass-buy"
+            title="消耗 120 个试炼金币，增加 1 次本周有奖挑战资格"
+            onClick={() => {
+              if (!window.confirm('消耗 120 个试炼金币，增加 1 次本周有奖挑战资格？')) return;
+              const ok = buyRewardChallenge();
+              window.alert(ok ? '已增加 1 次本周有奖挑战资格。' : '试炼金币不足，需要 120 金币。');
+            }}
+          >
+            +1 次 · 120 金币
+          </button>
+        </div>
         <div className="status-item">
           <span className="status-label">⚡</span>
           <span className="status-value" style={{ color: player.currentStreak >= 5 ? 'var(--crit-yellow)' : 'var(--text-light)' }}>
             {player.currentStreak}连击
           </span>
         </div>
-        <button className="pixel-btn" style={{ fontSize: '10px', padding: '4px 10px' }}
+        <button className="pixel-btn" style={{ fontSize: '10px', padding: '4px 10px', borderColor: trialInventory.equippedAvatarFrame === 'frame-crystal' ? '#2dd4bf' : undefined, boxShadow: trialInventory.equippedAvatarFrame === 'frame-crystal' ? '0 0 0 2px rgba(45,212,191,0.2)' : undefined }}
           onClick={() => { setView('profile'); navigate('/profile'); }}>
           👤
         </button>
@@ -87,6 +95,9 @@ export default function DungeonMap() {
         <p style={{ color: 'var(--text-dim)', fontSize: '11px', marginTop: '6px' }}>
           已征服：{progress.filter(p => p.status === 'cleared').length}/8 副本
         </p>
+        {trialInventory.equippedTitle === 'title-data-scout' && (
+          <div style={{ display: 'inline-block', marginTop: '6px', padding: '3px 8px', border: '1px solid #2dd4bf', color: '#99f6e4', fontSize: '10px' }}>数据侦察员</div>
+        )}
       </div>
 
       {/* Dungeon grid */}
@@ -106,7 +117,7 @@ export default function DungeonMap() {
           return (
             <div
               key={dungeon.id}
-              className={`pixel-card ${!locked ? '' : ''}`}
+              className={`pixel-card dungeon-map-card ${locked ? 'is-locked' : ''}`}
               onClick={() => handleEnterDungeon(dungeon)}
               style={{
                 cursor: locked ? 'not-allowed' : 'pointer',
@@ -115,9 +126,27 @@ export default function DungeonMap() {
                 borderWidth: cleared ? '3px' : 'var(--pixel-border)',
                 transition: 'all 0.2s',
                 position: 'relative',
-                background: locked ? 'var(--bg-card)' : `linear-gradient(135deg, var(--bg-card), ${dungeon.color}22)`,
+                overflow: 'hidden',
+                padding: 0,
+                background: 'rgba(10, 18, 27, 0.96)',
               }}
             >
+              <div
+                className="dungeon-map-card-art"
+                style={{
+                  backgroundImage: `linear-gradient(180deg, rgba(4, 10, 15, 0.02), rgba(10, 18, 27, 0.92)), url("${dungeon.bgImage}")`,
+                }}
+              >
+                {dungeon.bossImage && (
+                  <img
+                    className="dungeon-map-card-boss"
+                    src={dungeon.bossImage}
+                    alt={`${dungeon.bossName} Boss`}
+                    loading="lazy"
+                  />
+                )}
+              </div>
+
               {/* Status badge */}
               <div style={{
                 position: 'absolute', top: '8px', right: '8px',
@@ -129,46 +158,48 @@ export default function DungeonMap() {
                 {locked ? '🔒 封印' : cleared ? '✅ 已通关' : '⚔️ 挑战中'}
               </div>
 
-              {/* Dungeon info */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <span style={{ fontSize: '32px' }}>{dungeon.icon}</span>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: '15px', color: locked ? 'var(--text-dim)' : dungeon.color }}>
-                    {dungeon.name}
+              <div className="dungeon-map-card-content">
+                {/* Dungeon info */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '32px' }}>{dungeon.icon}</span>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '15px', color: locked ? 'var(--text-dim)' : dungeon.color }}>
+                      {dungeon.name}
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{dungeon.subtitle}</div>
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{dungeon.subtitle}</div>
                 </div>
+
+                {/* Progress */}
+                {dp && !locked && (
+                  <div style={{ marginTop: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-dim)', marginBottom: '4px' }}>
+                      <span>关卡 {dp.completedStages}/{dp.totalStages}</span>
+                      {dp.bossDefeated ? <span style={{ color: dungeon.color }}>Boss 已击败</span> : <span>Boss 未挑战</span>}
+                    </div>
+                    <div className="pixel-progress" style={{ height: '8px' }}>
+                      <div className="pixel-progress-fill exp" style={{
+                        width: `${(dp.completedStages / Math.max(dp.totalStages, 1)) * 100}%`,
+                        background: dungeon.color,
+                      }} />
+                    </div>
+                  </div>
+                )}
+
+                {/* Requirement */}
+                {dungeon.requiredDungeon && (
+                  <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '8px' }}>
+                    前置：需通关「{(dungeons.find(d => d.id === dungeon.requiredDungeon) || {}).name || '?'}」
+                  </div>
+                )}
+
+                {/* Level requirement */}
+                {dungeon.unlockLevel > 1 && (
+                  <div style={{ fontSize: '10px', color: player.playerLevel < dungeon.unlockLevel ? 'var(--hp-red)' : 'var(--text-dim)', marginTop: '4px' }}>
+                    需要等级 {dungeon.unlockLevel} {player.playerLevel < dungeon.unlockLevel ? '(未达到)' : ''}
+                  </div>
+                )}
               </div>
-
-              {/* Progress */}
-              {dp && !locked && (
-                <div style={{ marginTop: '8px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-dim)', marginBottom: '4px' }}>
-                    <span>关卡 {dp.completedStages}/{dp.totalStages}</span>
-                    {dp.bossDefeated ? <span style={{ color: dungeon.color }}>Boss 已击败</span> : <span>Boss 未挑战</span>}
-                  </div>
-                  <div className="pixel-progress" style={{ height: '8px' }}>
-                    <div className="pixel-progress-fill exp" style={{
-                      width: `${(dp.completedStages / Math.max(dp.totalStages, 1)) * 100}%`,
-                      background: dungeon.color,
-                    }} />
-                  </div>
-                </div>
-              )}
-
-              {/* Requirement */}
-              {dungeon.requiredDungeon && (
-                <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '8px' }}>
-                  前置：需通关「{(dungeons.find(d => d.id === dungeon.requiredDungeon) || {}).name || '?'}」
-                </div>
-              )}
-
-              {/* Level requirement */}
-              {dungeon.unlockLevel > 1 && (
-                <div style={{ fontSize: '10px', color: player.playerLevel < dungeon.unlockLevel ? 'var(--hp-red)' : 'var(--text-dim)', marginTop: '4px' }}>
-                  需要等级 {dungeon.unlockLevel} {player.playerLevel < dungeon.unlockLevel ? '(未达到)' : ''}
-                </div>
-              )}
             </div>
           );
         })}
@@ -183,6 +214,9 @@ export default function DungeonMap() {
         </button>
         <button className="pixel-btn" onClick={() => { setView('profile'); navigate('/profile'); }}>
           👤 个人档案
+        </button>
+        <button className="pixel-btn" onClick={() => navigate('/supplies')}>
+          🧪 试炼补给
         </button>
       </div>
     </div>

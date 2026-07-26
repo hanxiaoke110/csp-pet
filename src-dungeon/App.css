@@ -53,6 +53,87 @@ body {
   min-height: 100vh;
 }
 
+.dungeon-page-bg {
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.dungeon-subpage .pixel-card {
+  background: rgba(14, 27, 47, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.dungeon-map-page .status-bar {
+  background: rgba(18, 24, 44, 0.94);
+  backdrop-filter: blur(8px);
+}
+
+.reward-pass {
+  display: flex;
+  align-items: stretch;
+  border: 2px solid var(--border-pixel);
+  background: rgba(8, 13, 24, 0.86);
+}
+
+.reward-pass-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  color: var(--text-dim);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.reward-pass-status strong {
+  color: var(--gold);
+  font-family: var(--pixel-font);
+  font-size: 9px;
+}
+
+.pixel-btn.reward-pass-buy {
+  border: 0;
+  border-left: 2px solid var(--border-pixel);
+  padding: 4px 9px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.dungeon-map-card-art {
+  position: relative;
+  height: 112px;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.dungeon-map-card-boss {
+  position: absolute;
+  right: 10px;
+  bottom: -14px;
+  width: 86px;
+  height: 106px;
+  object-fit: cover;
+  object-position: center top;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.65));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.dungeon-map-card-content {
+  padding: 14px 16px 16px;
+}
+
+.dungeon-map-card.is-locked .dungeon-map-card-art {
+  filter: grayscale(0.88) brightness(0.55);
+}
+
+.dungeon-map-card:not(.is-locked):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 rgba(0, 0, 0, 0.38);
+}
+
 /* ── Pixel border utility ── */
 .pixel-border {
   border: var(--pixel-border) solid var(--border-pixel);
@@ -325,6 +406,15 @@ body {
     gap: 8px;
     padding: 6px 10px;
     font-size: 10px;
+  }
+  .reward-pass {
+    width: 100%;
+  }
+  .reward-pass-status {
+    flex: 1;
+  }
+  .dungeon-page-bg {
+    background-attachment: scroll;
   }
   .pixel-card {
     padding: 12px;
