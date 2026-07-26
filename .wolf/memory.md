@@ -1,3 +1,24 @@
+## 2026-07-26 — v1.7.14/15/16 CRLF 修复 + 20级满级
+
+### v1.7.14 (废弃)
+- Windows 学生报 `Bundled hash mismatch: daily-gesp.json`，超级挑战显示暂无题目
+- **根因**: CI Windows runner 的 `git core.autocrlf=true` 把 `question-bank-v2/*.json` 转成 CRLF
+- **修复**: 加 `.gitattributes` 强制 LF
+
+### v1.7.15 (废弃)  
+- 产品名 `CSP 学习助手` 导致文件名带中文，签名/URL编码对不上
+
+### v1.7.16 (当前)
+- `productName` 改为 `CSP`，纯英文文件名
+- 包含: CRLF fix + 20级大乘(满级) + 英文文件名
+- **macOS 不能用 Gitee URL** (302)，需走 GitHub
+- 清理 10.6G (`target/` `node_modules/` `dist/` `.tmp/`)
+
+### 满级系统
+- `MAX_PET_LEVEL = 20`，称号: 筑基→金丹→元婴→化神→大乘(满级)
+- 满级: 经验条归零，不再升级，弹窗「已达大乘之境，修行圆满！」
+- 涉及文件: `petStore.ts` `dungeonStore.ts` `RaisingGuide.tsx`
+
 ## 2026-07-25 — 发版前收尾：CSP 程序题全上架 + 答案纠错 + 知识卡映射 + CSP-S opt-out
 
 ### 最终状态
