@@ -812,7 +812,7 @@ dependencies = [
 
 [[package]]
 name = "csp-desktop-pet"
-version = "1.7.18"
+version = "1.7.19"
 dependencies = [
  "chrono",
  "objc",

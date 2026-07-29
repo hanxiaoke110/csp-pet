@@ -1,22 +1,28 @@
-mod db;
 mod commands;
+mod db;
 
 use db::Database;
-use tauri::Manager;
-use tauri::Emitter;
-use tauri::tray::{TrayIconBuilder, MouseButton, MouseButtonState, TrayIconEvent};
 use tauri::menu::{MenuBuilder, MenuItemBuilder};
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
+use tauri::Emitter;
+use tauri::Manager;
 
 #[tauri::command]
 fn toggle_pet_window(app: tauri::AppHandle) -> String {
     if let Some(w) = app.get_webview_window("pet") {
         if w.is_visible().unwrap_or(true) {
             let _ = w.hide();
-            let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": false }));
+            let _ = app.emit(
+                "pet-window-visibility",
+                serde_json::json!({ "visible": false }),
+            );
             "hidden".into()
         } else {
             let _ = w.show();
-            let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": true }));
+            let _ = app.emit(
+                "pet-window-visibility",
+                serde_json::json!({ "visible": true }),
+            );
             "shown".into()
         }
     } else {
@@ -28,7 +34,10 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
 fn show_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
         let _ = w.show();
-        let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": true }));
+        let _ = app.emit(
+            "pet-window-visibility",
+            serde_json::json!({ "visible": true }),
+        );
     }
 }
 
@@ -36,7 +45,10 @@ fn show_pet_window(app: tauri::AppHandle) {
 fn hide_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
         let _ = w.hide();
-        let _ = app.emit("pet-window-visibility", serde_json::json!({ "visible": false }));
+        let _ = app.emit(
+            "pet-window-visibility",
+            serde_json::json!({ "visible": false }),
+        );
     }
 }
 
@@ -45,7 +57,8 @@ fn bring_to_front(window: tauri::Window) {
     #[cfg(target_os = "macos")]
     unsafe {
         use objc::{class, msg_send, sel, sel_impl};
-        let ns_app: *mut objc::runtime::Object = msg_send![class!(NSApplication), sharedApplication];
+        let ns_app: *mut objc::runtime::Object =
+            msg_send![class!(NSApplication), sharedApplication];
         let _: () = msg_send![ns_app, activateIgnoringOtherApps: true];
     }
     #[cfg(target_os = "windows")]
@@ -76,14 +89,12 @@ pub fn run() {
         // pet 窗口由 PetWindow.tsx 自行管理位置，排除避免双重恢复导致跳动。
         .plugin(
             tauri_plugin_window_state::Builder::default()
-                .with_denylist(&["pet"])
+                .with_denylist(&["pet", "pet-2", "pet-3"])
                 .build(),
         )
         .setup(|app| {
-            let app_data_dir = app.path().app_data_dir()
-                .map_err(|e| e.to_string())?;
-            let database = Database::new(app_data_dir)
-                .expect("Failed to initialize database");
+            let app_data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+            let database = Database::new(app_data_dir).expect("Failed to initialize database");
             app.manage(database);
 
             // System tray — needed for Windows (close → hide, reopen from tray)
@@ -101,27 +112,30 @@ pub fn run() {
                 .icon(app.default_window_icon().unwrap().clone())
                 .menu(&menu)
                 .tooltip("CSP 学习助手")
-                .on_menu_event(move |app, event| {
-                    match event.id().as_ref() {
-                        "show" => {
-                            if let Some(w) = app.get_webview_window("main") {
-                                let _ = w.show();
-                                let _ = w.set_focus();
-                            }
+                .on_menu_event(move |app, event| match event.id().as_ref() {
+                    "show" => {
+                        if let Some(w) = app.get_webview_window("main") {
+                            let _ = w.show();
+                            let _ = w.set_focus();
                         }
-                        "hide" => {
-                            if let Some(w) = app.get_webview_window("main") {
-                                let _ = w.hide();
-                            }
-                        }
-                        "quit" => {
-                            app.exit(0);
-                        }
-                        _ => {}
                     }
+                    "hide" => {
+                        if let Some(w) = app.get_webview_window("main") {
+                            let _ = w.hide();
+                        }
+                    }
+                    "quit" => {
+                        app.exit(0);
+                    }
+                    _ => {}
                 })
                 .on_tray_icon_event(|tray, event| {
-                    if let TrayIconEvent::Click { button: MouseButton::Left, button_state: MouseButtonState::Up, .. } = event {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
                         let app = tray.app_handle();
                         if let Some(w) = app.get_webview_window("main") {
                             let _ = w.show();
@@ -190,17 +204,25 @@ pub fn run() {
                     if let Some(window) = app_handle.get_webview_window("main") {
                         let _ = window.show();
                         let _ = window.set_focus();
-                        let _ = app_handle.emit("main-window-state", serde_json::json!({ "visible": true }));
+                        let _ = app_handle
+                            .emit("main-window-state", serde_json::json!({ "visible": true }));
                     }
                 }
-                RunEvent::WindowEvent { label, event: window_event, .. } => {
-                    if label == "main" || label == "pet" {
+                RunEvent::WindowEvent {
+                    label,
+                    event: window_event,
+                    ..
+                } => {
+                    if label == "main" || label.starts_with("pet") {
                         if let tauri::WindowEvent::CloseRequested { api, .. } = &window_event {
                             api.prevent_close();
                             if let Some(window) = app_handle.get_webview_window(&label) {
                                 let _ = window.hide();
                                 if label == "pet" {
-                                    let _ = app_handle.emit("pet-window-visibility", serde_json::json!({ "visible": false }));
+                                    let _ = app_handle.emit(
+                                        "pet-window-visibility",
+                                        serde_json::json!({ "visible": false }),
+                                    );
                                 }
                             }
                         }
@@ -211,8 +233,10 @@ pub fn run() {
                     // soon as the main window loses focus.
                     if label == "main" {
                         if let tauri::WindowEvent::Focused(focused) = window_event {
-                            if let Some(pet) = app_handle.get_webview_window("pet") {
-                                let _ = pet.set_ignore_cursor_events(focused);
+                            for label in ["pet", "pet-2", "pet-3"] {
+                                if let Some(pet) = app_handle.get_webview_window(label) {
+                                    let _ = pet.set_ignore_cursor_events(focused);
+                                }
                             }
                         }
                     }

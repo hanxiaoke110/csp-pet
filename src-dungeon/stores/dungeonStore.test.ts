@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDungeonStore } from './dungeonStore';
+import { usePetStore } from '../../src/stores/petStore';
 import { expToNextLevel } from '../utils/gameLogic';
 import type { BattleState, DungeonProgress, PlayerState } from '../types/dungeon';
 
@@ -113,6 +114,7 @@ beforeEach(() => {
     trialInventory: { hintTickets: 0, healingPotions: 0, ownedCosmetics: [], equippedTitle: null, equippedAvatarFrame: null },
     _firstClears: {},
   });
+  usePetStore.setState({ coins: 0 });
 });
 
 describe('智子试炼场核心结算', () => {
@@ -144,9 +146,11 @@ describe('智子试炼场核心结算', () => {
     expect(state.dungeonProgress[0].status).toBe('in_progress');
     expect(state.dungeonProgress[0].bestRating).toBe('A');
     expect(state.player.exp).toBeGreaterThan(0);
-    expect(state.player.gold).toBeGreaterThan(0);
+    expect(state.player.gold).toBe(0);
+    expect(usePetStore.getState().coins).toBeGreaterThan(0);
     expect(state.lastBattleResult?.expEarned).toBeGreaterThan(0);
     expect(state.lastBattleResult?.goldEarned).toBeGreaterThan(0);
+    expect(state.lastBattleResult?.petCoinsEarned).toBeGreaterThan(0);
   });
 
   it('重打已通关关卡不发奖励不推进进度，但能提升最好评级', () => {
@@ -185,17 +189,39 @@ describe('智子试炼场核心结算', () => {
     expect(progress.bestRating).toBe('SS');
   });
 
-  it('金币可以购买本周额外奖励次数，金币不足时失败', () => {
-    useDungeonStore.setState({ player: makePlayer({ gold: 119 }) });
+  it('周奖励次数已满时，从未通关的具体关卡获得 SS 仍发经验', () => {
+    useDungeonStore.setState({
+      player: makePlayer({ exp: 0 }),
+      battle: makeBattle({
+        stageId: 'dungeon-01-stage-02',
+        rating: 'SS',
+        correctCount: 6,
+      }),
+      currentBattleEarnsRewards: false,
+      weeklyChallenges: { used: 5, limit: 5, resetAt: new Date().toISOString() },
+      dungeonProgress: [makeProgress({ completedStages: 1, bestRating: 'A' })],
+      _firstClears: { 'dungeon-01:dungeon-01-stage-01': true },
+    });
+
+    const result = useDungeonStore.getState().finalizeBattle('dungeon-01', false);
+
+    expect(useDungeonStore.getState().player.exp).toBeGreaterThan(0);
+    expect(result?.ratingExpBonus).toBe(15);
+    expect(result?.petExpEarned).toBeGreaterThan(0);
+    expect(useDungeonStore.getState().dungeonProgress[0].completedStages).toBe(2);
+  });
+
+  it('通用金币可以购买本周额外奖励次数，金币不足时失败', () => {
+    usePetStore.setState({ coins: 119 });
     useDungeonStore.getState().canEarnRewards();
     expect(useDungeonStore.getState().buyRewardChallenge()).toBe(false);
 
-    useDungeonStore.setState((s) => ({ player: { ...s.player, gold: 120 } }));
+    usePetStore.setState({ coins: 120 });
     const before = useDungeonStore.getState().weeklyChallenges;
     expect(useDungeonStore.getState().buyRewardChallenge()).toBe(true);
 
     const state = useDungeonStore.getState();
-    expect(state.player.gold).toBe(0);
+    expect(usePetStore.getState().coins).toBe(0);
     expect(state.weeklyChallenges.limit).toBe(before.limit + 1);
   });
 
@@ -209,13 +235,35 @@ describe('智子试炼场核心结算', () => {
     expect(useDungeonStore.getState().petCoinRewards.dailyGranted).toBe(30);
   });
 
-  it('试炼金币可以购买并消耗提示券', () => {
-    useDungeonStore.setState({ player: makePlayer({ gold: 18 }) });
+  it('通用金币可以购买并消耗提示券', () => {
+    usePetStore.setState({ coins: 18 });
 
     expect(useDungeonStore.getState().buyTrialItem('hint-ticket')).toBe(true);
-    expect(useDungeonStore.getState().player.gold).toBe(0);
+    expect(usePetStore.getState().coins).toBe(0);
     expect(useDungeonStore.getState().trialInventory.hintTickets).toBe(1);
     expect(useDungeonStore.getState().consumeTrialItem('hint-ticket')).toBe(true);
     expect(useDungeonStore.getState().trialInventory.hintTickets).toBe(0);
+  });
+
+  it('试炼补给逐项到账，高价外观不能重复扣款', () => {
+    usePetStore.setState({ coins: 300 });
+
+    expect(useDungeonStore.getState().buyTrialItem('title-data-scout')).toBe(true);
+    expect(useDungeonStore.getState().buyTrialItem('title-data-scout')).toBe(false);
+    expect(useDungeonStore.getState().buyTrialItem('frame-crystal')).toBe(true);
+    expect(useDungeonStore.getState().buyTrialItem('frame-crystal')).toBe(false);
+    expect(useDungeonStore.getState().buyTrialItem('hint-ticket')).toBe(true);
+    expect(useDungeonStore.getState().buyTrialItem('healing-potion')).toBe(true);
+
+    const inventory = useDungeonStore.getState().trialInventory;
+    expect(inventory.ownedCosmetics).toEqual(['title-data-scout', 'frame-crystal']);
+    expect(inventory.hintTickets).toBe(1);
+    expect(inventory.healingPotions).toBe(1);
+    expect(usePetStore.getState().coins).toBe(48);
+
+    expect(useDungeonStore.getState().consumeTrialItem('healing-potion')).toBe(true);
+    expect(useDungeonStore.getState().consumeTrialItem('healing-potion')).toBe(false);
+    expect(useDungeonStore.getState().trialInventory.healingPotions).toBe(0);
+    expect(usePetStore.getState().coins).toBe(48);
   });
 });

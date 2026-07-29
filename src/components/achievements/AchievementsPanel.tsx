@@ -21,7 +21,7 @@ const REWARDS: Record<string, { coins: number; renameCards?: number }> = {
   'pet-lv5': { coins: 50 }, 'pet-lv10': { coins: 100 }, 'pet-lv15': { coins: 150 },
   'pet-lv20': { coins: 200, renameCards: 1 }, 'pet-feed-20': { coins: 40 },
   'pet-coins-500': { coins: 50 }, 'pet-coins-2000': { coins: 100 },
-  'pet-affection': { coins: 80 }, 'pet-all-elements': { coins: 200, renameCards: 1 },
+  'pet-affection': { coins: 80 },
   'stage-c1': { coins: 30 }, 'stage-c2': { coins: 60 }, 'stage-c3': { coins: 100 },
   'stage-c4': { coins: 150 },
   'oj-cm-1': { coins: 50 }, 'oj-cm-all': { coins: 200, renameCards: 1 },
@@ -43,22 +43,27 @@ export default function AchievementsPanel() {
   const activePet = usePetStore(s => s.getActivePet());
   const coins = usePetStore(s => s.coins);
   const quizState = useQuizStore();
+  const [refreshTick, setRefreshTick] = useState(0);
+
+  // Listen for problem status changes so course achievements refresh immediately
+  useEffect(() => {
+    const handler = () => setRefreshTick(t => t + 1);
+    window.addEventListener('problem-status-changed', handler);
+    return () => window.removeEventListener('problem-status-changed', handler);
+  }, []);
 
   // Count feed from localStorage
   let feedCount = 0;
   try { feedCount = parseInt(localStorage.getItem('csp_feed_count') || '0'); } catch {}
 
   const achievements = useMemo(() => {
-    const elements = new Set(ownedPets.map(p => p.element));
-    const hasAllElements = elements.has('earth') && elements.has('fire') && elements.has('wind') && elements.has('water');
-
     return createAchievements(
       ownedPets.length,
       activePet?.level || 0,
       activePet?.affection || 0,
       coins,
       feedCount,
-      hasAllElements,
+      false,
       quizState.superCompletions,
       quizState.superBestScore,
       quizState.weeklyPerfects,
@@ -67,7 +72,7 @@ export default function AchievementsPanel() {
       quizState.lastReviewTotal,
       ownedPets,
     );
-  }, [ownedPets, activePet, coins, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal]);
+  }, [ownedPets, activePet, coins, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal, refreshTick]);
 
   // Group by category
   const grouped = useMemo(() => {

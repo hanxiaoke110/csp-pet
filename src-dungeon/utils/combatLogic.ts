@@ -55,6 +55,23 @@ export function calculateStats(
   };
 }
 
+export function calculateTrialPlayerStats(
+  base: { maxHp: number; attack: number; defense: number; speed: number },
+  tierMultiplier: number,
+  dungeonLevel: number,
+  petLevel: number,
+): Omit<CombatPet, 'currentHp' | 'element'> {
+  const stats = calculateStats(base, tierMultiplier, dungeonLevel);
+  const petGrowth = Math.max(0, Math.min(19, petLevel - 1));
+  return {
+    ...stats,
+    maxHp: stats.maxHp + petGrowth * 2,
+    attack: stats.attack + petGrowth,
+    defense: stats.defense + Math.ceil(petGrowth / 2),
+    speed: stats.speed + Math.floor(petGrowth / 3),
+  };
+}
+
 export function determineFirstAttacker(player: CombatPet, enemy: CombatPet): 'player' | 'enemy' {
   return player.speed >= enemy.speed ? 'player' : 'enemy';
 }

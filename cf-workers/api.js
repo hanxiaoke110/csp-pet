@@ -194,7 +194,7 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-const SCHEMA_VERSION = 4;
+const SCHEMA_VERSION = 6;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
@@ -215,6 +215,7 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS workshop_pets (id TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT, name TEXT, element TEXT, style TEXT, description TEXT, tier TEXT, price INTEGER, pet_json TEXT, spritesheet_url TEXT, thumbnail_url TEXT, status TEXT DEFAULT 'active', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_overrides (question_id TEXT PRIMARY KEY, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', updated_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_history (id INTEGER PRIMARY KEY AUTOINCREMENT, question_id TEXT NOT NULL, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS announcements (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, scope TEXT DEFAULT 'global', teacher_id TEXT DEFAULT '', teacher_name TEXT DEFAULT '', pinned INTEGER DEFAULT 0, status TEXT DEFAULT 'published', published_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`ALTER TABLE feedback ADD COLUMN submitter TEXT DEFAULT 'teacher'`); } catch {}
   // Migrations for existing tables
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN phone_enc TEXT DEFAULT ''`); } catch {}
@@ -223,6 +224,10 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE votes ADD COLUMN class_code TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE teachers ADD COLUMN permissions TEXT DEFAULT '[]'`); } catch {}
   try { await db.exec(`ALTER TABLE teachers ADD COLUMN max_pets INTEGER DEFAULT NULL`); } catch {}
+  try { await db.exec(`ALTER TABLE announcements ADD COLUMN scope TEXT DEFAULT 'global'`); } catch {}
+  try { await db.exec(`ALTER TABLE announcements ADD COLUMN teacher_id TEXT DEFAULT ''`); } catch {}
+  try { await db.exec(`ALTER TABLE announcements ADD COLUMN teacher_name TEXT DEFAULT ''`); } catch {}
+  try { await db.exec(`UPDATE announcements SET scope='global' WHERE scope IS NULL OR scope=''`); } catch {}
   // Pet upload limit: global default (meta) + per-teacher override (teachers.max_pets)
   try { await db.exec(`INSERT OR IGNORE INTO meta(key,value) VALUES('pet_limit_default','20')`); } catch {}
   // Workshop pet slug: R2 storage key (workshop/${slug}/...), must be globally unique to prevent素材覆盖
@@ -456,6 +461,91 @@ export default {
     if (path === '/api/question-bank/data' && request.method === 'GET') {
       const [{ bank }, overrides] = await Promise.all([fetchQuestionBankBase(), loadQuestionBankOverrides(db)]);
       return new Response(JSON.stringify(mergeQuestionBank(bank, overrides)), { headers: { ...cors, 'Cache-Control': 'no-store' } });
+    }
+
+    // ── Online announcements ──
+    // Students see global announcements plus every announcement from the teacher
+    // who owns their currently bound class. A class code selects the teacher scope;
+    // clients never supply a teacher id directly.
+    if (path === '/api/announcements' && request.method === 'GET') {
+      const classCode = String(url.searchParams.get('class_code') || '').trim();
+      let teacherId = '';
+      if (classCode) {
+        const cls = await db.prepare("SELECT teacher_id FROM classes WHERE class_code=? AND status='active'").bind(classCode).first();
+        teacherId = String(cls?.teacher_id || '');
+      }
+      const rows = teacherId
+        ? await db.prepare("SELECT id,title,content,scope,teacher_id,teacher_name,pinned,published_at FROM announcements WHERE status='published' AND (COALESCE(scope,'global')='global' OR (scope='teacher' AND teacher_id=?)) ORDER BY pinned DESC, published_at DESC LIMIT 50").bind(teacherId).all()
+        : await db.prepare("SELECT id,title,content,scope,teacher_id,teacher_name,pinned,published_at FROM announcements WHERE status='published' AND COALESCE(scope,'global')='global' ORDER BY pinned DESC, published_at DESC LIMIT 30").all();
+      return new Response(JSON.stringify({ items: rows.results || [] }), { headers: { ...cors, 'Cache-Control': 'public, max-age=60' } });
+    }
+
+    if (path === '/api/teacher/announcements' && request.method === 'GET') {
+      const teacher = await checkTeacher(request, db);
+      if (!teacher) return new Response(JSON.stringify({ error: '请先登录教师账号' }), { status: 401, headers: cors });
+      const rows = await db.prepare("SELECT id,title,content,scope,teacher_id,teacher_name,pinned,status,published_at,updated_at FROM announcements WHERE scope='teacher' AND teacher_id=? AND status!='deleted' ORDER BY pinned DESC, published_at DESC LIMIT 100").bind(teacher.teacher_id).all();
+      return new Response(JSON.stringify({ items: rows.results || [] }), { headers: cors });
+    }
+    if (path === '/api/teacher/announcements' && request.method === 'POST') {
+      const teacher = await checkTeacher(request, db);
+      if (!teacher) return new Response(JSON.stringify({ error: '请先登录教师账号' }), { status: 401, headers: cors });
+      const body = await request.json();
+      const title = String(body.title || '').trim().slice(0, 120);
+      const content = String(body.content || '').trim().slice(0, 8000);
+      if (!title || !content) return new Response(JSON.stringify({ error: '标题和内容不能为空' }), { status: 400, headers: cors });
+      const pinned = body.pinned ? 1 : 0;
+      const result = await db.prepare("INSERT INTO announcements(title,content,scope,teacher_id,teacher_name,pinned,status,published_at,updated_at) VALUES(?,?,'teacher',?,?,?,'published',datetime('now'),datetime('now'))").bind(title, content, teacher.teacher_id, teacher.name || '', pinned).run();
+      return new Response(JSON.stringify({ success: true, id: result.meta?.last_row_id }), { headers: cors });
+    }
+    const teacherAnnouncementMatch = path.match(/^\/api\/teacher\/announcements\/(\d+)$/);
+    if (teacherAnnouncementMatch && ['PUT', 'DELETE'].includes(request.method)) {
+      const teacher = await checkTeacher(request, db);
+      if (!teacher) return new Response(JSON.stringify({ error: '请先登录教师账号' }), { status: 401, headers: cors });
+      const id = Number(teacherAnnouncementMatch[1]);
+      if (request.method === 'DELETE') {
+        const result = await db.prepare("UPDATE announcements SET status='deleted',updated_at=datetime('now') WHERE id=? AND scope='teacher' AND teacher_id=?").bind(id, teacher.teacher_id).run();
+        if (!result.meta?.changes) return new Response(JSON.stringify({ error: '公告不存在或无权操作' }), { status: 404, headers: cors });
+        return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+      const body = await request.json();
+      const title = String(body.title || '').trim().slice(0, 120);
+      const content = String(body.content || '').trim().slice(0, 8000);
+      if (!title || !content) return new Response(JSON.stringify({ error: '标题和内容不能为空' }), { status: 400, headers: cors });
+      const result = await db.prepare("UPDATE announcements SET title=?,content=?,pinned=?,updated_at=datetime('now') WHERE id=? AND scope='teacher' AND teacher_id=?").bind(title, content, body.pinned ? 1 : 0, id, teacher.teacher_id).run();
+      if (!result.meta?.changes) return new Response(JSON.stringify({ error: '公告不存在或无权操作' }), { status: 404, headers: cors });
+      return new Response(JSON.stringify({ success: true }), { headers: cors });
+    }
+
+    if (path === '/admin/announcements' && request.method === 'GET') {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const rows = await db.prepare("SELECT id,title,content,scope,teacher_id,teacher_name,pinned,status,published_at,updated_at FROM announcements WHERE status!='deleted' ORDER BY pinned DESC, published_at DESC LIMIT 200").all();
+      return new Response(JSON.stringify({ items: rows.results || [] }), { headers: cors });
+    }
+    if (path === '/admin/announcements' && request.method === 'POST') {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const body = await request.json();
+      const title = String(body.title || '').trim().slice(0, 120);
+      const content = String(body.content || '').trim().slice(0, 8000);
+      if (!title || !content) return new Response(JSON.stringify({ error: '标题和内容不能为空' }), { status: 400, headers: cors });
+      const result = await db.prepare("INSERT INTO announcements(title,content,scope,teacher_id,teacher_name,pinned,status,published_at,updated_at) VALUES(?,?,'global','','管理员',?,'published',datetime('now'),datetime('now'))").bind(title, content, body.pinned ? 1 : 0).run();
+      return new Response(JSON.stringify({ success: true, id: result.meta?.last_row_id }), { headers: cors });
+    }
+    const adminAnnouncementMatch = path.match(/^\/admin\/announcements\/(\d+)$/);
+    if (adminAnnouncementMatch && ['PUT', 'DELETE'].includes(request.method)) {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const id = Number(adminAnnouncementMatch[1]);
+      if (request.method === 'DELETE') {
+        const result = await db.prepare("UPDATE announcements SET status='deleted',updated_at=datetime('now') WHERE id=?").bind(id).run();
+        if (!result.meta?.changes) return new Response(JSON.stringify({ error: '公告不存在' }), { status: 404, headers: cors });
+        return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+      const body = await request.json();
+      const title = String(body.title || '').trim().slice(0, 120);
+      const content = String(body.content || '').trim().slice(0, 8000);
+      if (!title || !content) return new Response(JSON.stringify({ error: '标题和内容不能为空' }), { status: 400, headers: cors });
+      const result = await db.prepare("UPDATE announcements SET title=?,content=?,pinned=?,updated_at=datetime('now') WHERE id=?").bind(title, content, body.pinned ? 1 : 0, id).run();
+      if (!result.meta?.changes) return new Response(JSON.stringify({ error: '公告不存在' }), { status: 404, headers: cors });
+      return new Response(JSON.stringify({ success: true }), { headers: cors });
     }
 
     // Admins and explicitly-authorized teachers can review and correct shared questions.
@@ -1777,12 +1867,17 @@ export default {
           return new Response(JSON.stringify({ error: '无效的排行榜类型' }), { status: 400, headers: cors });
         }
 
-        // 班级榜必须校验查看者属于该班级
+        // 班级榜必须校验查看者属于该班级。历史版本分别使用过
+        // dungeon_players 与 class_students 两套设备身份，两个入口都接受，
+        // 避免已绑定学生因身份格式迁移被误拦截。
         if (scope === 'class') {
           if (!cc) return new Response(JSON.stringify({ error: '缺少班级码' }), { status: 400, headers: cors });
           if (!dh) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 403, headers: cors });
-          const viewer = await db.prepare("SELECT class_code FROM dungeon_players WHERE device_hash=? AND status='active'").bind(dh).first();
-          if (!viewer || viewer.class_code !== cc) {
+          const [dungeonViewer, classViewer] = await Promise.all([
+            db.prepare("SELECT 1 AS ok FROM dungeon_players WHERE device_hash=? AND class_code=? AND status='active'").bind(dh, cc).first(),
+            db.prepare("SELECT 1 AS ok FROM class_students WHERE device_hash=? AND class_code=? AND status='active'").bind(dh, cc).first(),
+          ]);
+          if (!dungeonViewer && !classViewer) {
             return new Response(JSON.stringify({ error: '无权查看该班级排行榜' }), { status: 403, headers: cors });
           }
         }

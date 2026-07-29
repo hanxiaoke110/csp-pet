@@ -7,12 +7,17 @@ import { validatePetName } from '../../utils/validateName';
 import { addTickets, canBuyTickets } from '../../utils/crypto';
 import HatchConfirmModal from './HatchConfirmModal';
 
+function localDateKey() {
+  const date = new Date();
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
 export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   coins: number; ownedPets: any[]; spendCoins: (a: number) => boolean; setTab: (t: 'status' | 'shop' | 'hatch' | 'guide' | 'settings') => void;
 }) {
   const [shopTab, setShopTab] = useState<'food' | 'common' | 'rare' | 'legend' | 'special'>('food');
   const [buyConfirm, setBuyConfirm] = useState<{ speciesId: string; name: string; price: number; icon: string } | null>(null);
-  const [pendingHatch, setPendingHatch] = useState<{ speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
+  const [pendingHatch, setPendingHatch] = useState<{ eggId: string; speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
   const [buyNameInput, setBuyNameInput] = useState('');
   const [foodConfirm, setFoodConfirm] = useState<any>(null);
   const [shopToast, setShopToast] = useState<string | null>(null);
@@ -20,11 +25,21 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha'; title: string; desc: string; price: number } | null>(null);
   const renameCards = usePetStore(s => s.renameCards);
   const doGacha = usePetStore(s => s.doGacha);
+  const gachaHistory = usePetStore(s => s.gachaHistory);
   const gachaPulls = usePetStore(s => s.gachaDailyPulls);
+  const gachaDate = usePetStore(s => s.gachaDate);
   const buyRenameCard = usePetStore(s => s.buyRenameCard);
+  const autoFeederOwned = usePetStore(s => s.autoFeederOwned);
+  const buyAutoFeeder = usePetStore(s => s.buyAutoFeeder);
+  const expShopDate = usePetStore(s => s.expShopDate);
+  const expCapsuleBought = usePetStore(s => s.expCapsuleBought);
+  const expCoreBought = usePetStore(s => s.expCoreBought);
+  const buyExpItem = usePetStore(s => s.buyExpItem);
   const addEgg = useHatchStore(s => s.addEgg);
   const startHatching = useHatchStore(s => s.startHatching);
   const isOwned = usePetStore(s => s.isOwned);
+  const today = localDateKey();
+  const todayGachaPulls = gachaDate === today ? gachaPulls : 0;
 
   const allPets = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet');
   const commons = allPets.filter(i => (PET_TIERS[i.speciesId!] || 'common') === 'common');
@@ -43,7 +58,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
 
   return (
     <div className="pet-shop">
-      <div className="element-legend">🟫 地 · 🔴 火 · 🟢 风 · 🔵 水</div>
+      <div className="element-legend">🟫 地 · 🔴 火 · 🟢 风 · 🔵 水 · 🌟 光</div>
       <div className="shop-header">
         <span className="shop-coins">🪙 {coins} 金币</span>
         {renameCards > 0 && <span className="shop-coins" style={{fontSize:13}}>📝 ×{renameCards}</span>}
@@ -81,7 +96,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
           {currentPets.map(item => {
             const owned = isOwned(item.speciesId!);
             const config = getPetConfig(item.speciesId!);
-            const elemIcon = config?.element === 'earth' ? '🟫' : config?.element === 'fire' ? '🔴' : config?.element === 'wind' ? '🟢' : '🔵';
+            const elemIcon = config?.element === 'earth' ? '🟫' : config?.element === 'fire' ? '🔴' : config?.element === 'wind' ? '🟢' : config?.element === 'light' ? '🌟' : '🔵';
             return (
               <div key={item.itemId} className={`shop-card ${owned ? 'owned' : ''}`}>
                 <div className="shop-card-preview">
@@ -119,6 +134,39 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             </button>
           </div>
 
+          <div className="special-card" style={{ borderColor: '#0ea5e966' }}>
+            <div className="special-icon">🧪</div>
+            <h4>经验胶囊</h4>
+            <p>向公共经验池注入 120 EXP</p>
+            <div className="special-stock">每日限购：{expShopDate === today ? expCapsuleBought : 0}/3</div>
+            <button className="shop-card-buy" disabled={coins < 400 || (expShopDate === today ? expCapsuleBought : 0) >= 3}
+              onClick={() => showShopToast(buyExpItem('capsule') ? '🧪 120 EXP 已放入经验池' : '今日购买次数已满或金币不足')}>
+              🪙 400 购买
+            </button>
+          </div>
+
+          <div className="special-card" style={{ borderColor: '#8b5cf666' }}>
+            <div className="special-icon">💠</div>
+            <h4>进阶经验核心</h4>
+            <p>向公共经验池注入 360 EXP</p>
+            <div className="special-stock">每日限购：{expShopDate === today ? expCoreBought : 0}/1</div>
+            <button className="shop-card-buy" disabled={coins < 1000 || (expShopDate === today ? expCoreBought : 0) >= 1}
+              onClick={() => showShopToast(buyExpItem('core') ? '💠 360 EXP 已放入经验池' : '今日购买次数已满或金币不足')}>
+              🪙 1000 购买
+            </button>
+          </div>
+
+          <div className="special-card" style={{ borderColor: '#22c55e66' }}>
+            <div className="special-icon">🤖</div>
+            <h4>自动喂食器</h4>
+            <p>饱食低于 40 时自动使用背包食物；没有食物每天提醒一次</p>
+            <div className="special-stock">{autoFeederOwned ? '已拥有，可在智子页开关' : '永久道具'}</div>
+            <button className="shop-card-buy" disabled={autoFeederOwned || coins < 1500}
+              onClick={() => showShopToast(buyAutoFeeder() ? '🤖 自动喂食器已安装并开启' : '金币不足')}>
+              {autoFeederOwned ? '✅ 已拥有' : '🪙 1500 购买'}
+            </button>
+          </div>
+
           {/* Wish Tickets */}
           <div className="special-card" style={{ borderColor: '#7c3aed44' }}>
             <div className="special-icon">🎫</div>
@@ -131,7 +179,12 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                 if (!localStorage.getItem('csp_class_code')) { showShopToast('请先在设置中绑定班级码'); return; }
                 if (!canBuyTickets(1).allowed) { showShopToast('本周许愿票已买完，下周再来吧'); return; }
                 if (!spendCoins(100)) { showShopToast('金币不足'); return; }
-                addTickets(1); window.dispatchEvent(new CustomEvent('tickets-updated'));
+                if (!addTickets(1)) {
+                  usePetStore.getState().addCoins(100);
+                  showShopToast('许愿票写入失败，100 金币已原额退回');
+                  return;
+                }
+                window.dispatchEvent(new CustomEvent('tickets-updated'));
                 showShopToast('🎫 +1 许愿票已到账');
               }}>
               {!canBuyTickets(1).allowed ? '📦 本周已满' : '🪙 100 购买'}
@@ -149,7 +202,12 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                 if (!localStorage.getItem('csp_class_code')) { showShopToast('请先在设置中绑定班级码'); return; }
                 if (!canBuyTickets(3).allowed) { showShopToast('本周许愿票额度不足，还剩 ' + canBuyTickets(0).remaining + ' 张'); return; }
                 if (!spendCoins(250)) { showShopToast('金币不足'); return; }
-                addTickets(3); window.dispatchEvent(new CustomEvent('tickets-updated'));
+                if (!addTickets(3)) {
+                  usePetStore.getState().addCoins(250);
+                  showShopToast('许愿票写入失败，250 金币已原额退回');
+                  return;
+                }
+                window.dispatchEvent(new CustomEvent('tickets-updated'));
                 showShopToast('🎫 +3 许愿票已到账');
               }}>
               {!canBuyTickets(3).allowed ? '📦 额度不足' : '🪙 250 购买（省 50g）'}
@@ -161,12 +219,23 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <div className="special-icon">🎰</div>
             <h4>灵犀抽卡</h4>
             <p>随机获得一只宠物<br />每 100 抽必出稀有+</p>
-            <div className="special-stock">今日剩余：{5 - gachaPulls} 次</div>
-            <button className="shop-card-buy" disabled={coins < 150 || gachaPulls >= 5}
+            <div className="special-stock">今日剩余：{5 - todayGachaPulls} 次</div>
+            <button className="shop-card-buy" disabled={coins < 150 || todayGachaPulls >= 5}
               onClick={() => setActionConfirm({ type: 'gacha', title: '灵犀抽卡', desc: '随机获得精灵/食物/许愿票/改名卡\n每 100 抽保底传说', price: 150 })}>
               🎯 单抽 150g
             </button>
           </div>
+          {gachaHistory.length > 0 && (
+            <div className="special-card" style={{ borderColor: '#cbd5e1', gridColumn: '1 / -1' }}>
+              <h4>最近抽取记录</h4>
+              {gachaHistory.slice(0, 5).map(item => (
+                <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12, color: '#475569', padding: '4px 0' }}>
+                  <span>{item.label}</span>
+                  <span style={{ color: '#94a3b8' }}>{new Date(item.at).toLocaleString('zh-CN')}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -204,7 +273,8 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                       const tier = getPetTier(buyConfirm.speciesId);
                       const ok = spendCoins(buyConfirm.price);
                       if (!ok) { showShopToast('金币不足，无法购买。'); setBuyConfirm(null); return; }
-                      setPendingHatch({ speciesId: buyConfirm.speciesId, petName: name, rarity: tier as HatchRarity });
+                      const egg = addEgg(buyConfirm.speciesId, name, tier as HatchRarity, buyConfirm.price);
+                      setPendingHatch({ eggId: egg.eggId, speciesId: buyConfirm.speciesId, petName: name, rarity: tier as HatchRarity });
                       setBuyConfirm(null);
                     }
                   }}
@@ -225,7 +295,8 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                   const tier = getPetTier(buyConfirm.speciesId);
                   const ok = spendCoins(buyConfirm.price);
                   if (!ok) { showShopToast('金币不足，无法购买。'); setBuyConfirm(null); return; }
-                  setPendingHatch({ speciesId: buyConfirm.speciesId, petName: name, rarity: tier as HatchRarity });
+                  const egg = addEgg(buyConfirm.speciesId, name, tier as HatchRarity, buyConfirm.price);
+                  setPendingHatch({ eggId: egg.eggId, speciesId: buyConfirm.speciesId, petName: name, rarity: tier as HatchRarity });
                   setBuyConfirm(null);
                 }}
               >
@@ -257,6 +328,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                 onClick={() => {
                   if (spendCoins(foodConfirm.price)) {
                     usePetStore.setState(s => ({ foods: { ...s.foods, [foodConfirm.id]: (s.foods[foodConfirm.id] || 0) + 1 } }));
+                    usePetStore.getState().save();
                     showShopToast(`成功购买「${foodConfirm.name}」！`);
                   } else {
                     showShopToast('金币不足，无法购买。');
@@ -305,7 +377,9 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                     } else if (r.type === 'renameCard') {
                       showShopToast('📝 改名卡已放入背包！');
                     } else {
-                      setPendingHatch({ speciesId: r.item.speciesId!, petName: (r as any).autoName, rarity: r.rarity as HatchRarity });
+                      const petName = (r as any).autoName || r.item.name;
+                      const egg = addEgg(r.item.speciesId!, petName, r.rarity as HatchRarity, 150);
+                      setPendingHatch({ eggId: egg.eggId, speciesId: r.item.speciesId!, petName, rarity: r.rarity as HatchRarity });
                     }
                   }
                   setActionConfirm(null);
@@ -323,17 +397,14 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
           petName={pendingHatch.petName}
           rarity={pendingHatch.rarity}
           onStart={() => {
-            const egg = addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
-            startHatching(egg.eggId);
+            startHatching(pendingHatch.eggId);
             setTab('hatch');
             setPendingHatch(null);
           }}
           onLater={() => {
-            addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
             setPendingHatch(null);
           }}
           onClose={() => {
-            addEgg(pendingHatch.speciesId, pendingHatch.petName, pendingHatch.rarity);
             setPendingHatch(null);
           }}
         />
@@ -341,4 +412,3 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
     </div>
   );
 }
-

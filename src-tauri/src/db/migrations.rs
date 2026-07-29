@@ -42,6 +42,7 @@ pub fn run(conn: &Connection) -> Result<(), String> {
         CREATE TABLE IF NOT EXISTS course_metadata (
             key TEXT PRIMARY KEY,
             value TEXT NOT NULL
-        );"
-    ).map_err(|e| format!("Migration failed: {}", e))
+        );",
+    )
+    .map_err(|e| format!("Migration failed: {}", e))
 }

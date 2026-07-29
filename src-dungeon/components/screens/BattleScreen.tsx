@@ -4,7 +4,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById } from '../../data/skills';
 import { getTrustedQuestionImage, pickQuestionsByTag, pickBigMoveQuestions, getDungeonDifficulty } from '../../utils/questionLoader';
-import { calculateStats } from '../../utils/combatLogic';
+import { calculateStats, calculateTrialPlayerStats } from '../../utils/combatLogic';
 import {
   applySchoolAnswerPassive,
   calculateAnswerReward,
@@ -158,14 +158,19 @@ function makePlayerPetConfig(): PhaserPetConfig {
   else if (dungeonLevel >= 3) combatTier = 'rare';
   else combatTier = 'common';
 
-  const stats = calculateStats(base, TIER_MULTIPLIERS[combatTier], dungeonLevel);
+  const stats = calculateTrialPlayerStats(
+    base,
+    TIER_MULTIPLIERS[combatTier],
+    dungeonLevel,
+    raw.level || 1,
+  );
 
   return {
     petId: raw.petId,
     displayName: raw.petName,
     speciesId: raw.speciesId,
     element: raw.element,
-    level: dungeonLevel,
+    level: raw.level || 1,
     maxHp: stats.maxHp,
     // 试炼场使用独立战斗属性，不沿用宠物喂养体系的旧血量。
     currentHp: stats.maxHp,
@@ -182,14 +187,14 @@ function getBossStage(dungeon?: DungeonDefinition): DungeonStage | undefined {
   return dungeon?.stages[dungeon.stages.length - 1];
 }
 
-function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isBoss: boolean): PhaserPetConfig {
+function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isBoss: boolean, playerPet?: PhaserPetConfig): PhaserPetConfig {
   if (stage.enemyPet) {
     const cfg = stage.enemyPet;
     const speciesBase = PET_BASE_STATS[cfg.speciesId] || PET_BASE_STATS.default;
     const stats = calculateStats(speciesBase, TIER_MULTIPLIERS[cfg.tier], cfg.level);
     const maxHp = Math.floor(stats.maxHp * (cfg.maxHpBoost ?? 1));
 
-    return {
+    const enemy: PhaserPetConfig = {
       petId: `enemy-${cfg.speciesId}`,
       displayName: cfg.displayName,
       speciesId: cfg.speciesId,
@@ -204,6 +209,7 @@ function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isB
       previewUrl: `/pet-sprites/previews/${cfg.speciesId}.png`,
       textureKey: 'enemyPet',
     };
+    return scaleBossForPlayer(enemy, playerPet, dungeon.id, isBoss);
   }
 
   // Fallback
@@ -213,7 +219,7 @@ function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isB
   const element = elements[Math.floor(Math.random() * elements.length)];
   const stats = calculateStats(PET_BASE_STATS.default, TIER_MULTIPLIERS[tier], level);
 
-  return {
+  const enemy: PhaserPetConfig = {
     petId: 'enemy-fallback',
     displayName: isBoss ? dungeon.bossName : `${dungeon.guardianName}·随从`,
     speciesId: 'glitch-bot',
@@ -228,6 +234,18 @@ function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isB
     previewUrl: `/pet-sprites/previews/glitch-bot.png`,
     textureKey: 'enemyPet',
   };
+  return scaleBossForPlayer(enemy, playerPet, dungeon.id, isBoss);
+}
+
+function scaleBossForPlayer(enemy: PhaserPetConfig, player: PhaserPetConfig | undefined, dungeonId: string, isBoss: boolean): PhaserPetConfig {
+  if (!isBoss || !player) return enemy;
+  const dungeonIndex = Math.max(1, Number(dungeonId.split('-')[1]) || 1);
+  const normalTarget = Math.ceil(player.maxHp * Math.min(0.1, 0.06 + dungeonIndex * 0.005));
+  // Enemy intents use attack - defense. Keeping the target after defense means
+  // high-level player defense cannot reduce a late-game boss to one damage.
+  const attack = Math.max(enemy.attack, player.defense + normalTarget);
+  const level = Math.max(enemy.level, Math.max(1, player.level - 1));
+  return { ...enemy, attack, level };
 }
 
 // ─── Main component ───
@@ -260,6 +278,8 @@ export default function BattleScreen() {
   const [pendingAnswer, setPendingAnswer] = useState<{ skillId: string; isCorrect: boolean } | null>(null);
   const [activeFable, setActiveFable] = useState<typeof fables[0] | null>(null);
   const [hintRevealed, setHintRevealed] = useState(false);
+  const [battleNotice, setBattleNotice] = useState<string | null>(null);
+  const challengeConsumedRef = useRef(false);
 
   // 累计战斗数据（用于最终结算）
   const statsRef = useRef({
@@ -278,7 +298,7 @@ export default function BattleScreen() {
     const stage: DungeonStage | undefined = isBoss
       ? getBossStage(dungeon)
       : dungeon?.stages.find(s => s.id === stageId);
-    const enemyPet = dungeon && stage ? makeEnemyPetConfig(dungeon, stage, isBoss) : null;
+    const enemyPet = dungeon && stage ? makeEnemyPetConfig(dungeon, stage, isBoss, playerPet) : null;
     return [playerPet, enemyPet] as [PhaserPetConfig, PhaserPetConfig | null];
   }, [dungeonId, stageId, isBoss, dungeon]);
 
@@ -320,11 +340,9 @@ export default function BattleScreen() {
 
     (async () => {
       const s = useDungeonStore.getState();
-      // 消耗挑战次数
+      // Reserve reward eligibility now, but only consume the weekly attempt after
+      // the battle reaches settlement. Abandoning from the pause menu costs nothing.
       const earnsRewards = !isReplay && s.canEarnRewards();
-      if (earnsRewards) {
-        s.useChallenge();
-      }
       useDungeonStore.setState({ currentBattleEarnsRewards: earnsRewards });
 
       // 工坊宠物：异步加载 AppData 的 thumb 缩略图作为 preview（普通宠物用 public preview）
@@ -405,14 +423,21 @@ export default function BattleScreen() {
         // 难度按副本主题递进（天机阁简单→算法塔难）
         const isBigMove = skill.id === 'skill-4';
         const diffRange = getDungeonDifficulty(dungeonId || '');
+        // Read the store at click time. Phaser is intentionally created once, so
+        // a captured initial empty question bank would otherwise persist all battle.
+        const latestBank = useDungeonStore.getState().questionBank;
         const questions = isBigMove
-          ? pickBigMoveQuestions(questionBank, 1)
-          : pickQuestionsByTag(questionBank, skill.knowledgeTag, 1, diffRange);
+          ? pickBigMoveQuestions(latestBank, 1)
+          : pickQuestionsByTag(latestBank, skill.knowledgeTag, 1, diffRange);
         if (questions.length === 0) {
           // 大招无 reading/fillBlank 题时回退到 choice；仍无则视为答错
-          const fallback = isBigMove ? pickQuestionsByTag(questionBank, skill.knowledgeTag, 1, diffRange) : [];
+          const fallback = isBigMove ? pickQuestionsByTag(latestBank, skill.knowledgeTag, 1, diffRange) : [];
           if (fallback.length === 0) {
-            gameRef.current?.setAnswerResult({ skillId, isCorrect: false });
+            gameRef.current?.cancelPendingSkill();
+            setPendingAnswer(null);
+            setCurrentQuestion(null);
+            setSelectedSkillId(null);
+            setBattleNotice('题库正在准备中，请稍后重新选择技能。');
             return;
           }
           questions.push(...fallback);
@@ -474,7 +499,6 @@ export default function BattleScreen() {
 
     if (earnsRewards) {
       store.addExp(rewards.exp);
-      store.addGold(rewards.gold);
       store.addRankPoints(correct ? (critical ? 20 : 10) + getSchoolRankPointBonus(player.school, correct) : 0);
       store.checkRankUp();
     }
@@ -506,6 +530,11 @@ export default function BattleScreen() {
   }, [pendingAnswer]);
 
   const handleBattleEnd = useCallback((result: BattleEndResult) => {
+    const latestStore = useDungeonStore.getState();
+    if (latestStore.currentBattleEarnsRewards && !challengeConsumedRef.current) {
+      challengeConsumedRef.current = true;
+      latestStore.useChallenge();
+    }
     const totalAnswered = statsRef.current.correctCount + statsRef.current.wrongCount;
     const playerHpRatio = result.playerMaxHp > 0 ? result.playerHp / result.playerMaxHp : 0;
     const expectedRounds = isBoss ? 30 : 20;
@@ -570,6 +599,12 @@ export default function BattleScreen() {
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0a' }}>
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+      {battleNotice && (
+        <div style={{ position: 'fixed', top: 84, left: '50%', transform: 'translateX(-50%)', zIndex: 1002, padding: '10px 16px', background: '#3b1d1d', border: '1px solid #ef4444', color: '#fecaca', fontSize: 13 }}>
+          {battleNotice}
+          <button onClick={() => setBattleNotice(null)} style={{ marginLeft: 12, border: 0, background: 'transparent', color: '#fff', cursor: 'pointer' }}>知道了</button>
+        </div>
+      )}
 
       {/* 题目弹窗 */}
       {currentQuestion && (
@@ -632,11 +667,10 @@ export default function BattleScreen() {
                     className="pixel-btn"
                     style={{ marginTop: '12px', width: '100%' }}
                     onClick={() => {
-                      if (selectedSkillId) {
-                        gameRef.current?.setAnswerResult({ skillId: selectedSkillId, isCorrect: false });
-                      }
+                      gameRef.current?.cancelPendingSkill();
                       setCurrentQuestion(null);
                       setSelectedSkillId(null);
+                      setBattleNotice('这道题目暂时无法作答，技能没有消耗。');
                     }}
                   >
                     继续

@@ -538,6 +538,13 @@ test('no empty options in published choice/boolean questions',
   publishedEmptyOpts.length === 0,
   `${publishedEmptyOpts.length} questions: ${publishedEmptyOpts.map(e => e.question.id).slice(0, 5).join(', ')}`);
 
+const publishedOcrCodeResidue = allPublished.filter(({ question: q }) =>
+  q.options?.some(option => /\b\d+\s+um\s*=\s*sum\b/.test(String(option)))
+);
+test('no known OCR-truncated identifiers in published code options',
+  publishedOcrCodeResidue.length === 0,
+  `${publishedOcrCodeResidue.length} questions: ${publishedOcrCodeResidue.map(e => e.question.id).slice(0, 5).join(', ')}`);
+
 // Missing explanations — a published question without an explanation is a
 // student-facing defect (publish-snapshots counts these as publishedBlockers).
 const missingExplanations = allPublished.filter(({ question: q }) =>

@@ -332,7 +332,7 @@ function ClassBindingSection() {
               </div>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 600, color: '#334155', display: 'block', marginBottom: 4 }}>手机号 🔒（仅老师可见）</label>
-                <input value={phone} onChange={e => setPhone(e.target.value.slice(0, 11))} placeholder="选填"
+                <input value={phone} onChange={e => setPhone(e.target.value.slice(0, 11))} placeholder="请输入11位手机号（必填）"
                   style={{ width: '100%', padding: '8px 10px', boxSizing: 'border-box', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#1e293b', outline: 'none' }} />
               </div>
               {msg && <div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600 }}>{msg}</div>}

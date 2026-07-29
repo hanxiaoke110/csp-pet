@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
-import type { OwnedPet } from '../types/pet';
+import type { OwnedPet, PetElement, RecycledPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS } from '../types/pet';
 import type { ShopItem } from '../types/pet';
 import { calculateStats } from '../../src-dungeon/utils/combatLogic';
 import { validatePetName } from '../utils/validateName';
 import { useHatchStore } from './hatchStore';
 import { petCopy } from '../components/pet/PetCopy';
+import { grantTickets } from '../utils/crypto';
 
 interface PetState {
   activePetId: string | null;
@@ -29,18 +30,23 @@ interface PetState {
   addRenameCards: (amount: number) => void;
   buyRenameCard: () => boolean;
   renamePet: (petId: string, newName: string) => string;
+  reforgeElement: (petId: string, element: PetElement) => { ok: boolean; cost: number; message?: string };
+  recyclePet: (petId: string) => { ok: boolean; message?: string };
+  restoreRecycledPet: (petId: string) => boolean;
+  dismantleRecycledPet: (petId: string) => { ok: boolean; exp: number; coins: number };
 
   // Gacha
   gachaDailyPulls: number;
   gachaDate: string;
   gachaPity: number;
   _rollGacha: () => { type: 'pet'; item: ShopItem; rarity: string; autoName?: string; pityBreak: boolean } | { type: 'food'; foodType: string } | { type: 'wishTicket' } | { type: 'renameCard' } | null;
-  claimHatchedPet: (speciesId: string, petName: string, tier?: string) => boolean;
+  claimHatchedPet: (speciesId: string, petName: string, tier?: string, acquisitionCost?: number) => boolean;
   doGacha: () => { type: 'pet'; item: ShopItem; rarity: string; pityBreak: boolean } | { type: 'food'; foodType: string } | { type: 'wishTicket' } | { type: 'renameCard' } | null;
 
   // Inventory
   foodItems: { type: string; count: number }[];
   wishTickets: number;
+  gachaHistory: { id: string; type: string; label: string; at: string }[];
 
   // Attributes
   addExp: (petId: string, amount: number) => void;
@@ -53,6 +59,20 @@ interface PetState {
   applyOfflineHunger: () => number;
   dailyHungerConsumed: number;
   hungerDate: string;
+  autoFeederOwned: boolean;
+  autoFeederEnabled: boolean;
+  buyAutoFeeder: () => boolean;
+  setAutoFeederEnabled: (enabled: boolean) => void;
+  runAutoFeeder: () => boolean;
+  expShopDate: string;
+  expCapsuleBought: number;
+  expCoreBought: number;
+  buyExpItem: (kind: 'capsule' | 'core') => boolean;
+  recycledPets: RecycledPet[];
+  companionSlots: number;
+  desktopCompanionIds: string[];
+  buyCompanionSlot: (expectedCurrentSlots?: number) => boolean;
+  setDesktopCompanion: (slot: 2 | 3, petId: string | null) => boolean;
 
   // Pending rewards
   pendingExp: number;
@@ -90,6 +110,44 @@ export const FOODS: Record<string, { name: string; price: number; hunger: number
 };
 
 export const MAX_PET_LEVEL = 20;
+export const ELEMENT_REFORGE_COST = 200;
+export const AUTO_FEEDER_COST = 1500;
+const EXP_SHOP_CAPSULE_COST = 400;
+const EXP_SHOP_CORE_COST = 1000;
+const EXP_SHOP_CAPSULE_EXP = 120;
+const EXP_SHOP_CORE_EXP = 360;
+
+function currentDay(): string {
+  const date = new Date();
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function cumulativePetExp(pet: OwnedPet): number {
+  let required = 100;
+  let total = 0;
+  for (let level = 1; level < pet.level; level++) {
+    total += required;
+    required = Math.floor(required * 1.3);
+  }
+  return total + pet.exp;
+}
+
+function elementLabel(element: PetElement): string {
+  return ({ earth: '地', fire: '火', wind: '风', water: '水', light: '光' } as const)[element];
+}
+
+function calculatePetBattleStats(speciesId: string, level: number, currentHp?: number) {
+  const base = PET_BASE_STATS[speciesId] || PET_BASE_STATS.default;
+  const tier = getPetTier(speciesId);
+  const stats = calculateStats(base, TIER_MULTIPLIERS[tier], level);
+  const { level: _level, ...baseStats } = stats;
+  return {
+    ...baseStats,
+    currentHp: currentHp === undefined
+      ? baseStats.maxHp
+      : Math.min(baseStats.maxHp, Math.max(0, currentHp)),
+  };
+}
 
 // Level milestones
 export function getLevelMilestone(level: number): { title: string; pityThreshold: number; dailyPassiveCoins: number } {
@@ -126,6 +184,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   renameCards: 0,
   foodItems: [],
   wishTickets: 0,
+  gachaHistory: [],
   gachaDailyPulls: 0,
   gachaDate: '',
   gachaPity: 0,
@@ -135,13 +194,22 @@ export const usePetStore = create<PetState>((set, get) => ({
   lastActiveAt: new Date().toISOString(),
   dailyHungerConsumed: 0,
   hungerDate: '',
+  autoFeederOwned: false,
+  autoFeederEnabled: false,
+  expShopDate: '',
+  expCapsuleBought: 0,
+  expCoreBought: 0,
+  recycledPets: [],
+  companionSlots: 1,
+  desktopCompanionIds: [],
 
   selectStarter: (speciesId, petName) => {
     const species = STARTER_PETS.find(s => s.speciesId === speciesId);
     if (!species) return;
     const pet: OwnedPet = {
       petId: crypto.randomUUID(), petName,
-      speciesId: species.speciesId, element: species.element,
+      speciesId: species.speciesId, element: species.element, nativeElement: species.element,
+      acquisitionSource: 'starter', acquisitionCost: 0,
       renderType: species.renderType, modelPath: species.modelPath,
       level: 1, exp: 0, expToNext: 100,
       hunger: 100, mood: 80, affection: 50,
@@ -152,7 +220,29 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   setActivePet: (petId) => {
-    set({ activePetId: petId }); get().save();
+    if (!get().ownedPets.some(p => p.petId === petId)) return false;
+    set(s => ({ activePetId: petId, desktopCompanionIds: s.desktopCompanionIds.map(id => id === petId ? '' : id) })); get().save();
+    return true;
+  },
+
+  buyCompanionSlot: (expectedCurrentSlots) => {
+    const state = get();
+    if (expectedCurrentSlots !== undefined && state.companionSlots !== expectedCurrentSlots) return false;
+    const cost = state.companionSlots === 1 ? 2500 : state.companionSlots === 2 ? 5000 : 0;
+    if (!cost || state.coins < cost) return false;
+    set(s => ({ companionSlots: s.companionSlots + 1, coins: s.coins - cost }));
+    get().save();
+    return true;
+  },
+
+  setDesktopCompanion: (slot, petId) => {
+    const state = get();
+    if (slot > state.companionSlots || (petId && !state.ownedPets.some(p => p.petId === petId))) return false;
+    if (petId && (petId === state.activePetId || state.desktopCompanionIds.some((id, index) => id === petId && index !== slot - 2))) return false;
+    const ids = [...state.desktopCompanionIds];
+    ids[slot - 2] = petId || '';
+    set({ desktopCompanionIds: ids.slice(0, Math.max(0, state.companionSlots - 1)) });
+    get().save();
     return true;
   },
 
@@ -169,6 +259,10 @@ export const usePetStore = create<PetState>((set, get) => ({
     if (!config) return false;
     // Check owned pets
     if (get().ownedPets.some(p => p.modelPath === config.modelPath || p.speciesId === shopSpeciesId)) return true;
+    // Recycled pets still belong to the student until permanently dismantled.
+    if (get().recycledPets.some(record =>
+      record.pet.modelPath === config.modelPath || record.pet.speciesId === shopSpeciesId
+    )) return true;
     // Check hatching eggs (prevent duplicate gacha/shop while incubating)
     const eggs = useHatchStore.getState().eggs;
     return eggs.some(e => e.speciesId === shopSpeciesId);
@@ -185,7 +279,8 @@ export const usePetStore = create<PetState>((set, get) => ({
 
     const pet: OwnedPet = {
       petId: crypto.randomUUID(), petName,
-      speciesId, element: config.element,
+      speciesId, element: config.element, nativeElement: config.element,
+      acquisitionSource: 'shop', acquisitionCost: shopItem.price,
       renderType: config.renderType, modelPath: config.modelPath,
       tier: PET_TIERS[speciesId] || undefined,
       level: 1, exp: 0, expToNext: 100,
@@ -227,7 +322,15 @@ export const usePetStore = create<PetState>((set, get) => ({
             emit('pet-bubble', { text: petCopy.maxLevel() }).catch(() => {});
           }
         }
-        return { ...p, exp, expToNext, level, mood: Math.min(100, p.mood + 3), updatedAt: new Date().toISOString() };
+        return {
+          ...p,
+          exp,
+          expToNext,
+          level,
+          battle: calculatePetBattleStats(p.speciesId, level, p.battle?.currentHp),
+          mood: Math.min(100, p.mood + 3),
+          updatedAt: new Date().toISOString(),
+        };
       });
       return { ownedPets: updated, expPool: s.expPool + poolShare };
     });
@@ -247,6 +350,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   spendCoins: (amount) => {
+    if (!Number.isFinite(amount) || amount <= 0) return false;
     if (get().coins < amount) return false;
     set(s => ({ coins: s.coins - amount }));
     get().save();
@@ -312,6 +416,7 @@ export const usePetStore = create<PetState>((set, get) => ({
         emit('pet-bubble', { text: petCopy.hunger('low'), urgent: true }).catch(() => {});
       } catch {}
     }
+    get().runAutoFeeder();
     get().save();
   },
 
@@ -334,6 +439,8 @@ export const usePetStore = create<PetState>((set, get) => ({
           : p
       ),
     }));
+    get().runAutoFeeder();
+    get().save();
     return penalty;
   },
 
@@ -380,10 +487,65 @@ export const usePetStore = create<PetState>((set, get) => ({
     return '';
   },
 
+  reforgeElement: (petId, element) => {
+    const pet = get().ownedPets.find(p => p.petId === petId);
+    if (!pet) return { ok: false, cost: 0, message: '没有找到这只智子' };
+    if (pet.element === element) return { ok: false, cost: 0, message: `已经是${elementLabel(element)}属性` };
+    const cost = pet.freeElementChangeUsed ? ELEMENT_REFORGE_COST : 0;
+    if (get().coins < cost) return { ok: false, cost, message: '金币不足' };
+    set(s => ({
+      coins: s.coins - cost,
+      ownedPets: s.ownedPets.map(p => p.petId === petId
+        ? { ...p, element, freeElementChangeUsed: true, updatedAt: new Date().toISOString() }
+        : p),
+    }));
+    get().save();
+    return { ok: true, cost };
+  },
+
+  recyclePet: (petId) => {
+    const pet = get().ownedPets.find(p => p.petId === petId);
+    if (!pet) return { ok: false, message: '没有找到这只智子' };
+    if (get().ownedPets.length <= 1) return { ok: false, message: '至少保留一只智子陪伴你' };
+    const returnedExp = Math.floor(cumulativePetExp(pet) * 0.6);
+    const returnedCoins = Math.floor((pet.acquisitionCost || 0) * 0.5);
+    set(s => ({
+      ownedPets: s.ownedPets.filter(p => p.petId !== petId),
+      activePetId: s.activePetId === petId ? s.ownedPets.find(p => p.petId !== petId)?.petId || null : s.activePetId,
+      desktopCompanionIds: s.desktopCompanionIds.map(id => id === petId ? '' : id),
+      recycledPets: [...s.recycledPets, { pet, recycledAt: new Date().toISOString(), returnedExp, returnedCoins }],
+    }));
+    get().save();
+    return { ok: true };
+  },
+
+  restoreRecycledPet: (petId) => {
+    const record = get().recycledPets.find(item => item.pet.petId === petId);
+    if (!record || get().ownedPets.some(p => p.petId === petId)) return false;
+    set(s => ({
+      ownedPets: [...s.ownedPets, record.pet],
+      recycledPets: s.recycledPets.filter(item => item.pet.petId !== petId),
+    }));
+    get().save();
+    return true;
+  },
+
+  dismantleRecycledPet: (petId) => {
+    const record = get().recycledPets.find(item => item.pet.petId === petId);
+    if (!record) return { ok: false, exp: 0, coins: 0 };
+    set(s => ({
+      recycledPets: s.recycledPets.filter(item => item.pet.petId !== petId),
+      expPool: s.expPool + record.returnedExp,
+      coins: s.coins + record.returnedCoins,
+    }));
+    get().save();
+    return { ok: true, exp: record.returnedExp, coins: record.returnedCoins };
+  },
+
   // Gacha: 150g/抽，混合奖池（食物/许愿票/精灵/改名卡）
   _rollGacha: () => {
     const s = get();
-    const today = new Date().toISOString().slice(0, 10);
+    const today = currentDay();
     let gachaDailyPulls = s.gachaDailyPulls;
     let gachaDate = s.gachaDate;
     let gachaPity = s.gachaPity;
@@ -402,7 +564,11 @@ export const usePetStore = create<PetState>((set, get) => ({
       gachaPity = 0;
       const legends = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet' && PET_TIERS[i.speciesId!] === 'legendary');
       const available = legends.filter(i => !get().isOwned(i.speciesId!));
-      if (available.length === 0) return { type: 'renameCard' };
+      if (available.length === 0) {
+        set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
+        get().save();
+        return { type: 'renameCard' };
+      }
       const item = available[Math.floor(Math.random() * available.length)];
       if (!item?.speciesId) return null;
       const ownedNames = s.ownedPets.map(p => p.petName);
@@ -454,7 +620,7 @@ export const usePetStore = create<PetState>((set, get) => ({
 
     const available = pool.filter(i => !get().isOwned(i.speciesId!));
     if (available.length === 0) {
-      set({ gachaDailyPulls, gachaDate: today, gachaPity: s.gachaPity, coins: s.coins - 150 });
+      set({ gachaDailyPulls, gachaDate: today, gachaPity, coins: s.coins - 150 });
       get().save();
       return { type: 'renameCard' }; // All owned → fallback rename card
     }
@@ -471,14 +637,16 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   // Add pet after hatching — coins already deducted in gacha/shop flow
-  claimHatchedPet: (speciesId: string, petName: string, tier?: string) => {
+  claimHatchedPet: (speciesId: string, petName: string, tier?: string, acquisitionCost?: number) => {
     if (get().isOwned(speciesId)) return false;
     const config = getPetConfig(speciesId);
     if (!config) return false;
 
     const pet: OwnedPet = {
       petId: crypto.randomUUID(), petName,
-      speciesId, element: config.element,
+      speciesId, element: config.element, nativeElement: config.element,
+      acquisitionSource: speciesId.startsWith('workshop-') ? 'workshop' : 'gacha',
+      acquisitionCost: Math.max(0, acquisitionCost ?? 150),
       renderType: config.renderType, modelPath: config.modelPath,
       tier: tier || undefined,
       level: 1, exp: 0, expToNext: 100,
@@ -502,43 +670,42 @@ export const usePetStore = create<PetState>((set, get) => ({
 
     // Non-pet prizes
     if (result.type === 'food') {
-      set(s => {
-        const items = [...s.foodItems];
-        const existing = items.find(f => f.type === result.foodType);
-        if (existing) existing.count++;
-        else items.push({ type: result.foodType!, count: 1 });
-        return { foodItems: items };
-      });
+      const foodType = result.foodType === 'normal' ? 'basic' : result.foodType;
+      const label = FOODS[foodType]?.name || '食物';
+      set(s => ({
+        foods: { ...s.foods, [foodType]: (s.foods[foodType] || 0) + 1 },
+        gachaHistory: [{ id: crypto.randomUUID(), type: 'food', label: `${label} ×1`, at: new Date().toISOString() }, ...s.gachaHistory].slice(0, 30),
+      }));
       get().save();
       return result;
     }
     if (result.type === 'wishTicket') {
-      set(s => ({ wishTickets: s.wishTickets + 1 }));
+      grantTickets(1);
+      window.dispatchEvent(new CustomEvent('tickets-updated'));
+      set(s => ({
+        gachaHistory: [{ id: crypto.randomUUID(), type: 'wishTicket', label: '许愿票 ×1', at: new Date().toISOString() }, ...s.gachaHistory].slice(0, 30),
+      }));
       get().save();
       return result;
     }
     if (result.type === 'renameCard') {
-      set(s => ({ renameCards: s.renameCards + 1 }));
+      set(s => ({
+        renameCards: s.renameCards + 1,
+        gachaHistory: [{ id: crypto.randomUUID(), type: 'renameCard', label: '改名卡 ×1', at: new Date().toISOString() }, ...s.gachaHistory].slice(0, 30),
+      }));
       get().save();
       return result;
     }
 
-    // Pet prize
+    // Pet prizes enter the persistent hatching queue in ShopPanel. Do not add the
+    // pet here, otherwise the later hatch claim is rejected as "already owned".
     const r = result as any;
     const config = getPetConfig(r.item.speciesId);
     if (!config) return null;
-    const pet: OwnedPet = {
-      petId: crypto.randomUUID(), petName: r.autoName || r.item.name,
-      speciesId: r.item.speciesId!, element: config.element,
-      renderType: config.renderType, modelPath: config.modelPath,
-      tier: r.rarity || undefined,
-      level: 1, exp: 0, expToNext: 100,
-      hunger: 100, mood: 80, affection: 50,
-      lastFedAt: null, obtainedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
-    };
-    set(s => ({ ownedPets: [...s.ownedPets, pet] }));
+    set(s => ({
+      gachaHistory: [{ id: crypto.randomUUID(), type: 'pet', label: `${r.item.name}（${r.rarity === 'legendary' ? '传说' : r.rarity === 'rare' ? '稀有' : '普通'}）`, at: new Date().toISOString() }, ...s.gachaHistory].slice(0, 30),
+    }));
     get().save();
-    get().checkCollectionRewards();
     return result;
   },
 
@@ -622,7 +789,14 @@ export const usePetStore = create<PetState>((set, get) => ({
             emit('pet-bubble', { text: petCopy.maxLevel() }).catch(() => {});
           }
         }
-        return { ...p, exp, expToNext, level, updatedAt: new Date().toISOString() };
+        return {
+          ...p,
+          exp,
+          expToNext,
+          level,
+          battle: calculatePetBattleStats(p.speciesId, level),
+          updatedAt: new Date().toISOString(),
+        };
       }),
     }));
     get().save();
@@ -631,6 +805,55 @@ export const usePetStore = create<PetState>((set, get) => ({
   addExpToPool: (amount: number) => {
     set(state => ({ expPool: state.expPool + amount }));
     get().save();
+  },
+
+  buyAutoFeeder: () => {
+    if (get().autoFeederOwned || get().coins < AUTO_FEEDER_COST) return false;
+    set(s => ({ coins: s.coins - AUTO_FEEDER_COST, autoFeederOwned: true, autoFeederEnabled: true }));
+    get().save();
+    return true;
+  },
+
+  setAutoFeederEnabled: (enabled) => {
+    if (!get().autoFeederOwned) return;
+    set({ autoFeederEnabled: enabled });
+    get().save();
+  },
+
+  runAutoFeeder: () => {
+    const { autoFeederOwned, autoFeederEnabled, activePetId, foods } = get();
+    if (!autoFeederOwned || !autoFeederEnabled || !activePetId) return false;
+    const pet = get().ownedPets.find(p => p.petId === activePetId);
+    if (!pet || pet.hunger >= 40) return false;
+    const foodId = (['basic', 'premium', 'deluxe'] as const).find(id => (foods[id] || 0) > 0);
+    if (foodId) return get().feedPet(activePetId, foodId);
+    const noticeKey = `csp_auto_feeder_empty_${currentDay()}`;
+    if (!localStorage.getItem(noticeKey)) {
+      localStorage.setItem(noticeKey, '1');
+      emit('pet-bubble', { text: '自动喂食器没有食物了，记得去商城补给。', urgent: true }).catch(() => {});
+    }
+    return false;
+  },
+
+  buyExpItem: (kind) => {
+    const today = currentDay();
+    const state = get();
+    const capsuleBought = state.expShopDate === today ? state.expCapsuleBought : 0;
+    const coreBought = state.expShopDate === today ? state.expCoreBought : 0;
+    const isCapsule = kind === 'capsule';
+    const cost = isCapsule ? EXP_SHOP_CAPSULE_COST : EXP_SHOP_CORE_COST;
+    const amount = isCapsule ? EXP_SHOP_CAPSULE_EXP : EXP_SHOP_CORE_EXP;
+    const limit = isCapsule ? 3 : 1;
+    if ((isCapsule ? capsuleBought : coreBought) >= limit || state.coins < cost) return false;
+    set(s => ({
+      coins: s.coins - cost,
+      expPool: s.expPool + amount,
+      expShopDate: today,
+      expCapsuleBought: isCapsule ? capsuleBought + 1 : capsuleBought,
+      expCoreBought: isCapsule ? coreBought : coreBought + 1,
+    }));
+    get().save();
+    return true;
   },
 
   canLevelUp: (petId: string): boolean => {
@@ -647,12 +870,6 @@ export const usePetStore = create<PetState>((set, get) => ({
     const newLevel = pet.level + 1;
     const newExpToNext = Math.floor(needed * 1.3);
 
-    const speciesId = pet.speciesId;
-    const base = PET_BASE_STATS[speciesId] || PET_BASE_STATS.default;
-    const tier = getPetTier(speciesId);
-    const stats = calculateStats(base, TIER_MULTIPLIERS[tier], newLevel);
-    const { level, ...baseStats } = stats;
-
     set(state => ({
       expPool: state.expPool - needed,
       ownedPets: state.ownedPets.map(p =>
@@ -662,10 +879,8 @@ export const usePetStore = create<PetState>((set, get) => ({
               level: newLevel,
               exp: 0,
               expToNext: newExpToNext,
-              battle: {
-                ...baseStats,
-                currentHp: baseStats.maxHp,
-              },
+              battle: calculatePetBattleStats(p.speciesId, newLevel),
+              updatedAt: new Date().toISOString(),
             }
           : p
       ),
@@ -674,14 +889,9 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   ensureBattleStats: (pet: OwnedPet): OwnedPet => {
-    if (pet.battle) return pet;
-    const base = PET_BASE_STATS[pet.speciesId] || PET_BASE_STATS.default;
-    const tier = getPetTier(pet.speciesId);
-    const stats = calculateStats(base, TIER_MULTIPLIERS[tier], pet.level);
-    const { level, ...baseStats } = stats;
     return {
       ...pet,
-      battle: { ...baseStats, currentHp: baseStats.maxHp },
+      battle: calculatePetBattleStats(pet.speciesId, pet.level, pet.battle?.currentHp),
     };
   },
 
@@ -689,8 +899,8 @@ export const usePetStore = create<PetState>((set, get) => ({
   checkCollectionRewards: () => {},
 
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate } = get();
-    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate };
+    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
+    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     // save() 只管数据同步，不管窗口显隐
@@ -703,25 +913,63 @@ export const usePetStore = create<PetState>((set, get) => ({
     try {
       const data = JSON.parse(raw);
       if (data.ownedPets) {
-        // Migrate old pets without renderType/modelPath
+        // Repair legacy fields while keeping each student's existing pet identity intact.
         const migrated = data.ownedPets.map((p: any) => {
-          if (p.renderType) return p;
           const config = getPetConfig(p.speciesId);
-          return { ...p, renderType: config?.renderType || '2d', modelPath: config?.modelPath || '' };
+          return {
+            ...p,
+            renderType: p.renderType || config?.renderType || '2d',
+            modelPath: p.modelPath || config?.modelPath || '',
+            nativeElement: p.nativeElement || (p.speciesId?.startsWith('workshop-') ? undefined : config?.element || p.element || 'fire'),
+            element: p.element || config?.element || 'fire',
+            freeElementChangeUsed: p.freeElementChangeUsed ?? false,
+            acquisitionSource: p.acquisitionSource || 'legacy',
+            acquisitionCost: p.acquisitionCost ?? 0,
+          };
         });
         // Ensure every loaded pet has battle stats for 智子试炼场
         const loadedPets = migrated.map((p: any) => get().ensureBattleStats(p));
+        const migratedFoods = { ...(data.foods || { basic: 3 }) } as Record<string, number>;
+        for (const item of data.foodItems || []) {
+          const foodId = item.type === 'normal' ? 'basic' : item.type;
+          if (FOODS[foodId]) migratedFoods[foodId] = (migratedFoods[foodId] || 0) + (item.count || 0);
+        }
+        const legacyTickets = data.wishTickets || 0;
+        if (legacyTickets > 0 && !data.gachaRewardMigrationDone) {
+          grantTickets(legacyTickets);
+          window.dispatchEvent(new CustomEvent('tickets-updated'));
+        }
+        const activePetId = loadedPets.some((p: OwnedPet) => p.petId === data.activePetId)
+          ? data.activePetId
+          : loadedPets[0]?.petId || null;
+        const companionSlots = Math.min(3, Math.max(1, Number(data.companionSlots) || 1));
+        const validPetIds = new Set(loadedPets.map((p: OwnedPet) => p.petId));
+        const seenCompanions = new Set<string>();
+        const rawCompanionIds = Array.isArray(data.desktopCompanionIds) ? data.desktopCompanionIds : [];
+        const desktopCompanionIds = Array.from({ length: Math.max(0, companionSlots - 1) }, (_, index) => {
+          const id = rawCompanionIds[index];
+          if (
+            typeof id !== 'string'
+            || id === activePetId
+            || !validPetIds.has(id)
+            || seenCompanions.has(id)
+          ) return '';
+          seenCompanions.add(id);
+          return id;
+        });
+        const storedCoins = Number(data.coins);
         set({
           ownedPets: loadedPets,
-          activePetId: data.activePetId || null,
-          coins: data.coins ?? 200,
-          foods: data.foods || { basic: 3 },
+          activePetId,
+          coins: Number.isFinite(storedCoins) && storedCoins >= 0 ? storedCoins : 200,
+          foods: migratedFoods,
           pendingExp: data.pendingExp || 0,
           pendingCoins: data.pendingCoins || 0,
           expPool: data.expPool || 0,
           renameCards: data.renameCards || 0,
-          foodItems: data.foodItems || [],
-          wishTickets: data.wishTickets || 0,
+          foodItems: [],
+          wishTickets: 0,
+          gachaHistory: data.gachaHistory || [],
           gachaDailyPulls: data.gachaDailyPulls || 0,
           gachaDate: data.gachaDate || '',
           gachaPity: data.gachaPity || 0,
@@ -731,7 +979,25 @@ export const usePetStore = create<PetState>((set, get) => ({
           lastActiveAt: data.lastActiveAt || new Date().toISOString(),
           dailyHungerConsumed: data.dailyHungerConsumed || 0,
           hungerDate: data.hungerDate || '',
+          autoFeederOwned: data.autoFeederOwned || false,
+          autoFeederEnabled: data.autoFeederEnabled || false,
+          expShopDate: data.expShopDate || '',
+          expCapsuleBought: data.expCapsuleBought || 0,
+          expCoreBought: data.expCoreBought || 0,
+          recycledPets: data.recycledPets || [],
+          companionSlots,
+          desktopCompanionIds,
         });
+        if (!data.gachaRewardMigrationDone) {
+          dualSave('pet_data', 'csp_pet_data', JSON.stringify({
+            ...data,
+            ownedPets: loadedPets,
+            foods: migratedFoods,
+            foodItems: [],
+            wishTickets: 0,
+            gachaRewardMigrationDone: true,
+          }));
+        }
       }
     } catch { /* corrupted data — ignore */ }
   },

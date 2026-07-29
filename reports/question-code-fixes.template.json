@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "gesp-2023-12-3-03",
+    "file": "src-dungeon/data/csp-exam-bank.json",
+    "question": "下⾯C++代码执⾏后不能输出\"GESP\"的是( )。",
+    "code": "",
+    "note": "stem explicitly references code/program/output/blank but no code is available"
+  },
+  {
+    "id": "gesp-2024-09-3-12",
+    "file": "src-dungeon/data/csp-exam-bank.json",
+    "question": "关于一维数组，下列程序能够正确执行的是（ ）。",
+    "code": "",
+    "note": "stem explicitly references code/program/output/blank but no code is available; options look like code but stem has no independent code block"
+  }
+]

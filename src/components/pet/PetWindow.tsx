@@ -21,6 +21,14 @@ const getRoamingEnabled = () => {
   try { return localStorage.getItem('csp_pet_roaming') === 'true'; } catch { return false; }
 };
 const sleep = (ms: number) => new Promise<void>(resolve => window.setTimeout(resolve, ms));
+const desktopSlot = Math.max(1, Math.min(3, Number(new URLSearchParams(window.location.search).get('slot')) || 1));
+const positionKey = desktopSlot === 1 ? 'csp_pet_pos' : `csp_pet_pos_${desktopSlot}`;
+
+function selectWindowPet(data: any): OwnedPet | null {
+  const pets = Array.isArray(data?.ownedPets) ? data.ownedPets as OwnedPet[] : [];
+  const petId = desktopSlot === 1 ? data?.activePetId : data?.desktopCompanionIds?.[desktopSlot - 2];
+  return pets.find(item => item.petId === petId) || null;
+}
 
 export default function PetWindow() {
   const [bubble, setBubble] = useState('');
@@ -74,7 +82,7 @@ export default function PetWindow() {
 
   const savePosition = useCallback(() => {
     getCurrentWindow().outerPosition().then(position => {
-      localStorage.setItem('csp_pet_pos', JSON.stringify({ x: position.x, y: position.y }));
+      localStorage.setItem(positionKey, JSON.stringify({ x: position.x, y: position.y }));
     }).catch(() => {});
   }, []);
 
@@ -121,23 +129,23 @@ export default function PetWindow() {
         try { raw = await invoke('get_setting', { key: 'pet_data' }) as string | null; } catch { /* SQLite unavailable */ }
         if (!raw) raw = localStorage.getItem('csp_pet_data') || localStorage.getItem('csp_pet_data_tmp');
         const data = JSON.parse(raw || '{}');
-        const pet = data.activePetId && data.ownedPets?.find((item: OwnedPet) => item.petId === data.activePetId);
-        if (pet) setActivePet(pet);
+        const pet = selectWindowPet(data);
+        setActivePet(pet);
       } catch { /* keep window empty until a pet becomes available */ }
     };
     load();
     const listeners: (() => void)[] = [];
     listeners.push(safeListen('pet-data-sync', (event: any) => {
       const data = event.payload;
-      const pet = data.activePetId && data.ownedPets?.find((item: OwnedPet) => item.petId === data.activePetId);
-      if (pet) setActivePet(pet);
+      const pet = selectWindowPet(data);
+      setActivePet(pet);
     }));
     listeners.push(safeListen('pet-settings-changed', () => setPetSize(getPetSize())));
     listeners.push(safeListen('pet-anim', (event: any) => {
       const payload = event.payload as { anim: PetAnimState; duration?: number };
       window.__petTrigger__?.(payload.anim, payload.duration);
     }));
-    listeners.push(safeListen('pet-bubble', (event: any) => {
+    if (desktopSlot === 1) listeners.push(safeListen('pet-bubble', (event: any) => {
       showBubble(event.payload.text, Boolean(event.payload.urgent));
     }));
     pollRef.current = setInterval(() => emit('pet-request-sync', {}).catch(() => {}), 2000);
@@ -181,7 +189,7 @@ export default function PetWindow() {
 
   useEffect(() => {
     getCurrentWindow().outerPosition().then(position => {
-      const saved = localStorage.getItem('csp_pet_pos');
+      const saved = localStorage.getItem(positionKey);
       if (saved) {
         try {
           const { x, y } = JSON.parse(saved);
@@ -269,7 +277,7 @@ export default function PetWindow() {
   // Ambient messages are intentionally sparse. Context-rich result messages
   // continue to arrive from quiz/course screens through the pet-bubble event.
   useEffect(() => {
-    if (!activePet) return;
+    if (!activePet || desktopSlot !== 1) return;
     const timer = setInterval(() => {
       const next = dialogue.current.nextAmbient({
         hunger: activePet.hunger,
@@ -300,13 +308,13 @@ export default function PetWindow() {
     window.__petTrigger__?.('interact');
     const nextCount = clickCount + 1;
     setClickCount(nextCount);
-    if (activePet) {
+    if (activePet && desktopSlot === 1) {
       const line = dialogue.current.nextClick({
         hunger: activePet.hunger, mood: activePet.mood, hour: new Date().getHours(), clickCount: nextCount,
       });
       showBubble(line.text, line.priority === 'urgent');
     }
-    showActionBar();
+    if (desktopSlot === 1) showActionBar();
   }, [activePet, clickCount, pauseRoaming, showActionBar, showBubble]);
 
   if (!activePet) return null;
@@ -347,7 +355,7 @@ export default function PetWindow() {
       >
         <PetSprite key={activePet.modelPath || 'empty'} renderType={activePet.renderType} modelPath={activePet.modelPath} canvasSize={canvasSz} />
 
-        {showActions && (
+        {desktopSlot === 1 && showActions && (
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: barH, zIndex: 10,
             background: 'linear-gradient(transparent, rgba(0,0,0,0.45))', display: 'flex', alignItems: 'flex-end',

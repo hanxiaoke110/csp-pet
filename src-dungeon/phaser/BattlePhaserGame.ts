@@ -7,6 +7,7 @@ export type BattleEventCallback = (event: string, data: unknown) => void;
 export interface BattlePhaserGame {
   game: Phaser.Game;
   setAnswerResult: (result: SkillSelectResult) => void;
+  cancelPendingSkill: () => void;
   healPlayer: (amount: number) => void;
   pause: () => void;
   resume: () => void;
@@ -61,6 +62,10 @@ export function createBattleGame(
       if (scene) {
         scene.handleAnswerResult(result);
       }
+    },
+    cancelPendingSkill: () => {
+      const scene = game.scene.getScene('BattleScene') as BattleScene | undefined;
+      if (scene) scene.cancelPendingSkill();
     },
     healPlayer: (amount: number) => {
       const scene = game.scene.getScene('BattleScene') as BattleScene | undefined;

@@ -32,6 +32,7 @@ export default function RewardScreen() {
   const expEarned = battle.expEarned;
   const goldEarned = battle.goldEarned;
   const petCoinsEarned = battle.petCoinsEarned || 0;
+  const petExpEarned = battle.petExpEarned || 0;
   const rating = battle.rating;
   const totalAnswered = battle.correctCount + battle.wrongCount;
   const accuracy = totalAnswered > 0
@@ -100,22 +101,27 @@ export default function RewardScreen() {
                   +{expEarned}
                 </div>
               </div>
-              <div className="pixel-card" style={{ borderColor: 'var(--gold-coin)' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>金币获得</div>
-                <div style={{ fontSize: '24px', color: 'var(--gold-coin)', fontWeight: 700 }}>
-                  +{goldEarned}
+              <div className="pixel-card" style={{ borderColor: '#60a5fa' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>智子成长 EXP</div>
+                <div style={{ fontSize: '24px', color: '#60a5fa', fontWeight: 700 }}>
+                  +{petExpEarned}
                 </div>
               </div>
               <div className="pixel-card" style={{ borderColor: '#f97316' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>桌宠金币</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>通用金币到账</div>
                 <div style={{ fontSize: '24px', color: '#f97316', fontWeight: 700 }}>
                   +{petCoinsEarned}
                 </div>
               </div>
             </div>
             <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '-8px', marginBottom: '12px' }}>
-              已同步到桌宠商城 · 今日还可获得 {battle.petCoinsDailyRemaining ?? 30}，本周还可获得 {battle.petCoinsWeeklyRemaining ?? 150}
+              本局计算金币 {goldEarned}，按奖励上限实际到账 · 今日还可获得 {battle.petCoinsDailyRemaining ?? 30}，本周还可获得 {battle.petCoinsWeeklyRemaining ?? 150}
             </div>
+            {(battle.ratingExpBonus || 0) > 0 && (
+              <div style={{ fontSize: '11px', color: '#fbbf24', marginBottom: '12px', fontWeight: 700 }}>
+                首次 SS 评价额外获得 +{battle.ratingExpBonus} EXP
+              </div>
+            )}
 
             {/* Rating */}
             <div style={{

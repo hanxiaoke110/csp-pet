@@ -7,9 +7,13 @@ export class PetSprite extends Phaser.GameObjects.Container {
   private elementBadge: Phaser.GameObjects.Text;
   private levelText: Phaser.GameObjects.Text;
   private shadow: Phaser.GameObjects.Ellipse;
+  private readonly homeX: number;
+  private readonly homeY: number;
 
   constructor(scene: Phaser.Scene, x: number, y: number, config: PhaserPetConfig) {
     super(scene, x, y);
+    this.homeX = x;
+    this.homeY = y;
 
     // 地面阴影
     this.shadow = scene.add.ellipse(0, 60, 120, 30, 0x000000, 0.3);
@@ -71,10 +75,9 @@ export class PetSprite extends Phaser.GameObjects.Container {
 
   playAttackAnimation(targetX: number, targetY: number, onComplete: () => void): void {
     this.scene.tweens.killTweensOf(this);
-    const originalX = this.x;
-    const originalY = this.y;
-    const midX = (originalX + targetX) / 2;
-    const midY = (originalY + targetY) / 2 - 40;
+    this.resetToHome();
+    const midX = (this.homeX + targetX) / 2;
+    const midY = (this.homeY + targetY) / 2 - 40;
 
     this.scene.tweens.add({
       targets: this,
@@ -86,22 +89,23 @@ export class PetSprite extends Phaser.GameObjects.Container {
       ease: 'Sine.easeOut',
       yoyo: true,
       onComplete: () => {
-        this.x = originalX;
-        this.y = originalY;
-        this.setScale(1);
+        this.resetToHome();
         onComplete();
       },
     });
   }
 
   playHitAnimation(): void {
+    this.scene.tweens.killTweensOf(this);
+    this.resetToHome();
     this.scene.tweens.add({
       targets: this,
-      x: this.x + (this.sprite.flipX ? -12 : 12),
+      x: this.homeX + (this.sprite.flipX ? -12 : 12),
       duration: 60,
       yoyo: true,
       repeat: 3,
       ease: 'Sine.easeInOut',
+      onComplete: () => this.resetToHome(),
     });
 
     this.sprite.setTint(0xff0000);
@@ -122,16 +126,16 @@ export class PetSprite extends Phaser.GameObjects.Container {
 
   playCelebrateAnimation(): void {
     this.scene.tweens.killTweensOf(this);
-    const originalY = this.y;
+    this.resetToHome();
     this.scene.tweens.add({
       targets: this,
-      y: originalY - 20,
+      y: this.homeY - 20,
       duration: 300,
       yoyo: true,
       repeat: 2,
       ease: 'Sine.easeOut',
       onComplete: () => {
-        this.y = originalY;
+        this.resetToHome();
       },
     });
   }
@@ -145,6 +149,12 @@ export class PetSprite extends Phaser.GameObjects.Container {
       ease: 'Power2',
       onComplete,
     });
+  }
+
+  private resetToHome(): void {
+    this.x = this.homeX;
+    this.y = this.homeY;
+    this.setScale(1);
   }
 
   private getElementEmoji(element: string): string {

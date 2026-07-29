@@ -61,6 +61,25 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+const QUIZ_HISTORY_KEY = 'csp_quiz_recent_questions';
+
+function chooseFreshQuestions<T extends { id: string }>(pool: T[], count: number, mode: Mode): T[] {
+  let history: Array<{ id: string; mode: string }> = [];
+  try { history = JSON.parse(localStorage.getItem(QUIZ_HISTORY_KEY) || '[]'); } catch {}
+  const globalRecent = new Set(history.slice(0, 30).map(item => item.id));
+  const modeRecent = new Set(history.filter(item => item.mode === mode).slice(0, 50).map(item => item.id));
+  const fresh = shuffle(pool.filter(question => !globalRecent.has(question.id) && !modeRecent.has(question.id)));
+  const fallback = shuffle(pool.filter(question => !fresh.some(item => item.id === question.id)));
+  const selected = [...fresh, ...fallback].slice(0, count);
+  try {
+    localStorage.setItem(QUIZ_HISTORY_KEY, JSON.stringify([
+      ...selected.map(question => ({ id: question.id, mode })),
+      ...history,
+    ].slice(0, 100)));
+  } catch {}
+  return selected;
+}
+
 function resolveQuizImage(src?: string | null): string | null {
   if (!src) return null;
   if (/^https?:\/\//.test(src)) return src;
@@ -192,10 +211,10 @@ export default function QuizPractice() {
       // Use error pool
       const errorIds = new Set(quizStore.errors.map(e => e.questionId));
       const reviewQs = bank.filter(q => errorIds.has(q.id));
-      setQuestions(shuffle(reviewQs));
+      setQuestions(chooseFreshQuestions(reviewQs, reviewQs.length, m));
     } else if (m === 'super') {
       const superQs = bank.filter(q => q.source === 'super_challenge');
-      setQuestions(shuffle(superQs).slice(0, 1));
+      setQuestions(chooseFreshQuestions(superQs, 1, m));
     } else {
       // Random CSP/GESP exam questions with optional filters
       let pool = bank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
@@ -216,7 +235,7 @@ export default function QuizPractice() {
         // Fallback to all exam questions if filter leaves nothing
         pool = bank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
       }
-      setQuestions(shuffle(pool).slice(0, m === 'free' ? 15 : 5));
+      setQuestions(chooseFreshQuestions(pool, m === 'free' ? 15 : 5, m));
     }
   };
 

@@ -38,11 +38,13 @@ export function getProblemStatus(problemId: string): ProblemStatus {
 export function setProblemStatus(problemId: string, status: ProblemStatus): void {
   cache[problemId] = status;
 
-  // Debounced fire-and-forget save
+  // Sync write to localStorage immediately so achievements & other readers see latest
+  const json = JSON.stringify(cache);
+  try { localStorage.setItem('csp_problem_status', json); } catch {}
+
+  // Debounced async persist to SQLite
   if (saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    const json = JSON.stringify(cache);
     sqliteSetFireAndForget('problem_status', json);
-    try { localStorage.setItem('csp_problem_status', json); } catch {}
   }, 300);
 }

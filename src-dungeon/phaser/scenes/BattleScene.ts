@@ -306,6 +306,14 @@ export class BattleScene extends Phaser.Scene {
     this.pendingSkillId = null;
   }
 
+  /** Abort a question that could not be rendered without charging the player. */
+  cancelPendingSkill(): void {
+    if (!this.pendingSkillId) return;
+    this.pendingSkillId = null;
+    this.isProcessing = false;
+    this.cardHand.updateCardStates(this.state.energy, true);
+  }
+
   private executePlayerSkill(skill: SkillDefinition, isCorrect: boolean): void {
     const answerQuality = isCorrect ? 1.0 : 0.3;
 

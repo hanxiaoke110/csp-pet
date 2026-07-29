@@ -53,7 +53,7 @@ export default function LeaderboardScreen() {
   }, [scope, type, player.classCode]);
 
   const tabs: { key: LeaderboardType; label: string; icon: string }[] = [
-    { key: 'power', label: '战力榜', icon: '🏆' },
+    { key: 'power', label: '段位积分榜', icon: '🏆' },
     { key: 'streak', label: '连击榜', icon: '⚡' },
     { key: 'progress', label: '通关榜', icon: '🗺️' },
     { key: 'warrior', label: '勇者榜', icon: '🔥' },

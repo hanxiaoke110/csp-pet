@@ -204,6 +204,8 @@ export interface BattleState {
   expEarned: number;
   goldEarned: number;
   petCoinsEarned?: number;
+  petExpEarned?: number;
+  ratingExpBonus?: number;
   petCoinsDailyRemaining?: number;
   petCoinsWeeklyRemaining?: number;
   rating: string;              // D/C/B/A/S/SS

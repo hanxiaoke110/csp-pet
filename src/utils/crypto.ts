@@ -102,15 +102,35 @@ export function canBuyTickets(count: number): { allowed: boolean; remaining: num
   return { allowed: count <= remaining, remaining };
 }
 
-export function addTickets(count: number): void {
-  const current = getTicketCount();
-  localStorage.setItem('csp_wish_tickets', String(current + count));
+export function addTickets(count: number): boolean {
+  if (!Number.isInteger(count) || count <= 0) return false;
+  const ticketKey = 'csp_wish_tickets';
+  const weeklyKey = 'csp_wish_tickets_weekly';
+  const previousTickets = localStorage.getItem(ticketKey);
+  const previousWeekly = localStorage.getItem(weeklyKey);
+  try {
+    const current = getTicketCount();
+    const thisWeek = getWeekKey();
+    const bought = getWeeklyTicketsBought();
+    localStorage.setItem(ticketKey, String(current + count));
+    localStorage.setItem(weeklyKey, JSON.stringify({
+      week: thisWeek,
+      count: bought + count,
+    }));
+    return true;
+  } catch {
+    try {
+      if (previousTickets === null) localStorage.removeItem(ticketKey);
+      else localStorage.setItem(ticketKey, previousTickets);
+      if (previousWeekly === null) localStorage.removeItem(weeklyKey);
+      else localStorage.setItem(weeklyKey, previousWeekly);
+    } catch {}
+    return false;
+  }
+}
 
-  // Track weekly purchases
-  const thisWeek = getWeekKey();
-  const bought = getWeeklyTicketsBought();
-  localStorage.setItem('csp_wish_tickets_weekly', JSON.stringify({
-    week: thisWeek,
-    count: bought + count,
-  }));
+/** Rewards use the same ticket wallet but must not consume the weekly purchase quota. */
+export function grantTickets(count: number): void {
+  const current = getTicketCount();
+  localStorage.setItem('csp_wish_tickets', String(current + Math.max(0, count)));
 }

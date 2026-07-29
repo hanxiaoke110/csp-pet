@@ -256,6 +256,52 @@ const CODE_REQUIRED_PATTERNS = [
   '代码输出',
 ];
 
+const QUESTION_HISTORY_KEY = 'csp_question_history_v1';
+const QUESTION_HISTORY_LIMIT = 120;
+
+type QuestionHistoryEntry = { id: string; at: number; channel: string };
+
+function readQuestionHistory(): QuestionHistoryEntry[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(QUESTION_HISTORY_KEY) || '[]');
+    return Array.isArray(raw) ? raw.filter((x): x is QuestionHistoryEntry => typeof x?.id === 'string' && typeof x?.at === 'number') : [];
+  } catch { return []; }
+}
+
+export function rememberQuestionsShown(questions: Question[], channel: string): void {
+  if (!questions.length) return;
+  try {
+    const now = Date.now();
+    const added = questions.map(q => ({ id: q.id, at: now, channel }));
+    const deduped = [...added, ...readQuestionHistory().filter(old => !added.some(next => next.id === old.id))]
+      .slice(0, QUESTION_HISTORY_LIMIT);
+    localStorage.setItem(QUESTION_HISTORY_KEY, JSON.stringify(deduped));
+  } catch { /* localStorage is optional */ }
+}
+
+function shuffle<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function chooseFreshQuestions(candidates: Question[], count: number, channel: string): Question[] {
+  const history = readQuestionHistory();
+  const recentIds = new Set(history.slice(0, 30).map(item => item.id));
+  const weekAgo = Date.now() - 7 * 86400000;
+  const thisChannelIds = new Set(history.filter(item => item.channel === channel).slice(0, 50).map(item => item.id));
+  const fresh = candidates.filter(q => !recentIds.has(q.id) && !thisChannelIds.has(q.id));
+  const older = candidates.filter(q => !recentIds.has(q.id) && !fresh.includes(q));
+  const stale = candidates.filter(q => !recentIds.has(q.id) && history.some(item => item.id === q.id && item.at < weekAgo));
+  const pool = fresh.length >= count ? fresh : [...fresh, ...older, ...stale, ...candidates];
+  const chosen = shuffle(pool.filter((q, index, all) => all.findIndex(other => other.id === q.id) === index)).slice(0, count);
+  rememberQuestionsShown(chosen, channel);
+  return chosen;
+}
+
 // 题干里若含真实代码片段（哪怕没有独立 code 字段），题目仍可作答，不算残缺
 const INLINE_CODE_MARKERS = [
   '#include', 'int main', 'for(', 'while(', 'cout', 'printf', 'scanf', 'cin>>',
@@ -344,8 +390,7 @@ export function pickQuestionsByTag(
   const matched = allQuestions.filter(isEligible);
 
   // 随机抽取 count 道，不足则全取
-  const shuffled = [...matched].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  return chooseFreshQuestions(matched, count, `dungeon-skill-${tag}`);
 }
 
 // 副本 → 题目难度范围映射（按副本主题递进）
@@ -407,6 +452,5 @@ export function pickBigMoveQuestions(
     }
   }
 
-  const shuffled = [...candidates].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  return chooseFreshQuestions(candidates, count, 'dungeon-big-move');
 }

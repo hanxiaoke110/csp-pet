@@ -16,6 +16,7 @@ export interface HatchingEgg {
   speciesId: string;
   petName: string;
   rarity: HatchRarity;
+  acquisitionCost?: number;
   startTime: number | null;   // null = not started yet
   duration: number;           // randomized total ms
   status: HatchStatus;
@@ -27,7 +28,7 @@ interface HatchState {
   eggs: HatchingEgg[];
 
   // Operations
-  addEgg: (speciesId: string, petName: string, rarity: HatchRarity) => HatchingEgg;
+  addEgg: (speciesId: string, petName: string, rarity: HatchRarity, acquisitionCost?: number) => HatchingEgg;
   startHatching: (eggId: string) => void;
   checkEggs: () => void;                   // poll — updates ready eggs
   claimEgg: (eggId: string) => HatchingEgg | null;
@@ -104,12 +105,13 @@ function resumeDownload(get: () => HatchState, set: (fn: (s: HatchState) => Part
 export const useHatchStore = create<HatchState>((set, get) => ({
   eggs: [],
 
-  addEgg: (speciesId, petName, rarity) => {
+  addEgg: (speciesId, petName, rarity, acquisitionCost) => {
     const egg: HatchingEgg = {
       eggId: crypto.randomUUID(),
       speciesId,
       petName,
       rarity,
+      acquisitionCost,
       startTime: null,
       duration: randomDuration(rarity),
       status: 'waiting',

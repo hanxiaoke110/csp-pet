@@ -1,5 +1,5 @@
-use tauri::State;
 use crate::db::Database;
+use tauri::State;
 
 #[tauri::command]
 pub fn get_course_version(db: State<Database>) -> Result<String, String> {
@@ -18,6 +18,7 @@ pub fn set_course_version(db: State<Database>, version: String) -> Result<(), St
     conn.execute(
         "INSERT OR REPLACE INTO course_metadata (key, value) VALUES ('data_version', ?1)",
         [&version],
-    ).map_err(|e| e.to_string())?;
+    )
+    .map_err(|e| e.to_string())?;
     Ok(())
 }

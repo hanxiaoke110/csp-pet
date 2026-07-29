@@ -65,6 +65,9 @@ export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRE
           && question.options.some(option => !String(option).replace(/^[A-DＡ-Ｄ](?:[.、．:)]|\s)+/i, '').trim())) {
         failures.push(`emptyOption=${question.id}`);
       }
+      if (question.options?.some(option => /\b\d+\s+um\s*=\s*sum\b/.test(String(option)))) {
+        failures.push(`ocrCodeResidue=${logicalName}:${question.id}`);
+      }
     }
   }
   return { ready: failures.length === 0, failures: [...new Set(failures)] };

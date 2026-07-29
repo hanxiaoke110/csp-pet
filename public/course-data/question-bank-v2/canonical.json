@@ -32441,7 +32441,7 @@
       "options": [
         "A.  `1 int a[10]; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }`",
         "B.  1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }",
-        "C.  1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<10;i++) { 4 um=sum+a[i]; 5 }",
+        "C.  1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<10;i++) { 4 sum=sum+a[i]; 5 }",
         "D.  `1 int a[10]={0}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }`"
       ],
       "answer": {
@@ -32460,7 +32460,7 @@
       },
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
-      "contentHash": "efe00d45eb9f90bc28210b72c7968cd134d0e0f65f0eaf4e63252dead10f7287"
+      "contentHash": "0d69747a00d818e382bc7dbc583119b5f8598c68934fddc557154f62b999cf60"
     },
     {
       "id": "gesp-2024-09-3-13",

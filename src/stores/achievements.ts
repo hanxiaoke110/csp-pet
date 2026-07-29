@@ -46,7 +46,7 @@ export function createAchievements(
   activePetAffection: number,
   totalCoins: number,
   feedCount: number,
-  hasAllElements: boolean,
+  _hasAllElements: boolean,
   superCompletions: number,
   superBestScore: number,
   weeklyPerfects: number,
@@ -163,9 +163,6 @@ export function createAchievements(
       check: () => ({ unlocked: totalCoins >= 2000, progress: Math.min(totalCoins, 2000), total: 2000 }) },
     { id: 'pet-affection', name: '心有灵犀', description: '任意智子好感度达到 100', category: 'pet', icon: '💕',
       check: () => ({ unlocked: activePetAffection >= 100, progress: Math.min(activePetAffection, 100), total: 100 }) },
-    { id: 'pet-all-elements', name: '全系收集', description: '拥有地火风水四系智子各 1 只', category: 'pet', icon: '🌈',
-      check: () => ({ unlocked: hasAllElements }) },
-
     // === 💻 OJ 训练 ===
     { id: 'oj-cm-1', name: '初涉编程猫', description: '完成第 1 个编程猫题单', category: 'quiz', icon: '🐱',
       check: () => {

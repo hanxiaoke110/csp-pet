@@ -1,10 +1,11 @@
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
-import { getPetTier, type OwnedPet } from '../../types/pet';
+import { getPetTier, type OwnedPet, type PetElement } from '../../types/pet';
 import { useQuizStore } from '../../stores/quizStore';
 import { readFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import PetSprite from './PetSprite';
 import { useState, useEffect } from 'react';
 import React from 'react';
+import { showDesktopCompanion, hideDesktopCompanion } from '../../utils/desktopCompanions';
 
 function WorkshopThumb({ modelPath }: { modelPath: string }) {
   const [url, setUrl] = useState('');
@@ -43,6 +44,17 @@ export default function PetStatus({
   const setActivePet = usePetStore(s => s.setActivePet);
   const feedPet = usePetStore(s => s.feedPet);
   const allocateExpFromPool = usePetStore(s => s.allocateExpFromPool);
+  const reforgeElement = usePetStore(s => s.reforgeElement);
+  const recyclePet = usePetStore(s => s.recyclePet);
+  const recycledPets = usePetStore(s => s.recycledPets);
+  const restoreRecycledPet = usePetStore(s => s.restoreRecycledPet);
+  const dismantleRecycledPet = usePetStore(s => s.dismantleRecycledPet);
+  const autoFeederOwned = usePetStore(s => s.autoFeederOwned);
+  const autoFeederEnabled = usePetStore(s => s.autoFeederEnabled);
+  const setAutoFeederEnabled = usePetStore(s => s.setAutoFeederEnabled);
+  const companionSlots = usePetStore(s => s.companionSlots);
+  const desktopCompanionIds = usePetStore(s => s.desktopCompanionIds);
+  const setDesktopCompanion = usePetStore(s => s.setDesktopCompanion);
 
   const activePet = ownedPets.find(p => p.petId === activePetId);
   const displayPet = viewingPetId
@@ -53,7 +65,7 @@ export default function PetStatus({
   return (
     <div className="pet-status">
       <div style={{ marginBottom: 8 }}>
-        <div className="element-legend" style={{ marginBottom: 0 }}>🟫 地 · 🔴 火 · 🟢 风 · 🔵 水</div>
+        <div className="element-legend" style={{ marginBottom: 0 }}>🟫 地 · 🔴 火 · 🟢 风 · 🔵 水 · 🌟 光</div>
       </div>
 
       {displayPet && (
@@ -108,7 +120,7 @@ export default function PetStatus({
                           {isActive && <div className="pet-mini-badge">伙伴</div>}
                         </div>
                         <div className="pet-mini-name">{formatPetDisplayName(p.petName, p.level)}</div>
-                        <div className="pet-mini-level" style={{ color: getLevelBadgeColor(p.level) }}>{p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : '🔵'} Lv.{p.level}</div>
+                        <div className="pet-mini-level" style={{ color: getLevelBadgeColor(p.level) }}>{p.element === 'earth' ? '🟫' : p.element === 'fire' ? '🔴' : p.element === 'wind' ? '🟢' : p.element === 'light' ? '🌟' : '🔵'} Lv.{p.level}</div>
                       </div>
                     );
                   })}
@@ -126,11 +138,34 @@ export default function PetStatus({
             📝 改名 (×{renameCards})
           </button>
         )}
+        {displayPet && displayPet.petId !== activePetId && companionSlots > 1 && (
+          <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 8, flexWrap: 'wrap' }}>
+            {([2, 3] as const).filter(slot => slot <= companionSlots).map(slot => {
+              const assigned = desktopCompanionIds[slot - 2] === displayPet.petId;
+              return (
+                <button key={slot} onClick={async () => {
+                  if (assigned) {
+                    setDesktopCompanion(slot, null);
+                    await hideDesktopCompanion(slot);
+                    showToast(`已收回第 ${slot} 个桌面伙伴`);
+                    return;
+                  }
+                  if (!setDesktopCompanion(slot, displayPet.petId)) { showToast('该智子已在其他桌面位置，或位置不可用'); return; }
+                  const shown = await showDesktopCompanion(slot);
+                  if (!shown) setDesktopCompanion(slot, null);
+                  showToast(shown ? `${displayPet.petName} 已出现在独立桌面窗口` : '桌面窗口创建失败，请重试');
+                }} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #a78bfa', color: '#6d28d9', background: assigned ? '#ede9fe' : '#fff', cursor: 'pointer', fontSize: 11 }}>
+                  {assigned ? `收回桌面伙伴 ${slot}` : `设为桌面伙伴 ${slot}`}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {viewingPet && viewingPet.petId !== activePetId && (
         <div className="switch-prompt">
-          <span>正在查看：{formatPetDisplayName(viewingPet.petName, viewingPet.level)} {viewingPet.element === 'earth' ? '🟫地' : viewingPet.element === 'fire' ? '🔴火' : viewingPet.element === 'wind' ? '🟢风' : '🔵水'} <span style={{ color: getLevelBadgeColor(viewingPet.level), fontWeight: 600 }}>Lv.{viewingPet.level}</span></span>
+          <span>正在查看：{formatPetDisplayName(viewingPet.petName, viewingPet.level)} {viewingPet.element === 'earth' ? '🟫地' : viewingPet.element === 'fire' ? '🔴火' : viewingPet.element === 'wind' ? '🟢风' : viewingPet.element === 'light' ? '🌟光' : '🔵水'} <span style={{ color: getLevelBadgeColor(viewingPet.level), fontWeight: 600 }}>Lv.{viewingPet.level}</span></span>
           <button className="switch-btn" onClick={() => setSwitchTarget(viewingPet)}>
             🔄 切换智子伙伴
           </button>
@@ -214,6 +249,32 @@ export default function PetStatus({
 
           <div className="pet-coins">🪙 {coins} 金币 {expPool > 0 && <span style={{ color: '#818cf8', marginLeft: 8 }}>📦 {expPool} exp</span>}</div>
 
+          <div style={{ margin: '10px 0', padding: 10, border: '1px solid #dbeafe', borderRadius: 8, background: '#f8fbff', fontSize: 12 }}>
+            <div style={{ fontWeight: 700, marginBottom: 7 }}>🌈 属性重铸</div>
+            <div style={{ color: '#64748b', marginBottom: 8 }}>
+              每只智子都有一次免费修改机会；之后每次 200 金币。光属性同样可直接选择。
+            </div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {([
+                ['earth', '🟫 地'], ['fire', '🔴 火'], ['wind', '🟢 风'], ['water', '🔵 水'], ['light', '🌟 光'],
+              ] as [PetElement, string][]).map(([element, label]) => (
+                <button key={element} disabled={displayPet.element === element} onClick={() => {
+                  const result = reforgeElement(displayPet.petId, element);
+                  showToast(result.ok ? `${displayPet.petName} 已调整为${label}属性${result.cost ? `，消耗 ${result.cost} 金币` : '，已使用免费机会'}` : result.message || '修改失败');
+                }} style={{ border: '1px solid #bfdbfe', borderRadius: 5, background: displayPet.element === element ? '#dbeafe' : '#fff', padding: '4px 7px', cursor: 'pointer' }}>
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {autoFeederOwned && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: 7, margin: '8px 0', fontSize: 12, color: '#166534' }}>
+              <input type="checkbox" checked={autoFeederEnabled} onChange={e => setAutoFeederEnabled(e.target.checked)} />
+              🤖 自动喂食器 {autoFeederEnabled ? '已开启' : '已关闭'}（饱食低于 40 自动喂食）
+            </label>
+          )}
+
           {(pendingExp > 0 || pendingCoins > 0) && (
             <div className="pet-pending">
               🎁 待领取：+{pendingExp} EXP +{pendingCoins} 金币
@@ -242,6 +303,34 @@ export default function PetStatus({
               ))}
             </div>
           </div>
+
+          {ownedPets.length > 1 && (
+            <button onClick={() => {
+              if (!window.confirm(`将「${displayPet.petName}」放入智子回收站？放入后可恢复；确认拆解才会返还资源。`)) return;
+              const result = recyclePet(displayPet.petId);
+              showToast(result.ok ? '已放入智子回收站，可在本页恢复或拆解' : result.message || '操作失败');
+              if (result.ok) setViewingPetId(null);
+            }} style={{ marginTop: 8, border: '1px solid #fecaca', color: '#b91c1c', background: '#fff', borderRadius: 6, padding: '5px 9px', fontSize: 12, cursor: 'pointer' }}>
+              🗑 放入智子回收站
+            </button>
+          )}
+
+          {recycledPets.length > 0 && (
+            <div style={{ marginTop: 12, padding: 10, border: '1px dashed #cbd5e1', borderRadius: 8, fontSize: 12 }}>
+              <strong>🗑 智子回收站</strong>
+              {recycledPets.map(record => (
+                <div key={record.pet.petId} style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 7, flexWrap: 'wrap' }}>
+                  <span>{record.pet.petName} · 可返还 {record.returnedExp} EXP、{record.returnedCoins} 金币</span>
+                  <button onClick={() => { restoreRecycledPet(record.pet.petId); showToast('已恢复智子'); }}>恢复</button>
+                  <button onClick={() => {
+                    if (!window.confirm('确认永久拆解？资源将返还到经验池和金币钱包，无法撤销。')) return;
+                    const result = dismantleRecycledPet(record.pet.petId);
+                    showToast(result.ok ? `已返还 ${result.exp} EXP、${result.coins} 金币` : '拆解失败');
+                  }}>永久拆解</button>
+                </div>
+              ))}
+            </div>
+          )}
 
           {activePet && (() => {
             const ms = getLevelMilestone(activePet.level);

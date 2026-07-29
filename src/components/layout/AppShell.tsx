@@ -9,6 +9,7 @@ import {
   WINDOW_SKIN_CHANGE_EVENT,
   type WindowSkin,
 } from '../../utils/windowSkin';
+import { getWeekKey, loadCheckin, nextCheckin } from '../../utils/checkin';
 
 interface Props { children: ReactNode; }
 
@@ -23,13 +24,6 @@ const TIPS = [
   { do: '整理错题笔记', avoid: '拖延到明天', lucky: '⭐ 稀有智子' },
 ];
 
-function getWeekKey() {
-  const d = new Date();
-  const jan1 = new Date(d.getFullYear(), 0, 1);
-  const dayOfYear = Math.floor((d.getTime() - jan1.getTime()) / 86400000);
-  return `${d.getFullYear()}-W${Math.ceil((dayOfYear + jan1.getDay() + 1) / 7)}`;
-}
-
 function DailyCheckin() {
   const [checked, setChecked] = useState(false);
   const [streak, setStreak] = useState(0);
@@ -38,23 +32,21 @@ function DailyCheckin() {
 
   useEffect(() => {
     try {
-      const data = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
+      const data = loadCheckin();
       const thisWeek = getWeekKey();
       if (data.week === thisWeek) {
         setChecked(true);
         setStreak(data.streak || 0);
-        setTip(data.tip || TIPS[new Date().getDate() % TIPS.length]);
+        setTip((data.tip && typeof data.tip === 'object' ? data.tip : TIPS[new Date().getDate() % TIPS.length]) as typeof TIPS[number]);
       }
     } catch {}
   }, []);
 
   const doCheckin = () => {
-    const thisWeek = getWeekKey();
-    let newStreak = streak + 1;
-    try {
-      const data = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-      if (!data.week) { newStreak = 1; }
-    } catch {}
+    const checkin = nextCheckin();
+    if (checkin.alreadyChecked) return;
+    const thisWeek = checkin.week;
+    const newStreak = checkin.streak;
 
     let bonus = 50;
     let bonusMsg = '';
@@ -169,6 +161,10 @@ export default function AppShell({ children }: Props) {
         )}
 
         <div className="sidebar-spacer" />
+
+        <NavLink to="/announcements" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          📣 公告
+        </NavLink>
 
         <button className="nav-item" style={{ background: 'none', cursor: 'pointer', fontSize: 14, border: 'none', width: '100%', textAlign: 'left', fontFamily: 'inherit' }}
           onClick={() => setShowRedeem(true)}>

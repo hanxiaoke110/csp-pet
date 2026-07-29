@@ -4,15 +4,27 @@ const API_BASE = 'https://api.cspstudy.top';
 
 function getDeviceHash(): string {
   try {
-    let hash = localStorage.getItem('csp_device_hash');
+    // Existing dungeon students must retain their original identity. Switching a
+    // legacy player to the desktop UUID would orphan server-side progress.
+    const legacy = localStorage.getItem('csp_device_hash');
+    if (legacy) return legacy;
+    const rawPlayer = localStorage.getItem('dungeon_player');
+    if (rawPlayer) {
+      try {
+        const saved = JSON.parse(rawPlayer);
+        if (typeof saved?.deviceHash === 'string' && saved.deviceHash) return saved.deviceHash;
+      } catch { /* fall through to the shared identity */ }
+    }
+
+    // New dungeon students share the main app identity used for class binding.
+    let hash = localStorage.getItem('csp_wish_device');
     if (!hash) {
-      hash = 'dh-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      localStorage.setItem('csp_device_hash', hash);
+      hash = crypto.randomUUID();
+      localStorage.setItem('csp_wish_device', hash);
     }
     return hash;
   } catch {
-    // 隐私模式等 localStorage 不可用时，回退到内存随机值
-    return 'dh-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return crypto.randomUUID();
   }
 }
 

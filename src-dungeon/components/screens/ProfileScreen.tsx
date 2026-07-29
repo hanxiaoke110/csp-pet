@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDungeonStore } from '../../stores/dungeonStore';
+import { usePetStore } from '../../../src/stores/petStore';
 import { getRankName, getSchoolPassive } from '../../utils/gameLogic';
 import schoolsData from '../../data/schools.json';
 import type { School, SchoolDefinition } from '../../types/dungeon';
@@ -40,6 +41,7 @@ const BADGE_DEFS: Record<string, { name: string; desc: string; rarity: string; i
 };
 
 export default function ProfileScreen() {
+  const coins = usePetStore(s => s.coins);
   const navigate = useNavigate();
   const [changingSchool, setChangingSchool] = useState(false);
   const player = useDungeonStore(s => s.player);
@@ -159,7 +161,7 @@ export default function ProfileScreen() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '12px', fontSize: '11px', color: 'var(--text-dim)' }}>
-            <span>💰 {player.gold} 金币</span>
+            <span>💰 {coins} 通用金币</span>
             <span>📊 {player.totalAnswered} 题</span>
             <span>⚡ {player.maxStreak} 最高连击</span>
           </div>

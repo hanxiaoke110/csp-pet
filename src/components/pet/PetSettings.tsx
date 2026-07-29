@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 import { emit } from '@tauri-apps/api/event';
+import { usePetStore } from '../../stores/petStore';
 
 interface Props {
   petSize: string;
@@ -12,6 +13,9 @@ interface Props {
 }
 
 export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, petWinVisible, setPetWinVisible, showToast }: Props) {
+  const coins = usePetStore(s => s.coins);
+  const companionSlots = usePetStore(s => s.companionSlots);
+  const buyCompanionSlot = usePetStore(s => s.buyCompanionSlot);
   return (
     <div className="pet-status">
       <div style={{
@@ -53,6 +57,22 @@ export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, 
               );
             })}
           </div>
+        </div>
+
+        <div style={{ borderTop: '1px solid #e2e8f0', margin: '4px 0 16px' }} />
+
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>👥 多智子桌面伙伴</div>
+          <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2, marginBottom: 8 }}>已解锁 {companionSlots}/3 个位置。额外伙伴使用独立窗口，可单独拖到任意位置，不参与战斗和奖励。</div>
+          {companionSlots < 3 ? (
+            <button onClick={() => {
+              const cost = companionSlots === 1 ? 2500 : 5000;
+              if (!window.confirm(`解锁第 ${companionSlots + 1} 个独立桌面伙伴位置，需要 ${cost} 金币，确认购买？`)) return;
+              showToast(buyCompanionSlot(companionSlots) ? `已解锁第 ${companionSlots + 1} 个桌面伙伴位置，可回智子页选择伙伴` : '状态已变化或金币不足，请重新确认');
+            }} disabled={coins < (companionSlots === 1 ? 2500 : 5000)} style={{ padding: '7px 10px', borderRadius: 7, border: '1px solid #8b5cf6', background: '#fff', color: '#6d28d9', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
+              解锁第 {companionSlots + 1} 位 · 🪙 {companionSlots === 1 ? 2500 : 5000}
+            </button>
+          ) : <div style={{ color: '#16a34a', fontSize: 12, fontWeight: 700, marginTop: 6 }}>✅ 三个独立桌面位置已全部解锁</div>}
         </div>
 
         <div style={{ borderTop: '1px solid #e2e8f0', margin: '4px 0 16px' }} />

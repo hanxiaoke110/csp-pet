@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
+import { usePetStore } from '../../../src/stores/petStore';
 import { getRankName } from '../../utils/gameLogic';
 import type { DungeonDefinition, DungeonProgress } from '../../types/dungeon';
 
 export default function DungeonMap() {
+  const coins = usePetStore(s => s.coins);
   const navigate = useNavigate();
   const player = useDungeonStore(s => s.player);
   const dungeons = useDungeonStore(s => s.dungeons);
@@ -53,7 +55,7 @@ export default function DungeonMap() {
         </div>
         <div className="status-item">
           <span className="status-label">💰</span>
-          <span className="status-value gold-text">{player.gold}</span>
+          <span className="status-value gold-text">{coins}</span>
         </div>
         <div className="reward-pass">
           <div className="reward-pass-status" title="本周仍可获得完整结算奖励的挑战次数">
@@ -62,11 +64,11 @@ export default function DungeonMap() {
           </div>
           <button
             className="pixel-btn reward-pass-buy"
-            title="消耗 120 个试炼金币，增加 1 次本周有奖挑战资格"
+            title="消耗 120 个通用金币，增加 1 次本周有奖挑战资格"
             onClick={() => {
-              if (!window.confirm('消耗 120 个试炼金币，增加 1 次本周有奖挑战资格？')) return;
+            if (!window.confirm('消耗 120 个通用金币，增加 1 次本周有奖挑战资格？')) return;
               const ok = buyRewardChallenge();
-              window.alert(ok ? '已增加 1 次本周有奖挑战资格。' : '试炼金币不足，需要 120 金币。');
+              window.alert(ok ? '已增加 1 次本周有奖挑战资格。' : '通用金币不足，需要 120 金币。');
             }}
           >
             +1 次 · 120 金币

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useDungeonStore } from './stores/dungeonStore';
 import { loadQuestionBank, loadDungeons, loadQuestionMapping } from './utils/questionLoader';
-import { getStoredClassCode } from './utils/api';
+import { getStoredClassCode, getStoredHash } from './utils/api';
 import { readDesktopBinding } from './utils/autoRegister';
 import type { DungeonProgress } from './types/dungeon';
 
@@ -65,7 +65,7 @@ export function AppContent() {
           const binding = readDesktopBinding();
           if (binding) {
             useDungeonStore.getState().initPlayer({
-              deviceHash: crypto.randomUUID?.() || 'dh-' + Date.now(),
+              deviceHash: getStoredHash(),
               classCode: binding.classCode,
               displayName: binding.displayName,
               realName: binding.realName,
@@ -75,7 +75,7 @@ export function AppContent() {
             const cc = getStoredClassCode();
             if (cc) {
               useDungeonStore.getState().initPlayer({
-                deviceHash: crypto.randomUUID?.() || 'dh-' + Date.now(),
+                deviceHash: getStoredHash(),
                 classCode: cc,
               });
             }

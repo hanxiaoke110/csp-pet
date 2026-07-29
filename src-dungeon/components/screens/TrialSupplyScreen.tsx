@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
+import { usePetStore } from '../../../src/stores/petStore';
 
 const ITEMS = [
   { id: 'hint-ticket' as const, icon: '💡', name: '知识提示券', cost: 18, description: '战斗答题前查看一次解题方向。' },
@@ -10,7 +11,7 @@ const ITEMS = [
 
 export default function TrialSupplyScreen() {
   const navigate = useNavigate();
-  const player = useDungeonStore(s => s.player);
+  const coins = usePetStore(s => s.coins);
   const inventory = useDungeonStore(s => s.trialInventory);
   const buy = useDungeonStore(s => s.buyTrialItem);
   const equip = useDungeonStore(s => s.equipTrialCosmetic);
@@ -33,9 +34,9 @@ export default function TrialSupplyScreen() {
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', alignItems: 'center' }}>
             <div>
               <h2 style={{ margin: 0, color: 'var(--gold)', fontFamily: 'var(--pixel-font)', fontSize: '16px' }}>试炼补给站</h2>
-              <p style={{ margin: '8px 0 0', color: 'var(--text-dim)', fontSize: '12px' }}>用试炼场金币准备下一场战斗，也能收藏专属外观。</p>
+              <p style={{ margin: '8px 0 0', color: 'var(--text-dim)', fontSize: '12px' }}>使用桌宠通用金币准备下一场战斗，也能收藏专属外观。</p>
             </div>
-            <div style={{ color: 'var(--gold-coin)', fontWeight: 700, fontSize: '18px' }}>💰 {player.gold}</div>
+            <div style={{ color: 'var(--gold-coin)', fontWeight: 700, fontSize: '18px' }}>💰 {coins}</div>
           </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
@@ -54,7 +55,7 @@ export default function TrialSupplyScreen() {
                     {equipped ? '已装备' : '装备'}
                   </button>
                 ) : (
-                  <button className="pixel-btn primary" disabled={player.gold < item.cost} onClick={() => buy(item.id)} style={{ fontSize: '11px' }}>
+                  <button className="pixel-btn primary" disabled={coins < item.cost} onClick={() => buy(item.id)} style={{ fontSize: '11px' }}>
                     购买 {item.cost} 金币
                   </button>
                 )}

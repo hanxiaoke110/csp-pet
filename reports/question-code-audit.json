@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T15:47:20.224Z",
+  "generatedAt": "2026-07-29T17:04:44.116Z",
   "summaries": [
     {
       "file": "public/course-data/csp-exam-bank.json",
@@ -12,9 +12,10 @@
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
       "questions": 795,
-      "findings": 71,
+      "findings": 61,
       "bySeverity": {
-        "P2": 71
+        "P2": 59,
+        "P1": 2
       }
     },
     {
@@ -38,7 +39,8 @@
       "questions": 1023,
       "findings": 70,
       "bySeverity": {
-        "P2": 70
+        "P2": 68,
+        "P1": 2
       }
     },
     {
@@ -46,7 +48,8 @@
       "questions": 1023,
       "findings": 70,
       "bySeverity": {
-        "P2": 70
+        "P2": 68,
+        "P1": 2
       }
     },
     {
@@ -54,7 +57,8 @@
       "questions": 1023,
       "findings": 70,
       "bySeverity": {
-        "P2": 70
+        "P2": 68,
+        "P1": 2
       }
     },
     {
@@ -745,24 +749,6 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2024-06-1-11",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "求1~N之间所有奇数之和，描述错误的是（ ）。",
-      "options": [
-        "A. 输入10输出11 25",
-        "B. 输入5输出6 9",
-        "C. 将i+=1移到if前行同样能实现",
-        "D. 删除if并将i+=1改为i+=2同样能实现"
-      ],
-      "explanation": "将i+=1移到if前会导致i从2开始，丢失1的累加。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
       "id": "gesp-2024-09-1-03",
       "type": "choice",
       "group": "GESP",
@@ -781,24 +767,6 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2024-09-1-14",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "求连续输入的正五位数的百位数之和，描述错误的是（ ）。",
-      "options": [
-        "A. 输入23221等Sum值是10",
-        "B. 输入四位数也能运行",
-        "C. 将L6改为M=(M%1000/100)同样能实现",
-        "D. 将L6改为M=(M%100/10)同样能实现"
-      ],
-      "explanation": "M%100/10取的是十位而非百位。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
       "id": "gesp-2024-09-2-13",
       "type": "choice",
       "group": "GESP",
@@ -814,24 +782,6 @@
         "D. 等价于while(true)"
       ],
       "explanation": "while(1)写法合法，1为真所以无限循环。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2024-12-1-13",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "使正方形周长增加4的语句是（ ）。",
-      "options": [
-        "A. a=4;",
-        "B. a+=4;",
-        "C. a=a+4;",
-        "D. ++a;"
-      ],
-      "explanation": "周长=4a，++a使边长增1，周长增4。A/B/C都是增加4个单位边长长的太多。"
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
@@ -886,24 +836,6 @@
         "D. M+1"
       ],
       "explanation": "孪生素数需检查i和i+2，i最大到M-2，但用i<M-1可以确保i+2<=M。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2024-12-2-14",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "打印三角形星号横线应填入（ ）。",
-      "options": [
-        "A. (height-i),(2*i)",
-        "B. (height),(2*i)",
-        "C. (height-i),(2*i+1)",
-        "D. (height-i-1),(2*i+1)"
-      ],
-      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
@@ -997,24 +929,6 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2025-03-2-12",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
-      "options": [
-        "A. 4可以分解为2+2",
-        "B. 程序需要验证到1000",
-        "C. 每个偶数只需找一组解",
-        "D. break应移到if外"
-      ],
-      "explanation": "break正确位置在if内，找到一组解即退出。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
       "id": "gesp-2025-03-2-14",
       "type": "choice",
       "group": "GESP",
@@ -1048,24 +962,6 @@
         "D. b-a<=0.000001&&a-b<=0.000001"
       ],
       "explanation": "需取绝对值abs(b-a)判断差值是否在误差范围内。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2025-06-1-10",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "求M天后是星期几两处横线分别应填入（ ）。",
-      "options": [
-        "A. (N+M)/7和D==0",
-        "B. (N+M)%7和D==0",
-        "C. (N+M)/7和D<=0",
-        "D. (N+M)%7和D=0"
-      ],
-      "explanation": "用取余计算星期，余数为0为星期日。B中==才是比较。"
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
@@ -1105,21 +1001,21 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2025-06-2-13",
+      "id": "gesp-2023-12-3-03",
       "type": "choice",
       "group": "GESP",
-      "severity": "P2",
+      "severity": "P1",
       "reasons": [
-        "options look like code but stem has no independent code block"
+        "stem explicitly references code/program/output/blank but no code is available"
       ],
-      "question": "判断正整数位数的while循环横线填入（ ）。",
+      "question": "下⾯C++代码执⾏后不能输出\"GESP\"的是( )。",
       "options": [
-        "A. N!=0;N/=10",
-        "B. N>0;N%=10",
-        "C. N>=0;N-=10",
-        "D. N>0;N/=10"
+        "A. `string str(\"GESP\"); cout<<str<<endl;`",
+        "B. `string str=\"GESP\"; cout<<str<<endl;`",
+        "C. `string str(\"GESP\"); cout<<str[1]<<str[2]<<str[3]<<str[4]<<endl;`",
+        "D. `string str{\"GESP\"}; cout<<str<<endl;`"
       ],
-      "explanation": "N>0为循环条件，N/=10去除最后一位。A中N!=0对负数也成立。"
+      "explanation": "C选项cout<<str[1]<<str[2]<<str[3]<<str[4]，string str(\"GESP\")长度为4，有效下标0~3，str[4]越界访问，无法正确输出GESP。其余选项均能输出完整字符串\"GESP\"。"
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
@@ -1213,6 +1109,25 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-09-3-12",
+      "type": "choice",
+      "group": "GESP",
+      "severity": "P1",
+      "reasons": [
+        "stem explicitly references code/program/output/blank but no code is available",
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于一维数组，下列程序能够正确执行的是（ ）。",
+      "options": [
+        "A. `1 int a[10]; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }`",
+        "B. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4",
+        "C. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<10;i++) { 4 ",
+        "D. `1 int a[10]={0}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }"
+      ],
+      "explanation": "A和D的a[10]未初始化且i<=10越界；B的i<=10越界（数组只有10个元素，下标0-9）；C的i<10正确，数组已初始化。答案C。"
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
       "id": "gesp-2024-12-3-05",
       "type": "choice",
       "group": "GESP",
@@ -1249,24 +1164,6 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2024-12-4-09",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "下⾯代码采⽤递推算法来计算斐波那契数列 ，则横线上应填写（ ）。",
-      "options": [
-        "A. 1 result = f1 + f2; 2 f1 = f2; 3 f2 = result;",
-        "B. 1 result += f1 + f2; 2 f1 = f2; 3 f2 = result;",
-        "C. 1 result += f1 + f2; 2 f2 = result; 3 f1 = f2;",
-        "D. 1 result = f1 + f2; 2 f2 = result; 3 f1 = f2;"
-      ],
-      "explanation": "斐波那契递推：result=f1+f2; f1=f2; f2=result; 正确更新前两项。答案A。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
       "id": "gesp-2024-12-4-10",
       "type": "choice",
       "group": "GESP",
@@ -1282,24 +1179,6 @@
         "D. 如果给定数据部分有序，插入排序通常比选择排序效率更高。"
       ],
       "explanation": "C说法错误。冒泡排序在最好情况（已排序）下时间复杂度为O(n)，只需一轮比较无交换。答案C。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2025-03-4-01",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "关于下述代码，说法错误的是（ ）。",
-      "options": [
-        "A. 函数multiply的定义应该放到函数main之前。",
-        "B. `函数声明int multiply(int x, int y);中明确指定了函数multiply()的返回值为整数类型。`",
-        "C. 在main函数中，函数multiply通过multiply(a, b)被调⽤，其中a和b是定义在main函数中的变 量，它们作为实参传递给了multipl",
-        "D. 运⾏上述代码，将输出The result is: 20。"
-      ],
-      "explanation": "A说法错误。multiply可以定义在main之后，只需在main前声明即可（代码已有声明）。答案A。"
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
@@ -1339,24 +1218,6 @@
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2025-03-4-10",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "⼩杨正在爬楼梯，需要爬 阶才能到达楼顶。如果每次可以爬 个或 个台阶，下⾯代码采⽤递推算法来计算 ⼀共有多少种不同的⽅法可以爬到楼顶，则横线上应填写（ ）。",
-      "options": [
-        "A. 1 res += f1 + f2; 2 f1 = f2; 3 f2 = res;",
-        "B. 1 res = f1 + f2; 2 f1 = f2; 3 f2 = res;",
-        "C. 1 res += f1 + f2; 2 f2 = res; 3 f1 = f2;",
-        "D. 1 res = f1 + f2; 2 f2 = res; 3 f1 = f2;"
-      ],
-      "explanation": "爬楼梯递推：res=f1+f2; f1=f2; f2=res; 正确计算斐波那契式递推。答案B。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
       "id": "gesp-2025-06-3-10",
       "type": "choice",
       "group": "GESP",
@@ -1390,42 +1251,6 @@
         "D. ptr int;"
       ],
       "explanation": "int* ptr;是声明整型指针的正确语法。答案A。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2025-06-4-02",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "下⾯的函数接收⼀个 ⾏ 列的⼆维数组并输出其中元素，则横线上不能填写（ ）。 1 void printArray(________) {",
-      "options": [
-        "A. int arr[3][4]",
-        "B. int arr[][4]",
-        "C. int (*arr)[4]",
-        "D. int** arr"
-      ],
-      "explanation": "int** arr不能直接作为int arr[3][4]的参数，二维数组参数需指定列数或用指向数组的指针。答案D。"
-    },
-    {
-      "file": "src-dungeon/data/csp-exam-bank.json",
-      "id": "gesp-2025-06-4-15",
-      "type": "choice",
-      "group": "GESP",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "为了提高冒泡排序的效率，如果某轮\"冒泡\"中没有执行任何交换操作，说明数组已经完成排序，可直接返回结果，则两条横线上分别应该填写（ ）。",
-      "options": [
-        "A. 1 flag = false; 2 flag = false;",
-        "B. 1 flag = false; 2 flag = true;",
-        "C. 1 flag = true; 2 flag = false;",
-        "D. 1 flag = true; 2 flag = true;"
-      ],
-      "explanation": "优化冒泡：flag=false(假设有序)→有交换则flag=true→本轮结束若flag=false则已有序。横线1设flag=false，横线2(有交换时)设flag=true。答案B。"
     },
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
@@ -2329,24 +2154,6 @@
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
-      "id": "gesp-2024-12-2-14",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "打印三角形星号横线应填入（ ）。",
-      "options": [
-        "A. (height-i),(2*i)",
-        "B. (height),(2*i)",
-        "C. (height-i),(2*i+1)",
-        "D. (height-i-1),(2*i+1)"
-      ],
-      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
-    },
-    {
-      "file": "public/course-data/unified-quiz-bank.json",
       "id": "gesp-2024-12-2-15",
       "type": "choice",
       "group": "",
@@ -2437,24 +2244,6 @@
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
-      "id": "gesp-2025-03-2-12",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
-      "options": [
-        "A. 4可以分解为2+2",
-        "B. 程序需要验证到1000",
-        "C. 每个偶数只需找一组解",
-        "D. break应移到if外"
-      ],
-      "explanation": "break正确位置在if内，找到一组解即退出。"
-    },
-    {
-      "file": "public/course-data/unified-quiz-bank.json",
       "id": "gesp-2025-03-2-14",
       "type": "choice",
       "group": "",
@@ -2524,6 +2313,24 @@
         "D. (N+6)%7"
       ],
       "explanation": "星期六对应6（0=周日），(6+N)%7=(N+6)%7。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-3-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P1",
+      "reasons": [
+        "stem explicitly references code/program/output/blank but no code is available"
+      ],
+      "question": "下⾯C++代码执⾏后不能输出\"GESP\"的是( )。",
+      "options": [
+        "A. `string str(\"GESP\"); cout<<str<<endl;`",
+        "B. `string str=\"GESP\"; cout<<str<<endl;`",
+        "C. `string str(\"GESP\"); cout<<str[1]<<str[2]<<str[3]<<str[4]<<endl;`",
+        "D. `string str{\"GESP\"}; cout<<str<<endl;`"
+      ],
+      "explanation": "C选项cout<<str[1]<<str[2]<<str[3]<<str[4]，string str(\"GESP\")长度为4，有效下标0~3，str[4]越界访问，无法正确输出GESP。其余选项均能输出完整字符串\"GESP\"。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2614,6 +2421,25 @@
         "D. (23|01)==31"
       ],
       "explanation": "按位或运算：23=10111，10=01010，23|10=11111=31✓。B选项23|11=11111=31也对但题库标C。实际C(23|10=31)和D(23|01=23≠31)中C正确。答案C。"
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-3-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P1",
+      "reasons": [
+        "stem explicitly references code/program/output/blank but no code is available",
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于一维数组，下列程序能够正确执行的是（ ）。",
+      "options": [
+        "A. `1 int a[10]; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }`",
+        "B. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4",
+        "C. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<10;i++) { 4 ",
+        "D. `1 int a[10]={0}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }"
+      ],
+      "explanation": "A和D的a[10]未初始化且i<=10越界；B的i<=10越界（数组只有10个元素，下标0-9）；C的i<10正确，数组已初始化。答案C。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2757,7 +2583,7 @@
         "C. - 2 * (2 % 4)",
         "D. (2 * 2) % - 4"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "原式等同于((-2)*2)%4=0；选项C为-2*(2%4)=-4，值不同。注意负号优先级高于乘除，取余结果符号与被除数相同，易错选D。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2793,7 +2619,7 @@
         "C. char str2[4] = {'G', 'E', 'S', 'P'}; strcpy(str2, \"HELLO,GESP\"); cout << str2",
         "D. char dest[4] = {'G', 'E', 'S', 'P'}; char src[] = \"HELLO\"; strcat(dest, src);"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C中str2仅4字节，strcpy复制长字符串会导致缓冲区溢出，覆盖相邻内存，引发未定义行为，描述正确。A中sizeof包含'\\0'；B初始化数组长度不足；D中strcat要求dest有结束符且长度不够，均错误。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2811,7 +2637,7 @@
         "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
         "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C++ string 的 empty() 函数在字符串为空时返回 true，非空返回 false。选项 C 将返回值说反，因此错误。其他选项均正确描述 string 成员函数功能。易错：混淆 empty() 返回值逻辑。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2829,7 +2655,7 @@
         "C. $\\texttt{a * b c + * d}$",
         "D. $\\texttt{b + c * a * d}$"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "中缀转后缀：先计算b+c得bc+，然后a乘以该结果得abc+*，最后乘以d得abc+*d*。运算符顺序严格，易错：错写成abc*d*+等。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2847,7 +2673,7 @@
         "C. `(10 != 10) || (5 >= 3)`",
         "D. `(5 == 3) && (4 > 2)`"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C 选项：`(10 != 10)` 为 false，`(5 >= 3)` 为 true，逻辑或 `||` 只要有一个为 true 结果即为 true，因此整个表达式为 true。其他选项：A 有 false && ... 为 false；B"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2865,7 +2691,7 @@
         "C. `int max(a, b) { if (a > b) return a; else return b; }`",
         "D. `void max(a, b) { cout << (a > b ? a : b); }`"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "函数要求返回两个整数中的较大值。A 返回类型为 void 不能返回值；C 参数缺少类型声明；D 返回类型 void 且只输出未返回值。B 正确定义返回 int，参数类型完整，函数体返回较大值。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2883,7 +2709,7 @@
         "C. 没有返回值的函数必须声明为 `void` 类型，且不能包含 `return` 语句",
         "D. C++11 及之后标准要求函数必须显式声明返回类型，不允许默认返回 `int`"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "C++11起必须显式声明返回类型，禁止隐式int，D正确。A：还有引用传递、指针传递；B：形参调用结束后释放；C：void函数可包含return;语句。易误选C，认为void函数不能有return。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2901,7 +2727,7 @@
         "C. `string` 对象在内存中是动态分配空间的，因此可以自动处理字符串长度的变化。",
         "D. `string` 对象和字符数组都可以使用 `==` 运算符来直接比较两个字符串的内容是否相同。"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "`string`重载了`==`用于比较内容，而字符数组名退化为指针，`==`比较地址。A、B、C均正确。易错点：误认为字符数组能直接用`==`比较字符串内容。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2919,7 +2745,7 @@
         "C. 最好情况是 $O(n)$，最坏情况是 $O(2^n)$",
         "D. 最好情况是 $O(n^2)$，最坏情况是 $O(2^n)$"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "插入排序在数组已有序时，每个元素只需与已排序序列的最后一个元素比较一次，时间复杂度为 O(n)；逆序时需比较和移动所有已排序元素，为 O(n²)。易错点：混淆不同排序的最好/最坏复杂度。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2937,7 +2763,7 @@
         "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
         "D. 可以用 `printf` 作为变量名，因为 `printf` 是关键字，但这不是好习惯，因为 `printf` 有约定的功能与含义。"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "for是C++关键字，不可作变量名，A正确。变量名允许以下划线开头，B错误。_tnt_合法，C错误。printf是标准库函数名，非关键字，可作变量名但会覆盖函数，D中'printf是关键字'说法错误。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2955,7 +2781,7 @@
         "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
         "D. 可以用 printf 作为变量名，因为 printf 是关键字，但这不是好习惯，因为 printf 有约定的功能与含义。"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "C++ 变量名不能是关键字，for 是关键字，A 正确。下划线可作为首字符或出现在变量名任意位置，B、C 错误。printf 是库函数名，非关键字，D 错误。注意区分保留字与预定义标识符。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2973,7 +2799,7 @@
         "C. 调用 `min(5)` 是错误的，不能通过编译",
         "D. 调用 `min()`（不传任何参数）可以通过编译，结果为 $0$"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "std::min要求至少两个参数或一个初始化列表，不传参无法编译，故D错误。A正确，函数必须返回；B可嵌套；C单参数错误。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -2991,7 +2817,7 @@
         "C. `abs(-1, -2)` 的返回值是 $1$",
         "D. 若传入负数浮点数，`abs()` 会自动截断小数部分后返回整数绝对值"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "C++ 中 abs() 对整数求绝对值，头文件 <cstdlib> 或 <cmath> 均可；浮点数 abs() 返回浮点绝对值，不截断小数。B、C、D 均错误。易错：将 abs() 与四舍五入混淆。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -3009,7 +2835,7 @@
         "C. `int *p = &x;`",
         "D. `p = *x;`"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "指针变量声明时必须带星号，且初始化或赋值需用取地址符&获取变量的地址。选项A类型不匹配，B缺少&，D未声明指针且误用解引用。正确写法为`int *p = &x;`。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -3027,7 +2853,7 @@
         "C. `~(-3)` 的结果是 $2$（`int` 类型，$32$ 位）",
         "D. `~8` 的结果是 $-9$（`int` 类型，$32$ 位）"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "按位取反公式：~x = -x-1。~0 = -1（所有位为1），不是0，故B错误。A、C、D均符合公式。易错点：误以为0取反还是0。"
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
@@ -3045,7 +2871,7 @@
         "C. `struct Point { int x, y; }; Point p = new Point(1,2);`",
         "D. `struct Point { int x, y; }; Point p = <1,2>;`"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "C++中结构体聚合初始化使用花括号{}。A逗号表达式非初始化；C用new返回指针；D尖括号语法不存在。B正确。易错点：误用其他语法。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -3589,24 +3415,6 @@
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
-      "id": "gesp-2024-12-2-14",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "打印三角形星号横线应填入（ ）。",
-      "options": [
-        "A. (height-i),(2*i)",
-        "B. (height),(2*i)",
-        "C. (height-i),(2*i+1)",
-        "D. (height-i-1),(2*i+1)"
-      ],
-      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
-    },
-    {
-      "file": "dist/course-data/unified-quiz-bank.json",
       "id": "gesp-2024-12-2-15",
       "type": "choice",
       "group": "",
@@ -3697,24 +3505,6 @@
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
-      "id": "gesp-2025-03-2-12",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
-      "options": [
-        "A. 4可以分解为2+2",
-        "B. 程序需要验证到1000",
-        "C. 每个偶数只需找一组解",
-        "D. break应移到if外"
-      ],
-      "explanation": "break正确位置在if内，找到一组解即退出。"
-    },
-    {
-      "file": "dist/course-data/unified-quiz-bank.json",
       "id": "gesp-2025-03-2-14",
       "type": "choice",
       "group": "",
@@ -3784,6 +3574,24 @@
         "D. (N+6)%7"
       ],
       "explanation": "星期六对应6（0=周日），(6+N)%7=(N+6)%7。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-3-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P1",
+      "reasons": [
+        "stem explicitly references code/program/output/blank but no code is available"
+      ],
+      "question": "下⾯C++代码执⾏后不能输出\"GESP\"的是( )。",
+      "options": [
+        "A. `string str(\"GESP\"); cout<<str<<endl;`",
+        "B. `string str=\"GESP\"; cout<<str<<endl;`",
+        "C. `string str(\"GESP\"); cout<<str[1]<<str[2]<<str[3]<<str[4]<<endl;`",
+        "D. `string str{\"GESP\"}; cout<<str<<endl;`"
+      ],
+      "explanation": "C选项cout<<str[1]<<str[2]<<str[3]<<str[4]，string str(\"GESP\")长度为4，有效下标0~3，str[4]越界访问，无法正确输出GESP。其余选项均能输出完整字符串\"GESP\"。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -3874,6 +3682,25 @@
         "D. (23|01)==31"
       ],
       "explanation": "按位或运算：23=10111，10=01010，23|10=11111=31✓。B选项23|11=11111=31也对但题库标C。实际C(23|10=31)和D(23|01=23≠31)中C正确。答案C。"
+    },
+    {
+      "file": "dist/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-3-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P1",
+      "reasons": [
+        "stem explicitly references code/program/output/blank but no code is available",
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于一维数组，下列程序能够正确执行的是（ ）。",
+      "options": [
+        "A. `1 int a[10]; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }`",
+        "B. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4",
+        "C. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<10;i++) { 4 ",
+        "D. `1 int a[10]={0}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }"
+      ],
+      "explanation": "A和D的a[10]未初始化且i<=10越界；B的i<=10越界（数组只有10个元素，下标0-9）；C的i<10正确，数组已初始化。答案C。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4017,7 +3844,7 @@
         "C. - 2 * (2 % 4)",
         "D. (2 * 2) % - 4"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "原式等同于((-2)*2)%4=0；选项C为-2*(2%4)=-4，值不同。注意负号优先级高于乘除，取余结果符号与被除数相同，易错选D。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4053,7 +3880,7 @@
         "C. char str2[4] = {'G', 'E', 'S', 'P'}; strcpy(str2, \"HELLO,GESP\"); cout << str2",
         "D. char dest[4] = {'G', 'E', 'S', 'P'}; char src[] = \"HELLO\"; strcat(dest, src);"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C中str2仅4字节，strcpy复制长字符串会导致缓冲区溢出，覆盖相邻内存，引发未定义行为，描述正确。A中sizeof包含'\\0'；B初始化数组长度不足；D中strcat要求dest有结束符且长度不够，均错误。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4071,7 +3898,7 @@
         "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
         "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C++ string 的 empty() 函数在字符串为空时返回 true，非空返回 false。选项 C 将返回值说反，因此错误。其他选项均正确描述 string 成员函数功能。易错：混淆 empty() 返回值逻辑。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4089,7 +3916,7 @@
         "C. $\\texttt{a * b c + * d}$",
         "D. $\\texttt{b + c * a * d}$"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "中缀转后缀：先计算b+c得bc+，然后a乘以该结果得abc+*，最后乘以d得abc+*d*。运算符顺序严格，易错：错写成abc*d*+等。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4107,7 +3934,7 @@
         "C. `(10 != 10) || (5 >= 3)`",
         "D. `(5 == 3) && (4 > 2)`"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C 选项：`(10 != 10)` 为 false，`(5 >= 3)` 为 true，逻辑或 `||` 只要有一个为 true 结果即为 true，因此整个表达式为 true。其他选项：A 有 false && ... 为 false；B"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4125,7 +3952,7 @@
         "C. `int max(a, b) { if (a > b) return a; else return b; }`",
         "D. `void max(a, b) { cout << (a > b ? a : b); }`"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "函数要求返回两个整数中的较大值。A 返回类型为 void 不能返回值；C 参数缺少类型声明；D 返回类型 void 且只输出未返回值。B 正确定义返回 int，参数类型完整，函数体返回较大值。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4143,7 +3970,7 @@
         "C. 没有返回值的函数必须声明为 `void` 类型，且不能包含 `return` 语句",
         "D. C++11 及之后标准要求函数必须显式声明返回类型，不允许默认返回 `int`"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "C++11起必须显式声明返回类型，禁止隐式int，D正确。A：还有引用传递、指针传递；B：形参调用结束后释放；C：void函数可包含return;语句。易误选C，认为void函数不能有return。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4161,7 +3988,7 @@
         "C. `string` 对象在内存中是动态分配空间的，因此可以自动处理字符串长度的变化。",
         "D. `string` 对象和字符数组都可以使用 `==` 运算符来直接比较两个字符串的内容是否相同。"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "`string`重载了`==`用于比较内容，而字符数组名退化为指针，`==`比较地址。A、B、C均正确。易错点：误认为字符数组能直接用`==`比较字符串内容。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4179,7 +4006,7 @@
         "C. 最好情况是 $O(n)$，最坏情况是 $O(2^n)$",
         "D. 最好情况是 $O(n^2)$，最坏情况是 $O(2^n)$"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "插入排序在数组已有序时，每个元素只需与已排序序列的最后一个元素比较一次，时间复杂度为 O(n)；逆序时需比较和移动所有已排序元素，为 O(n²)。易错点：混淆不同排序的最好/最坏复杂度。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4197,7 +4024,7 @@
         "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
         "D. 可以用 `printf` 作为变量名，因为 `printf` 是关键字，但这不是好习惯，因为 `printf` 有约定的功能与含义。"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "for是C++关键字，不可作变量名，A正确。变量名允许以下划线开头，B错误。_tnt_合法，C错误。printf是标准库函数名，非关键字，可作变量名但会覆盖函数，D中'printf是关键字'说法错误。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4215,7 +4042,7 @@
         "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
         "D. 可以用 printf 作为变量名，因为 printf 是关键字，但这不是好习惯，因为 printf 有约定的功能与含义。"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "C++ 变量名不能是关键字，for 是关键字，A 正确。下划线可作为首字符或出现在变量名任意位置，B、C 错误。printf 是库函数名，非关键字，D 错误。注意区分保留字与预定义标识符。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4233,7 +4060,7 @@
         "C. 调用 `min(5)` 是错误的，不能通过编译",
         "D. 调用 `min()`（不传任何参数）可以通过编译，结果为 $0$"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "std::min要求至少两个参数或一个初始化列表，不传参无法编译，故D错误。A正确，函数必须返回；B可嵌套；C单参数错误。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4251,7 +4078,7 @@
         "C. `abs(-1, -2)` 的返回值是 $1$",
         "D. 若传入负数浮点数，`abs()` 会自动截断小数部分后返回整数绝对值"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "C++ 中 abs() 对整数求绝对值，头文件 <cstdlib> 或 <cmath> 均可；浮点数 abs() 返回浮点绝对值，不截断小数。B、C、D 均错误。易错：将 abs() 与四舍五入混淆。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4269,7 +4096,7 @@
         "C. `int *p = &x;`",
         "D. `p = *x;`"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "指针变量声明时必须带星号，且初始化或赋值需用取地址符&获取变量的地址。选项A类型不匹配，B缺少&，D未声明指针且误用解引用。正确写法为`int *p = &x;`。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4287,7 +4114,7 @@
         "C. `~(-3)` 的结果是 $2$（`int` 类型，$32$ 位）",
         "D. `~8` 的结果是 $-9$（`int` 类型，$32$ 位）"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "按位取反公式：~x = -x-1。~0 = -1（所有位为1），不是0，故B错误。A、C、D均符合公式。易错点：误以为0取反还是0。"
     },
     {
       "file": "dist/course-data/unified-quiz-bank.json",
@@ -4305,7 +4132,7 @@
         "C. `struct Point { int x, y; }; Point p = new Point(1,2);`",
         "D. `struct Point { int x, y; }; Point p = <1,2>;`"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "C++中结构体聚合初始化使用花括号{}。A逗号表达式非初始化；C用new返回指针；D尖括号语法不存在。B正确。易错点：误用其他语法。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -4849,24 +4676,6 @@
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
-      "id": "gesp-2024-12-2-14",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "打印三角形星号横线应填入（ ）。",
-      "options": [
-        "A. (height-i),(2*i)",
-        "B. (height),(2*i)",
-        "C. (height-i),(2*i+1)",
-        "D. (height-i-1),(2*i+1)"
-      ],
-      "explanation": "第i行有(height-i-1)个前导空格，2*i+1个星号。"
-    },
-    {
-      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
       "id": "gesp-2024-12-2-15",
       "type": "choice",
       "group": "",
@@ -4957,24 +4766,6 @@
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
-      "id": "gesp-2025-03-2-12",
-      "type": "choice",
-      "group": "",
-      "severity": "P2",
-      "reasons": [
-        "options look like code but stem has no independent code block"
-      ],
-      "question": "验证哥德巴赫猜想（4~1000）关于代码错误说法是（ ）。",
-      "options": [
-        "A. 4可以分解为2+2",
-        "B. 程序需要验证到1000",
-        "C. 每个偶数只需找一组解",
-        "D. break应移到if外"
-      ],
-      "explanation": "break正确位置在if内，找到一组解即退出。"
-    },
-    {
-      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
       "id": "gesp-2025-03-2-14",
       "type": "choice",
       "group": "",
@@ -5044,6 +4835,24 @@
         "D. (N+6)%7"
       ],
       "explanation": "星期六对应6（0=周日），(6+N)%7=(N+6)%7。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-3-03",
+      "type": "choice",
+      "group": "",
+      "severity": "P1",
+      "reasons": [
+        "stem explicitly references code/program/output/blank but no code is available"
+      ],
+      "question": "下⾯C++代码执⾏后不能输出\"GESP\"的是( )。",
+      "options": [
+        "A. `string str(\"GESP\"); cout<<str<<endl;`",
+        "B. `string str=\"GESP\"; cout<<str<<endl;`",
+        "C. `string str(\"GESP\"); cout<<str[1]<<str[2]<<str[3]<<str[4]<<endl;`",
+        "D. `string str{\"GESP\"}; cout<<str<<endl;`"
+      ],
+      "explanation": "C选项cout<<str[1]<<str[2]<<str[3]<<str[4]，string str(\"GESP\")长度为4，有效下标0~3，str[4]越界访问，无法正确输出GESP。其余选项均能输出完整字符串\"GESP\"。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5134,6 +4943,25 @@
         "D. (23|01)==31"
       ],
       "explanation": "按位或运算：23=10111，10=01010，23|10=11111=31✓。B选项23|11=11111=31也对但题库标C。实际C(23|10=31)和D(23|01=23≠31)中C正确。答案C。"
+    },
+    {
+      "file": "dist-dungeon/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-3-12",
+      "type": "choice",
+      "group": "",
+      "severity": "P1",
+      "reasons": [
+        "stem explicitly references code/program/output/blank but no code is available",
+        "options look like code but stem has no independent code block"
+      ],
+      "question": "关于一维数组，下列程序能够正确执行的是（ ）。",
+      "options": [
+        "A. `1 int a[10]; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }`",
+        "B. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4",
+        "C. 1 int a[10]={1,2,3,4,5,6,7,8,9,10}; 2 int sum=0; 3 for(int i=0;i<10;i++) { 4 ",
+        "D. `1 int a[10]={0}; 2 int sum=0; 3 for(int i=0;i<=10;i++) { 4 sum=sum+a[i]; 5 }"
+      ],
+      "explanation": "A和D的a[10]未初始化且i<=10越界；B的i<=10越界（数组只有10个元素，下标0-9）；C的i<10正确，数组已初始化。答案C。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5277,7 +5105,7 @@
         "C. - 2 * (2 % 4)",
         "D. (2 * 2) % - 4"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "原式等同于((-2)*2)%4=0；选项C为-2*(2%4)=-4，值不同。注意负号优先级高于乘除，取余结果符号与被除数相同，易错选D。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5313,7 +5141,7 @@
         "C. char str2[4] = {'G', 'E', 'S', 'P'}; strcpy(str2, \"HELLO,GESP\"); cout << str2",
         "D. char dest[4] = {'G', 'E', 'S', 'P'}; char src[] = \"HELLO\"; strcat(dest, src);"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C中str2仅4字节，strcpy复制长字符串会导致缓冲区溢出，覆盖相邻内存，引发未定义行为，描述正确。A中sizeof包含'\\0'；B初始化数组长度不足；D中strcat要求dest有结束符且长度不够，均错误。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5331,7 +5159,7 @@
         "C. empty() :判断字符串是否为空(非空返回 true ,空返回 false )。",
         "D. s.append(s2, 0, 3); 从 s2 下标 0 开始,截取 3 个字符。"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C++ string 的 empty() 函数在字符串为空时返回 true，非空返回 false。选项 C 将返回值说反，因此错误。其他选项均正确描述 string 成员函数功能。易错：混淆 empty() 返回值逻辑。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5349,7 +5177,7 @@
         "C. $\\texttt{a * b c + * d}$",
         "D. $\\texttt{b + c * a * d}$"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "中缀转后缀：先计算b+c得bc+，然后a乘以该结果得abc+*，最后乘以d得abc+*d*。运算符顺序严格，易错：错写成abc*d*+等。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5367,7 +5195,7 @@
         "C. `(10 != 10) || (5 >= 3)`",
         "D. `(5 == 3) && (4 > 2)`"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "C 选项：`(10 != 10)` 为 false，`(5 >= 3)` 为 true，逻辑或 `||` 只要有一个为 true 结果即为 true，因此整个表达式为 true。其他选项：A 有 false && ... 为 false；B"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5385,7 +5213,7 @@
         "C. `int max(a, b) { if (a > b) return a; else return b; }`",
         "D. `void max(a, b) { cout << (a > b ? a : b); }`"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "函数要求返回两个整数中的较大值。A 返回类型为 void 不能返回值；C 参数缺少类型声明；D 返回类型 void 且只输出未返回值。B 正确定义返回 int，参数类型完整，函数体返回较大值。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5403,7 +5231,7 @@
         "C. 没有返回值的函数必须声明为 `void` 类型，且不能包含 `return` 语句",
         "D. C++11 及之后标准要求函数必须显式声明返回类型，不允许默认返回 `int`"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "C++11起必须显式声明返回类型，禁止隐式int，D正确。A：还有引用传递、指针传递；B：形参调用结束后释放；C：void函数可包含return;语句。易误选C，认为void函数不能有return。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5421,7 +5249,7 @@
         "C. `string` 对象在内存中是动态分配空间的，因此可以自动处理字符串长度的变化。",
         "D. `string` 对象和字符数组都可以使用 `==` 运算符来直接比较两个字符串的内容是否相同。"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "`string`重载了`==`用于比较内容，而字符数组名退化为指针，`==`比较地址。A、B、C均正确。易错点：误认为字符数组能直接用`==`比较字符串内容。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5439,7 +5267,7 @@
         "C. 最好情况是 $O(n)$，最坏情况是 $O(2^n)$",
         "D. 最好情况是 $O(n^2)$，最坏情况是 $O(2^n)$"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "插入排序在数组已有序时，每个元素只需与已排序序列的最后一个元素比较一次，时间复杂度为 O(n)；逆序时需比较和移动所有已排序元素，为 O(n²)。易错点：混淆不同排序的最好/最坏复杂度。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5457,7 +5285,7 @@
         "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
         "D. 可以用 `printf` 作为变量名，因为 `printf` 是关键字，但这不是好习惯，因为 `printf` 有约定的功能与含义。"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "for是C++关键字，不可作变量名，A正确。变量名允许以下划线开头，B错误。_tnt_合法，C错误。printf是标准库函数名，非关键字，可作变量名但会覆盖函数，D中'printf是关键字'说法错误。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5475,7 +5303,7 @@
         "C. `_tnt_` 不可以是变量名，因为最后一个字符容易与减号混淆。",
         "D. 可以用 printf 作为变量名，因为 printf 是关键字，但这不是好习惯，因为 printf 有约定的功能与含义。"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "C++ 变量名不能是关键字，for 是关键字，A 正确。下划线可作为首字符或出现在变量名任意位置，B、C 错误。printf 是库函数名，非关键字，D 错误。注意区分保留字与预定义标识符。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5493,7 +5321,7 @@
         "C. 调用 `min(5)` 是错误的，不能通过编译",
         "D. 调用 `min()`（不传任何参数）可以通过编译，结果为 $0$"
       ],
-      "explanation": "官方答案：D。"
+      "explanation": "std::min要求至少两个参数或一个初始化列表，不传参无法编译，故D错误。A正确，函数必须返回；B可嵌套；C单参数错误。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5511,7 +5339,7 @@
         "C. `abs(-1, -2)` 的返回值是 $1$",
         "D. 若传入负数浮点数，`abs()` 会自动截断小数部分后返回整数绝对值"
       ],
-      "explanation": "官方答案：A。"
+      "explanation": "C++ 中 abs() 对整数求绝对值，头文件 <cstdlib> 或 <cmath> 均可；浮点数 abs() 返回浮点绝对值，不截断小数。B、C、D 均错误。易错：将 abs() 与四舍五入混淆。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5529,7 +5357,7 @@
         "C. `int *p = &x;`",
         "D. `p = *x;`"
       ],
-      "explanation": "官方答案：C。"
+      "explanation": "指针变量声明时必须带星号，且初始化或赋值需用取地址符&获取变量的地址。选项A类型不匹配，B缺少&，D未声明指针且误用解引用。正确写法为`int *p = &x;`。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5547,7 +5375,7 @@
         "C. `~(-3)` 的结果是 $2$（`int` 类型，$32$ 位）",
         "D. `~8` 的结果是 $-9$（`int` 类型，$32$ 位）"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "按位取反公式：~x = -x-1。~0 = -1（所有位为1），不是0，故B错误。A、C、D均符合公式。易错点：误以为0取反还是0。"
     },
     {
       "file": "dist-dungeon/course-data/unified-quiz-bank.json",
@@ -5565,7 +5393,7 @@
         "C. `struct Point { int x, y; }; Point p = new Point(1,2);`",
         "D. `struct Point { int x, y; }; Point p = <1,2>;`"
       ],
-      "explanation": "官方答案：B。"
+      "explanation": "C++中结构体聚合初始化使用花括号{}。A逗号表达式非初始化；C用new返回指针；D尖括号语法不存在。B正确。易错点：误用其他语法。"
     }
   ]
 }

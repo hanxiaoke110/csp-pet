@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { usePetStore } from '../../stores/petStore';
 import { useHatchStore } from '../../stores/hatchStore';
+import { setWorkshopElement, type PetElement } from '../../types/pet';
 import type { HatchRarity } from '../../stores/hatchStore';
 import { BaseDirectory, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
 import HatchConfirmModal from './HatchConfirmModal';
@@ -16,7 +17,7 @@ export function WorkshopShop() {
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [buyingId, setBuyingId] = useState<string | null>(null);
-  const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity } | null>(null);
+  const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity; eggId: string } | null>(null);
   const [filter, setFilter] = useState<'all' | 'rare' | 'legendary'>('all');
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
   const [hasMore, setHasMore] = useState(false);
@@ -33,6 +34,31 @@ export function WorkshopShop() {
         const items = Array.isArray(d) ? d : (d.items || []);
         if (isLoadMore) setPets(prev => [...prev, ...items]);
         else setPets(items);
+        // Cache and repair workshop elements. Legacy pets without nativeElement were
+        // created while every workshop pet was incorrectly treated as fire.
+        items.forEach((pet: any) => { if (pet.id && pet.element) setWorkshopElement(pet.id, pet.element); });
+        const elementById = new Map<string, PetElement>(items
+          .filter((pet: any) => pet.id && ['earth', 'fire', 'wind', 'water', 'light'].includes(pet.element))
+          .map((pet: any) => [`workshop-${pet.id}`, pet.element as PetElement]));
+        if (elementById.size) {
+          const state = usePetStore.getState();
+          let changed = false;
+          const ownedPets = state.ownedPets.map(owned => {
+            const nativeElement = elementById.get(owned.speciesId);
+            if (!nativeElement || owned.nativeElement) return owned;
+            changed = true;
+            return {
+              ...owned,
+              nativeElement,
+              // A legacy pet never had an intentional reforge, so repair its displayed element too.
+              element: owned.freeElementChangeUsed ? owned.element : nativeElement,
+            };
+          });
+          if (changed) {
+            usePetStore.setState({ ownedPets });
+            usePetStore.getState().save();
+          }
+        }
         if (!Array.isArray(d)) { setHasMore(!!d.hasMore); setNextCursor(d.nextCursor); }
       })
       .catch(() => {}).finally(() => { setLoading(false); setLoadingMore(false); });
@@ -47,9 +73,11 @@ export function WorkshopShop() {
     setBuyingId(pet.id);
     try {
     if (!await downloadSprites(pet)) return;
-    spendCoins(pet.price || 200);
+    const cost = pet.price || 200;
+    if (!spendCoins(cost)) return;
     const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
-    setPendingHatch({ pet, rarity });
+    const egg = addEgg('workshop-' + pet.id, pet.name, rarity, cost);
+    setPendingHatch({ pet, rarity, eggId: egg.eggId });
     } finally { setBuyingId(null); }
   };
 
@@ -67,6 +95,7 @@ export function WorkshopShop() {
       await writeFile('pet-sprites/2d/' + petId + '.png', buf, { baseDir: BaseDirectory.AppData });
       let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
       try { if (pet.pet_json) pj = JSON.parse(pet.pet_json); } catch {}
+      pj.element = pet.element || 'fire';
       await writeFile('pet-sprites/2d/' + petId + '.json', new TextEncoder().encode(JSON.stringify(pj)), { baseDir: BaseDirectory.AppData });
       // Generate thumbnail from spritesheet first frame (72×78)
       try {
@@ -145,21 +174,25 @@ export function WorkshopShop() {
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}
         onStart={(customName) => {
-          const egg = addEgg('workshop-' + pendingHatch.pet.id, customName, pendingHatch.rarity);
-          startHatching(egg.eggId);
+          useHatchStore.setState(s => ({
+            eggs: s.eggs.map(egg => egg.eggId === pendingHatch.eggId ? { ...egg, petName: customName } : egg),
+          }));
+          useHatchStore.getState().save();
+          startHatching(pendingHatch.eggId);
           setPendingHatch(null);
           window.dispatchEvent(new CustomEvent('switch-pet-tab', { detail: 'hatch' }));
         }}
         onLater={(customName) => {
-          addEgg('workshop-' + pendingHatch.pet.id, customName, pendingHatch.rarity);
+          useHatchStore.setState(s => ({
+            eggs: s.eggs.map(egg => egg.eggId === pendingHatch.eggId ? { ...egg, petName: customName } : egg),
+          }));
+          useHatchStore.getState().save();
           setPendingHatch(null);
         }}
         onClose={() => {
-          addEgg('workshop-' + pendingHatch.pet.id, pendingHatch.pet.name, pendingHatch.rarity);
           setPendingHatch(null);
         }}
       />}
     </div>
   );
 }
-

@@ -17,6 +17,7 @@ import SettingsPage from './components/settings/SettingsPage';
 import WindowSkinsPage from './components/skins/WindowSkinsPage';
 import AdminPage from './components/admin/AdminPage';
 import LearningResourcesPage from './components/resources/LearningResourcesPage';
+import AnnouncementPage from './components/announcements/AnnouncementPage';
 import DungeonEmbed from '../src-dungeon/DungeonEmbed';
 import { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/utils/routeBridge';
 import { refreshQuestionBankV2 } from './question-bank/repository';
@@ -28,6 +29,8 @@ import { useQuizStore } from './stores/quizStore';
 import { useAIStore } from './stores/aiStore';
 import { migrateLocalStorageToSqlite } from './lib/migration';
 import { loadProblemStatuses } from './lib/problemStatusCache';
+import { nextCheckin } from './utils/checkin';
+import { showDesktopCompanion } from './utils/desktopCompanions';
 import type { Lesson, Stage, LessonsData } from './types/course';
 import './App.css';
 
@@ -97,27 +100,22 @@ function PetActionHandler() {
   return null;
 }
 
-function getWeekKey() {
-  const d = new Date();
-  const jan1 = new Date(d.getFullYear(), 0, 1);
-  const dayOfYear = Math.floor((d.getTime() - jan1.getTime()) / 86400000);
-  return `${d.getFullYear()}-W${Math.ceil((dayOfYear + jan1.getDay() + 1) / 7)}`;
-}
-
 function doCheckinFromPet() {
   try {
-    const thisWeek = getWeekKey();
-    const data = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-    if (data.week === thisWeek) {
+    const checkin = nextCheckin();
+    if (checkin.alreadyChecked) {
       emit('pet-bubble', { text: petCopy.checkinAlready() }).catch(() => {});
       return;
     }
-    let streak = (data.streak || 0) + 1;
+    const streak = checkin.streak;
     let bonus = 50;
-    if (streak % 8 === 0) { bonus = 200; usePetStore.getState().renameCards += 1; }
+    if (streak % 8 === 0) {
+      bonus = 200;
+      usePetStore.setState(s => ({ renameCards: s.renameCards + 1 }));
+    }
     else if (streak % 4 === 0) { bonus = 100; }
     usePetStore.getState().addCoins(bonus);
-    localStorage.setItem('csp_checkin', JSON.stringify({ week: thisWeek, streak }));
+    localStorage.setItem('csp_checkin', JSON.stringify({ week: checkin.week, streak }));
     emit('pet-bubble', { text: petCopy.checkinSuccess(streak, bonus) }).catch(() => {});
     setTimeout(() => usePetStore.getState().save(), 100);
   } catch {
@@ -171,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.18';
+  const VER = '1.7.19';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -182,11 +180,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🖼️ 新增窗口皮肤图鉴，14种场景按学习与试炼进度永久解锁</div>
-          <div>🏯 智子试炼场更新中国奇境副本背景与 Boss 形象</div>
-          <div>🪙 试炼金币接入桌宠金币，并新增提示、回血等试炼补给</div>
-          <div>💬 优化桌宠动画、对话气泡和日常互动体验</div>
-          <div>🛡️ 修复试炼场旧素材缓存及部分程序题显示问题</div>
+          <div>🪙 试炼场与桌宠共用金币，补给购买增加到账和退款保护</div>
+          <div>👥 支持最多三只智子使用独立桌面窗口，可分别拖动位置</div>
+          <div>🐣 修复抽卡、商城与工坊智子的孵化和重启恢复流程</div>
+          <div>🛡️ 旧版本智子、属性、战力、资源和桌面位置自动安全迁移</div>
+          <div>📣 新增班级教师公告与全服公告入口</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -264,6 +262,14 @@ function App() {
       try { usePetStore.getState().applyOfflineHunger(); } catch {}
       // 5. Sync to pet window
       usePetStore.getState().save();
+      // Restore independently positioned desktop companions after an app restart.
+      const companionState = usePetStore.getState();
+      for (const slot of [2, 3] as const) {
+        const petId = companionState.desktopCompanionIds[slot - 2];
+        if (petId && slot <= companionState.companionSlots) {
+          try { await showDesktopCompanion(slot); } catch {}
+        }
+      }
       // 6. Start hunger timer: tick every 15 minutes while app is open
       hungerTimer = setInterval(() => {
         usePetStore.getState().tickHunger();
@@ -491,6 +497,7 @@ function App() {
           <Route path="/exam" element={<ExamTraining />} />
           <Route path="/oj-training" element={<OJTraining />} />
           <Route path="/resources" element={<LearningResourcesPage />} />
+          <Route path="/announcements" element={<AnnouncementPage />} />
           <Route path="/window-skins" element={<WindowSkinsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/admin" element={<AdminPage />} />

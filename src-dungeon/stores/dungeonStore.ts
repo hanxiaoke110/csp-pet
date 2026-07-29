@@ -31,6 +31,9 @@ function todayStr(): string {
 
 const PET_COIN_DAILY_LIMIT = 30;
 const PET_COIN_WEEKLY_LIMIT = 150;
+const TRIAL_PET_EXP_DAILY_LIMIT = 120;
+const FIRST_SS_PLAYER_EXP_BONUS = 15;
+const FIRST_SS_PET_EXP_BONUS = 10;
 
 function defaultTrialInventory(): TrialInventory {
   return { hintTickets: 0, healingPotions: 0, ownedCosmetics: [], equippedTitle: null, equippedAvatarFrame: null };
@@ -313,12 +316,25 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     if (!battle) return null;
     // 保留结算前快照供 RewardScreen 展示
     const snapshot = { ...battle };
+    let earnedRewardsThisBattle = false;
+    const stageIndex = Math.max(0, Number((battle.stageId.match(/stage-0(\d)$/) || [])[1] || 1) - 1);
 
     // 1. 通关奖励（首通倍率）——同步累加到快照，避免结算页少报
     if (battle.isWon) {
-      const isFirstClear = !get()._firstClears[dungeonId];
+      const currentProgress = get().dungeonProgress.find(p => p.dungeonId === dungeonId);
+      const clearKey = `${dungeonId}:${battle.stageId}`;
+      const isFirstClear = isBoss
+        ? !currentProgress?.bossDefeated
+        : currentProgress
+          ? stageIndex >= currentProgress.completedStages
+          : !get()._firstClears[clearKey];
       const mult = isFirstClear ? FIRST_CLEAR_MULTIPLIER : 1;
-      const earnsRewards = get().currentBattleEarnsRewards;
+      // 周次数只限制重复刷取；从未通关的具体关卡始终有首通奖励。
+      const earnsRewards = get().currentBattleEarnsRewards || isFirstClear;
+      earnedRewardsThisBattle = earnsRewards;
+      const ratingExpBonus = earnsRewards && isFirstClear && battle.rating === 'SS'
+        ? FIRST_SS_PLAYER_EXP_BONUS
+        : 0;
       let clearExp = 0;
       let clearGold = 0;
       if (isBoss) {
@@ -329,22 +345,43 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         clearGold = earnsRewards ? STAGE_CLEAR_GOLD * mult : 0;
       }
       const schoolReward = applySchoolClearPassive(get().player.school, { exp: clearExp, gold: clearGold });
-      clearExp = schoolReward.exp;
+      clearExp = schoolReward.exp + ratingExpBonus;
       clearGold = schoolReward.gold;
       if (clearExp > 0) get().addExp(clearExp);
-      if (clearGold > 0) get().addGold(clearGold);
       snapshot.expEarned += clearExp;
       snapshot.goldEarned += clearGold;
+      snapshot.ratingExpBonus = ratingExpBonus;
       if (isFirstClear) {
-        set((s) => ({ _firstClears: { ...s._firstClears, [dungeonId]: true } }));
+        set((s) => ({ _firstClears: { ...s._firstClears, [clearKey]: true } }));
       }
-      // 内部金币用于试炼补给；桌宠金币按固定额度结算并受日/周上限限制，避免重复刷关破坏主商城平衡。
-      const petCoinBase = isBoss ? 12 : 5;
-      const petCoinFirstClearBonus = isFirstClear ? (isBoss ? 8 : 3) : 0;
-      const petCoinReward = get().grantPetCoins(earnsRewards ? petCoinBase + petCoinFirstClearBonus : 0);
+      // All trial gold now settles into the desktop pet wallet. The shared ledger
+      // caps actual grants, so repeated battles cannot inflate the main economy.
+      const petCoinReward = get().grantPetCoins(earnsRewards ? snapshot.goldEarned : 0);
       snapshot.petCoinsEarned = petCoinReward.granted;
       snapshot.petCoinsDailyRemaining = petCoinReward.dailyRemaining;
       snapshot.petCoinsWeeklyRemaining = petCoinReward.weeklyRemaining;
+
+      // Trial reputation remains independent, while successful clears also feed the
+      // desktop pet's shared experience pool. A daily cap keeps repeated farming fair.
+      const today = todayStr();
+      const expLedgerKey = 'dungeon_pet_exp_rewards';
+      let grantedToday = 0;
+      try {
+        const saved = JSON.parse(localStorage.getItem(expLedgerKey) || '{}');
+        grantedToday = saved.date === today ? Number(saved.granted) || 0 : 0;
+      } catch { /* first grant */ }
+      const requestedPetExp = earnsRewards
+        ? (isBoss ? 25 : 10)
+          + (isFirstClear ? 5 : 0)
+          + (isFirstClear && battle.rating === 'SS' ? FIRST_SS_PET_EXP_BONUS : 0)
+        : 0;
+      const grantedPetExp = Math.max(0, Math.min(requestedPetExp, TRIAL_PET_EXP_DAILY_LIMIT - grantedToday));
+      if (grantedPetExp > 0) {
+        const companion = usePetStore.getState().getActivePet();
+        if (companion) usePetStore.getState().addExp(companion.petId, grantedPetExp);
+        try { localStorage.setItem(expLedgerKey, JSON.stringify({ date: today, granted: grantedToday + grantedPetExp })); } catch {}
+      }
+      snapshot.petExpEarned = grantedPetExp;
     }
 
     // 2. 更新副本进度（在徽章检查之前，避免读 stale progress）
@@ -362,7 +399,6 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
           if (isBoss) {
             return { ...p, bossDefeated: true, bestScore: Math.max(p.bestScore, battle.correctCount), bestRating };
           }
-          const stageIndex = Math.max(0, Number((battle.stageId.match(/stage-0(\d)$/) || [])[1] || p.completedStages + 1) - 1);
           const newCompleted = Math.min(Math.max(p.completedStages, stageIndex + 1), p.totalStages);
           const allStagesDone = newCompleted >= p.totalStages;
           const status: DungeonProgress['status'] = allStagesDone ? 'cleared' : 'in_progress';
@@ -384,7 +420,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     if (battle.isWon) {
       const s0 = get();
       import('../utils/api').then(({ reportBattle, syncProgress }) => {
-        if (s0.currentBattleEarnsRewards) {
+        if (earnedRewardsThisBattle) {
           reportBattle({
             dungeon_id: dungeonId,
             stage_id: stageIdForReport,
@@ -538,7 +574,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     if (state.weeklyChallenges.resetAt !== currentWeekStart) {
       set({ weeklyChallenges: { used: 0, limit: 5, resetAt: currentWeekStart } });
     }
-    if (!get().spendGold(cost)) return false;
+    if (!usePetStore.getState().spendCoins(cost)) return false;
     set((s) => ({
       weeklyChallenges: {
         ...s.weeklyChallenges,
@@ -582,7 +618,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     const state = get();
     const isCosmetic = itemId === 'title-data-scout' || itemId === 'frame-crystal';
     if (isCosmetic && state.trialInventory.ownedCosmetics.includes(itemId)) return false;
-    if (!state.spendGold(item.cost)) return false;
+    if (!usePetStore.getState().spendCoins(item.cost)) return false;
     set((s) => {
       if (isCosmetic) {
         return { trialInventory: { ...s.trialInventory, ownedCosmetics: [...s.trialInventory.ownedCosmetics, itemId] } };
@@ -654,7 +690,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       if (nc >= s.healing.requiredCorrect) {
         get().removeWeakPoint(s.healing.knowledgePoint);
         get().addExp(30);
-        get().addGold(20);
+        get().grantPetCoins(20);
         return true;
       }
     } else {
@@ -780,6 +816,16 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       const inventory = localStorage.getItem('dungeon_trial_inventory');
       if (inventory) set({ trialInventory: { ...defaultTrialInventory(), ...JSON.parse(inventory) } });
     } catch { /* ignore trial inventory */ }
+
+    // One-time compatibility migration: old trial-only coins become main wallet
+    // coins before trial supply purchases start using the shared balance.
+    try {
+      const migrationKey = 'csp_trial_gold_wallet_migrated_v1';
+      if (!localStorage.getItem(migrationKey) && get().player.gold > 0) {
+        usePetStore.getState().addCoins(get().player.gold);
+        localStorage.setItem(migrationKey, '1');
+      }
+    } catch { /* keep legacy balance visible if migration storage is unavailable */ }
 
     return hasAny;
   },

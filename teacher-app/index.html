@@ -40,6 +40,14 @@ h3{font-size:15px;margin-bottom:8px}
 .badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
 .badge-active{background:#f0fdf4;color:#16a34a}
 .badge-pending{background:#fef3c7;color:#d97706}
+.announcement-form{display:grid;gap:12px;margin-bottom:16px}
+.announcement-form textarea{min-height:140px;resize:vertical;line-height:1.7}
+.announcement-item{border-left:4px solid #94a3b8}
+.announcement-item.is-pinned{border-left-color:#FF8C00}
+.announcement-content{white-space:pre-wrap;color:#475569;margin:10px 0;line-height:1.7}
+.announcement-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#94a3b8}
+.announcement-scope{padding:2px 7px;border-radius:4px;background:#eff6ff;color:#1d4ed8;font-weight:600}
+.announcement-scope.global{background:#fff7ed;color:#c2410c}
 .login-box{max-width:380px;margin:80px auto}
 .element-btn{padding:10px 16px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;transition:all .15s;text-align:center;flex:1}
 .element-btn:hover{border-color:#fed7aa}
@@ -297,6 +305,7 @@ function Dashboard() {
     if (isAdmin) return [
       { key:'teachers', label:'👥 教师管理' },
       { key:'wishes', label:'💡 许愿管理' },
+      { key:'announcements', label:'📣 公告管理' },
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求收集' },
       { key:'question-bank', label:'✓ 题库质检' },
@@ -304,6 +313,7 @@ function Dashboard() {
     const base = [
       { key:'teachers', label:'📋 班级管理' },
       { key:'wishes', label:'💡 许愿管理' },
+      { key:'announcements', label:'📣 公告管理' },
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求反馈' },
     ];
@@ -564,12 +574,121 @@ function Dashboard() {
     ),
     // ═══ FEEDBACK TAB ═══
     tab === 'feedback' && !loading && React.createElement(FeedbackPanel),
+    tab === 'announcements' && !loading && React.createElement(AnnouncementPanel, { isAdmin }),
     tab === 'question-bank' && !loading && React.createElement(QuestionBankPanel),
     // ═══ PERMISSION-GATED TABS ═══
     tab === 'qianlong' && !loading && React.createElement(QianLongPanel),
     // ═══ WORKSHOP TABS ═══
     tab==='workshop-import' ? React.createElement(ImportPanel, { onCreated:loadWorkshopPets }) : null,
     tab==='workshop-my' ? React.createElement(MyPetsPanel, { pets:workshopPets, onRefresh:loadWorkshopPets }) : null,
+  );
+}
+
+function AnnouncementPanel({ isAdmin }) {
+  const [items, setItems] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
+  const [editingId, setEditingId] = React.useState(null);
+  const [title, setTitle] = React.useState('');
+  const [content, setContent] = React.useState('');
+  const [pinned, setPinned] = React.useState(false);
+  const base = isAdmin ? '/api/admin/announcements' : '/api/teacher/announcements';
+
+  async function load() {
+    setLoading(true);
+    const data = await api(base);
+    if (data.error) toast(data.error, 'error');
+    else setItems(Array.isArray(data.items) ? data.items : []);
+    setLoading(false);
+  }
+
+  React.useEffect(() => { load(); }, [isAdmin]);
+
+  function resetForm() {
+    setEditingId(null);
+    setTitle('');
+    setContent('');
+    setPinned(false);
+  }
+
+  function edit(item) {
+    setEditingId(item.id);
+    setTitle(item.title || '');
+    setContent(item.content || '');
+    setPinned(!!item.pinned);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function save() {
+    const cleanTitle = title.trim();
+    const cleanContent = content.trim();
+    if (!cleanTitle || !cleanContent) return toast('标题和内容不能为空', 'error');
+    setSaving(true);
+    const data = await api(editingId ? `${base}/${editingId}` : base, {
+      method: editingId ? 'PUT' : 'POST',
+      body: JSON.stringify({ title: cleanTitle, content: cleanContent, pinned }),
+    });
+    setSaving(false);
+    if (data.error) return toast(data.error, 'error');
+    toast(editingId ? '公告已更新' : '公告已发布');
+    resetForm();
+    load();
+  }
+
+  async function remove(item) {
+    if (!confirm(`确认删除公告“${item.title}”？`)) return;
+    const data = await api(`${base}/${item.id}`, { method:'DELETE' });
+    if (data.error) return toast(data.error, 'error');
+    toast('公告已删除');
+    if (editingId === item.id) resetForm();
+    load();
+  }
+
+  return React.createElement('div', null,
+    React.createElement('div', { className:'card' },
+      React.createElement('div', { className:'row', style:{ alignItems:'flex-start', marginBottom:12 } },
+        React.createElement('div', null,
+          React.createElement('h3', null, editingId ? '编辑公告' : (isAdmin ? '发布全服公告' : '发布教师公告')),
+          React.createElement('div', { style:{ fontSize:12, color:'#64748b' } },
+            isAdmin
+              ? '管理员发布的内容会展示给所有学生。下方也可查看并管理教师公告。'
+              : '绑定你名下任意班级码的学生都会看到，无需给每个班重复发布。'),
+        ),
+        editingId && React.createElement('button', { className:'btn btn-outline btn-sm', onClick:resetForm }, '取消编辑'),
+      ),
+      React.createElement('div', { className:'announcement-form' },
+        React.createElement('input', { className:'input', maxLength:120, value:title, onChange:e=>setTitle(e.target.value), placeholder:'公告标题' }),
+        React.createElement('textarea', { className:'input', maxLength:8000, value:content, onChange:e=>setContent(e.target.value), placeholder:'填写学生需要看到的公告内容' }),
+        React.createElement('div', { className:'row' },
+          React.createElement('label', { style:{ display:'flex', alignItems:'center', gap:7, fontSize:13, cursor:'pointer' } },
+            React.createElement('input', { type:'checkbox', checked:pinned, onChange:e=>setPinned(e.target.checked) }),
+            '置顶公告',
+          ),
+          React.createElement('button', { className:'btn btn-primary', disabled:saving, onClick:save }, saving ? '保存中...' : (editingId ? '保存修改' : '发布公告')),
+        ),
+      ),
+    ),
+    loading
+      ? React.createElement('div', { className:'spinner' })
+      : items.length === 0
+        ? React.createElement('div', { className:'empty' }, '还没有公告')
+        : items.map(item => React.createElement('div', { key:item.id, className:`card announcement-item ${item.pinned ? 'is-pinned' : ''}` },
+            React.createElement('div', { className:'row', style:{ alignItems:'flex-start' } },
+              React.createElement('div', { style:{ minWidth:0, flex:1 } },
+                React.createElement('h3', null, item.pinned ? '📌 ' : '', item.title),
+                React.createElement('div', { className:'announcement-meta' },
+                  React.createElement('span', { className:`announcement-scope ${item.scope === 'global' ? 'global' : ''}` },
+                    item.scope === 'global' ? '全服公告' : `${item.teacher_name || '教师'}公告`),
+                  React.createElement('span', null, item.published_at || ''),
+                ),
+              ),
+              React.createElement('div', { style:{ display:'flex', gap:6 } },
+                React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>edit(item) }, '编辑'),
+                React.createElement('button', { className:'btn btn-danger btn-sm', onClick:()=>remove(item) }, '删除'),
+              ),
+            ),
+            React.createElement('div', { className:'announcement-content' }, item.content),
+          )),
   );
 }
 

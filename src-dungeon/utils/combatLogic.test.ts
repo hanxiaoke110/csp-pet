@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateDamage, getElementMultiplier, determineFirstAttacker, resolveEnemyIntent } from './combatLogic';
+import { calculateDamage, calculateTrialPlayerStats, getElementMultiplier, determineFirstAttacker, resolveEnemyIntent } from './combatLogic';
 import { PetElement } from '../../src/types/pet';
 
 const makePet = (element: PetElement, attack: number, defense: number, speed: number) => ({
@@ -75,5 +75,17 @@ describe('先手判定', () => {
     const player = makePet('fire', 10, 5, 12);
     const enemy = makePet('water', 10, 5, 8);
     expect(determineFirstAttacker(player, enemy)).toBe('player');
+  });
+});
+
+describe('试炼场智子成长', () => {
+  it('相同试炼等级下，智子升级会提高实际战斗属性', () => {
+    const base = { maxHp: 80, attack: 12, defense: 8, speed: 8 };
+    const level1 = calculateTrialPlayerStats(base, 1, 3, 1);
+    const level2 = calculateTrialPlayerStats(base, 1, 3, 2);
+
+    expect(level2.attack).toBeGreaterThan(level1.attack);
+    expect(level2.defense).toBeGreaterThan(level1.defense);
+    expect(level2.maxHp).toBeGreaterThan(level1.maxHp);
   });
 });

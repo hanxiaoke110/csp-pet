@@ -60,6 +60,8 @@ export default function ProblemViewer({ problem, sectionType }: Props) {
     // Notify pet: celebrate!
     emit('pet-anim', { anim: 'celebrate', duration: 3000 }).catch(() => {});
     emit('pet-bubble', { text: petCopy.courseUnderstood() }).catch(() => {});
+    // Notify achievements panel to refresh
+    window.dispatchEvent(new CustomEvent('problem-status-changed'));
   };
 
   const trackCompletion = () => {

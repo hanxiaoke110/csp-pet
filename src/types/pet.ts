@@ -43,6 +43,12 @@ export interface OwnedPet {
   petName: string;
   speciesId: string;
   element: PetElement;
+  /** Source element supplied by the species/workshop catalogue. Never overwritten by reforge. */
+  nativeElement?: PetElement;
+  /** Every pet, including pets created before this release, receives one free reforge. */
+  freeElementChangeUsed?: boolean;
+  acquisitionSource?: 'starter' | 'shop' | 'gacha' | 'workshop' | 'legacy';
+  acquisitionCost?: number;
   renderType: RenderType;
   modelPath: string;
   tier?: string;
@@ -57,6 +63,13 @@ export interface OwnedPet {
   updatedAt?: string;
   battle?: BattleStats;
   expPool?: number;
+}
+
+export interface RecycledPet {
+  pet: OwnedPet;
+  recycledAt: string;
+  returnedExp: number;
+  returnedCoins: number;
 }
 
 export interface ShopItem {
@@ -242,6 +255,13 @@ function buildShop(): ShopItem[] {
 
 export const ALL_SHOP_ITEMS: ShopItem[] = buildShop();
 
+// Workshop pet element cache — populated when workshop pets load from API
+const workshopElementCache: Record<string, string> = {};
+
+export function setWorkshopElement(id: string, element: string) {
+  workshopElementCache[id] = element;
+}
+
 // Helper to get pet info from speciesId
 export function getPetConfig(speciesId: string): { renderType: RenderType; modelPath: string; element: PetElement } | null {
   const starter = STARTER_PETS.find(s => s.speciesId === speciesId);
@@ -254,7 +274,8 @@ export function getPetConfig(speciesId: string): { renderType: RenderType; model
   // Note: pet.id from API already has ws- prefix, so wsId = id (no extra ws-)
   if (speciesId.startsWith('workshop-')) {
     const wsId = speciesId.replace('workshop-', '');
-    return { renderType: '2d', modelPath: '/pet-sprites/2d/' + wsId + '.json', element: 'fire' };
+    const element = (workshopElementCache[wsId] || 'fire') as PetElement;
+    return { renderType: '2d', modelPath: '/pet-sprites/2d/' + wsId + '.json', element };
   }
 
   return null;
@@ -286,4 +307,3 @@ export const TIER_MULTIPLIERS: Record<PetTier, number> = {
   rare: 1.3,
   legendary: 1.6,
 };
-
