@@ -6,6 +6,7 @@ use tauri::menu::{MenuBuilder, MenuItemBuilder};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::Emitter;
 use tauri::Manager;
+use tauri::{WebviewUrl, WebviewWindowBuilder};
 
 #[tauri::command]
 fn toggle_pet_window(app: tauri::AppHandle) -> String {
@@ -50,6 +51,51 @@ fn hide_pet_window(app: tauri::AppHandle) {
             serde_json::json!({ "visible": false }),
         );
     }
+}
+
+fn companion_label(slot: u8) -> Result<String, String> {
+    match slot {
+        2 | 3 => Ok(format!("pet-{slot}")),
+        _ => Err("只支持第 2 或第 3 个桌面智子位置".into()),
+    }
+}
+
+#[tauri::command]
+fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
+    let label = companion_label(slot)?;
+    if let Some(window) = app.get_webview_window(&label) {
+        window.show().map_err(|error| error.to_string())?;
+        window.set_focus().map_err(|error| error.to_string())?;
+        return Ok(());
+    }
+
+    let x = if slot == 2 { 180.0 } else { 360.0 };
+    WebviewWindowBuilder::new(
+        &app,
+        &label,
+        WebviewUrl::App(format!("pet.html?slot={slot}").into()),
+    )
+    .title(format!("CSP Pet {slot}"))
+    .inner_size(154.0, 154.0)
+    .position(x, 160.0)
+    .resizable(false)
+    .decorations(false)
+    .transparent(true)
+    .always_on_top(true)
+    .skip_taskbar(true)
+    .shadow(false)
+    .build()
+    .map_err(|error| format!("创建第 {slot} 个桌面智子窗口失败：{error}"))?;
+    Ok(())
+}
+
+#[tauri::command]
+fn hide_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
+    let label = companion_label(slot)?;
+    if let Some(window) = app.get_webview_window(&label) {
+        window.hide().map_err(|error| error.to_string())?;
+    }
+    Ok(())
 }
 
 #[tauri::command]
@@ -172,6 +218,8 @@ pub fn run() {
             toggle_pet_window,
             show_pet_window,
             hide_pet_window,
+            show_desktop_companion,
+            hide_desktop_companion,
             // courses
             commands::courses::get_course_version,
             commands::courses::set_course_version,

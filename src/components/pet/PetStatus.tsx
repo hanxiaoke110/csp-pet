@@ -38,6 +38,8 @@ export default function PetStatus({
   viewingPetId, setViewingPetId, openGroups, setOpenGroups,
   switchTarget, setSwitchTarget, renameCards, setRenameInput, setRenameModal, showToast,
 }: Props) {
+  const [pendingElement, setPendingElement] = useState<PetElement | null>(null);
+  const [launchingSlot, setLaunchingSlot] = useState<2 | 3 | null>(null);
   const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool } = usePetStore();
   const claimPendingRewards = usePetStore(s => s.claimPendingRewards);
   const weeklyTaskDone = useQuizStore(s => s.weeklyTaskDone);
@@ -108,8 +110,16 @@ export default function PetStatus({
                     const isSelected = p.petId === viewingPetId;
                     return (
                       <div key={p.petId}
+                        role="button"
+                        tabIndex={0}
                         className={`pet-mini-card ${isActive ? 'active' : ''} ${isSelected ? 'selected' : ''}`}
-                        onClick={() => setViewingPetId(p.petId)}>
+                        onClick={() => setViewingPetId(p.petId)}
+                        onKeyDown={event => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            setViewingPetId(p.petId);
+                          }
+                        }}>
                         <div className="pet-mini-preview">
                           {p.speciesId.startsWith('workshop-') ? (
                             React.createElement(WorkshopThumb, { modelPath: p.modelPath })
@@ -143,7 +153,7 @@ export default function PetStatus({
             {([2, 3] as const).filter(slot => slot <= companionSlots).map(slot => {
               const assigned = desktopCompanionIds[slot - 2] === displayPet.petId;
               return (
-                <button key={slot} onClick={async () => {
+                <button key={slot} disabled={launchingSlot !== null} onClick={async () => {
                   if (assigned) {
                     setDesktopCompanion(slot, null);
                     await hideDesktopCompanion(slot);
@@ -151,11 +161,17 @@ export default function PetStatus({
                     return;
                   }
                   if (!setDesktopCompanion(slot, displayPet.petId)) { showToast('该智子已在其他桌面位置，或位置不可用'); return; }
-                  const shown = await showDesktopCompanion(slot);
-                  if (!shown) setDesktopCompanion(slot, null);
-                  showToast(shown ? `${displayPet.petName} 已出现在独立桌面窗口` : '桌面窗口创建失败，请重试');
-                }} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #a78bfa', color: '#6d28d9', background: assigned ? '#ede9fe' : '#fff', cursor: 'pointer', fontSize: 11 }}>
-                  {assigned ? `收回桌面伙伴 ${slot}` : `设为桌面伙伴 ${slot}`}
+                  setLaunchingSlot(slot);
+                  try {
+                    const shown = await showDesktopCompanion(slot);
+                    if (!shown) setDesktopCompanion(slot, null);
+                    else usePetStore.getState().save();
+                    showToast(shown ? `${displayPet.petName} 已出现在独立桌面窗口` : '桌面窗口启动失败，位置未占用，请重试');
+                  } finally {
+                    setLaunchingSlot(null);
+                  }
+                }} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #a78bfa', color: '#6d28d9', background: assigned ? '#ede9fe' : '#fff', cursor: launchingSlot ? 'wait' : 'pointer', fontSize: 11 }}>
+                  {launchingSlot === slot ? '正在启动…' : assigned ? `收回桌面伙伴 ${slot}` : `设为桌面伙伴 ${slot}`}
                 </button>
               );
             })}
@@ -258,15 +274,53 @@ export default function PetStatus({
               {([
                 ['earth', '🟫 地'], ['fire', '🔴 火'], ['wind', '🟢 风'], ['water', '🔵 水'], ['light', '🌟 光'],
               ] as [PetElement, string][]).map(([element, label]) => (
-                <button key={element} disabled={displayPet.element === element} onClick={() => {
-                  const result = reforgeElement(displayPet.petId, element);
-                  showToast(result.ok ? `${displayPet.petName} 已调整为${label}属性${result.cost ? `，消耗 ${result.cost} 金币` : '，已使用免费机会'}` : result.message || '修改失败');
-                }} style={{ border: '1px solid #bfdbfe', borderRadius: 5, background: displayPet.element === element ? '#dbeafe' : '#fff', padding: '4px 7px', cursor: 'pointer' }}>
+                <button key={element} disabled={displayPet.element === element} onClick={() => setPendingElement(element)}
+                  style={{ border: '1px solid #bfdbfe', borderRadius: 5, background: displayPet.element === element ? '#dbeafe' : '#fff', padding: '4px 7px', cursor: 'pointer' }}>
                   {label}
                 </button>
               ))}
             </div>
           </div>
+
+          {pendingElement && (() => {
+            const labels: Record<PetElement, string> = {
+              earth: '🟫 地', fire: '🔴 火', wind: '🟢 风', water: '🔵 水', light: '🌟 光',
+            };
+            const cost = displayPet.freeElementChangeUsed ? 200 : 0;
+            return (
+              <div className="gacha-overlay" onClick={() => setPendingElement(null)}>
+                <div className="buy-confirm-modal" onClick={event => event.stopPropagation()}>
+                  <div className="buy-confirm-header">
+                    <span>🌈 确认属性重铸</span>
+                    <button className="ai-modal-close" onClick={() => setPendingElement(null)}>✕</button>
+                  </div>
+                  <div style={{ padding: '18px 20px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 14, color: '#334155', lineHeight: 1.7 }}>
+                      将「{displayPet.petName}」从 {labels[displayPet.element]} 修改为
+                    </div>
+                    <div style={{ fontSize: 24, fontWeight: 800, margin: '10px 0', color: '#6d28d9' }}>
+                      {labels[pendingElement]}
+                    </div>
+                    <div style={{ fontSize: 13, color: cost ? '#b45309' : '#15803d', fontWeight: 700 }}>
+                      {cost ? `本次消耗 ${cost} 金币` : '本次使用免费修改机会'}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 8 }}>确认后立即生效，请核对属性。</div>
+                  </div>
+                  <div className="buy-confirm-actions">
+                    <button className="mode-btn mode-btn-back" onClick={() => setPendingElement(null)}>取消</button>
+                    <button className="mode-btn" onClick={() => {
+                      const target = pendingElement;
+                      setPendingElement(null);
+                      const result = reforgeElement(displayPet.petId, target);
+                      showToast(result.ok
+                        ? `${displayPet.petName} 已调整为${labels[target]}属性${result.cost ? `，消耗 ${result.cost} 金币` : '，已使用免费机会'}`
+                        : result.message || '修改失败');
+                    }}>确认修改{cost ? ` · 🪙 ${cost}` : ''}</button>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
           {autoFeederOwned && (
             <label style={{ display: 'flex', alignItems: 'center', gap: 7, margin: '8px 0', fontSize: 12, color: '#166534' }}>

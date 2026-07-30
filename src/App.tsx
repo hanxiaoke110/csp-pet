@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.19';
+  const VER = '1.7.20';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,11 +180,9 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🪙 试炼场与桌宠共用金币，补给购买增加到账和退款保护</div>
-          <div>👥 支持最多三只智子使用独立桌面窗口，可分别拖动位置</div>
-          <div>🐣 修复抽卡、商城与工坊智子的孵化和重启恢复流程</div>
-          <div>🛡️ 旧版本智子、属性、战力、资源和桌面位置自动安全迁移</div>
-          <div>📣 新增班级教师公告与全服公告入口</div>
+          <div>🌈 属性重铸增加二次确认，修改前明确显示目标属性和金币费用</div>
+          <div>👥 修复第二、第三只智子点击后桌面窗口可能无法启动的问题</div>
+          <div>⏳ 桌面伙伴启动时增加状态反馈，失败会自动回滚位置</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
