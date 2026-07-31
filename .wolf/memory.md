@@ -1,3 +1,18 @@
+## 2026-07-31 — v1.7.21 数据备份 + 交互修复
+
+### 本次内容
+- 数据备份：设置页一键导出/导入（localStorage + SQLite + AppData 精灵素材），换机迁移；`src/lib/backup.ts` + `src-tauri/src/commands/backup.rs`（tauri-plugin-dialog 原生对话框，tmp+rename 原子写，Windows rename 需先删目标）
+- 公告页改折叠式（AnnouncementPage.tsx 重写）；版本公告脚本 `scripts/post-release-announcements.sh`（ADMIN_TOKEN = `csp-teacher-2026`，见 docs/superpowers/specs/cf-config.md）
+- macOS WKWebView `window.confirm` 静默失效 → 全部改用应用内 `ConfirmModal`（回收站/拆解/解锁伙伴位/商城特殊道具）
+- 抽卡翻牌动画；自动喂食器购买/开启/启动时立即 runAutoFeeder；伙伴窗口 slot 改用窗口标签识别（URL query 不可靠）；WorkshopThumb 缩略图自愈
+
+### 发版记录（v1.7.21）
+- Gitee 旧 token（ae707fc…）已失效，新 token 由用户提供；推送时若遇 127.0.0.1:7897 代理未开，用 `git -c http.proxy= -c https.proxy= push`
+- **Gitee 仓库附件配额 1GB**：3 个包装不下 4 个 Release，传 Windows 包时报"超出仓库附件配额"→ 删除 v1.7.18/v1.7.19 旧 Release 后重传成功。下次发版前先删旧 Release
+- Gitee raw 的 update.json 有几分钟缓存，推送后稍等再验证
+- 公告按 published_at 倒序展示，脚本要先发旧版本再发新版本（中间 sleep 3s）
+- update.json 已推送：三平台全部 Gitee URL，学生端自动更新已生效
+
 ## 2026-07-26 — v1.7.17 最终发版流程
 
 ### 完整发版 Checklist
