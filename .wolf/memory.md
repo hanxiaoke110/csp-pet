@@ -1,3 +1,16 @@
+## 2026-08-01 — v1.7.22 回收站返还 + 伙伴反馈 + dialog ACL
+
+### 本次内容
+- 回收站金币返还恒 0 修复：`estimateAcquisitionCost` 按稀有度回填（TIER_PRICES：普通150/稀有260/传说500），load() 同时回填 ownedPets 和已回收记录（petStore.ts）
+- 第二/第三桌面伙伴点击冒泡回应（PetWindow 去掉 slot===1 的对话限制；此前无反馈导致连点误触双击回位，被报为"闪烁"）
+- **dialog ACL 坑**：Rust 注册 `tauri_plugin_dialog` 后，Tauri 会把 `window.alert()` 转发为 `plugin:dialog|message` 命令，capabilities 不含 `dialog:default` 时每次 alert 都弹 ACL 红条。注册 dialog 插件必须同时补 capabilities
+- 知识卡大审计：21 卡位中 16 篇插图错位（图片洗牌），3 个知识点（控制结构/数组与字符串/程序阅读）无卡。修正命令：`docs +media-upload` 拿 file_token → `block_replace` img 块（`<img src="token"/>`）；media-upload 只上传不替换块内容。lark-cli 用户身份走 device flow 授权
+- 新增 3 张知识卡（生图提示词在 reports/new-card-prompts/，吉祥物为"小麒麟"）
+
+### 发版记录（v1.7.22）
+- GitHub 网络抖动时 `git -c http.version=HTTP/1.1 push` 可解决 HTTP2 framing 错误
+- Gitee 附件配额这次没删旧版也够（v1.7.20/21/22 共 ~840MB < 1GB）；下版发版前需删 v1.7.20
+
 ## 2026-07-31 — v1.7.21 数据备份 + 交互修复
 
 ### 本次内容
