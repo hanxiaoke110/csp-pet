@@ -1,7 +1,7 @@
 {
   "_note": "21/21 知识点已填入 feishuCardUrl。飞书文档由 lark-cli --as user 创建。生图由 Codex 负责。",
   "version": 1,
-  "updated": "2026-07-10",
+  "updated": "2026-07-31",
   "totalNavigationUrl": "https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg",
   "totalNavigationTitle": "智子学习资料库｜CSP 学习导航",
   "items": [
@@ -199,8 +199,8 @@
       "summary": "贪心策略：每步选局部最优。适用范围与证明方法。典型问题：找零钱、活动选择、区间调度。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/DYMOdLnySoLxoQxsUXUcgM27nz2",
       "feishuCardTitle": "知识卡｜贪心算法",
-      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/HvB7dvF7zojkl1xWoQbcnlW8nxc",
-      "feishuLectureTitle": "专题讲解｜贪心算法：3个经典区间问题",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/QGkXdQJlRogJzZxMMoqc7u1nnWf",
+      "feishuLectureTitle": "专题讲解｜常见贪心算法类型",
       "existingQuizKps": [],
       "prerequisiteIds": [
         "sorting-and-searching"
@@ -217,8 +217,8 @@
       "summary": "二分查找的前提与实现。边界条件的处理。二分答案：在单调性上二分枚举答案。",
       "feishuCardUrl": "https://scncdgmg7m6w.feishu.cn/docx/OiVedCjFeoETprxQd6ZcZMLfnJe",
       "feishuCardTitle": "知识卡｜二分查找与二分答案",
-      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/OZh2d0njzo6ybJx7x7PcuGeVnDf",
-      "feishuLectureTitle": "专题讲解｜二分答案",
+      "feishuLectureUrl": "https://scncdgmg7m6w.feishu.cn/docx/IMSPdsW2aoyMV2xRVkqc2mStnAf",
+      "feishuLectureTitle": "专题讲解｜二分查找的边界分析",
       "existingQuizKps": [
         "排序与查找"
       ],

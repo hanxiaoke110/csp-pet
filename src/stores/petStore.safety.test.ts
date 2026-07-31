@@ -227,4 +227,31 @@ describe('孵化与旧版本升级', () => {
     expect(saved.ownedPets).toHaveLength(2);
     expect(saved.coins).toBe(4_321);
   });
+
+  it('旧存档缺失 acquisitionCost 时按商城价回填，回收站金币返还不为 0', async () => {
+    const shopPet = makePet('shop-1', 'peach', 3);
+    const starterPet = makePet('starter-1', 'capi', 1);
+    const workshopLegend = { ...makePet('ws-1', 'workshop-ws-abc', 5), tier: 'legendary' as const };
+    localStorage.setItem('csp_pet_data', JSON.stringify({
+      ownedPets: [shopPet, starterPet, workshopLegend],
+      activePetId: 'shop-1',
+      coins: 500,
+      recycledPets: [
+        { pet: makePet('old-1', 'peach', 2), recycledAt: '2026-01-01T00:00:00.000Z', returnedExp: 100, returnedCoins: 0 },
+        { pet: { ...makePet('old-2', 'workshop-ws-xyz', 4), tier: 'rare' }, recycledAt: '2026-01-01T00:00:00.000Z', returnedExp: 80, returnedCoins: 0 },
+      ],
+      gachaRewardMigrationDone: true,
+    }));
+
+    await usePetStore.getState().load();
+
+    const state = usePetStore.getState();
+    // 商城普通精灵按 TIER_PRICES.common = 150 回填；免费初始智子保持 0
+    expect(state.ownedPets.find(p => p.petId === 'shop-1')?.acquisitionCost).toBe(150);
+    expect(state.ownedPets.find(p => p.petId === 'starter-1')?.acquisitionCost).toBe(0);
+    // 非商城精灵按稀有度定价：传说 500、稀有 260
+    expect(state.ownedPets.find(p => p.petId === 'ws-1')?.acquisitionCost).toBe(500);
+    expect(state.recycledPets[0].returnedCoins).toBe(75);
+    expect(state.recycledPets[1].returnedCoins).toBe(130);
+  });
 });

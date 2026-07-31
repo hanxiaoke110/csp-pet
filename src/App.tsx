@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.21';
+  const VER = '1.7.22';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,13 +180,10 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>💾 新增数据备份：一键导出/导入，换电脑再也不怕丢数据</div>
-          <div>🎰 灵犀抽卡新增翻牌动画，稀有度一目了然</div>
-          <div>🛒 经验胶囊、进阶核心、自动喂食器购买前增加确认弹窗</div>
-          <div>🗑 回收站、解锁桌面伙伴位置增加确认弹窗，不再误触</div>
-          <div>🤖 修复自动喂食器在饱食已低于 40 时不触发的问题</div>
-          <div>👥 修复第二、第三桌面伙伴窗口不显示的问题</div>
-          <div>🖼 修复早期购买的工坊智子卡片显示红圈的问题</div>
+          <div>🪙 修复智子回收站金币返还一直为 0 的问题，按稀有度估价返还</div>
+          <div>💬 第二、第三桌面伙伴点击后会冒泡回应，不再"没反应"</div>
+          <div>🔔 修复设置页/工坊弹窗报 dialog not allowed 错误</div>
+          <div>📚 修正贪心、二分查找知识点的专题讲解链接</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

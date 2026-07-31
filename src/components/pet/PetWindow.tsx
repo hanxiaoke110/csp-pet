@@ -318,7 +318,9 @@ export default function PetWindow() {
     window.__petTrigger__?.('interact');
     const nextCount = clickCount + 1;
     setClickCount(nextCount);
-    if (activePet && desktopSlot === 1) {
+    // 点击反馈对所有桌面位置开放：第二/第三伙伴被点击时也会冒泡回应，
+    // 否则孩子得不到反馈会连续点击，误触发双击回位（窗口跳动像闪烁）。
+    if (activePet) {
       const line = dialogue.current.nextClick({
         hunger: activePet.hunger, mood: activePet.mood, hour: new Date().getHours(), clickCount: nextCount,
       });

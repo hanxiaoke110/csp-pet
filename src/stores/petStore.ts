@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
-import type { OwnedPet, PetElement, RecycledPet } from '../types/pet';
-import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS } from '../types/pet';
+import type { OwnedPet, PetElement, PetTier, RecycledPet } from '../types/pet';
+import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS, TIER_PRICES } from '../types/pet';
 import type { ShopItem } from '../types/pet';
 import { calculateStats } from '../../src-dungeon/utils/combatLogic';
 import { validatePetName } from '../utils/validateName';
@@ -130,6 +130,20 @@ function cumulativePetExp(pet: OwnedPet): number {
     required = Math.floor(required * 1.3);
   }
   return total + pet.exp;
+}
+
+// 估算老数据的获取成本：早期记录的 acquisitionCost 为 0，
+// 导致回收站金币返还恒为 0。优先取商城标价；其余按稀有度定价
+// （与商城 TIER_PRICES 一致：普通 150 / 稀有 260 / 传说 500）。
+function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acquisitionCost?: number }): number {
+  if (pet.acquisitionCost) return pet.acquisitionCost;
+  if (pet.speciesId && STARTER_PETS.some(s => s.speciesId === pet.speciesId)) return 0;
+  const shopItem = pet.speciesId
+    ? ALL_SHOP_ITEMS.find(i => i.itemType === 'pet' && i.speciesId === pet.speciesId)
+    : undefined;
+  if (shopItem) return shopItem.price;
+  const tier = (pet.tier as PetTier | undefined) || (pet.speciesId ? getPetTier(pet.speciesId) : 'common');
+  return TIER_PRICES[tier] ?? TIER_PRICES.common;
 }
 
 function elementLabel(element: PetElement): string {
@@ -928,8 +942,14 @@ export const usePetStore = create<PetState>((set, get) => ({
             element: p.element || config?.element || 'fire',
             freeElementChangeUsed: p.freeElementChangeUsed ?? false,
             acquisitionSource: p.acquisitionSource || 'legacy',
-            acquisitionCost: p.acquisitionCost ?? 0,
+            acquisitionCost: estimateAcquisitionCost(p),
           };
+        });
+        // 回收站里已存在的记录同样回填金币返还（此前因成本为 0 恒显示 0 金币）
+        const migratedRecycled = (data.recycledPets || []).map((r: any) => {
+          if (r?.returnedCoins) return r;
+          const cost = estimateAcquisitionCost(r?.pet || {});
+          return { ...r, returnedCoins: Math.floor(cost * 0.5) };
         });
         // Ensure every loaded pet has battle stats for 智子试炼场
         const loadedPets = migrated.map((p: any) => get().ensureBattleStats(p));
@@ -988,7 +1008,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           expShopDate: data.expShopDate || '',
           expCapsuleBought: data.expCapsuleBought || 0,
           expCoreBought: data.expCoreBought || 0,
-          recycledPets: data.recycledPets || [],
+          recycledPets: migratedRecycled,
           companionSlots,
           desktopCompanionIds,
         });
