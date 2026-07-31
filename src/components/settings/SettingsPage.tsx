@@ -1,9 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type CSSProperties } from 'react';
+import { getVersion } from '@tauri-apps/api/app';
 import { useAIStore } from '../../stores/aiStore';
 import { usePetStore } from '../../stores/petStore';
 import { AI_MODELS, type AIProvider } from '../../types/ai';
 import { getDeviceId } from '../../utils/crypto';
 import { clearClassAccessCache, markClassAccessChecked } from '../access/ClassAccessGate';
+import ConfirmModal from '../pet/ConfirmModal';
+import {
+  pickBackupFile, parseBackup, exportBackup, snapshotCurrentToAppData, applyBackup,
+  compareVersions, type BackupFile, type ApplyResult,
+} from '../../lib/backup';
 import UpdateChecker from './UpdateChecker';
 
 const API = 'https://api.cspstudy.top';
@@ -121,6 +127,12 @@ export default function SettingsPage() {
         <h3>🏕️ 集训模式</h3>
         <p className="settings-desc">输入教师提供的激活码，开启 12 天集训模式：所有奖励 ×1.5，每日额外 3 份食物，超级挑战每日可完成 1 次</p>
         <TrainingCampSection />
+      </div>
+
+      <div className="settings-section">
+        <h3>💾 数据备份</h3>
+        <p className="settings-desc">换电脑或重装前，先导出备份文件（含智子、金币、课程进度和精灵素材），在新电脑上导入即可恢复全部数据</p>
+        <BackupSection />
       </div>
 
       <UpdateChecker />
@@ -345,6 +357,121 @@ function ClassBindingSection() {
             </div>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function BackupSection() {
+  const [busy, setBusy] = useState<'export' | 'import' | null>(null);
+  const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [pendingImport, setPendingImport] = useState<{ data: BackupFile; warning: string | null } | null>(null);
+  const [doneInfo, setDoneInfo] = useState<ApplyResult | null>(null);
+
+  const handleExport = async () => {
+    setBusy('export');
+    setMsg(null);
+    try {
+      const path = await exportBackup();
+      setMsg({ text: `✅ 备份已保存到：${path}`, ok: true });
+    } catch (e: any) {
+      if (String(e) !== 'cancelled' && !String(e).includes('cancelled')) {
+        setMsg({ text: `❌ 导出失败：${e}`, ok: false });
+      }
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handlePickImport = async () => {
+    setBusy('import');
+    setMsg(null);
+    try {
+      const raw = await pickBackupFile();
+      const parsed = parseBackup(raw);
+      if (!parsed.ok) {
+        setMsg({ text: `❌ ${parsed.error}`, ok: false });
+        return;
+      }
+      let warning: string | null = null;
+      try {
+        const current = await getVersion();
+        if (compareVersions(parsed.data.appVersion, current) > 0) {
+          warning = `备份来自更新版本（v${parsed.data.appVersion}，当前 v${current}），建议先更新 App 再导入`;
+        }
+      } catch { /* 版本对比失败不阻塞 */ }
+      setPendingImport({ data: parsed.data, warning });
+    } catch (e: any) {
+      if (String(e) !== 'cancelled' && !String(e).includes('cancelled')) {
+        setMsg({ text: `❌ 读取备份失败：${e}`, ok: false });
+      }
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handleConfirmImport = async () => {
+    if (!pendingImport) return;
+    const { data } = pendingImport;
+    setPendingImport(null);
+    setBusy('import');
+    setMsg(null);
+    try {
+      // 导入前强制快照，失败则中止，绝不在没有兜底的情况下覆盖数据
+      await snapshotCurrentToAppData();
+      const result = await applyBackup(data);
+      setDoneInfo(result);
+    } catch (e: any) {
+      setMsg({ text: `❌ 导入失败：${e}。现有数据未受影响`, ok: false });
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const btnStyle: CSSProperties = {
+    padding: '10px 20px', borderRadius: 10, border: 'none', cursor: 'pointer',
+    fontWeight: 700, fontSize: 13, color: '#fff',
+    background: busy ? '#cbd5e1' : 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+  };
+
+  return (
+    <div style={{ marginTop: 8 }}>
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+        <button onClick={handleExport} disabled={busy !== null} style={btnStyle}>
+          {busy === 'export' ? '正在导出…' : '📤 导出备份'}
+        </button>
+        <button onClick={handlePickImport} disabled={busy !== null}
+          style={{ ...btnStyle, background: busy ? '#cbd5e1' : 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}>
+          {busy === 'import' ? '正在导入…' : '📥 导入备份'}
+        </button>
+      </div>
+      <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 8, lineHeight: 1.7 }}>
+        💡 把导出的 .json 文件拷到 U 盘或发送到新电脑，在新电脑的同一页面导入即可。导入前会自动为当前数据保留一份快照，不会丢东西。
+      </div>
+      {msg && (
+        <div style={{ marginTop: 8, fontSize: 12, fontWeight: 600, color: msg.ok ? '#16a34a' : '#dc2626', wordBreak: 'break-all' }}>
+          {msg.text}
+        </div>
+      )}
+
+      {pendingImport && (
+        <ConfirmModal
+          icon="📥" title="确认导入备份"
+          desc={`备份时间：${new Date(pendingImport.data.exportedAt).toLocaleString('zh-CN')}\n包含 ${Object.keys(pendingImport.data.localStorage).length} 项设置与进度、${Object.keys(pendingImport.data.sprites || {}).length} 个精灵素材。\n导入会覆盖本机现有数据（已自动保留当前快照）。${pendingImport.warning ? `\n⚠️ ${pendingImport.warning}` : ''}`}
+          confirmText="确认导入"
+          onCancel={() => setPendingImport(null)}
+          onConfirm={handleConfirmImport}
+        />
+      )}
+
+      {doneInfo && (
+        <ConfirmModal
+          icon="✅" title="导入完成"
+          desc={`已恢复 ${doneInfo.lsCount} 项设置与进度、${doneInfo.spriteCount} 个精灵素材。\n重启应用后全部生效。`}
+          confirmText="立即重启"
+          onCancel={() => setDoneInfo(null)}
+          onConfirm={() => window.location.reload()}
+        />
       )}
     </div>
   );

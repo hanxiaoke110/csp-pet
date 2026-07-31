@@ -21,7 +21,17 @@ const getRoamingEnabled = () => {
   try { return localStorage.getItem('csp_pet_roaming') === 'true'; } catch { return false; }
 };
 const sleep = (ms: number) => new Promise<void>(resolve => window.setTimeout(resolve, ms));
-const desktopSlot = Math.max(1, Math.min(3, Number(new URLSearchParams(window.location.search).get('slot')) || 1));
+// Slot detection: prefer the native window label ('pet' / 'pet-2' / 'pet-3').
+// URL query strings (?slot=N) can be dropped by the production asset protocol,
+// which previously made a companion window fall back to slot 1 (or render nothing).
+const labelSlot = (() => {
+  try {
+    const match = /^pet-(\d+)$/.exec(getCurrentWindow().label);
+    return match ? Number(match[1]) : null;
+  } catch { return null; }
+})();
+const querySlot = Number(new URLSearchParams(window.location.search).get('slot')) || null;
+const desktopSlot = Math.max(1, Math.min(3, labelSlot ?? querySlot ?? 1));
 const positionKey = desktopSlot === 1 ? 'csp_pet_pos' : `csp_pet_pos_${desktopSlot}`;
 
 function selectWindowPet(data: any): OwnedPet | null {

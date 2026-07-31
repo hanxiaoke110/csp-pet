@@ -73,7 +73,9 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
     WebviewWindowBuilder::new(
         &app,
         &label,
-        WebviewUrl::App(format!("pet.html?slot={slot}").into()),
+        // Slot is derived from the window label on the JS side; keep the URL
+        // plain because query strings may not survive the production protocol.
+        WebviewUrl::App("pet.html".into()),
     )
     .title(format!("CSP Pet {slot}"))
     .inner_size(154.0, 154.0)
@@ -131,6 +133,7 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_dialog::init())
         // 记住主窗口尺寸/位置：启动阶段同步恢复，消除「先大后小」闪烁。
         // pet 窗口由 PetWindow.tsx 自行管理位置，排除避免双重恢复导致跳动。
         .plugin(
@@ -233,6 +236,9 @@ pub fn run() {
             commands::settings::get_setting,
             commands::settings::set_setting,
             commands::settings::get_all_settings,
+            // backup
+            commands::backup::export_backup,
+            commands::backup::import_backup,
             // chat
             commands::chat::create_chat_session,
             commands::chat::get_chat_sessions,

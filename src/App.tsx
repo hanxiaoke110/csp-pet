@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.20';
+  const VER = '1.7.21';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,9 +180,13 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🌈 属性重铸增加二次确认，修改前明确显示目标属性和金币费用</div>
-          <div>👥 修复第二、第三只智子点击后桌面窗口可能无法启动的问题</div>
-          <div>⏳ 桌面伙伴启动时增加状态反馈，失败会自动回滚位置</div>
+          <div>💾 新增数据备份：一键导出/导入，换电脑再也不怕丢数据</div>
+          <div>🎰 灵犀抽卡新增翻牌动画，稀有度一目了然</div>
+          <div>🛒 经验胶囊、进阶核心、自动喂食器购买前增加确认弹窗</div>
+          <div>🗑 回收站、解锁桌面伙伴位置增加确认弹窗，不再误触</div>
+          <div>🤖 修复自动喂食器在饱食已低于 40 时不触发的问题</div>
+          <div>👥 修复第二、第三桌面伙伴窗口不显示的问题</div>
+          <div>🖼 修复早期购买的工坊智子卡片显示红圈的问题</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -258,6 +262,8 @@ function App() {
       } catch (e) { console.error('[init] store load failed:', e); }
       // 4. Apply offline hunger (before first save)
       try { usePetStore.getState().applyOfflineHunger(); } catch {}
+      // 4.5 Auto feeder: catch up if hunger is already below the threshold at startup
+      try { usePetStore.getState().runAutoFeeder(); } catch {}
       // 5. Sync to pet window
       usePetStore.getState().save();
       // Restore independently positioned desktop companions after an app restart.

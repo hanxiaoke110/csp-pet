@@ -811,6 +811,8 @@ export const usePetStore = create<PetState>((set, get) => ({
     if (get().autoFeederOwned || get().coins < AUTO_FEEDER_COST) return false;
     set(s => ({ coins: s.coins - AUTO_FEEDER_COST, autoFeederOwned: true, autoFeederEnabled: true }));
     get().save();
+    // 购买时饱食已低于 40 的情况也要立即补喂，而不是等下一次消耗
+    get().runAutoFeeder();
     return true;
   },
 
@@ -818,6 +820,8 @@ export const usePetStore = create<PetState>((set, get) => ({
     if (!get().autoFeederOwned) return;
     set({ autoFeederEnabled: enabled });
     get().save();
+    // 重新开启时立即检查一次，覆盖饱食早已低于阈值的情况
+    if (enabled) get().runAutoFeeder();
   },
 
   runAutoFeeder: () => {

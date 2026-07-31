@@ -1,21 +1,58 @@
 import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
 import { getPetTier, type OwnedPet, type PetElement } from '../../types/pet';
 import { useQuizStore } from '../../stores/quizStore';
-import { readFile, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import PetSprite from './PetSprite';
 import { useState, useEffect } from 'react';
 import React from 'react';
+import ConfirmModal from './ConfirmModal';
 import { showDesktopCompanion, hideDesktopCompanion } from '../../utils/desktopCompanions';
 
 function WorkshopThumb({ modelPath }: { modelPath: string }) {
   const [url, setUrl] = useState('');
   useEffect(() => {
-    const thumbPath = modelPath.replace('.json', '-thumb.png');
-    const id = thumbPath.replace('/pet-sprites/2d/', '');
-    readFile('pet-sprites/2d/' + id, { baseDir: BaseDirectory.AppData })
-      .then(buf => { setUrl(URL.createObjectURL(new Blob([new Uint8Array(buf)], { type: 'image/png' }))); })
-      .catch(() => {});
-    return () => { if (url) URL.revokeObjectURL(url); };
+    let cancelled = false;
+    let objectUrl = '';
+    const id = modelPath.replace('.json', '').replace('/pet-sprites/2d/', '');
+    const show = (buf: Uint8Array) => {
+      if (cancelled) return;
+      objectUrl = URL.createObjectURL(new Blob([new Uint8Array(buf)], { type: 'image/png' }));
+      setUrl(objectUrl);
+    };
+    (async () => {
+      // Fast path: pre-generated thumbnail from purchase time
+      try {
+        const buf = await readFile(`pet-sprites/2d/${id}-thumb.png`, { baseDir: BaseDirectory.AppData });
+        show(buf);
+        return;
+      } catch { /* thumb missing — self-heal below */ }
+      // Self-heal: crop the first frame of the cached spritesheet, persist it
+      // as the thumbnail so older pets (bought before thumbnails existed) get one.
+      try {
+        const [pngBuf, jsonText] = await Promise.all([
+          readFile(`pet-sprites/2d/${id}.png`, { baseDir: BaseDirectory.AppData }),
+          readTextFile(`pet-sprites/2d/${id}.json`, { baseDir: BaseDirectory.AppData }),
+        ]);
+        const meta = JSON.parse(jsonText);
+        const fw = meta.frameWidth || 192;
+        const fh = meta.frameHeight || 208;
+        const sheetUrl = URL.createObjectURL(new Blob([new Uint8Array(pngBuf)], { type: 'image/png' }));
+        const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+          const i = new Image(); i.onload = () => resolve(i); i.onerror = reject;
+          i.src = sheetUrl;
+        });
+        URL.revokeObjectURL(sheetUrl);
+        const canvas = document.createElement('canvas');
+        canvas.width = 72;
+        canvas.height = Math.round(72 * fh / fw);
+        canvas.getContext('2d')!.drawImage(img, 0, 0, fw, fh, 0, 0, canvas.width, canvas.height);
+        const base64 = canvas.toDataURL('image/png').replace(/^data:image\/\w+;base64,/, '');
+        const thumbBuf = Uint8Array.from(atob(base64), ch => ch.charCodeAt(0));
+        try { await writeFile(`pet-sprites/2d/${id}-thumb.png`, thumbBuf, { baseDir: BaseDirectory.AppData }); } catch {}
+        show(thumbBuf);
+      } catch { /* keep fallback icon */ }
+    })();
+    return () => { cancelled = true; if (objectUrl) URL.revokeObjectURL(objectUrl); };
   }, [modelPath]);
   if (!url) return React.createElement('span', { style: { fontSize: 32, lineHeight: '48px' } }, '🔴');
   return React.createElement('img', { src: url, alt: '', style: { width: '100%', height: '100%', objectFit: 'contain', imageRendering: 'pixelated' } });
@@ -40,6 +77,8 @@ export default function PetStatus({
 }: Props) {
   const [pendingElement, setPendingElement] = useState<PetElement | null>(null);
   const [launchingSlot, setLaunchingSlot] = useState<2 | 3 | null>(null);
+  const [recycleTarget, setRecycleTarget] = useState<string | null>(null);
+  const [dismantleTarget, setDismantleTarget] = useState<string | null>(null);
   const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool } = usePetStore();
   const claimPendingRewards = usePetStore(s => s.claimPendingRewards);
   const weeklyTaskDone = useQuizStore(s => s.weeklyTaskDone);
@@ -359,12 +398,7 @@ export default function PetStatus({
           </div>
 
           {ownedPets.length > 1 && (
-            <button onClick={() => {
-              if (!window.confirm(`将「${displayPet.petName}」放入智子回收站？放入后可恢复；确认拆解才会返还资源。`)) return;
-              const result = recyclePet(displayPet.petId);
-              showToast(result.ok ? '已放入智子回收站，可在本页恢复或拆解' : result.message || '操作失败');
-              if (result.ok) setViewingPetId(null);
-            }} style={{ marginTop: 8, border: '1px solid #fecaca', color: '#b91c1c', background: '#fff', borderRadius: 6, padding: '5px 9px', fontSize: 12, cursor: 'pointer' }}>
+            <button onClick={() => setRecycleTarget(displayPet.petId)} style={{ marginTop: 8, border: '1px solid #fecaca', color: '#b91c1c', background: '#fff', borderRadius: 6, padding: '5px 9px', fontSize: 12, cursor: 'pointer' }}>
               🗑 放入智子回收站
             </button>
           )}
@@ -376,11 +410,7 @@ export default function PetStatus({
                 <div key={record.pet.petId} style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 7, flexWrap: 'wrap' }}>
                   <span>{record.pet.petName} · 可返还 {record.returnedExp} EXP、{record.returnedCoins} 金币</span>
                   <button onClick={() => { restoreRecycledPet(record.pet.petId); showToast('已恢复智子'); }}>恢复</button>
-                  <button onClick={() => {
-                    if (!window.confirm('确认永久拆解？资源将返还到经验池和金币钱包，无法撤销。')) return;
-                    const result = dismantleRecycledPet(record.pet.petId);
-                    showToast(result.ok ? `已返还 ${result.exp} EXP、${result.coins} 金币` : '拆解失败');
-                  }}>永久拆解</button>
+                  <button onClick={() => setDismantleTarget(record.pet.petId)}>永久拆解</button>
                 </div>
               ))}
             </div>
@@ -396,6 +426,35 @@ export default function PetStatus({
               </div>
             );
           })()}
+
+          {recycleTarget && (
+            <ConfirmModal
+              icon="🗑" title="放入智子回收站"
+              desc={`将「${ownedPets.find(p => p.petId === recycleTarget)?.petName ?? ''}」放入智子回收站？\n放入后可随时恢复；确认拆解才会返还资源。`}
+              confirmText="放入回收站" danger
+              onCancel={() => setRecycleTarget(null)}
+              onConfirm={() => {
+                const result = recyclePet(recycleTarget);
+                showToast(result.ok ? '已放入智子回收站，可在本页恢复或拆解' : result.message || '操作失败');
+                if (result.ok) setViewingPetId(null);
+                setRecycleTarget(null);
+              }}
+            />
+          )}
+
+          {dismantleTarget && (
+            <ConfirmModal
+              icon="⚠️" title="永久拆解"
+              desc="确认永久拆解？资源将返还到经验池和金币钱包，无法撤销。"
+              confirmText="永久拆解" danger
+              onCancel={() => setDismantleTarget(null)}
+              onConfirm={() => {
+                const result = dismantleRecycledPet(dismantleTarget);
+                showToast(result.ok ? `已返还 ${result.exp} EXP、${result.coins} 金币` : '拆解失败');
+                setDismantleTarget(null);
+              }}
+            />
+          )}
         </>
       )}
     </div>

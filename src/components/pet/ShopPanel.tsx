@@ -22,7 +22,8 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   const [foodConfirm, setFoodConfirm] = useState<any>(null);
   const [shopToast, setShopToast] = useState<string | null>(null);
   const showShopToast = (msg: string) => { setShopToast(msg); setTimeout(() => setShopToast(null), 3000); };
-  const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha'; title: string; desc: string; price: number } | null>(null);
+  const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha' | 'capsule' | 'core' | 'feeder'; icon: string; title: string; desc: string; price: number } | null>(null);
+  const [gachaAnim, setGachaAnim] = useState<{ phase: 'rolling' | 'revealed'; result: NonNullable<ReturnType<typeof doGacha>> } | null>(null);
   const renameCards = usePetStore(s => s.renameCards);
   const doGacha = usePetStore(s => s.doGacha);
   const gachaHistory = usePetStore(s => s.gachaHistory);
@@ -129,7 +130,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <p>给任意一只宠物重新起名</p>
             <div className="special-stock">拥有：{renameCards} 张</div>
             <button className="shop-card-buy" disabled={coins < 200}
-              onClick={() => setActionConfirm({ type: 'rename', title: '改名卡', desc: '给一只灵犀智子改名字', price: 200 })}>
+              onClick={() => setActionConfirm({ type: 'rename', icon: '📝', title: '改名卡', desc: '给一只灵犀智子改名字', price: 200 })}>
               🪙 200 购买
             </button>
           </div>
@@ -140,7 +141,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <p>向公共经验池注入 120 EXP</p>
             <div className="special-stock">每日限购：{expShopDate === today ? expCapsuleBought : 0}/3</div>
             <button className="shop-card-buy" disabled={coins < 400 || (expShopDate === today ? expCapsuleBought : 0) >= 3}
-              onClick={() => showShopToast(buyExpItem('capsule') ? '🧪 120 EXP 已放入经验池' : '今日购买次数已满或金币不足')}>
+              onClick={() => setActionConfirm({ type: 'capsule', icon: '🧪', title: '经验胶囊', desc: '向公共经验池注入 120 EXP\n每日限购 3 次', price: 400 })}>
               🪙 400 购买
             </button>
           </div>
@@ -151,7 +152,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <p>向公共经验池注入 360 EXP</p>
             <div className="special-stock">每日限购：{expShopDate === today ? expCoreBought : 0}/1</div>
             <button className="shop-card-buy" disabled={coins < 1000 || (expShopDate === today ? expCoreBought : 0) >= 1}
-              onClick={() => showShopToast(buyExpItem('core') ? '💠 360 EXP 已放入经验池' : '今日购买次数已满或金币不足')}>
+              onClick={() => setActionConfirm({ type: 'core', icon: '💠', title: '进阶经验核心', desc: '向公共经验池注入 360 EXP\n每日限购 1 次', price: 1000 })}>
               🪙 1000 购买
             </button>
           </div>
@@ -162,7 +163,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <p>饱食低于 40 时自动使用背包食物；没有食物每天提醒一次</p>
             <div className="special-stock">{autoFeederOwned ? '已拥有，可在智子页开关' : '永久道具'}</div>
             <button className="shop-card-buy" disabled={autoFeederOwned || coins < 1500}
-              onClick={() => showShopToast(buyAutoFeeder() ? '🤖 自动喂食器已安装并开启' : '金币不足')}>
+              onClick={() => setActionConfirm({ type: 'feeder', icon: '🤖', title: '自动喂食器', desc: '饱食低于 40 时自动使用背包食物\n永久道具，购买后可在智子页开关', price: 1500 })}>
               {autoFeederOwned ? '✅ 已拥有' : '🪙 1500 购买'}
             </button>
           </div>
@@ -221,7 +222,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <p>随机获得一只宠物<br />每 100 抽必出稀有+</p>
             <div className="special-stock">今日剩余：{5 - todayGachaPulls} 次</div>
             <button className="shop-card-buy" disabled={coins < 150 || todayGachaPulls >= 5}
-              onClick={() => setActionConfirm({ type: 'gacha', title: '灵犀抽卡', desc: '随机获得精灵/食物/许愿票/改名卡\n每 100 抽保底传说', price: 150 })}>
+              onClick={() => setActionConfirm({ type: 'gacha', icon: '🎰', title: '灵犀抽卡', desc: '随机获得精灵/食物/许愿票/改名卡\n每 100 抽保底传说', price: 150 })}>
               🎯 单抽 150g
             </button>
           </div>
@@ -342,19 +343,20 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
         </div>
       )}
 
-      {/* Action confirmation (rename card / gacha) */}
+      {/* Action confirmation (rename card / gacha / exp items / feeder) */}
       {actionConfirm && (
         <div className="gacha-overlay" onClick={() => setActionConfirm(null)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
             <div className="buy-confirm-header">
-              <span>{actionConfirm.type === 'rename' ? '📝' : '🎰'} 确认购买</span>
+              <span>{actionConfirm.icon} 确认购买</span>
               <button className="ai-modal-close" onClick={() => setActionConfirm(null)}>✕</button>
             </div>
             <div className="buy-confirm-body">
-              <div style={{ fontSize: 48 }}>{actionConfirm.type === 'rename' ? '📝' : '🎰'}</div>
+              <div style={{ fontSize: 48 }}>{actionConfirm.icon}</div>
               <div className="buy-confirm-name">{actionConfirm.title}</div>
               <div style={{ fontSize: 13, color: '#64748b', textAlign: 'center', whiteSpace: 'pre-line' }}>{actionConfirm.desc}</div>
               <div className="buy-confirm-price">🪙 {actionConfirm.price} 金币</div>
+              <div className="buy-confirm-balance">当前余额：🪙 {coins} 金币</div>
             </div>
             <div className="buy-confirm-actions">
               <button className="mode-btn mode-btn-back" onClick={() => setActionConfirm(null)}>取消</button>
@@ -366,20 +368,18 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
                     } else {
                       showShopToast('金币不足，无法购买。');
                     }
+                  } else if (actionConfirm.type === 'capsule') {
+                    showShopToast(buyExpItem('capsule') ? '🧪 120 EXP 已放入经验池' : '今日购买次数已满或金币不足');
+                  } else if (actionConfirm.type === 'core') {
+                    showShopToast(buyExpItem('core') ? '💠 360 EXP 已放入经验池' : '今日购买次数已满或金币不足');
+                  } else if (actionConfirm.type === 'feeder') {
+                    showShopToast(buyAutoFeeder() ? '🤖 自动喂食器已安装并开启' : '金币不足');
                   } else {
                     const r = doGacha();
                     if (!r) { showShopToast('抽卡失败，请检查金币或今日次数。'); }
-                    else if (r.type === 'food') {
-                      const label = r.foodType === 'premium' ? '🍖 高级食物' : '🍞 普通食物';
-                      showShopToast(`${label} 已放入背包！`);
-                    } else if (r.type === 'wishTicket') {
-                      showShopToast('🎫 许愿票 +1 已到账！');
-                    } else if (r.type === 'renameCard') {
-                      showShopToast('📝 改名卡已放入背包！');
-                    } else {
-                      const petName = (r as any).autoName || r.item.name;
-                      const egg = addEgg(r.item.speciesId!, petName, r.rarity as HatchRarity, 150);
-                      setPendingHatch({ eggId: egg.eggId, speciesId: r.item.speciesId!, petName, rarity: r.rarity as HatchRarity });
+                    else {
+                      setGachaAnim({ phase: 'rolling', result: r });
+                      setTimeout(() => setGachaAnim(a => a ? { ...a, phase: 'revealed' } : null), 1500);
                     }
                   }
                   setActionConfirm(null);
@@ -388,6 +388,63 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Gacha pull animation + result reveal */}
+      {gachaAnim && (
+        <div className="gacha-overlay">
+          {gachaAnim.phase === 'rolling' ? (
+            <div className="gacha-ceremony" style={{ background: 'linear-gradient(135deg, #eef2ff, #f5f3ff)' }}>
+              <div className="gacha-card-back"><span className="gacha-card-inner">🎴</span></div>
+              <div className="gacha-spin-text">灵犀之力汇聚中…</div>
+            </div>
+          ) : (() => {
+            const r = gachaAnim.result;
+            const rarityColor = (r as any).rarity === 'legendary' ? '#f59e0b' : (r as any).rarity === 'rare' ? '#8b5cf6' : '#0ea5e9';
+            const rarityLabel = (r as any).rarity === 'legendary' ? '👑 传说' : (r as any).rarity === 'rare' ? '✨ 稀有' : '⭐ 普通';
+            const isPet = r.type === 'pet';
+            const icon = r.type === 'food' ? '🍖' : r.type === 'wishTicket' ? '🎫' : r.type === 'renameCard' ? '📝' : '';
+            const label = r.type === 'food'
+              ? `食物补给（${(r as any).foodType === 'premium' ? '高级食物' : '普通食物'}）`
+              : r.type === 'wishTicket' ? '许愿票 ×1'
+              : r.type === 'renameCard' ? '改名卡 ×1'
+              : (r as any).item.name;
+            return (
+              <div className="gacha-ceremony" style={{
+                background: isPet
+                  ? `linear-gradient(135deg, ${rarityColor}22, #fff)`
+                  : 'linear-gradient(135deg, #f0f9ff, #fff)',
+                border: isPet ? `2px solid ${rarityColor}` : '2px solid #bae6fd',
+              }}>
+                {isPet ? (
+                  <>
+                    <div className="gacha-preview-big">
+                      <img src={`/pet-sprites/previews/${(r as any).item.speciesId}.png`} alt=""
+                        onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                    </div>
+                    <div className="gacha-name" style={{ color: rarityColor }}>{label}</div>
+                    <div className="gacha-rarity" style={{ color: rarityColor }}>{rarityLabel}</div>
+                    <div className="gacha-hint">已放入孵化队列，收下后开始孵化</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="gacha-reveal-icon">{icon}</div>
+                    <div className="gacha-name">{label}</div>
+                    <div className="gacha-hint">已放入背包</div>
+                  </>
+                )}
+                <button className="gacha-done-btn" onClick={() => {
+                  if (isPet) {
+                    const petName = (r as any).autoName || (r as any).item.name;
+                    const egg = addEgg((r as any).item.speciesId!, petName, (r as any).rarity as HatchRarity, 150);
+                    setPendingHatch({ eggId: egg.eggId, speciesId: (r as any).item.speciesId!, petName, rarity: (r as any).rarity as HatchRarity });
+                  }
+                  setGachaAnim(null);
+                }}>收下</button>
+              </div>
+            );
+          })()}
         </div>
       )}
 
