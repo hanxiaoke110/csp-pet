@@ -67,6 +67,11 @@ export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, 
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>👥 多智子桌面伙伴</div>
           <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2, marginBottom: 8 }}>已解锁 {companionSlots}/3 个位置。额外伙伴使用独立窗口，可单独拖到任意位置，不参与战斗和奖励。</div>
+          {companionSlots < 3 && (
+            <div style={{ fontSize: 11, lineHeight: 1.5, color: '#b45309', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 6, padding: '6px 8px', marginBottom: 8 }}>
+              ⚠️ 每只额外智子都会增加电脑资源占用。配置较低或已经出现卡顿时，建议只开启一只桌宠。
+            </div>
+          )}
           {companionSlots < 3 ? (
             <button onClick={() => setSlotConfirm(true)} disabled={coins < (companionSlots === 1 ? 2500 : 5000)} style={{ padding: '7px 10px', borderRadius: 7, border: '1px solid #8b5cf6', background: '#fff', color: '#6d28d9', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
               解锁第 {companionSlots + 1} 位 · 🪙 {companionSlots === 1 ? 2500 : 5000}
@@ -75,7 +80,7 @@ export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, 
           {slotConfirm && (
             <ConfirmModal
               icon="👥" title="解锁桌面伙伴位置"
-              desc={`解锁第 ${companionSlots + 1} 个独立桌面伙伴位置。\n额外伙伴使用独立窗口，可单独拖到任意位置，不参与战斗和奖励。`}
+              desc={`解锁第 ${companionSlots + 1} 个独立桌面伙伴位置。\n额外伙伴使用独立窗口，可单独拖到任意位置，不参与战斗和奖励。\n\n⚠️ 每只额外智子都会增加内存和图形资源占用。电脑配置较低或已经出现卡顿时，请谨慎购买并避免同时开启多只。`}
               price={companionSlots === 1 ? 2500 : 5000} coins={coins}
               confirmText="确认解锁"
               onCancel={() => setSlotConfirm(false)}
