@@ -246,7 +246,7 @@ export default function PetStatus({
               <div className="buy-confirm-info">
                 <div className="buy-confirm-name">{formatPetDisplayName(switchTarget.petName, switchTarget.level)}</div>
                 <div style={{ fontSize: 13, color: '#64748b', marginTop: 2 }}>
-                  {switchTarget.element === 'earth' ? '🟫 地' : switchTarget.element === 'fire' ? '🔴 火' : switchTarget.element === 'wind' ? '🟢 风' : '🔵 水'} · <span style={{ color: getLevelBadgeColor(switchTarget.level), fontWeight: 600 }}>Lv.{switchTarget.level}</span>
+                  {switchTarget.element === 'earth' ? '🟫 地' : switchTarget.element === 'fire' ? '🔴 火' : switchTarget.element === 'wind' ? '🟢 风' : switchTarget.element === 'light' ? '🌟 光' : '🔵 水'} · <span style={{ color: getLevelBadgeColor(switchTarget.level), fontWeight: 600 }}>Lv.{switchTarget.level}</span>
                 </div>
               </div>
             </div>

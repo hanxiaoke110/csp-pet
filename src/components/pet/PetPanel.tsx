@@ -130,7 +130,7 @@ export default function PetPanel() {
               <div className="starter-icon"><img src={`/pet-sprites/previews/${s.speciesId}.png`} alt={s.name} style={{width:48,height:48,imageRendering:'pixelated'}} onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} /></div>
               <div className="starter-name">{s.name}</div>
               <div className="starter-elem">
-                {s.element === 'earth' ? '🟫 地' : s.element === 'fire' ? '🔴 火' : s.element === 'wind' ? '🟢 风' : '🔵 水'}
+                {s.element === 'earth' ? '🟫 地' : s.element === 'fire' ? '🔴 火' : s.element === 'wind' ? '🟢 风' : s.element === 'light' ? '🌟 光' : '🔵 水'}
               </div>
               <div className="starter-style">2D 像素</div>
               <div className="starter-desc">{s.description}</div>

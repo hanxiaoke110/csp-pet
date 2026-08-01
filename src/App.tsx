@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.22';
+  const VER = '1.7.23';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,6 +180,7 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
+          <div>🌟 修复光属性智子在切换伙伴弹窗里显示为水属性的问题</div>
           <div>🪙 修复智子回收站金币返还一直为 0 的问题，按稀有度估价返还</div>
           <div>💬 第二、第三桌面伙伴点击后会冒泡回应，不再"没反应"</div>
           <div>🔔 修复设置页/工坊弹窗报 dialog not allowed 错误</div>
