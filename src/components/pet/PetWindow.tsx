@@ -46,7 +46,6 @@ export default function PetWindow() {
   const [activePet, setActivePet] = useState<OwnedPet | null>(null);
   const [petSize, setPetSize] = useState(getPetSize);
   const [showActions, setShowActions] = useState(false);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const bubbleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const actionsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isDragging = useRef(false);
@@ -158,10 +157,12 @@ export default function PetWindow() {
     if (desktopSlot === 1) listeners.push(safeListen('pet-bubble', (event: any) => {
       showBubble(event.payload.text, Boolean(event.payload.urgent));
     }));
-    pollRef.current = setInterval(() => emit('pet-request-sync', {}).catch(() => {}), 2000);
+    // The initial SQLite read normally has everything. Request one live snapshot
+    // to cover the small race where the companion assignment is still saving.
+    const syncTimer = window.setTimeout(() => emit('pet-request-sync', {}).catch(() => {}), 250);
     return () => {
       listeners.forEach(unlisten => unlisten());
-      if (pollRef.current) clearInterval(pollRef.current);
+      window.clearTimeout(syncTimer);
       if (bubbleTimer.current) clearTimeout(bubbleTimer.current);
       if (actionsTimer.current) clearTimeout(actionsTimer.current);
     };
@@ -276,13 +277,6 @@ export default function PetWindow() {
     schedule(30_000);
     return () => { cancelled = true; if (timer) clearTimeout(timer); };
   }, [winSz]);
-
-  useEffect(() => {
-    if (activePet && pollRef.current) {
-      clearInterval(pollRef.current);
-      pollRef.current = null;
-    }
-  }, [activePet]);
 
   // Ambient messages are intentionally sparse. Context-rich result messages
   // continue to arrive from quiz/course screens through the pet-bubble event.

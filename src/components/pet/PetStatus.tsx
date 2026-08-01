@@ -7,9 +7,11 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import ConfirmModal from './ConfirmModal';
 import { showDesktopCompanion, hideDesktopCompanion } from '../../utils/desktopCompanions';
+import { repairWorkshopSprite } from '../../utils/workshopSpriteRepair';
 
 function WorkshopThumb({ modelPath }: { modelPath: string }) {
   const [url, setUrl] = useState('');
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     let cancelled = false;
     let objectUrl = '';
@@ -50,11 +52,25 @@ function WorkshopThumb({ modelPath }: { modelPath: string }) {
         const thumbBuf = Uint8Array.from(atob(base64), ch => ch.charCodeAt(0));
         try { await writeFile(`pet-sprites/2d/${id}-thumb.png`, thumbBuf, { baseDir: BaseDirectory.AppData }); } catch {}
         show(thumbBuf);
-      } catch { /* keep fallback icon */ }
+      } catch {
+        // Older purchases can survive while their AppData image cache does not.
+        // Restore the same workshop pet instead of showing the old red-dot fallback.
+        if (id && await repairWorkshopSprite(id)) {
+          try {
+            const buf = await readFile(`pet-sprites/2d/${id}-thumb.png`, { baseDir: BaseDirectory.AppData });
+            show(buf);
+            return;
+          } catch { /* full sprite is restored and can be cropped next mount */ }
+        }
+        if (!cancelled) setFailed(true);
+      }
     })();
     return () => { cancelled = true; if (objectUrl) URL.revokeObjectURL(objectUrl); };
   }, [modelPath]);
-  if (!url) return React.createElement('span', { style: { fontSize: 32, lineHeight: '48px' } }, '🔴');
+  if (!url) return React.createElement('span', {
+    style: { fontSize: failed ? 22 : 18, lineHeight: '48px', color: '#94a3b8' },
+    title: failed ? '素材暂未恢复，请联网后重试' : '正在恢复智子素材',
+  }, failed ? '🖼️' : '···');
   return React.createElement('img', { src: url, alt: '', style: { width: '100%', height: '100%', objectFit: 'contain', imageRendering: 'pixelated' } });
 }
 

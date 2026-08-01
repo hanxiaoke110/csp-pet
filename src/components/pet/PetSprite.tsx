@@ -3,6 +3,8 @@ import { readFile, readTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { tick, wakeUp, triggerAnim, updateLastEvent, type PetAnimState } from './PetStateMachine';
 import { createStateMachine } from './PetStateMachine';
 import { isRemotePet } from '../../types/pet';
+import { downloadPetSprites } from '../../utils/spriteDownloader';
+import { repairWorkshopSprite } from '../../utils/workshopSpriteRepair';
 
 const CANVAS_SIZE = 140;
 const CACHE_SUBDIR = 'pet-sprites/2d';
@@ -157,7 +159,23 @@ export default function PetSprite({
           setStatus('ready');
           return;
         } catch {
-          // Cache miss — fall through to bundled path
+          // Repair owned remote pets whose AppData sprites were lost during an
+          // older update or manual cleanup, then retry the normal cache loader.
+          const repaired = petId.startsWith('ws-')
+            ? await repairWorkshopSprite(petId)
+            : (await downloadPetSprites(petId)).errors.length === 0;
+          if (cancelled) return;
+          if (repaired) {
+            try {
+              const { data, blobUrl } = await loadCachedSprite(petId);
+              if (cancelled) return;
+              spriteRef.current = data;
+              setMetaVersion(v => v + 1);
+              setResolvedPngUrl(blobUrl);
+              setStatus('ready');
+              return;
+            } catch { /* show the normal sprite error below */ }
+          }
         }
       }
 
@@ -188,7 +206,7 @@ export default function PetSprite({
         currentAnimRef.current = anim;
         setCurrentAnim(anim);
       }
-    }, 100);
+    }, 250);
 
     return () => { cancelled = true; window.clearInterval(stateTimer); };
   }, [modelPath]);
