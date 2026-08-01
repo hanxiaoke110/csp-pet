@@ -125,8 +125,20 @@ jobs:
           SIG_MAC_INTEL=$(sign_file "$MAC_INTEL")
           SIG_WIN=$(sign_file "$WIN_MSI")
 
-          # Create Gitee release
           GITEE_API="https://gitee.com/api/v5/repos/hanliuliu110/csp-pet"
+
+          # Gitee free repositories have a 1 GB release-attachment quota. Keep the
+          # two newest previous releases so all three platform packages can upload.
+          OLD_RELEASE_IDS=$(curl -s "$GITEE_API/releases?per_page=20" \
+            -H "Authorization: token $GITEE_TOKEN" \
+            | jq -r 'sort_by(.created_at) | reverse | .[2:][]?.id')
+          for OLD_RELEASE_ID in $OLD_RELEASE_IDS; do
+            echo "Deleting old Gitee release $OLD_RELEASE_ID"
+            curl -s -X DELETE "$GITEE_API/releases/$OLD_RELEASE_ID" \
+              -H "Authorization: token $GITEE_TOKEN" >/dev/null
+          done
+
+          # Create Gitee release
           RELEASE_ID=$(curl -s -X POST "$GITEE_API/releases" \
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITEE_TOKEN" \
