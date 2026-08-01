@@ -1364,36 +1364,48 @@ export default {
         return new Response(JSON.stringify({ success: true, key }), { headers: cors });
       }
 
-      // GET /api/workshop/pets — list pets, cursor pagination when param present
+      // GET /api/workshop/pets — newest first, with opt-in cursor pagination.
+      // Requests without paginated=1 keep the legacy array response used by the teacher app.
       if (path === '/api/workshop/pets' && request.method === 'GET') {
         const teacher = await checkTeacher(request, db);
-        const limit = Math.min(parseInt(url.searchParams.get('limit') || '30'), 100);
+        const parsedLimit = parseInt(url.searchParams.get('limit') || '30');
+        const limit = Number.isFinite(parsedLimit) ? Math.min(Math.max(parsedLimit, 1), 100) : 30;
         const cursorRaw = url.searchParams.get('cursor') || '';
+        const paginated = url.searchParams.get('paginated') === '1' || !!cursorRaw;
+        const isTeacherManagementRequest = !!teacher || !!request.headers.get('X-Admin-Token');
 
         let cursor = null;
         if (cursorRaw) { try { cursor = JSON.parse(atob(decodeURIComponent(cursorRaw))); } catch {} }
 
-        const cursorClause = cursor && cursor.id ? 'AND id < ?' : '';
-        const cursorParams = cursor && cursor.id ? [cursor.id] : [];
+        const hasValidCursor = !!(cursor && typeof cursor.created_at === 'string' && cursor.id);
+        const cursorClause = hasValidCursor
+          ? "AND (COALESCE(created_at, '') < ? OR (COALESCE(created_at, '') = ? AND id < ?))"
+          : '';
+        const cursorParams = hasValidCursor
+          ? [cursor.created_at, cursor.created_at, cursor.id]
+          : [];
 
         let result;
         if (teacher) {
-          const sql = `SELECT * FROM workshop_pets WHERE teacher_id=? AND status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
+          const sql = `SELECT * FROM workshop_pets WHERE teacher_id=? AND status='active' ${cursorClause} ORDER BY COALESCE(created_at, '') DESC, id DESC LIMIT ?`;
           result = await db.prepare(sql).bind(teacher.teacher_id, ...cursorParams, limit + 1).all();
         } else {
-          const sql = `SELECT * FROM workshop_pets WHERE status='active' ${cursorClause} ORDER BY id DESC LIMIT ?`;
+          const sql = `SELECT * FROM workshop_pets WHERE status='active' ${cursorClause} ORDER BY COALESCE(created_at, '') DESC, id DESC LIMIT ?`;
           result = await db.prepare(sql).bind(...cursorParams, limit + 1).all();
         }
 
-        // Backward compat: no cursor → return plain array
-        if (!cursorRaw) {
+        if (!paginated && isTeacherManagementRequest) {
           return new Response(JSON.stringify(result.results.slice(0, limit)), { headers: cors });
         }
 
         const hasMore = result.results.length > limit;
         const items = hasMore ? result.results.slice(0, limit) : result.results;
         const nextCursor = (hasMore && items.length > 0)
-          ? btoa(JSON.stringify({ id: items[items.length - 1].id })) : null;
+          ? btoa(JSON.stringify({
+              created_at: items[items.length - 1].created_at || '',
+              id: items[items.length - 1].id,
+            }))
+          : null;
 
         return new Response(JSON.stringify({ items, hasMore, nextCursor }), { headers: cors });
       }

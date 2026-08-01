@@ -243,9 +243,11 @@ export const PET_TIERS: Record<string, PetTier> = {
 
 function buildShop(): ShopItem[] {
   const items: ShopItem[] = [];
+  const disabledSpecies = new Set(['hina']);
 
   // 2D pixel pets from Petdex
   for (const p of PETDEX_PETS) {
+    if (disabledSpecies.has(p.speciesId)) continue;
     const tier = PET_TIERS[p.speciesId] || 'common';
     items.push({ itemId: `pet-2d-${p.speciesId}`, itemType: 'pet', name: p.name, description: p.description, price: TIER_PRICES[tier], speciesId: p.speciesId, requiredLevel: 1 });
   }

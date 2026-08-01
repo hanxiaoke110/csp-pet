@@ -5,8 +5,13 @@ import { setWorkshopElement, type PetElement } from '../../types/pet';
 import type { HatchRarity } from '../../stores/hatchStore';
 import { BaseDirectory, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
 import HatchConfirmModal from './HatchConfirmModal';
+import ConfirmModal from './ConfirmModal';
 
 const WORKSHOP_API = 'https://api.cspstudy.top';
+
+function GoldCoin() {
+  return <span className="gold-coin-icon" aria-hidden="true">G</span>;
+}
 
 export function WorkshopShop() {
   const coins = usePetStore(s => s.coins);
@@ -17,6 +22,7 @@ export function WorkshopShop() {
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [buyingId, setBuyingId] = useState<string | null>(null);
+  const [purchaseTarget, setPurchaseTarget] = useState<any | null>(null);
   const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity; eggId: string } | null>(null);
   const [filter, setFilter] = useState<'all' | 'rare' | 'legendary'>('all');
   const hasClassCode = !!(localStorage.getItem('csp_class_code'));
@@ -27,12 +33,15 @@ export function WorkshopShop() {
   const loadPets = (cursor?: string | null) => {
     const isLoadMore = !!cursor;
     if (isLoadMore) setLoadingMore(true); else setLoading(true);
-    let url = WORKSHOP_API + '/api/workshop/pets?limit=30';
+    let url = WORKSHOP_API + '/api/workshop/pets?limit=24&paginated=1';
     if (cursor) url += '&cursor=' + encodeURIComponent(cursor);
     fetch(url)
       .then(r => r.json()).then(d => {
         const items = Array.isArray(d) ? d : (d.items || []);
-        if (isLoadMore) setPets(prev => [...prev, ...items]);
+        if (isLoadMore) setPets(prev => {
+          const existingIds = new Set(prev.map(pet => pet.id));
+          return [...prev, ...items.filter((pet: any) => !existingIds.has(pet.id))];
+        });
         else setPets(items);
         // Cache and repair workshop elements. Legacy pets without nativeElement were
         // created while every workshop pet was incorrectly treated as fire.
@@ -59,7 +68,13 @@ export function WorkshopShop() {
             usePetStore.getState().save();
           }
         }
-        if (!Array.isArray(d)) { setHasMore(!!d.hasMore); setNextCursor(d.nextCursor); }
+        if (!Array.isArray(d)) {
+          setHasMore(!!d.hasMore);
+          setNextCursor(d.nextCursor || null);
+        } else {
+          setHasMore(false);
+          setNextCursor(null);
+        }
       })
       .catch(() => {}).finally(() => { setLoading(false); setLoadingMore(false); });
   };
@@ -128,7 +143,7 @@ export function WorkshopShop() {
     <div style={{ padding: 4 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <h3 style={{ margin: 0 }}>🏭 智子工坊</h3>
-        <span style={{ fontSize: 12, color: '#94a3b8' }}>🪙 {coins} 金币</span>
+        <span className="workshop-balance"><GoldCoin />{coins} 金币</span>
       </div>
       <div className="shop-tabs" style={{ marginBottom: 12 }}>
         {([{ k: 'all', label: '全部' }, { k: 'rare', label: '✨ 稀有' }, { k: 'legendary', label: '👑 传说' }] as const).map(t => (
@@ -138,21 +153,25 @@ export function WorkshopShop() {
       </div>
       {loading ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>加载中...</div> :
        !pets.length ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>🏭 还没有老师上传精灵，敬请期待~</div> :
-       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12 }}>
+       <div className="workshop-pet-grid">
         {pets.filter((pet: any) => filter === 'all' || pet.tier === filter).map((pet: any) => (
-          <div key={pet.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 14, textAlign: 'center' }}>
+          <div key={pet.id} className="workshop-pet-card">
             <img src={WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || '')}
-              style={{ width: 72, height: 78, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' }}
+              style={{ width: 60, height: 65, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' }}
               onError={(e: any) => { e.target.style.display = 'none'; }} />
-            <div style={{ fontWeight: 600, fontSize: 13, marginTop: 6 }}>{pet.name}</div>
-            <div style={{ fontSize: 10, color: '#94a3b8' }}>{(pet.teacher_name || '?')} · {pet.element || '?'}</div>
+            <div className="workshop-pet-name" title={pet.name}>{pet.name}</div>
+            <div className="workshop-pet-meta" title={`${pet.teacher_name || '?'} · ${pet.element || '?'}`}>
+              {(pet.teacher_name || '?')} · {pet.element || '?'}
+            </div>
             <div style={{ fontSize: 10, color: '#f59e0b', marginBottom: 4 }}>
               {pet.tier === 'legendary' ? '👑 传说' : pet.tier === 'rare' ? '✨ 稀有' : '⭐ 普通'}
             </div>
             <button className="shop-card-buy" style={{ width: '100%' }}
               disabled={buyingId !== null || coins < (pet.price || 200) || isOwned('workshop-' + pet.id)}
-              onClick={() => handleBuy(pet)}>
-              {isOwned('workshop-' + pet.id) ? '已拥有' : buyingId === pet.id ? '下载中...' : '🪙 ' + (pet.price || 200)}
+              onClick={() => setPurchaseTarget(pet)}>
+              {isOwned('workshop-' + pet.id) ? '已拥有' : buyingId === pet.id ? '下载中...' : (
+                <><GoldCoin />{pet.price || 200}</>
+              )}
             </button>
           </div>
         ))}
@@ -164,12 +183,31 @@ export function WorkshopShop() {
             background: loadingMore ? '#f1f5f9' : '#fff',
             color: loadingMore ? '#94a3b8' : '#FF8C00',
             border: `1px solid ${loadingMore ? '#e2e8f0' : '#fed7aa'}`,
-            borderRadius: 10, cursor: loadingMore ? 'not-allowed' : 'pointer',
+            borderRadius: 8, cursor: loadingMore ? 'not-allowed' : 'pointer',
           }}>
             {loadingMore ? '加载中...' : '加载更多'}
           </button>
         </div>
       )}
+      {purchaseTarget && (() => {
+        const price = purchaseTarget.price || 200;
+        return (
+          <ConfirmModal
+            icon="🏭"
+            title={`购买「${purchaseTarget.name}」`}
+            desc={`购买后将生成一枚待孵化智子蛋。\n购买后余额：${Math.max(0, coins - price)} 金币`}
+            price={price}
+            coins={coins}
+            confirmText="确认购买"
+            onCancel={() => setPurchaseTarget(null)}
+            onConfirm={() => {
+              const pet = purchaseTarget;
+              setPurchaseTarget(null);
+              void handleBuy(pet);
+            }}
+          />
+        );
+      })()}
       {pendingHatch && <HatchConfirmModal
         petName={pendingHatch.pet.name}
         rarity={pendingHatch.rarity}

@@ -73,6 +73,11 @@ describe('智子升级属性', () => {
 });
 
 describe('商城抽卡奖励', () => {
+  it('下架的错误智子不会进入商城或抽卡池，但旧存档仍可读取', () => {
+    expect(ALL_SHOP_ITEMS.some(item => item.speciesId === 'hina')).toBe(false);
+    expect(getPetConfig('hina')).not.toBeNull();
+  });
+
   it('抽中许愿票会进入统一票券钱包并留下可见记录', () => {
     vi.spyOn(Math, 'random').mockReturnValue(0.55);
 
