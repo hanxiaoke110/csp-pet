@@ -116,10 +116,29 @@ const EXP_SHOP_CAPSULE_COST = 400;
 const EXP_SHOP_CORE_COST = 1000;
 const EXP_SHOP_CAPSULE_EXP = 120;
 const EXP_SHOP_CORE_EXP = 360;
+const COMPANION_SLOT_RECEIPT_KEY = 'csp_companion_slot_receipt';
 
 function currentDay(): string {
   const date = new Date();
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function readCompanionSlotReceipt(): number {
+  try {
+    const receipt = JSON.parse(localStorage.getItem(COMPANION_SLOT_RECEIPT_KEY) || '{}');
+    return Math.min(3, Math.max(1, Number(receipt.slots) || 1));
+  } catch {
+    return 1;
+  }
+}
+
+function writeCompanionSlotReceipt(slots: number): void {
+  try {
+    localStorage.setItem(COMPANION_SLOT_RECEIPT_KEY, JSON.stringify({
+      slots: Math.min(3, Math.max(1, slots)),
+      updatedAt: new Date().toISOString(),
+    }));
+  } catch { /* main pet snapshot remains the primary copy */ }
 }
 
 function cumulativePetExp(pet: OwnedPet): number {
@@ -244,7 +263,9 @@ export const usePetStore = create<PetState>((set, get) => ({
     if (expectedCurrentSlots !== undefined && state.companionSlots !== expectedCurrentSlots) return false;
     const cost = state.companionSlots === 1 ? 2500 : state.companionSlots === 2 ? 5000 : 0;
     if (!cost || state.coins < cost) return false;
-    set(s => ({ companionSlots: s.companionSlots + 1, coins: s.coins - cost }));
+    const unlockedSlots = state.companionSlots + 1;
+    set(s => ({ companionSlots: unlockedSlots, coins: s.coins - cost }));
+    writeCompanionSlotReceipt(unlockedSlots);
     get().save();
     return true;
   },
@@ -918,7 +939,7 @@ export const usePetStore = create<PetState>((set, get) => ({
 
   save: () => {
     const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
-    const data = { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
+    const data = { savedAt: new Date().toISOString(), ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     // save() 只管数据同步，不管窗口显隐
@@ -966,7 +987,16 @@ export const usePetStore = create<PetState>((set, get) => ({
         const activePetId = loadedPets.some((p: OwnedPet) => p.petId === data.activePetId)
           ? data.activePetId
           : loadedPets[0]?.petId || null;
-        const companionSlots = Math.min(3, Math.max(1, Number(data.companionSlots) || 1));
+        const assignedSlotCount = Array.isArray(data.desktopCompanionIds)
+          ? data.desktopCompanionIds.reduce((max: number, id: unknown, index: number) => typeof id === 'string' && id ? Math.max(max, index + 2) : max, 1)
+          : 1;
+        const companionSlots = Math.min(3, Math.max(
+          1,
+          Number(data.companionSlots) || 1,
+          assignedSlotCount,
+          readCompanionSlotReceipt(),
+        ));
+        if (companionSlots > 1) writeCompanionSlotReceipt(companionSlots);
         const validPetIds = new Set(loadedPets.map((p: OwnedPet) => p.petId));
         const seenCompanions = new Set<string>();
         const rawCompanionIds = Array.isArray(data.desktopCompanionIds) ? data.desktopCompanionIds : [];

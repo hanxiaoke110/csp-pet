@@ -67,6 +67,7 @@ describe('高额金币消费保护', () => {
 
     expect(usePetStore.getState().buyCompanionSlot(1)).toBe(true);
     expect(usePetStore.getState()).toMatchObject({ coins: 7_500, companionSlots: 2 });
+    expect(JSON.parse(localStorage.getItem('csp_companion_slot_receipt') || '{}')).toMatchObject({ slots: 2 });
 
     expect(usePetStore.getState().buyCompanionSlot(1)).toBe(false);
     expect(usePetStore.getState()).toMatchObject({ coins: 7_500, companionSlots: 2 });
@@ -110,6 +111,29 @@ describe('高额金币消费保护', () => {
 });
 
 describe('三智子位置完整性', () => {
+  it('升级时 SQLite 旧快照更新也不会覆盖已购买的伙伴位置', async () => {
+    const localPet = makePet('p1');
+    const sqlitePet = { ...localPet, updatedAt: '2026-08-01T00:00:00.000Z' };
+    localStorage.setItem('csp_pet_data', JSON.stringify({
+      ownedPets: [localPet], activePetId: 'p1', coins: 7_500,
+      foods: { basic: 3 }, companionSlots: 2, desktopCompanionIds: [''],
+      gachaRewardMigrationDone: true,
+    }));
+    // Browser tests use the SQLite key as a local fallback. This deliberately
+    // reproduces a newer-looking SQLite snapshot that has lost the entitlement.
+    localStorage.setItem('pet_data', JSON.stringify({
+      ownedPets: [sqlitePet], activePetId: 'p1', coins: 7_500,
+      foods: { basic: 3 }, companionSlots: 1, desktopCompanionIds: [],
+      gachaRewardMigrationDone: true,
+    }));
+
+    await usePetStore.getState().load();
+
+    expect(usePetStore.getState()).toMatchObject({ coins: 7_500, companionSlots: 2 });
+    expect(JSON.parse(localStorage.getItem('csp_pet_data') || '{}')).toMatchObject({ companionSlots: 2 });
+    expect(JSON.parse(localStorage.getItem('csp_companion_slot_receipt') || '{}')).toMatchObject({ slots: 2 });
+  });
+
   it('主智子、第二位、第三位必须是三只不同智子', () => {
     const pets = [makePet('p1'), makePet('p2', 'boba'), makePet('p3', 'miga')];
     usePetStore.setState({

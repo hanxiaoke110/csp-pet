@@ -27,20 +27,31 @@ export async function dualLoad(sqliteKey: string, lsKey: string): Promise<string
   try {
     const lsObj = JSON.parse(ls);
     const sqlObj = JSON.parse(sql);
-    // Compare ownedPets max updatedAt as freshness signal
-    const lsTime = getMaxUpdatedAt(lsObj);
-    const sqlTime = getMaxUpdatedAt(sqlObj);
-    if (sqlTime > lsTime) {
-      // SQLite is newer — also restore to localStorage
-      safeLsSet(lsKey, sql);
-      return sql;
+    const lsTime = getSnapshotUpdatedAt(lsObj);
+    const sqlTime = getSnapshotUpdatedAt(sqlObj);
+    const preferSql = sqlTime > lsTime;
+    const preferred = preferSql ? sqlObj : lsObj;
+    const alternate = preferSql ? lsObj : sqlObj;
+
+    // Permanent pet entitlements are monotonic. A companion-slot purchase does
+    // not touch a pet's updatedAt, so an older snapshot could previously win and
+    // make a paid slot disappear after an update/restart.
+    const merged = sqliteKey === 'pet_data'
+      ? mergePetEntitlements(preferred, alternate)
+      : preferred;
+    const result = JSON.stringify(merged);
+    if (preferSql || result !== ls) {
+      safeLsSet(lsKey, result);
     }
+    return result;
   } catch {}
 
   return ls;
 }
 
-function getMaxUpdatedAt(data: any): number {
+function getSnapshotUpdatedAt(data: any): number {
+  const savedAt = data?.savedAt ? new Date(data.savedAt).getTime() : 0;
+  if (Number.isFinite(savedAt) && savedAt > 0) return savedAt;
   let max = 0;
   try {
     if (data.ownedPets) {
@@ -51,4 +62,19 @@ function getMaxUpdatedAt(data: any): number {
     }
   } catch {}
   return max;
+}
+
+function mergePetEntitlements(preferred: any, alternate: any): any {
+  const preferredSlots = Math.min(3, Math.max(1, Number(preferred?.companionSlots) || 1));
+  const alternateSlots = Math.min(3, Math.max(1, Number(alternate?.companionSlots) || 1));
+  const companionSlots = Math.max(preferredSlots, alternateSlots);
+  const desktopCompanionIds = alternateSlots > preferredSlots
+    && Array.isArray(alternate?.desktopCompanionIds)
+    ? alternate.desktopCompanionIds
+    : preferred?.desktopCompanionIds;
+  return {
+    ...preferred,
+    companionSlots,
+    desktopCompanionIds: Array.isArray(desktopCompanionIds) ? desktopCompanionIds : [],
+  };
 }
