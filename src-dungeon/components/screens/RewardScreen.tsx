@@ -117,6 +117,21 @@ export default function RewardScreen() {
             <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '-8px', marginBottom: '12px' }}>
               本局计算金币 {goldEarned}，按奖励上限实际到账 · 今日还可获得 {battle.petCoinsDailyRemaining ?? 30}，本周还可获得 {battle.petCoinsWeeklyRemaining ?? 150}
             </div>
+            {battle.rewardsEligible === false && (
+              <div style={{ fontSize: '11px', color: '#fbbf24', marginBottom: '12px', fontWeight: 700 }}>
+                本周有奖次数已用完：本局仅记录评级，不发放 EXP 和金币
+              </div>
+            )}
+            {battle.rewardsEligible !== false && petCoinsEarned === 0 && battle.petCoinsDailyRemaining === 0 && (
+              <div style={{ fontSize: '11px', color: '#fbbf24', marginBottom: '12px', fontWeight: 700 }}>
+                今日试炼金币已达 30 上限，本局仍正常获得试炼 EXP
+              </div>
+            )}
+            {battle.rewardsEligible !== false && petExpEarned === 0 && battle.petExpDailyRemaining === 0 && (
+              <div style={{ fontSize: '11px', color: '#60a5fa', marginBottom: '12px', fontWeight: 700 }}>
+                今日智子成长 EXP 已达 120 上限
+              </div>
+            )}
             {(battle.ratingExpBonus || 0) > 0 && (
               <div style={{ fontSize: '11px', color: '#fbbf24', marginBottom: '12px', fontWeight: 700 }}>
                 首次 SS 评价额外获得 +{battle.ratingExpBonus} EXP

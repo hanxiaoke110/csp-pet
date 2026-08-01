@@ -342,7 +342,9 @@ export default function BattleScreen() {
       const s = useDungeonStore.getState();
       // Reserve reward eligibility now, but only consume the weekly attempt after
       // the battle reaches settlement. Abandoning from the pause menu costs nothing.
-      const earnsRewards = !isReplay && s.canEarnRewards();
+      // A replay can consume a normal or purchased reward attempt. Otherwise the
+      // paid "+1 reward attempt" becomes unusable after a student clears a stage.
+      const earnsRewards = s.canEarnRewards();
       useDungeonStore.setState({ currentBattleEarnsRewards: earnsRewards });
 
       // 工坊宠物：异步加载 AppData 的 thumb 缩略图作为 preview（普通宠物用 public preview）

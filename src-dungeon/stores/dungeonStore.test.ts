@@ -172,6 +172,24 @@ describe('智子试炼场核心结算', () => {
     expect(state.dungeonProgress[0].bestRating).toBe('S');
     expect(state.lastBattleResult?.expEarned).toBe(0);
     expect(state.lastBattleResult?.goldEarned).toBe(0);
+    expect(state.lastBattleResult?.rewardsEligible).toBe(false);
+  });
+
+  it('重打使用有奖次数时正常发放 EXP 和通用金币', () => {
+    useDungeonStore.setState({
+      player: makePlayer({ exp: 40 }),
+      battle: makeBattle({ rating: 'SS', correctCount: 5, expEarned: 45, goldEarned: 30 }),
+      currentBattleEarnsRewards: true,
+      dungeonProgress: [makeProgress({ completedStages: 1, bestScore: 3, bestRating: 'A' })],
+      _firstClears: { 'dungeon-01:dungeon-01-stage-01': true },
+    });
+
+    const result = useDungeonStore.getState().finalizeBattle('dungeon-01', false);
+
+    expect(result?.rewardsEligible).toBe(true);
+    expect(result?.expEarned).toBeGreaterThan(45);
+    expect(result?.petCoinsEarned).toBeGreaterThan(0);
+    expect(usePetStore.getState().coins).toBeGreaterThan(0);
   });
 
   it('重打较差评级不会覆盖已有 SS 最好评级', () => {

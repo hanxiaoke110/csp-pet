@@ -205,9 +205,11 @@ export interface BattleState {
   goldEarned: number;
   petCoinsEarned?: number;
   petExpEarned?: number;
+  rewardsEligible?: boolean;
   ratingExpBonus?: number;
   petCoinsDailyRemaining?: number;
   petCoinsWeeklyRemaining?: number;
+  petExpDailyRemaining?: number;
   rating: string;              // D/C/B/A/S/SS
   enemyHp: number;
   enemyMaxHp: number;

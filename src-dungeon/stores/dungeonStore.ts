@@ -332,6 +332,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
       // 周次数只限制重复刷取；从未通关的具体关卡始终有首通奖励。
       const earnsRewards = get().currentBattleEarnsRewards || isFirstClear;
       earnedRewardsThisBattle = earnsRewards;
+      snapshot.rewardsEligible = earnsRewards;
       const ratingExpBonus = earnsRewards && isFirstClear && battle.rating === 'SS'
         ? FIRST_SS_PLAYER_EXP_BONUS
         : 0;
@@ -382,6 +383,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         try { localStorage.setItem(expLedgerKey, JSON.stringify({ date: today, granted: grantedToday + grantedPetExp })); } catch {}
       }
       snapshot.petExpEarned = grantedPetExp;
+      snapshot.petExpDailyRemaining = Math.max(0, TRIAL_PET_EXP_DAILY_LIMIT - grantedToday - grantedPetExp);
     }
 
     // 2. 更新副本进度（在徽章检查之前，避免读 stale progress）
