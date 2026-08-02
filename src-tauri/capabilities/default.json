@@ -17,6 +17,7 @@
     "opener:default",
     "updater:default",
     "dialog:default",
+    "dialog:allow-confirm",
     "fs:default",
     "fs:allow-appdata-read",
     "fs:allow-appdata-write",

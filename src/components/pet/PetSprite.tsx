@@ -98,8 +98,10 @@ async function loadCachedSprite(petId: string): Promise<{ data: SpriteData; blob
 
 export default function PetSprite({
   renderType: _renderType, modelPath, canvasSize,
+  onReady,
 }: {
   renderType?: string; modelPath?: string; canvasSize?: number;
+  onReady?: () => void;
 }) {
   const sz = canvasSize || CANVAS_SIZE;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -218,6 +220,13 @@ export default function PetSprite({
     (window as any).__petUpdate__ = () => updateLastEvent(smRef.current);
     (window as any).__petTrigger__ = (anim: string, duration?: number) => triggerAnim(smRef.current, anim as PetAnimState, duration);
   }, []);
+
+  // Notify the host window once the sprite is actually rendered, so a
+  // freshly created transparent pet window can be shown instead of flashing
+  // an empty/white frame during webview startup.
+  useEffect(() => {
+    if (status === 'ready' || status === 'error') onReady?.();
+  }, [status, onReady]);
 
   const anim = currentAnim;
   const spr = spriteRef.current;

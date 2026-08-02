@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [wishes, setWishes] = useState<AdminWish[]>([]);
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
+  const [confirmId, setConfirmId] = useState<number | null>(null);
 
   const login = () => {
     if (!tokenInput.trim()) { setMsg('请输入管理密码'); return; }
@@ -55,8 +56,8 @@ export default function AdminPage() {
     }
   }, []);
 
-  const deleteWish = async (id: number) => {
-    if (!confirm('确定删除这条许愿？')) return;
+  const performDelete = async (id: number) => {
+    setConfirmId(null);
     try {
       const resp = await fetch(`${API}/admin/wishes/${id}`, {
         method: 'DELETE', headers: { 'X-Admin-Token': token },
@@ -71,6 +72,8 @@ export default function AdminPage() {
     } catch { setMsg('网络错误'); }
     setTimeout(() => setMsg(''), 3000);
   };
+
+  const confirmDeleteWish = (id: number) => setConfirmId(id);
 
   const timeFormat = (d: string) => {
     const date = new Date(d + 'Z');
@@ -175,7 +178,7 @@ export default function AdminPage() {
                 {timeFormat(w.created_at)} · 设备：{w.device_hash.slice(0, 8)}...
               </div>
             </div>
-            <button onClick={() => deleteWish(w.id)} style={{
+            <button onClick={() => confirmDeleteWish(w.id)} style={{
               flexShrink: 0, padding: '6px 14px', fontSize: 12, fontWeight: 600,
               background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca',
               borderRadius: 8, cursor: 'pointer',
@@ -185,6 +188,32 @@ export default function AdminPage() {
           </div>
         ))}
       </div>
+
+      {confirmId !== null && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(15,23,42,.45)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
+        }} onClick={() => setConfirmId(null)}>
+          <div style={{
+            background: '#fff', borderRadius: 14, padding: '20px 22px', maxWidth: 360,
+            boxShadow: '0 12px 40px rgba(15,23,42,.25)', textAlign: 'center',
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ fontSize: 32, marginBottom: 10 }}>🗑</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#1e293b', marginBottom: 6 }}>删除这条许愿？</div>
+            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 18 }}>删除后不可恢复，学生端将同步消失。</div>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+              <button onClick={() => setConfirmId(null)} style={{
+                padding: '8px 18px', borderRadius: 8, border: '1px solid #e2e8f0',
+                background: '#fff', color: '#334155', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              }}>取消</button>
+              <button onClick={() => performDelete(confirmId)} style={{
+                padding: '8px 18px', borderRadius: 8, border: 'none',
+                background: '#ef4444', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              }}>确认删除</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
