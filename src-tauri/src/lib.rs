@@ -20,6 +20,7 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
             "hidden".into()
         } else {
             let _ = w.show();
+            ensure_pet_topmost(&app, "pet");
             let _ = app.emit(
                 "pet-window-visibility",
                 serde_json::json!({ "visible": true }),
@@ -35,6 +36,7 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
 fn show_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
         let _ = w.show();
+        ensure_pet_topmost(&app, "pet");
         let _ = app.emit(
             "pet-window-visibility",
             serde_json::json!({ "visible": true }),
@@ -60,16 +62,47 @@ fn companion_label(slot: u8) -> Result<String, String> {
     }
 }
 
+/// 把某个智子窗口重新提到最上层。主窗口获得焦点后调用，
+/// 避免智子图层被主窗口盖住（Windows 上直接置 HWND_TOPMOST，
+/// macOS 上重新设置 floating 层级）。
+fn ensure_pet_topmost(app: &tauri::AppHandle, label: &str) {
+    if let Some(window) = app.get_webview_window(label) {
+        let _ = window.set_always_on_top(true);
+        #[cfg(target_os = "windows")]
+        force_windows_topmost(&window);
+    }
+}
+
+#[cfg(target_os = "windows")]
+fn force_windows_topmost(window: &tauri::WebviewWindow) {
+    use windows::Win32::UI::WindowsAndMessaging::{
+        SetWindowPos, HWND_TOPMOST, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
+    };
+    if let Ok(hwnd) = window.hwnd() {
+        unsafe {
+            let _ = SetWindowPos(
+                hwnd,
+                Some(HWND_TOPMOST),
+                0,
+                0,
+                0,
+                0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+            );
+        }
+    }
+}
+
 #[tauri::command]
 fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
     let label = companion_label(slot)?;
     if let Some(window) = app.get_webview_window(&label) {
         window.show().map_err(|error| error.to_string())?;
-        window.set_focus().map_err(|error| error.to_string())?;
+        ensure_pet_topmost(&app, &label);
         return Ok(());
     }
 
-    let x = if slot == 2 { 180.0 } else { 360.0 };
+    let x = if slot == 2 { 280.0 } else { 560.0 };
     WebviewWindowBuilder::new(
         &app,
         &label,
@@ -78,7 +111,7 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
         WebviewUrl::App("pet.html".into()),
     )
     .title(format!("CSP Pet {slot}"))
-    .inner_size(154.0, 154.0)
+    .inner_size(260.0, 230.0)
     .position(x, 160.0)
     .resizable(false)
     .decorations(false)
@@ -86,6 +119,9 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
     .always_on_top(true)
     .skip_taskbar(true)
     .shadow(false)
+    // 先隐藏创建，等页面精灵就绪后由 PetWindow show，
+    // 消除动态创建透明窗口时的闪白/闪黑。
+    .visible(false)
     .build()
     .map_err(|error| format!("创建第 {slot} 个桌面智子窗口失败：{error}"))?;
     Ok(())
@@ -98,6 +134,26 @@ fn hide_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
         window.hide().map_err(|error| error.to_string())?;
     }
     Ok(())
+}
+
+/// 点击穿透状态的防抖器：主窗口连续焦点变化时（Alt+Tab、连点等），
+/// 只按最后一次状态合并应用，避免 Windows 上每次切换都整窗重绘。
+#[derive(Default)]
+struct PetClickThroughState {
+    applied: Option<bool>,
+    pending: Option<bool>,
+    worker: Option<std::thread::JoinHandle<()>>,
+}
+
+fn apply_pet_cursor_state(app: &tauri::AppHandle, ignore: bool) {
+    for label in ["pet", "pet-2", "pet-3"] {
+        if let Some(pet) = app.get_webview_window(label) {
+            let _ = pet.set_ignore_cursor_events(ignore);
+            // 主窗口回到前台时同步把智子窗口重新置顶，
+            // 保证智子图层始终在主窗口之上。
+            ensure_pet_topmost(app, label);
+        }
+    }
 }
 
 #[tauri::command]
@@ -251,7 +307,9 @@ pub fn run() {
     // Prevent close → hide to tray, reopen support
     {
         use tauri::RunEvent;
-        app.run(|app_handle, event| {
+        let pet_cursor_state =
+            std::sync::Arc::new(std::sync::Mutex::new(PetClickThroughState::default()));
+        app.run(move |app_handle, event| {
             match event {
                 #[cfg(target_os = "macos")]
                 RunEvent::Reopen { .. } => {
@@ -287,9 +345,41 @@ pub fn run() {
                     // soon as the main window loses focus.
                     if label == "main" {
                         if let tauri::WindowEvent::Focused(focused) = window_event {
-                            for label in ["pet", "pet-2", "pet-3"] {
-                                if let Some(pet) = app_handle.get_webview_window(label) {
-                                    let _ = pet.set_ignore_cursor_events(focused);
+                            let thread_app = app_handle.clone();
+                            let thread_state = pet_cursor_state.clone();
+                            {
+                                let mut state = pet_cursor_state.lock().unwrap();
+                                state.pending = Some(focused);
+                                if state.worker.is_none() {
+                                    state.worker = Some(std::thread::spawn(move || {
+                                        loop {
+                                            std::thread::sleep(std::time::Duration::from_millis(120));
+                                            let next = {
+                                                let mut state = thread_state.lock().unwrap();
+                                                match state.pending.take() {
+                                                    Some(value) => {
+                                                        let changed = state.applied != Some(value);
+                                                        state.applied = Some(value);
+                                                        if changed {
+                                                            Some(value)
+                                                        } else {
+                                                            None
+                                                        }
+                                                    }
+                                                    None => None,
+                                                }
+                                            };
+                                            if let Some(value) = next {
+                                                apply_pet_cursor_state(&thread_app, value);
+                                            } else {
+                                                let mut state = thread_state.lock().unwrap();
+                                                if state.pending.is_none() {
+                                                    state.worker = None;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }));
                                 }
                             }
                         }

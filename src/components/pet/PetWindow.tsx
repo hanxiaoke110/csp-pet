@@ -13,6 +13,7 @@ const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
   medium: { canvas: 140, win: 154 },
   large: { canvas: 170, win: 188 },
 };
+const BUBBLE_SPACE = 76;
 
 const getPetSize = () => {
   try { return localStorage.getItem('csp_pet_size') || 'medium'; } catch { return 'medium'; }
@@ -55,18 +56,27 @@ export default function PetWindow() {
   const roamingPausedUntil = useRef(0);
   const dialogue = useRef(new PetDialogueDirector());
   const currentWindowSize = useRef({
-    width: (SIZE_MAP[getPetSize()] || SIZE_MAP.medium).win,
-    height: (SIZE_MAP[getPetSize()] || SIZE_MAP.medium).win,
+    width: Math.max(260, (SIZE_MAP[getPetSize()] || SIZE_MAP.medium).win + 96),
+    height: (SIZE_MAP[getPetSize()] || SIZE_MAP.medium).win + BUBBLE_SPACE,
   });
+  const autoShownRef = useRef(false);
 
   const size = SIZE_MAP[petSize] || SIZE_MAP.medium;
   const winSz = size.win;
   const canvasSz = size.canvas;
   const uiScale = canvasSz / 200;
-  const bubbleWindowWidth = Math.max(260, winSz + 96);
-  const bubbleSpace = 76;
-  const windowWidth = bubble ? bubbleWindowWidth : winSz;
-  const windowHeight = bubble ? winSz + bubbleSpace : winSz;
+  // 气泡固定画在窗口内部：窗口尺寸不再随气泡显示/消失而变化，
+  // 避免透明置顶窗口反复 resize 造成闪烁。
+  const windowWidth = Math.max(260, winSz + 96);
+  const windowHeight = winSz + BUBBLE_SPACE;
+
+  // 窗口创建时保持隐藏，等精灵真正渲染出来再 show，
+  // 消除第二/第三智子窗口创建瞬间的闪白/闪黑。
+  const handleSpriteReady = useCallback(() => {
+    if (autoShownRef.current) return;
+    autoShownRef.current = true;
+    getCurrentWindow().show().catch(() => {});
+  }, []);
 
   const pauseRoaming = useCallback((ms: number) => {
     roamingPausedUntil.current = Math.max(roamingPausedUntil.current, Date.now() + ms);
@@ -91,7 +101,7 @@ export default function PetWindow() {
 
   const savePosition = useCallback(() => {
     getCurrentWindow().outerPosition().then(position => {
-      localStorage.setItem(positionKey, JSON.stringify({ x: position.x, y: position.y }));
+      localStorage.setItem(positionKey, JSON.stringify({ x: position.x, y: position.y, v: 2 }));
     }).catch(() => {});
   }, []);
 
@@ -203,14 +213,27 @@ export default function PetWindow() {
       const saved = localStorage.getItem(positionKey);
       if (saved) {
         try {
-          const { x, y } = JSON.parse(saved);
-          getCurrentWindow().setPosition(new PhysicalPosition(x, y)).catch(() => {});
-          defaultPos.current = { x, y };
-          return;
+          const parsed = JSON.parse(saved);
+          let x = Number(parsed.x);
+          let y = Number(parsed.y);
+          if (parsed.v !== 2) {
+            // 旧版窗口是正方形且与精灵同尺寸；新版固定为带气泡空间的窗口。
+            // 换算到新的左上角，让精灵在屏幕上的位置保持不变。
+            const prevW = (SIZE_MAP[petSize] || SIZE_MAP.medium).win;
+            x = Math.round(x + (prevW - windowWidth) / 2);
+            y = Math.round(y + (prevW - windowHeight));
+            localStorage.setItem(positionKey, JSON.stringify({ x, y, v: 2 }));
+          }
+          if (Number.isFinite(x) && Number.isFinite(y)) {
+            getCurrentWindow().setPosition(new PhysicalPosition(x, y)).catch(() => {});
+            defaultPos.current = { x, y };
+            return;
+          }
         } catch { /* use app-selected location */ }
       }
       defaultPos.current = { x: position.x, y: position.y };
     }).catch(() => {});
+    // 仅在挂载时恢复/迁移保存的位置；尺寸切换时由 resize effect 负责保持精灵视觉位置。
   }, []);
 
   // Low-disturbance roaming: remain on the current monitor, use its work area,
@@ -231,13 +254,14 @@ export default function PetWindow() {
       const areaPos = (area.position as any).data || area.position;
       const areaSize = (area.size as any).data || area.size;
       const scale = Number(monitor.scaleFactor) || 1;
-      const windowSize = winSz * scale;
+      const windowW = windowWidth * scale;
+      const windowH = windowHeight * scale;
       const margin = Math.round(18 * scale);
       const minX = Number(areaPos.x) + margin;
-      const maxX = Number(areaPos.x) + Number(areaSize.width) - windowSize - margin;
+      const maxX = Number(areaPos.x) + Number(areaSize.width) - windowW - margin;
       // Keep the default roaming lane in the lower half so code and reading stay visible.
       const minY = Number(areaPos.y) + Math.max(margin, Number(areaSize.height) * 0.52);
-      const maxY = Number(areaPos.y) + Number(areaSize.height) - windowSize - margin;
+      const maxY = Number(areaPos.y) + Number(areaSize.height) - windowH - margin;
       if (maxX <= minX || maxY <= minY) return;
 
       const maxStep = Math.min(340 * scale, (maxX - minX) * 0.35);
@@ -260,7 +284,9 @@ export default function PetWindow() {
           Math.round(position.y + dy * eased),
         ));
         if (progress >= 1) break;
-        await sleep(40);
+        // 100ms 一步：透明置顶窗口移动频率过高会在 Windows/macOS 上闪，
+        // 降频后观感几乎不变。
+        await sleep(100);
       }
       window.__petTrigger__?.('idle');
     };
@@ -276,7 +302,7 @@ export default function PetWindow() {
 
     schedule(30_000);
     return () => { cancelled = true; if (timer) clearTimeout(timer); };
-  }, [winSz]);
+  }, [windowHeight, windowWidth]);
 
   // Ambient messages are intentionally sparse. Context-rich result messages
   // continue to arrive from quiz/course screens through the pet-bubble event.
@@ -331,7 +357,7 @@ export default function PetWindow() {
       {bubble && (
         <div style={{
           position: 'absolute', top: 4, left: '50%', transform: 'translateX(-50%)',
-          width: bubbleWindowWidth - 16, maxWidth: 244,
+          width: windowWidth - 16, maxWidth: 244,
           background: 'rgba(255,255,255,.98)', borderRadius: 12, padding: '9px 12px',
           fontSize: Math.max(12, Math.round(13 * uiScale)), lineHeight: 1.5, fontWeight: 600,
           boxShadow: '0 5px 18px rgba(15,23,42,.2)', zIndex: 20,
@@ -359,7 +385,7 @@ export default function PetWindow() {
         }}
         onClick={handleClick}
       >
-        <PetSprite key={activePet.modelPath || 'empty'} renderType={activePet.renderType} modelPath={activePet.modelPath} canvasSize={canvasSz} />
+        <PetSprite key={activePet.modelPath || 'empty'} renderType={activePet.renderType} modelPath={activePet.modelPath} canvasSize={canvasSz} onReady={handleSpriteReady} />
 
         {desktopSlot === 1 && showActions && (
           <div style={{

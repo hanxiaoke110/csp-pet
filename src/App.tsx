@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.24';
+  const VER = '1.7.26';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,11 +180,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🏭 工坊按最新上传排序，支持加载全部老师智子</div>
-          <div>▦ 工坊调整为四列展示，名称和卡片更清晰紧凑</div>
-          <div>🛡️ 工坊购买新增二次确认，防止误触扣除金币</div>
-          <div>🪙 金币改为清晰的金色样式，余额数字更醒目</div>
-          <div>🧹 下架商城中素材错误的智子，旧存档仍可正常使用</div>
+          <div>🐾 修复多智子窗口闪烁与置顶问题，点击更稳定</div>
+          <div>🖥️ 修复 Windows 弹窗权限提示，删除确认正常弹出</div>
+          <div>💬 气泡改为固定窗口展示，不再反复跳动</div>
+          <div>🧹 移除教师端学习分析入口</div>
+          <div>⚡ 优化多窗口数据同步与漫游流畅度</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
