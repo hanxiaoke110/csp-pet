@@ -39,6 +39,9 @@
 - Gitee 仓库附件总配额 1GB，不发版时清理旧 Release
 - 新增精灵需要同时做：spritesheet → Gitee + preview → public/ + pet.ts 配置，缺一不可
 - **Gitee 安装包命名规则**：`CSP_${version}_${arch}.dmg` / `CSP_${version}_x64-setup.exe`。productName 用中文（`CSP 学习助手`），CI 构建后重命名为英文再签名。
+- **Gitee contents API 鉴权**：`/contents/update.json` 更新必须用 `?access_token=` query 参数；`Authorization: token` header 在 attach_files 上传可用，但在 contents 接口会报 40001「登录失效」
+- **dialog ACL 权限拆分**：`dialog:default` 只含 allow-message/save/open，`window.confirm`（被插件注入脚本转发为 `plugin:dialog|confirm`）需要显式 `dialog:allow-confirm`；客户端避免使用原生 confirm/alert，统一应用内弹窗
+- **Gitee 大文件下载加速**：GitHub 直连 ~30KB/s、ghfast.top ~50KB/s 时，用本机代理 `curl -x http://127.0.0.1:7897 -C -` 可达 ~2.3MB/s
 - **CI `npm ci` 只装 `csp-desktop-pet/package.json` 的依赖**，如果根目录 `package.json` 有额外依赖，必须同步到子项目
 - **CI `sign_file` 用 `grep '^dW50' | head -1` 提取纯签名**，不再读 `.sig` 文件（含说明文字）
 - **CI 构建文件名处理**：productName 保留中文 → Tauri 输出中文名 → CI rename_eng() 替换为英文 → 再签名 → 文件名/签名/URL 全部对齐

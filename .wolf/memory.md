@@ -1841,3 +1841,16 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 ### 发版
 - v1.7.13 已提交并推送 Gitee master + tag（github 因本机代理未启动待补推）
 - CF Worker api.cspstudy.top /api/question-bank/v2/* 已部署上线，指纹与本地一致
+## 2026-08-02 — v1.7.26 多智子稳定性与窗口修复
+
+### 本次内容
+- 多智子窗口闪烁修复：气泡改为固定窗口尺寸（不再随气泡 resize）、漫游 40ms→100ms 降频、Windows 点击穿透防抖（120ms 合并焦点切换）
+- 智子图层修复：主窗口聚焦时重新置顶 pet/pet-2/pet-3（Windows 直接 SetWindowPos HWND_TOPMOST，macOS 重设 floating 层级）；二三号窗口先隐藏创建、精灵就绪再 show；不再 set_focus 抢焦点
+- **dialog confirm ACL 补漏**：v1.7.22 只加了 `dialog:default`（含 allow-message/save/open），**confirm 命令需要独立的 `dialog:allow-confirm`**；孩子端 1.7.25 实测仍报 `plugin: dialog confirm not allowed by ACL`（触发点：AdminPage 删除许愿的原生 confirm()）。已补权限 + AdminPage 改应用内确认弹窗
+- 移除教师端学习分析死代码（AnalyticsPanel，用户确认功能不需要）
+- 三件套验证（客户端+教师端+CF API）：发现许愿限流并发竞态（P0，4 并发全部入库超限）、管理员口令文档泄露（用户选择保留）；详见 docs/validation/2026-08-02-full-validation-matrix.md
+
+### 发版记录（v1.7.26）
+- **CI 的 Gitee 大文件上传又失败**：release 只有源码包，update.json 回退成 GitHub URL。补传流程：本机下载走 `127.0.0.1:7897` 代理（~2.3MB/s，比 ghfast.top 快 30 倍）→ Gitee `attach_files` 上传（Authorization header 可用）→ **contents API 更新 update.json 必须用 `?access_token=` query 参数，Authorization header 会报 40001** → 删除旧 Release（保留最近 2 个）
+- 本地 `GITEE_TOKEN`（32 位旧值）已失效，本次用用户新提供的 token；注意不要把 token 写进仓库
+- App.tsx VER 曾漏改（1.7.24→1.7.26 一起修了）；发版前核对三个版本号
