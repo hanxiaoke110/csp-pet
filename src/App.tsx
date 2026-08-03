@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.27';
+  const VER = '1.7.28';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,11 +180,10 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🐛 修复阅读题没有选项、代码显示不全的问题</div>
-          <div>🔄 题库缓存加强校验，旧缓存会自动更新修复</div>
-          <div>🎁 新增补偿码兑换（每码每设备限兑一次）</div>
-          <div>⭐ 优秀码改为服务器校验，仅当天有效</div>
-          <div>🕒 统一按北京时间计算日期</div>
+          <div>🏆 修复每周任务 5/5 全对却不解锁成就的问题</div>
+          <div>👑 超级挑战“完美通关”改为按总分判定，真正全对才算</div>
+          <div>📖 更新饲养指南：经验来源、商城道具、神秘代码、成就奖励</div>
+          <div>🐛 修复“三连完美”成就描述，累计 3 次周常完美即可达成</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
