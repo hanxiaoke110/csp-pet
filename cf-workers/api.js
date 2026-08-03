@@ -182,8 +182,9 @@ function getDateStr() {
   return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
 }
 function getDateShort() {
-  const d = new Date();
-  return `${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  // 统一按北京时间(UTC+8)：与侧边栏/学生端一致，避免 UTC 与本地日期跨天不一致
+  const d = new Date(Date.now() + 8 * 3600 * 1000);
+  return `${String(d.getUTCMonth()+1).padStart(2,'0')}${String(d.getUTCDate()).padStart(2,'0')}`;
 }
 function getDateDashed() {
   const d = new Date();
@@ -194,7 +195,7 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-const SCHEMA_VERSION = 6;
+const SCHEMA_VERSION = 7;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
@@ -210,7 +211,14 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS classes (class_code TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT DEFAULT '', label TEXT DEFAULT '', created_at TEXT, status TEXT DEFAULT 'active')`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS class_students (class_code TEXT, device_hash TEXT, student_name TEXT, phone TEXT DEFAULT '', joined_at TEXT, status TEXT DEFAULT 'active', PRIMARY KEY(class_code, device_hash))`); } catch {}
   try { await db.exec(`ALTER TABLE class_students ADD COLUMN phone TEXT DEFAULT ''`); } catch {}
-  try { await db.exec(`CREATE TABLE IF NOT EXISTS generated_codes (code TEXT PRIMARY KEY, type TEXT, teacher_id TEXT, level TEXT, created_at TEXT)`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS generated_codes (code TEXT PRIMARY KEY, type TEXT, teacher_id TEXT, level TEXT, coins INTEGER DEFAULT 0, exp INTEGER DEFAULT 0, class_code TEXT DEFAULT '', status TEXT DEFAULT 'unused', used_at TEXT, used_device_hash TEXT, created_at TEXT)`); } catch {}
+  try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN coins INTEGER DEFAULT 0`); } catch {}
+  try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN exp INTEGER DEFAULT 0`); } catch {}
+  try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN class_code TEXT DEFAULT ''`); } catch {}
+  try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN status TEXT DEFAULT 'unused'`); } catch {}
+  try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN used_at TEXT`); } catch {}
+  try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN used_device_hash TEXT`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS exc_claims (code TEXT NOT NULL, device_hash TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')), PRIMARY KEY(code, device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, title TEXT, description TEXT, teacher_id TEXT, teacher_name TEXT, submitter TEXT DEFAULT 'teacher', status TEXT DEFAULT 'open', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS workshop_pets (id TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT, name TEXT, element TEXT, style TEXT, description TEXT, tier TEXT, price INTEGER, pet_json TEXT, spritesheet_url TEXT, thumbnail_url TEXT, status TEXT DEFAULT 'active', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_overrides (question_id TEXT PRIMARY KEY, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', updated_at TEXT DEFAULT (datetime('now')))`); } catch {}
@@ -727,6 +735,7 @@ export default {
       // ═══ CODE GENERATION (teacher auth) ═══
       const EXC_SECRET = 'csp-coach-2025';
       const CAMP_SECRET = 'csp-camp-2025';
+      const EXC_REWARDS = { '1': { exp: 100, coins: 60 }, '2': { exp: 60, coins: 40 }, '3': { exp: 30, coins: 20 } };
 
       if (path === '/api/codes/exc' && request.method === 'POST') {
         const teacher = await checkTeacher(request, db);
@@ -756,6 +765,105 @@ export default {
         const code = `CAMP-${date}-${hash}-${rand}`;
         await db.prepare('INSERT INTO generated_codes (code, type, teacher_id, level, created_at) VALUES (?,"camp",?,?,datetime("now"))').bind(code, teacher.teacher_id, '').run();
         return new Response(JSON.stringify({ code }), { headers: cors });
+      }
+
+      // ═══ COMPENSATION CODES (teacher-set coins/exp, class-bound, one-time) ═══
+      if (path === '/api/codes/comp' && request.method === 'POST') {
+        const teacher = await checkTeacher(request, db);
+        if (!teacher && !checkAdmin(request, env)) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
+
+        const body = await request.json();
+        const rawCoins = parseInt(body.coins, 10);
+        const rawExp = parseInt(body.exp, 10);
+        if (!Number.isInteger(rawCoins) || rawCoins < 1 || rawCoins > 10000
+            || !Number.isInteger(rawExp) || rawExp < 1 || rawExp > 100000) {
+          return new Response(JSON.stringify({ error: '请输入有效的金币(1-10000)和经验(1-100000)' }), { status: 400, headers: cors });
+        }
+        const coinAmt = rawCoins;
+        const expAmt = rawExp;
+        const cnt = Math.min(20, Math.max(1, parseInt(body.count, 10) || 1));
+
+        // 班级码可选：填写则仅限该班学生兑换；留空则和优秀码一样，拿到码即可兑
+        const clsCode = String(body.class_code || '').trim().toUpperCase();
+        if (clsCode) {
+          if (teacher) {
+            const cls = await db.prepare("SELECT class_code FROM classes WHERE class_code=? AND teacher_id=? AND status='active'").bind(clsCode, teacher.teacher_id).first();
+            if (!cls) return new Response(JSON.stringify({ error: '班级不存在或不属于当前老师' }), { status: 403, headers: cors });
+          } else {
+            const cls = await db.prepare("SELECT class_code FROM classes WHERE class_code=? AND status='active'").bind(clsCode).first();
+            if (!cls) return new Response(JSON.stringify({ error: '班级不存在' }), { status: 404, headers: cors });
+          }
+        }
+
+        const teacherId = teacher ? teacher.teacher_id : '';
+        const codes = [];
+        for (let i = 0; i < cnt; i++) {
+          const code = 'CMP-' + randomChars(16);
+          await db.prepare("INSERT INTO generated_codes (code, type, teacher_id, level, coins, exp, class_code, status, created_at) VALUES (?,'comp',?,'',?,?,?,'unused',datetime('now'))")
+            .bind(code, teacherId, coinAmt, expAmt, clsCode).run();
+          codes.push(code);
+        }
+        return new Response(JSON.stringify({ codes, coins: coinAmt, exp: expAmt, class_code: clsCode }), { headers: cors });
+      }
+
+      // POST /api/codes/redeem — student redeems a compensation code (atomic one-time claim)
+      if (path === '/api/codes/redeem' && request.method === 'POST') {
+        const body = await request.json();
+        const code = String(body.code || '').trim().toUpperCase();
+        const device_hash = String(body.device_hash || '').trim();
+        if (!code || !device_hash) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
+        if (!code.startsWith('CMP-')) return new Response(JSON.stringify({ error: '无效的补偿码' }), { status: 400, headers: cors });
+
+        if (!await checkRateLimit(db, `redeem:${device_hash}`, 5, 60)) {
+          return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
+        }
+
+        const row = await db.prepare("SELECT code, type, coins, exp, class_code, status FROM generated_codes WHERE code=?").bind(code).first();
+        if (!row || row.type !== 'comp') return new Response(JSON.stringify({ error: '补偿码不存在' }), { status: 404, headers: cors });
+        if (row.status !== 'unused') return new Response(JSON.stringify({ error: '此补偿码已被兑换' }), { status: 400, headers: cors });
+
+        // 班级绑定校验：仅本班 active 学生可兑换
+        if (row.class_code) {
+          const st = await db.prepare("SELECT 1 AS ok FROM class_students WHERE class_code=? AND device_hash=? AND status='active'").bind(row.class_code, device_hash).first();
+          if (!st) return new Response(JSON.stringify({ error: '此补偿码仅限本班学生兑换' }), { status: 403, headers: cors });
+        }
+
+        // 原子占用：并发重复兑换只成功一次
+        const upd = await db.prepare("UPDATE generated_codes SET status='used', used_at=datetime('now'), used_device_hash=? WHERE code=? AND status='unused'").bind(device_hash, code).run();
+        if (!upd.meta?.changes) return new Response(JSON.stringify({ error: '此补偿码已被兑换' }), { status: 400, headers: cors });
+
+        return new Response(JSON.stringify({ success: true, coins: row.coins, exp: row.exp }), { headers: cors });
+      }
+
+      // POST /api/codes/redeem-exc — 优秀码服务端校验（密钥不再下发到学生端）
+      if (path === '/api/codes/redeem-exc' && request.method === 'POST') {
+        const body = await request.json();
+        const code = String(body.code || '').trim().toUpperCase();
+        const device_hash = String(body.device_hash || '').trim();
+        if (!code || !device_hash) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
+
+        if (!await checkRateLimit(db, `redeem-exc:${device_hash}`, 5, 60)) {
+          return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
+        }
+
+        const m = code.match(/^EXC-([123])-(\d{4})-([A-Z0-9]{4})-([A-Z0-9]{4})$/);
+        if (!m) return new Response(JSON.stringify({ error: '兑换码无效，请检查输入' }), { status: 400, headers: cors });
+        const [, level, date, check, rand] = m;
+        if (codeHash(`${level}-${date}-${rand}-${EXC_SECRET}`) !== check) {
+          return new Response(JSON.stringify({ error: '兑换码无效，请检查输入' }), { status: 400, headers: cors });
+        }
+        if (date !== getDateShort()) {
+          return new Response(JSON.stringify({ error: '此优秀码已过期（仅当天有效）' }), { status: 400, headers: cors });
+        }
+
+        // 每设备一次：原子占用，并发/重复只成功一次
+        const ins = await db.prepare('INSERT OR IGNORE INTO exc_claims (code, device_hash) VALUES (?,?)').bind(code, device_hash).run();
+        if (!ins.meta?.changes) {
+          return new Response(JSON.stringify({ error: '此优秀码已被使用' }), { status: 400, headers: cors });
+        }
+
+        const reward = EXC_REWARDS[level] || EXC_REWARDS['1'];
+        return new Response(JSON.stringify({ success: true, level, exp: reward.exp, coins: reward.coins }), { headers: cors });
       }
 
       // ═══ WISH WALL (public) ═══

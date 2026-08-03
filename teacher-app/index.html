@@ -569,6 +569,9 @@ function Dashboard() {
     tab === 'codes' && !loading && React.createElement('div', null,
       React.createElement(ExcCodePanel),
       React.createElement('div', { style:{ marginTop:16 } },
+        React.createElement(CompCodePanel),
+      ),
+      React.createElement('div', { style:{ marginTop:16 } },
         React.createElement(CampCodePanel),
       ),
     ),
@@ -926,7 +929,7 @@ function ExcCodePanel() {
 
   return React.createElement('div', { className:'card' },
     React.createElement('h3', null, '⭐ 优秀学生奖励码'),
-    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:14 } }, '生成兑换码发给学生，在桌宠 App「神秘代码」中输入领取。'),
+    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:14 } }, '生成兑换码发给学生，在桌宠 App「神秘代码」中输入领取。⚠️ 优秀码仅当天有效，过期作废。'),
     React.createElement('div', { style:{ display:'flex', gap:10, alignItems:'end', marginBottom:12 } },
       React.createElement('div', { style:{ flex:1 } },
         React.createElement('label', { style:{ fontSize:11, fontWeight:600, color:'#64748b', display:'block', marginBottom:4 } }, '等级'),
@@ -979,6 +982,57 @@ function CampCodePanel() {
         React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(result); toast('已复制'); } }, '📋 复制'),
       ),
       React.createElement('code', { style:{ display:'block', background:'#fff', padding:'10px 14px', borderRadius:8, fontSize:14, fontFamily:'monospace', fontWeight:700, letterSpacing:1, border:'1px solid #e2e8f0', wordBreak:'break-all' } }, result),
+    ),
+  );
+}
+
+function CompCodePanel() {
+  const [coins, setCoins] = React.useState(500);
+  const [exp, setExp] = React.useState(1000);
+  const [count, setCount] = React.useState(3);
+  const [result, setResult] = React.useState(null);
+  const [genLoading, setGenLoading] = React.useState(false);
+
+  const generate = async () => {
+    const c = parseInt(coins, 10);
+    const e = parseInt(exp, 10);
+    const n = parseInt(count, 10) || 1;
+    if (!(c >= 1 && c <= 10000) || !(e >= 1 && e <= 100000)) { toast('金币范围 1-10000，经验范围 1-100000', 'error'); return; }
+    setGenLoading(true);
+    const d = await api('/api/codes/comp', { method:'POST', body:JSON.stringify({ coins:c, exp:e, count:Math.min(n,20) }) });
+    if (d.error) { toast(d.error, 'error'); setGenLoading(false); return; }
+    setResult(d);
+    setGenLoading(false);
+    navigator.clipboard.writeText(d.codes.join('\n')).catch(()=>{});
+  };
+
+  return React.createElement('div', { className:'card' },
+    React.createElement('h3', null, '🎁 Bug 补偿码'),
+    React.createElement('div', { style:{ fontSize:12, color:'#94a3b8', marginBottom:14 } }, '金额由老师自定，每个码全局只能兑换一次（拿到码即可兑换）。经验到账后存入学生经验池。'),
+    React.createElement('div', { style:{ display:'flex', gap:10, alignItems:'end', marginBottom:12, flexWrap:'wrap' } },
+      React.createElement('div', { style:{ flex:1, minWidth:100 } },
+        React.createElement('label', { style:{ fontSize:11, fontWeight:600, color:'#64748b', display:'block', marginBottom:4 } }, '金币 (1-10000)'),
+        React.createElement('input', { className:'input', type:'number', value:coins, onChange:e=>setCoins(e.target.value), min:1, max:10000 }),
+      ),
+      React.createElement('div', { style:{ flex:1, minWidth:100 } },
+        React.createElement('label', { style:{ fontSize:11, fontWeight:600, color:'#64748b', display:'block', marginBottom:4 } }, '经验 (1-100000)'),
+        React.createElement('input', { className:'input', type:'number', value:exp, onChange:e=>setExp(e.target.value), min:1, max:100000 }),
+      ),
+      React.createElement('div', { style:{ width:80 } },
+        React.createElement('label', { style:{ fontSize:11, fontWeight:600, color:'#64748b', display:'block', marginBottom:4 } }, '数量'),
+        React.createElement('input', { className:'input', type:'number', value:count, onChange:e=>setCount(parseInt(e.target.value)||1), min:1, max:20 }),
+      ),
+      React.createElement('button', { className:'btn btn-primary', onClick:generate, disabled:genLoading, style:{ whiteSpace:'nowrap' } },
+        genLoading ? '生成中...' : '🎲 生成'),
+    ),
+    result && React.createElement('div', { style:{ background:'#f8fafc', borderRadius:8, padding:12 } },
+      React.createElement('div', { style:{ fontSize:12, fontWeight:600, marginBottom:8, display:'flex', justifyContent:'space-between' } },
+        React.createElement('span', null, `已生成 ${result.codes.length} 个补偿码（+${result.coins}金币 +${result.exp}经验，已自动复制）`),
+        React.createElement('button', { className:'btn btn-outline btn-sm', onClick:()=>{ navigator.clipboard.writeText(result.codes.join('\n')); toast('已复制'); } }, '📋 复制'),
+      ),
+      React.createElement('div', { style:{ display:'flex', flexWrap:'wrap', gap:6 } },
+        result.codes.map(c => React.createElement('code', { key:c, style:{ background:'#fff', padding:'4px 10px', borderRadius:6, fontSize:12, fontFamily:'monospace', border:'1px solid #e2e8f0' } }, c)),
+      ),
     ),
   );
 }

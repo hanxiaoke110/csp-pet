@@ -2,34 +2,9 @@ import { useState } from 'react';
 import { useCourseStore } from '../../stores/courseStore';
 import { usePetStore } from '../../stores/petStore';
 import type { Lesson } from '../../types/course';
+import { getDeviceId } from '../../utils/crypto';
 
-// ─── Code validation ───
-const SECRET = 'csp-coach-2025';
-
-function makeHash(level: string, date: string, rand: string): string {
-  let h = 0;
-  const s = `${level}-${date}-${rand}-${SECRET}`;
-  for (let i = 0; i < s.length; i++) {
-    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-  }
-  const chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-  let result = '';
-  let v = Math.abs(h);
-  for (let i = 0; i < 4; i++) {
-    result = chars[v % chars.length] + result;
-    v = Math.floor(v / chars.length);
-  }
-  return result;
-}
-
-function verifyExcellenceCode(code: string): { level: string } | null {
-  // Format: EXC-{level}-{MMDD}-{4-char-hash}-{4-char-rand}
-  // The random suffix is PART of the hash — changing any character invalidates the code
-  const match = code.match(/^EXC-([123])-(\d{4})-([A-Z0-9]{4})-([A-Z0-9]{4})$/);
-  if (!match) return null;
-  const [, level, date, check, rand] = match;
-  return makeHash(level, date, rand) === check ? { level } : null;
-}
+const API = 'https://api.cspstudy.top';
 
 // ─── Rewards ───
 const LESSON_REWARD = { exp: 50, coins: 30, affection: 10 };
@@ -54,7 +29,7 @@ export default function RedeemCode({ onClose }: Props) {
     return lessons.find(l => l.password && l.password === code) || null;
   };
 
-  const handleRedeem = () => {
+  const handleRedeem = async () => {
     const code = input.trim();
     if (!code) return;
 
@@ -95,32 +70,83 @@ export default function RedeemCode({ onClose }: Props) {
       return;
     }
 
-    // 2. Try excellence code (EXC-{level}-{date}-{check})
-    const excInfo = verifyExcellenceCode(code);
-    if (excInfo) {
+    // 1.5 Compensation code (CMP-): server-generated, class-bound, one-time
+    if (code.toUpperCase().startsWith('CMP-')) {
+      const normalized = code.toUpperCase();
+      try {
+        const used = JSON.parse(localStorage.getItem('csp_used_comp_codes') || '[]');
+        if (used.includes(normalized)) {
+          setResult({ type: 'already', message: '此补偿码已被兑换' });
+          return;
+        }
+      } catch {}
+
+      try {
+        const resp = await fetch(`${API}/api/codes/redeem`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: normalized, device_hash: getDeviceId() }),
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok || data.error) {
+          setResult({ type: 'error', message: data.error || '兑换失败，请稍后重试' });
+          return;
+        }
+        petStore.addCoins(data.coins || 0);
+        petStore.addExpToPool(data.exp || 0);
+        try {
+          const used = JSON.parse(localStorage.getItem('csp_used_comp_codes') || '[]');
+          used.push(normalized);
+          localStorage.setItem('csp_used_comp_codes', JSON.stringify(used));
+        } catch {}
+        setResult({
+          type: 'success',
+          message: `🎁 补偿到账：+${data.coins} 金币，+${data.exp} 经验（已存入经验池，可在智子页分配）`,
+        });
+      } catch {
+        setResult({ type: 'error', message: '网络连接失败，请稍后重试' });
+      }
+      return;
+    }
+
+    // 2. Excellence code (EXC-*): server-side validation (secret no longer shipped to clients)
+    if (/^EXC-[123]-\d{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.toUpperCase())) {
+      const normalized = code.toUpperCase();
       try {
         const used = JSON.parse(localStorage.getItem('csp_used_exc_codes') || '[]');
-        if (used.includes(code)) {
+        if (used.includes(normalized)) {
           setResult({ type: 'already', message: '此优秀码已被使用' });
           return;
         }
       } catch {}
 
-      const reward = EXCELLENCE_REWARDS[excInfo.level];
-      const activePetId = petStore.activePetId;
-      if (activePetId) petStore.addExp(activePetId, reward.exp);
-      petStore.addCoins(reward.coins);
-
       try {
-        const used = JSON.parse(localStorage.getItem('csp_used_exc_codes') || '[]');
-        used.push(code);
-        localStorage.setItem('csp_used_exc_codes', JSON.stringify(used));
-      } catch {}
-
-      setResult({
-        type: 'success',
-        message: `${reward.label} 优秀学生奖励！\n+${reward.exp} EXP  +${reward.coins} 金币`,
-      });
+        const resp = await fetch(`${API}/api/codes/redeem-exc`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: normalized, device_hash: getDeviceId() }),
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok || data.error) {
+          setResult({ type: 'error', message: data.error || '兑换失败，请稍后重试' });
+          return;
+        }
+        const reward = EXCELLENCE_REWARDS[data.level] || EXCELLENCE_REWARDS['1'];
+        const activePetId = petStore.activePetId;
+        if (activePetId) petStore.addExp(activePetId, data.exp || 0);
+        petStore.addCoins(data.coins || 0);
+        try {
+          const used = JSON.parse(localStorage.getItem('csp_used_exc_codes') || '[]');
+          used.push(normalized);
+          localStorage.setItem('csp_used_exc_codes', JSON.stringify(used));
+        } catch {}
+        setResult({
+          type: 'success',
+          message: `${reward.label} 优秀学生奖励！\n+${data.exp} EXP  +${data.coins} 金币`,
+        });
+      } catch {
+        setResult({ type: 'error', message: '网络连接失败，请稍后重试' });
+      }
       return;
     }
 
