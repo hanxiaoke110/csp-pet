@@ -29,7 +29,8 @@ export default function RaisingGuide() {
 
       {/* Guide sections */}
       <Section title="📈 经验 & 升级" icon="📈">
-        <p>完成课程验证、每周任务获得经验。</p>
+        <p>完成课程验证、每周任务、额外挑战、月度复盘、超级挑战、CSP 真题都能获得经验。</p>
+        <p>老师发放的<strong>优秀码</strong>直接加经验；<strong>补偿码</strong>的金币直接到账，经验存入经验池。</p>
         <p><strong>30%</strong> 直接给活跃智子，<strong>70%</strong> 存入经验池，可分配给任意智子。</p>
         <p>智子<strong>心情 ≥ 80</strong> 时经验 ×1.2，<strong>心情 ≤ 20</strong> 时 ×0.8。</p>
         <LevelTable />
@@ -64,9 +65,16 @@ export default function RaisingGuide() {
         </table>
       </Section>
 
+      <Section title="🛒 商城道具" icon="🛒">
+        <p>🧪 经验胶囊 <strong>400g</strong>：向经验池注入 120 EXP（每日限购 3 次）</p>
+        <p>💠 进阶经验核心 <strong>1000g</strong>：向经验池注入 360 EXP（每日限购 1 次）</p>
+        <p>🤖 自动喂食器 <strong>1500g</strong>：饱食低于 40 时自动使用背包食物（永久道具）</p>
+      </Section>
+
       <Section title="🎰 抽卡" icon="🎰">
         <p>单抽 <strong>150g</strong>，每日限 5 次。</p>
         <p>传说 4% · 稀有 8% · 保底 <strong>{ms.pityThreshold}</strong> 抽必出传说。</p>
+        <p>奖池包含精灵、普通/高级食物、许愿票、改名卡。</p>
         <p>达成<strong>化神</strong>（Lv.15）后保底减半至 50 抽。</p>
       </Section>
 
@@ -95,9 +103,16 @@ export default function RaisingGuide() {
         </table>
       </Section>
 
-      <Section title="🎁 收集奖励" icon="🎁">
-        <p>🌈 集齐地火风水<strong>四系</strong>各 1 只 → +200g + 改名卡</p>
-        <p>⭐ 拥有 <strong>8 只</strong> → +150g</p>
+      <Section title="🏆 成就奖励" icon="🏆">
+        <p>完成课程、周常、超级挑战、签到等目标会解锁成就，在「成就」页<strong>手动领取</strong>金币/改名卡奖励。</p>
+        <p>例如：拥有 8 只智子 +150g；双料冠军（超级完美 + 周常完美） +300g + 2 张改名卡。</p>
+        <p>每周任务 5/5 全对、超级挑战全对都能解锁成就，别漏领啦~</p>
+      </Section>
+
+      <Section title="🎁 神秘代码" icon="🎁">
+        <p>在「神秘代码」入口输入老师发放的兑换码。</p>
+        <p>补偿码 <strong>CMP-</strong>：每码全局只能兑换一次，金币直接到账，经验存入经验池。</p>
+        <p>优秀码 <strong>EXC-</strong>：仅当天有效、每设备限兑一次，金币与经验直接到账。</p>
       </Section>
 
       <Section title="🏕️ 集训模式" icon="🏕️">
@@ -143,7 +158,7 @@ function LevelTable() {
               <td style={{ padding: '3px 4px', fontWeight: 600 }}>Lv.{lv}</td>
               <td style={{ color: lv >= 20 ? '#dc2626' : lv >= 15 ? '#f59e0b' : lv >= 10 ? '#3b82f6' : lv >= 5 ? '#22c55e' : '#94a3b8' }}>{m.title}</td>
               <td style={{ fontSize: 10, color: '#94a3b8' }}>
-                {lv === 1 ? '—' : lv === 5 ? '新称号「金丹」' : lv === 10 ? '每周自动 +20g' : lv === 15 ? '保底减半至 50 抽' : '修行圆满 🎉'}
+                {lv === 1 ? '—' : lv === 5 ? '新称号「金丹」' : lv === 10 ? '每周自动 +20g' : lv === 15 ? '保底减半至 50 抽 · 每周 +20g' : '每周自动 +32g · 修行圆满 🎉'}
               </td>
             </tr>
           );

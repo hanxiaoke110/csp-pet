@@ -220,7 +220,7 @@ export function createAchievements(
           (p.petName || '').includes('C++') || (p.petName || '').includes('编程') || (p.petName || '').includes('代码')
         ),
       })},
-    { id: 'hidden-3perfect', name: '三连完美', description: '一周内 3 次完美通关', category: 'hidden', icon: '🏅', hidden: true,
+    { id: 'hidden-3perfect', name: '三连完美', description: '累计 3 次周常完美通关', category: 'hidden', icon: '🏅', hidden: true,
       check: () => ({ unlocked: weeklyPerfects >= 3 }) },
     { id: 'hidden-starve', name: '饿坏了', description: '让智子的饱食度降到 0', category: 'hidden', icon: '🤤', hidden: true,
       check: () => ({ unlocked: ownedPets.some(p => (p.hunger ?? 100) <= 0) }) },

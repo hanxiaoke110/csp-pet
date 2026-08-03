@@ -1888,3 +1888,10 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - 顺带修复：超级挑战“完美”原来只看 `superBestScore >= 5`，5/6 也算完美；改为记录最佳成绩对应总分（`superBestTotal`），成就要求 `得分 === 总分` 才算全对。
 - 改动：QuizPractice 去重复计数；quizStore 新增 `superBestTotal`（completeSuperChallenge 传总分）；achievements 完美通关/双料冠军按总分判定；新增 achievements.test.ts（123/123 通过，构建通过）。
 - 说明：孩子已完成的这次“全对”无法追溯补记，升级后下周再完成一次周常 5/5 即可解锁（双料冠军需再打一次超级全对）。该修复随下个客户端版本发版。
+
+## 2026-08-03 — 成就全量审计 + 饲养指南更新（未发版）
+
+- 成就全量核对：除已修的“周常完美”外，发现 `hidden-3perfect`（三连完美）描述“一周内 3 次完美通关”**不可能达成**（周常每周只能完成 1 次），已改为“累计 3 次周常完美通关”。
+- 其余成就数据源全部有写入点（course/csp_problem_status、OJ/csp_oj_status+csp_cm_done、签到/csp_checkin、AI/csp_asked_cspj、喂食/csp_feed_count、周常与超级/quizStore），无其他“完成不触发”问题。
+- 观察项（未改，需产品确认）：stage-c1..c4 与 course-10/30/60/100 阈值完全重复，疑似应改为按课程阶段；super-3of5/4of5 在 6 小问挑战下 4/6 也会解锁“4/5”，语义略松。
+- 饲养指南（RaisingGuide.tsx）更新：经验来源补齐（额外挑战/复盘/超级挑战/CSP真题/优秀码/补偿码）、新增“商城道具”（经验胶囊/核心/自动喂食器）、新增“神秘代码”（CMP 一码一次/EXC 当天有效每设备一次）、“收集奖励”改为“成就奖励”（原“四系+200g”奖励代码中已不存在）、等级表补 Lv15/Lv20 每周金币。
