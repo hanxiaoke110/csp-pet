@@ -1,43 +1,43 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50005479322,
+  "contentRevision": 50005479323,
   "verificationRevision": 50005479322,
   "channelRulesRevision": 3,
-  "generatedAt": "2026-07-28T13:15:15.860Z",
+  "generatedAt": "2026-08-03T09:14:48.774Z",
   "files": {
     "daily-gesp.json": {
-      "path": "daily-gesp.42cbf46dd7ad.json",
-      "sha256": "42cbf46dd7ad3220b1271d11b8aeae174f61c7b4e945bae56fadfdc2ea81977e",
+      "path": "daily-gesp.a70a0aca456a.json",
+      "sha256": "a70a0aca456a94bd45d7bbec98bd7a3bd8b023ca51f0215138740016ae9d4858",
       "bytes": 914601,
       "count": 705
     },
     "super-cspj.json": {
-      "path": "super-cspj.c157b38b28bf.json",
-      "sha256": "c157b38b28bfee096a8f6f95b29c572bcad4e06272705b6011781053bb80a556",
+      "path": "super-cspj.c8b60c18cf3d.json",
+      "sha256": "c8b60c18cf3d5b10b4c0fc0a7e26f367c736a7452b56eb0c1e540ad697de6155",
       "bytes": 89543,
       "count": 19
     },
     "exam-questions.json": {
-      "path": "exam-questions.f2bef88a7dd4.json",
-      "sha256": "f2bef88a7dd47039f142fd68569899abd69944f33ae34fb4a1aeafa0d6d45ff8",
+      "path": "exam-questions.e4278906cc40.json",
+      "sha256": "e4278906cc40644e717c0c250e529bd30e8c83401e5206d03bca536c59d52104",
       "bytes": 520609,
       "count": 234
     },
     "exam-manifests.json": {
-      "path": "exam-manifests.5a9ae7540352.json",
-      "sha256": "5a9ae7540352c8713b7c953b2bee00a7916cc6bd536a5737315e99a93ad254e9",
+      "path": "exam-manifests.041decbc9cf7.json",
+      "sha256": "041decbc9cf7f4e8d308bf49226945004f99bb61e881edc20d4f0bd4bda9f421",
       "bytes": 7607,
       "count": 12
     },
     "dungeon-mixed.json": {
-      "path": "dungeon-mixed.7c54eb3e6e87.json",
-      "sha256": "7c54eb3e6e87fa6330ce75d445779a65c992e20c1d0a0ff748e4c8851c1522ee",
+      "path": "dungeon-mixed.80905a2c1c38.json",
+      "sha256": "80905a2c1c38f2684ac11b3904b9418094bb774cf66f6dc86ec68cce77a812be",
       "bytes": 1144540,
       "count": 820
     },
     "verification-summary.json": {
-      "path": "verification-summary.b061875a0fb0.json",
-      "sha256": "b061875a0fb0968e87286642f8327362e229e05e3f91f2472b05fbf426f556aa",
+      "path": "verification-summary.bdb4dfa222d4.json",
+      "sha256": "bdb4dfa222d426c914d4080a89139522f6321b279cd09195e41cae3a539e99e2",
       "bytes": 489,
       "count": 1
     }
