@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.26';
+  const VER = '1.7.27';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,11 +180,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🐾 修复多智子窗口闪烁与置顶问题，点击更稳定</div>
-          <div>🖥️ 修复 Windows 弹窗权限提示，删除确认正常弹出</div>
-          <div>💬 气泡改为固定窗口展示，不再反复跳动</div>
-          <div>🧹 移除教师端学习分析入口</div>
-          <div>⚡ 优化多窗口数据同步与漫游流畅度</div>
+          <div>🐛 修复阅读题没有选项、代码显示不全的问题</div>
+          <div>🔄 题库缓存加强校验，旧缓存会自动更新修复</div>
+          <div>🎁 新增补偿码兑换（每码每设备限兑一次）</div>
+          <div>⭐ 优秀码改为服务器校验，仅当天有效</div>
+          <div>🕒 统一按北京时间计算日期</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
