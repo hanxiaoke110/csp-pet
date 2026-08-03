@@ -1,14 +1,14 @@
 # 题库可靠性报告 (Question Reliability Report)
 
-生成时间: 2026-07-28T12:38:43.638Z
+生成时间: 2026-08-03T09:14:54.555Z
 
 ## 总览
 
 - 审计源文件: 4 个
 - 源题库总题数: 2490
 - 源题库问题题数 (sourceIssuesTotal): 40 (P0=0, P1=6, P2=34)
-- 已隔离题目数 (excludedIssuesTotal): 2
-- 学生可见问题 (visible): P0=0, P1=4, P2=34
+- 已隔离题目数 (excludedIssuesTotal): 6
+- 学生可见问题 (visible): P0=0, P1=0, P2=34
 
 ## 分文件摘要
 
@@ -24,20 +24,22 @@
 学生可见 = 源题库问题中尚未被 `excluded-question-ids.json` 隔离的题（会进入 /quiz 与 /dungeon 题池）。
 
 - visibleP0: **0**
-- visibleP1: **4**
+- visibleP1: **0**
 - visibleP2: **34**
+
+> ✅ 学生可见 P0/P1 均为 0：无崩溃、无无法作答、无显示异常题目。仅剩 34 道 P2（缺解析，不影响作答与显示）。
 
 ## 源题库剩余问题
 
-源题库仍有 2 道缺代码题，已隔离，不会进入学生题池。其余 38 道为内容缺失类（P2，缺解析）。
+源题库仍有 6 道缺代码题，已隔离，不会进入学生题池。其余 34 道为内容缺失类（P2，缺解析）。
 
 ### 源题库 P1（含已隔离）
 
-- **gesp-2023-12-3-03** [unified-quiz-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
-- **gesp-2024-09-3-12** [unified-quiz-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
+- 🚫已隔离 **gesp-2023-12-3-03** [unified-quiz-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
+- 🚫已隔离 **gesp-2024-09-3-12** [unified-quiz-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
 - 🚫已隔离 **gesp-2024-12-4-13** [unified-quiz-bank.json] choice: [code] code 含相邻/悬空运算符（疑似 OCR 损坏） | [code] code 大括号严重不匹配/以 } 起始（疑似残片）
-- **gesp-2023-12-3-03** [csp-exam-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
-- **gesp-2024-09-3-12** [csp-exam-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
+- 🚫已隔离 **gesp-2023-12-3-03** [csp-exam-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
+- 🚫已隔离 **gesp-2024-09-3-12** [csp-exam-bank.json] choice: [code] 题干引用代码/程序/输出但无 code 字段
 - 🚫已隔离 **gesp-2024-12-4-13** [csp-exam-bank.json] choice: [code] code 含相邻/悬空运算符（疑似 OCR 损坏） | [code] code 大括号严重不匹配/以 } 起始（疑似残片）
 
 ### 源题库 P2（34 道，缺解析等）
@@ -54,9 +56,11 @@
 | id | 隔离原因 |
 | --- | --- |
 | gesp-2023-09-2-07 | missing_corrupted_or_answer_disputed |
+| gesp-2023-12-3-03 | missing_corrupted_or_answer_disputed |
 | gesp-2024-03-4-10 | missing_corrupted_or_answer_disputed |
 | gesp-2024-06-4-15 | missing_corrupted_or_answer_disputed |
 | gesp-2024-09-2-10 | missing_corrupted_or_answer_disputed |
+| gesp-2024-09-3-12 | missing_corrupted_or_answer_disputed |
 | gesp-2024-12-4-13 | missing_corrupted_or_answer_disputed |
 | gesp-2025-06-1-02 | missing_corrupted_or_answer_disputed |
 | gesp-2025-09-1-04 | missing_corrupted_or_answer_disputed |
@@ -86,9 +90,9 @@
 
 ## 发版建议
 
-- 学生可见 P0=0, P1=4 → **不建议发版，需先修复或隔离 visible P0/P1**
+- 学生可见 P0=0, P1=0 → **可发版（无阻塞风险）**
 - visibleP2=34（缺解析）为内容完善项，不阻塞发版。
-- 2 道已隔离题不影响学生体验；发版前可选择补全代码后移除隔离。
+- 6 道已隔离题不影响学生体验；发版前可选择补全代码后移除隔离。
 - 本报告基于源题库审计；dist/dist-dungeon 由构建再生成，发版流程跑 `npm run build` 即可同步。
 
 ## 后续补题清单
@@ -96,9 +100,11 @@
 ### 1. 补全已隔离题代码（补全后从 excluded-question-ids.json 移除对应 id）
 
 - gesp-2023-09-2-07
+- gesp-2023-12-3-03
 - gesp-2024-03-4-10
 - gesp-2024-06-4-15
 - gesp-2024-09-2-10
+- gesp-2024-09-3-12
 - gesp-2024-12-4-13
 - gesp-2025-06-1-02
 - gesp-2025-09-1-04

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-28T12:38:43.637Z",
+  "generatedAt": "2026-08-03T09:14:54.554Z",
   "sourceFiles": [
     "public/course-data/unified-quiz-bank.json",
     "public/course-data/quiz-bank.json",
@@ -10,9 +10,11 @@
     "file": "public/course-data/excluded-question-ids.json",
     "ids": [
       "gesp-2023-09-2-07",
+      "gesp-2023-12-3-03",
       "gesp-2024-03-4-10",
       "gesp-2024-06-4-15",
       "gesp-2024-09-2-10",
+      "gesp-2024-09-3-12",
       "gesp-2024-12-4-13",
       "gesp-2025-06-1-02",
       "gesp-2025-09-1-04",
@@ -44,9 +46,9 @@
   "totals": {
     "questions": 2490,
     "sourceIssuesTotal": 40,
-    "excludedIssuesTotal": 2,
+    "excludedIssuesTotal": 6,
     "visibleP0": 0,
-    "visibleP1": 4,
+    "visibleP1": 0,
     "visibleP2": 34,
     "sourceP0": 0,
     "sourceP1": 6,
@@ -105,7 +107,7 @@
       "type": "choice",
       "group": "gesp",
       "severity": "P1",
-      "excluded": false,
+      "excluded": true,
       "issues": [
         {
           "sev": "P1",
@@ -121,7 +123,7 @@
       "type": "choice",
       "group": "gesp",
       "severity": "P1",
-      "excluded": false,
+      "excluded": true,
       "issues": [
         {
           "sev": "P1",
@@ -702,7 +704,7 @@
       "type": "choice",
       "group": "GESP",
       "severity": "P1",
-      "excluded": false,
+      "excluded": true,
       "issues": [
         {
           "sev": "P1",
@@ -718,7 +720,7 @@
       "type": "choice",
       "group": "GESP",
       "severity": "P1",
-      "excluded": false,
+      "excluded": true,
       "issues": [
         {
           "sev": "P1",
