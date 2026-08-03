@@ -195,7 +195,8 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-const SCHEMA_VERSION = 7;
+// v8: 新增 comp_claims 表（补偿码全局一码一次的结构性锁/审计）
+const SCHEMA_VERSION = 8;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
@@ -219,6 +220,8 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN used_at TEXT`); } catch {}
   try { await db.exec(`ALTER TABLE generated_codes ADD COLUMN used_device_hash TEXT`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS exc_claims (code TEXT NOT NULL, device_hash TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')), PRIMARY KEY(code, device_hash))`); } catch {}
+  // 补偿码全局一码一次的结构性锁：code 主键，同一码只能占位一次（双保险，审计可查）
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS comp_claims (code TEXT PRIMARY KEY, device_hash TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, title TEXT, description TEXT, teacher_id TEXT, teacher_name TEXT, submitter TEXT DEFAULT 'teacher', status TEXT DEFAULT 'open', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS workshop_pets (id TEXT PRIMARY KEY, teacher_id TEXT, teacher_name TEXT, name TEXT, element TEXT, style TEXT, description TEXT, tier TEXT, price INTEGER, pet_json TEXT, spritesheet_url TEXT, thumbnail_url TEXT, status TEXT DEFAULT 'active', created_at TEXT)`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_overrides (question_id TEXT PRIMARY KEY, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', updated_at TEXT DEFAULT (datetime('now')))`); } catch {}
@@ -828,9 +831,13 @@ export default {
           if (!st) return new Response(JSON.stringify({ error: '此补偿码仅限本班学生兑换' }), { status: 403, headers: cors });
         }
 
-        // 原子占用：并发重复兑换只成功一次
-        const upd = await db.prepare("UPDATE generated_codes SET status='used', used_at=datetime('now'), used_device_hash=? WHERE code=? AND status='unused'").bind(device_hash, code).run();
-        if (!upd.meta?.changes) return new Response(JSON.stringify({ error: '此补偿码已被兑换' }), { status: 400, headers: cors });
+        // 原子占用（双保险）：comp_claims 以 code 为主键，全局一码只能占位一次；
+        // 即使状态字段因任何原因漏更，也无法重复兑换；同时留下审计记录
+        const claim = await db.prepare('INSERT OR IGNORE INTO comp_claims (code, device_hash) VALUES (?,?)').bind(code, device_hash).run();
+        if (!claim.meta?.changes) return new Response(JSON.stringify({ error: '此补偿码已被兑换' }), { status: 400, headers: cors });
+
+        // 同步状态字段（兼容旧查询/展示）
+        await db.prepare("UPDATE generated_codes SET status='used', used_at=datetime('now'), used_device_hash=? WHERE code=?").bind(device_hash, code).run();
 
         return new Response(JSON.stringify({ success: true, coins: row.coins, exp: row.exp }), { headers: cors });
       }

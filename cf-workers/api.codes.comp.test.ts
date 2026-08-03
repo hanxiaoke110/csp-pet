@@ -9,6 +9,7 @@ function makeDb() {
   const classes = new Map<string, { class_code: string; teacher_id: string; status: string }>();
   const students = new Map<string, { status: string }>();
   const codes = new Map<string, Record<string, unknown>>();
+  const claims = new Map<string, string>();
   const rateLimits = new Map<string, { count: number; reset_at: string }>();
 
   const db: any = {
@@ -59,6 +60,12 @@ function makeDb() {
               coins, exp, class_code: classCode, status: 'unused', used_at: null, used_device_hash: null,
             });
             return { meta: { changes: 1, last_row_id: 1 } };
+          }
+          if (sql.includes('INSERT OR IGNORE INTO comp_claims')) {
+            const [code, deviceHash] = call.bindings;
+            if (claims.has(String(code))) return { meta: { changes: 0 } };
+            claims.set(String(code), String(deviceHash));
+            return { meta: { changes: 1 } };
           }
           if (sql.includes("INSERT OR REPLACE INTO rate_limits")) {
             const [key, resetAt] = call.bindings;
