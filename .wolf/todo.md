@@ -26,4 +26,4 @@
 - 教师端 teacher-csp Pages 已部署（补偿码面板上线、学习分析已删）；生产冒烟 4/4 通过。
 - 客户端 v1.7.26 已发布（闪烁/置顶/窗口修复 + confirm ACL 修复）。
 - 测试账号/班级/联调数据：见根目录 `.tmp/validation-creds.json`（不入库）。
-- [ ] 待办：v1.7.27 发版公告（需 CSP_ADMIN_TOKEN）。
+- [x] v1.7.27 发版公告已发布（id 16，X-Admin-Token=csp-teacher-2026）。
