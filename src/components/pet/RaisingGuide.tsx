@@ -31,13 +31,18 @@ export default function RaisingGuide() {
       <Section title="📈 经验 & 升级" icon="📈">
         <p>完成课程验证、每周任务、额外挑战、月度复盘、超级挑战、CSP 真题都能获得经验。</p>
         <p>老师发放的<strong>优秀码</strong>直接加经验；<strong>补偿码</strong>的金币直接到账，经验存入经验池。</p>
-        <p><strong>30%</strong> 直接给活跃智子，<strong>70%</strong> 存入经验池，可分配给任意智子。</p>
+        <p><strong>30%</strong> 直接给活跃智子，<strong>70%</strong> 存入经验池，可在「智子页 → 经验池」自由分配给任意智子。</p>
         <p>智子<strong>心情 ≥ 80</strong> 时经验 ×1.2，<strong>心情 ≤ 20</strong> 时 ×0.8。</p>
         <LevelTable />
       </Section>
 
       <Section title="💛 心情 & 好感度" icon="💛">
-        <p>喂食、获得经验可提升心情。饥饿时（饱食 ≤ 20）心情会下降。</p>
+        <p>初始：心情 <strong>80</strong>、好感 <strong>50</strong>（上限 100）。</p>
+        <p>🍖 喂食：心情 <strong>+5</strong>、好感 <strong>+3</strong>。</p>
+        <p>📈 获得经验：心情 <strong>+3</strong>。</p>
+        <p>✅ 完成课程验证：好感 <strong>+10</strong>（阶段毕业 +20）。</p>
+        <p>😵 饱食 ≤ 20 时，心情每次下降 <strong>-1</strong>。</p>
+        <p>好感达到 100 可解锁成就「心有灵犀」💕</p>
       </Section>
 
       <Section title="🍖 食物" icon="🍖">
@@ -69,6 +74,17 @@ export default function RaisingGuide() {
         <p>🧪 经验胶囊 <strong>400g</strong>：向经验池注入 120 EXP（每日限购 3 次）</p>
         <p>💠 进阶经验核心 <strong>1000g</strong>：向经验池注入 360 EXP（每日限购 1 次）</p>
         <p>🤖 自动喂食器 <strong>1500g</strong>：饱食低于 40 时自动使用背包食物（永久道具）</p>
+      </Section>
+
+      <Section title="👥 多智子（第二 / 第三只）" icon="👥">
+        <p>同一桌面可以带 <strong>2~3 只</strong>智子一起学习、一起成长～</p>
+        <p>第 2 个伴生槽 <strong>2500g</strong>，第 3 个 <strong>5000g</strong>，在智子页解锁后即可在桌面同时展示。</p>
+        <p style={{ color: '#fbbf24' }}>
+          ⚠️ 温馨提示（认真脸）：每多一只智子，桌宠窗口就多一个，电脑要稍微多出一点点力。
+          <strong>请务必确认你的电脑设备足够硬核</strong>，再购买/更新多智子！
+          如果因为硬件太老导致电脑卡死、死机、甚至重装软件，本店概不退还损失，只能抱抱你 🫂。
+          （当然，设备给力的话，两只三只围着你转真的很香～）
+        </p>
       </Section>
 
       <Section title="🎰 抽卡" icon="🎰">
@@ -105,7 +121,10 @@ export default function RaisingGuide() {
 
       <Section title="🏆 成就奖励" icon="🏆">
         <p>完成课程、周常、超级挑战、签到等目标会解锁成就，在「成就」页<strong>手动领取</strong>金币/改名卡奖励。</p>
-        <p>例如：拥有 8 只智子 +150g；双料冠军（超级完美 + 周常完美） +300g + 2 张改名卡。</p>
+        <p>💎 完美通关（超级挑战全对）：+200g + 1 张改名卡</p>
+        <p>🏅 双料冠军（超级完美 + 周常完美）：+300g + 2 张改名卡</p>
+        <p>🎓 百炼成钢（累计答对 100 道课程验证）：+200g + 1 张改名卡</p>
+        <p>🐾 拥有 8 只智子：+150g</p>
         <p>每周任务 5/5 全对、超级挑战全对都能解锁成就，别漏领啦~</p>
       </Section>
 
