@@ -217,7 +217,11 @@ export default function QuizPractice() {
       setQuestions(chooseFreshQuestions(superQs, 1, m));
     } else {
       // Random CSP/GESP exam questions with optional filters
-      let pool = bank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+      // 选择题练习只放真正的选择题：带 code 但无选项的题（含兜底转出的阅读题）不进入本入口，
+      // 避免渲染出“有题干没选项”的空白页
+      let pool = bank.filter(q => (q.source === 'csp_exam' || q.source === 'gesp')
+        && q.type === 'choice'
+        && (q.options?.length || 0) > 0);
       if (sourceFilter !== 'all') {
         pool = pool.filter(q => q.source === sourceFilter);
       }
@@ -233,7 +237,9 @@ export default function QuizPractice() {
       }
       if (pool.length === 0) {
         // Fallback to all exam questions if filter leaves nothing
-        pool = bank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+        pool = bank.filter(q => (q.source === 'csp_exam' || q.source === 'gesp')
+          && q.type === 'choice'
+          && (q.options?.length || 0) > 0);
       }
       setQuestions(chooseFreshQuestions(pool, m === 'free' ? 15 : 5, m));
     }

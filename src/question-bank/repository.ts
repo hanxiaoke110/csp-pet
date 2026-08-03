@@ -58,9 +58,19 @@ export function chooseQuestionSnapshot<T>(
   previous: SnapshotCandidate<T> | null,
   bundled: SnapshotCandidate<T>,
 ): SnapshotCandidate<T> {
-  const valid = [current, previous, bundled]
-    .filter((candidate): candidate is SnapshotCandidate<T> => Boolean(candidate?.valid))
-    .sort((left, right) => right.revision - left.revision);
+  const candidates = [current, previous, bundled]
+    .filter((candidate): candidate is SnapshotCandidate<T> => Boolean(candidate?.valid));
+  // 同版本时优先内置快照：内置数据随安装包做过 sha256 校验，比“同版本缓存”更可信，
+  // 防止远程数据修复但未 bump 版本号时，坏缓存一直压过内置好数据。
+  const preferenceOrder = [bundled, current, previous];
+  const rank = (candidate: SnapshotCandidate<T>): number => {
+    const index = preferenceOrder.indexOf(candidate);
+    return index === -1 ? preferenceOrder.length : index;
+  };
+  const valid = candidates.sort((left, right) => {
+    const byRevision = right.revision - left.revision;
+    return byRevision !== 0 ? byRevision : rank(left) - rank(right);
+  });
   if (!valid[0]) throw new Error('No valid question bank snapshot is available');
   return valid[0];
 }
@@ -86,6 +96,37 @@ async function validateCache(cache: CachedRevision | null, requiredFiles: string
     const raw = cache.files[logicalName];
     const expected = cache.manifest.files[logicalName]?.sha256;
     if (!raw || !expected || await sha256(raw) !== expected) return false;
+  }
+  return true;
+}
+
+async function cacheMatchesManifest(cache: CachedRevision | null, manifest: QuestionBankManifest): Promise<boolean> {
+  if (!cache || cache.manifest.schemaVersion !== 2) return false;
+  for (const logicalName of Object.keys(manifest.files)) {
+    const raw = cache.files[logicalName];
+    const expected = manifest.files[logicalName]?.sha256;
+    if (!raw || !expected || await sha256(raw) !== expected) return false;
+  }
+  return true;
+}
+
+function bundledMatchesRemote(bundled: QuestionBankManifest, remote: QuestionBankManifest): boolean {
+  if (bundled.contentRevision !== remote.contentRevision
+      || bundled.verificationRevision !== remote.verificationRevision
+      || bundled.channelRulesRevision !== remote.channelRulesRevision) {
+    return false;
+  }
+  const bundledFiles = bundled.files;
+  const remoteFiles = remote.files;
+  if (Object.keys(bundledFiles).length !== Object.keys(remoteFiles).length) return false;
+  for (const logicalName of Object.keys(remoteFiles)) {
+    const bundledEntry = bundledFiles[logicalName];
+    const remoteEntry = remoteFiles[logicalName];
+    if (!bundledEntry || !remoteEntry
+        || bundledEntry.path !== remoteEntry.path
+        || bundledEntry.sha256 !== remoteEntry.sha256) {
+      return false;
+    }
   }
   return true;
 }
@@ -158,21 +199,41 @@ export async function beginQuestionBankSession(requiredChannels: QuestionChannel
 export async function refreshQuestionBankV2(): Promise<boolean> {
   const manifest = JSON.parse(await fetchText(`${REMOTE_BASE}/manifest`)) as QuestionBankManifest;
   const current = readCache(V2_KEYS.current);
-  if (current?.manifest.contentRevision === manifest.contentRevision
-      && current.manifest.verificationRevision === manifest.verificationRevision
-      && current.manifest.channelRulesRevision === manifest.channelRulesRevision) {
+  const previous = readCache(V2_KEYS.previous);
+
+  // 即使 manifest 版本号相同，也要校验缓存文件内容与远程 manifest 的 sha256 是否一致：
+  // 远程数据可能修复过但版本号没变，只有内容级校验通过才认为缓存可信，
+  // 避免“同版本坏缓存”一直卡住客户端。
+  const [currentOk, previousOk, bundledOk] = await Promise.all([
+    cacheMatchesManifest(current, manifest),
+    cacheMatchesManifest(previous, manifest),
+    (async () => {
+      try {
+        const bundled = JSON.parse(await fetchText(`${BUNDLED_BASE}/manifest.json`)) as QuestionBankManifest;
+        return bundledMatchesRemote(bundled, manifest);
+      } catch {
+        // 内置快照不可用时，仍然尝试从远程下载修复
+        return false;
+      }
+    })(),
+  ]);
+
+  if (currentOk) return false;
+
+  // 当前缓存不可信，但 previous 与远程一致：直接提升为 current，避免重复下载
+  if (previousOk && previous) {
+    localStorage.setItem(V2_KEYS.current, JSON.stringify(previous));
+    return true;
+  }
+
+  // 内置快照与远程 manifest 完全一致：清掉坏缓存，让加载逻辑直接使用内置数据
+  if (bundledOk) {
+    localStorage.removeItem(V2_KEYS.current);
+    localStorage.removeItem(V2_KEYS.previous);
     return false;
   }
-  try {
-    const bundled = JSON.parse(await fetchText(`${BUNDLED_BASE}/manifest.json`)) as QuestionBankManifest;
-    if (bundled.contentRevision === manifest.contentRevision
-        && bundled.verificationRevision === manifest.verificationRevision
-        && bundled.channelRulesRevision === manifest.channelRulesRevision) {
-      return false;
-    }
-  } catch {
-    // A remote snapshot can still recover an installation with a damaged bundle.
-  }
+
+  // 否则重新下载全部文件并覆盖缓存
   const logicalNames = Object.keys(manifest.files);
   const files = Object.fromEntries(await Promise.all(logicalNames.map(async logicalName => {
     const raw = await fetchText(`${REMOTE_BASE}/${logicalName}`);
@@ -182,8 +243,7 @@ export async function refreshQuestionBankV2(): Promise<boolean> {
     return [logicalName, raw];
   })));
   const next: CachedRevision = { manifest, files, cachedAt: new Date().toISOString() };
-  const currentRaw = localStorage.getItem(V2_KEYS.current);
-  if (currentRaw) localStorage.setItem(V2_KEYS.previous, currentRaw);
   localStorage.setItem(V2_KEYS.current, JSON.stringify(next));
+  localStorage.removeItem(V2_KEYS.previous);
   return true;
 }

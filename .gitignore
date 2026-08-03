@@ -12,6 +12,7 @@ dist
 dist-ssr
 dist-dungeon
 src-tauri/target
+.wrangler
 *.local
 
 # Editor directories and files

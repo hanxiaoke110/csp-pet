@@ -88,7 +88,8 @@ export default function ExamTraining() {
   // Group filtered bank
   const groupBank = useMemo(() => bank.filter(q => q.group === group), [bank, group]);
 
-  const choiceQs = useMemo(() => groupBank.filter(q => q.type === 'choice'), [groupBank]);
+  // 选择题池只保留有选项的真选择题；带 code 无选项的题会被适配器转成阅读题走 multipart
+  const choiceQs = useMemo(() => groupBank.filter(q => q.type === 'choice' && (q.options?.length || 0) > 0), [groupBank]);
   const readingQs = useMemo(() => groupBank.filter(q => q.type === 'reading'), [groupBank]);
   const fillBlankQs = useMemo(() => groupBank.filter(q => q.type === 'fillBlank'), [groupBank]);
 

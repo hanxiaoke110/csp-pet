@@ -1854,3 +1854,21 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - **CI 的 Gitee 大文件上传又失败**：release 只有源码包，update.json 回退成 GitHub URL。补传流程：本机下载走 `127.0.0.1:7897` 代理（~2.3MB/s，比 ghfast.top 快 30 倍）→ Gitee `attach_files` 上传（Authorization header 可用）→ **contents API 更新 update.json 必须用 `?access_token=` query 参数，Authorization header 会报 40001** → 删除旧 Release（保留最近 2 个）
 - 本地 `GITEE_TOKEN`（32 位旧值）已失效，本次用用户新提供的 token；注意不要把 token 写进仓库
 - App.tsx VER 曾漏改（1.7.24→1.7.26 一起修了）；发版前核对三个版本号
+## 2026-08-03 — 补偿码/优秀码服务端化 + Windows 性能分析
+
+- 待办与部署状态速览见 `.wolf/todo.md`（每次开工先读它）。
+- 后端已部署：`/api/codes/comp`、`/api/codes/redeem`、`/api/codes/redeem-exc`、`exc_claims` 表、SCHEMA_VERSION 7、getDateShort 统一北京时间。
+- 教师端已部署：补偿码面板上线、学习分析删除。
+- 客户端未发版：CMP 兑换 + 优秀码服务端校验 + 当天有效（代码/测试就绪）。
+- Windows 卡顿分析结论：最大瓶颈是宠物 CSS background-position 逐帧动画（3 个透明 WebView2 窗口 60fps 全帧重绘）+ petStore 43 处 save 全量写/广播；优化优先级见 todo.md。
+
+## 2026-08-03 — 阅读题“没选项/代码截断”显示问题定位与修复
+
+- 孩子反馈：CSP 真题“选择题”里阅读题只有题干没有可点选项，部分题代码只显示后半段；孩子为最新版（v1.7.26）。
+- 排查结论：内置/远程题库数据、v1.7.26 tag 源码全部正常（三道题 code 完整、children 6-7 个、选项齐全）；本地无头浏览器实测选择题/阅读题均正常。根因锁定为**客户端本地缓存了“同版本坏快照”**（localStorage `question_bank_v2_current`，manifest 版本号与远程相同但内容不一致；旧刷新逻辑只看版本号，版本相同就不重下，且加载时同版本缓存优先于内置数据）。
+- 修复（已实现，未发版）：
+  1. `src/question-bank/repository.ts`：`refreshQuestionBankV2` 增加内容级 sha256 校验（版本相同也校验）；校验失败时优先提升好的 previous、或丢弃坏缓存用内置快照、或强制重下；`chooseQuestionSnapshot` 同版本时优先内置快照。
+  2. `src/question-bank/adapters.ts`：带 code、无 options、有 children 的 choice 自动按 reading 转换（防“有题干没选项”空白页）。
+  3. `QuizPractice.tsx` / `ExamTraining.tsx`：选择题入口只保留“有选项的真选择题”。
+- 验证：vitest 120/120（新增 6 例）、`npm run build` 通过、e2e 种入同版本坏缓存后应用自动丢弃并渲染出 6 小问选项。
+- 说明：孩子设备需联网启动一次触发新逻辑（或手动清缓存/重装）；该修复随下个客户端版本（建议 1.7.27）发版。

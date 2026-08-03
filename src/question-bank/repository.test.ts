@@ -26,4 +26,20 @@ describe('question bank v2 snapshot selection', () => {
       { revision: 2, valid: true, data: ['bundle'] },
     ).data).toEqual(['bundle']);
   });
+
+  it('prefers bundled over an equal-revision current cache (same-revision bad cache guard)', () => {
+    expect(chooseQuestionSnapshot(
+      { revision: 2, valid: true, data: ['bad-current'] },
+      null,
+      { revision: 2, valid: true, data: ['bundle'] },
+    ).data).toEqual(['bundle']);
+  });
+
+  it('prefers bundled over an equal-revision previous cache', () => {
+    expect(chooseQuestionSnapshot(
+      null,
+      { revision: 2, valid: true, data: ['bad-previous'] },
+      { revision: 2, valid: true, data: ['bundle'] },
+    ).data).toEqual(['bundle']);
+  });
 });
