@@ -49,6 +49,7 @@ export function createAchievements(
   _hasAllElements: boolean,
   superCompletions: number,
   superBestScore: number,
+  superBestTotal: number,
   weeklyPerfects: number,
   extraChallengeCount: number,
   lastReviewCorrect: number,
@@ -132,9 +133,9 @@ export function createAchievements(
     { id: 'super-4of5', name: '差一步完美', description: '超级挑战答对 4/5', category: 'super', icon: '💎',
       check: () => ({ unlocked: superBestScore >= 4 }) },
     { id: 'super-5of5', name: '完美通关', description: '超级挑战 5/5 全对', category: 'super', icon: '👑',
-      check: () => ({ unlocked: superBestScore >= 5 }) },
+      check: () => ({ unlocked: superBestScore >= 5 && superBestScore === superBestTotal }) },
     { id: 'super-double', name: '双料冠军', description: '超级完美 + 周常完美各 1 次', category: 'super', icon: '🏅',
-      check: () => ({ unlocked: superBestScore >= 5 && getWeeklyPerfectCount() >= 1 }) },
+      check: () => ({ unlocked: superBestScore >= 5 && superBestScore === superBestTotal && getWeeklyPerfectCount() >= 1 }) },
 
     // === 🐾 灵犀智子 ===
     { id: 'pet-first', name: '初次相遇', description: '领养第一只灵犀智子', category: 'pet', icon: '🐣',

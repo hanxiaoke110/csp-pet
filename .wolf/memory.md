@@ -1880,3 +1880,11 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - 已把 release.yml 旧 release 清理步骤改为 jq 失败不中断（`2>/dev/null || true`），下次发版不会再挂在这里。
 - 下载链接：gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.27/CSP_1.7.27_{aarch64.dmg,x64.dmg,x64-setup.exe}（均已 200 验证）。
 - 待办：发版公告需要 CSP_ADMIN_TOKEN（worker env.ADMIN_TOKEN），用户提供后跑 scripts/post-release-announcements.sh。
+
+## 2026-08-03 — 成就“周常完美/超级完美”判定修复（未发版）
+
+- 学生反馈：每周任务 5/5 全对，界面显示“完美挑战！全对！”，但“完美首秀/双料冠军”成就仍是 🔒。
+- 根因（初版 2026-05-28 遗留）：QuizPractice `handleSubmit` 已把最后一题计入 `results`，`nextQuestion` 的 `finalResults` 又把最后一题加了一次 → 5/5 全对被算成 6/6 → `completeWeeklyTask(6===5)` 永远 false → `weeklyPerfects` 永远不涨。界面按 `correct===total`（6/6）判完美，所以孩子看到“全对”却没成就。
+- 顺带修复：超级挑战“完美”原来只看 `superBestScore >= 5`，5/6 也算完美；改为记录最佳成绩对应总分（`superBestTotal`），成就要求 `得分 === 总分` 才算全对。
+- 改动：QuizPractice 去重复计数；quizStore 新增 `superBestTotal`（completeSuperChallenge 传总分）；achievements 完美通关/双料冠军按总分判定；新增 achievements.test.ts（123/123 通过，构建通过）。
+- 说明：孩子已完成的这次“全对”无法追溯补记，升级后下周再完成一次周常 5/5 即可解锁（双料冠军需再打一次超级全对）。该修复随下个客户端版本发版。

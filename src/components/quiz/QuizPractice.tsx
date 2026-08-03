@@ -348,7 +348,9 @@ export default function QuizPractice() {
     // Hunger: -1 every 2 questions
     if (currentIdx % 2 === 1) usePetStore.getState().tickHunger();
     if (currentIdx + 1 >= questions.length) {
-      const finalResults = { ...results, done: true, correct: results.correct + (selected === q.correctIndex ? 1 : 0), total: results.total + 1 };
+      // 最后一题的作答已由 handleSubmit 计入 results，这里直接沿用，
+      // 避免 5/5 全对被算成 6/6 导致“周常完美/全对”判定失效
+      const finalResults = { ...results, done: true, correct: results.correct, total: results.total };
       setResults(finalResults);
       // Record KP results to store
       const kpArray = Array.from(kpResults.entries()).map(([kp, v]) => ({ kp, ...v }));
@@ -380,7 +382,7 @@ export default function QuizPractice() {
       }
       if (mode === 'review') quizStore.completeMonthlyReview(finalResults.correct, finalResults.total);
       if (mode === 'super') {
-        quizStore.completeSuperChallenge(finalResults.correct);
+        quizStore.completeSuperChallenge(finalResults.correct, finalResults.total);
         // Apply tiered super reward
         const sr = getSuperReward(finalResults.correct, finalResults.total);
         if (sr.exp > 0) {
@@ -726,7 +728,7 @@ export default function QuizPractice() {
         }
       }
       setResults({ correct, total: subCount, done: true });
-      quizStore.completeSuperChallenge(correct);
+      quizStore.completeSuperChallenge(correct, subCount);
       // Add wrong sub-questions to error pool for monthly review
       for (let i = 0; i < subCount; i++) {
         const expected = correctAnswers[i];

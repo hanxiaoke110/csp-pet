@@ -39,6 +39,7 @@ export interface QuizState {
   lastSuperDate: string;
   superCompletions: number;
   superBestScore: number;
+  superBestTotal: number;
   // Free practice stats
   totalPractice: number;
   totalCorrect: number;
@@ -62,7 +63,7 @@ export interface QuizState {
   completeWeeklyTask: (perfect: boolean) => void;
   completeExtraChallenge: () => void;
   completeMonthlyReview: (correct?: number, total?: number) => void;
-  completeSuperChallenge: (correct: number) => void;
+  completeSuperChallenge: (correct: number, total?: number) => void;
   canDoSuperChallenge: () => boolean;
   superDaysLeft: () => number;
   canDoWeeklyTask: () => boolean;
@@ -150,6 +151,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
     lastSuperDate: '',
     superCompletions: 0,
     superBestScore: 0,
+    superBestTotal: 0,
     totalPractice: 0,
     totalCorrect: 0,
     freeRewardedCount: 0,
@@ -236,11 +238,25 @@ export const useQuizStore = create<QuizState>((set, get) => {
       get().save();
     },
 
-    completeSuperChallenge: (correct: number) => {
+    completeSuperChallenge: (correct: number, total?: number) => {
       const s = get();
       const completions = (s.superCompletions || 0) + 1;
       const best = Math.max(s.superBestScore || 0, correct);
-      set({ lastSuperDate: getSuperChallengeKey(), superCompletions: completions, superBestScore: best });
+      // 记录“最佳成绩”对应的总分：同分时优先保留“全对”的那次（用于成就判定的真·完美）
+      let bestTotal = s.superBestTotal || 0;
+      if (correct > (s.superBestScore || 0)) {
+        bestTotal = total ?? correct;
+      } else if (correct === (s.superBestScore || 0)
+          && total !== undefined && correct === total
+          && bestTotal !== (s.superBestScore || 0)) {
+        bestTotal = total;
+      }
+      set({
+        lastSuperDate: getSuperChallengeKey(),
+        superCompletions: completions,
+        superBestScore: best,
+        superBestTotal: bestTotal,
+      });
       get().save();
     },
 
@@ -347,6 +363,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
           lastSuperDate: data.lastSuperDate || '',
           superCompletions: data.superCompletions || 0,
           superBestScore: data.superBestScore || 0,
+          superBestTotal: data.superBestTotal || 0,
           totalPractice: data.totalPractice || 0,
           totalCorrect: data.totalCorrect || 0,
           freeRewardedCount: data.freeRewardedDate === todayDate ? (data.freeRewardedCount || 0) : 0,
@@ -384,6 +401,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
           lastSuperDate: s.lastSuperDate,
           superCompletions: s.superCompletions,
           superBestScore: s.superBestScore,
+          superBestTotal: s.superBestTotal,
           totalPractice: s.totalPractice,
           totalCorrect: s.totalCorrect,
           freeRewardedCount: s.freeRewardedCount,

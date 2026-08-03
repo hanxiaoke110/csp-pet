@@ -66,13 +66,14 @@ export default function AchievementsPanel() {
       false,
       quizState.superCompletions,
       quizState.superBestScore,
+      quizState.superBestTotal,
       quizState.weeklyPerfects,
       quizState.extraChallengeCount,
       quizState.lastReviewCorrect,
       quizState.lastReviewTotal,
       ownedPets,
     );
-  }, [ownedPets, activePet, coins, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal, refreshTick]);
+  }, [ownedPets, activePet, coins, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.superBestTotal, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal, refreshTick]);
 
   // Group by category
   const grouped = useMemo(() => {
