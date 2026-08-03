@@ -169,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.28';
+  const VER = '1.7.29';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -181,8 +181,9 @@ function ChangelogModal() {
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
           <div>🏆 修复每周任务 5/5 全对却不解锁成就的问题</div>
-          <div>👑 超级挑战“完美通关”改为按总分判定，真正全对才算</div>
-          <div>📖 更新饲养指南：经验来源、商城道具、神秘代码、成就奖励</div>
+          <div>📈 超级挑战成就改为按正确率判定（≥60% / ≥80% / 全对）</div>
+          <div>🎓 阶段成就改为按课程阶段判定，C4 敬请期待</div>
+          <div>📖 更新饲养指南：心情/好感度、商城道具、神秘代码、多智子说明</div>
           <div>🐛 修复“三连完美”成就描述，累计 3 次周常完美即可达成</div>
         </div>
         <button onClick={dismiss} style={{
