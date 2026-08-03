@@ -1872,3 +1872,11 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
   3. `QuizPractice.tsx` / `ExamTraining.tsx`：选择题入口只保留“有选项的真选择题”。
 - 验证：vitest 120/120（新增 6 例）、`npm run build` 通过、e2e 种入同版本坏缓存后应用自动丢弃并渲染出 6 小问选项。
 - 说明：孩子设备需联网启动一次触发新逻辑（或手动清缓存/重装）；该修复随下个客户端版本（建议 1.7.27）发版。
+
+## 2026-08-03 — v1.7.27 发版记录
+
+- 版本内容：① 阅读题无选项/代码截断修复（题库同版本坏缓存自愈 + 选择题→阅读题兜底 + 选择题池过滤）；② 补偿码 CMP 兑换 + 优秀码服务端校验 + 当天有效（客户端代码随本版发布）；③ 隔离 2 道缺代码 GESP 题（gesp-2023-12-3-03、gesp-2024-09-3-12，visible P1 归零）；④ 题库 revision bump 50005479322→50005479323（远程热更新，旧客户端联网自动重下）。
+- 发版过程：push tag v1.7.27 → CI 三平台构建成功；release job 挂在旧 release 清理步骤的 jq 解析（CI 的 GITEE_TOKEN 疑似旧失效值）→ 手动补传：本地用 `~/.tauri/csp-updater-v2.key`（注意 `--private-key` 传文件内容而非路径）签名三个安装包 → Gitee release v1.7.27（id 773579）attach_files 上传 → update.json 写 Gitee URLs 并推 GitHub/Gitee master（raw CDN 有缓存延迟）。
+- 已把 release.yml 旧 release 清理步骤改为 jq 失败不中断（`2>/dev/null || true`），下次发版不会再挂在这里。
+- 下载链接：gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.27/CSP_1.7.27_{aarch64.dmg,x64.dmg,x64-setup.exe}（均已 200 验证）。
+- 待办：发版公告需要 CSP_ADMIN_TOKEN（worker env.ADMIN_TOKEN），用户提供后跑 scripts/post-release-announcements.sh。

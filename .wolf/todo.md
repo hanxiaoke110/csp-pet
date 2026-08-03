@@ -21,8 +21,9 @@
 
 ## 部署状态（2026-08-03）
 
+- 客户端 **v1.7.27 已发版**：阅读题显示修复 + 补偿码/优秀码服务端化 + 题库 revision 50005479323（Gitee 下载/update.json 已就绪）。
 - 后端 api worker 已部署（含 comp/redeem/redeem-exc、exc_claims、schema v7、北京时间日期）；生产联调 18/18 通过。
 - 教师端 teacher-csp Pages 已部署（补偿码面板上线、学习分析已删）；生产冒烟 4/4 通过。
 - 客户端 v1.7.26 已发布（闪烁/置顶/窗口修复 + confirm ACL 修复）。
-- 客户端新版本（优秀码服务端化 + CMP）**未发版**。
 - 测试账号/班级/联调数据：见根目录 `.tmp/validation-creds.json`（不入库）。
+- [ ] 待办：v1.7.27 发版公告（需 CSP_ADMIN_TOKEN）。
