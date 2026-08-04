@@ -6,7 +6,7 @@ import PetSprite from './PetSprite';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import ConfirmModal from './ConfirmModal';
-import { showDesktopCompanion, hideDesktopCompanion } from '../../utils/desktopCompanions';
+import { showDesktopCompanion, hideDesktopCompanion, waitForCompanionVisible } from '../../utils/desktopCompanions';
 import { repairWorkshopSprite } from '../../utils/workshopSpriteRepair';
 
 function WorkshopThumb({ modelPath }: { modelPath: string }) {
@@ -217,11 +217,25 @@ export default function PetStatus({
                   }
                   if (!setDesktopCompanion(slot, displayPet.petId)) { showToast('该智子已在其他桌面位置，或位置不可用'); return; }
                   setLaunchingSlot(slot);
+                  // 先注册“窗口可见”监听再创建窗口，避免事件竞态漏判
+                  const appearedPromise = waitForCompanionVisible(slot);
                   try {
-                    const shown = await showDesktopCompanion(slot);
-                    if (!shown) setDesktopCompanion(slot, null);
-                    else usePetStore.getState().save();
-                    showToast(shown ? `${displayPet.petName} 已出现在独立桌面窗口` : '桌面窗口启动失败，位置未占用，请重试');
+                    const created = await showDesktopCompanion(slot);
+                    if (!created) {
+                      setDesktopCompanion(slot, null);
+                      showToast('桌面窗口启动失败，位置未占用，请重试');
+                      return;
+                    }
+                    const appeared = await appearedPromise;
+                    if (!appeared) {
+                      // 窗口创建了但一直没真正显示：回滚位置并销毁窗口，避免“假成功”
+                      setDesktopCompanion(slot, null);
+                      await hideDesktopCompanion(slot);
+                      showToast('桌面窗口启动超时，已自动回滚，请重试');
+                      return;
+                    }
+                    usePetStore.getState().save();
+                    showToast(`${displayPet.petName} 已出现在独立桌面窗口`);
                   } finally {
                     setLaunchingSlot(null);
                   }

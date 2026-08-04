@@ -12,6 +12,9 @@ use tauri::{WebviewUrl, WebviewWindowBuilder};
 fn toggle_pet_window(app: tauri::AppHandle) -> String {
     if let Some(w) = app.get_webview_window("pet") {
         if w.is_visible().unwrap_or(true) {
+            // 先暂停 WebView2 渲染再隐藏 OS 窗口：Windows 上隐藏窗口若继续合成，
+            // 会在后台持续 60fps 全帧重绘，是卡顿/资源占用的大头。
+            let _ = w.as_ref().hide();
             let _ = w.hide();
             let _ = app.emit(
                 "pet-window-visibility",
@@ -19,6 +22,7 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
             );
             "hidden".into()
         } else {
+            let _ = w.as_ref().show();
             let _ = w.show();
             ensure_pet_topmost(&app, "pet");
             let _ = app.emit(
@@ -35,6 +39,7 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
 #[tauri::command]
 fn show_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
+        let _ = w.as_ref().show();
         let _ = w.show();
         ensure_pet_topmost(&app, "pet");
         let _ = app.emit(
@@ -47,6 +52,7 @@ fn show_pet_window(app: tauri::AppHandle) {
 #[tauri::command]
 fn hide_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
+        let _ = w.as_ref().hide();
         let _ = w.hide();
         let _ = app.emit(
             "pet-window-visibility",
@@ -97,8 +103,11 @@ fn force_windows_topmost(window: &tauri::WebviewWindow) {
 fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
     let label = companion_label(slot)?;
     if let Some(window) = app.get_webview_window(&label) {
+        let _ = window.as_ref().show();
         window.show().map_err(|error| error.to_string())?;
         ensure_pet_topmost(&app, &label);
+        // 已存在窗口直接显示：同步广播“可见”，避免前端事件注册竞态导致误判回滚
+        let _ = app.emit("pet-companion-shown", serde_json::json!({ "slot": slot }));
         return Ok(());
     }
 
@@ -131,7 +140,10 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
 fn hide_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
     let label = companion_label(slot)?;
     if let Some(window) = app.get_webview_window(&label) {
-        window.hide().map_err(|error| error.to_string())?;
+        // 收回 = 彻底释放：先暂停 WebView2 渲染，再销毁窗口，
+        // 避免隐藏窗口仍在后台 60fps 重绘，也避免残留卡死的渲染进程。
+        let _ = window.as_ref().hide();
+        window.destroy().map_err(|error| error.to_string())?;
     }
     Ok(())
 }

@@ -3,7 +3,7 @@
 ## 待办（近期）
 
 - [ ] **客户端发版前，教师端不要发 CMP 补偿码**：教师端补偿码面板已上线（teacher.cspstudy.top），但学生端旧版（v1.7.26）不认识 CMP- 码，兑了只会提示无效；等客户端新版本发版后再开始发补偿码。
-- [ ] **PetWindow 加“超时强制显示”兜底**：宠物窗口改为精灵就绪后才显示；远程素材（稀有/传说）缓存丢失且断网时，素材恢复退避最长约 6.5 分钟，窗口会一直不出现。建议 2-3 秒后无论素材是否就绪都先显示（沿用 loading 兜底）。
+- [x] **PetWindow 加“超时强制显示”兜底**：已实现 2.5s 超时强制显示 + `pet-companion-shown` 事件握手；`waitForCompanionVisible` 双通道（事件 + isVisible 轮询）确认，10s 超时自动回滚位置并销毁窗口（2026-08-04）。
 - [ ] **新客户端发版内容清单**（代码已就绪、未发版）：补偿码 CMP 兑换、优秀码服务端校验、优秀码仅当天有效（北京时间）、学生端移除本地密钥 `csp-coach-2025`。
 - [x] **阅读题“没选项”修复（代码已改、未发版）**：① `refreshQuestionBankV2` 改为内容级校验（版本号相同也比对缓存 sha256 与远程 manifest，不一致强制重下/丢弃坏缓存）；快照选择同版本优先内置；② `toLegacyQuestion` 兜底：带 code、无 options、有 children 的 choice 自动按 reading 转 multipart；③ 选择题入口过滤掉无选项题。测试 120/120、构建通过、坏缓存 e2e 复现通过。**需随下个客户端版本发版**。
 - [ ] 发版后提醒老师：优秀码“当天有效 + 需联网兑换”。
@@ -18,6 +18,12 @@
 6. 主 bundle 路由懒加载（1.4MB）；lessons.json 2.8MB 启动优化
 7. 隐藏宠物窗口 WebView2 TrySuspend；additionalBrowserArgs 真机验证
 8. quizStore.errors 上限（当前无上限累积）
+
+## Windows 第二智子卡死专项（2026-08-04 已改代码，待真机验证）
+
+- 已实现：① PetWindow 2.5s 超时强制显示（远程素材下载慢不再“假成功”）；② 设为桌面伙伴需等窗口真正可见，超时自动回滚并销毁窗口；③ 启动恢复 pet-2/pet-3 改为非阻塞 + 8s 超时 + 失败清位；④ 收回/隐藏桌宠时暂停 WebView2 渲染并销毁窗口（不再后台 60fps 重绘）；⑤ Windows 注入 `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--disable-gpu-compositing`（针对透明多窗口 GPU/合成器崩溃类）。
+- 待 Windows 真机验证：第二智子复现步骤是否还卡死；若仍崩溃把参数升级为 `--disable-gpu`；若性能回退明显则移除该参数。
+- 相关代码：`src/utils/desktopCompanions.ts`、`PetWindow.tsx`、`PetStatus.tsx`、`App.tsx`、`src-tauri/src/{lib,main}.rs`；测试 130/130 通过，`cargo check` 通过。
 
 ## 部署状态（2026-08-03）
 

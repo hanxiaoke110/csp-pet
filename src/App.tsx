@@ -30,7 +30,7 @@ import { useAIStore } from './stores/aiStore';
 import { migrateLocalStorageToSqlite } from './lib/migration';
 import { loadProblemStatuses } from './lib/problemStatusCache';
 import { nextCheckin } from './utils/checkin';
-import { showDesktopCompanion } from './utils/desktopCompanions';
+import { COMPANION_RESTORE_TIMEOUT_MS, hideDesktopCompanion, showDesktopCompanion, waitForCompanionVisible } from './utils/desktopCompanions';
 import type { Lesson, Stage, LessonsData } from './types/course';
 import './App.css';
 
@@ -265,11 +265,12 @@ function App() {
       // 5. Sync to pet window
       usePetStore.getState().save();
       // Restore independently positioned desktop companions after an app restart.
+      // 不阻塞启动：每槽位带超时，失败自动回滚，避免“启动即无限加载/卡死”重演。
       const companionState = usePetStore.getState();
       for (const slot of [2, 3] as const) {
         const petId = companionState.desktopCompanionIds[slot - 2];
         if (petId && slot <= companionState.companionSlots) {
-          try { await showDesktopCompanion(slot); } catch {}
+          void restoreDesktopCompanion(slot);
         }
       }
       // 6. Start hunger timer: tick every 15 minutes while app is open
@@ -317,6 +318,19 @@ function App() {
       cleanupListeners?.();
     };
   }, []);
+
+  async function restoreDesktopCompanion(slot: 2 | 3) {
+    const appearedPromise = waitForCompanionVisible(slot, COMPANION_RESTORE_TIMEOUT_MS);
+    try {
+      const created = await showDesktopCompanion(slot);
+      if (!created) throw new Error('create failed');
+      if (!await appearedPromise) throw new Error('not visible in time');
+    } catch {
+      // 启动恢复失败：清掉位置并销毁可能已创建的窗口，下次启动不再重试卡死
+      try { usePetStore.getState().setDesktopCompanion(slot, null); } catch {}
+      await hideDesktopCompanion(slot);
+    }
+  }
 
   // Milestone toast listener — moved to AppLayout (only active in main app, not dungeon)
 

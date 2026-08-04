@@ -76,6 +76,20 @@ export default function PetWindow() {
     if (autoShownRef.current) return;
     autoShownRef.current = true;
     getCurrentWindow().show().catch(() => {});
+    // 通知主窗口“独立桌宠窗口已真正可见”，供“设为桌面伙伴”按钮确认/回滚
+    emit('pet-companion-shown', { slot: desktopSlot }).catch(() => {});
+  }, []);
+
+  // 兜底：远程素材下载慢/失败时也要让窗口先出现（loading 状态），
+  // 避免出现“按钮显示已设置，但桌面一直没有第二只智子”的假成功。
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (autoShownRef.current) return;
+      autoShownRef.current = true;
+      getCurrentWindow().show().catch(() => {});
+      emit('pet-companion-shown', { slot: desktopSlot }).catch(() => {});
+    }, 2500);
+    return () => clearTimeout(timer);
   }, []);
 
   const pauseRoaming = useCallback((ms: number) => {
