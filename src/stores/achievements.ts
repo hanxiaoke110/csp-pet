@@ -8,6 +8,16 @@ export interface Achievement {
   check: () => { unlocked: boolean; progress?: number; total?: number };
 }
 
+// 显示口径：领取过的成就永远视为已解锁（条件回退后卡片不缩水），与卡片渲染一致
+export function isUnlockedForDisplay(a: Achievement, claimed: Set<string>): boolean {
+  return a.check().unlocked || claimed.has(a.id);
+}
+
+// 成就计数：与卡片显示口径一致，避免“标题 4/6、卡片 6 个已领取”的差异
+export function countUnlockedForDisplay(achievements: Achievement[], claimed: Set<string>): number {
+  return achievements.filter(a => isUnlockedForDisplay(a, claimed)).length;
+}
+
 // Helper: count completed course problems from localStorage
 function getCompletedCount(): number {
   try {

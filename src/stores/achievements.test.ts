@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { createAchievements } from './achievements';
+import { createAchievements, countUnlockedForDisplay } from './achievements';
 
 let store: Record<string, string> = {};
 
@@ -69,5 +69,26 @@ describe('成就判定', () => {
     // 周常没全对
     store['csp_quiz_state'] = JSON.stringify({ weeklyPerfects: 0 });
     expect(build(0, 5, 5).find(a => a.id === 'super-double')!.check().unlocked).toBe(false);
+  });
+
+  it('计数与卡片同口径：旧存档条件回退但已领取的成就仍计入（回归：标题 4/6 vs 卡片已领取）', () => {
+    // 模拟旧版存档：superBestTotal 缺失，加载后为 0；孩子已领取全部 6 个极限挑战成就
+    store['csp_quiz_state'] = JSON.stringify({ weeklyPerfects: 1 });
+    const achievements = createAchievements(
+      1, 1, 0, 0, 0, false,
+      5, 5, 0, 1, 0, 0, 0, [],
+    );
+    const superItems = achievements.filter(a => a.category === 'super');
+
+    // 未领取时：实时条件只通过 4 个（完美通关/双料冠军因 bestTotal=0 不通过）
+    expect(countUnlockedForDisplay(superItems, new Set())).toBe(4);
+
+    // 已领取 5/5 完美与双料冠军后：计数应恢复为 6/6，与卡片显示一致
+    const claimed = new Set(['super-5of5', 'super-double']);
+    expect(countUnlockedForDisplay(superItems, claimed)).toBe(6);
+
+    // 只领取其中一个条件回退的成就：计数 5/6
+    const claimed2 = new Set(['super-5of5']);
+    expect(countUnlockedForDisplay(superItems, claimed2)).toBe(5);
   });
 });

@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { usePetStore } from '../../stores/petStore';
 import { useQuizStore } from '../../stores/quizStore';
-import { createAchievements, type Achievement } from '../../stores/achievements';
+import { createAchievements, countUnlockedForDisplay, type Achievement } from '../../stores/achievements';
 
 const CLAIM_KEY = 'csp_achievement_claimed';
 
@@ -85,12 +85,6 @@ export default function AchievementsPanel() {
     return map;
   }, [achievements]);
 
-  const unlockedCount = achievements.filter(a => a.check().unlocked).length;
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const [newUnlock, setNewUnlock] = useState<Achievement | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
-  const prevUnlocked = useRef<Set<string> | null>(null);
-
   // Load claimed set from localStorage
   const [claimed, setClaimed] = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem(CLAIM_KEY) || '[]')); } catch { return new Set(); }
@@ -99,6 +93,13 @@ export default function AchievementsPanel() {
   const saveClaimed = (next: Set<string>) => {
     try { localStorage.setItem(CLAIM_KEY, JSON.stringify([...next])); } catch {}
   };
+
+  // 计数与卡片同口径：领取过的成就即使实时条件回退也计入“已解锁”
+  const unlockedCount = countUnlockedForDisplay(achievements, claimed);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [newUnlock, setNewUnlock] = useState<Achievement | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const prevUnlocked = useRef<Set<string> | null>(null);
 
   const handleClaim = useCallback((achId: string) => {
     const reward = REWARDS[achId];
@@ -144,7 +145,7 @@ export default function AchievementsPanel() {
               <span className="ach-cat-arrow">{expanded[key] ? '▼' : '▶'}</span>
               <span>{cat.label}</span>
               <span className="ach-cat-count">
-                {items.filter(a => a.check().unlocked).length}/{items.length}
+                {countUnlockedForDisplay(items, claimed)}/{items.length}
               </span>
             </div>
             {expanded[key] && (
