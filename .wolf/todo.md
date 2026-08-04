@@ -23,6 +23,7 @@
 
 - 已实现：① PetWindow 2.5s 超时强制显示（远程素材下载慢不再“假成功”）；② 设为桌面伙伴需等窗口真正可见，超时自动回滚并销毁窗口；③ 启动恢复 pet-2/pet-3 改为非阻塞 + 8s 超时 + 失败清位；④ 收回/隐藏桌宠时暂停 WebView2 渲染并销毁窗口（不再后台 60fps 重绘）；⑤ Windows 注入 `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--disable-gpu-compositing`（针对透明多窗口 GPU/合成器崩溃类）。
 - 第二轮（Windows 实机仍卡死在“正在加载课程数据..”后追加）：⑥ pet-2/pet-3 在 Windows 上改用独立 WebView2 用户数据目录（`appdata/webview2-pet-{slot}`），把桌宠窗口与主窗口进程隔离（Tauri #8196 同类问题，共享环境创建第二个窗口会把整窗拖死）；⑦ 收回改为“暂停渲染 + 隐藏”，不再 destroy（避免等待挂死的 WebView2 进程阻塞主线程）；⑧ 窗口偏好（尺寸/漫游）同步到 SQLite，独立环境 localStorage 不共享后仍能跟随主设置。
+- 第三轮（Windows 实机：开启/收回不卡了，但智子不显示、软件关不掉、强杀后重启卡加载）：⑨ Windows 主窗口点 X 改为真正退出整个应用（原来统一“关闭→隐藏托盘”，只能强杀导致下次启动异常）；⑩ pet-2 窗口数据改为轮询重试（独立环境 localStorage 为空 + SQLite 异步写入，初次读取拿不到桌面伙伴 → 空透明窗口看不到智子）；⑪ 启动恢复桌宠延后到主界面加载完成后再做。
 - 待 Windows 真机验证：第二智子复现步骤是否还卡死；若仍崩溃把参数升级为 `--disable-gpu`；若性能回退明显则移除该参数。
 - 相关代码：`src/utils/desktopCompanions.ts`、`PetWindow.tsx`、`PetStatus.tsx`、`App.tsx`、`src-tauri/src/{lib,main}.rs`；测试 130/130 通过，`cargo check` 通过。
 

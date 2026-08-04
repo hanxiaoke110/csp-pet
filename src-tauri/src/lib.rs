@@ -359,6 +359,20 @@ pub fn run() {
                 } => {
                     if label == "main" || label.starts_with("pet") {
                         if let tauri::WindowEvent::CloseRequested { api, .. } = &window_event {
+                            // Windows：主窗口点 X = 真正退出整个应用（含桌宠窗口）。
+                            // 之前统一“关闭→隐藏到托盘”，孩子找不到托盘入口，
+                            // 只能任务管理器强杀，导致下次启动异常。
+                            #[cfg(target_os = "windows")]
+                            if label == "main" {
+                                for pet_label in ["pet", "pet-2", "pet-3"] {
+                                    if let Some(w) = app_handle.get_webview_window(pet_label) {
+                                        let _ = w.as_ref().hide();
+                                        let _ = w.destroy();
+                                    }
+                                }
+                                app_handle.exit(0);
+                                return;
+                            }
                             api.prevent_close();
                             if let Some(window) = app_handle.get_webview_window(&label) {
                                 let _ = window.hide();

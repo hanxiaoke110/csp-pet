@@ -264,15 +264,8 @@ function App() {
       try { usePetStore.getState().runAutoFeeder(); } catch {}
       // 5. Sync to pet window
       usePetStore.getState().save();
-      // Restore independently positioned desktop companions after an app restart.
-      // 不阻塞启动：每槽位带超时，失败自动回滚，避免“启动即无限加载/卡死”重演。
-      const companionState = usePetStore.getState();
-      for (const slot of [2, 3] as const) {
-        const petId = companionState.desktopCompanionIds[slot - 2];
-        if (petId && slot <= companionState.companionSlots) {
-          void restoreDesktopCompanion(slot);
-        }
-      }
+      // 独立桌宠窗口的启动恢复延后到主界面加载完成后再做（见下方 effect），
+      // 避免启动阶段创建第二个 WebView2 环境与课程数据加载竞争。
       // 6. Start hunger timer: tick every 15 minutes while app is open
       hungerTimer = setInterval(() => {
         usePetStore.getState().tickHunger();
@@ -331,6 +324,18 @@ function App() {
       await hideDesktopCompanion(slot);
     }
   }
+
+  // 主界面加载完成后，再恢复独立桌宠窗口（每槽位带超时，失败自动回滚）
+  useEffect(() => {
+    if (loading) return;
+    const companionState = usePetStore.getState();
+    for (const slot of [2, 3] as const) {
+      const petId = companionState.desktopCompanionIds[slot - 2];
+      if (petId && slot <= companionState.companionSlots) {
+        void restoreDesktopCompanion(slot);
+      }
+    }
+  }, [loading]);
 
   // Milestone toast listener — moved to AppLayout (only active in main app, not dungeon)
 

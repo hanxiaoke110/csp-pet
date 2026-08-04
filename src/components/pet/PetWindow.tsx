@@ -171,17 +171,27 @@ export default function PetWindow() {
 
   // Data sync and product events.
   useEffect(() => {
-    const load = async () => {
+    let cancelled = false;
+    const load = async (): Promise<boolean> => {
       try {
         let raw: string | null = null;
         try { raw = await invoke('get_setting', { key: 'pet_data' }) as string | null; } catch { /* SQLite unavailable */ }
         if (!raw) raw = localStorage.getItem('csp_pet_data') || localStorage.getItem('csp_pet_data_tmp');
         const data = JSON.parse(raw || '{}');
         const pet = selectWindowPet(data);
-        setActivePet(pet);
+        if (pet && !cancelled) { setActivePet(pet); return true; }
       } catch { /* keep window empty until a pet becomes available */ }
+      return false;
     };
-    load();
+    // 独立 WebView2 环境下 localStorage 为空，SQLite 写入是异步的：
+    // 初次读取可能拿不到刚设置的桌面伙伴，轮询重试直到拿到宠物（最长约 4.5s）。
+    const loadWithRetry = async (attempt = 0) => {
+      const ok = await load();
+      if (!ok && attempt < 15 && !cancelled) {
+        window.setTimeout(() => { if (!cancelled) loadWithRetry(attempt + 1); }, 300);
+      }
+    };
+    loadWithRetry();
     applyStoredSettings();
     const listeners: (() => void)[] = [];
     listeners.push(safeListen('pet-data-sync', (event: any) => {
@@ -201,6 +211,7 @@ export default function PetWindow() {
     // to cover the small race where the companion assignment is still saving.
     const syncTimer = window.setTimeout(() => emit('pet-request-sync', {}).catch(() => {}), 250);
     return () => {
+      cancelled = true;
       listeners.forEach(unlisten => unlisten());
       window.clearTimeout(syncTimer);
       if (bubbleTimer.current) clearTimeout(bubbleTimer.current);
