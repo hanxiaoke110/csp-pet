@@ -112,7 +112,7 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
     }
 
     let x = if slot == 2 { 280.0 } else { 560.0 };
-    WebviewWindowBuilder::new(
+    let base_builder = WebviewWindowBuilder::new(
         &app,
         &label,
         // Slot is derived from the window label on the JS side; keep the URL
@@ -130,9 +130,28 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
     .shadow(false)
     // 先隐藏创建，等页面精灵就绪后由 PetWindow show，
     // 消除动态创建透明窗口时的闪白/闪黑。
-    .visible(false)
-    .build()
-    .map_err(|error| format!("创建第 {slot} 个桌面智子窗口失败：{error}"))?;
+    .visible(false);
+
+    #[cfg(target_os = "windows")]
+    let builder = {
+        // Windows 部分机器上，多个 WebView2 窗口共享同一用户数据目录会导致
+        // 第二个窗口创建卡死/整窗冻结（Tauri #8196 同类问题）。
+        // 每个独立桌宠窗口使用独立 WebView2 环境：即使某个桌宠窗口异常，
+        // 也不会拖垮主窗口；代价是独立 localStorage，窗口偏好由 SQLite 同步。
+        if let Ok(app_data) = app.path().app_data_dir() {
+            let dir = app_data.join(format!("webview2-pet-{slot}"));
+            let _ = std::fs::create_dir_all(&dir);
+            base_builder.data_directory(dir)
+        } else {
+            base_builder
+        }
+    };
+    #[cfg(not(target_os = "windows"))]
+    let builder = base_builder;
+
+    builder
+        .build()
+        .map_err(|error| format!("创建第 {slot} 个桌面智子窗口失败：{error}"))?;
     Ok(())
 }
 
@@ -140,10 +159,11 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
 fn hide_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
     let label = companion_label(slot)?;
     if let Some(window) = app.get_webview_window(&label) {
-        // 收回 = 彻底释放：先暂停 WebView2 渲染，再销毁窗口，
-        // 避免隐藏窗口仍在后台 60fps 重绘，也避免残留卡死的渲染进程。
+        // 收回 = 暂停渲染 + 隐藏。不销毁窗口：销毁可能等待挂死的 WebView2
+        // 进程而阻塞主线程；SetIsVisible(false) 后渲染即停止，窗口对象在
+        // 应用退出时统一清理。
         let _ = window.as_ref().hide();
-        window.destroy().map_err(|error| error.to_string())?;
+        window.hide().map_err(|error| error.to_string())?;
     }
     Ok(())
 }

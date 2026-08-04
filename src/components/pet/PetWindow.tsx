@@ -7,6 +7,7 @@ import type { PetAnimState } from './PetStateMachine';
 import { PetDialogueDirector } from './PetDialogueDirector';
 import type { OwnedPet } from '../../types/pet';
 import { safeListen } from '../../lib/tauriEvents';
+import { sqliteGet } from '../../lib/sqlite-storage';
 
 const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
   small: { canvas: 110, win: 122 },
@@ -46,7 +47,21 @@ export default function PetWindow() {
   const [clickCount, setClickCount] = useState(0);
   const [activePet, setActivePet] = useState<OwnedPet | null>(null);
   const [petSize, setPetSize] = useState(getPetSize);
+  const [roamingEnabled, setRoamingEnabled] = useState(getRoamingEnabled);
   const [showActions, setShowActions] = useState(false);
+
+  // Windows 独立 WebView2 环境下 localStorage 不再共享，窗口偏好从 SQLite 读取
+  const applyStoredSettings = async () => {
+    try {
+      const [size, roaming] = await Promise.all([
+        sqliteGet('csp_pet_size'),
+        sqliteGet('csp_pet_roaming'),
+      ]);
+      if (size && SIZE_MAP[size]) setPetSize(size);
+      if (roaming !== null) setRoamingEnabled(roaming === 'true');
+    } catch { /* 保持 localStorage 默认值 */ }
+  };
+
   const bubbleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const actionsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isDragging = useRef(false);
@@ -167,13 +182,14 @@ export default function PetWindow() {
       } catch { /* keep window empty until a pet becomes available */ }
     };
     load();
+    applyStoredSettings();
     const listeners: (() => void)[] = [];
     listeners.push(safeListen('pet-data-sync', (event: any) => {
       const data = event.payload;
       const pet = selectWindowPet(data);
       setActivePet(pet);
     }));
-    listeners.push(safeListen('pet-settings-changed', () => setPetSize(getPetSize())));
+    listeners.push(safeListen('pet-settings-changed', () => { applyStoredSettings(); }));
     listeners.push(safeListen('pet-anim', (event: any) => {
       const payload = event.payload as { anim: PetAnimState; duration?: number };
       window.__petTrigger__?.(payload.anim, payload.duration);
@@ -306,7 +322,7 @@ export default function PetWindow() {
     };
 
     const run = async () => {
-      if (!getRoamingEnabled() || Date.now() < roamingPausedUntil.current) {
+      if (!roamingEnabled || Date.now() < roamingPausedUntil.current) {
         schedule(Math.max(30_000, roamingPausedUntil.current - Date.now()));
         return;
       }
@@ -316,7 +332,7 @@ export default function PetWindow() {
 
     schedule(30_000);
     return () => { cancelled = true; if (timer) clearTimeout(timer); };
-  }, [windowHeight, windowWidth]);
+  }, [roamingEnabled, windowHeight, windowWidth]);
 
   // Ambient messages are intentionally sparse. Context-rich result messages
   // continue to arrive from quiz/course screens through the pet-bubble event.

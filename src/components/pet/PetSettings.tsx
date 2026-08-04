@@ -3,6 +3,7 @@ import { emit } from '@tauri-apps/api/event';
 import { useState } from 'react';
 import { usePetStore } from '../../stores/petStore';
 import ConfirmModal from './ConfirmModal';
+import { sqliteSetFireAndForget } from '../../lib/sqlite-storage';
 
 interface Props {
   petSize: string;
@@ -42,6 +43,7 @@ export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, 
                 <button key={opt.key} onClick={() => {
                   setPetSize(opt.key);
                   localStorage.setItem('csp_pet_size', opt.key);
+                  sqliteSetFireAndForget('csp_pet_size', opt.key);
                   emit('pet-settings-changed', {}).catch(() => {});
                   showToast(`精灵尺寸已设为「${opt.label}」`);
                 }} style={{
@@ -103,6 +105,7 @@ export default function PetSettings({ petSize, setPetSize, roaming, setRoaming, 
             const next = !roaming;
             setRoaming(next);
             localStorage.setItem('csp_pet_roaming', String(next));
+            sqliteSetFireAndForget('csp_pet_roaming', String(next));
             emit('pet-settings-changed', {}).catch(() => {});
           }} style={{
             width: 48, height: 28, borderRadius: 14, border: 'none', cursor: 'pointer',
