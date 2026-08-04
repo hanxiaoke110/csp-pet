@@ -1,14 +1,14 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50005479323,
+  "contentRevision": 50005479324,
   "verificationRevision": 50005479322,
   "channelRulesRevision": 3,
-  "generatedAt": "2026-08-03T09:14:48.774Z",
+  "generatedAt": "2026-08-04T05:26:22.209Z",
   "files": {
     "daily-gesp.json": {
-      "path": "daily-gesp.a70a0aca456a.json",
-      "sha256": "a70a0aca456a94bd45d7bbec98bd7a3bd8b023ca51f0215138740016ae9d4858",
-      "bytes": 914601,
+      "path": "daily-gesp.88072836a08f.json",
+      "sha256": "88072836a08fb727479a36bd951f1c681b5a47d433d61677a3302493a724058e",
+      "bytes": 918570,
       "count": 705
     },
     "super-cspj.json": {
@@ -30,9 +30,9 @@
       "count": 12
     },
     "dungeon-mixed.json": {
-      "path": "dungeon-mixed.80905a2c1c38.json",
-      "sha256": "80905a2c1c38f2684ac11b3904b9418094bb774cf66f6dc86ec68cce77a812be",
-      "bytes": 1144540,
+      "path": "dungeon-mixed.ac04e5b9379d.json",
+      "sha256": "ac04e5b9379dfc1b85c44ae0c5dbad356480a158b7ff22b2b62b716733f2b2c3",
+      "bytes": 1148509,
       "count": 820
     },
     "verification-summary.json": {
