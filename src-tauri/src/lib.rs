@@ -106,6 +106,14 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
         let _ = window.as_ref().show();
         window.show().map_err(|error| error.to_string())?;
         ensure_pet_topmost(&app, &label);
+        #[cfg(target_os = "windows")]
+        {
+            let main_focused = app
+                .get_webview_window("main")
+                .map(|w| w.is_focused().unwrap_or(false))
+                .unwrap_or(false);
+            recompute_pet_click_through(&app, main_focused);
+        }
         // 已存在窗口直接显示：同步广播“可见”，避免前端事件注册竞态导致误判回滚
         let _ = app.emit("pet-companion-shown", serde_json::json!({ "slot": slot }));
         return Ok(());
@@ -152,6 +160,14 @@ fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String>
     builder
         .build()
         .map_err(|error| format!("创建第 {slot} 个桌面智子窗口失败：{error}"))?;
+    #[cfg(target_os = "windows")]
+    {
+        let main_focused = app
+            .get_webview_window("main")
+            .map(|w| w.is_focused().unwrap_or(false))
+            .unwrap_or(false);
+        recompute_pet_click_through(&app, main_focused);
+    }
     Ok(())
 }
 
@@ -177,13 +193,79 @@ struct PetClickThroughState {
     worker: Option<std::thread::JoinHandle<()>>,
 }
 
-fn apply_pet_cursor_state(app: &tauri::AppHandle, ignore: bool) {
+// ── Windows 区域感知穿透 ──
+// 只有“主窗口有焦点”且“智子窗口有一半以上面积压在主窗口上”时才点击穿透：
+// 智子在桌面空白处始终可交互、可拖拽，不再出现“总选中不到”的问题。
+#[cfg(target_os = "windows")]
+fn window_rect(window: &tauri::WebviewWindow) -> Option<(i32, i32, i32, i32)> {
+    let pos = window.outer_position().ok()?;
+    let size = window.outer_size().ok()?;
+    Some((
+        pos.x,
+        pos.y,
+        pos.x + size.width as i32,
+        pos.y + size.height as i32,
+    ))
+}
+
+#[cfg(target_os = "windows")]
+fn overlap_ratio(pet: (i32, i32, i32, i32), main: (i32, i32, i32, i32)) -> f32 {
+    let ix = pet.0.max(main.0);
+    let iy = pet.1.max(main.1);
+    let ix2 = pet.2.min(main.2);
+    let iy2 = pet.3.min(main.3);
+    if ix2 <= ix || iy2 <= iy {
+        return 0.0;
+    }
+    let inter = ((ix2 - ix) as i64) * ((iy2 - iy) as i64);
+    let area = ((pet.2 - pet.0) as i64) * ((pet.3 - pet.1) as i64);
+    if area <= 0 {
+        return 0.0;
+    }
+    inter as f32 / area as f32
+}
+
+#[cfg(target_os = "windows")]
+fn should_pet_ignore_cursor(app: &tauri::AppHandle, label: &str, main_focused: bool) -> bool {
+    if !main_focused {
+        return false;
+    }
+    let (Some(main), Some(pet)) = (
+        app.get_webview_window("main"),
+        app.get_webview_window(label),
+    ) else {
+        return false;
+    };
+    let (Some(main_rect), Some(pet_rect)) = (window_rect(&main), window_rect(&pet)) else {
+        return false;
+    };
+    // 智子超过一半面积压在主窗口上才穿透，避免“蹭到一点边就整窗拖不动”
+    overlap_ratio(pet_rect, main_rect) >= 0.5
+}
+
+fn apply_pet_cursor_state(app: &tauri::AppHandle, main_focused: bool) {
     for label in ["pet", "pet-2", "pet-3"] {
         if let Some(pet) = app.get_webview_window(label) {
+            #[cfg(target_os = "windows")]
+            let ignore = should_pet_ignore_cursor(app, label, main_focused);
+            #[cfg(not(target_os = "windows"))]
+            let ignore = main_focused;
             let _ = pet.set_ignore_cursor_events(ignore);
-            // 主窗口回到前台时同步把智子窗口重新置顶，
-            // 保证智子图层始终在主窗口之上。
-            ensure_pet_topmost(app, label);
+            if main_focused {
+                // 主窗口回到前台时同步把智子窗口重新置顶，
+                // 保证智子图层始终在主窗口之上。
+                ensure_pet_topmost(app, label);
+            }
+        }
+    }
+}
+
+#[cfg(target_os = "windows")]
+fn recompute_pet_click_through(app: &tauri::AppHandle, main_focused: bool) {
+    for label in ["pet", "pet-2", "pet-3"] {
+        if let Some(pet) = app.get_webview_window(label) {
+            let ignore = should_pet_ignore_cursor(app, label, main_focused);
+            let _ = pet.set_ignore_cursor_events(ignore);
         }
     }
 }
@@ -341,6 +423,8 @@ pub fn run() {
         use tauri::RunEvent;
         let pet_cursor_state =
             std::sync::Arc::new(std::sync::Mutex::new(PetClickThroughState::default()));
+        let main_focused =
+            std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false));
         app.run(move |app_handle, event| {
             match event {
                 #[cfg(target_os = "macos")]
@@ -385,12 +469,9 @@ pub fn run() {
                             }
                         }
                     }
-                    // While the main window is focused, make the always-on-top pet
-                    // window click-through so it can never swallow clicks meant for
-                    // app UI (e.g. the 知识卡 button). Pet interaction resumes as
-                    // soon as the main window loses focus.
                     if label == "main" {
                         if let tauri::WindowEvent::Focused(focused) = window_event {
+                            main_focused.store(focused, std::sync::atomic::Ordering::SeqCst);
                             let thread_app = app_handle.clone();
                             let thread_state = pet_cursor_state.clone();
                             {
@@ -428,6 +509,21 @@ pub fn run() {
                                     }));
                                 }
                             }
+                        }
+                    }
+                    // Windows 区域感知穿透：智子/主窗口移动或缩放后重算穿透状态。
+                    // 只有“主窗口有焦点 + 智子大半个压在主窗口上”才穿透，
+                    // 智子在桌面空白处始终可交互、可拖拽。
+                    #[cfg(target_os = "windows")]
+                    if label == "main" || label.starts_with("pet") {
+                        if matches!(
+                            window_event,
+                            tauri::WindowEvent::Moved(_) | tauri::WindowEvent::Resized(_)
+                        ) {
+                            recompute_pet_click_through(
+                                app_handle,
+                                main_focused.load(std::sync::atomic::Ordering::SeqCst),
+                            );
                         }
                     }
                 }
