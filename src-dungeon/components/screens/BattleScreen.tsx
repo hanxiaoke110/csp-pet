@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
-import { SKILLS, getSkillById } from '../../data/skills';
-import { getTrustedQuestionImage, pickQuestionsByTag, pickBigMoveQuestions, getDungeonDifficulty } from '../../utils/questionLoader';
+import { SKILLS, getSkillById, type SkillDefinition } from '../../data/skills';
+import { getTrustedQuestionImage, pickQuestionsByTag, pickBigMoveQuestions, pickFallbackChoiceQuestions, getDungeonDifficulty, loadQuestionBank } from '../../utils/questionLoader';
 import { calculateStats, calculateTrialPlayerStats } from '../../utils/combatLogic';
 import {
   applySchoolAnswerPassive,
@@ -257,7 +257,6 @@ export default function BattleScreen() {
   const store = useDungeonStore();
   const player = store.player;
   const dungeons = store.dungeons;
-  const questionBank = store.questionBank;
   const trialInventory = useDungeonStore(s => s.trialInventory);
   const consumeTrialItem = useDungeonStore(s => s.consumeTrialItem);
 
@@ -279,6 +278,7 @@ export default function BattleScreen() {
   const [activeFable, setActiveFable] = useState<typeof fables[0] | null>(null);
   const [hintRevealed, setHintRevealed] = useState(false);
   const [battleNotice, setBattleNotice] = useState<string | null>(null);
+  const [noticeSkillId, setNoticeSkillId] = useState<string | null>(null);
   const challengeConsumedRef = useRef(false);
 
   // 累计战斗数据（用于最终结算）
@@ -414,35 +414,58 @@ export default function BattleScreen() {
     };
   }, []);
 
-  const handlePhaserEvent = useCallback((event: string, data: unknown) => {
+  // 技能 → 题目：知识点匹配优先，大招回退选择题，最后兜底任意可用选择题
+  const pickSkillQuestions = useCallback((skill: SkillDefinition, bank: Question[]): Question[] => {
+    const isBigMove = skill.id === 'skill-4';
+    const diffRange = getDungeonDifficulty(dungeonId || '');
+    let questions = isBigMove
+      ? pickBigMoveQuestions(bank, 1)
+      : pickQuestionsByTag(bank, skill.knowledgeTag, 1, diffRange);
+    if (questions.length === 0) {
+      // 大招无 reading/fillBlank 题时回退到普通选择题
+      const fallback = isBigMove ? pickQuestionsByTag(bank, skill.knowledgeTag, 1, diffRange) : [];
+      questions.push(...fallback);
+    }
+    if (questions.length === 0) {
+      // 知识点/难度覆盖缺口：兜底任意可用选择题，避免技能完全无法使用
+      questions = pickFallbackChoiceQuestions(bank, 1, diffRange);
+    }
+    return questions;
+  }, [dungeonId]);
+
+  const handlePhaserEvent = useCallback(async (event: string, data: unknown) => {
     switch (event) {
       case 'skillSelected': {
         const { skillId } = data as { skillId: string };
         const skill = getSkillById(skillId);
         if (!skill) return;
 
-        // 大招（递归爆发）用程序阅读/填空题（J 组，难度高）；普通技能用 J 组选择题
-        // 难度按副本主题递进（天机阁简单→算法塔难）
-        const isBigMove = skill.id === 'skill-4';
-        const diffRange = getDungeonDifficulty(dungeonId || '');
         // Read the store at click time. Phaser is intentionally created once, so
         // a captured initial empty question bank would otherwise persist all battle.
-        const latestBank = useDungeonStore.getState().questionBank;
-        const questions = isBigMove
-          ? pickBigMoveQuestions(latestBank, 1)
-          : pickQuestionsByTag(latestBank, skill.knowledgeTag, 1, diffRange);
+        let latestBank = useDungeonStore.getState().questionBank;
+        let questions = pickSkillQuestions(skill, latestBank);
+
         if (questions.length === 0) {
-          // 大招无 reading/fillBlank 题时回退到 choice；仍无则视为答错
-          const fallback = isBigMove ? pickQuestionsByTag(latestBank, skill.knowledgeTag, 1, diffRange) : [];
-          if (fallback.length === 0) {
-            gameRef.current?.cancelPendingSkill();
-            setPendingAnswer(null);
-            setCurrentQuestion(null);
-            setSelectedSkillId(null);
-            setBattleNotice('题库正在准备中，请稍后重新选择技能。');
-            return;
-          }
-          questions.push(...fallback);
+          // 题库可能还在准备：现场重载一次再试（命中缓存很快），
+          // 避免“点了技能只弹提示、重选也永远失败”。
+          try {
+            const reloaded = await loadQuestionBank();
+            if (reloaded.length > 0) {
+              useDungeonStore.getState().setQuestionBank(reloaded);
+              latestBank = reloaded;
+              questions = pickSkillQuestions(skill, latestBank);
+            }
+          } catch { /* 重载失败则按当前空库处理 */ }
+        }
+
+        if (questions.length === 0) {
+          gameRef.current?.cancelPendingSkill();
+          setPendingAnswer(null);
+          setCurrentQuestion(null);
+          setSelectedSkillId(null);
+          setNoticeSkillId(skillId);
+          setBattleNotice('题库正在准备中，请稍后重新选择技能。');
+          return;
         }
 
         setSelectedSkillId(skillId);
@@ -461,7 +484,28 @@ export default function BattleScreen() {
         break;
       }
     }
-  }, [questionBank]);
+  }, [pickSkillQuestions]);
+
+  // “重试”按钮：重新加载题库后，让 Phaser 重新走一遍选技能流程（含能量/冷却/次数校验）
+  const retryFailedSkill = useCallback(async () => {
+    const skillId = noticeSkillId;
+    setBattleNotice(null);
+    setNoticeSkillId(null);
+    if (!skillId) return;
+    const skill = getSkillById(skillId);
+    if (!skill) return;
+    try {
+      const reloaded = await loadQuestionBank();
+      if (reloaded.length > 0) useDungeonStore.getState().setQuestionBank(reloaded);
+    } catch { /* 重载失败则按当前库判断 */ }
+    const bank = useDungeonStore.getState().questionBank;
+    if (pickSkillQuestions(skill, bank).length === 0) {
+      setNoticeSkillId(skillId);
+      setBattleNotice('题库暂时不可用，请稍后再试。');
+      return;
+    }
+    gameRef.current?.retrySkill(skillId);
+  }, [noticeSkillId, pickSkillQuestions]);
 
   const handleAnswer = useCallback((optionIndex: number) => {
     if (submitted || !currentQuestion || !selectedSkillId) return;
@@ -604,6 +648,9 @@ export default function BattleScreen() {
       {battleNotice && (
         <div style={{ position: 'fixed', top: 84, left: '50%', transform: 'translateX(-50%)', zIndex: 1002, padding: '10px 16px', background: '#3b1d1d', border: '1px solid #ef4444', color: '#fecaca', fontSize: 13 }}>
           {battleNotice}
+          {noticeSkillId && (
+            <button onClick={() => void retryFailedSkill()} style={{ marginLeft: 12, border: 0, background: '#ef4444', color: '#fff', cursor: 'pointer', padding: '3px 10px', borderRadius: 4 }}>重试</button>
+          )}
           <button onClick={() => setBattleNotice(null)} style={{ marginLeft: 12, border: 0, background: 'transparent', color: '#fff', cursor: 'pointer' }}>知道了</button>
         </div>
       )}

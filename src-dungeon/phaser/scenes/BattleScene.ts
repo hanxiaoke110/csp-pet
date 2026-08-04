@@ -273,6 +273,11 @@ export class BattleScene extends Phaser.Scene {
     this.onEvent('skillSelected', { skillId });
   }
 
+  /** React 侧“重试”时重新进入选技能流程：复用能量/冷却/次数等完整校验 */
+  retrySkill(skillId: string): void {
+    this.onSkillSelected(skillId);
+  }
+
   handleAnswerResult(result: SkillSelectResult): void {
     if (!this.pendingSkillId || this.pendingSkillId !== result.skillId) return;
 

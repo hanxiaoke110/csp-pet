@@ -8,6 +8,7 @@ export interface BattlePhaserGame {
   game: Phaser.Game;
   setAnswerResult: (result: SkillSelectResult) => void;
   cancelPendingSkill: () => void;
+  retrySkill: (skillId: string) => void;
   healPlayer: (amount: number) => void;
   pause: () => void;
   resume: () => void;
@@ -66,6 +67,10 @@ export function createBattleGame(
     cancelPendingSkill: () => {
       const scene = game.scene.getScene('BattleScene') as BattleScene | undefined;
       if (scene) scene.cancelPendingSkill();
+    },
+    retrySkill: (skillId: string) => {
+      const scene = game.scene.getScene('BattleScene') as BattleScene | undefined;
+      if (scene) scene.retrySkill(skillId);
     },
     healPlayer: (amount: number) => {
       const scene = game.scene.getScene('BattleScene') as BattleScene | undefined;

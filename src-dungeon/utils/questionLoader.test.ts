@@ -4,6 +4,7 @@ import {
   getTrustedQuestionImage,
   isBrokenCodeQuestion,
   mergeReviewedQuestionBank,
+  pickFallbackChoiceQuestions,
 } from './questionLoader';
 
 vi.stubGlobal('localStorage', {
@@ -34,6 +35,32 @@ describe('试炼场题目可靠性', () => {
 
     expect(getTrustedQuestionImage(question)).toBeNull();
     expect(isBrokenCodeQuestion(question)).toBe(true);
+  });
+
+  it('兜底选函数：返回可用选择题（J/GESP 1-4 级、难度区间内）', () => {
+    const q = makeQuestion({
+      group: 'GESP', level: 2, difficulty: 2,
+      question: '以下哪个是合法的变量名？', knowledgePoint: '语法',
+    });
+    const picked = pickFallbackChoiceQuestions([q], 1, [1, 4]);
+    expect(picked).toHaveLength(1);
+    expect(picked[0].id).toBe('gesp-test');
+  });
+
+  it('兜底选函数：过滤 CSP-S、超纲 GESP、选项不足的题', () => {
+    const sQuestion = makeQuestion({ id: 's-q', group: 'S' });
+    const highLevel = makeQuestion({ id: 'gesp5', group: 'GESP', level: 5, difficulty: 5 });
+    const fewOptions = makeQuestion({ id: 'few', group: 'J', options: ['A. 1', 'B. 2'] });
+    expect(pickFallbackChoiceQuestions([sQuestion, highLevel, fewOptions], 1, [1, 4])).toHaveLength(0);
+  });
+
+  it('兜底选函数：超出难度区间的题不选', () => {
+    const hard = makeQuestion({ id: 'hard', group: 'J', difficulty: 4 });
+    expect(pickFallbackChoiceQuestions([hard], 1, [1, 2])).toHaveLength(0);
+  });
+
+  it('兜底选函数：空题库返回空数组（不会崩溃）', () => {
+    expect(pickFallbackChoiceQuestions([], 1)).toHaveLength(0);
   });
 
   it('有结构化代码时保留题目，但仍隐藏旧页面截图', () => {

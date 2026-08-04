@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useDungeonStore } from './stores/dungeonStore';
 import { loadQuestionBank, loadDungeons, loadQuestionMapping } from './utils/questionLoader';
@@ -17,6 +18,35 @@ import LeaderboardScreen from './components/screens/LeaderboardScreen';
 import ProfileScreen from './components/screens/ProfileScreen';
 import HealingScreen from './components/screens/HealingScreen';
 import TrialSupplyScreen from './components/screens/TrialSupplyScreen';
+
+// 战斗路由门禁：题库未就绪时不进战斗，避免“选技能永远弹‘题库准备中’、打不过去”。
+function BattleRoute({ children }: { children: ReactNode }) {
+  const questionBank = useDungeonStore(s => s.questionBank);
+  const [retrying, setRetrying] = useState(false);
+  const load = useCallback(async () => {
+    setRetrying(true);
+    try {
+      const bank = await loadQuestionBank();
+      if (bank.length > 0) useDungeonStore.getState().setQuestionBank(bank);
+    } catch { /* 保持空库，由重试按钮继续 */ }
+    setRetrying(false);
+  }, []);
+  useEffect(() => {
+    if (questionBank.length === 0) void load();
+  }, [questionBank.length, load]);
+
+  if (questionBank.length === 0) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-title">题库准备中，请稍候...</div>
+        <button className="pixel-btn" disabled={retrying} onClick={() => void load()} style={{ marginTop: 16 }}>
+          {retrying ? '加载中...' : '重试'}
+        </button>
+      </div>
+    );
+  }
+  return <>{children}</>;
+}
 
 export function AppContent() {
   const store = useDungeonStore();
@@ -83,10 +113,21 @@ export function AppContent() {
           store.initProgress(defaultProgress);
         }
 
-        // Load questions in background
-        loadQuestionBank().then(bank => {
-          store.setQuestionBank(bank);
-        }).catch(() => {});
+        // Load questions in background, with retry:
+        // 题库未就绪时战斗技能完全无法出题，失败重试（0s/3s/8s）降低空库概率。
+        const loadBankWithRetry = async (attempt = 0) => {
+          try {
+            const bank = await loadQuestionBank();
+            if (bank.length > 0) {
+              store.setQuestionBank(bank);
+              return;
+            }
+          } catch { /* fallthrough to retry */ }
+          if (attempt < 2) {
+            window.setTimeout(() => { void loadBankWithRetry(attempt + 1); }, attempt === 0 ? 3000 : 8000);
+          }
+        };
+        void loadBankWithRetry();
 
         loadQuestionMapping().then(mapping => {
           store.setQuestionMapping(mapping);
@@ -130,8 +171,8 @@ export function AppContent() {
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/map" element={<DungeonMap />} />
       <Route path="/dungeon/:dungeonId" element={<DungeonEntrance />} />
-      <Route path="/battle/:dungeonId/:stageId" element={<BattleScreen />} />
-      <Route path="/battle/:dungeonId" element={<BattleScreen />} />
+      <Route path="/battle/:dungeonId/:stageId" element={<BattleRoute><BattleScreen /></BattleRoute>} />
+      <Route path="/battle/:dungeonId" element={<BattleRoute><BattleScreen /></BattleRoute>} />
       <Route path="/reward/:dungeonId" element={<RewardScreen />} />
       <Route path="/leaderboard" element={<LeaderboardScreen />} />
       <Route path="/profile" element={<ProfileScreen />} />

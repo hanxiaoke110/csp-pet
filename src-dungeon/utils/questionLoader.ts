@@ -393,6 +393,24 @@ export function pickQuestionsByTag(
   return chooseFreshQuestions(matched, count, `dungeon-skill-${tag}`);
 }
 
+// ── Skill fallback: any usable choice question ──
+// 某技能的知识点/难度没有匹配题时兜底用，保证试炼场技能永远不会因为
+// 题库覆盖缺口而完全卡死（答错也有 0.3 倍伤害，能继续推进战斗）。
+export function pickFallbackChoiceQuestions(
+  allQuestions: Question[],
+  count: number,
+  difficultyRange?: [number, number]
+): Question[] {
+  const [minD, maxD] = difficultyRange || [1, 4];
+  const eligible = allQuestions.filter(q =>
+    isUsableChoiceQuestion(q) &&
+    // 与 pickQuestionsByTag 同口径：排除 CSP-S 超纲题
+    ((q.group === 'J') || (q.group === 'GESP' && q.level && q.level <= 4)) &&
+    q.difficulty >= minD && q.difficulty <= maxD
+  );
+  return chooseFreshQuestions(eligible, count, 'dungeon-skill-fallback');
+}
+
 // 副本 → 题目难度范围映射（按副本主题递进）
 export function getDungeonDifficulty(dungeonId: string): [number, number] {
   const map: Record<string, [number, number]> = {
