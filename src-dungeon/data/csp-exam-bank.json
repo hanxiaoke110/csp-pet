@@ -10310,17 +10310,17 @@
       "type": "choice",
       "knowledgePoint": "函数与递归",
       "difficulty": 1,
-      "question": "代码执行后有关描述正确的是（ ）。输入N=21。",
-      "code": "int N;cin>>N;\nif(N>=90) cout<<\"A\";\n    else if(N>=80) cout<<\"B\";\n    else if(N>=70) cout<<\"C\";\n    else cout<<\"D\";",
+      "question": "下面C++代码执行时输入21后，有关描述正确的是（ ）。",
+      "code": "int N;\ncin >> N;\nif (N % 3 == 0)\n    cout << \"能被3整除\";\nelse if (N % 7 == 0)\n    cout << \"能被7整除\";\nelse\n    cout << \"不能被3和7整除\";\ncout << endl;",
       "image": null,
       "options": [
         "A. 代码第4行被执行",
-        "B. 代码第5行被执行",
-        "C. 代码第6行被执行",
-        "D. 代码第7行被执行"
+        "B. 第4和第7行代码都被执行",
+        "C. 仅有代码第7行被执行",
+        "D. 第8行代码将被执行，因为input()输入为字符串"
       ],
-      "correctIndex": 3,
-      "explanation": "21<70，所有if都不满足，进入else输出D。",
+      "correctIndex": 0,
+      "explanation": "输入21，21%3==0成立，只执行第4行输出\"能被3整除\"，随后第9行输出换行；else if 与 else 分支（第7、8行）不会执行，故A正确。",
       "level": 1
     },
     {
@@ -11328,17 +11328,17 @@
       "type": "choice",
       "knowledgePoint": "控制结构",
       "difficulty": 2,
-      "question": "关于while条件无法实现预期效果的是（ ）。",
-      "code": null,
+      "question": "假设下面C++代码执行过程中仅输入正负整数或0，有关说法错误的是（ ）。",
+      "code": "int N, Sum = 0;\ncin >> N;\nwhile (N) {\n    Sum += N;\n    cin >> N;\n}\ncout << Sum;",
       "image": null,
       "options": [
-        "A. while(i!=0)",
-        "B. while(i>0)",
-        "C. while(i<=100)",
-        "D. while(N==0)"
+        "A. 执行上面代码如果输入0，将终止循环",
+        "B. 执行上面代码能实现所有非0整数的求和",
+        "C. 执行上面代码第一次输入0，最后将输出0",
+        "D. 执行上面代码将陷入死循环，可将while(N)改为while(N==0)"
       ],
       "correctIndex": 3,
-      "explanation": "while(N==0)如果第一次输入非0则直接跳过，逻辑错误。",
+      "explanation": "while(N) 在 N 为 0 时退出循环，并不会死循环；改为 while(N==0) 反而在 N 为 0 时进入循环，逻辑错误。A/B/C 均正确，故错误的是 D。",
       "level": 2
     },
     {
@@ -11348,17 +11348,17 @@
       "type": "choice",
       "knowledgePoint": "数论",
       "difficulty": 2,
-      "question": "关于判断质数的代码说法正确的是（ ）。",
-      "code": null,
+      "question": "执行下面的C++代码，有关说法正确的是（ ）。【质数是指仅能被1和它本身整除的正整数】",
+      "code": "int N;\ncin >> N;\nbool Flag = true;\nfor (int i = 2; i < N; i++) {\n    if (i * i > N)\n        break;\n    if (N % i == 0) {\n        Flag = false;\n        break;\n    }\n}\nif (Flag)\n    cout << N << \"是质数\" << endl;\nelse\n    cout << N << \"不是质数\" << endl;",
       "image": null,
       "options": [
-        "A. 各选项均正确",
-        "B. 只要i<N都正确",
-        "C. 只需判断到sqrt(N)",
-        "D. 各选项均无法完美处理边界情况"
+        "A. 如果输入正整数，上面代码能正确判断N是否为质数",
+        "B. 如果输入整数，上面代码能正确判断N是否为质数",
+        "C. 如果输入大于等于0的整数，上面代码能正确判断N是否为质数",
+        "D. 如将Flag = true修改为Flag = N>=2? true:false，则能判断所有整数包括负整数、0、正整数是否为质数"
       ],
       "correctIndex": 3,
-      "explanation": "各选项无法处理N=0和N=1的情况。",
+      "explanation": "N=1、0、负数时循环不执行，Flag保持true，会把非质数判为质数，故A/B/C均错；将Flag初始化为N>=2后，小于2的数直接判为非质数，大于等于2的数由循环正确判断，故D正确。",
       "level": 2
     },
     {
@@ -11408,17 +11408,17 @@
       "type": "choice",
       "knowledgePoint": "计算机基础",
       "difficulty": 2,
-      "question": "关于幸运数判断代码说法正确的是（ ）。",
-      "code": null,
+      "question": "在下面的C++代码中，N必须是小于10大于1的整数，M为正整数（大于0）。如果M被N整除则M为幸运数，如果M中含有N且能被N整除，则为超级幸运数，否则不是幸运数。程序用于判断M是否为幸运数或超级幸运数或非幸运数。阅读下面代码，有关说法正确的是（ ）。",
+      "code": "int N, M;\ncout << \"请输入幸运数字：\";\ncin >> N;\ncout << \"请输入正整数：\";\ncin >> M;\n\nbool Lucky;\nif (M % N == 0)\n    Lucky = true;\nelse\n    Lucky = false;\nwhile (M) {\n    if (M % 10 == N && Lucky) {\n        printf(\"%d是%d的超级幸运数!\", M, N);\n        break;\n    }\n    M /= 10;\n}\nif (M == 0)\n    if (Lucky)\n        printf(\"%d是%d的幸运数!\", M, N);\n    else\n        printf(\"%d非%d的幸运数!\", M, N);",
       "image": null,
       "options": [
-        "A. 各选项均正确",
-        "B. M=0时各选项都能正确处理",
-        "C. 只有选项A正确",
-        "D. 各选项均有逻辑错误"
+        "A. 如果N输入3，M输入36则将输出：36是3的超级幸运数!",
+        "B. 如果N输入7，M输入21则将输出：21是7的幸运数!",
+        "C. 如果N输入8，M输入36则将输出：36非8的超级幸运数!",
+        "D. 如果N输入3，M输入63则将输出：63是3的超级幸运数!"
       ],
       "correctIndex": 3,
-      "explanation": "各选项均有逻辑错误，无法处理所有边界情况。",
+      "explanation": "逐项模拟：A中M=36时循环把36除以10到3才命中，输出\"3是3的超级幸运数!\"；B、C循环结束M被除到0，输出的是\"0是7的幸运数!\"、\"0非8的幸运数!\"（注意printf用此时的M=0）；D中M=63首次取模即命中，输出\"63是3的超级幸运数!\"，正确。",
       "level": 2
     },
     {
@@ -11794,17 +11794,17 @@
       "type": "choice",
       "knowledgePoint": "控制结构",
       "difficulty": 2,
-      "question": "与for(int i=1;i<10;i++)效果相同的是（ ）。",
-      "code": null,
+      "question": "在C++中，与for(int i=1; i<10; i++)效果相同的是（ ）。",
+      "code": "",
       "image": null,
       "options": [
-        "A. `for(int i=0;i<10;i+=1)`",
-        "B. `for(int i=1;i<=9;i++)`",
-        "C. `for(int i=1;i<10;++i)`",
-        "D. `for(int i=10;i>0;i--)`"
+        "A. for(int i=0; i<10; i++)",
+        "B. for(int i=0; i<11; i++)",
+        "C. for(int i=1; i<10; ++i)",
+        "D. for(int i=0; i<11; ++i)"
       ],
       "correctIndex": 2,
-      "explanation": "++i与i++在for更新中效果相同。",
+      "explanation": "for 更新表达式中 ++i 与 i++ 效果相同（先自增再进入下一次判断），C 与原循环完全等价：i 均从1到9。A/B/D 的起始或终止条件不同（i 从0开始或到10、11），不等价。",
       "level": 2
     },
     {
@@ -11834,17 +11834,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 2,
-      "question": "输入-2和3.14后输出不可能是（ ）。",
-      "code": null,
+      "question": "假定变量a和b可能是整型、字符型或浮点型，则下面C++代码执行时先后输入-2和3.14后，其输出不可能是（ ）。[已知字符'+'、'-'、'='的ASCII码值分别是43、45和61]",
+      "code": "cin >> a;\ncin >> b;\ncout << (a + b);",
       "image": null,
       "options": [
-        "A. -2 3.14",
-        "B. -2",
-        "C. 取决于变量类型",
+        "A. 1",
+        "B. 1.14",
+        "C. 47",
         "D. 将触发异常"
       ],
       "correctIndex": 3,
-      "explanation": "C++的cin输入不会触发异常，会进入错误状态。",
+      "explanation": "int+int 时输出 -2+3=1；有 float 参与时输出 -2+3.14=1.14；char+int 时 a 读到 '-'(ASCII 45)、int 读 b 到小数点前的2，输出 45+2=47。C++ 的 cin 类型不匹配不会抛异常（只进入错误状态），故 D 不可能。",
       "level": 2
     },
     {
@@ -11914,17 +11914,17 @@
       "type": "choice",
       "knowledgePoint": "控制结构",
       "difficulty": 2,
-      "question": "for(i=1;i<5;i+=2)loopCount+=1输出（ ）。",
-      "code": null,
+      "question": "下面C++代码执行后的输出是（ ）。",
+      "code": "int loopCount = 0;\nfor (int i = 1; i < 5; i += 2)\n    loopCount += 1;\ncout << (loopCount);",
       "image": null,
       "options": [
         "A. 1",
         "B. 2",
         "C. 3",
-        "D. 4"
+        "D. 5"
       ],
       "correctIndex": 1,
-      "explanation": "i=1,3两次循环。",
+      "explanation": "i 依次取 1、3（i<5 且步长2），循环体执行 2 次，loopCount=2，选 B。",
       "level": 2
     },
     {
@@ -12486,17 +12486,17 @@
       "type": "choice",
       "knowledgePoint": "数论",
       "difficulty": 2,
-      "question": "输出0~100能被7整除但不能被3整除，不能填入的代码是（ ）。",
-      "code": null,
+      "question": "下面的C++代码用于输出0~100之间能被7整除但不能被3整除的数，横线处不能填入的代码是（ ）。",
+      "code": "for (i = 0; i < 100; i++)\n    if ( ____ )\n        cout << i << endl;",
       "image": null,
       "options": [
-        "A. i%7==0&&i%3!=0",
-        "B. !(i%7)&&i%3!=0",
-        "C. i%7&&i%3",
-        "D. i%7==0&&!(i%3==0)"
+        "A. i % 7 == 0 && i % 3 != 0",
+        "B. !(i % 7) && i % 3 != 0",
+        "C. i % 7 && i % 3",
+        "D. i % 7 == 0 && !(i % 3 == 0)"
       ],
       "correctIndex": 2,
-      "explanation": "C表示不能被7整除且不能被3整除，与要求相反。",
+      "explanation": "C 的条件为 i%7 与 i%3 都为真，即既不能被7整除也不能被3整除才输出，与题目要求（能被7整除且不能被3整除）相反，故不能填入。A/B/D 均等价于 i%7==0 && i%3!=0。",
       "level": 2
     },
     {
@@ -12588,17 +12588,17 @@
       "type": "choice",
       "knowledgePoint": "数论",
       "difficulty": 2,
-      "question": "输出N~M之间孪生素数横线i<_____应填（ ）。",
-      "code": null,
+      "question": "下面C++代码用于输出N和M之间（可以包括N和M）的孪生素数。孪生素数是指间隔为2的两个数均为素数，如11和13分别是素数，且间隔为2。isPrime(N)用于判断N是否为素数的函数。为完成上述功能，横线处应填上的代码是（ ）。",
+      "code": "int N, M;\n//本题假设N小于M\ncin >> N >> M;\n\nfor (int i = N; i < ____; i++)\n    if (isPrime(i) && isPrime(i + 2))\n        printf(\"%d %d\\n\", i, i + 2);",
       "image": null,
       "options": [
-        "A. M-2",
-        "B. M-1",
+        "A. M - 2",
+        "B. M - 1",
         "C. M",
-        "D. M+1"
+        "D. M + 1"
       ],
       "correctIndex": 1,
-      "explanation": "孪生素数需检查i和i+2，i最大到M-2，但用i<M-1可以确保i+2<=M。",
+      "explanation": "要输出 i 与 i+2 的孪生素数且 i+2 不超过 M，i 最大取 M-2，循环条件 i < M-1 恰好覆盖 i 从 N 到 M-2，故填 M-1。填 M-2 会漏掉 (M-2, M) 这一组。",
       "level": 2
     },
     {
@@ -12628,17 +12628,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 2,
-      "question": "a=10,b=20,c=30输出30则横线不能填入（ ）。",
-      "code": null,
+      "question": "下面C++代码执行后的输出是30，则横线处不能填入（ ）。",
+      "code": "int a = 10, b = 20, c = 30;\ncout << ____ << endl;\ncout << endl;",
       "image": null,
       "options": [
-        "A. max(max(a,b),c)",
-        "B. min(a+b,c)",
-        "C. sqrt(a+b+c)",
-        "D. (a+b+c)/2"
+        "A. max(max(a, b), c)",
+        "B. min(a + b, c)",
+        "C. sqrt(a + b + c)",
+        "D. (a + b + c) / 2"
       ],
       "correctIndex": 2,
-      "explanation": "sqrt(60)约等于7.746不等于30。A/B/D都得30。",
+      "explanation": "max(max(10,20),30)=30、min(10+20,30)=30、(10+20+30)/2=30 均成立；sqrt(60)≈7.75，不能输出30，故C不能填入。",
       "level": 2
     },
     {
@@ -13016,17 +13016,17 @@
       "type": "choice",
       "knowledgePoint": "组合数学",
       "difficulty": 2,
-      "question": "彩球排列规律：每组5红3绿2蓝（共10个），用N%10判断颜色。说法正确的是（ ）。",
-      "code": null,
+      "question": "下面C++代码用于根据N%10判断彩球颜色（每组5红3绿2蓝，共10个），正确说法是（ ）。",
+      "code": "int N, remainder;\ncin >> N;\nremainder = N % 10; // remainder变量保存余数\n\nif ((1 <= remainder) && (remainder <= 5))\n    cout << \"Red\";\nelse if ((6 <= remainder) && (remainder <= 8))\n    cout << \"Green\";\nelse if ((remainder == 9) || (remainder == 0))\n    cout << \"Blue\";",
       "image": null,
       "options": [
         "A. 将最后一个else if修改为else效果相同",
-        "B. 条件改为remainder<=5会包含0逻辑不同",
-        "C. 6<=remainder<=8不是合法C++写法",
-        "D. 应该用取余而非除法"
+        "B. 将((1 <= remainder) && (remainder <= 5))修改为(remainder <= 5)效果相同",
+        "C. else if ((6 <= remainder) && (remainder <= 8))写法错误，应修改为else if (6 <= remainder <= 8)",
+        "D. 根据题意remainder = N % 10应修改为remainder = N / 10"
       ],
       "correctIndex": 0,
-      "explanation": "最后一个else if的条件覆盖所有剩余情况，改为else效果相同。",
+      "explanation": "remainder 取值只有 0-9，前两个分支排除了 1-8 后，剩余恰好是 9 和 0，最后一个 else if 改为 else 效果相同，A 正确。B 中 remainder<=5 会把 0 也判为 Red，逻辑不同；C 中 6<=remainder<=8 是连比写法，C++ 不合法；D 应保留取余。",
       "level": 2
     },
     {
@@ -13124,17 +13124,17 @@
       "type": "choice",
       "knowledgePoint": "数论",
       "difficulty": 2,
-      "question": "输出能被2整除且除以7余数为2的数，不能实现的是（ ）。",
-      "code": null,
+      "question": "下面C++代码执行后，将输出能被2整除且除以7余数为2的数。下列选项不能实现的是（ ）。",
+      "code": "for (int i = 0; i < 100; i++)\n    if ( ____ )\n        cout << i << \" \";",
       "image": null,
       "options": [
-        "A. i%2==0&&i%7==2",
-        "B. !(i%2)&&i%7==2",
-        "C. (!(i%2))&&(!(i%7))",
-        "D. i%2==0&&(i-2)%7==0"
+        "A. ((i % 2 == 0) && (i % 7 == 2))",
+        "B. ((!(i % 2)) && (i % 7 == 2))",
+        "C. ((!(i % 2)) && (!(i % 7)))",
+        "D. ((i % 2 != 1) && (i % 7 == 2))"
       ],
       "correctIndex": 2,
-      "explanation": "C表示能被2和7都整除（除以7余0），不符合要求。",
+      "explanation": "C 的条件等价于 i 为偶数且 i%7==0，输出的是能被 2 和 7 整除（余数为 0）的数，与\"除以7余数为2\"不符，故不能实现。A/B/D 均输出能被2整除且除以7余数为2的数。",
       "level": 2
     },
     {
@@ -13166,17 +13166,17 @@
       "type": "choice",
       "knowledgePoint": "计算机基础",
       "difficulty": 2,
-      "question": "求1~N阶乘之和两种实现对比说法正确的是（ ）。",
-      "code": null,
+      "question": "在数学中N!表示N的阶乘，即1到N的乘积，如3!=1*2*3，且0!=1。下面的两段C++代码用于求1到N的阶乘之和，如N为3，则结果是9（1!+2!+3!的值）。选项中的说法正确的是（ ）。",
+      "code": "// 实现1\nint i, N;\ncin >> N;\nint tnt = 0, last = 1;\nfor (i = 1; i < N + 1; i++) {\n    last *= i;\n    tnt += last;\n}\ncout << tnt << endl;\n\n// 实现2\nint i2, N2;\ncin >> N2;\nint tnt2 = 0, tmp;\nfor (i2 = 1; i2 < N2 + 1; i2++) {\n    tmp = 1;\n    for (int j = 1; j < i2 + 1; j++)\n        tmp *= j;\n    tnt2 += tmp;\n}\ncout << tnt2 << endl;",
       "image": null,
       "options": [
-        "A. 实现2效率更高",
-        "B. 两种实现效率相同",
-        "C. 实现1应用前项计算结果效率更高",
-        "D. 实现1每次重新计算效率更低"
+        "A. 虽然实现1的代码短小，但效率并不高",
+        "B. 实现2的代码效率更高，且更易于理解",
+        "C. 实现1因为应用了前项计算结果，计算量更小，因此效率高",
+        "D. 两种实现，效率几乎一致"
       ],
       "correctIndex": 2,
-      "explanation": "实现1复用前一次阶乘结果效率更高。",
+      "explanation": "实现1用 last *= i 复用上一轮的阶乘结果，整体计算量为 O(N)；实现2每轮都从 1 重新乘到 i（内层循环 O(N)），整体为 O(N²)。故实现1效率更高，C 正确。",
       "level": 2
     },
     {
@@ -13246,17 +13246,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 2,
-      "question": "判断两个float变量a、b是否近似相等（差值<=0.000001）正确的是（ ）。",
-      "code": null,
+      "question": "在C++中，如果a和b均为float类型的变量，那么二者如果相差足够小（比如0.000001），就可以视作相等。比如2.2345676和2.2345677就可以视作相等。下列哪个表达式能用来正确判断\"a等于b\"（ ）。",
+      "code": "",
       "image": null,
       "options": [
-        "A. a-b<=0.000001",
-        "B. a==b",
-        "C. abs(b-a)<=0.000001",
-        "D. b-a<=0.000001&&a-b<=0.000001"
+        "A. ((b - a) < 0.000001)",
+        "B. ((b - a) <= 0.000001)",
+        "C. (abs(b - a) <= 0.000001)",
+        "D. (sqrt(b - a) <= 0.000001)"
       ],
       "correctIndex": 2,
-      "explanation": "需取绝对值abs(b-a)判断差值是否在误差范围内。",
+      "explanation": "判断两个浮点数近似相等应取差值的绝对值并与误差阈值比较：abs(b-a)<=0.000001。A/B 只判断单侧，当 b<a 时 b-a 为负也会满足条件，逻辑错误；D 对负数求 sqrt 无意义。",
       "level": 2
     },
     {
@@ -13286,17 +13286,17 @@
       "type": "choice",
       "knowledgePoint": "C++语法基础",
       "difficulty": 1,
-      "question": "在某集成开发环境中调试代码段时设置断点和检查局部变量，说法错误的是（ ）。",
-      "code": null,
+      "question": "在某集成开发环境中调试下面代码段时尝试设置断点和检查局部变量，下面哪个说法是错误的（ ）。",
+      "code": "int i, N = 0; // L1\ncin >> N; // L2\nfor (i = 1; i < 9; i++)\n    if (N % i == 0) break; // L3\nif (i < 9)\n    printf(\"N不能大于9\\n\"); // L4",
       "image": null,
       "options": [
         "A. 断点不可以设在L1标记的代码行",
-        "B. 暂停在L2时可检测i的值",
-        "C. 暂停在L3时可修改i的值",
-        "D. 执行可能暂停在L4"
+        "B. 执行暂停在L2标记的代码行时，可以检测i的值",
+        "C. 执行暂停在L3标记的代码行时，可以修改i的值",
+        "D. 执行有可能暂停在L4标记的代码行"
       ],
       "correctIndex": 0,
-      "explanation": "断点可以设在任何可执行代码行。",
+      "explanation": "断点可以设在声明行 L1 上，A 说法错误。B/C/D 均为调试器常见能力，说法正确。",
       "level": 1
     },
     {
@@ -13640,17 +13640,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 2,
-      "question": "取正整数第3位数（百位）横线填入（ ）。",
-      "code": null,
+      "question": "下面C++代码用于输出正整数N的百位数字，横线处应填入的代码是（ ）。",
+      "code": "int N, remainder;\ncout << \"请输入正整数：\";\ncin >> N;\ncout << ____;",
       "image": null,
       "options": [
-        "A. N%1000/100",
-        "B. N/100%10",
-        "C. N%100/10",
-        "D. N/10%10"
+        "A. N % 1000 / 100",
+        "B. N / 1000 % 100",
+        "C. N / 1000 / 100",
+        "D. N % 100 / 100"
       ],
       "correctIndex": 0,
-      "explanation": "N%1000保留后三位，/100取百位。",
+      "explanation": "百位数字：N%1000 去掉高位后取 N/100 的个位。A 中 (N%1000)/100 正确（如 1234 → 234/100=2）；B 得到的是千位，C 为 0，D 为十位以下。",
       "level": 2
     },
     {
@@ -13782,17 +13782,17 @@
       "type": "choice",
       "knowledgePoint": "控制结构",
       "difficulty": 2,
-      "question": "双重循环输出%d#%d-格式结果是（ ）。",
-      "code": null,
+      "question": "下面C++代码执行后的输出是（ ）。",
+      "code": "int i, j;\nfor (i = 0; i < 3; i++)\n    for (j = 0; j < i; j++)\n        printf(\"%d#%d-\", i, j);\nprintf(\"END\");",
       "image": null,
       "options": [
-        "A. 0#0-1#0-1#1-",
-        "B. 0#1-1#0-1#1-",
-        "C. 1#0-2#0-2#1-",
+        "A. 0#0-1#0-2#0-2#1-END",
+        "B. 0#0-1#0-1#1-2#0-2#1-2#2-3#0-3#1-3#2-END",
+        "C. 0#0-1#0-1#1-2#0-2#1-2#2-END",
         "D. 1#0-2#0-2#1-END"
       ],
       "correctIndex": 3,
-      "explanation": "外循环i=1时j=0输出1#0-;i=2时j=0,1输出2#0-2#1-;加上END。",
+      "explanation": "i=0 时内层不执行；i=1 时输出 1#0-；i=2 时输出 2#0-、2#1-；循环结束后输出 END，即 1#0-2#0-2#1-END，选 D。",
       "level": 2
     },
     {
@@ -13842,17 +13842,17 @@
       "type": "choice",
       "knowledgePoint": "计算机基础",
       "difficulty": 2,
-      "question": "判断自守数的代码说法错误的是（ ）。",
-      "code": null,
+      "question": "判断一个数是否为自守数。自守数的定义是如果一个数的平方其尾数与该数相同，则为自守数，如25的平方是625，其尾数是25，所以25是自守数。相关说法错误的是（ ）。",
+      "code": "int N, N1, M1;\ncout << \"输入一个正整数：\";\ncin >> N;\nN1 = N, M1 = N * N;\n\nbool Flag = true;\n\nwhile (N1 > 0) {\n    if (N1 % 10 != M1 % 10) {\n        Flag = false;\n        break;\n    }\n    else {\n        N1 = N1 / 10, M1 = M1 / 10;\n    }\n}\n\nif (Flag == true)\n    printf(\"%d的平方是%d,是自守数\", N, N * N);\nelse\n    printf(\"%d的平方是%d,不是自守数\", N, N * N);",
       "image": null,
       "options": [
-        "A. 自守数如5和25",
-        "B. 25^2=625末尾25所以25是自守数",
-        "C. 程序需计算平方后判断末尾",
-        "D. 将N1>0改为N>0效果相同"
+        "A. 如果Flag在循环中不被改为false，则说明该数是自守数",
+        "B. 代码if（N1 % 10 != M1 % 10）用于判断其个位数是否相等，如果不等，则表明不是自守数",
+        "C. 代码N1 = N1 / 10, M1 = M1 / 10将个位数去掉",
+        "D. 将N1 > 0 改为 N > 0 效果相同"
       ],
       "correctIndex": 3,
-      "explanation": "改为N>0会导致死循环因为N值不会改变。",
+      "explanation": "N 在循环中从未被修改，把循环条件 N1>0 改成 N>0 后，若 N>0 则循环无法按位消去（死循环/行为完全不同），效果不相同，故 D 说法错误。A/B/C 均正确。",
       "level": 2
     },
     {
@@ -14866,8 +14866,8 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
-      "question": "下⾯C++代码执⾏后输出是( )。",
-      "code": "|int foo(float *f)\n{\nreturn int(*#*2);\nint main()",
+      "question": "下面C++代码执行后输出是（ ）。",
+      "code": "int foo(float *f)\n{\n    return int(*f * 2);\n}\n\nint main()\n{\n    float fnum[10] = {1.1};\n    fnum[1] = foo(fnum);\n    cout << fnum[0] + fnum[1] << endl;\n    cout << endl;\n    return 0;\n}",
       "image": null,
       "options": [
         "A. 1",
@@ -14876,7 +14876,7 @@
         "D. 3.1"
       ],
       "correctIndex": 3,
-      "explanation": "fnum[0]=1.1，foo(fnum)传fnum的地址，*f=1.1，int(*f*2)=int(2.2)=2。fnum[1]=2。fnum[0]+fnum[1]=1.1+2=3.1。答案D。",
+      "explanation": "foo(fnum) 中 *f=1.1，int(1.1*2)=int(2.2)=2；fnum[1]=2，fnum[0]+fnum[1]=1.1+2=3.1，输出3.1。",
       "level": 4,
       "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
       "sourcePage": 1
@@ -15014,17 +15014,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
-      "question": "在如下的C++代码执⾏后，设第11和12⾏的输出地址值分别为X和Y，则下⾯正确的是（ ）。 1 struct pass{",
-      "code": "int level;\n}\nint main() {\n    struct pass XiaoYang;\n    cout << \"&XiaoYang=\" << &XiaoYang << endl;\n    //第11行 cout << \"&(XiaoYang.no)=\" << &(XiaoYang.no) << endl;\n    //第12行 14 cout << endl;\n    return 0;",
+      "question": "在如下的C++代码执行后，设第11和12行的输出地址值分别为X和Y，则下面正确的是（ ）。",
+      "code": "struct pass {\n    int no;\n    char name[20];\n    int level;\n};\n\nint main()\n{\n    struct pass XiaoYang;\n\n    cout << \"&XiaoYang=\" << &XiaoYang << endl; //第11行\n    cout << \"&(XiaoYang.no)=\" << &(XiaoYang.no) << endl; //第12行\n\n    cout << endl;\n    return 0;\n}",
       "image": null,
       "options": [
-        "A. X>Y",
-        "B. X==Y",
-        "C. X<Y",
+        "A. X > Y",
+        "B. X == Y",
+        "C. X < Y",
         "D. 不确定"
       ],
       "correctIndex": 1,
-      "explanation": "struct pass只含一个int成员level，XiaoYang的地址与其首成员level的地址相同。X==Y。答案B。",
+      "explanation": "结构体的第一个成员 no 从偏移 0 开始，因此 &XiaoYang 与 &(XiaoYang.no) 地址相同，X==Y，选 B。编译实测一致。",
       "level": 4
     },
     {
@@ -15698,8 +15698,8 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
-      "question": "下⾯的程序中，如果输⼊10 0，会输出（ ）。",
-      "code": null,
+      "question": "下面的程序中，如果输入10 0，会输出（ ）。",
+      "code": "#include <iostream>\nusing namespace std;\ndouble Division(int a, int b)\n{\n    if (b == 0)\n        throw \"Division by zero condition!\";\n    else\n        return ((double)a / (double)b);\n}\nvoid func()\n{\n    int len, time;\n    cin >> len >> time;\n    cout << Division(len, time) << endl;\n}\nint main()\n{\n    try {\n        func();\n    }\n    catch (const char* errmsg) {\n        cout << errmsg << endl;\n    }\n    catch (const int errmsg) {\n        cout << errmsg << endl;\n    }\n    return 0;\n}",
       "image": null,
       "options": [
         "A. Division by zero condition!",
@@ -15708,7 +15708,7 @@
         "D. 100"
       ],
       "correctIndex": 0,
-      "explanation": "输入10 0，除数为0触发除零异常，输出Division by zero condition!。答案A。",
+      "explanation": "输入10 0后调用 Division(10,0)，b==0 抛出 const char* 异常\"Division by zero condition!\"，被 catch(const char* errmsg) 捕获并输出，故A正确。",
       "level": 4
     },
     {
@@ -15738,8 +15738,8 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
-      "question": "下⾯程序中，如果语句 cout<<p<<endl; 输出的是0x6ffe00，则cout<<++p<<endl;输出的是（）",
-      "code": "p=&x[0][0][0];\ncout<<p<<endl;\ncout<<++p<<endl;",
+      "question": "下面程序中，如果语句cout<<p<<endl;输出的是0x6ffe00，则cout<<++p<<endl;输出的是（ ）。",
+      "code": "int x[10][10][10] = {{0}};\nint *p;\np = &x[0][0][0];\ncout << p << endl;\ncout << ++p << endl;",
       "image": null,
       "options": [
         "A. 0x6ffe0c",
@@ -15748,7 +15748,7 @@
         "D. 0x6ffe04"
       ],
       "correctIndex": 3,
-      "explanation": "三维数组x[2][3][2]，p是int指针，++p前进4字节，0x6ffe00+4=0x6ffe04。答案D。",
+      "explanation": "p 是 int* 指针，++p 使指针前进 sizeof(int)=4 字节，故 0x6ffe00 后输出 0x6ffe04，选 D。",
       "level": 4
     },
     {
@@ -16614,17 +16614,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
-      "question": "下⾯代码实现了插⼊排序函数，则横线上应填写（ ）。 1 void insertion_sort(vector<int> &nums) {",
-      "code": "while (j >= && nums[j] > base) 8 nums[j + 1] = nums[j];\n    j--;\n    }\nnums[j + 1] = base;\n}",
+      "question": "下面代码实现了插入排序函数，则横线上应填写（ ）。",
+      "code": "void insertion_sort(vector<int> &nums) {\n    for (int i = 1; i < nums.size(); i++) {\n        ____ // 在此处填入代码\n        while (j >= 0 && nums[j] > base) {\n            nums[j + 1] = nums[j];\n            j--;\n        }\n        nums[j + 1] = base;\n    }\n}",
       "image": null,
       "options": [
-        "A. `int base = nums[i], j = i - 1;`",
-        "B. `int base = nums[i], j = i;`",
-        "C. `int base = nums[0], j = i - 1;`",
-        "D. `int base = nums[0], j = i;`"
+        "A. int base = nums[i], j = i - 1;",
+        "B. int base = nums[i], j = i;",
+        "C. int base = nums[0], j = i - 1;",
+        "D. int base = nums[0], j = i;"
       ],
       "correctIndex": 0,
-      "explanation": "插入排序：base=nums[i]暂存当前元素，j=i-1从前一个开始比较。答案A。",
+      "explanation": "插入排序每轮暂存当前元素 nums[i] 为 base，从 i-1 开始向前比较并后移，故填 int base = nums[i], j = i - 1;，选 A。",
       "level": 4
     },
     {
@@ -16654,17 +16654,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
-      "question": "运⾏下⾯的代码，将出现什么情况？（ ）",
-      "code": "throw runtime_error(\"Runtime error occurred\");\nreturn 2.0*a*b/(a + b);\n}\nint main() {\n    double x = 10;\n    double y = -10;\n    try {\n        int result = hmean(x, y);\n        cout << \"hmean: \" << result << endl;\n        }\n    catch (const runtime_error& e) {\n        cout << \"Caught: \" << e.what() << endl;\n        }\n    catch (...) {\n        cout << \"Caught an unknown exception.\" << endl;\n        }\n    return 0;",
+      "question": "运行下面的代码，将出现什么情况？（ ）",
+      "code": "double hmean(double a, double b) {\n    if (a == -b)\n        throw runtime_error(\"Runtime error occurred\");\n    return 2.0 * a * b / (a + b);\n}\n\nint main() {\n    double x = 10;\n    double y = -10;\n\n    try {\n        int result = hmean(x, y);\n        cout << \"hmean: \" << result << endl;\n    }\n    catch (const runtime_error& e) {\n        cout << \"Caught: \" << e.what() << endl;\n    }\n    catch (...) {\n        cout << \"Caught an unknown exception.\" << endl;\n    }\n    return 0;\n}",
       "image": null,
       "options": [
         "A. 屏幕上输出Caught: Runtime error occurred",
         "B. 屏幕上输出Caught an unknown exception",
-        "C. 程序调⽤ std::terminate()",
+        "C. 程序调用std::terminate()",
         "D. 编译错误"
       ],
       "correctIndex": 0,
-      "explanation": "throw抛出runtime_error，catch捕获并输出\"Caught: Runtime error occurred\"。答案A。",
+      "explanation": "x=10、y=-10 时 a==-b 成立，抛出 runtime_error，被 catch(const runtime_error& e) 捕获，输出 \"Caught: Runtime error occurred\"，选 A。编译实测通过。",
       "level": 4
     },
     {
@@ -17246,17 +17246,17 @@
       "type": "choice",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 4,
-      "question": "运⾏下⾯的代码，将出现（ ）。",
-      "code": "throw runtime_error(\"Runtime error occurred.\");\nreturn 2.0*a*b/(a + b);\n}\nint main() {\n    double x = 10;\n    double y = -10;\n    try {\n        int result = hmean(x, y);\n        cout << \"hmean: \" << result << endl;\n        }\n    catch (const runtime_error& e) {\n        cout << \"Caught: \" << e.what() << endl;\n        }\n    catch (...) {\n        cout << \"Caught an unknown exception.\" << endl;\n        }\n    return 0;",
+      "question": "运行下面的代码，将出现（ ）。",
+      "code": "double hmean(double a, double b) {\n    if (a == -b)\n        throw runtime_error(\"Runtime error occurred.\");\n    return 2.0 * a * b / (a + b);\n}\n\nint main() {\n    double x = 10;\n    double y = -10;\n\n    try {\n        int result = hmean(x, y);\n        cout << \"hmean: \" << result << endl;\n    }\n    catch (const runtime_error& e) {\n        cout << \"Caught: \" << e.what() << endl;\n    }\n    catch (...) {\n        cout << \"Caught an unknown exception.\" << endl;\n    }\n    return 0;\n}",
       "image": null,
       "options": [
         "A. 屏幕上输出Caught: Runtime error occurred.",
-        "B. 屏幕上输出Caught an unknown exception.",
-        "C. 程序调⽤ std::terminate()",
+        "B. 屏幕上输出Caught an unknown exception",
+        "C. 程序调用std::terminate()",
         "D. 编译错误"
       ],
       "correctIndex": 0,
-      "explanation": "throw抛出runtime_error，try-catch捕获输出\"Caught: Runtime error occurred.\"。答案A。",
+      "explanation": "x=10、y=-10 时 a==-b 成立，抛出 runtime_error，被 catch(const runtime_error& e) 捕获并输出 \"Caught: Runtime error occurred.\"，选 A。",
       "level": 4
     },
     {
@@ -18439,18 +18439,18 @@
       "type": "choice",
       "knowledgePoint": "循环结构",
       "difficulty": 2,
-      "question": "如下 C++ 代码执行后输出是 1 2 3 4 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7",
-      "code": "9 10 11 5 6 7 。横线处应该填入的运算符是( )。\nint num = 1;\nfor (int i = 0; i < 35; i++) {\ncout << num << \" \";\nif (num _______ 10)\nnum _______ 2;\nelse\nnum _______ 1;\n}",
+      "question": "如下C++代码执行后输出为 1 2 3 4 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7，横线处应该填入的运算符是（ ）。",
+      "code": "int num = 1;\nfor (int i = 0; i < 35; i++) {\n    cout << num << \" \";\n    if (num _______ 10)\n        num _______ 2;\n    else\n        num _______ 1;\n}",
       "image": null,
       "codeImage": null,
       "options": [
-        "A. > /= +=",
-        "B. >= %= +=",
-        "C. > /= =+",
-        "D. >= %= =+"
+        "A. >  /=  +=",
+        "B. >=  %=  +=",
+        "C. >  /=  =+",
+        "D. >=  %=  =+"
       ],
       "correctIndex": 0,
-      "explanation": "官方答案：A。",
+      "explanation": "输出到 11 后回到 5：num>10 时 num/=2（11/2=5），否则 num+=1 从 5 累加到 11，故三处分别为 >、/=、+=，选 A。编译实测输出与题干一致。",
       "level": 2
     },
     {

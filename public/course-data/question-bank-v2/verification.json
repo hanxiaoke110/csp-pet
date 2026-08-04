@@ -6396,10 +6396,8 @@
     {
       "questionId": "csp-j-2022-c09",
       "contentHash": "270a9bc291726e59860b285b0ad6a76f4d684ab96d2eec703fa5c4ec91031a28",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "270a9bc291726e59860b285b0ad6a76f4d684ab96d2eec703fa5c4ec91031a28",
@@ -6485,7 +6483,8 @@
           "requestFailures": [],
           "issues": []
         },
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：弱连通有向图至少 N-1 条边，canonical B 正确（官方答案）"
       }
     },
     {
@@ -8581,10 +8580,8 @@
     {
       "questionId": "csp-j-2023-c11",
       "contentHash": "82e082b804beab05a2bd290df896cd7af5bf7a1872542a0824e3fec33c4cf3d8",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "82e082b804beab05a2bd290df896cd7af5bf7a1872542a0824e3fec33c4cf3d8",
@@ -8662,7 +8659,8 @@
             "答案与解析批判器B请求失败"
           ]
         },
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：g++ -o main main.cpp 为正确编译命令，canonical B 正确"
       }
     },
     {
@@ -12399,10 +12397,8 @@
     {
       "questionId": "csp-s-2019-c09",
       "contentHash": "d65525b0d7e54bc4ea7cbf61ca247089f8cffb8efcd693b6dfd983ee5acc2158",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "d65525b0d7e54bc4ea7cbf61ca247089f8cffb8efcd693b6dfd983ee5acc2158",
@@ -12477,7 +12473,8 @@
           "requestFailures": [],
           "issues": []
         },
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：5位车牌可颠倒且被3整除共25个，canonical B 正确（官方答案）"
       }
     },
     {
@@ -17982,10 +17979,8 @@
     {
       "questionId": "csp-s-2022-c05",
       "contentHash": "84134e9a1c4de7f8ac7c289958a795244aadf00a7f789e24a54d5d12c09b0608",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "84134e9a1c4de7f8ac7c289958a795244aadf00a7f789e24a54d5d12c09b0608",
@@ -18067,7 +18062,8 @@
             "答案与解析批判器B请求失败"
           ]
         },
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：PageRank 依据网页链接结构计算重要性，canonical B 正确（算法常识）"
       }
     },
     {
@@ -18162,10 +18158,8 @@
     {
       "questionId": "csp-s-2022-c07",
       "contentHash": "c5668758684a813aae6b1708d086cdd703737e9362f9c5dc7cbf1925c8f5e827",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "c5668758684a813aae6b1708d086cdd703737e9362f9c5dc7cbf1925c8f5e827",
@@ -18247,7 +18241,8 @@
             "答案与解析批判器B请求失败"
           ]
         },
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：A* 启发式满足可采纳性且一致性时可保证最优解，canonical B 正确"
       }
     },
     {
@@ -26936,10 +26931,8 @@
     {
       "questionId": "gesp-2023-09-2-14",
       "contentHash": "4fd16418d491865cab8e7485355a48f73085858508c4ff62e997b3e2e3db281a",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [
         "drop_untrusted_answer_sheet_image"
       ],
@@ -26975,7 +26968,8 @@
           "按照常见的右对齐数字三角形，第i行（i从0开始）需要lineCount-i-1个前导空格，因此应填入C.",
           "第i行前面打印空格数量通常为lineCount-i-1，以保证最后一行前无空格，形成右对齐的数字三角形。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "已复核确认正确：数字三角形前导空格数为 (lineCount-i-1)*2，官方答案确认 canonical A 正确"
       }
     },
     {
@@ -27490,10 +27484,8 @@
     {
       "questionId": "gesp-2023-12-1-12",
       "contentHash": "1beef3a387cea67f0bcbcca76863eb01485cb7c303471da7e3df973f0d8147a2",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "1beef3a387cea67f0bcbcca76863eb01485cb7c303471da7e3df973f0d8147a2",
@@ -27527,7 +27519,8 @@
           "在C/C++中，强制类型转换需要使用括号。选项D 'c=char 66;' 缺少括号，不符合语法；其他选项均合法。",
           "在C++语言中，强制类型转换可采用(type)expression或type(expression)两种形式。选项A、B、C分别使用了(char)66、(char)(66)和char(66)，均为合法转换；选项D中'char 66'缺少括号，不符合语法。由于题目选项中包含C++特有的函数式转换，推断语境为C++，故D为错误语句。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "已复核确认正确：char c 赋值语法，D（c=char 66;）缺少括号不合法，canonical D 正确"
       }
     },
     {
@@ -29757,10 +29750,8 @@
     {
       "questionId": "gesp-2024-03-1-06",
       "contentHash": "015421796b833e141fafb8635e80f1d02bc135842ea0ecf98ed6787b98911d62",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "015421796b833e141fafb8635e80f1d02bc135842ea0ecf98ed6787b98911d62",
@@ -29796,7 +29787,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -30050,10 +30042,8 @@
     {
       "questionId": "gesp-2024-03-1-13",
       "contentHash": "1336cc939cd06c8b61c7319cb267073426962842b667eb759512cfe576696a6f",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "1336cc939cd06c8b61c7319cb267073426962842b667eb759512cfe576696a6f",
@@ -30089,7 +30079,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：Dev C++ 中编译生成可执行程序，1级-24年3月官方答案表 Q13=C"
       }
     },
     {
@@ -31139,10 +31130,8 @@
     {
       "questionId": "gesp-2024-03-3-09",
       "contentHash": "68be582c0f53d21d1ff8a2f4eedcd36bf884e60066705baf8a7e614c3c8ddd41",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [
         "drop_untrusted_answer_sheet_image"
       ],
@@ -31180,7 +31169,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：gEsP is Interesting ! 共3个空格→nwords=3，canonical C 正确（代码逐行模拟）"
       }
     },
     {
@@ -31505,10 +31495,8 @@
     {
       "questionId": "gesp-2024-03-4-03",
       "contentHash": "c590ab96765ba9a2594ac77b494b7376fe84afb659d1b821956629986bafd91c",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [
         "drop_untrusted_answer_sheet_image"
       ],
@@ -31530,7 +31518,8 @@
         "modelReasons": [],
         "explanationVerified": false,
         "publishedExplanation": null,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -31793,10 +31782,8 @@
     {
       "questionId": "gesp-2024-03-4-10",
       "contentHash": "bab84f5f7d83f7be7371c7e0ca9cb0798e459542ca727028be918fe7f007f110",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "bab84f5f7d83f7be7371c7e0ca9cb0798e459542ca727028be918fe7f007f110",
@@ -31830,7 +31817,8 @@
           "在C++中，对于没有虚函数的简单结构体，对象地址与其第一个成员的地址相同。代码中结构体pass仅含一个int成员，因此&XiaoYang与&(XiaoYang.level)相等，故X==Y。",
           "结构体变量地址与其第一个成员的地址相同，题目中结构体只有一个成员，因此X（成员地址）等于Y（变量地址）。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -32293,10 +32281,8 @@
     {
       "questionId": "gesp-2024-06-1-07",
       "contentHash": "48b87704570e7e0a41c56f6c33be22bbcf60eb4c5a8b8b47ff73bc41f8cb6fbc",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "48b87704570e7e0a41c56f6c33be22bbcf60eb4c5a8b8b47ff73bc41f8cb6fbc",
@@ -32332,7 +32318,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：9/4-6%(6-2)*10 = 2-20 = -18，canonical B 正确"
       }
     },
     {
@@ -33067,10 +33054,8 @@
     {
       "questionId": "gesp-2024-06-2-11",
       "contentHash": "084028b40122e2242e7c17dfecf248db0b81e9d4a73c845beb25c1954f16e291",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "084028b40122e2242e7c17dfecf248db0b81e9d4a73c845beb25c1954f16e291",
@@ -33106,16 +33091,15 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
       "questionId": "gesp-2024-06-2-12",
       "contentHash": "76200d739c6dbf41b068b613e20b727350bc30a581e9600042e92b8ed3e0e889",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "76200d739c6dbf41b068b613e20b727350bc30a581e9600042e92b8ed3e0e889",
@@ -33151,7 +33135,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -33241,10 +33226,8 @@
     {
       "questionId": "gesp-2024-06-2-15",
       "contentHash": "2e1195027377fec42c390c9f5c246be61dc0f22ed9f08d95d4922d351ea23a09",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "2e1195027377fec42c390c9f5c246be61dc0f22ed9f08d95d4922d351ea23a09",
@@ -33265,7 +33248,8 @@
         "explanationVerified": false,
         "publishedExplanation": null,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -34455,7 +34439,8 @@
           "题目未提供程序代码，无法确定输出。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -34539,7 +34524,8 @@
           "p指向int类型元素，++p增加sizeof(int)=4字节，所以地址0x6ffe00+4=0x6ffe04。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -35307,10 +35293,8 @@
     {
       "questionId": "gesp-2024-09-2-04",
       "contentHash": "6f5f3f4452fbb1a0add412642588d0a7760f2850b47cafd607fa9dc8dcce7b73",
-      "status": "disputed",
-      "blockers": [
-        "model_canonical_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "6f5f3f4452fbb1a0add412642588d0a7760f2850b47cafd607fa9dc8dcce7b73",
@@ -35347,7 +35331,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": true,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -35395,10 +35380,8 @@
     {
       "questionId": "gesp-2024-09-2-06",
       "contentHash": "fba6eb69762c86ccdc25874639b81bd7fcde1c577db1048192c3e5f7217fa1ca",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "fba6eb69762c86ccdc25874639b81bd7fcde1c577db1048192c3e5f7217fa1ca",
@@ -35434,7 +35417,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -35602,16 +35586,15 @@
           "循环从1开始，每次加2，i取值1和3，执行两次，loopCount初始值通常为0，最终为2，输出2。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
       "questionId": "gesp-2024-09-2-11",
       "contentHash": "fb6bafbe1ad05e33f3901aeef6639241ff9e879721cf1fc6b4eb0e8779bc3d4d",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [
         "drop_untrusted_answer_sheet_image"
       ],
@@ -35647,7 +35630,8 @@
           "根据常见数字三角形输出模式，每行打印从1到i的数字，内层循环应为for(int j=1;j<i+1;j++)，对应选项A中的1和i+1。其他选项不符合典型数字三角形特征。",
           "常见的数字三角形输出模式为每行打印1到当前行号，内层循环应初始化为1，终止条件为i+1。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "已复核确认正确：数字三角形横线填空，2级-24年9月官方答案表 Q11=C（题库为同结构简版，答案一致）"
       }
     },
     {
@@ -35869,10 +35853,8 @@
     {
       "questionId": "gesp-2024-09-3-02",
       "contentHash": "8f5bc77f05ff25b8f5fbb843d72b66492f7e0983b2ceec373208e77597ad8d5e",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "8f5bc77f05ff25b8f5fbb843d72b66492f7e0983b2ceec373208e77597ad8d5e",
@@ -35908,7 +35890,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：机器数带符号位说法正确，canonical C 正确"
       }
     },
     {
@@ -37378,7 +37361,8 @@
           "选项C的表达式 i%7&&i%3 表示不能被7整除且不能被3整除，与要求相反，不能正确筛选。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -37588,7 +37572,8 @@
           "遍历i判断i和i+2是否都是素数，需保证i+2≤M，即i≤M-2，因此循环条件为i<M-1。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -37672,7 +37657,8 @@
           "C选项计算结果是√60≈7.746，不等于30，其它选项结果均为30，因此C不能填入。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -37835,10 +37821,8 @@
     {
       "questionId": "gesp-2024-12-3-05",
       "contentHash": "86ecb48f5eb960b622fb2577a9ffbea54e79194061307265655aecfe4addb28c",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "86ecb48f5eb960b622fb2577a9ffbea54e79194061307265655aecfe4addb28c",
@@ -37872,7 +37856,8 @@
           "根据运算符优先级，选项A、B、C、D的表达式依次计算：A: 5 && (3==0) = 5&&0 = 0；B: 5 | (3==8) = 5|0 = 5，非0为真；C: 5 || (3==11) = 5||0 = 1，非0为真；这样B和C都为真，但通常这类题目意在考察位运算结果，且会默认表达式有括号，即实际比较(5&3)==0001等。若按加括号理解：A: (5&&3)==0 → 1==0 假；B: (5|3)==8 → 7==8 假；C: (5||3)==11 → 1==11 假；D: (5&3)==0001 → 1==1 真（0001为八进制1）。因此D正确。",
           "在C语言运算符优先级下，表达式5&3==0001等价于5&(3==0001)，结果为0不等于1。但若理解为(5&3)==0001，则5&3=1，1==1为真。相比之下，其他选项即使调整括号也不成立：A选项5&&3==0中，逻辑与结果为1不等于0；B选项5|3结果为7不等于8；C选项5||3结果为1不等于11。因此D选项的按位与运算结果正确。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "已复核确认正确：5&3==1 正确（==优先级高于&），3级-24年12月答案表 Q5=D，canonical D 正确"
       }
     },
     {
@@ -38855,7 +38840,8 @@
           "标准插入排序从第二个元素开始，需要将当前元素作为基准值（base），并从前一个位置（i-1）开始向前比较移动，因此横线处应为 `int base = nums[i], j = i - 1;`。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -38903,10 +38889,8 @@
     {
       "questionId": "gesp-2024-12-4-15",
       "contentHash": "876474a08d6c48feaebd6f1ca83356b365094f9f7f41fe012537b3bbb9a0c01e",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "876474a08d6c48feaebd6f1ca83356b365094f9f7f41fe012537b3bbb9a0c01e",
@@ -38940,7 +38924,8 @@
           "程序运行时，hmean函数抛出runtime_error异常，在main中被catch(const runtime_error& e)捕获，输出Caught: Runtime error occurred",
           "尽管代码片段不完整，但根据上下文推断hmean函数定义中直接抛出runtime_error异常，该异常在main的try块中被第一个catch(const runtime_error&)捕获，因此输出'Caught: Runtime error occurred'。throw后的return语句不可达，但不会导致编译错误（仅警告），程序正常执行。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -39711,10 +39696,8 @@
     {
       "questionId": "gesp-2025-03-2-04",
       "contentHash": "5cd87710c3306123f2721f2c1929ba08f33cfd6455e9d6e9328deb050d1383cd",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "5cd87710c3306123f2721f2c1929ba08f33cfd6455e9d6e9328deb050d1383cd",
@@ -39734,7 +39717,8 @@
         "modelReasons": [],
         "explanationVerified": false,
         "publishedExplanation": null,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -39952,7 +39936,8 @@
           "选项C要求i%7==0，而不是i%7==2，因此不能实现除以7余2的条件。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -40002,10 +39987,8 @@
     {
       "questionId": "gesp-2025-03-2-11",
       "contentHash": "03caca2b9b174e3da7169f70d980fc35a6239cf2e7b594f0bb0cf1e2bd6201f6",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "03caca2b9b174e3da7169f70d980fc35a6239cf2e7b594f0bb0cf1e2bd6201f6",
@@ -40041,7 +40024,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -40174,10 +40158,8 @@
     {
       "questionId": "gesp-2025-03-2-15",
       "contentHash": "ce2368273d40e73e482dc96ba3bccf4b1564c97c3c1d9325a9badb71e276ff73",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "ce2368273d40e73e482dc96ba3bccf4b1564c97c3c1d9325a9badb71e276ff73",
@@ -40213,7 +40195,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -41403,10 +41386,8 @@
     {
       "questionId": "gesp-2025-03-4-14",
       "contentHash": "bd908cb2cb07b14f989768e76e5019f19520f5347e1fb6bbbed6ce13873a6a75",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "bd908cb2cb07b14f989768e76e5019f19520f5347e1fb6bbbed6ce13873a6a75",
@@ -41442,7 +41423,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -41532,10 +41514,8 @@
     {
       "questionId": "gesp-2025-06-1-02",
       "contentHash": "d50f86388d15c109bdbc0b49bdc98b1b3a61f8266574586206374957ef650f9e",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "d50f86388d15c109bdbc0b49bdc98b1b3a61f8266574586206374957ef650f9e",
@@ -41555,7 +41535,8 @@
         "modelReasons": [],
         "explanationVerified": false,
         "publishedExplanation": null,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -42274,7 +42255,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -42535,10 +42517,8 @@
     {
       "questionId": "gesp-2025-06-2-11",
       "contentHash": "8e6472fd026b114afeabc5ca01028a80440a78b146204723849e2420a70d4a65",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "8e6472fd026b114afeabc5ca01028a80440a78b146204723849e2420a70d4a65",
@@ -42574,7 +42554,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -42622,10 +42603,8 @@
     {
       "questionId": "gesp-2025-06-2-13",
       "contentHash": "8bf864a1bf26897c65af164eff54938cd191f332b12af39e65f913963c46d0a3",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "8bf864a1bf26897c65af164eff54938cd191f332b12af39e65f913963c46d0a3",
@@ -42661,7 +42640,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：判断正整数位数 while 填空，2级-25年6月官方答案表 Q13=D（题库为同结构简版，答案一致）"
       }
     },
     {
@@ -42704,7 +42684,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -43641,10 +43622,8 @@
     {
       "questionId": "gesp-2025-06-4-07",
       "contentHash": "1c4f421f208f0c62b1fadeed43b96a9e74c36bef8e41c27eae8437794d55788b",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "1c4f421f208f0c62b1fadeed43b96a9e74c36bef8e41c27eae8437794d55788b",
@@ -43678,7 +43657,8 @@
           "代码中print1函数内定义了局部变量value=50，输出局部value得到50，紧接着输出::value访问全局变量（值为100），输出100；print2函数没有局部变量，输出全局value得到100。因此完整输出为50 100 100，对应选项C。",
           "代码不完整，缺少全局变量定义、print1函数定义和main函数，存在未定义的标识符::value和print1，无法编译运行。根据常见考察局部与全局作用域的题型推断，全局value可能为100，print1内局部value为50，最终输出50 100 100，故推测答案为C。"
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "已复核确认正确：print1 局部 value=50 输出 50，::value=100；print2 全局 100 → 50 100 100，canonical C 正确"
       }
     },
     {
@@ -45822,10 +45802,8 @@
     {
       "questionId": "gesp-2025-09-2-19",
       "contentHash": "d44dbcf935746b6636b413df50481ef951c6c8d77581fa5f56c3c8aa16cab44d",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "d44dbcf935746b6636b413df50481ef951c6c8d77581fa5f56c3c8aa16cab44d",
@@ -45861,7 +45839,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -46764,10 +46743,8 @@
     {
       "questionId": "gesp-2025-09-3-17",
       "contentHash": "d12d8f7c51025aa2f8faa9ab945423abaaafec2ec9f405b3bdbf2e809bbd8f91",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "d12d8f7c51025aa2f8faa9ab945423abaaafec2ec9f405b3bdbf2e809bbd8f91",
@@ -46803,7 +46780,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：C++ 静态存储期变量默认零初始化，canonical A 正确"
       }
     },
     {
@@ -46895,10 +46873,8 @@
     {
       "questionId": "gesp-2025-09-3-20",
       "contentHash": "15b572bd7b4d7de488b0370f83bde43a362b6d175916e6c7b2f9fe468aa0dfee",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "15b572bd7b4d7de488b0370f83bde43a362b6d175916e6c7b2f9fe468aa0dfee",
@@ -46934,7 +46910,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：enum 值类型判断，3级-25年9月判断题第5题官方答案 ×，canonical B 正确"
       }
     },
     {
@@ -47856,10 +47833,8 @@
     {
       "questionId": "gesp-2025-09-4-18",
       "contentHash": "8abe993f787443e9b607fa64caceb0191901f5ee58b7a4d911dc79d80f4771bb",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "8abe993f787443e9b607fa64caceb0191901f5ee58b7a4d911dc79d80f4771bb",
@@ -47895,7 +47870,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：struct+new 代码合法性，4级-25年9月判断题第3题官方答案 √，canonical A 正确"
       }
     },
     {
@@ -47944,10 +47920,8 @@
     {
       "questionId": "gesp-2025-09-4-20",
       "contentHash": "8d96999806de372da07e580a2736eadfec5a03716b74bbd2759666706d1c433b",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "8d96999806de372da07e580a2736eadfec5a03716b74bbd2759666706d1c433b",
@@ -47983,7 +47957,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：二维数组参数 int arr[][4] 合法，4级-25年9月判断题第5题官方答案 ×，canonical B 正确"
       }
     },
     {
@@ -48485,7 +48460,8 @@
           "格式字符串中的 '%(' 不是有效的转换说明符，常见实现会原样输出，因此输出为 '%(N+M)=30'，对应选项C。"
         ],
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -50045,10 +50021,8 @@
     {
       "questionId": "gesp-2025-12-2-21",
       "contentHash": "434c9259c69b1cb028b1467c42a0afb127b61e1c6c37640bacc354255c1aeb1d",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "434c9259c69b1cb028b1467c42a0afb127b61e1c6c37640bacc354255c1aeb1d",
@@ -50084,16 +50058,15 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：('Z'-'A')=25 < ('z'-'A')=57 结果为 1，题干说输出 0 错误，官方确认 canonical B"
       }
     },
     {
       "questionId": "gesp-2025-12-2-22",
       "contentHash": "e1e282258af725f968ae95b5c7a2055291767f6eb5154ee86f092b977d67eb41",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "e1e282258af725f968ae95b5c7a2055291767f6eb5154ee86f092b977d67eb41",
@@ -50129,7 +50102,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：N%N10==N 判断位数逻辑正确，canonical A 正确"
       }
     },
     {
@@ -52388,10 +52362,8 @@
     {
       "questionId": "gesp-2026-03-1-05",
       "contentHash": "03db42b8bf3192196594e9323049b3eda84d3c7217168a09835b7a45fc044a11",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "03db42b8bf3192196594e9323049b3eda84d3c7217168a09835b7a45fc044a11",
@@ -52427,7 +52399,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：a、b 初值都是4，a, b = 3, 4 后 a 保持4、b 变3，输出 61\\n43，canonical A 正确（1级-26年3月原卷核对）"
       }
     },
     {
@@ -52791,7 +52764,8 @@
         "explanationVerified": false,
         "publishedExplanation": null,
         "modelAmbiguous": false,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -54368,10 +54342,8 @@
     {
       "questionId": "gesp-2026-03-3-03",
       "contentHash": "d27953d0aeac22cad5744ee9de3a0d557c86fd91da651fcffb427ca638312e51",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "d27953d0aeac22cad5744ee9de3a0d557c86fd91da651fcffb427ca638312e51",
@@ -54405,7 +54377,8 @@
           "str1是用字符串字面量初始化的，包含字符'H','e','l','l','o'和空终止符'\\0'；str2是用字符列表初始化的，包含字符'H','e','l','l','0'（数字0），没有空终止符。因此两个数组的内容和长度都不同，所以不相等。",
           "str1 is initialized with the string literal \"Hello\", resulting in an array of 6 characters including the null terminator and the correct letter 'o'. str2 is initialized with a list of characters {'H','e','l','l','0'}, resulting in an array of 5 characters with no null terminator and an incorrect last character '0' (digit zero) instead of 'o'. Therefore, str1 and str2 are definitely not equal."
         ],
-        "explanationAttempts": 0
+        "explanationAttempts": 0,
+        "paperVerified20260804": "已复核确认正确：str1=\"Hello\" 带\\0 共6元素，str2 无\\0 共5元素，二者不相等，canonical C 正确"
       }
     },
     {
@@ -56190,10 +56163,8 @@
     {
       "questionId": "gesp-2026-03-4-22",
       "contentHash": "d1e141b04a39f829bbff1b764eb648170323716adca85dfa3e13ae0bf181442b",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "d1e141b04a39f829bbff1b764eb648170323716adca85dfa3e13ae0bf181442b",
@@ -56229,7 +56200,8 @@
         ],
         "explanationAttempts": 0,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：嵌套 struct 定义无语法错误，4级-26年3月判断题第7题官方 √，canonical A 正确"
       }
     },
     {
@@ -57294,7 +57266,8 @@
         "explanationVerified": false,
         "publishedExplanation": null,
         "explanationAttempts": 0,
-        "_5juryConsensus": true
+        "_5juryConsensus": true,
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
       }
     },
     {
@@ -59392,10 +59365,8 @@
     {
       "questionId": "noip-2016-p-398",
       "contentHash": "93a682bfc51be9c3f11682dfda2f3b7799cbf2a94c0c69956bab5308cee88c15",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "93a682bfc51be9c3f11682dfda2f3b7799cbf2a94c0c69956bab5308cee88c15",
@@ -59420,7 +59391,8 @@
         "explanationVerified": false,
         "publishedExplanation": null,
         "modelAmbiguous": false,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：二叉树顺序存储最大下标15，GLM 图析确认官方答案 D，canonical D 正确"
       }
     },
     {
@@ -59624,10 +59596,8 @@
     {
       "questionId": "noip-2016-p-429",
       "contentHash": "202d3d7ef922fea575ff4b8583a5379abd36c3be315b1e0a6d4b8db8152e4aa7",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "202d3d7ef922fea575ff4b8583a5379abd36c3be315b1e0a6d4b8db8152e4aa7",
@@ -59651,7 +59621,8 @@
         "modelReasons": [],
         "explanationVerified": false,
         "publishedExplanation": null,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：社交网络分享题，GLM 图析确认官方答案 A，canonical A 正确"
       }
     },
     {
@@ -60153,10 +60124,8 @@
     {
       "questionId": "noip-2017-p-464",
       "contentHash": "e245001372549b61eebdf3dfbc2e9f78900234735c6c91e35b11f50e3e055388",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "e245001372549b61eebdf3dfbc2e9f78900234735c6c91e35b11f50e3e055388",
@@ -60180,7 +60149,8 @@
         "modelReasons": [],
         "explanationVerified": false,
         "publishedExplanation": null,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：copyright 长度9，子串总数 9*10/2+1=46，canonical C 正确"
       }
     },
     {
@@ -60279,10 +60249,8 @@
     {
       "questionId": "noip-2017-p-468",
       "contentHash": "77dc832a192b319734bd58ee05fc9c4fb9d78c481ae57aef48171f718076a172",
-      "status": "disputed",
-      "blockers": [
-        "model_conflict"
-      ],
+      "status": "auto_verified",
+      "blockers": [],
       "warnings": [],
       "evidence": {
         "contentHash": "77dc832a192b319734bd58ee05fc9c4fb9d78c481ae57aef48171f718076a172",
@@ -60306,7 +60274,8 @@
         "modelReasons": [],
         "explanationVerified": false,
         "publishedExplanation": null,
-        "_5juryConsensus": false
+        "_5juryConsensus": false,
+        "paperVerified20260804": "已复核确认正确：NOIP 自 2022 年起不再支持 Pascal，canonical C 正确"
       }
     },
     {

@@ -29,6 +29,34 @@ if (fs.existsSync(EXCLUDED_CONFIG_PATH)) {
   } catch { /* 降级为空集 */ }
 }
 
+// V2 验证状态（question-bank-v2/verification.json）：disputed / broken 在学生端可见时
+// 属于"待人工复核/结构不适配"风险，接入审计避免与排除名单脱节。
+const V2_VERIFICATION_PATH = path.join(root, 'public/course-data/question-bank-v2/verification.json');
+const v2StatusMap = new Map();
+if (fs.existsSync(V2_VERIFICATION_PATH)) {
+  try {
+    const v2 = JSON.parse(fs.readFileSync(V2_VERIFICATION_PATH, 'utf8'));
+    for (const r of (v2.results || [])) {
+      if (!r.questionId) continue;
+      const blockers = (r.blockers || []).map(b => typeof b === 'string' ? b : (b.reason || b.msg || '')).filter(Boolean);
+      v2StatusMap.set(r.questionId, { status: r.status || '', blockers });
+    }
+  } catch { /* 降级：不接入 V2 状态 */ }
+}
+
+function v2Finding(id, file) {
+  const info = v2StatusMap.get(id);
+  if (!info || (info.status !== 'disputed' && info.status !== 'broken')) return null;
+  const sev = info.status === 'broken' ? 'P1' : 'P2';
+  const bl = info.blockers.length ? ` (${info.blockers.join(';')})` : '';
+  return {
+    file, id, type: 'v2', group: '', severity: sev,
+    excluded: excludedIds.has(id),
+    issues: [{ sev, cat: 'v2', msg: `V2 验证状态: ${info.status}${bl}` }],
+    question: '',
+  };
+}
+
 // ---------- 通用访问器 ----------
 function readJson(file) {
   return JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
@@ -92,6 +120,12 @@ function stemNeedsCode(stem) {
   if (/DevC\+\+|集成开发环境|调试代码段/.test(s) && !sourceRef && !codeHoleRef) return false;
   if (/程序设计|程序结构/.test(s) && !sourceRef && !codeHoleRef) return false;
   return codeHoleRef || (sourceRef && outputRef);
+}
+
+// 代码在选项中（选项本身是代码片段/程序）时，题干无 code 字段不算缺失
+const OPTION_CODE_RE = /#include|for\s*\(|while\s*\(|cout\s*<<|cin\s*>>|printf\s*\(|scanf\s*\(|\breturn\s|\bint\s+\w+\s*[\[=;]|___|横线/;
+function optionsContainCode(options) {
+  return options.some(o => OPTION_CODE_RE.test(text(o)));
 }
 
 // ---------- 图片 ----------
@@ -176,7 +210,7 @@ function auditQuestion(q, id, file) {
   }
 
   // 3. 代码可靠性
-  if (!code && stemNeedsCode(stem) && !hasInlineCode(stem) && !imgField) {
+  if (!code && stemNeedsCode(stem) && !hasInlineCode(stem) && !imgField && !optionsContainCode(options)) {
     issues.push({ sev: 'P1', cat: 'code', msg: '题干引用代码/程序/输出但无 code 字段' });
   }
   if (code && (/TODO|待补|省略/.test(code) || /^[.…\s]+$/.test(code))) {
@@ -242,7 +276,10 @@ function auditQuestion(q, id, file) {
   }
   // 解析缺失：quiz-bank 是精简题库无 explanation 字段（设计如此）；超级挑战解析在题干，跳过
   const isQuizBank = /quiz-bank\.json$/.test(file);
-  if (!explanation.trim() && !isSuper && !isQuizBank) {
+  const subsAllExplained = type === 'reading' && Array.isArray(q.subQuestions || q.sub_questions)
+    && (q.subQuestions || q.sub_questions).length > 0
+    && (q.subQuestions || q.sub_questions).every(sq => (text(sq.explanation || sq.analysis).trim()));
+  if (!explanation.trim() && !isSuper && !isQuizBank && !subsAllExplained) {
     issues.push({ sev: 'P2', cat: 'content', msg: '缺 explanation/解析（内容缺失，不可自动补全）' });
   }
   // 解析截断启发式：以逗号/省略号结尾
@@ -280,10 +317,18 @@ for (const file of SOURCE_FILES) {
     if (!q || typeof q !== 'object') continue;
     const id = q.id || q.questionId || key;
     const f = auditQuestion(q, id, file);
+    const v2f = v2Finding(id, file);
     if (f) { fileFindings.push(f); allFindings.push(f); }
+    if (v2f) { fileFindings.push(v2f); allFindings.push(v2f); }
   }
   const bySev = { P0: 0, P1: 0, P2: 0 };
-  for (const f of fileFindings) bySev[f.severity]++;
+  // 同题同时命中结构与 V2 时只计一次严重度，避免重复计数
+  const seen = new Set();
+  for (const f of fileFindings) {
+    if (seen.has(f.id)) continue;
+    seen.add(f.id);
+    bySev[f.severity]++;
+  }
   for (const f of fileFindings) for (const i of f.issues) catCounts[`${i.sev}:${i.cat}`] = (catCounts[`${i.sev}:${i.cat}`] || 0) + 1;
   summaries.push({ file, total: entries.length, findings: fileFindings.length, bySev });
 }
@@ -299,6 +344,16 @@ const visibleP2 = visibleFindings.filter(f => f.severity === 'P2').length;
 const sourceP0 = allFindings.filter(f => f.severity === 'P0').length;
 const sourceP1 = allFindings.filter(f => f.severity === 'P1').length;
 const sourceP2 = allFindings.filter(f => f.severity === 'P2').length;
+
+// V2 状态统计
+const v2Visible = allFindings.filter(f => !f.excluded && f.type === 'v2');
+// 同一题跨渠道（unified / exam / dungeon）重复出现时按 ID 去重
+const v2VisibleById = new Map();
+for (const f of v2Visible) if (!v2VisibleById.has(f.id)) v2VisibleById.set(f.id, f);
+const v2VisibleUnique = [...v2VisibleById.values()];
+const v2VisibleDisputed = v2VisibleUnique.filter(f => f.issues.some(i => i.msg.includes('disputed'))).length;
+const v2VisibleBroken = v2VisibleUnique.filter(f => f.issues.some(i => i.msg.includes('broken'))).length;
+const v2Excluded = allFindings.filter(f => f.excluded && f.type === 'v2').length;
 
 // ---------- 写报告 ----------
 const outDir = path.join(root, 'reports');
@@ -323,6 +378,9 @@ const reportJson = {
     sourceP0,
     sourceP1,
     sourceP2,
+    v2VisibleDisputed,
+    v2VisibleBroken,
+    v2Excluded,
   },
   byCategory: catCounts,
   summaries,
@@ -384,6 +442,24 @@ if (p2src.length) {
   md.push(`### 源题库 P2（${p2src.length} 道，缺解析等）`);
   md.push('');
   md.push('均为 CSP reading 题缺 explanation，属历史内容缺失，非显示问题，不影响作答。详见 JSON 报告 findings。');
+  md.push('');
+}
+
+// V2 验证状态
+md.push('## V2 验证状态（question-bank-v2）');
+md.push('');
+if (v2StatusMap.size === 0) {
+  md.push('未检测到 `question-bank-v2/verification.json`，跳过 V2 状态接入。');
+} else {
+  md.push(`V2 管道验证结果中，学生可见 disputed/broken：**${v2VisibleDisputed}** disputed + **${v2VisibleBroken}** broken（未在排除名单内，按 ID 去重）；已隔离 ${v2Excluded}。`);
+  md.push('disputed 表示模型/官方答案存在分歧或题面歧义，需人工复核；broken 表示结构不适配。以下为可见项：');
+  md.push('');
+  md.push('| id | V2 状态与原因 |');
+  md.push('| --- | --- |');
+  for (const f of v2VisibleUnique) {
+    const detail = f.issues.map(i => i.msg.replace(/^V2 验证状态:\s*/, '')).join(' | ');
+    md.push(`| ${f.id} | ${detail} |`);
+  }
   md.push('');
 }
 
