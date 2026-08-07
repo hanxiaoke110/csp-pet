@@ -1,10 +1,34 @@
 {
-  "version": "1.7.30",
-  "notes": "Release v1.7.30 - 详见 Gitee Releases",
-  "pub_date": "2026-08-04T07:31:29Z",
+  "version": "refs/heads/main",
+  "notes": "Release refs/heads/main - 详见 Gitee Releases",
+  "pub_date": "2026-08-07T08:13:10Z",
   "platforms": {
-    "darwin-aarch64":  { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3phMkJsWnZGRUZFdkgxcGpmMyswTUc2b0ZPS2hyeWprZ1hIQnA2Y0IrajZUNHBjSU02MW1uNHNPZ2taL3VuWmcrYkUwa0duSHJPYVY4RnpLa1dFSWcwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg1ODI2ODgyCWZpbGU6Q1NQXzEuNy4zMF9hYXJjaDY0LmRtZwovd3RPaUxXMmZOZHNoRHljOVNncmt6VTk4czQzaktWNndVUGFnQTZ4L2U1VUpHaUNyOUM2am1lM2lFRUhzbzZvV0FQT3c0RTVqZ3AwREFzejA2a1dCdz09Cg==",   "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.30/CSP_1.7.30_aarch64.dmg"   },
-    "darwin-x86_64":   { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzNjai9FOEg3TGVFYUFiNzM1eGFYTWRLR0EzS05yZ2ljZjVjOGRsVHZFRWIrZDV2dlVkdFRSTmRLa3ZVVXpMUXJaZ2xpTWNQSXpQYk5UTkdhNTltcUFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg1ODI2ODg0CWZpbGU6Q1NQXzEuNy4zMF94NjQuZG1nCkgwalZXbjJMTG1xUk1heEo2YWVwOTJ4bm95Y0k4YVhEZUg4Ukd5NVFzQlY5QWhueWVKblV0ampSc011OFIzMXB3RnhXV3pUVGlqdDhkZ29IeldoUEFnPT0K", "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.30/CSP_1.7.30_x64.dmg" },
-    "windows-x86_64":  { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzdhZjhQRjk5RGxEeVdzamtTRytiMGNIdm9zTmJ2VWdjcVV1eUg3WHhqS1FVV0xTZFp3djZrdUZBQ1pqcGV4TEF2R2ZsQ0QyUDQ3Tnlua1dQdTVRVFFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg1ODI2ODg1CWZpbGU6Q1NQXzEuNy4zMF94NjQtc2V0dXAuZXhlCmthTlEvTy9xVHZvTHphdzQ4cGFqUmtrZzB6dGRhMGNVQm5ub2duTTMrTFozVitDUElKS2JKa0YxQklhekxPcmhLdU5OcHFtMHdOeVRlT0NVNGxIdkF3PT0K",       "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/v1.7.30/CSP_1.7.30_x64-setup.exe"       }
+    "darwin-aarch64":  { "signature": "
+Your file was signed successfully, You can find the signature here:
+/home/runner/work/csp-pet/csp-pet/dist/macos-aarch64/CSP 学习助手_1.7.3_aarch64.dmg.sig
+
+Public signature:
+dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzA3QkRQVHVGUURrYVdMSTlPNXB4SlhtODE1THU0d2ROME1aNWdjeXBPelVOU2YzUnpWMk9zeE1jMFp4VDBYUkdGSExBRWFKY0RJOUdlM3ZwYW9mVXc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg2MDkwMzg1CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuM19hYXJjaDY0LmRtZwpNUkpHd2p5V0d6b0FTNGQvQTZIank5cXF3c1FQei9wdkczbWRtb2hUMkJWZVpuLzE1Q2MrakRHTngraGZMbWpZMGsrNnJWWW41aDlramFZYXo4ZGFCZz09Cg==
+
+Make sure to include this into the signature field of your update server.
+dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzA3QkRQVHVGUURrYVdMSTlPNXB4SlhtODE1THU0d2ROME1aNWdjeXBPelVOU2YzUnpWMk9zeE1jMFp4VDBYUkdGSExBRWFKY0RJOUdlM3ZwYW9mVXc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg2MDkwMzg1CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuM19hYXJjaDY0LmRtZwpNUkpHd2p5V0d6b0FTNGQvQTZIank5cXF3c1FQei9wdkczbWRtb2hUMkJWZVpuLzE1Q2MrakRHTngraGZMbWpZMGsrNnJWWW41aDlramFZYXo4ZGFCZz09Cg==",   "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/refs/heads/main/CSP 学习助手_1.7.3_aarch64.dmg"   },
+    "darwin-x86_64":   { "signature": "
+Your file was signed successfully, You can find the signature here:
+/home/runner/work/csp-pet/csp-pet/dist/macos-x86_64/CSP 学习助手_1.7.3_x64.dmg.sig
+
+Public signature:
+dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzVnZlFVb3RMUEx1bGQxSXpkbjdmdW9oYVZhRjJEUDdUa1UrdE1GRmM1YTM4NG1GMFJxK3JQUWxzdlA3Tjk4MWZKNGphcUhGcUlia0FMNEpnM0M0Wmc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg2MDkwMzg3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuM194NjQuZG1nCks5Wmk5Wmh1WDI5VHlQengwUWt1OHZsZ2NWRWkxNFpsNGRpbmFEdDJRSHpRRjJtZVpWNDZLNEZDcnJrNjRHU0locGFaZFNzMGVsQzhtbno2U25lc0NBPT0K
+
+Make sure to include this into the signature field of your update server.
+dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzVnZlFVb3RMUEx1bGQxSXpkbjdmdW9oYVZhRjJEUDdUa1UrdE1GRmM1YTM4NG1GMFJxK3JQUWxzdlA3Tjk4MWZKNGphcUhGcUlia0FMNEpnM0M0Wmc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg2MDkwMzg3CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuM194NjQuZG1nCks5Wmk5Wmh1WDI5VHlQengwUWt1OHZsZ2NWRWkxNFpsNGRpbmFEdDJRSHpRRjJtZVpWNDZLNEZDcnJrNjRHU0locGFaZFNzMGVsQzhtbno2U25lc0NBPT0K", "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/refs/heads/main/CSP 学习助手_1.7.3_x64.dmg" },
+    "windows-x86_64":  { "signature": "
+Your file was signed successfully, You can find the signature here:
+/home/runner/work/csp-pet/csp-pet/dist/windows-x86_64/CSP 学习助手_1.7.3_x64-setup.exe.sig
+
+Public signature:
+dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzhZZlhSZ3FsWGdzWHh2R1JqN3ZnR3NZa2d3RThJQ3l4bFNkR1c4bjNaYXBlUXZKRTJLaDdLbDV4dWZibk1VWU1DWWlrTEZENmpVTTRwMEh2b3pMd3dNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg2MDkwMzg4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuM194NjQtc2V0dXAuZXhlCllicjVKaEh4UUtTd3I4NXk3ODduMWpVTXFxUzRIMXU3VlFMUFkrMUg5Vm14UFBnL3hsdWxoODhOWklkWjhhSjFpUVJoeGllY1FRbFErRnRyTWN4SUFnPT0K
+
+Make sure to include this into the signature field of your update server.
+dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzhZZlhSZ3FsWGdzWHh2R1JqN3ZnR3NZa2d3RThJQ3l4bFNkR1c4bjNaYXBlUXZKRTJLaDdLbDV4dWZibk1VWU1DWWlrTEZENmpVTTRwMEh2b3pMd3dNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg2MDkwMzg4CWZpbGU6Q1NQIOWtpuS5oOWKqeaJi18xLjcuM194NjQtc2V0dXAuZXhlCllicjVKaEh4UUtTd3I4NXk3ODduMWpVTXFxUzRIMXU3VlFMUFkrMUg5Vm14UFBnL3hsdWxoODhOWklkWjhhSjFpUVJoeGllY1FRbFErRnRyTWN4SUFnPT0K",       "url": "https://github.com/hanxiaoke110/csp-pet/releases/download/refs/heads/main/CSP 学习助手_1.7.3_x64-setup.exe"       }
   }
 }
