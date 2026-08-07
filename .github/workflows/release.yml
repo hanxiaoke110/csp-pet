@@ -163,9 +163,15 @@ jobs:
             echo "$url"
           }
 
-          URL_MAC_ARM=$(upload_file "$MAC_ARM")
-          URL_MAC_INTEL=$(upload_file "$MAC_INTEL")
-          URL_WIN=$(upload_file "$WIN_MSI")
+          # 三个包并行上传（每个约 90MB，串行曾让发布步骤耗时 30 分钟）
+          upload_to_file() { upload_file "$1" > "$2"; }
+          upload_to_file "$MAC_ARM" /tmp/url_mac_arm &
+          upload_to_file "$MAC_INTEL" /tmp/url_mac_intel &
+          upload_to_file "$WIN_MSI" /tmp/url_win &
+          wait
+          URL_MAC_ARM=$(cat /tmp/url_mac_arm)
+          URL_MAC_INTEL=$(cat /tmp/url_mac_intel)
+          URL_WIN=$(cat /tmp/url_win)
 
           # Fallback to GitHub Release URLs（GitHub 会把中文文件名 sanitize 成点）
           GH_RELEASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"

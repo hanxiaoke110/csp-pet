@@ -283,20 +283,11 @@ pub fn run() {
                 } => {
                     if label == "main" || label.starts_with("pet") {
                         if let tauri::WindowEvent::CloseRequested { api, .. } = &window_event {
-                            // Windows：主窗口点 X = 真正退出整个应用（含桌宠窗口）。
-                            // 之前统一“关闭→隐藏到托盘”，孩子找不到托盘入口，
-                            // 只能任务管理器强杀，导致下次启动异常。
-                            #[cfg(target_os = "windows")]
-                            if label == "main" {
-                                if let Some(w) = app_handle.get_webview_window("pet") {
-                                    // 只暂停渲染+隐藏，不 destroy：挂死的 WebView2
-                                    // 会让 destroy 阻塞，进程退不掉（“软件关不掉”）。
-                                    let _ = w.as_ref().hide();
-                                    let _ = w.hide();
-                                }
-                                app_handle.exit(0);
-                                return;
-                            }
+                            // 主窗口点 X = 最小化到托盘（Windows 用户的标准预期），
+                            // 托盘图标右键菜单有「退出」。
+                            // 注：v1.7.30 曾短暂改为 X=直接退出——那是多 WebView2 窗口
+                            // 时代防强杀孤儿进程的取舍；单窗多宠重构后强杀已无后遗症，
+                            // v1.7.32 恢复托盘行为。
                             api.prevent_close();
                             if let Some(window) = app_handle.get_webview_window(&label) {
                                 let _ = window.hide();
