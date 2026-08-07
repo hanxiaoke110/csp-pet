@@ -30,7 +30,6 @@ import { useAIStore } from './stores/aiStore';
 import { migrateLocalStorageToSqlite } from './lib/migration';
 import { loadProblemStatuses } from './lib/problemStatusCache';
 import { nextCheckin } from './utils/checkin';
-import { COMPANION_RESTORE_TIMEOUT_MS, hideDesktopCompanion, showDesktopCompanion, waitForCompanionVisible } from './utils/desktopCompanions';
 import type { Lesson, Stage, LessonsData } from './types/course';
 import './App.css';
 
@@ -312,30 +311,8 @@ function App() {
     };
   }, []);
 
-  async function restoreDesktopCompanion(slot: 2 | 3) {
-    const appearedPromise = waitForCompanionVisible(slot, COMPANION_RESTORE_TIMEOUT_MS);
-    try {
-      const created = await showDesktopCompanion(slot);
-      if (!created) throw new Error('create failed');
-      if (!await appearedPromise) throw new Error('not visible in time');
-    } catch {
-      // 启动恢复失败：清掉位置并销毁可能已创建的窗口，下次启动不再重试卡死
-      try { usePetStore.getState().setDesktopCompanion(slot, null); } catch {}
-      await hideDesktopCompanion(slot);
-    }
-  }
-
-  // 主界面加载完成后，再恢复独立桌宠窗口（每槽位带超时，失败自动回滚）
-  useEffect(() => {
-    if (loading) return;
-    const companionState = usePetStore.getState();
-    for (const slot of [2, 3] as const) {
-      const petId = companionState.desktopCompanionIds[slot - 2];
-      if (petId && slot <= companionState.companionSlots) {
-        void restoreDesktopCompanion(slot);
-      }
-    }
-  }, [loading]);
+  // 单窗多宠架构（v1.7.31）：桌面伙伴不再需要启动恢复——它们与主智子同在
+  // 一个 pet 窗口里渲染，pet-data-sync 事件驱动，无独立窗口可恢复。
 
   // Milestone toast listener — moved to AppLayout (only active in main app, not dungeon)
 

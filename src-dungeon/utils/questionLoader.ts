@@ -47,6 +47,9 @@ function isDungeonQuestionBankData(data: unknown): data is DungeonQuestionBankDa
 // ── Public API ──
 
 export async function loadQuestionBank(): Promise<Question[]> {
+  // 统一排除配置（/course-data/excluded-question-ids.json）须先加载，
+  // V2 与旧版两条路径的 isBrokenCodeQuestion 过滤都依赖它。
+  await loadExcludedQuestionIds();
   try {
     const session = await beginQuestionBankSession(['dungeon']);
     const verified = (session.channels.dungeon || []).map(question => toLegacyQuestion(question)) as Question[];
@@ -54,9 +57,6 @@ export async function loadQuestionBank(): Promise<Question[]> {
   } catch {
     // Older installations can still use the legacy three-level cache below.
   }
-  // 预加载统一排除配置（与 /quiz 共用 /course-data/excluded-question-ids.json），
-  // 供后续同步过滤 isBrokenCodeQuestion 使用。失败降级为空集，不影响题库加载。
-  await loadExcludedQuestionIds();
   const data = await loadVersionedRemoteJson<DungeonQuestionBankData>({
     cacheKey: 'dungeon_exam_bank_v1',
     versionKey: 'dungeon_exam_bank_version',

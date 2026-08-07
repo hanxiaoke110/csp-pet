@@ -2,11 +2,11 @@ import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBa
 import { getPetTier, type OwnedPet, type PetElement } from '../../types/pet';
 import { useQuizStore } from '../../stores/quizStore';
 import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { invoke } from '@tauri-apps/api/core';
 import PetSprite from './PetSprite';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import ConfirmModal from './ConfirmModal';
-import { showDesktopCompanion, hideDesktopCompanion, waitForCompanionVisible } from '../../utils/desktopCompanions';
 import { repairWorkshopSprite } from '../../utils/workshopSpriteRepair';
 
 function WorkshopThumb({ modelPath }: { modelPath: string }) {
@@ -92,7 +92,6 @@ export default function PetStatus({
   switchTarget, setSwitchTarget, renameCards, setRenameInput, setRenameModal, showToast,
 }: Props) {
   const [pendingElement, setPendingElement] = useState<PetElement | null>(null);
-  const [launchingSlot, setLaunchingSlot] = useState<2 | 3 | null>(null);
   const [recycleTarget, setRecycleTarget] = useState<string | null>(null);
   const [dismantleTarget, setDismantleTarget] = useState<string | null>(null);
   const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool } = usePetStore();
@@ -207,40 +206,21 @@ export default function PetStatus({
           <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 8, flexWrap: 'wrap' }}>
             {([2, 3] as const).filter(slot => slot <= companionSlots).map(slot => {
               const assigned = desktopCompanionIds[slot - 2] === displayPet.petId;
+              // 单窗多宠架构：设置/收回只是更新 pet_data，桌宠窗口通过
+              // pet-data-sync 事件自动增删智子，不再创建/销毁独立窗口。
               return (
-                <button key={slot} disabled={launchingSlot !== null} onClick={async () => {
+                <button key={slot} onClick={async () => {
                   if (assigned) {
                     setDesktopCompanion(slot, null);
-                    await hideDesktopCompanion(slot);
                     showToast(`已收回第 ${slot} 个桌面伙伴`);
                     return;
                   }
                   if (!setDesktopCompanion(slot, displayPet.petId)) { showToast('该智子已在其他桌面位置，或位置不可用'); return; }
-                  setLaunchingSlot(slot);
-                  // 先注册“窗口可见”监听再创建窗口，避免事件竞态漏判
-                  const appearedPromise = waitForCompanionVisible(slot);
-                  try {
-                    const created = await showDesktopCompanion(slot);
-                    if (!created) {
-                      setDesktopCompanion(slot, null);
-                      showToast('桌面窗口启动失败，位置未占用，请重试');
-                      return;
-                    }
-                    const appeared = await appearedPromise;
-                    if (!appeared) {
-                      // 窗口创建了但一直没真正显示：回滚位置并销毁窗口，避免“假成功”
-                      setDesktopCompanion(slot, null);
-                      await hideDesktopCompanion(slot);
-                      showToast('桌面窗口启动超时，已自动回滚，请重试');
-                      return;
-                    }
-                    usePetStore.getState().save();
-                    showToast(`${displayPet.petName} 已出现在独立桌面窗口`);
-                  } finally {
-                    setLaunchingSlot(null);
-                  }
-                }} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #a78bfa', color: '#6d28d9', background: assigned ? '#ede9fe' : '#fff', cursor: launchingSlot ? 'wait' : 'pointer', fontSize: 11 }}>
-                  {launchingSlot === slot ? '正在启动…' : assigned ? `收回桌面伙伴 ${slot}` : `设为桌面伙伴 ${slot}`}
+                  // 桌宠窗口被隐藏时先唤出，避免“设置了但桌面上看不到”
+                  await invoke('show_pet_window').catch(() => {});
+                  showToast(`${displayPet.petName} 已出现在桌面上`);
+                }} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #a78bfa', color: '#6d28d9', background: assigned ? '#ede9fe' : '#fff', cursor: 'pointer', fontSize: 11 }}>
+                  {assigned ? `收回桌面伙伴 ${slot}` : `设为桌面伙伴 ${slot}`}
                 </button>
               );
             })}

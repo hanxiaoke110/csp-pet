@@ -149,3 +149,63 @@ Windows 电脑、已解锁 2 个及以上桌面伙伴位置时，开启第二智
 2. 若仍不显示，优先检查 pet-2 独立 WebView2 环境下的数据链路（`get_setting('pet_data')` 轮询）与 `PetSprite` 远程素材加载；
 3. 若仍崩溃，把 `main.rs` 的 `--disable-gpu-compositing` 升级为 `--disable-gpu` 或调整独立环境策略；
 4. 修复完成后发 v1.7.31+，并更新/撤销公告 id 18、19 中“暂缓使用”的提示。
+
+## 10. 第四轮（2026-08-05，v1.7.30 真机仍不显示/点不到之后）
+
+用户反馈 v1.7.30 后第二智子仍不显示、智子点不到。本轮四处改动：
+
+1. **指针级点击穿透取代方案 A**（核心）。方案 A 有死锁：智子出生位置 (280,160) 大概率压在主窗口上 → 主窗口聚焦 + 重叠≥50% → 穿透 → 孩子的点击全落在主窗口上、主窗口保持焦点、穿透永远保持 → 没有任何办法抓住智子。现改为 `PetWindow.tsx` 内 150ms 轮询 `cursorPosition()`：只有光标悬停在精灵本体上窗口才接收鼠标事件，其余透明区域始终穿透；穿透中光标移入精灵立即恢复交互；拖拽途中（`dragStarted`）不切穿透。Rust 侧 `should_pet_ignore_cursor` / `overlap_ratio` / `recompute_pet_click_through` / 焦点防抖器全部移除，焦点事件只保留置顶。Windows/macOS 行为统一。
+2. **数据轮询加固**：pet-2 读 `pet_data` 从裸 `invoke` 改为带 5s 超时的 `sqliteGet`（独立 WebView2 环境 IPC 挂起会让整条轮询链卡死在一次尝试上）；轮询从 4.5s 延长到约 30s，每 ~2s 补发 `pet-request-sync`（覆盖主窗口监听未注册时首次同步请求丢失的竞态）。
+3. **空数据渲染占位卡**：`activePet` 为空时不再返回 null（强制 show 后整窗完全透明 = “没出现”），改为渲染「智子正在赶来…」占位卡（可拖拽），约 30s 后提示可收回重试。
+4. **Windows 关闭不再 destroy 桌宠窗口**：挂死的 WebView2 会让 `destroy()` 阻塞、进程退不掉；只暂停渲染 + 隐藏后直接 `exit(0)`。
+
+### 附带：试炼场题库真正根因（同批修复）
+
+v1.7.30 后「题库正在准备中」仍复现。根因：V2 canonical 题库 705 道 GESP 题 `exam.group` 为 `null`，`toLegacyQuestion` 透传 → 抽题过滤器（`group==='J' || GESP level≤4`）滤掉全部 GESP 题 → 高难副本 [3,4] 难度段匹配与兜底均为 0 → 技能永远出不了题。修复：`adapters.ts` 按 `source==='gesp'` 推断 group='GESP'（可用池 88→785）；`loadQuestionBank` V2 路径补上统一排除名单预加载。另：答题面板改为「选选项 → 点提交」两步确认防误触。
+
+### 验证
+
+- `cargo check` 通过；`tsc --noEmit` 通过；`vitest` 136/136 通过（新增 2 条组别推断用例）；`vite build` 通过。
+- 待 Windows 真机复测：① 第二智子出现（可能先看到占位卡再变精灵）；② 悬停精灵可点可拖、压在主窗口上时只有精灵本体挡点击；③ 点 X 完全退出；④ 重开自动恢复；⑤ 收回不卡；⑥ 试炼场高难副本技能正常出题。
+
+## 11. 第五轮（2026-08-05 晚）：架构重构——单窗多宠
+
+第四轮仍是补丁思路。复盘结论：**「运行时给每个伙伴创建一个透明 WebView2 窗口」这个地基在部分 Windows 机器上不可用**（Tauri #8196），独立数据目录 workaround 则带来 localStorage 不通、跨窗数据同步、ACL、孤儿进程、退出挂死等连环故障。没有 Windows 真机，继续打补丁无法收敛。
+
+**最终方案（成熟做法，Shimeji/直播桌宠 overlay 同款）**：一个覆盖整个工作区的全屏透明置顶窗口（沿用现有 `pet` 窗口），内部渲染 N 只智子。第二智子与第一只走完全相同的代码路径——第一只在该机器上可用，因此第二只不再有额外的故障面。
+
+- 窗口：启动时 `currentMonitor()` → 覆盖工作区；整窗默认 `setIgnoreCursorEvents(true)`（失败安全），PetWindow 内 150ms 轮询 `cursorPosition()`，光标悬停在任一精灵本体上才放开交互。
+- 位置/漫游/拖拽：全部是 DOM `transform` 位移（窗口本身不动），漫游不再每 100ms 移动 OS 窗口（旧闪烁源消除）；位置存 v3 窗口相对逻辑坐标，v2 自动迁移。
+- 数据：与主窗口同 WebView2 环境，localStorage 直接共享 + `pet-data-sync` 事件驱动；设置/收回伙伴 = 纯数据操作，无窗口创建、无握手、无超时回滚、无启动恢复。
+- 删除：`show_desktop_companion`/`hide_desktop_companion` 命令、独立数据目录、`desktopCompanions.ts(+test)`、`App.tsx` 恢复逻辑、`main.rs` 的 `--disable-gpu-compositing`。
+- `PetSprite`：逐帧动画 background-position → transform（全屏窗口下避免整面重绘）；`apiRef` 实例句柄解决多实例抢 window 全局。
+- capabilities：补 `core:window:allow-set-ignore-cursor-events`（JS 调它必须显式授权，**这也是第四轮轮询方案在 ACL 下会被静默拒绝的隐患**）；`cursor-position`/`current-monitor` 已含在 core:window:default。
+- 顺带修正文案：设置页「独立窗口」→「同屏显示」。
+
+验证：`cargo check`、`tsc`、`vitest` 129/129（删了 desktopCompanions 7 条）、`vite build` 全通过；**macOS `tauri dev` 真机端到端验证通过**（2026-08-05 晚）：三只智子同屏显示、悬停点击冒泡、拖拽移动、点击穿透正常（Quartz CGEvent 合成事件验证）。
+
+**Windows 真机复测清单（v1.7.31 候选）**：① 设桌面伙伴 2 → 立即出现在桌面（与主智子同屏）；② 悬停精灵可点（冒泡）可拖；③ 精灵以外区域全部穿透（主窗口按钮不受挡）；④ 拖到主窗口上方再拖走不卡；⑤ 点 X 完全退出、重开自动恢复；⑥ 收回即消失；⑦ 低配置机器开 3 只智子的流畅度；⑧ 任务管理器确认只有 1 组 pet WebView2 进程。
+
+## 12. 追加：工坊智子点击闪烁（豆包闪烁，2026-08-05 晚已修）
+
+- 现象：点击工坊生成的智子会"闪一下"，内置精灵正常；此前也有孩子反馈过智子闪烁。
+- 根因：早期工坊生成器写入的 meta 不规范：`animsOrder` 错别字键（PetSprite 只认 `animOrder`）、`anims: {"idle":[0,5]}` 数组写法、声明 1 行但 PNG 实际 9 行。PetSprite 回退 7 行布局 → idle 帧数为数组 → 非法动画名（idle 静止）；点击切 interact → 按错误行号跳帧 → 闪烁。
+- 修复：`PetSprite.tsx` 新增 `normalizeSheet`——以 PNG 真实几何为准（行数定布局：9 行 Codex / 7 行标准），声明仅在实际行数相符时采信；数组写法取帧数；逐帧 keyframes 覆盖 1..12；条带宽度用真实列数。
+- 真机验证：豆包 idle 恢复动画、点击正常播放 jumping 行、不再闪烁（用户确认 + 像素 diff 验证动画在播放）。
+- 影响面：所有工坊/远程素材（AppData 26 份 meta 审计过，9 行/7 行/数组写法三种变体均兼容）。
+
+## 13. 多屏支持：方案 D「一键换屏」（2026-08-05 晚，Mac 双屏实测通过）
+
+单窗多宠把智子限定在主屏（旧版小窗可拖到任意屏，属能力回退）。调研成熟项目后确认：**不做横跨多屏的大窗口**（WebView2 横跨混 DPI 显示器有已知 bug：WebView2Feedback#5253、wails#5677；CrossOver 等成熟 overlay 也用整窗跳屏）。实现为「窗口永远完整待在一块屏内，一键整体搬到下一块屏」：
+
+- 入口：设置页「🖥️ 智子在哪块屏幕」行 + 主智子操作条 🖥️ 图标，均只在检测到 >1 块屏时出现；2 屏互换、3+ 屏循环；偏好存 `csp_pet_monitor`，重启恢复。
+- **macOS 坐标坑（实测标定）**：① tao `set_outer_position` 用窗口当前 backingScale 换算，跨屏异 scale 直接设物理坐标偏移一半 → `applyMonitor` 两阶段落定（LogicalPosition 近似 → 350ms → PhysicalPosition 精确校正）；② tao `cursorPosition` 全屏统一返回「逻辑 × 主屏 scale」→ 命中测试 macOS 侧统一到逻辑点比较，Windows 侧维持物理像素（PMv2）。
+- Mac 双屏实测：搬到副屏精确落位、副屏点击冒泡/命中正确、搬回主屏正常。
+- Windows 真机待验：混 DPI 双屏下换屏 + 命中（代码路径与单屏一致，风险低）。
+
+## 14. Windows 桌宠「打开→关闭→再打开 = 未响应幽灵窗」（2026-08-07 修复）
+
+- 现象（Windows 用户反馈）：显示桌宠 → 隐藏 → 再显示，宠物窗口标题变「CSP Pet（未响应）」（Windows 幽灵窗口机制：窗口挂死时系统画的替身）。
+- 根因：第 1 轮修复引入的「隐藏时暂停 WebView2 渲染」(`w.as_ref().hide()` = controller `SetIsVisible(false)`)——部分机器/运行时上重新激活 `SetIsVisible(true)` 静默失败，窗口从此冻结成幽灵。
+- 修复（`lib.rs` `hide_pet_os_window`)：Windows 上隐藏只做 OS 层 `hide()`，不再手动暂停 WebView2 合成；OS 隐藏后 Chromium 页面可见性自动变 hidden，渲染自然暂停（原来担心的后台 60fps 重绘由浏览器自身节流覆盖）。macOS 行为不变。
+- 另：v1.7.30 的 `--disable-gpu-compositing`（软件合成）也可能参与该类挂死，本轮重构已移除。

@@ -63,3 +63,21 @@ describe('toLegacyQuestion 选择题→阅读题兜底', () => {
     expect(legacy.answers).toEqual([]);
   });
 });
+
+describe('toLegacyQuestion 组别推断', () => {
+  it('GESP 题 exam.group 为 null 时按 source 推断为 GESP', () => {
+    // canonical 数据里 GESP 题的 exam.group 全是 null（级别在 exam.level 上），
+    // 试炼场按 group === 'GESP' && level <= 4 过滤，不推断会滤掉全部 GESP 题。
+    const legacy = toLegacyQuestion(makeQuestion({
+      source: 'gesp',
+      exam: { year: 2023, date: '2023-03', group: null, level: 1, originalNumber: 1 },
+    }));
+    expect(legacy.group).toBe('GESP');
+    expect(legacy.level).toBe(1);
+  });
+
+  it('CSP 题保留原 exam.group', () => {
+    const legacy = toLegacyQuestion(makeQuestion({ source: 'csp_exam' }));
+    expect(legacy.group).toBe('J');
+  });
+});

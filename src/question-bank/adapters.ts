@@ -16,11 +16,15 @@ export function toLegacyQuestion(question: CanonicalQuestion, source = question.
     && !(question.options && question.options.length > 0)
     && children.length > 0;
   const effectiveType = looksLikeReading ? 'reading' : question.type;
+  // canonical 数据里 GESP 题的 exam.group 为 null（级别在 exam.level 上），
+  // 下游（试炼场技能抽题等）按 group === 'GESP' && level <= 4 过滤，
+  // 不推断会让全部 GESP 题被滤掉，高难副本无题可出。
+  const group = question.exam.group ?? (source === 'gesp' ? 'GESP' : question.exam.group);
   return {
     id: question.id,
     source,
     year: question.exam.year,
-    group: question.exam.group,
+    group,
     level: question.exam.level ?? undefined,
     type: effectiveType,
     knowledgePoint: question.knowledgePoint,

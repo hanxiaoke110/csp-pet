@@ -734,6 +734,8 @@ export default function BattleScreen() {
                     if (idx === currentQuestion.correctIndex) btnClass += ' correct';
                     else if (idx === selectedOption) btnClass += ' wrong';
                     else btnClass += ' disabled';
+                  } else if (idx === selectedOption) {
+                    btnClass += ' selected';
                   }
 
                   return (
@@ -741,7 +743,7 @@ export default function BattleScreen() {
                       key={idx}
                       className={btnClass}
                       disabled={submitted}
-                      onClick={() => handleAnswer(idx)}
+                      onClick={() => setSelectedOption(idx)}
                     >
                       <span className="battle-option-letter">{letter}</span>
                       <span>{clean}</span>
@@ -750,6 +752,18 @@ export default function BattleScreen() {
                 })
               )}
             </div>
+
+            {!submitted && currentQuestion.options && currentQuestion.options.length > 0 && (
+              <button
+                className="pixel-btn battle-submit-btn"
+                disabled={selectedOption === null}
+                onClick={() => {
+                  if (selectedOption !== null) handleAnswer(selectedOption);
+                }}
+              >
+                {selectedOption === null ? '先选择一个选项' : `提交答案（${String.fromCharCode(65 + selectedOption)}）`}
+              </button>
+            )}
 
             {submitted && (
               <div className={`battle-answer-feedback ${isCorrect ? 'correct' : 'wrong'}`}>

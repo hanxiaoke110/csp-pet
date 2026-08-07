@@ -164,6 +164,29 @@
   opacity: 0.5;
 }
 
+.battle-option-btn.selected {
+  background: #1e2a4a;
+  border-color: #ffd700;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.35);
+}
+
+.battle-option-btn.selected .battle-option-letter {
+  border-color: #ffd700;
+  color: #ffd700;
+}
+
+.battle-submit-btn {
+  margin-top: 12px;
+  width: 100%;
+  font-size: 14px;
+  padding: 10px 12px;
+}
+
+.battle-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .battle-option-letter {
   display: inline-flex;
   align-items: center;

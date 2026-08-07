@@ -6,16 +6,12 @@ use tauri::menu::{MenuBuilder, MenuItemBuilder};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::Emitter;
 use tauri::Manager;
-use tauri::{WebviewUrl, WebviewWindowBuilder};
 
 #[tauri::command]
 fn toggle_pet_window(app: tauri::AppHandle) -> String {
     if let Some(w) = app.get_webview_window("pet") {
         if w.is_visible().unwrap_or(true) {
-            // 先暂停 WebView2 渲染再隐藏 OS 窗口：Windows 上隐藏窗口若继续合成，
-            // 会在后台持续 60fps 全帧重绘，是卡顿/资源占用的大头。
-            let _ = w.as_ref().hide();
-            let _ = w.hide();
+            hide_pet_os_window(&w);
             let _ = app.emit(
                 "pet-window-visibility",
                 serde_json::json!({ "visible": false }),
@@ -36,6 +32,17 @@ fn toggle_pet_window(app: tauri::AppHandle) -> String {
     }
 }
 
+/// 隐藏桌宠 OS 窗口。Windows 上【不】调用 WebView2 的 SetIsVisible(false)
+/// （v1.7.26~1.7.30 曾用它暂停渲染）：部分机器/运行时上重新激活会静默失败，
+/// 窗口冻结成“未响应”幽灵窗（用户反馈：打开→关闭→再打开即现）。
+/// OS 层隐藏后 Chromium 页面可见性自动变为 hidden，渲染自然会暂停，
+/// 不需要手动暂停合成。
+fn hide_pet_os_window(w: &tauri::WebviewWindow) {
+    #[cfg(not(target_os = "windows"))]
+    let _ = w.as_ref().hide();
+    let _ = w.hide();
+}
+
 #[tauri::command]
 fn show_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
@@ -52,8 +59,7 @@ fn show_pet_window(app: tauri::AppHandle) {
 #[tauri::command]
 fn hide_pet_window(app: tauri::AppHandle) {
     if let Some(w) = app.get_webview_window("pet") {
-        let _ = w.as_ref().hide();
-        let _ = w.hide();
+        hide_pet_os_window(&w);
         let _ = app.emit(
             "pet-window-visibility",
             serde_json::json!({ "visible": false }),
@@ -61,14 +67,12 @@ fn hide_pet_window(app: tauri::AppHandle) {
     }
 }
 
-fn companion_label(slot: u8) -> Result<String, String> {
-    match slot {
-        2 | 3 => Ok(format!("pet-{slot}")),
-        _ => Err("只支持第 2 或第 3 个桌面智子位置".into()),
-    }
-}
+// v1.7.31 起：多桌面伙伴不再创建独立窗口（Windows 多 WebView2 窗口在部分
+// 机器上会整窗卡死，Tauri #8196），改为单一 pet 窗口内渲染多只智子。
+// show_desktop_companion / hide_desktop_companion 命令已移除，前端只需更新
+// pet_data，pet 窗口通过 pet-data-sync 事件自动增删智子。
 
-/// 把某个智子窗口重新提到最上层。主窗口获得焦点后调用，
+/// 把智子窗口重新提到最上层。主窗口获得焦点后调用，
 /// 避免智子图层被主窗口盖住（Windows 上直接置 HWND_TOPMOST，
 /// macOS 上重新设置 floating 层级）。
 fn ensure_pet_topmost(app: &tauri::AppHandle, label: &str) {
@@ -99,174 +103,16 @@ fn force_windows_topmost(window: &tauri::WebviewWindow) {
     }
 }
 
-#[tauri::command]
-fn show_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
-    let label = companion_label(slot)?;
-    if let Some(window) = app.get_webview_window(&label) {
-        let _ = window.as_ref().show();
-        window.show().map_err(|error| error.to_string())?;
-        ensure_pet_topmost(&app, &label);
-        #[cfg(target_os = "windows")]
-        {
-            let main_focused = app
-                .get_webview_window("main")
-                .map(|w| w.is_focused().unwrap_or(false))
-                .unwrap_or(false);
-            recompute_pet_click_through(&app, main_focused);
-        }
-        // 已存在窗口直接显示：同步广播“可见”，避免前端事件注册竞态导致误判回滚
-        let _ = app.emit("pet-companion-shown", serde_json::json!({ "slot": slot }));
-        return Ok(());
-    }
-
-    let x = if slot == 2 { 280.0 } else { 560.0 };
-    let base_builder = WebviewWindowBuilder::new(
-        &app,
-        &label,
-        // Slot is derived from the window label on the JS side; keep the URL
-        // plain because query strings may not survive the production protocol.
-        WebviewUrl::App("pet.html".into()),
-    )
-    .title(format!("CSP Pet {slot}"))
-    .inner_size(260.0, 230.0)
-    .position(x, 160.0)
-    .resizable(false)
-    .decorations(false)
-    .transparent(true)
-    .always_on_top(true)
-    .skip_taskbar(true)
-    .shadow(false)
-    // 先隐藏创建，等页面精灵就绪后由 PetWindow show，
-    // 消除动态创建透明窗口时的闪白/闪黑。
-    .visible(false);
-
-    #[cfg(target_os = "windows")]
-    let builder = {
-        // Windows 部分机器上，多个 WebView2 窗口共享同一用户数据目录会导致
-        // 第二个窗口创建卡死/整窗冻结（Tauri #8196 同类问题）。
-        // 每个独立桌宠窗口使用独立 WebView2 环境：即使某个桌宠窗口异常，
-        // 也不会拖垮主窗口；代价是独立 localStorage，窗口偏好由 SQLite 同步。
-        if let Ok(app_data) = app.path().app_data_dir() {
-            let dir = app_data.join(format!("webview2-pet-{slot}"));
-            let _ = std::fs::create_dir_all(&dir);
-            base_builder.data_directory(dir)
-        } else {
-            base_builder
-        }
-    };
-    #[cfg(not(target_os = "windows"))]
-    let builder = base_builder;
-
-    builder
-        .build()
-        .map_err(|error| format!("创建第 {slot} 个桌面智子窗口失败：{error}"))?;
-    #[cfg(target_os = "windows")]
-    {
-        let main_focused = app
-            .get_webview_window("main")
-            .map(|w| w.is_focused().unwrap_or(false))
-            .unwrap_or(false);
-        recompute_pet_click_through(&app, main_focused);
-    }
-    Ok(())
-}
-
-#[tauri::command]
-fn hide_desktop_companion(app: tauri::AppHandle, slot: u8) -> Result<(), String> {
-    let label = companion_label(slot)?;
-    if let Some(window) = app.get_webview_window(&label) {
-        // 收回 = 暂停渲染 + 隐藏。不销毁窗口：销毁可能等待挂死的 WebView2
-        // 进程而阻塞主线程；SetIsVisible(false) 后渲染即停止，窗口对象在
-        // 应用退出时统一清理。
-        let _ = window.as_ref().hide();
-        window.hide().map_err(|error| error.to_string())?;
-    }
-    Ok(())
-}
-
-/// 点击穿透状态的防抖器：主窗口连续焦点变化时（Alt+Tab、连点等），
-/// 只按最后一次状态合并应用，避免 Windows 上每次切换都整窗重绘。
-#[derive(Default)]
-struct PetClickThroughState {
-    applied: Option<bool>,
-    pending: Option<bool>,
-    worker: Option<std::thread::JoinHandle<()>>,
-}
-
-// ── Windows 区域感知穿透 ──
-// 只有“主窗口有焦点”且“智子窗口有一半以上面积压在主窗口上”时才点击穿透：
-// 智子在桌面空白处始终可交互、可拖拽，不再出现“总选中不到”的问题。
-#[cfg(target_os = "windows")]
-fn window_rect(window: &tauri::WebviewWindow) -> Option<(i32, i32, i32, i32)> {
-    let pos = window.outer_position().ok()?;
-    let size = window.outer_size().ok()?;
-    Some((
-        pos.x,
-        pos.y,
-        pos.x + size.width as i32,
-        pos.y + size.height as i32,
-    ))
-}
-
-#[cfg(target_os = "windows")]
-fn overlap_ratio(pet: (i32, i32, i32, i32), main: (i32, i32, i32, i32)) -> f32 {
-    let ix = pet.0.max(main.0);
-    let iy = pet.1.max(main.1);
-    let ix2 = pet.2.min(main.2);
-    let iy2 = pet.3.min(main.3);
-    if ix2 <= ix || iy2 <= iy {
-        return 0.0;
-    }
-    let inter = ((ix2 - ix) as i64) * ((iy2 - iy) as i64);
-    let area = ((pet.2 - pet.0) as i64) * ((pet.3 - pet.1) as i64);
-    if area <= 0 {
-        return 0.0;
-    }
-    inter as f32 / area as f32
-}
-
-#[cfg(target_os = "windows")]
-fn should_pet_ignore_cursor(app: &tauri::AppHandle, label: &str, main_focused: bool) -> bool {
+/// 主窗口获得焦点后，把智子窗口重新提到最上层，
+/// 避免智子图层被主窗口盖住。点击穿透不由 Rust 侧管理：
+/// PetWindow 内按光标位置轮询的指针级穿透
+/// （只有悬停在精灵本体上才拦截鼠标），Windows/macOS 行为一致。
+fn apply_pet_focus_side_effects(app: &tauri::AppHandle, main_focused: bool) {
     if !main_focused {
-        return false;
+        return;
     }
-    let (Some(main), Some(pet)) = (
-        app.get_webview_window("main"),
-        app.get_webview_window(label),
-    ) else {
-        return false;
-    };
-    let (Some(main_rect), Some(pet_rect)) = (window_rect(&main), window_rect(&pet)) else {
-        return false;
-    };
-    // 智子超过一半面积压在主窗口上才穿透，避免“蹭到一点边就整窗拖不动”
-    overlap_ratio(pet_rect, main_rect) >= 0.5
-}
-
-fn apply_pet_cursor_state(app: &tauri::AppHandle, main_focused: bool) {
-    for label in ["pet", "pet-2", "pet-3"] {
-        if let Some(pet) = app.get_webview_window(label) {
-            #[cfg(target_os = "windows")]
-            let ignore = should_pet_ignore_cursor(app, label, main_focused);
-            #[cfg(not(target_os = "windows"))]
-            let ignore = main_focused;
-            let _ = pet.set_ignore_cursor_events(ignore);
-            if main_focused {
-                // 主窗口回到前台时同步把智子窗口重新置顶，
-                // 保证智子图层始终在主窗口之上。
-                ensure_pet_topmost(app, label);
-            }
-        }
-    }
-}
-
-#[cfg(target_os = "windows")]
-fn recompute_pet_click_through(app: &tauri::AppHandle, main_focused: bool) {
-    for label in ["pet", "pet-2", "pet-3"] {
-        if let Some(pet) = app.get_webview_window(label) {
-            let ignore = should_pet_ignore_cursor(app, label, main_focused);
-            let _ = pet.set_ignore_cursor_events(ignore);
-        }
+    if app.get_webview_window("pet").is_some() {
+        ensure_pet_topmost(app, "pet");
     }
 }
 
@@ -391,8 +237,6 @@ pub fn run() {
             toggle_pet_window,
             show_pet_window,
             hide_pet_window,
-            show_desktop_companion,
-            hide_desktop_companion,
             // courses
             commands::courses::get_course_version,
             commands::courses::set_course_version,
@@ -421,10 +265,6 @@ pub fn run() {
     // Prevent close → hide to tray, reopen support
     {
         use tauri::RunEvent;
-        let pet_cursor_state =
-            std::sync::Arc::new(std::sync::Mutex::new(PetClickThroughState::default()));
-        let main_focused =
-            std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false));
         app.run(move |app_handle, event| {
             match event {
                 #[cfg(target_os = "macos")]
@@ -448,11 +288,11 @@ pub fn run() {
                             // 只能任务管理器强杀，导致下次启动异常。
                             #[cfg(target_os = "windows")]
                             if label == "main" {
-                                for pet_label in ["pet", "pet-2", "pet-3"] {
-                                    if let Some(w) = app_handle.get_webview_window(pet_label) {
-                                        let _ = w.as_ref().hide();
-                                        let _ = w.destroy();
-                                    }
+                                if let Some(w) = app_handle.get_webview_window("pet") {
+                                    // 只暂停渲染+隐藏，不 destroy：挂死的 WebView2
+                                    // 会让 destroy 阻塞，进程退不掉（“软件关不掉”）。
+                                    let _ = w.as_ref().hide();
+                                    let _ = w.hide();
                                 }
                                 app_handle.exit(0);
                                 return;
@@ -471,59 +311,7 @@ pub fn run() {
                     }
                     if label == "main" {
                         if let tauri::WindowEvent::Focused(focused) = window_event {
-                            main_focused.store(focused, std::sync::atomic::Ordering::SeqCst);
-                            let thread_app = app_handle.clone();
-                            let thread_state = pet_cursor_state.clone();
-                            {
-                                let mut state = pet_cursor_state.lock().unwrap();
-                                state.pending = Some(focused);
-                                if state.worker.is_none() {
-                                    state.worker = Some(std::thread::spawn(move || {
-                                        loop {
-                                            std::thread::sleep(std::time::Duration::from_millis(120));
-                                            let next = {
-                                                let mut state = thread_state.lock().unwrap();
-                                                match state.pending.take() {
-                                                    Some(value) => {
-                                                        let changed = state.applied != Some(value);
-                                                        state.applied = Some(value);
-                                                        if changed {
-                                                            Some(value)
-                                                        } else {
-                                                            None
-                                                        }
-                                                    }
-                                                    None => None,
-                                                }
-                                            };
-                                            if let Some(value) = next {
-                                                apply_pet_cursor_state(&thread_app, value);
-                                            } else {
-                                                let mut state = thread_state.lock().unwrap();
-                                                if state.pending.is_none() {
-                                                    state.worker = None;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }));
-                                }
-                            }
-                        }
-                    }
-                    // Windows 区域感知穿透：智子/主窗口移动或缩放后重算穿透状态。
-                    // 只有“主窗口有焦点 + 智子大半个压在主窗口上”才穿透，
-                    // 智子在桌面空白处始终可交互、可拖拽。
-                    #[cfg(target_os = "windows")]
-                    if label == "main" || label.starts_with("pet") {
-                        if matches!(
-                            window_event,
-                            tauri::WindowEvent::Moved(_) | tauri::WindowEvent::Resized(_)
-                        ) {
-                            recompute_pet_click_through(
-                                app_handle,
-                                main_focused.load(std::sync::atomic::Ordering::SeqCst),
-                            );
+                            apply_pet_focus_side_effects(app_handle, focused);
                         }
                     }
                 }
