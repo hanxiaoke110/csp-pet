@@ -2024,7 +2024,9 @@ export default {
         const classFilter = (scope === 'class' && cc) ? 'AND p.class_code = ?' : '';
 
         if (type === 'wins' || type === 'warrior') {
-          const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString();
+          // created_at 是 datetime('now') 格式（"YYYY-MM-DD HH:MM:SS"），
+          // 边界值必须同格式，否则字符串比较在 'T' vs ' ' 处出错，边界日数据被误排除
+          const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().replace('T', ' ').slice(0, 19);
           let whereExtra = '';
           if (type === 'wins') whereExtra = 'AND a.is_win = 1';
           const selectValue = type === 'warrior'
