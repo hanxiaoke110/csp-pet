@@ -156,11 +156,18 @@ jobs:
             local f="$1"
             if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then return; fi
             if [ -z "$f" ] || [ ! -f "$f" ]; then return; fi
-            local resp=$(curl -s --connect-timeout 30 --max-time 600 -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
-              -H "Authorization: token $GITEE_TOKEN" \
-              -F "file=@$f")
-            local url=$(echo "$resp" | jq -r '.browser_download_url // .download_url // empty')
-            echo "$url"
+            local attempt resp url
+            # GitHub runner → Gitee 上传不稳定（v1.7.31/32 曾三次全失败静默回退
+            # GitHub URL，国内学生无法下载）：失败打日志 + 最多重试 3 次
+            for attempt in 1 2 3; do
+              resp=$(curl -s --connect-timeout 30 --max-time 900 -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
+                -H "Authorization: token $GITEE_TOKEN" \
+                -F "file=@$f")
+              url=$(echo "$resp" | jq -r '.browser_download_url // .download_url // empty' 2>/dev/null)
+              if [ -n "$url" ]; then echo "$url"; return; fi
+              echo "Gitee upload attempt $attempt failed for $(basename "$f"): $(echo "$resp" | head -c 200)" >&2
+              sleep 5
+            done
           }
 
           # 三个包并行上传（每个约 90MB，串行曾让发布步骤耗时 30 分钟）
