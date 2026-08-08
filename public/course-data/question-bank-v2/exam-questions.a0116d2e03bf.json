@@ -3,8 +3,8 @@
   "contentRevision": 50005479323,
   "verificationRevision": 50005479322,
   "channelRulesRevision": 3,
-  "generatedAt": "2026-08-03T09:14:48.774Z",
-  "questionCount": 234,
+  "generatedAt": "2026-08-08T09:45:05.634Z",
+  "questionCount": 239,
   "questions": [
     {
       "id": "csp-j-2019-c01",
@@ -3653,6 +3653,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "csp-j-2022-c09",
+      "source": "csp_exam",
+      "exam": {
+        "year": 2022,
+        "date": null,
+        "group": "J",
+        "level": null,
+        "originalNumber": 9
+      },
+      "type": "choice",
+      "question": "考虑由N 个顶点构成的有向连通图，采用邻接矩阵的数据结构表示时，该矩阵中至少存在（ ）个非零元素。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "N-1",
+        "N",
+        "N+1",
+        "N2"
+      ],
+      "answer": {
+        "correctIndex": 1
+      },
+      "children": [],
+      "explanation": "有向连通图至少需要N条边才能保证每个顶点都有入度或出度，邻接矩阵中非零元素对应边数，故选B。",
+      "knowledgePoint": "待复核",
+      "difficulty": 2,
+      "provenance": {
+        "level": "local_source_copy",
+        "url": null,
+        "page": 3,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "official_source_recovery",
+      "importPriority": 120,
+      "contentHash": "270a9bc291726e59860b285b0ad6a76f4d684ab96d2eec703fa5c4ec91031a28",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "csp-j-2022-c10",
       "source": "csp_exam",
       "exam": {
@@ -4801,6 +4840,45 @@
       "importOrigin": "official_source_recovery",
       "importPriority": 120,
       "contentHash": "17e207aaddfe62d2cad3fc461fc0f1f1106c2cf63bfce9126139219cda85a2c4",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "csp-j-2023-c11",
+      "source": "csp_exam",
+      "exam": {
+        "year": 2023,
+        "date": null,
+        "group": "J",
+        "level": null,
+        "originalNumber": 11
+      },
+      "type": "choice",
+      "question": "给定一棵二叉树， 其前序遍历结果为: ABDECFG， 中序遍历结果为: DEBACFG。请问这棵树的正确后序遍历结果是什么?(   )",
+      "code": null,
+      "assets": [],
+      "options": [
+        "EDBFGCA",
+        "EDBGCFA",
+        "DEBGFCA",
+        "DBEGFCA"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "前序根左右，中序左根右。由前序知A为根，中序左子树DEB、右子树CFG，递归构造得后序EDBFGCA。",
+      "knowledgePoint": "待复核",
+      "difficulty": 2,
+      "provenance": {
+        "level": "local_source_copy",
+        "url": null,
+        "page": 3,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "official_source_recovery",
+      "importPriority": 120,
+      "contentHash": "82e082b804beab05a2bd290df896cd7af5bf7a1872542a0824e3fec33c4cf3d8",
       "verificationStatus": "auto_verified"
     },
     {
@@ -6623,6 +6701,45 @@
       "importOrigin": "official_source_recovery",
       "importPriority": 120,
       "contentHash": "e171ebd44252ae9ad4c0717d0d0633f1b3065b52e05a4616512065817a27fd8a",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "csp-s-2019-c09",
+      "source": "csp_exam",
+      "exam": {
+        "year": 2019,
+        "date": null,
+        "group": "S",
+        "level": null,
+        "originalNumber": 9
+      },
+      "type": "choice",
+      "question": "一些数字可以颠倒过来看，例如 0、1、8 颠倒过来还是本身，6 颠倒过来是 9，9 颠倒过来看还是 6，其他数字颠倒过来都不构成数字。类似的，一些多位数也可以颠倒过来看，比如 106 颠倒过来是 901。假设某个城市的车牌只有 5 位数字，每一位都可以取 0 到 9。请问这个城市有多少个车牌倒过来恰好还是原来的车牌，并且车牌上的 5 位数能被 3 整除？（）",
+      "code": "#include <iostream>\nusing namespace std;\nint main(){int cnt=0;\nfor(int a:{1,6,8,9})for(int b:{0,1,6,8,9})for(int c:{0,1,6,8,9})\nfor(int d:{0,1,6,8,9})for(int e:{1,6,8,9})\nif((a+b+c+d+e)%3==0)cnt++;\ncout<<cnt<<endl;return 0;}",
+      "assets": [],
+      "options": [
+        "40",
+        "25",
+        "30",
+        "20"
+      ],
+      "answer": {
+        "correctIndex": 1
+      },
+      "children": [],
+      "explanation": "车牌倒过来相同要求第1、5位互为颠倒对，第2、4位互为颠倒对，第3位自颠倒（0/1/8）。共5×5×3=75种。能被3整除需各位和模3为0，枚举得25种。",
+      "knowledgePoint": "待复核",
+      "difficulty": 3,
+      "provenance": {
+        "level": "local_source_copy",
+        "url": null,
+        "page": 2,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "official_source_recovery",
+      "importPriority": 120,
+      "contentHash": "d65525b0d7e54bc4ea7cbf61ca247089f8cffb8efcd693b6dfd983ee5acc2158",
       "verificationStatus": "auto_verified"
     },
     {
@@ -9663,6 +9780,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "csp-s-2022-c05",
+      "source": "csp_exam",
+      "exam": {
+        "year": 2022,
+        "date": null,
+        "group": "S",
+        "level": null,
+        "originalNumber": 5
+      },
+      "type": "choice",
+      "question": "假设在基数排序过程中，受宇宙射线的影响，某项数据异变为一个完全不同的值。请问排序算法结束后，可能出现的最坏情况是（  ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "移除受影响的数据后，最终序列是有序序列",
+        "移除受影响的数据后，最终序列是前后两个有序的子序列",
+        "移除受影响的数据后，最终序列是一个有序的子序列和一个基本无序的子序列",
+        "移除受影响的数据后，最终序列基本无序"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "基数排序按位稳定排序，单个数据异变仅影响其最终位置，其余数据相对顺序不变，移除后剩余数据仍有序。考查基数排序的稳定性。",
+      "knowledgePoint": "待复核",
+      "difficulty": 2,
+      "provenance": {
+        "level": "local_source_copy",
+        "url": null,
+        "page": 2,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "official_source_recovery",
+      "importPriority": 120,
+      "contentHash": "84134e9a1c4de7f8ac7c289958a795244aadf00a7f789e24a54d5d12c09b0608",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "csp-s-2022-c06",
       "source": "csp_exam",
       "exam": {
@@ -9699,6 +9855,45 @@
       "importOrigin": "official_source_recovery",
       "importPriority": 120,
       "contentHash": "e5980f36e92b5f22334cc425675e00d1200f1c0f98d1c81bdcec93137e561c3e",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "csp-s-2022-c07",
+      "source": "csp_exam",
+      "exam": {
+        "year": 2022,
+        "date": null,
+        "group": "S",
+        "level": null,
+        "originalNumber": 7
+      },
+      "type": "choice",
+      "question": "一个深度为5（根结点深度为1）的完全3 叉树，按前序遍历的顺序给结点从1 开始编号，则第100 号结点的父结点是第（  ）号。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "95",
+        "96",
+        "97",
+        "98"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "完全3叉树前序遍历编号，第100号结点父结点为第97号。可通过计算前几层结点数或利用父结点编号公式推导。考查树的前序遍历与编号关系。",
+      "knowledgePoint": "待复核",
+      "difficulty": 3,
+      "provenance": {
+        "level": "local_source_copy",
+        "url": null,
+        "page": 2,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "official_source_recovery",
+      "importPriority": 120,
+      "contentHash": "c5668758684a813aae6b1708d086cdd703737e9362f9c5dc7cbf1925c8f5e827",
       "verificationStatus": "auto_verified"
     },
     {

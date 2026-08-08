@@ -168,7 +168,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.30';
+  const VER = '1.7.33';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -179,11 +179,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🏆 修复每周任务 5/5 全对却不解锁成就的问题</div>
-          <div>📈 超级挑战成就改为按正确率判定（≥60% / ≥80% / 全对）</div>
-          <div>🎓 阶段成就改为按课程阶段判定，C4 敬请期待</div>
-          <div>📖 更新饲养指南：心情/好感度、商城道具、神秘代码、多智子说明</div>
-          <div>🐛 修复“三连完美”成就描述，累计 3 次周常完美即可达成</div>
+          <div>⚔️ 修复试炼场偶发“题库准备中”导致战斗无法继续</div>
+          <div>🧹 残缺题会在出题前自动淘汰</div>
+          <div>🛡️ 新增离线应急题，网络异常也能继续战斗</div>
+          <div>✅ 判断题只显示“正确 / 错误”，不再出现空 C、D</div>
+          <div>📚 试炼场已校验题目更新至 849 道</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

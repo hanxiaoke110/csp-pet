@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById, type SkillDefinition } from '../../data/skills';
-import { getTrustedQuestionImage, pickQuestionsByTag, pickBigMoveQuestions, pickFallbackChoiceQuestions, getDungeonDifficulty, loadQuestionBank } from '../../utils/questionLoader';
+import { getTrustedQuestionImage, pickQuestionsByTag, pickBigMoveQuestions, pickFallbackChoiceQuestions, pickEmergencyQuestions, getDungeonDifficulty, loadQuestionBank } from '../../utils/questionLoader';
 import { calculateStats, calculateTrialPlayerStats } from '../../utils/combatLogic';
 import {
   applySchoolAnswerPassive,
@@ -429,6 +429,10 @@ export default function BattleScreen() {
     if (questions.length === 0) {
       // 知识点/难度覆盖缺口：兜底任意可用选择题，避免技能完全无法使用
       questions = pickFallbackChoiceQuestions(bank, 1, diffRange);
+    }
+    if (questions.length === 0) {
+      // 最后使用随安装包发布的人工核对题，网络或缓存异常也不会卡住战斗。
+      questions = pickEmergencyQuestions(skill.knowledgeTag, 1, diffRange);
     }
     return questions;
   }, [dungeonId]);

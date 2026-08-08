@@ -41,10 +41,20 @@ function MultiPartImage({ src }: { src?: string | null }) {
   );
 }
 
-function isTrueFalseItem(item: SubItem): boolean {
-  const first = item.options[0]?.trim();
-  const second = item.options[1]?.trim();
-  return /^判断[:：]/.test(item.label.trim()) && first === '正确' && second === '错误';
+function normalizeTrueFalseOption(value?: string): string {
+  return String(value || '')
+    .trim()
+    .replace(/^[A-DＡ-Ｄ]\s*[.．、:：]\s*/i, '')
+    .replace(/^[√✓✔×✕✖]\s*/, '')
+    .trim();
+}
+
+export function isTrueFalseItem(item: SubItem): boolean {
+  // label 已明确标记为判断题时，强制使用二选一。兼容远程数据
+  // 多传空 C/D、选项带 A/B 前缀或对错符号的情况。
+  if (/^判断(?:题)?\s*\d*\s*[:：]/.test(item.label.trim())) return true;
+  const meaningful = item.options.map(normalizeTrueFalseOption).filter(Boolean);
+  return meaningful.length === 2 && meaningful[0] === '正确' && meaningful[1] === '错误';
 }
 
 function getEffectiveCorrectIndex(item: SubItem): number {
@@ -134,12 +144,14 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
                         }}
                       >
                         <span>{opt}.</span>{' '}
-                        <span dangerouslySetInnerHTML={renderCodeText(item.options[oi] || '')} />
+                        <span dangerouslySetInnerHTML={renderCodeText(
+                          isTrueFalseItem(item) ? normalizeTrueFalseOption(item.options[oi]) : (item.options[oi] || ''),
+                        )} />
                       </label>
                     );
                   })}
                 </div>
-                {submitted && answers[i] !== item.correctIndex && item.explanation && (
+                {submitted && answers[i] !== getEffectiveCorrectIndex(item) && item.explanation && (
                   <div style={{ fontSize: 12, color: '#ef4444', marginTop: 4 }} dangerouslySetInnerHTML={renderCodeText(item.explanation)} />
                 )}
               </div>

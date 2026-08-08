@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50005479324,
+  "contentRevision": 50005479323,
   "verificationRevision": 50005479322,
   "channelRulesRevision": 3,
-  "generatedAt": "2026-08-04T05:26:22.193Z",
-  "questionCount": 705,
+  "generatedAt": "2026-08-08T09:45:05.634Z",
+  "questionCount": 732,
   "questions": [
     {
       "id": "gesp-2023-03-1-01",
@@ -3445,6 +3445,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2023-09-2-14",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-09",
+        "group": null,
+        "level": 2,
+        "originalNumber": 14
+      },
+      "type": "choice",
+      "question": "输入行数输出数字三角形，横线处应填入（ ）。",
+      "code": "cin>>lineCount;\nfor(int i=0;i<lineCount;i++){\n    for(int j=0;j<________;j++)\n        cout<<' ';",
+      "assets": [],
+      "options": [
+        "A. (lineCount-i-1)*2",
+        "B. (lineCount-i)*2",
+        "C. lineCount-i-1",
+        "D. lineCount-i"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "空格数为(lineCount-i-1)*2。",
+      "knowledgePoint": "控制结构",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1580976138354720.pdf",
+        "page": 9,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "4fd16418d491865cab8e7485355a48f73085858508c4ff62e997b3e2e3db281a",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2023-09-2-15",
       "source": "gesp",
       "exam": {
@@ -3910,6 +3949,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "0ceb392f2004cfbcd00cba173d070f6f2e60bafe5419a5cb2ef4549feccd1d55",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2023-12-1-12",
+      "source": "gesp",
+      "exam": {
+        "year": 2023,
+        "date": "2023-12",
+        "group": null,
+        "level": 1,
+        "originalNumber": 12
+      },
+      "type": "choice",
+      "question": "定义变量char c;，对c赋值的语句不符合语法的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. c=(char)66;",
+        "B. c=(char)(66);",
+        "C. c=char(66);",
+        "D. c=char 66;"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "A/B是C风格强转（合法），C是C++函数风格（合法），D缺少括号语法错误。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "1beef3a387cea67f0bcbcca76863eb01485cb7c303471da7e3df973f0d8147a2",
       "verificationStatus": "auto_verified"
     },
     {
@@ -5980,6 +6058,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2024-03-1-06",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-03",
+        "group": null,
+        "level": 1,
+        "originalNumber": 6
+      },
+      "type": "choice",
+      "question": "代码执行后有关描述正确的是（ ）。输入N=21。",
+      "code": "int N;cin>>N;\nif(N>=90) cout<<\"A\";\n    else if(N>=80) cout<<\"B\";\n    else if(N>=70) cout<<\"C\";\n    else cout<<\"D\";",
+      "assets": [],
+      "options": [
+        "A. 代码第4行被执行",
+        "B. 代码第5行被执行",
+        "C. 代码第6行被执行",
+        "D. 代码第7行被执行"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "21<70，所有if都不满足，进入else输出D。",
+      "knowledgePoint": "函数与递归",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "015421796b833e141fafb8635e80f1d02bc135842ea0ecf98ed6787b98911d62",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2024-03-1-07",
       "source": "gesp",
       "exam": {
@@ -6211,6 +6328,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "8a422a4e8958e1e3e2242b4ef85a9b0fb73a80650dec05a554b49ca01790b828",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-03-1-13",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-03",
+        "group": null,
+        "level": 1,
+        "originalNumber": 13
+      },
+      "type": "choice",
+      "question": "Dev C++中生成可执行程序需执行（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 编辑",
+        "B. 连接",
+        "C. 编译",
+        "D. 运行"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "编译是将源代码转换为可执行程序的过程。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "1336cc939cd06c8b61c7319cb267073426962842b667eb759512cfe576696a6f",
       "verificationStatus": "auto_verified"
     },
     {
@@ -7189,6 +7345,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2024-03-3-09",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-03",
+        "group": null,
+        "level": 3,
+        "originalNumber": 9
+      },
+      "type": "choice",
+      "question": "假设英⽂句⼦由若⼲词构成。下⾯C++代码统计输出的词数是（ ）。",
+      "code": "int main()\nstring str=\"gEsP is Interesting !\";\nint x = str.length();\nint nwords = 0;",
+      "assets": [],
+      "options": [
+        "A. 1",
+        "B. 2",
+        "C. 3",
+        "D. 4"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "代码统计字符串中单词数，以空格分隔。\"gEsP is Interesting !\"有3个空格分隔出4段，但代码逻辑统计的是空格数+1或特定条件。实际输出3个词（gEsP、is、Interesting，!不计入）。答案C(3)。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1602047101108256.pdf",
+        "page": 3,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "68be582c0f53d21d1ff8a2f4eedcd36bf884e60066705baf8a7e614c3c8ddd41",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2024-03-3-10",
       "source": "gesp",
       "exam": {
@@ -7501,6 +7696,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2024-03-4-03",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-03",
+        "group": null,
+        "level": 4,
+        "originalNumber": 3
+      },
+      "type": "choice",
+      "question": "下⾯C++代码执⾏后输出是( )。",
+      "code": "|int foo(float *f)\n{\nreturn int(*#*2);\nint main()",
+      "assets": [],
+      "options": [
+        "A. 1",
+        "B. 1.1",
+        "C. 3",
+        "D. 3.1"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "fnum[0]=1.1，foo(fnum)传fnum的地址，*f=1.1，int(*f*2)=int(2.2)=2。fnum[1]=2。fnum[0]+fnum[1]=1.1+2=3.1。答案D。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1602047134662688.pdf",
+        "page": 1,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "c590ab96765ba9a2594ac77b494b7376fe84afb659d1b821956629986bafd91c",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2024-03-4-04",
       "source": "gesp",
       "exam": {
@@ -7732,6 +7966,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "411565fc9eedc992cb487810bf9f856e5db8079bdf5518b102d09f0b53858145",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-03-4-10",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-03",
+        "group": null,
+        "level": 4,
+        "originalNumber": 10
+      },
+      "type": "choice",
+      "question": "在如下的C++代码执⾏后，设第11和12⾏的输出地址值分别为X和Y，则下⾯正确的是（ ）。 1 struct pass{",
+      "code": "int level;\n}\nint main() {\n    struct pass XiaoYang;\n    cout << \"&XiaoYang=\" << &XiaoYang << endl;\n    //第11行 cout << \"&(XiaoYang.no)=\" << &(XiaoYang.no) << endl;\n    //第12行 14 cout << endl;\n    return 0;",
+      "assets": [],
+      "options": [
+        "A. X>Y",
+        "B. X==Y",
+        "C. X<Y",
+        "D. 不确定"
+      ],
+      "answer": {
+        "correctIndex": 1
+      },
+      "children": [],
+      "explanation": "struct pass只含一个int成员level，XiaoYang的地址与其首成员level的地址相同。X==Y。答案B。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "bab84f5f7d83f7be7371c7e0ca9cb0798e459542ca727028be918fe7f007f110",
       "verificationStatus": "auto_verified"
     },
     {
@@ -8161,6 +8434,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "2208860f6f150d9ecce2349f472e54468845d4f579e4e7682dfa4c9eec3af21d",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-06-1-07",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-06",
+        "group": null,
+        "level": 1,
+        "originalNumber": 7
+      },
+      "type": "choice",
+      "question": "表达式9/4-6%(6-2)*10的值是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. -17.75",
+        "B. -18",
+        "C. -14",
+        "D. -12.75"
+      ],
+      "answer": {
+        "correctIndex": 1
+      },
+      "children": [],
+      "explanation": "括号6-2=4;6%4=2;2*10=20;9/4=2;2-20=-18。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "48b87704570e7e0a41c56f6c33be22bbcf60eb4c5a8b8b47ff73bc41f8cb6fbc",
       "verificationStatus": "auto_verified"
     },
     {
@@ -8868,6 +9180,84 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2024-06-2-11",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-06",
+        "group": null,
+        "level": 2,
+        "originalNumber": 11
+      },
+      "type": "choice",
+      "question": "关于while条件无法实现预期效果的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. while(i!=0)",
+        "B. while(i>0)",
+        "C. while(i<=100)",
+        "D. while(N==0)"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "while(N==0)如果第一次输入非0则直接跳过，逻辑错误。",
+      "knowledgePoint": "控制结构",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "084028b40122e2242e7c17dfecf248db0b81e9d4a73c845beb25c1954f16e291",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-06-2-12",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-06",
+        "group": null,
+        "level": 2,
+        "originalNumber": 12
+      },
+      "type": "choice",
+      "question": "关于判断质数的代码说法正确的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 各选项均正确",
+        "B. 只要i<N都正确",
+        "C. 只需判断到sqrt(N)",
+        "D. 各选项均无法完美处理边界情况"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "各选项无法处理N=0和N=1的情况。",
+      "knowledgePoint": "数论",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "76200d739c6dbf41b068b613e20b727350bc30a581e9600042e92b8ed3e0e889",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2024-06-2-13",
       "source": "gesp",
       "exam": {
@@ -8943,6 +9333,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "5f525f36c24816938499ec463d16275e14f55dd1141af301c1964047801ada62",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-06-2-15",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-06",
+        "group": null,
+        "level": 2,
+        "originalNumber": 15
+      },
+      "type": "choice",
+      "question": "关于幸运数判断代码说法正确的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 各选项均正确",
+        "B. M=0时各选项都能正确处理",
+        "C. 只有选项A正确",
+        "D. 各选项均有逻辑错误"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "各选项均有逻辑错误，无法处理所有边界情况。",
+      "knowledgePoint": "计算机基础",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "2e1195027377fec42c390c9f5c246be61dc0f22ed9f08d95d4922d351ea23a09",
       "verificationStatus": "auto_verified"
     },
     {
@@ -10011,8 +10440,8 @@
         "originalNumber": 13
       },
       "type": "choice",
-      "question": "下面的程序中，如果输入10 0，会输出（ ）。",
-      "code": "#include <iostream>\nusing namespace std;\ndouble Division(int a, int b)\n{\n    if (b == 0)\n        throw \"Division by zero condition!\";\n    else\n        return ((double)a / (double)b);\n}\nvoid func()\n{\n    int len, time;\n    cin >> len >> time;\n    cout << Division(len, time) << endl;\n}\nint main()\n{\n    try {\n        func();\n    }\n    catch (const char* errmsg) {\n        cout << errmsg << endl;\n    }\n    catch (const int errmsg) {\n        cout << errmsg << endl;\n    }\n    return 0;\n}",
+      "question": "下⾯的程序中，如果输⼊10 0，会输出（ ）。",
+      "code": null,
       "assets": [],
       "options": [
         "A. Division by zero condition!",
@@ -10024,7 +10453,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "输入10 0后调用 Division(10,0)，b==0 抛出 const char* 异常\"Division by zero condition!\"，被 catch(const char* errmsg) 捕获并输出，故A正确。",
+      "explanation": "输入10 0，除数为0触发除零异常，输出Division by zero condition!。答案A。",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 1,
       "provenance": {
@@ -10037,8 +10466,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "56e654606e283b078d6480490098052e341b0ae3fda22b8eb5732ac043f38aa5",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 0
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2024-06-4-14",
@@ -10090,8 +10518,8 @@
         "originalNumber": 15
       },
       "type": "choice",
-      "question": "下面程序中，如果语句cout<<p<<endl;输出的是0x6ffe00，则cout<<++p<<endl;输出的是（ ）。",
-      "code": "int x[10][10][10] = {{0}};\nint *p;\np = &x[0][0][0];\ncout << p << endl;\ncout << ++p << endl;",
+      "question": "下⾯程序中，如果语句 cout<<p<<endl; 输出的是0x6ffe00，则cout<<++p<<endl;输出的是（）",
+      "code": "p=&x[0][0][0];\ncout<<p<<endl;\ncout<<++p<<endl;",
       "assets": [],
       "options": [
         "A. 0x6ffe0c",
@@ -10103,7 +10531,7 @@
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "p 是 int* 指针，++p 使指针前进 sizeof(int)=4 字节，故 0x6ffe00 后输出 0x6ffe04，选 D。",
+      "explanation": "三维数组x[2][3][2]，p是int指针，++p前进4字节，0x6ffe00+4=0x6ffe04。答案D。",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 1,
       "provenance": {
@@ -10116,8 +10544,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "a2d2677442079804e48f45251b99d1a78e6732428014da28f6946d1840ea180f",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 3
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2024-09-1-01",
@@ -10822,6 +11249,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2024-09-2-04",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-09",
+        "group": null,
+        "level": 2,
+        "originalNumber": 4
+      },
+      "type": "choice",
+      "question": "与for(int i=1;i<10;i++)效果相同的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. `for(int i=0;i<10;i+=1)`",
+        "B. `for(int i=1;i<=9;i++)`",
+        "C. `for(int i=1;i<10;++i)`",
+        "D. `for(int i=10;i>0;i--)`"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "++i与i++在for更新中效果相同。",
+      "knowledgePoint": "控制结构",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "6f5f3f4452fbb1a0add412642588d0a7760f2850b47cafd607fa9dc8dcce7b73",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2024-09-2-05",
       "source": "gesp",
       "exam": {
@@ -10858,6 +11324,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "3927dadf84c42afa80a78fa4405d231735439ba1176400a8180fa76bf2c6c6c6",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-09-2-06",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-09",
+        "group": null,
+        "level": 2,
+        "originalNumber": 6
+      },
+      "type": "choice",
+      "question": "输入-2和3.14后输出不可能是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. -2 3.14",
+        "B. -2",
+        "C. 取决于变量类型",
+        "D. 将触发异常"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "C++的cin输入不会触发异常，会进入错误状态。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "fba6eb69762c86ccdc25874639b81bd7fcde1c577db1048192c3e5f7217fa1ca",
       "verificationStatus": "auto_verified"
     },
     {
@@ -10988,20 +11493,20 @@
         "originalNumber": 10
       },
       "type": "choice",
-      "question": "下面C++代码执行后的输出是（ ）。",
-      "code": "int loopCount = 0;\nfor (int i = 1; i < 5; i += 2)\n    loopCount += 1;\ncout << (loopCount);",
+      "question": "for(i=1;i<5;i+=2)loopCount+=1输出（ ）。",
+      "code": null,
       "assets": [],
       "options": [
         "A. 1",
         "B. 2",
         "C. 3",
-        "D. 5"
+        "D. 4"
       ],
       "answer": {
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "i 依次取 1、3（i<5 且步长2），循环体执行 2 次，loopCount=2，选 B。",
+      "explanation": "i=1,3两次循环。",
       "knowledgePoint": "控制结构",
       "difficulty": 1,
       "provenance": {
@@ -11014,8 +11519,46 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "bf13420045239168dbdc4a7a3d90e0e936609be5b920530df8c007db109421d7",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 1
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-09-2-11",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-09",
+        "group": null,
+        "level": 2,
+        "originalNumber": 11
+      },
+      "type": "choice",
+      "question": "输出数字三角形横线处应填入（ ）。",
+      "code": "for(int i=1;i<=N;i++){\n    for(int j=___1___;j<___2___;j++) cout<<j<<\" \";\n        cout<<endl;",
+      "assets": [],
+      "options": [
+        "A. 1;i+1",
+        "B. i;N+1",
+        "C. j=i;j<i*2;j++",
+        "D. i;i*2"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "输出数字三角形每行从i到2i-1。",
+      "knowledgePoint": "控制结构",
+      "difficulty": 1,
+      "provenance": {
+        "level": "official_unlinked",
+        "url": "https://gesp.ccf.org.cn/101/attach/1633836163137568.pdf",
+        "page": 3,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "fb6bafbe1ad05e33f3901aeef6639241ff9e879721cf1fc6b4eb0e8779bc3d4d",
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2024-09-2-12",
@@ -11210,6 +11753,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "ac90043b6cad917782a5e4e6bcd8256db938ab8a8748c34af59ae5f7d2f7b78b",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-09-3-02",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-09",
+        "group": null,
+        "level": 3,
+        "originalNumber": 2
+      },
+      "type": "choice",
+      "question": "关于计算机中的编码，下列说法中正确的是（）",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 机器数的形式值和真值是一致的",
+        "B. 原码就是符号位加上真值",
+        "C. 机器数是带符号的",
+        "D. [-1]=[1000 0001]原=[1111 1111]反"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "机器数是数据在计算机中的二进制表示形式，带有符号位（正0负1）。A错（形式值≠真值）；B错（原码=符号位+绝对值）；D错（[-1]原=10000001，反=11111110）。答案C。",
+      "knowledgePoint": "进制与编码",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "8f5bc77f05ff25b8f5fbb843d72b66492f7e0983b2ceec373208e77597ad8d5e",
       "verificationStatus": "auto_verified"
     },
     {
@@ -12588,20 +13170,20 @@
         "originalNumber": 8
       },
       "type": "choice",
-      "question": "下面的C++代码用于输出0~100之间能被7整除但不能被3整除的数，横线处不能填入的代码是（ ）。",
-      "code": "for (i = 0; i < 100; i++)\n    if ( ____ )\n        cout << i << endl;",
+      "question": "输出0~100能被7整除但不能被3整除，不能填入的代码是（ ）。",
+      "code": null,
       "assets": [],
       "options": [
-        "A. i % 7 == 0 && i % 3 != 0",
-        "B. !(i % 7) && i % 3 != 0",
-        "C. i % 7 && i % 3",
-        "D. i % 7 == 0 && !(i % 3 == 0)"
+        "A. i%7==0&&i%3!=0",
+        "B. !(i%7)&&i%3!=0",
+        "C. i%7&&i%3",
+        "D. i%7==0&&!(i%3==0)"
       ],
       "answer": {
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "C 的条件为 i%7 与 i%3 都为真，即既不能被7整除也不能被3整除才输出，与题目要求（能被7整除且不能被3整除）相反，故不能填入。A/B/D 均等价于 i%7==0 && i%3!=0。",
+      "explanation": "C表示不能被7整除且不能被3整除，与要求相反。",
       "knowledgePoint": "数论",
       "difficulty": 1,
       "provenance": {
@@ -12614,8 +13196,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "15b71dc740213206c8e4fa5a9511520d6fae2cebc8a1077b3969aa51e3c6e83e",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 2
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2024-12-2-09",
@@ -12784,20 +13365,20 @@
         "originalNumber": 13
       },
       "type": "choice",
-      "question": "下面C++代码用于输出N和M之间（可以包括N和M）的孪生素数。孪生素数是指间隔为2的两个数均为素数，如11和13分别是素数，且间隔为2。isPrime(N)用于判断N是否为素数的函数。为完成上述功能，横线处应填上的代码是（ ）。",
-      "code": "int N, M;\n//本题假设N小于M\ncin >> N >> M;\n\nfor (int i = N; i < ____; i++)\n    if (isPrime(i) && isPrime(i + 2))\n        printf(\"%d %d\\n\", i, i + 2);",
+      "question": "输出N~M之间孪生素数横线i<_____应填（ ）。",
+      "code": null,
       "assets": [],
       "options": [
-        "A. M - 2",
-        "B. M - 1",
+        "A. M-2",
+        "B. M-1",
         "C. M",
-        "D. M + 1"
+        "D. M+1"
       ],
       "answer": {
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "要输出 i 与 i+2 的孪生素数且 i+2 不超过 M，i 最大取 M-2，循环条件 i < M-1 恰好覆盖 i 从 N 到 M-2，故填 M-1。填 M-2 会漏掉 (M-2, M) 这一组。",
+      "explanation": "孪生素数需检查i和i+2，i最大到M-2，但用i<M-1可以确保i+2<=M。",
       "knowledgePoint": "数论",
       "difficulty": 1,
       "provenance": {
@@ -12810,8 +13391,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "9961cc4d4652708ca4f9ba0699c7f309d8e73b6e7d085c7d0ffd6af48b6a6474",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 1
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2024-12-2-14",
@@ -12863,20 +13443,20 @@
         "originalNumber": 15
       },
       "type": "choice",
-      "question": "下面C++代码执行后的输出是30，则横线处不能填入（ ）。",
-      "code": "int a = 10, b = 20, c = 30;\ncout << ____ << endl;\ncout << endl;",
+      "question": "a=10,b=20,c=30输出30则横线不能填入（ ）。",
+      "code": null,
       "assets": [],
       "options": [
-        "A. max(max(a, b), c)",
-        "B. min(a + b, c)",
-        "C. sqrt(a + b + c)",
-        "D. (a + b + c) / 2"
+        "A. max(max(a,b),c)",
+        "B. min(a+b,c)",
+        "C. sqrt(a+b+c)",
+        "D. (a+b+c)/2"
       ],
       "answer": {
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "max(max(10,20),30)=30、min(10+20,30)=30、(10+20+30)/2=30 均成立；sqrt(60)≈7.75，不能输出30，故C不能填入。",
+      "explanation": "sqrt(60)约等于7.746不等于30。A/B/D都得30。",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 1,
       "provenance": {
@@ -12889,8 +13469,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "a590ce3e5d03775e93149bec2ae9a35a838ba43708ee2b116f6b4d04ae45be57",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 2
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2024-12-3-01",
@@ -13046,6 +13625,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "dcaebbe3e7df6bf2b9deb563c02a887c3442959740e88c90b5d48aa5215668e1",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-12-3-05",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-12",
+        "group": null,
+        "level": 3,
+        "originalNumber": 5
+      },
+      "type": "choice",
+      "question": "下⾯逻辑运算中，正确的是（ ）",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 5&&3==0",
+        "B. 5|3==8",
+        "C. 5||3==11",
+        "D. 5&3==0001"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "5&3：5=101,3=011,按位与=001=1。D选项5&3==0001正确。A:5&&3=1≠0✗；B:5|3=7≠8✗；C:5||3=1≠11✗。答案D。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "86ecb48f5eb960b622fb2577a9ffbea54e79194061307265655aecfe4addb28c",
       "verificationStatus": "auto_verified"
     },
     {
@@ -13917,20 +14535,20 @@
         "originalNumber": 13
       },
       "type": "choice",
-      "question": "下面代码实现了插入排序函数，则横线上应填写（ ）。",
-      "code": "void insertion_sort(vector<int> &nums) {\n    for (int i = 1; i < nums.size(); i++) {\n        ____ // 在此处填入代码\n        while (j >= 0 && nums[j] > base) {\n            nums[j + 1] = nums[j];\n            j--;\n        }\n        nums[j + 1] = base;\n    }\n}",
+      "question": "下⾯代码实现了插⼊排序函数，则横线上应填写（ ）。 1 void insertion_sort(vector<int> &nums) {",
+      "code": "while (j >= && nums[j] > base) 8 nums[j + 1] = nums[j];\n    j--;\n    }\nnums[j + 1] = base;\n}",
       "assets": [],
       "options": [
-        "A. int base = nums[i], j = i - 1;",
-        "B. int base = nums[i], j = i;",
-        "C. int base = nums[0], j = i - 1;",
-        "D. int base = nums[0], j = i;"
+        "A. `int base = nums[i], j = i - 1;`",
+        "B. `int base = nums[i], j = i;`",
+        "C. `int base = nums[0], j = i - 1;`",
+        "D. `int base = nums[0], j = i;`"
       ],
       "answer": {
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "插入排序每轮暂存当前元素 nums[i] 为 base，从 i-1 开始向前比较并后移，故填 int base = nums[i], j = i - 1;，选 A。",
+      "explanation": "插入排序：base=nums[i]暂存当前元素，j=i-1从前一个开始比较。答案A。",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 1,
       "provenance": {
@@ -13943,8 +14561,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "f13d8833076a48e4cd570075d69b1c9f137057420596ed48f29065926e7cedef",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 0
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2024-12-4-14",
@@ -13983,6 +14600,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "7f188397bd8073d60c603bee45579d5d18931cdb2e2038c320fda9a72d8da4e2",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2024-12-4-15",
+      "source": "gesp",
+      "exam": {
+        "year": 2024,
+        "date": "2024-12",
+        "group": null,
+        "level": 4,
+        "originalNumber": 15
+      },
+      "type": "choice",
+      "question": "运⾏下⾯的代码，将出现什么情况？（ ）",
+      "code": "throw runtime_error(\"Runtime error occurred\");\nreturn 2.0*a*b/(a + b);\n}\nint main() {\n    double x = 10;\n    double y = -10;\n    try {\n        int result = hmean(x, y);\n        cout << \"hmean: \" << result << endl;\n        }\n    catch (const runtime_error& e) {\n        cout << \"Caught: \" << e.what() << endl;\n        }\n    catch (...) {\n        cout << \"Caught an unknown exception.\" << endl;\n        }\n    return 0;",
+      "assets": [],
+      "options": [
+        "A. 屏幕上输出Caught: Runtime error occurred",
+        "B. 屏幕上输出Caught an unknown exception",
+        "C. 程序调⽤ std::terminate()",
+        "D. 编译错误"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "throw抛出runtime_error，catch捕获并输出\"Caught: Runtime error occurred\"。答案A。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "876474a08d6c48feaebd6f1ca83356b365094f9f7f41fe012537b3bbb9a0c01e",
       "verificationStatus": "auto_verified"
     },
     {
@@ -14688,6 +15344,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2025-03-2-04",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-03",
+        "group": null,
+        "level": 2,
+        "originalNumber": 4
+      },
+      "type": "choice",
+      "question": "彩球排列规律：每组5红3绿2蓝（共10个），用N%10判断颜色。说法正确的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 将最后一个else if修改为else效果相同",
+        "B. 条件改为remainder<=5会包含0逻辑不同",
+        "C. 6<=remainder<=8不是合法C++写法",
+        "D. 应该用取余而非除法"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "最后一个else if的条件覆盖所有剩余情况，改为else效果相同。",
+      "knowledgePoint": "组合数学",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "5cd87710c3306123f2721f2c1929ba08f33cfd6455e9d6e9328deb050d1383cd",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2025-03-2-05",
       "source": "gesp",
       "exam": {
@@ -14854,20 +15549,20 @@
         "originalNumber": 9
       },
       "type": "choice",
-      "question": "下面C++代码执行后，将输出能被2整除且除以7余数为2的数。下列选项不能实现的是（ ）。",
-      "code": "for (int i = 0; i < 100; i++)\n    if ( ____ )\n        cout << i << \" \";",
+      "question": "输出能被2整除且除以7余数为2的数，不能实现的是（ ）。",
+      "code": null,
       "assets": [],
       "options": [
-        "A. ((i % 2 == 0) && (i % 7 == 2))",
-        "B. ((!(i % 2)) && (i % 7 == 2))",
-        "C. ((!(i % 2)) && (!(i % 7)))",
-        "D. ((i % 2 != 1) && (i % 7 == 2))"
+        "A. i%2==0&&i%7==2",
+        "B. !(i%2)&&i%7==2",
+        "C. (!(i%2))&&(!(i%7))",
+        "D. i%2==0&&(i-2)%7==0"
       ],
       "answer": {
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "C 的条件等价于 i 为偶数且 i%7==0，输出的是能被 2 和 7 整除（余数为 0）的数，与\"除以7余数为2\"不符，故不能实现。A/B/D 均输出能被2整除且除以7余数为2的数。",
+      "explanation": "C表示能被2和7都整除（除以7余0），不符合要求。",
       "knowledgePoint": "数论",
       "difficulty": 1,
       "provenance": {
@@ -14880,8 +15575,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "dbd3bccb2582aae2fbd360a954e46ad2d5f12ad59dfa9f37fc27da9c9ff93b9e",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 2
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2025-03-2-10",
@@ -14920,6 +15614,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "d391ea87b016f933c6d169b312f4a1eb835c71a6ad775e281b71226fd4b45654",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2025-03-2-11",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-03",
+        "group": null,
+        "level": 2,
+        "originalNumber": 11
+      },
+      "type": "choice",
+      "question": "求1~N阶乘之和两种实现对比说法正确的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 实现2效率更高",
+        "B. 两种实现效率相同",
+        "C. 实现1应用前项计算结果效率更高",
+        "D. 实现1每次重新计算效率更低"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "实现1复用前一次阶乘结果效率更高。",
+      "knowledgePoint": "计算机基础",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "03caca2b9b174e3da7169f70d980fc35a6239cf2e7b594f0bb0cf1e2bd6201f6",
       "verificationStatus": "auto_verified"
     },
     {
@@ -15037,6 +15770,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "d89762a552461cebec57f07849ead7b8208d80b1f10a33f11db9be894051071c",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2025-03-2-15",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-03",
+        "group": null,
+        "level": 2,
+        "originalNumber": 15
+      },
+      "type": "choice",
+      "question": "判断两个float变量a、b是否近似相等（差值<=0.000001）正确的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. a-b<=0.000001",
+        "B. a==b",
+        "C. abs(b-a)<=0.000001",
+        "D. b-a<=0.000001&&a-b<=0.000001"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "需取绝对值abs(b-a)判断差值是否在误差范围内。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "ce2368273d40e73e482dc96ba3bccf4b1564c97c3c1d9325a9badb71e276ff73",
       "verificationStatus": "auto_verified"
     },
     {
@@ -16132,6 +16904,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2025-03-4-14",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-03",
+        "group": null,
+        "level": 4,
+        "originalNumber": 14
+      },
+      "type": "choice",
+      "question": "运⾏下⾯的代码，将出现（ ）。",
+      "code": "throw runtime_error(\"Runtime error occurred.\");\nreturn 2.0*a*b/(a + b);\n}\nint main() {\n    double x = 10;\n    double y = -10;\n    try {\n        int result = hmean(x, y);\n        cout << \"hmean: \" << result << endl;\n        }\n    catch (const runtime_error& e) {\n        cout << \"Caught: \" << e.what() << endl;\n        }\n    catch (...) {\n        cout << \"Caught an unknown exception.\" << endl;\n        }\n    return 0;",
+      "assets": [],
+      "options": [
+        "A. 屏幕上输出Caught: Runtime error occurred.",
+        "B. 屏幕上输出Caught an unknown exception.",
+        "C. 程序调⽤ std::terminate()",
+        "D. 编译错误"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "throw抛出runtime_error，try-catch捕获输出\"Caught: Runtime error occurred.\"。答案A。",
+      "knowledgePoint": "数据类型与运算",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "bd908cb2cb07b14f989768e76e5019f19520f5347e1fb6bbbed6ce13873a6a75",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2025-03-4-15",
       "source": "gesp",
       "exam": {
@@ -16207,6 +17018,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "10d89fc3e7aabdbd985e4affcaf9b03559a511a05cd617e47aea5f989b8ba24f",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2025-06-1-02",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-06",
+        "group": null,
+        "level": 1,
+        "originalNumber": 2
+      },
+      "type": "choice",
+      "question": "在某集成开发环境中调试代码段时设置断点和检查局部变量，说法错误的是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 断点不可以设在L1标记的代码行",
+        "B. 暂停在L2时可检测i的值",
+        "C. 暂停在L3时可修改i的值",
+        "D. 执行可能暂停在L4"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "断点可以设在任何可执行代码行。",
+      "knowledgePoint": "C++语法基础",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "d50f86388d15c109bdbc0b49bdc98b1b3a61f8266574586206374957ef650f9e",
       "verificationStatus": "auto_verified"
     },
     {
@@ -16844,8 +17694,8 @@
         "originalNumber": 4
       },
       "type": "choice",
-      "question": "下面C++代码用于输出正整数N的百位数字，横线处应填入的代码是（ ）。",
-      "code": "int N, remainder;\ncout << \"请输入正整数：\";\ncin >> N;\ncout << ____;",
+      "question": "取正整数第3位数（百位）横线填入（ ）。",
+      "code": null,
       "assets": [],
       "options": [
         "A. N % 1000 / 100",
@@ -16857,7 +17707,7 @@
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "百位数字：N%1000 去掉高位后取 N/100 的个位。A 中 (N%1000)/100 正确（如 1234 → 234/100=2）；B 得到的是千位，C 为 0，D 为十位以下。",
+      "explanation": "如 N=1234：N%1000=234，234/100=2，即百位。答案A。B 的 N/1000%100=1，C、D 结果均为 0。",
       "knowledgePoint": "数据类型与运算",
       "difficulty": 1,
       "provenance": {
@@ -16870,8 +17720,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "a307ebfad94e10be2abc1a2b98e2f09c533d4cd3484fcdf7e45314073392d326",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 0
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2025-06-2-05",
@@ -17108,6 +17957,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2025-06-2-11",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-06",
+        "group": null,
+        "level": 2,
+        "originalNumber": 11
+      },
+      "type": "choice",
+      "question": "双重循环输出%d#%d-格式结果是（ ）。",
+      "code": null,
+      "assets": [],
+      "options": [
+        "A. 0#0-1#0-1#1-",
+        "B. 0#1-1#0-1#1-",
+        "C. 1#0-2#0-2#1-",
+        "D. 1#0-2#0-2#1-END"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "外循环i=1时j=0输出1#0-;i=2时j=0,1输出2#0-2#1-;加上END。",
+      "knowledgePoint": "控制结构",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "8e6472fd026b114afeabc5ca01028a80440a78b146204723849e2420a70d4a65",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2025-06-2-12",
       "source": "gesp",
       "exam": {
@@ -17147,6 +18035,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2025-06-2-13",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-06",
+        "group": null,
+        "level": 2,
+        "originalNumber": 13
+      },
+      "type": "choice",
+      "question": "判断正整数位数的while循环横线填入（ ）。",
+      "code": "int cnt=0;\nwhile(______){\n    cnt++;\n    ______;",
+      "assets": [],
+      "options": [
+        "A. N!=0;N/=10",
+        "B. N>0;N%=10",
+        "C. N>=0;N-=10",
+        "D. N>0;N/=10"
+      ],
+      "answer": {
+        "correctIndex": 3
+      },
+      "children": [],
+      "explanation": "N>0为循环条件，N/=10去除最后一位。A中N!=0对负数也成立。",
+      "knowledgePoint": "控制结构",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "8bf864a1bf26897c65af164eff54938cd191f332b12af39e65f913963c46d0a3",
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2025-06-2-14",
       "source": "gesp",
       "exam": {
@@ -17157,20 +18084,20 @@
         "originalNumber": 14
       },
       "type": "choice",
-      "question": "判断一个数是否为自守数。自守数的定义是如果一个数的平方其尾数与该数相同，则为自守数，如25的平方是625，其尾数是25，所以25是自守数。相关说法错误的是（ ）。",
-      "code": "int N, N1, M1;\ncout << \"输入一个正整数：\";\ncin >> N;\nN1 = N, M1 = N * N;\n\nbool Flag = true;\n\nwhile (N1 > 0) {\n    if (N1 % 10 != M1 % 10) {\n        Flag = false;\n        break;\n    }\n    else {\n        N1 = N1 / 10, M1 = M1 / 10;\n    }\n}\n\nif (Flag == true)\n    printf(\"%d的平方是%d,是自守数\", N, N * N);\nelse\n    printf(\"%d的平方是%d,不是自守数\", N, N * N);",
+      "question": "判断自守数的代码说法错误的是（ ）。",
+      "code": null,
       "assets": [],
       "options": [
-        "A. 如果Flag在循环中不被改为false，则说明该数是自守数",
-        "B. 代码if（N1 % 10 != M1 % 10）用于判断其个位数是否相等，如果不等，则表明不是自守数",
-        "C. 代码N1 = N1 / 10, M1 = M1 / 10将个位数去掉",
-        "D. 将N1 > 0 改为 N > 0 效果相同"
+        "A. 自守数如5和25",
+        "B. 25^2=625末尾25所以25是自守数",
+        "C. 程序需计算平方后判断末尾",
+        "D. 将N1>0改为N>0效果相同"
       ],
       "answer": {
         "correctIndex": 3
       },
       "children": [],
-      "explanation": "N 在循环中从未被修改，把循环条件 N1>0 改成 N>0 后，若 N>0 则循环无法按位消去（死循环/行为完全不同），效果不相同，故 D 说法错误。A/B/C 均正确。",
+      "explanation": "改为N>0会导致死循环因为N值不会改变。",
       "knowledgePoint": "计算机基础",
       "difficulty": 1,
       "provenance": {
@@ -17183,8 +18110,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "288db7a02b14162915a75759428bccdfd75ed9143439220d0e77fe3770608cf2",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 3
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2025-06-2-15",
@@ -18042,6 +18968,45 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "9ea9b111c0c96d2c47fd53d74e39f04314046294d27d8a3e409277c9d6011918",
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2025-06-4-07",
+      "source": "gesp",
+      "exam": {
+        "year": 2025,
+        "date": "2025-06",
+        "group": null,
+        "level": 4,
+        "originalNumber": 7
+      },
+      "type": "choice",
+      "question": "运⾏如下代码会输出（ ）。",
+      "code": "int value = 50;\ncout << value << \" \";\ncout << ::value << \" \";\n}\nvoid print2() {\n    cout << value << \" \";\n    }\nprint1();\nprint2();",
+      "assets": [],
+      "options": [
+        "A. 100 100 100",
+        "B. 50 50 50",
+        "C. 50 100 100",
+        "D. 50 50 100"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "print1中value=50(全局),::value=100(局部?实际全局value=50)。根据作用域规则，输出50 100 100。答案C。",
+      "knowledgePoint": "C++语法基础",
+      "difficulty": 1,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "contentHash": "1c4f421f208f0c62b1fadeed43b96a9e74c36bef8e41c27eae8437794d55788b",
       "verificationStatus": "auto_verified"
     },
     {
@@ -20902,20 +21867,20 @@
         "originalNumber": 7
       },
       "type": "choice",
-      "question": "下面的C++代码执行时如果先输入10回车后输入20并回车，其输出是（ ）。",
-      "code": "int N, M;\nprintf(\"第一个数:\");\nscanf(\"%d\", &N);\nprintf(\"第二个数:\");\nscanf(\"%d\", &M);\nprintf(\"%%(N+M)=%d\", N+M, int(N+M));",
+      "question": "下面的 C++ 代码执行时如果先输入 10 回车后输入 20 并回车，其输出是（ ）。",
+      "code": "int N, M;\nprintf(\"第一个数:\");\nscanf(\"%d\", &N);\nprintf(\"第二个数:\");\nscanf(\"%d\", &M);\nprintf(\"%(N+M)=%d\", N+M, int(N+M));",
       "assets": [],
       "options": [
-        "A. 30=30",
-        "B. 10+20=30",
-        "C. %(N+M)=30",
+        "A. `30=30`",
+        "B. `10+20=30`",
+        "C. `%(N+M)=30`",
         "D. 错误提示"
       ],
       "answer": {
         "correctIndex": 2
       },
       "children": [],
-      "explanation": "printf 中 %% 输出一个 % 字符，%d 输出 N+M=30，故输出 %(N+M)=30，选 C。",
+      "explanation": "官方答案：C。",
       "knowledgePoint": "表达式与运算",
       "difficulty": 2,
       "provenance": {
@@ -20928,8 +21893,7 @@
       "contentHash": "88a7676a6a7089e8c4d2011ab3d8b26bfa6bcf1ad13039d9c4e385e1bb300a44",
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
-      "verificationStatus": "auto_verified",
-      "correctIndex": 2
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2025-12-1-08",
@@ -23118,6 +24082,45 @@
       "verificationStatus": "auto_verified"
     },
     {
+      "id": "gesp-2026-03-1-05",
+      "source": "gesp",
+      "exam": {
+        "year": 2026,
+        "date": "2026-03",
+        "group": null,
+        "level": 1,
+        "originalNumber": 5
+      },
+      "type": "choice",
+      "question": "整型变量 a、b 的初值都是 4，则下面的 C++ 代码执行后的输出是（ ）。",
+      "code": "a, b = 3, 4;\ncout << (a + 2) << (b - 2) << endl;\ncout << a << b << endl;",
+      "assets": [],
+      "options": [
+        "A. 61\n43",
+        "B. 52\n34",
+        "C. 62\n44",
+        "D. 62\n32"
+      ],
+      "answer": {
+        "correctIndex": 0
+      },
+      "children": [],
+      "explanation": "代码`a,b=3,4;`是逗号表达式，仅b被赋值为3，a仍为初值4。输出(4+2)=6,(3-2)=1 得61；再输出a=4,b=3得43。易错：误认为同时赋值a=3,b=4。",
+      "knowledgePoint": "表达式与运算",
+      "difficulty": 2,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "contentHash": "03db42b8bf3192196594e9323049b3eda84d3c7217168a09835b7a45fc044a11",
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "verificationStatus": "auto_verified"
+    },
+    {
       "id": "gesp-2026-03-1-06",
       "source": "gesp",
       "exam": {
@@ -23440,20 +24443,20 @@
         "originalNumber": 14
       },
       "type": "choice",
-      "question": "执行下面C++代码可以判断一个6位正整数N的高3位和低3位的差是否是314的倍数。例如628314就符合要求。横线处应该填入（ ）。",
-      "code": "cin >> N;\nif (____)\n    cout << N << \"符合条件\" << endl;",
+      "question": "执行下面 C++ 代码可以判断一个 6 位正整数 $N$ 的高 3 位和低 3 位的差是否是 314 的倍数。例如 628314 就符合要求。横线处应该填入（ ）。",
+      "code": "cin >> N;\nif (______________________)\n    cout << N << \"符合条件\" << endl;",
       "assets": [],
       "options": [
-        "A. ((N % 1000) - (N / 1000)) / 314 == 0",
-        "B. ((N / 1000) - (N % 1000)) % 314 == 0",
-        "C. ((N % 1000) - (N / 1000)) / 314",
-        "D. ((N / 1000) - (N % 1000)) % 314"
+        "A. (N % 1000) - (N / 1000) / 314 == 0",
+        "B. (N / 1000) - (N % 1000) % 314 == 0",
+        "C. (N % 1000) - (N / 1000) / 314",
+        "D. (N / 1000) - (N % 1000) % 314"
       ],
       "answer": {
         "correctIndex": 1
       },
       "children": [],
-      "explanation": "高3位=N/1000，低3位=N%1000，差是314的倍数即 ((N/1000)-(N%1000))%314==0。628314 时 (628-314)%314=0 成立，选 B。",
+      "explanation": "官方答案：B。",
       "knowledgePoint": "控制结构",
       "difficulty": 2,
       "provenance": {
@@ -23466,8 +24469,7 @@
       "contentHash": "a41ac683cf55350c21c2ddf4e2e7ae65cc30924f5d44c464aa0f23100de76aed",
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
-      "verificationStatus": "auto_verified",
-      "correctIndex": 1
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2026-03-1-15",
@@ -24128,6 +25130,45 @@
         "answerPage": null
       },
       "contentHash": "536c8422266837568a34b50fdc28376bfb69d8fa1a0761feb5b26caa5e29c087",
+      "importOrigin": "reviewed_cloud",
+      "importPriority": 100,
+      "verificationStatus": "auto_verified"
+    },
+    {
+      "id": "gesp-2026-03-3-03",
+      "source": "gesp",
+      "exam": {
+        "year": 2026,
+        "date": "2026-03",
+        "group": null,
+        "level": 3,
+        "originalNumber": 3
+      },
+      "type": "choice",
+      "question": "关于下列正确的程序段，说法正确的是（ ）。",
+      "code": "char str1[] = \"Hello\";\nchar str2[]={'H','e','l','l','0'};",
+      "assets": [],
+      "options": [
+        "A. 字符数组 str1 和 str2 完全相同。",
+        "B. `cout<<str1<<endl; cout<<str2<<endl;` 这段程序多次执行将输出不同的结果。",
+        "C. 字符数组 str1 和 str2 不相等。",
+        "D. 这两个赋值方式完全相同。"
+      ],
+      "answer": {
+        "correctIndex": 2
+      },
+      "children": [],
+      "explanation": "str1以字符串常量初始化，包含'\\0'；str2用字符列表初始化，最后是'0'而非'\\0'且无自动补'\\0'，两者长度和内容均不同，故不相等。B项中输出str2会未定义行为，不一定每次不同。",
+      "knowledgePoint": "C++语法基础",
+      "difficulty": 2,
+      "provenance": {
+        "level": "secondary",
+        "url": null,
+        "page": null,
+        "answerUrl": null,
+        "answerPage": null
+      },
+      "contentHash": "d27953d0aeac22cad5744ee9de3a0d557c86fd91da651fcffb427ca638312e51",
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "verificationStatus": "auto_verified"
@@ -26171,20 +27212,20 @@
         "originalNumber": 11
       },
       "type": "choice",
-      "question": "如下C++代码执行后输出为 1 2 3 4 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7，横线处应该填入的运算符是（ ）。",
-      "code": "int num = 1;\nfor (int i = 0; i < 35; i++) {\n    cout << num << \" \";\n    if (num _______ 10)\n        num _______ 2;\n    else\n        num _______ 1;\n}",
+      "question": "如下 C++ 代码执行后输出是 1 2 3 4 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7 8 9 10 11 5 6 7",
+      "code": "9 10 11 5 6 7 。横线处应该填入的运算符是( )。\nint num = 1;\nfor (int i = 0; i < 35; i++) {\ncout << num << \" \";\nif (num _______ 10)\nnum _______ 2;\nelse\nnum _______ 1;\n}",
       "assets": [],
       "options": [
-        "A. >  /=  +=",
-        "B. >=  %=  +=",
-        "C. >  /=  =+",
-        "D. >=  %=  =+"
+        "A. > /= +=",
+        "B. >= %= +=",
+        "C. > /= =+",
+        "D. >= %= =+"
       ],
       "answer": {
         "correctIndex": 0
       },
       "children": [],
-      "explanation": "输出到 11 后回到 5：num>10 时 num/=2（11/2=5），否则 num+=1 从 5 累加到 11，故三处分别为 >、/=、+=，选 A。编译实测输出与题干一致。",
+      "explanation": "官方答案：A。",
       "knowledgePoint": "循环结构",
       "difficulty": 2,
       "provenance": {
@@ -26197,8 +27238,7 @@
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
       "contentHash": "cd148c9f7bd743d37ad471e1b5fd2ef173e286ea923d019ce5cc550bd489ff5c",
-      "verificationStatus": "auto_verified",
-      "correctIndex": 0
+      "verificationStatus": "auto_verified"
     },
     {
       "id": "gesp-2026-06-2-12",

@@ -5,9 +5,9 @@
   "generatedAt": "2026-07-25T07:36:16.162Z",
   "questionCount": 1183,
   "statusCounts": {
-    "auto_verified": 1126,
+    "auto_verified": 1170,
     "auto_probable": 0,
-    "disputed": 56,
+    "disputed": 12,
     "broken": 1
   },
   "results": [

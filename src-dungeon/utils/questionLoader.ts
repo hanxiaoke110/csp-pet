@@ -35,6 +35,23 @@ interface ReviewedBankVersion {
   revision: number;
 }
 
+// 人工核对的离线应急题。只在题库快照不可用，或某技能的候选题
+// 全部被可靠性规则淘汰时使用，保证战斗不被单道坏题卡住。
+const EMERGENCY_QUESTIONS: Question[] = [
+  { id: 'dungeon-emergency-grammar-1', year: 2026, group: 'J', type: 'choice', knowledgePoint: '数据类型与运算', difficulty: 1, question: 'C++ 中，下列哪个变量名是合法的？', options: ['2score', 'class', 'student_score', 'total-score'], correctIndex: 2, explanation: '标识符不能以数字开头，不能使用关键字或减号。' },
+  { id: 'dungeon-emergency-grammar-3', year: 2026, group: 'J', type: 'choice', knowledgePoint: '数据类型与运算', difficulty: 3, question: '已知 int a = 7, b = 3；表达式 a / b 的值是？', options: ['2', '2.333', '3', '1'], correctIndex: 0, explanation: '两个 int 相除执行整数除法，结果为 2。' },
+  { id: 'dungeon-emergency-control-1', year: 2026, group: 'J', type: 'choice', knowledgePoint: '分支与循环', difficulty: 1, question: '下列哪个关键字可以立即结束当前循环？', options: ['continue', 'break', 'switch', 'case'], correctIndex: 1, explanation: 'break 结束当前循环；continue 只跳过本次循环的剩余部分。' },
+  { id: 'dungeon-emergency-control-3', year: 2026, group: 'J', type: 'choice', knowledgePoint: '分支与循环', difficulty: 3, question: 'for (int i = 0; i < 5; ++i) 的循环体会执行多少次？', options: ['4', '5', '6', '无限次'], correctIndex: 1, explanation: 'i 依次取 0、1、2、3、4，共执行 5 次。' },
+  { id: 'dungeon-emergency-data-1', year: 2026, group: 'J', type: 'choice', knowledgePoint: '数组与字符串', difficulty: 1, question: '已知 int a[5]；下列哪个是合法的数组下标？', options: ['-1', '0', '5', '6'], correctIndex: 1, explanation: '长度为 5 的数组下标范围是 0 到 4。' },
+  { id: 'dungeon-emergency-data-3', year: 2026, group: 'J', type: 'choice', knowledgePoint: '数组与字符串', difficulty: 3, question: '若 string s = "CSPJ";，s.size() 的值是？', options: ['3', '4', '5', '8'], correctIndex: 1, explanation: '字符串 CSPJ 包含 4 个字符。' },
+  { id: 'dungeon-emergency-algorithm-1', year: 2026, group: 'J', type: 'choice', knowledgePoint: '算法基础', difficulty: 1, question: '在包含 n 个元素的数组中顺序查找目标，最坏需要比较多少次？', options: ['1', 'log2(n)', 'n', 'n²'], correctIndex: 2, explanation: '最坏情况下需要检查全部 n 个元素。' },
+  { id: 'dungeon-emergency-algorithm-3', year: 2026, group: 'J', type: 'choice', knowledgePoint: '算法基础', difficulty: 3, question: '对有序数组使用二分查找，每次比较后搜索范围如何变化？', options: ['大约减半', '只减少一个元素', '扩大一倍', '保持不变'], correctIndex: 0, explanation: '二分查找每次根据中间元素排除一半范围。' },
+];
+
+export function getEmergencyQuestionBank(): Question[] {
+  return EMERGENCY_QUESTIONS.map(question => ({ ...question, options: [...(question.options || [])] }));
+}
+
 function isDungeonQuestionBankData(data: unknown): data is DungeonQuestionBankData {
   return Boolean(
     data &&
@@ -49,7 +66,11 @@ function isDungeonQuestionBankData(data: unknown): data is DungeonQuestionBankDa
 export async function loadQuestionBank(): Promise<Question[]> {
   // 统一排除配置（/course-data/excluded-question-ids.json）须先加载，
   // V2 与旧版两条路径的 isBrokenCodeQuestion 过滤都依赖它。
-  await loadExcludedQuestionIds();
+  try {
+    await loadExcludedQuestionIds();
+  } catch {
+    // 排除名单是额外安全层，加载失败不应阻断内置题库。
+  }
   try {
     const session = await beginQuestionBankSession(['dungeon']);
     const verified = (session.channels.dungeon || []).map(question => toLegacyQuestion(question)) as Question[];
@@ -64,7 +85,7 @@ export async function loadQuestionBank(): Promise<Question[]> {
     dataFile: 'dungeon-exam-bank.json',
     bundledUrl: '/course-data/dungeon-exam-bank.json',
     validate: isDungeonQuestionBankData,
-  });
+  }).catch(() => ({ questions: getEmergencyQuestionBank() }));
   let cachedReviewed = loadFromCache<Question[]>(REVIEWED_BANK_CACHE_KEY);
 
   // The desktop shell already downloads the merged teacher-reviewed bank on launch.
@@ -348,8 +369,13 @@ export function getTrustedQuestionImage(q: Question): string | null {
 export function isUsableChoiceQuestion(q: Question | undefined): q is Question {
   return Boolean(q) &&
     q!.type === 'choice' &&
+    Boolean(q!.question?.trim()) &&
     Array.isArray(q!.options) &&
     q!.options.length >= 4 &&
+    q!.options.every(option => Boolean(String(option || '').trim())) &&
+    Number.isInteger(q!.correctIndex) &&
+    q!.correctIndex! >= 0 &&
+    q!.correctIndex! < q!.options.length &&
     !isBrokenCodeQuestion(q!);
 }
 
@@ -372,9 +398,7 @@ export function pickQuestionsByTag(
   const keywords = tagMap[tag];
   const [minD, maxD] = difficultyRange || [1, 4];
   const isEligible = (q: Question) =>
-    q.type === 'choice' &&
-    Array.isArray(q.options) && q.options.length >= 4 &&
-    typeof q.correctIndex === 'number' &&
+    isUsableChoiceQuestion(q) &&
     // 组别：CSP-J 或 GESP 1-4 级（排除 CSP-S 超纲题）
     ((q.group === 'J') || (q.group === 'GESP' && q.level && q.level <= 4)) &&
     // 难度过滤：CSP-J 用 difficulty，GESP 用 level（导入时已设 difficulty=level）
@@ -409,6 +433,25 @@ export function pickFallbackChoiceQuestions(
     q.difficulty >= minD && q.difficulty <= maxD
   );
   return chooseFreshQuestions(eligible, count, 'dungeon-skill-fallback');
+}
+
+export function pickEmergencyQuestions(
+  tag: KnowledgeTag,
+  count: number,
+  difficultyRange?: [number, number],
+): Question[] {
+  const [minD, maxD] = difficultyRange || [1, 4];
+  const keywords: Record<KnowledgeTag, string[]> = {
+    grammar: ['数据类型', '运算'],
+    'control-flow': ['分支', '循环'],
+    'data-structure': ['数组', '字符串'],
+    algorithm: ['算法'],
+  };
+  const eligible = EMERGENCY_QUESTIONS.filter(question =>
+    question.difficulty >= minD && question.difficulty <= maxD &&
+    keywords[tag].some(keyword => question.knowledgePoint.includes(keyword)),
+  );
+  return chooseFreshQuestions(eligible, count, `dungeon-emergency-${tag}`);
 }
 
 // 副本 → 题目难度范围映射（按副本主题递进）
