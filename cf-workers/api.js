@@ -1848,7 +1848,7 @@ export default {
           for (const dp of body.dungeon_progress) {
             // 白名单校验：仅接受合法副本 id，防伪造 dungeonId 写脏数据
             if (!dp.dungeonId || !VALID_DUNGEON_IDS.has(dp.dungeonId)) continue;
-            const existing = await db.prepare('SELECT best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
+            const existing = await db.prepare('SELECT status, completed_stages, boss_defeated, best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
             const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
             // bestScore 设上界（单场最多答对题数×10），防客户端注水
             const newScore = Math.min(10000, Math.max(0, dp.bestScore || 0));
@@ -1856,10 +1856,21 @@ export default {
             const bestScore = Math.max(existing?.best_score || 0, newScore);
             const bestRating = (!existing?.best_rating || (ratingOrder[newRating]||0) > (ratingOrder[existing.best_rating]||0))
               ? newRating : (existing?.best_rating || 'D');
+            // 通关状态修复通道：客户端上报 bossDefeated/满关 → 升级为 cleared（只升不降）。
+            // 早期版本未上报、上报失败、离线通关的进度只能靠 sync 修复（report-battle
+            // 只在首次发奖胜利时推进状态，重打不发奖就永远修不上，通关榜会少算）。
+            // 信任级别与 report-battle 的 is_win 相同（本就客户端上报），不扩大伪造面。
+            const clientCleared = dp.bossDefeated === true || (dp.completedStages || 0) >= (dp.totalStages || 5);
+            const insertStatus = clientCleared ? 'cleared' : 'locked';
             await db.prepare(`INSERT INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
               VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))
-              ON CONFLICT(device_hash, dungeon_id) DO UPDATE SET best_score=excluded.best_score, best_rating=excluded.best_rating, updated_at=datetime('now')`)
-              .bind(device_hash, dp.dungeonId, 'locked', dp.completedStages||0, dp.totalStages||5,
+              ON CONFLICT(device_hash, dungeon_id) DO UPDATE SET
+                best_score=excluded.best_score, best_rating=excluded.best_rating,
+                completed_stages=MAX(dungeon_progress.completed_stages, excluded.completed_stages),
+                boss_defeated=MAX(dungeon_progress.boss_defeated, excluded.boss_defeated),
+                status=CASE WHEN excluded.status='cleared' THEN 'cleared' ELSE dungeon_progress.status END,
+                updated_at=datetime('now')`)
+              .bind(device_hash, dp.dungeonId, insertStatus, dp.completedStages||0, dp.totalStages||5,
                     dp.currentStageId||null, dp.bossDefeated?1:0, bestScore, bestRating).run();
           }
         }

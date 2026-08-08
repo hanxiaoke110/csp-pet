@@ -60,6 +60,26 @@ export function AppContent() {
         // Restore player progress from localStorage
         const hasLocal = store.loadFromLocalStorage();
 
+        // 通关榜修复推送：本地已通关/已击败 Boss 的副本，若服务端没记上（早期版本
+        // 未上报、reportBattle 失败、离线通关、重打不发奖不推进状态），通关榜会少算。
+        // 每次启动把这些副本进度推一次；服务端 sync 按 bossDefeated/满关升级为
+        // cleared（只升不降，v1.7.32+ 服务端支持）。
+        if (hasLocal) {
+          const clearedDps = useDungeonStore.getState().dungeonProgress
+            .filter(dp => dp.status === 'cleared' || dp.bossDefeated);
+          if (clearedDps.length > 0) {
+            import('./utils/api').then(({ syncProgress }) => {
+              syncProgress({
+                dungeon_progress: clearedDps.map(dp => ({
+                  dungeonId: dp.dungeonId, status: dp.status, completedStages: dp.completedStages,
+                  totalStages: dp.totalStages, bossDefeated: dp.bossDefeated,
+                  bestScore: dp.bestScore, bestRating: dp.bestRating,
+                })),
+              }).catch(() => {});
+            }).catch(() => {});
+          }
+        }
+
         // 换班级码检测：本地 dungeon_player.classCode 与桌面当前 csp_class_code 不一致时，
         // 更新本地 classCode（进度/金币/段位全保留，数据按 device_hash 继承），并异步 sync 到服务端。
         // 不调 register（已 active 会 409）；sync 端点已支持 class_code 白名单 + 班级码合法性校验 + teacher_id 同步。
