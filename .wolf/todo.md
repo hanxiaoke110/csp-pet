@@ -110,4 +110,4 @@
 - [x] 公告：id 20（v1.7.31 发版）、id 21（v1.7.32 发版）置顶；id 18 改为「已修好」、id 19 取消置顶。
 - [x] **事故记录**：手动触发 CI 不带 --ref 时跑在积灰的 main 分支（旧工作流无 tag 门禁），曾把 Gitee update.json 覆盖为垃圾值——已恢复，且 GitHub 默认分支已改 master，杜绝复发。教训：gh workflow run 永远带 `--ref master`。
 - [x] **Windows 第二智子专项关闭**：真机验证通过（显示/点击/拖拽/收回/退出/重开恢复/换屏）。
-- [x] **通关榜少算修复已上线（2026-08-08）**：服务端 sync 通关状态修复通道（只升不降）+ 客户端启动修复推送（94fa578）。worker 已部署（版本 118，`deploy-api-direct.sh` 直接 API 上传——wrangler OAuth 过期时的备用部署方式）。学生重打一遍各副本 Boss 即可修复榜单（当前客户端即可）；下个客户端版本启动自动修复。
+- [x] **通关榜少算修复已上线（2026-08-08）**：服务端 sync 通关状态修复通道（只升不降）+ 客户端启动修复推送（94fa578）。worker 已部署。部署通道已彻底修好（2026-08-08）：`./deploy-worker.sh` 一键部署（wrangler 优先、直接 API 兜底）；注意 ① 本机 wrangler 4.103 只认旧变量名 CLOUDFLARE_API_TOKEN，token 存项目根 .cf-api-token（gitignored）；② 必须 `-c wrangler.toml`，否则 wrangler 会向上误用父目录 wrangler.jsonc 部署到 csp 静态 worker。学生重打一遍各副本 Boss 即可修复榜单（当前客户端即可）；下个客户端版本启动自动修复。

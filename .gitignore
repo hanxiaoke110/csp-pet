@@ -47,3 +47,4 @@ reports/csp-sources/
 .tmp/recovery-explanations-backup-*.json
 .tmp/deepseek-recheck-*.json
 .tmp/backup-pre-rebuild-20260724/
+.cf-api-token
