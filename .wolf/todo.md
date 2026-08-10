@@ -112,7 +112,10 @@
 
 - 原因：Gitee 附件下载会 302 到 `foruda.gitee.com/attach_file/...`，该公开文件托管域名被 Google 安全浏览标记（尤其未签名 exe）。
 - 已做：① 飞书文档已直接上传三个安装包附件（Windows exe + Mac ARM/Intel dmg），用户可从飞书附件直接下载（feishu.cn 可信域名，无警告）；② `cf-workers/api.js` 新增稳定直链 `/dl/win|mac-arm|mac-intel`（Worker 代理 Gitee 最新版，自动指向最新安装包，链接永不变）。
-- 待办：`npx wrangler login` 后在仓库根目录 `npx wrangler deploy` 部署 Worker；部署后把飞书文档里的下载链接换成 `https://api.cspstudy.top/dl/win` 等稳定直链（并同步 update-feishu-release-doc.mjs 的链接替换逻辑）。
+- [x] Worker 已部署（2026-08-10，用 `.cf-api-token` 新令牌，`./deploy-worker.sh`），`/dl/*` 线上实测 200。
+- [x] 飞书文档链接已全部切换为稳定直链（Gitee 链接清零），脚本同步固定。
+- [x] 发版 CI 已接入 `update-feishu-doc` 任务（release 成功后自动更新飞书文档）；需在 GitHub Secrets 配 `LARK_APP_ID` / `LARK_APP_SECRET`，未配置则自动跳过。
+- 流程文档：`docs/feishu-update-doc-workflow.md`。
 
 ## 部署状态（2026-08-08 更新）
 

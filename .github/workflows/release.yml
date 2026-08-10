@@ -239,3 +239,23 @@ jobs:
             dist/windows-x86_64/*
             dist/update.json
           generate_release_notes: true
+
+  # ── 发版后自动更新飞书「智子客户端更新」文档 ──
+  # 依赖 GitHub Secrets：LARK_APP_ID / LARK_APP_SECRET（飞书自建应用，需 docx 文档读写权限）。
+  # 未配置 secrets 时该任务自动跳过，不影响发版。
+  update-feishu-doc:
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/v') && secrets.LARK_APP_ID != '' && secrets.LARK_APP_SECRET != ''
+    runs-on: ubuntu-latest
+    env:
+      LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+      LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm install -g @larksuite/cli
+      - name: 配置飞书 bot 身份
+        run: echo "$LARK_APP_SECRET" | lark-cli config init --app-id "$LARK_APP_ID" --app-secret-stdin --brand feishu
+      - name: 更新飞书版本更新文档
+        run: node scripts/update-feishu-release-doc.mjs --as bot
