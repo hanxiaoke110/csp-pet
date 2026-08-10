@@ -57,6 +57,19 @@ node scripts/update-feishu-release-doc.mjs
 
 > 注意：安装包附件（飞书云空间里的 exe/dmg）不会自动更新——每次发版如果想让文档里也带**新安装包附件**，需要手动把新安装包上传到文档对应位置（用 `lark-cli docs +media-insert`，或让 AI 代传）。稳定直链 `/dl/*` 会自动指向最新版，可以只靠直链。
 
+### 同步安装包附件（`--sync-attachments`）
+
+脚本支持一步完成「删旧附件 → 传新附件」：
+
+```bash
+LARK_CLI_AS=user node scripts/update-feishu-release-doc.mjs --sync-attachments
+```
+
+- 会自动删除文档里旧的 `CSP_*.exe / CSP_*.dmg` 附件块（不动视频和图片），再上传最新版三个安装包附件；
+- 安装包从 Gitee 下载到 `.tmp/doc-assets/`（已存在则跳过下载）；
+- **必须用 user 身份**：上传文件到飞书需要用户的 `drive:file:upload` 权限，bot 应用默认没有该权限（实测 bot 上传报 invalid token）；
+- CI 自动更新默认只同步文字；如需 CI 也同步附件，需先在飞书开发者后台给应用开通「上传文件」权限，并把 CI 命令改为 `node scripts/update-feishu-release-doc.mjs --as bot --sync-attachments`。
+
 ## 5. 常见问题
 
 - Chrome 提示「危险网站」：不要再使用 Gitee 附件直链（`gitee.com/.../releases/download/...` 会 302 到 `foruda.gitee.com`，被安全浏览标记）。文档里的链接已全部换成 `api.cspstudy.top/dl/*` 或飞书附件；

@@ -12,11 +12,13 @@
 //   GITEE_REPO      Gitee 仓库（默认 hanliuliu110/csp-pet）
 
 import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs';
 
 const GITEE_REPO = process.env.GITEE_REPO || 'hanliuliu110/csp-pet';
 const DOC_TOKEN = process.env.LARK_DOC_TOKEN || 'VJmgd3RB0oOzPfxV9MxcKzzyn1b';
 const CLI_AS = process.env.LARK_CLI_AS || 'bot';
 const DRY_RUN = process.argv.includes('--dry-run');
+const SYNC_ATTACHMENTS = process.argv.includes('--sync-attachments');
 
 function esc(text) {
   return String(text)
@@ -103,6 +105,53 @@ function buildReplacements(release, changelog) {
   ];
 }
 
+// 同步安装包附件：删除文档里旧版本的 CSP_*.exe/dmg 附件块，再上传最新版。
+// 仅在 --sync-attachments 时执行（默认不动附件，保持轻量更新）。
+async function syncAttachments(docXml, release) {
+  const targets = [
+    { marker: '下载链接（Windows 10 版本）：', file: release.win.name, url: release.win.url },
+    { marker: '苹果电脑 M 芯片下载链接：', file: release.macArm.name, url: release.macArm.url },
+    { marker: '苹果电脑 Intel 芯片下载链接：', file: release.macIntel.name, url: release.macIntel.url },
+  ];
+
+  // 1. 删除旧附件块（只匹配安装包，不动视频/图片）
+  const oldIds = [];
+  const re = /<source[^>]*id="([^"]+)"[^>]*name="(CSP_[^"]+\.(?:exe|dmg))"/g;
+  let m;
+  while ((m = re.exec(docXml))) oldIds.push(m[1]);
+  if (oldIds.length > 0) {
+    runCli([
+      'docs', '+update', '--doc', DOC_TOKEN, '--command', 'block_delete',
+      '--block-id', oldIds.join(','), '--as', CLI_AS,
+    ]);
+    console.log(`已删除旧安装包附件块：${oldIds.length} 个`);
+  }
+
+  // 2. 确保最新安装包已在本地（缺才下载，Gitee 源）
+  mkdirSync('.tmp/doc-assets', { recursive: true });
+  for (const t of targets) {
+    const path = `.tmp/doc-assets/${t.file}`;
+    if (!existsSync(path) || statSync(path).size === 0) {
+      console.log(`下载 ${t.file} ...`);
+      const res = await fetch(t.url, { redirect: 'follow' });
+      if (!res.ok) throw new Error(`下载 ${t.file} 失败 HTTP ${res.status}`);
+      writeFileSync(path, Buffer.from(await res.arrayBuffer()));
+    }
+  }
+
+  // 3. 在对应下载链接后重新插入新附件卡片
+  for (const t of targets) {
+    runCli([
+      'docs', '+media-insert', '--doc', DOC_TOKEN,
+      '--file', `.tmp/doc-assets/${t.file}`,
+      '--type', 'file', '--file-view', 'card',
+      '--selection-with-ellipsis', t.marker,
+      '--as', CLI_AS,
+    ]);
+    console.log(`已上传新附件：${t.file}`);
+  }
+}
+
 async function main() {
   const release = await getLatestRelease();
   const changelog = await getChangelog(release.version);
@@ -135,6 +184,10 @@ async function main() {
     const parsed = JSON.parse(out);
     if (!parsed.ok) throw new Error(`更新 ${r.marker} 失败：${JSON.stringify(parsed.error || parsed)}`);
     console.log(`已更新：${r.marker}`);
+  }
+
+  if (SYNC_ATTACHMENTS) {
+    await syncAttachments(xml, release);
   }
 
   console.log(`\n文档地址：https://scncdgmg7m6w.feishu.cn/docx/${DOC_TOKEN}`);

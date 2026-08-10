@@ -115,6 +115,7 @@
 - [x] Worker 已部署（2026-08-10，用 `.cf-api-token` 新令牌，`./deploy-worker.sh`），`/dl/*` 线上实测 200。
 - [x] 飞书文档链接已全部切换为稳定直链（Gitee 链接清零），脚本同步固定。
 - [x] 发版 CI 已接入 `update-feishu-doc` 任务（release 成功后自动更新飞书文档）；需在 GitHub Secrets 配 `LARK_APP_ID` / `LARK_APP_SECRET`，未配置则自动跳过。
+- [x] 附件同步：脚本新增 `--sync-attachments`（删旧附件→传新附件），本地用 user 身份实测通过；CI 默认只同步文字（bot 无上传文件权限）。
 - 流程文档：`docs/feishu-update-doc-workflow.md`。
 
 ## 部署状态（2026-08-08 更新）
