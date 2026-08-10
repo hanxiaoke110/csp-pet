@@ -245,7 +245,9 @@ jobs:
   # 未配置 secrets 时该任务自动跳过，不影响发版。
   update-feishu-doc:
     needs: release
-    if: startsWith(github.ref, 'refs/tags/v') && secrets.LARK_APP_ID != '' && secrets.LARK_APP_SECRET != ''
+    # secrets 不能在 job 级 if 里引用（非法语法），只在这里限定 tag 触发；
+    # 凭据是否配置放到步骤级判断，未配置时跳过文档更新。
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     env:
       LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
@@ -256,6 +258,8 @@ jobs:
         with: { node-version: '20' }
       - run: npm install -g @larksuite/cli
       - name: 配置飞书 bot 身份
+        if: env.LARK_APP_ID != '' && env.LARK_APP_SECRET != ''
         run: echo "$LARK_APP_SECRET" | lark-cli config init --app-id "$LARK_APP_ID" --app-secret-stdin --brand feishu
       - name: 更新飞书版本更新文档
+        if: env.LARK_APP_ID != '' && env.LARK_APP_SECRET != ''
         run: node scripts/update-feishu-release-doc.mjs --as bot
