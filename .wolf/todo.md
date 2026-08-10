@@ -108,6 +108,12 @@
 - 文档：https://scncdgmg7m6w.feishu.cn/docx/VJmgd3RB0oOzPfxV9MxcKzzyn1b（bot 创建，老师 full_access；分享前设“链接可阅读”）
 - 自动更新：`node scripts/update-feishu-release-doc.mjs`（发版后跑一次，自动抓 Gitee 最新安装包 + 公告更新说明）
 
+## 下载链接被 Chrome 报“危险网站”（2026-08-10）
+
+- 原因：Gitee 附件下载会 302 到 `foruda.gitee.com/attach_file/...`，该公开文件托管域名被 Google 安全浏览标记（尤其未签名 exe）。
+- 已做：① 飞书文档已直接上传三个安装包附件（Windows exe + Mac ARM/Intel dmg），用户可从飞书附件直接下载（feishu.cn 可信域名，无警告）；② `cf-workers/api.js` 新增稳定直链 `/dl/win|mac-arm|mac-intel`（Worker 代理 Gitee 最新版，自动指向最新安装包，链接永不变）。
+- 待办：`npx wrangler login` 后在仓库根目录 `npx wrangler deploy` 部署 Worker；部署后把飞书文档里的下载链接换成 `https://api.cspstudy.top/dl/win` 等稳定直链（并同步 update-feishu-release-doc.mjs 的链接替换逻辑）。
+
 ## 部署状态（2026-08-08 更新）
 
 - [x] **v1.7.31 已发版**（2026-08-07 晚）：单窗多宠架构重构（Windows 第二智子根源解决）+ 指针级点击穿透（智子点不到）+ 桌宠隐藏再显示「未响应」修复 + 多屏一键换屏 + 工坊智子闪烁修复（normalizeSheet）+ 试炼场题库根因（GESP group=null）+ 答题提交按钮防误触。**Windows 真机验证通过**（孩子机器，全套清单）。

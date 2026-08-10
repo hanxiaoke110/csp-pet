@@ -43,6 +43,62 @@ const BUILTIN_QUESTION_PATCHES = {
   },
 };
 
+// ── 安装包稳定直链（自动指向最新版）──
+// Gitee 附件域名（foruda.gitee.com）会被 Chrome 安全浏览标记为危险，
+// 这里用自有域名 api.cspstudy.top 代理下载，用户全程只见自有域名，无警告。
+const GITEE_RELEASE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/releases/download';
+let _releaseCache = { at: 0, data: null };
+
+async function getLatestInstallerRelease() {
+  if (_releaseCache.data && Date.now() - _releaseCache.at < 5 * 60 * 1000) {
+    return _releaseCache.data;
+  }
+  const res = await fetch(
+    'https://gitee.com/api/v5/repos/hanliuliu110/csp-pet/releases?per_page=10',
+  );
+  if (!res.ok) return _releaseCache.data;
+  const releases = await res.json();
+  let latest = null;
+  for (const r of releases) {
+    const version = String(r.tag_name || '').replace(/^v/, '');
+    const names = new Set((r.assets || []).map(a => a.name));
+    const win = `CSP_${version}_x64-setup.exe`;
+    const arm = `CSP_${version}_aarch64.dmg`;
+    const intel = `CSP_${version}_x64.dmg`;
+    if (names.has(win) && names.has(arm) && names.has(intel)) {
+      if (!latest || (r.created_at || '') > latest.date) {
+        latest = { tag: r.tag_name, version, date: r.created_at || '', win, arm, intel };
+      }
+    }
+  }
+  _releaseCache = { at: Date.now(), data: latest };
+  return latest;
+}
+
+async function handleDownload(path, request) {
+  const match = path.match(/^\/dl\/(win|mac-arm|mac-intel)$/);
+  if (!match) return null;
+  if (request.method !== 'GET') {
+    return new Response(JSON.stringify({ error: 'method not allowed' }), { status: 405 });
+  }
+  const info = await getLatestInstallerRelease();
+  if (!info) {
+    return new Response('暂未找到最新安装包，请稍后再试', { status: 502 });
+  }
+  const file = match[1] === 'win' ? info.win : match[1] === 'mac-arm' ? info.arm : info.intel;
+  const upstream = await fetch(`${GITEE_RELEASE_BASE}/${info.tag}/${file}`, { redirect: 'follow' });
+  if (!upstream.ok) {
+    return new Response('下载源暂不可用，请稍后再试', { status: 502 });
+  }
+  const headers = new Headers();
+  headers.set('Content-Type', 'application/octet-stream');
+  headers.set('Content-Disposition', `attachment; filename="${file}"`);
+  headers.set('Cache-Control', 'public, max-age=300');
+  const length = upstream.headers.get('content-length');
+  if (length) headers.set('Content-Length', length);
+  return new Response(upstream.body, { status: 200, headers });
+}
+
 // Rate limiting
 const RATE_WISH_POST = 5;       // 5 wishes per minute per device
 const RATE_VOTE_POST = 10;      // 10 votes per minute per device
@@ -415,6 +471,9 @@ export default {
     // Admin API alias: some networks/extensions treat bare /admin/* paths specially.
     // Keep legacy /admin/* working, and expose /api/admin/* for the teacher web app.
     if (path.startsWith('/api/admin/')) path = path.replace(/^\/api\/admin/, '/admin');
+    // 安装包稳定直链：/dl/win | /dl/mac-arm | /dl/mac-intel
+    const dlResponse = await handleDownload(path, request);
+    if (dlResponse) return dlResponse;
     const db = env.DB;
     await ensureSchema(db);
 
