@@ -103,6 +103,11 @@
 - [ ] **Windows 第二智子专项仍未解决**：待真机复测/继续修复（详见 `docs/2026-08-04-windows-second-pet-fix-record.md`）。
 - [x] CI 防护：release 只在 v* tag 执行（commit fb28b1a），手动构建不再误改线上 update.json。
 
+## 飞书版本更新文档（2026-08-10）
+
+- 文档：https://scncdgmg7m6w.feishu.cn/docx/VJmgd3RB0oOzPfxV9MxcKzzyn1b（bot 创建，老师 full_access；分享前设“链接可阅读”）
+- 自动更新：`node scripts/update-feishu-release-doc.mjs`（发版后跑一次，自动抓 Gitee 最新安装包 + 公告更新说明）
+
 ## 部署状态（2026-08-08 更新）
 
 - [x] **v1.7.31 已发版**（2026-08-07 晚）：单窗多宠架构重构（Windows 第二智子根源解决）+ 指针级点击穿透（智子点不到）+ 桌宠隐藏再显示「未响应」修复 + 多屏一键换屏 + 工坊智子闪烁修复（normalizeSheet）+ 试炼场题库根因（GESP group=null）+ 答题提交按钮防误触。**Windows 真机验证通过**（孩子机器，全套清单）。

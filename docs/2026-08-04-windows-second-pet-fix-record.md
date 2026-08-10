@@ -150,6 +150,17 @@ Windows 电脑、已解锁 2 个及以上桌面伙伴位置时，开启第二智
 3. 若仍崩溃，把 `main.rs` 的 `--disable-gpu-compositing` 升级为 `--disable-gpu` 或调整独立环境策略；
 4. 修复完成后发 v1.7.31+，并更新/撤销公告 id 18、19 中“暂缓使用”的提示。
 
+## 10. 飞书「智子客户端更新」文档（2026-08-10）
+
+- 文档地址：https://scncdgmg7m6w.feishu.cn/docx/VJmgd3RB0oOzPfxV9MxcKzzyn1b
+- 内容：最新版本 + 更新说明 + 最新安装包（Windows / Mac ARM / Mac Intel）+ 使用视频（https://t.eeo.cn/3adWa=.1）
+- 自动更新脚本：`scripts/update-feishu-release-doc.mjs`（每次发版后运行一次即可）
+  - 自动从 Gitee 找“带安装包的最新 release”（跳过只有源码包的版本）
+  - 自动从公告接口取该版本的更新说明
+  - 用 `lark-cli docs +update --command overwrite`（bot 身份）整篇重建文档
+  - 用法：`node scripts/update-feishu-release-doc.mjs`；`--dry-run` 只预览不写入
+- 注意：文档由 bot 创建，老师已有 full_access（可管理）；分享给学生前需在飞书文档权限里设置“获得链接的人可阅读”。
+
 ## 10. 第四轮（2026-08-05，v1.7.30 真机仍不显示/点不到之后）
 
 用户反馈 v1.7.30 后第二智子仍不显示、智子点不到。本轮四处改动：
