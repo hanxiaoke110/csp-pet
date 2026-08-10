@@ -1,23 +1,21 @@
 #!/usr/bin/env node
-// 自动更新飞书「智子客户端更新」文档（最新版本 + 安装包 + 使用视频）。
+// 自动更新飞书「智子客户端更新」文档：只更新版本号/日期/更新说明/三个下载链接，
+// 保留文档里已有的视频、图片、提醒、系统要求等手工内容。
 //
 // 用法：
 //   node scripts/update-feishu-release-doc.mjs            # 自动抓最新版本并更新文档
-//   node scripts/update-feishu-release-doc.mjs --dry-run  # 只打印将写入的内容，不改文档
+//   node scripts/update-feishu-release-doc.mjs --dry-run  # 只打印将要执行的替换，不改文档
 //
 // 环境变量：
 //   LARK_DOC_TOKEN  飞书文档 token（默认 VJmgd3RB0oOzPfxV9MxcKzzyn1b）
 //   LARK_CLI_AS     身份：bot（默认）/ user
 //   GITEE_REPO      Gitee 仓库（默认 hanliuliu110/csp-pet）
-//
-// 说明：使用 overwrite 整篇重建，文档结构完全由本脚本生成（无图片/评论，重建无副作用）。
 
 import { execFileSync } from 'node:child_process';
 
 const GITEE_REPO = process.env.GITEE_REPO || 'hanliuliu110/csp-pet';
 const DOC_TOKEN = process.env.LARK_DOC_TOKEN || 'VJmgd3RB0oOzPfxV9MxcKzzyn1b';
 const CLI_AS = process.env.LARK_CLI_AS || 'bot';
-const VIDEO_URL = 'https://t.eeo.cn/3adWa=.1';
 const DRY_RUN = process.argv.includes('--dry-run');
 
 function esc(text) {
@@ -25,6 +23,14 @@ function esc(text) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+function runCli(args) {
+  return execFileSync(
+    'lark-cli',
+    args,
+    { encoding: 'utf8', env: { ...process.env, LARKSUITE_CLI_NO_UPDATE_NOTIFIER: '1', LARKSUITE_CLI_NO_SKILLS_NOTIFIER: '1' } },
+  );
 }
 
 async function fetchJson(url) {
@@ -50,12 +56,12 @@ async function getLatestRelease() {
       if (!latest || (r.created_at || '') > latest.date) {
         const url = name => `https://gitee.com/${GITEE_REPO}/releases/download/${r.tag_name}/${name}`;
         latest = {
-        version: r.tag_name.replace(/^v/, ''),
-        tag: r.tag_name,
-        date: (r.created_at || '').slice(0, 10),
-        win: { name: win, url: url(win) },
-        macArm: { name: macArm, url: url(macArm) },
-        macIntel: { name: macIntel, url: url(macIntel) },
+          version: r.tag_name.replace(/^v/, ''),
+          tag: r.tag_name,
+          date: (r.created_at || '').slice(0, 10),
+          win: { name: win, url: url(win) },
+          macArm: { name: macArm, url: url(macArm) },
+          macIntel: { name: macIntel, url: url(macIntel) },
         };
       }
     }
@@ -75,49 +81,60 @@ async function getChangelog(version) {
   return `v${version} 版本更新，请查看客户端内公告了解详情。`;
 }
 
-function buildXml(release, changelog) {
+// 3. 拉当前文档（with-ids），按文本特征找要替换的 block id
+function findBlockId(xml, marker) {
+  // 匹配 <tag id="..."> 且内容以 marker 开头的块
+  const re = new RegExp(`<(h1|p|li)[^>]*id="([^"]+)"[^>]*>[^<]*${marker}`, 'i');
+  const m = xml.match(re);
+  if (!m) throw new Error(`未找到可更新的块：${marker}`);
+  return m[2];
+}
+
+function buildReplacements(release, changelog) {
   return [
-    '<title>智子客户端更新</title>',
-    `<h1>📦 最新版本：v${release.version}</h1>`,
-    `<p>更新日期：${release.date}</p>`,
-    `<p>本次更新：${esc(changelog)}</p>`,
-    '<h1>⬇️ 最新安装包下载</h1>',
-    `<p>Windows 电脑：<a href="${release.win.url}">${release.win.name}（Windows 安装包）</a></p>`,
-    `<p>Mac（Apple 芯片 M 系列）：<a href="${release.macArm.url}">${release.macArm.name}</a></p>`,
-    `<p>Mac（Intel 芯片）：<a href="${release.macIntel.url}">${release.macIntel.name}</a></p>`,
-    '<h1>🎬 使用视频</h1>',
-    `<p><a href="${VIDEO_URL}">点击观看使用视频</a></p>`,
-  ].join('\n');
+    { marker: '📦 最新版本：', content: `<h1>📦 最新版本：v${release.version}</h1>` },
+    { marker: '更新日期：', content: `<p>更新日期：${release.date}</p>` },
+    { marker: '本次更新：', content: `<p>本次更新：${esc(changelog)}</p>` },
+    { marker: '下载链接（Windows 10 版本）：', content: `<li>下载链接（Windows 10 版本）：<a href="${release.win.url}">${release.win.name}</a></li>` },
+    { marker: '苹果电脑 M 芯片下载链接：', content: `<li>苹果电脑 M 芯片下载链接：<a href="${release.macArm.url}">${release.macArm.name}</a></li>` },
+    { marker: '苹果电脑 Intel 芯片下载链接：', content: `<li>苹果电脑 Intel 芯片下载链接：<a href="${release.macIntel.url}">${release.macIntel.name}</a></li>` },
+  ];
 }
 
 async function main() {
   const release = await getLatestRelease();
   const changelog = await getChangelog(release.version);
-  const xml = buildXml(release, changelog);
+  const replacements = buildReplacements(release, changelog);
 
   console.log(`最新版本：v${release.version}（${release.date}）`);
   console.log(`Windows：${release.win.url}`);
   console.log(`Mac ARM：${release.macArm.url}`);
   console.log(`Mac Intel：${release.macIntel.url}`);
 
+  const fetchOut = JSON.parse(runCli([
+    'docs', '+fetch', '--doc', DOC_TOKEN, '--detail', 'with-ids', '--as', CLI_AS,
+  ]));
+  const xml = fetchOut.data.document.content;
+
   if (DRY_RUN) {
-    console.log('\n===== 将写入的 XML =====\n' + xml);
+    console.log('\n===== 将执行的 block_replace =====');
+    for (const r of replacements) {
+      console.log(`- ${r.marker} -> ${r.content.slice(0, 100)}...`);
+    }
     return;
   }
 
-  const out = execFileSync(
-    'lark-cli',
-    [
-      'docs', '+update',
-      '--doc', DOC_TOKEN,
-      '--command', 'overwrite',
-      '--content', xml,
-      '--as', CLI_AS,
-    ],
-    { encoding: 'utf8', env: { ...process.env, LARKSUITE_CLI_NO_UPDATE_NOTIFIER: '1', LARKSUITE_CLI_NO_SKILLS_NOTIFIER: '1' } },
-  );
-  console.log('\n飞书文档更新结果：');
-  console.log(out.trim());
+  for (const r of replacements) {
+    const blockId = findBlockId(xml, r.marker);
+    const out = runCli([
+      'docs', '+update', '--doc', DOC_TOKEN, '--command', 'block_replace',
+      '--block-id', blockId, '--content', r.content, '--as', CLI_AS,
+    ]);
+    const parsed = JSON.parse(out);
+    if (!parsed.ok) throw new Error(`更新 ${r.marker} 失败：${JSON.stringify(parsed.error || parsed)}`);
+    console.log(`已更新：${r.marker}`);
+  }
+
   console.log(`\n文档地址：https://scncdgmg7m6w.feishu.cn/docx/${DOC_TOKEN}`);
 }
 
