@@ -95,9 +95,11 @@ function buildReplacements(release, changelog) {
     { marker: '📦 最新版本：', content: `<h1>📦 最新版本：v${release.version}</h1>` },
     { marker: '更新日期：', content: `<p>更新日期：${release.date}</p>` },
     { marker: '本次更新：', content: `<p>本次更新：${esc(changelog)}</p>` },
-    { marker: '下载链接（Windows 10 版本）：', content: `<li>下载链接（Windows 10 版本）：<a href="${release.win.url}">${release.win.name}</a></li>` },
-    { marker: '苹果电脑 M 芯片下载链接：', content: `<li>苹果电脑 M 芯片下载链接：<a href="${release.macArm.url}">${release.macArm.name}</a></li>` },
-    { marker: '苹果电脑 Intel 芯片下载链接：', content: `<li>苹果电脑 Intel 芯片下载链接：<a href="${release.macIntel.url}">${release.macIntel.name}</a></li>` },
+    // 稳定直链走自有域名（api.cspstudy.top 代理最新安装包），避免 Gitee 附件域名
+    // 被 Chrome 安全浏览标记为“危险网站”；URL 固定，发版后无需再改。
+    { marker: '下载链接（Windows 10 版本）：', content: '<li>下载链接（Windows 10 版本）：<a href="https://api.cspstudy.top/dl/win">点此直接下载</a>（自动最新版）</li>' },
+    { marker: '苹果电脑 M 芯片下载链接：', content: '<li>苹果电脑 M 芯片下载链接：<a href="https://api.cspstudy.top/dl/mac-arm">点此直接下载</a>（自动最新版）</li>' },
+    { marker: '苹果电脑 Intel 芯片下载链接：', content: '<li>苹果电脑 Intel 芯片下载链接：<a href="https://api.cspstudy.top/dl/mac-intel">点此直接下载</a>（自动最新版）</li>' },
   ];
 }
 
