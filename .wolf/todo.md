@@ -103,6 +103,13 @@
 - [ ] **Windows 第二智子专项仍未解决**：待真机复测/继续修复（详见 `docs/2026-08-04-windows-second-pet-fix-record.md`）。
 - [x] CI 防护：release 只在 v* tag 执行（commit fb28b1a），手动构建不再误改线上 update.json。
 
+## 移动智子黑屏（2026-08-10 已改代码，待 Windows 验证）
+
+- 现象：v1.7.31+ 单窗多宠架构下，移动智子时屏幕变黑，点一下才恢复。
+- 可疑机制：全屏透明窗口的指针级点击穿透每 150ms 轮询，光标移出精灵就立即切换 `setIgnoreCursorEvents`，Windows 上反复切换整窗穿透易导致合成器黑屏；拖拽时大量 DOM transform 重绘加剧。
+- 已改（`PetWindow.tsx`）：① 切穿透延迟 400ms（光标短暂移出不切，拖拽途中不切）；② 拖拽期间精灵 `willChange: transform` 提升合成层。
+- 验证：tsc/vitest 139 通过、生产构建通过；待 Windows 真机确认黑屏消失后发 v1.7.34。
+
 ## 飞书版本更新文档（2026-08-10）
 
 - 文档：https://scncdgmg7m6w.feishu.cn/docx/VJmgd3RB0oOzPfxV9MxcKzzyn1b（bot 创建，老师 full_access；分享前设“链接可阅读”）

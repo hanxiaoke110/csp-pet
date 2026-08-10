@@ -76,6 +76,7 @@ export default function PetWindow() {
   const [showActions, setShowActions] = useState(false);
   const [petSize, setPetSize] = useState(getPetSize);
   const [roamingEnabled, setRoamingEnabled] = useState(getRoamingEnabled);
+  const [draggingSlot, setDraggingSlot] = useState<number | null>(null);
   const [stage, setStage] = useState<{ w: number; h: number } | null>(null);
   // 多于一块屏时，智子操作条和设置页提供「换屏」入口
   const [monitorCount, setMonitorCount] = useState(1);
@@ -219,6 +220,8 @@ export default function PetWindow() {
     const win = getCurrentWindow();
     const isMac = /Mac/i.test(navigator.userAgent);
     let ignoring = true;
+    let ignoreTimer: ReturnType<typeof setTimeout> | null = null;
+    let latestShouldIgnore = false;
     let disposed = false;
     const apply = async () => {
       const info = stageInfoRef.current;
@@ -245,13 +248,33 @@ export default function PetWindow() {
       });
       // 拖拽途中光标可能短暂移出精灵（窗口跟随有延迟），此时不能切穿透
       const shouldIgnore = !over && !dragRef.current;
+      latestShouldIgnore = shouldIgnore;
       if (shouldIgnore !== ignoring) {
-        ignoring = shouldIgnore;
-        await win.setIgnoreCursorEvents(shouldIgnore);
+        if (shouldIgnore) {
+          // 切穿透延迟 400ms：光标短暂移出精灵（拖拽抖动/快速移动）时不切，
+          // 避免全屏透明窗口反复切换穿透导致 Windows 合成器黑屏
+          if (ignoreTimer === null) {
+            ignoreTimer = setTimeout(() => {
+              ignoreTimer = null;
+              if (latestShouldIgnore) {
+                ignoring = true;
+                win.setIgnoreCursorEvents(true).catch(() => {});
+              }
+            }, 400);
+          }
+        } else {
+          if (ignoreTimer !== null) { clearTimeout(ignoreTimer); ignoreTimer = null; }
+          ignoring = false;
+          await win.setIgnoreCursorEvents(false);
+        }
       }
     };
     const timer = window.setInterval(() => { apply().catch(() => {}); }, 150);
-    return () => { disposed = true; window.clearInterval(timer); };
+    return () => {
+      disposed = true;
+      if (ignoreTimer !== null) clearTimeout(ignoreTimer);
+      window.clearInterval(timer);
+    };
   }, []);
 
   // ── 显示窗口：第一只精灵就绪即显示；2.5s 兜底防闪白等待卡死 ──
@@ -375,6 +398,7 @@ export default function PetWindow() {
       const dy = event.clientY - drag.startCY;
       if (!drag.moved && Math.abs(dx) <= 5 && Math.abs(dy) <= 5) return;
       drag.moved = true;
+      setDraggingSlot(prev => (prev === drag.slot ? prev : drag.slot));
       roamPausedUntil.current[drag.slot] = Date.now() + 5 * 60_000;
       const c = clampPos(drag.startX + dx, drag.startY + dy);
       setPositions(prev => ({ ...prev, [drag.slot]: { ...c, animMs: 0 } }));
@@ -382,6 +406,7 @@ export default function PetWindow() {
     const onMouseUp = () => {
       const drag = dragRef.current;
       dragRef.current = null;
+      setDraggingSlot(null);
       if (drag?.moved) {
         lastDragEndAt.current = Date.now();
         savePosition(drag.slot);
@@ -536,7 +561,8 @@ export default function PetWindow() {
               width: canvasSz, height: canvasSz,
               transform: `translate(${Math.round(pos.x)}px, ${Math.round(pos.y)}px)`,
               transition: pos.animMs ? `transform ${pos.animMs}ms cubic-bezier(0.33, 0, 0.67, 1)` : 'none',
-              willChange: pos.animMs ? 'transform' : undefined,
+              // 拖拽/漫游时提升为合成层，避免每次 mousemove 触发全屏透明窗口重绘（黑屏来源之一）
+              willChange: (draggingSlot === slot || pos.animMs) ? 'transform' : undefined,
             }}
           >
             {bubble && (
