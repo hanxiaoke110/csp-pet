@@ -116,6 +116,7 @@
 - [x] 飞书文档链接已全部切换为稳定直链（Gitee 链接清零），脚本同步固定。
 - [x] 发版 CI 已接入 `update-feishu-doc` 任务（release 成功后自动更新飞书文档）；需在 GitHub Secrets 配 `LARK_APP_ID` / `LARK_APP_SECRET`，未配置则自动跳过。
 - [x] 附件同步：脚本新增 `--sync-attachments`（删旧附件→传新附件），本地用 user 身份实测通过；CI 默认只同步文字（bot 无上传文件权限）。
+- [x] 方案确认：文档保留安装包附件（方案 B）；**每次发版后 AI 必须主动提醒用户执行附件同步**（`LARK_CLI_AS=user node scripts/update-feishu-release-doc.mjs --sync-attachments`），用户确认后由 AI 代为执行。
 - 流程文档：`docs/feishu-update-doc-workflow.md`。
 
 ## 部署状态（2026-08-08 更新）

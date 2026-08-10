@@ -57,6 +57,14 @@ node scripts/update-feishu-release-doc.mjs
 
 > 注意：安装包附件（飞书云空间里的 exe/dmg）不会自动更新——每次发版如果想让文档里也带**新安装包附件**，需要手动把新安装包上传到文档对应位置（用 `lark-cli docs +media-insert`，或让 AI 代传）。稳定直链 `/dl/*` 会自动指向最新版，可以只靠直链。
 
+**约定（方案 B，2026-08-10 用户确认）**：每次发版后，**由 AI 主动提醒用户执行附件同步**，或用户回复后由 AI 代为执行：
+
+```bash
+LARK_CLI_AS=user node scripts/update-feishu-release-doc.mjs --sync-attachments
+```
+
+流程：打 tag 发版 → CI 自动更新文档文字/链接 → **提醒用户同步附件** → 用户确认后执行附件同步（删旧传新）。
+
 ### 同步安装包附件（`--sync-attachments`）
 
 脚本支持一步完成「删旧附件 → 传新附件」：
