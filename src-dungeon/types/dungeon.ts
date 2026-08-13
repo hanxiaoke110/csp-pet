@@ -90,6 +90,17 @@ export interface DungeonStage {
   enemyPet?: EnemyPetConfig;     // 智子试炼场敌方宠物配置
 }
 
+export interface DungeonQuestionPlan {
+  dungeonId: string;
+  stageId: string;
+  includeKeywords: string[];
+  excludeKeywords?: string[];
+  difficulty: [number, number];
+  groups: Array<'J' | 'GESP'>;
+  years?: number[];
+  reviewRatio?: number;
+}
+
 // ── 副本进度 ──
 export interface DungeonProgress {
   dungeonId: string;

@@ -6,6 +6,7 @@ import { loadQuestionBank, loadDungeons, loadQuestionMapping } from './utils/que
 import { getStoredClassCode, getStoredHash } from './utils/api';
 import { readDesktopBinding } from './utils/autoRegister';
 import type { DungeonProgress } from './types/dungeon';
+import { CURRENT_DUNGEON_SEASON_ID } from './data/season';
 
 // Screen imports (will be created in later phases)
 import TitleScreen from './components/screens/TitleScreen';
@@ -59,12 +60,14 @@ export function AppContent() {
 
         // Restore player progress from localStorage
         const hasLocal = store.loadFromLocalStorage();
+        const needsSeasonMigration = hasLocal
+          && useDungeonStore.getState().player.season !== CURRENT_DUNGEON_SEASON_ID;
 
         // 通关榜修复推送：本地已通关/已击败 Boss 的副本，若服务端没记上（早期版本
         // 未上报、reportBattle 失败、离线通关、重打不发奖不推进状态），通关榜会少算。
         // 每次启动把这些副本进度推一次；服务端 sync 按 bossDefeated/满关升级为
         // cleared（只升不降，v1.7.32+ 服务端支持）。
-        if (hasLocal) {
+        if (hasLocal && !needsSeasonMigration) {
           const clearedDps = useDungeonStore.getState().dungeonProgress
             .filter(dp => dp.status === 'cleared' || dp.bossDefeated);
           if (clearedDps.length > 0) {
@@ -98,9 +101,12 @@ export function AppContent() {
         // Load dungeons (bundled, fast)
         const dungeons = await loadDungeons();
         store.initDungeons(dungeons);
+        // New seasons reset trial-only progress and rankings while preserving pets, coins,
+        // purchases, skins and trial inventory in their existing stores.
+        const seasonMigrated = store.migrateSeason(dungeons);
 
         // Initialize progress for new players
-        if (!hasLocal) {
+        if (!hasLocal && !seasonMigrated) {
           const defaultProgress: DungeonProgress[] = dungeons.map(d => ({
             dungeonId: d.id,
             status: (!d.requiredDungeon ? 'unlocked' : 'locked') as DungeonProgress['status'],

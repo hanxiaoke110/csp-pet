@@ -15,6 +15,7 @@ import WishWall from './WishWall';
 import PetStatus from './PetStatus';
 import { WorkshopShop } from './WorkshopShop';
 import { ShopPanel } from './ShopPanel';
+import { BookOpen, Egg, Factory, Lightbulb, MonitorCog, PawPrint, ShoppingCart } from 'lucide-react';
 
 export default function PetPanel() {
   const { ownedPets, activePetId, coins } = usePetStore();
@@ -185,16 +186,16 @@ export default function PetPanel() {
     <div className="pet-panel">
       <div className="pet-tabs">
         <button className={`pet-tab ${tab === 'status' ? 'active' : ''}`} onClick={() => { setTab('status'); localStorage.removeItem('csp_new_pets'); setNewPetCount(0); }}>
-          🐾 智子 {newPetCount > 0 && <span style={{ background: '#ef4444', color: '#fff', borderRadius: 10, padding: '1px 6px', fontSize: 10, fontWeight: 700, marginLeft: 4 }}>NEW</span>}
+          <PawPrint /> 智子 {newPetCount > 0 && <span style={{ background: '#ef4444', color: '#fff', borderRadius: 10, padding: '1px 6px', fontSize: 10, fontWeight: 700, marginLeft: 4 }}>NEW</span>}
         </button>
-        <button className={`pet-tab ${tab === 'shop' ? 'active' : ''}`} onClick={() => setTab('shop')}>🛒 商城</button>
+        <button className={`pet-tab ${tab === 'shop' ? 'active' : ''}`} onClick={() => setTab('shop')}><ShoppingCart /> 商城</button>
         <button className={`pet-tab ${tab === 'hatch' ? 'active' : ''}`} onClick={() => setTab('hatch')}>
-          🐣 孵化中{eggCount > 0 && <span className="hatch-badge">{eggCount}</span>}
+          <Egg /> 孵化中{eggCount > 0 && <span className="hatch-badge">{eggCount}</span>}
         </button>
-        <button className={`pet-tab ${tab === 'guide' ? 'active' : ''}`} onClick={() => setTab('guide')}>📖 指南</button>
-        <button className={`pet-tab ${tab === 'settings' ? 'active' : ''}`} onClick={() => setTab('settings')}>⚙️ 显示</button>
-        <button className={`pet-tab ${tab === 'wish' ? 'active' : ''}`} onClick={() => setTab('wish')}>💡 许愿</button>
-        <button className={`pet-tab ${tab === 'workshop' ? 'active' : ''}`} onClick={() => setTab('workshop')}>🏭 工坊</button>
+        <button className={`pet-tab ${tab === 'guide' ? 'active' : ''}`} onClick={() => setTab('guide')}><BookOpen /> 指南</button>
+        <button className={`pet-tab ${tab === 'settings' ? 'active' : ''}`} onClick={() => setTab('settings')}><MonitorCog /> 显示</button>
+        <button className={`pet-tab ${tab === 'wish' ? 'active' : ''}`} onClick={() => setTab('wish')}><Lightbulb /> 许愿</button>
+        <button className={`pet-tab ${tab === 'workshop' ? 'active' : ''}`} onClick={() => setTab('workshop')}><Factory /> 工坊</button>
       </div>
 
       {tab === 'status' && (

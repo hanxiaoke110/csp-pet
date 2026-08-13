@@ -10,6 +10,10 @@ import {
   type WindowSkin,
 } from '../../utils/windowSkin';
 import { getWeekKey, loadCheckin, nextCheckin } from '../../utils/checkin';
+import {
+  BookOpen, Bot, ClipboardList, Gift, Images, Laptop, Library, ListChecks,
+  Medal, Megaphone, PawPrint, Settings, Sparkles, Swords, Trophy, Zap,
+} from 'lucide-react';
 
 interface Props { children: ReactNode; }
 
@@ -107,47 +111,49 @@ export default function AppShell({ children }: Props) {
   return (
     <div className="app-shell" data-window-skin={windowSkin}>
       <nav className="sidebar">
-        <div className="sidebar-logo">CSP 学习助手</div>
+        <div className="sidebar-logo"><Sparkles /> <span>CSP 学习助手</span></div>
 
         <DailyCheckin />
 
+        <div className="sidebar-section">学习</div>
         <NavLink to="/courses" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          📚 课程
+          <BookOpen /> <span>课程</span>
         </NavLink>
         <NavLink to="/ai-coach" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          🧑‍🏫 AI 教练
+          <Bot /> <span>AI 教练</span>
         </NavLink>
         <NavLink to="/quiz" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          📝 选择题
-        </NavLink>
-        <NavLink to="/pet" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          🐾 灵犀智子
-        </NavLink>
-        <NavLink to="/achievements" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          🏆 成就
+          <ListChecks /> <span>选择题</span>
         </NavLink>
         <NavLink to="/exam" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          🏅 CSP 真题
+          <Medal /> <span>CSP 真题</span>
         </NavLink>
         <NavLink to="/oj-training" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          💻 OJ 训练
+          <Laptop /> <span>OJ 训练</span>
         </NavLink>
         <NavLink to="/resources" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          📖 学习资料
+          <Library /> <span>学习资料</span>
+        </NavLink>
+
+        <div className="sidebar-section">成长</div>
+        <NavLink to="/pet" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          <PawPrint /> <span>灵犀智子</span>
+        </NavLink>
+        <NavLink to="/achievements" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          <Trophy /> <span>成就</span>
         </NavLink>
         {/* 智子试炼场：全屏地牢，需整体切换到 MemoryRouter，用 pushState 触发顶层路由二选一 */}
         <button
           className="nav-item"
-          style={{ background: 'none', cursor: 'pointer', fontSize: 14, border: 'none', width: '100%', textAlign: 'left', fontFamily: 'inherit' }}
           onClick={() => navigateToMainApp('/dungeon')}
         >
-          ⚔️ 智子试炼场
+          <Swords /> <span>智子试炼场</span>
         </button>
 
         <div className="sidebar-section">挑战</div>
 
         <NavLink to="/quiz" className={`nav-item nav-sub ${canSuper ? 'nav-super-available' : 'nav-super-done'}`}>
-          ⚡ 超级挑战
+          <Zap /> <span>超级挑战</span>
           <span className={`nav-tag ${canSuper ? 'tag-available' : 'tag-done'}`}>
             {canSuper ? '可挑战' : '已完成'}
           </span>
@@ -155,28 +161,28 @@ export default function AppShell({ children }: Props) {
 
         {errorCount > 0 && (
           <NavLink to="/quiz" className="nav-item nav-sub nav-review">
-            📋 月度复盘
+            <ClipboardList /> <span>月度复盘</span>
             <span className="nav-count">{errorCount}题</span>
           </NavLink>
         )}
 
-        <div className="sidebar-spacer" />
+        <div className="sidebar-section sidebar-system-section">系统</div>
 
         <NavLink to="/announcements" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          📣 公告
+          <Megaphone /> <span>公告</span>
         </NavLink>
 
-        <button className="nav-item" style={{ background: 'none', cursor: 'pointer', fontSize: 14, border: 'none', width: '100%', textAlign: 'left', fontFamily: 'inherit' }}
+        <button className="nav-item"
           onClick={() => setShowRedeem(true)}>
-          🎁 神秘代码
+          <Gift /> <span>神秘代码</span>
         </button>
 
         <NavLink to="/window-skins" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          🖼️ 窗口皮肤
+          <Images /> <span>窗口皮肤</span>
         </NavLink>
 
         <NavLink to="/settings" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          ⚙️ 设置
+          <Settings /> <span>设置</span>
         </NavLink>
       </nav>
       <main className="main-content">

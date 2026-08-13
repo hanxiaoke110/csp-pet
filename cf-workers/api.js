@@ -122,6 +122,8 @@ const VALID_BADGE_IDS = new Set([
 
 // 单场战斗答题数上界（防刷答题统计）
 const MAX_BATTLE_QUESTIONS = 50;
+const CURRENT_DUNGEON_SEASON = '2026-season-2';
+const normalizeDungeonSeason = value => value === CURRENT_DUNGEON_SEASON ? CURRENT_DUNGEON_SEASON : '2026-autumn';
 const BAD_WORDS = [
   '色情','裸体','裸聊','性交','淫秽','色诱','约炮','嫖娼','卖淫','色情片','成人','激情',
   '杀人','杀死','砍死','炸死','枪毙','自杀','割腕','跳楼','虐杀','打死','弄死','灭口',
@@ -251,8 +253,8 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-// v8: 新增 comp_claims 表（补偿码全局一码一次的结构性锁/审计）
-const SCHEMA_VERSION = 8;
+// v9: 智子试炼场新赛季使用独立统计/进度/战斗/徽章表，旧赛季只读归档。
+const SCHEMA_VERSION = 9;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
@@ -313,8 +315,13 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN earned_reward INTEGER DEFAULT 0`); } catch {}
   try { await db.exec(`ALTER TABLE dungeon_attempts ADD COLUMN is_win INTEGER DEFAULT 0`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_badges (device_hash TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, badge_id))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_season_stats (device_hash TEXT NOT NULL, season_id TEXT NOT NULL, player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, PRIMARY KEY (device_hash, season_id))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_season_progress (device_hash TEXT NOT NULL, season_id TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 5, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, season_id, dungeon_id))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_season_attempts (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL, season_id TEXT NOT NULL, dungeon_id TEXT NOT NULL, stage_id TEXT NOT NULL, correct_count INTEGER DEFAULT 0, total_count INTEGER DEFAULT 0, rating TEXT DEFAULT 'D', is_win INTEGER DEFAULT 0, earned_reward INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_season_badges (device_hash TEXT NOT NULL, season_id TEXT NOT NULL, badge_id TEXT NOT NULL, earned_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, season_id, badge_id))`); } catch {}
   // 防重放：同 device+dungeon+stage 的胜利奖励只发一次（DB 级兜底，防 TOCTOU 竞态）
   try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_dungeon_attempts_win ON dungeon_attempts(device_hash, dungeon_id, stage_id) WHERE is_win = 1 AND earned_reward > 0`); } catch {}
+  try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_dungeon_season_attempts_win ON dungeon_season_attempts(device_hash, season_id, dungeon_id, stage_id) WHERE is_win = 1 AND earned_reward > 0`); } catch {}
   // Performance indexes
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_device_status ON wishes(device_hash, status)`); } catch {}
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_wishes_class_status ON wishes(class_code, status)`); } catch {}
@@ -1779,6 +1786,7 @@ export default {
       if (path === '/api/dungeon/login' && request.method === 'POST') {
         const body = await request.json();
         const { real_name, phone } = body;
+        const seasonId = normalizeDungeonSeason(body.season_id);
         if (!real_name || !phone) {
           return new Response(JSON.stringify({ error: '姓名和手机号缺一不可' }), { status: 400, headers: cors });
         }
@@ -1792,9 +1800,25 @@ export default {
         if (player.status !== 'active') {
           return new Response(JSON.stringify({ error: '你的修炼权限已被暂停，请联系老师' }), { status: 403, headers: cors });
         }
-        // Get full progress
-        const dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(player.device_hash).all();
-        const badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(player.device_hash).all();
+        // New-season statistics are isolated from the permanent player profile and old rankings.
+        let dungeons;
+        let badges;
+        if (seasonId === CURRENT_DUNGEON_SEASON) {
+          await db.prepare(`INSERT OR IGNORE INTO dungeon_season_stats (device_hash, season_id) VALUES (?,?)`).bind(player.device_hash, seasonId).run();
+          const dungeonIds = ['dungeon-01','dungeon-02','dungeon-03','dungeon-04','dungeon-05','dungeon-06','dungeon-07','dungeon-08'];
+          for (const dId of dungeonIds) {
+            const initStatus = dId === 'dungeon-01' ? 'unlocked' : 'locked';
+            await db.prepare('INSERT OR IGNORE INTO dungeon_season_progress (device_hash, season_id, dungeon_id, status, total_stages) VALUES (?,?,?,?,5)')
+              .bind(player.device_hash, seasonId, dId, initStatus).run();
+          }
+          const stats = await db.prepare(`SELECT * FROM dungeon_season_stats WHERE device_hash=? AND season_id=?`).bind(player.device_hash, seasonId).first();
+          Object.assign(player, stats || {}, { season: seasonId });
+          dungeons = await db.prepare('SELECT * FROM dungeon_season_progress WHERE device_hash=? AND season_id=?').bind(player.device_hash, seasonId).all();
+          badges = await db.prepare('SELECT badge_id FROM dungeon_season_badges WHERE device_hash=? AND season_id=?').bind(player.device_hash, seasonId).all();
+        } else {
+          dungeons = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=?').bind(player.device_hash).all();
+          badges = await db.prepare('SELECT badge_id FROM dungeon_badges WHERE device_hash=?').bind(player.device_hash).all();
+        }
         const today = new Date().toISOString().slice(0,10);
         // Daily tasks removed — return stub for client compatibility
         const tasks = { date: today, questions_done: 0, stages_cleared: 0, bosses_defeated: 0, all_done: 0, claimed: 0 };
@@ -1818,6 +1842,7 @@ export default {
       if (path === '/api/dungeon/register' && request.method === 'POST') {
         const body = await request.json();
         const { device_hash, class_code, display_name, real_name, phone, school } = body;
+        const seasonId = normalizeDungeonSeason(body.season_id);
         if (!device_hash || !class_code || !display_name || !real_name || !phone) {
           return new Response(JSON.stringify({ error: '班级码、昵称、姓名、手机号缺一不可' }), { status: 400, headers: cors });
         }
@@ -1833,14 +1858,16 @@ export default {
           return new Response(JSON.stringify({ error: '班级码无效或班级已失效' }), { status: 400, headers: cors });
         }
         // Check existing player
-        const existing = await db.prepare('SELECT device_hash, status FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
-        if (existing && existing.status === 'active') {
-          return new Response(JSON.stringify({ error: '该设备已注册，无需重复注册' }), { status: 409, headers: cors });
-        }
+        const existing = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
         const validSchool = ['cultivation','tactical','star','minecraft','code','dream'].includes(school) ? school : 'cultivation';
         if (existing && existing.status === 'inactive') {
           await db.prepare('UPDATE dungeon_players SET status=\'active\', display_name=?, real_name=?, phone=?, class_code=?, school=?, teacher_id=?, updated_at=datetime(\'now\') WHERE device_hash=?')
             .bind(display_name, real_name, phone, class_code, validSchool, cls.teacher_id, device_hash).run();
+        } else if (existing) {
+          // Idempotent re-entry after reinstall: refresh class/display metadata but keep the
+          // original identity and school, so registration cannot bypass paid school changes.
+          await db.prepare('UPDATE dungeon_players SET class_code=?, teacher_id=?, display_name=?, updated_at=datetime(\'now\') WHERE device_hash=?')
+            .bind(class_code, cls.teacher_id, display_name, device_hash).run();
         } else {
           await db.prepare('INSERT OR REPLACE INTO dungeon_players (device_hash, class_code, teacher_id, display_name, real_name, phone, status, school, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,datetime(\'now\'),datetime(\'now\'))')
             .bind(device_hash, class_code, cls.teacher_id, display_name, real_name, phone, 'active', validSchool).run();
@@ -1852,6 +1879,15 @@ export default {
           }
         }
         const player = await db.prepare('SELECT * FROM dungeon_players WHERE device_hash=?').bind(device_hash).first();
+        if (seasonId === CURRENT_DUNGEON_SEASON) {
+          await db.prepare('INSERT OR IGNORE INTO dungeon_season_stats (device_hash, season_id) VALUES (?,?)').bind(device_hash, seasonId).run();
+          const dungeonIds = ['dungeon-01','dungeon-02','dungeon-03','dungeon-04','dungeon-05','dungeon-06','dungeon-07','dungeon-08'];
+          for (const dId of dungeonIds) {
+            const initStatus = dId === 'dungeon-01' ? 'unlocked' : 'locked';
+            await db.prepare('INSERT OR IGNORE INTO dungeon_season_progress (device_hash, season_id, dungeon_id, status, total_stages) VALUES (?,?,?,?,5)').bind(device_hash, seasonId, dId, initStatus).run();
+          }
+          player.season = seasonId;
+        }
         return new Response(JSON.stringify({ success: true, player }), { headers: cors });
       }
 
@@ -1860,6 +1896,7 @@ export default {
       if (path === '/api/dungeon/sync' && request.method === 'POST') {
         const body = await request.json();
         const { device_hash } = body;
+        const seasonId = normalizeDungeonSeason(body.season_id);
         if (!device_hash) return new Response(JSON.stringify({ error: '缺少设备标识' }), { status: 400, headers: cors });
         // 写额度软熔断：接近 D1 每日上限时，跳过 sync（非核心），保 reportBattle
         const budget = await getWriteBudget(db);
@@ -1907,7 +1944,9 @@ export default {
           for (const dp of body.dungeon_progress) {
             // 白名单校验：仅接受合法副本 id，防伪造 dungeonId 写脏数据
             if (!dp.dungeonId || !VALID_DUNGEON_IDS.has(dp.dungeonId)) continue;
-            const existing = await db.prepare('SELECT status, completed_stages, boss_defeated, best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
+            const existing = seasonId === CURRENT_DUNGEON_SEASON
+              ? await db.prepare('SELECT status, completed_stages, boss_defeated, best_score, best_rating FROM dungeon_season_progress WHERE device_hash=? AND season_id=? AND dungeon_id=?').bind(device_hash, seasonId, dp.dungeonId).first()
+              : await db.prepare('SELECT status, completed_stages, boss_defeated, best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
             const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
             // bestScore 设上界（单场最多答对题数×10），防客户端注水
             const newScore = Math.min(10000, Math.max(0, dp.bestScore || 0));
@@ -1921,7 +1960,18 @@ export default {
             // 信任级别与 report-battle 的 is_win 相同（本就客户端上报），不扩大伪造面。
             const clientCleared = dp.bossDefeated === true || (dp.completedStages || 0) >= (dp.totalStages || 5);
             const insertStatus = clientCleared ? 'cleared' : 'locked';
-            await db.prepare(`INSERT INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
+            if (seasonId === CURRENT_DUNGEON_SEASON) {
+              await db.prepare(`INSERT INTO dungeon_season_progress (device_hash, season_id, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,datetime('now'))
+                ON CONFLICT(device_hash, season_id, dungeon_id) DO UPDATE SET
+                  best_score=excluded.best_score, best_rating=excluded.best_rating,
+                  completed_stages=MAX(dungeon_season_progress.completed_stages, excluded.completed_stages),
+                  boss_defeated=MAX(dungeon_season_progress.boss_defeated, excluded.boss_defeated),
+                  status=CASE WHEN excluded.status='cleared' THEN 'cleared' ELSE dungeon_season_progress.status END,
+                  updated_at=datetime('now')`)
+                .bind(device_hash, seasonId, dp.dungeonId, insertStatus, dp.completedStages||0, dp.totalStages||5,
+                      dp.currentStageId||null, dp.bossDefeated?1:0, bestScore, bestRating).run();
+            } else await db.prepare(`INSERT INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
               VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))
               ON CONFLICT(device_hash, dungeon_id) DO UPDATE SET
                 best_score=excluded.best_score, best_rating=excluded.best_rating,
@@ -1938,7 +1988,11 @@ export default {
         if (body.badges && Array.isArray(body.badges)) {
           for (const bid of body.badges) {
             if (typeof bid !== 'string' || !VALID_BADGE_IDS.has(bid)) continue;
-            await db.prepare('INSERT OR IGNORE INTO dungeon_badges (device_hash, badge_id) VALUES (?,?)').bind(device_hash, bid).run();
+            if (seasonId === CURRENT_DUNGEON_SEASON) {
+              await db.prepare('INSERT OR IGNORE INTO dungeon_season_badges (device_hash, season_id, badge_id) VALUES (?,?,?)').bind(device_hash, seasonId, bid).run();
+            } else {
+              await db.prepare('INSERT OR IGNORE INTO dungeon_badges (device_hash, badge_id) VALUES (?,?)').bind(device_hash, bid).run();
+            }
             badgeWrites++;
           }
         }
@@ -1954,6 +2008,7 @@ export default {
       // 同时同步客户端权威的等级/段位/连胜字段到服务端（供跨设备登录恢复），加上界防刷。
       if (path === '/api/dungeon/report-battle' && request.method === 'POST') {
         const body = await request.json();
+        const seasonId = normalizeDungeonSeason(body.season_id);
         const { device_hash, class_code, dungeon_id, stage_id, is_win, rating, questions_answered, correct_count,
                 player_level, exp, rank_tier, rank_points, current_streak, max_streak } = body;
         if (!device_hash || !class_code || !dungeon_id || !stage_id) {
@@ -2002,15 +2057,25 @@ export default {
         // 失败时（is_win=0, earned_reward=0）不触发唯一索引，正常记录。
         let rewardInserted = false;
         if (winFlag && reward > 0) {
-          const ins = await db.prepare(`INSERT OR IGNORE INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
-            VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
-            .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+          const ins = seasonId === CURRENT_DUNGEON_SEASON
+            ? await db.prepare(`INSERT OR IGNORE INTO dungeon_season_attempts (device_hash, season_id, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+                VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))`)
+                .bind(device_hash, seasonId, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run()
+            : await db.prepare(`INSERT OR IGNORE INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+                VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
+                .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
           rewardInserted = !!(ins.meta && ins.meta.changes > 0);
         } else {
           // 失败或 reward=0：直接写记录（不触发唯一索引，因 earned_reward=0）
-          await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
-            VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
-            .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+          if (seasonId === CURRENT_DUNGEON_SEASON) {
+            await db.prepare(`INSERT INTO dungeon_season_attempts (device_hash, season_id, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+              VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))`)
+              .bind(device_hash, seasonId, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+          } else {
+            await db.prepare(`INSERT INTO dungeon_attempts (device_hash, dungeon_id, stage_id, correct_count, total_count, rating, is_win, earned_reward, created_at)
+              VALUES (?,?,?,?,?,?,?,?,datetime('now'))`)
+              .bind(device_hash, dungeon_id, sid, correct, answered, validRating, winFlag, reward).run();
+          }
         }
 
         const actualReward = rewardInserted ? reward : 0;
@@ -2026,14 +2091,36 @@ export default {
           const rp = Math.max(0, Math.min(999999, parseInt(rank_points) || 0));
           const cs = Math.max(0, Math.min(9999, parseInt(current_streak) || 0));
           const ms = Math.max(0, Math.min(9999, parseInt(max_streak) || 0));
-          await db.prepare(`UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?,
-                            player_level=?, exp=?, rank_tier=?, rank_points=?, current_streak=?, max_streak=?, updated_at=datetime('now') WHERE device_hash=?`)
-            .bind(actualReward, answered, correct, lv, expVal, rt, rp, cs, ms, device_hash).run();
+          if (seasonId === CURRENT_DUNGEON_SEASON) {
+            // Shared wallet is permanent. All progression/ranking fields live only in the season
+            // table so an older client cannot merge the new season into archived standings.
+            await db.prepare(`UPDATE dungeon_players SET gold=gold+?, updated_at=datetime('now') WHERE device_hash=?`)
+              .bind(actualReward, device_hash).run();
+            await db.prepare(`INSERT INTO dungeon_season_stats (device_hash, season_id, player_level, exp, rank_tier, rank_points, total_answered, total_correct, current_streak, max_streak)
+              VALUES (?,?,?,?,?,?,?,?,?,?)
+              ON CONFLICT(device_hash, season_id) DO UPDATE SET player_level=excluded.player_level, exp=excluded.exp,
+                rank_tier=excluded.rank_tier, rank_points=excluded.rank_points,
+                total_answered=dungeon_season_stats.total_answered+excluded.total_answered,
+                total_correct=dungeon_season_stats.total_correct+excluded.total_correct,
+                current_streak=excluded.current_streak, max_streak=MAX(dungeon_season_stats.max_streak, excluded.max_streak)`)
+              .bind(device_hash, seasonId, lv, expVal, rt, rp, answered, correct, cs, ms).run();
+          } else {
+            await db.prepare(`UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?,
+                              player_level=?, exp=?, rank_tier=?, rank_points=?, current_streak=?, max_streak=?, updated_at=datetime('now') WHERE device_hash=?`)
+              .bind(actualReward, answered, correct, lv, expVal, rt, rp, cs, ms, device_hash).run();
+          }
         }
 
         // 更新副本通关状态（仅首次胜利推进）
         if (winFlag && rewardInserted) {
-          const progress = await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dungeon_id).first();
+          if (seasonId === CURRENT_DUNGEON_SEASON) {
+            const initialStatus = dungeon_id === 'dungeon-01' ? 'unlocked' : 'locked';
+            await db.prepare('INSERT OR IGNORE INTO dungeon_season_progress (device_hash, season_id, dungeon_id, status, total_stages) VALUES (?,?,?,?,5)')
+              .bind(device_hash, seasonId, dungeon_id, initialStatus).run();
+          }
+          const progress = seasonId === CURRENT_DUNGEON_SEASON
+            ? await db.prepare('SELECT * FROM dungeon_season_progress WHERE device_hash=? AND season_id=? AND dungeon_id=?').bind(device_hash, seasonId, dungeon_id).first()
+            : await db.prepare('SELECT * FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dungeon_id).first();
           if (progress) {
             const totalStages = progress.total_stages || 5;
             const newCompleted = isBossStage ? totalStages : Math.min(totalStages, (progress.completed_stages || 0) + 1);
@@ -2044,8 +2131,13 @@ export default {
             const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
             const bestRating = (!progress.best_rating || (ratingOrder[validRating]||0) > (ratingOrder[progress.best_rating]||0))
               ? validRating : (progress.best_rating || 'D');
-            await db.prepare(`UPDATE dungeon_progress SET status=?, completed_stages=?, current_stage_id=?, boss_defeated=?, best_score=?, best_rating=?, updated_at=datetime('now') WHERE device_hash=? AND dungeon_id=?`)
-              .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
+            if (seasonId === CURRENT_DUNGEON_SEASON) {
+              await db.prepare(`UPDATE dungeon_season_progress SET status=?, completed_stages=?, current_stage_id=?, boss_defeated=?, best_score=?, best_rating=?, updated_at=datetime('now') WHERE device_hash=? AND season_id=? AND dungeon_id=?`)
+                .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, seasonId, dungeon_id).run();
+            } else {
+              await db.prepare(`UPDATE dungeon_progress SET status=?, completed_stages=?, current_stage_id=?, boss_defeated=?, best_score=?, best_rating=?, updated_at=datetime('now') WHERE device_hash=? AND dungeon_id=?`)
+                .bind(status, newCompleted, sid, bossDefeated, bestScore, bestRating, device_hash, dungeon_id).run();
+            }
           }
         }
         // 记写次数（reportBattle 约 5 次写：rate_limits/attempts/players/progress/meta），让熔断计数接近真实
@@ -2055,6 +2147,7 @@ export default {
 
       // ── GET /api/dungeon/leaderboard ──
       if (path === '/api/dungeon/leaderboard' && request.method === 'GET') {
+        const seasonId = normalizeDungeonSeason(url.searchParams.get('season_id'));
         const scope = url.searchParams.get('scope') || 'class';
         const type = url.searchParams.get('type') || 'power';
         const cc = url.searchParams.get('class_code') || '';
@@ -2082,7 +2175,35 @@ export default {
         let query, params;
         const classFilter = (scope === 'class' && cc) ? 'AND p.class_code = ?' : '';
 
-        if (type === 'wins' || type === 'warrior') {
+        if (seasonId === CURRENT_DUNGEON_SEASON && (type === 'wins' || type === 'warrior')) {
+          const selectValue = type === 'warrior'
+            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.rating = 'S' THEN 1 END) * 15) as value"
+            : 'COUNT(*) as value';
+          const whereExtra = type === 'wins' ? 'AND a.is_win = 1' : '';
+          query = `SELECT a.device_hash, p.display_name, p.school, COALESCE(s.rank_tier,1) rank_tier, ${selectValue}
+                   FROM dungeon_season_attempts a JOIN dungeon_players p ON a.device_hash=p.device_hash
+                   LEFT JOIN dungeon_season_stats s ON s.device_hash=p.device_hash AND s.season_id=?
+                   WHERE a.season_id=? AND p.status='active' ${classFilter} ${whereExtra}
+                   GROUP BY a.device_hash ORDER BY value DESC LIMIT 50`;
+          params = (scope === 'class' && cc) ? [seasonId, seasonId, cc] : [seasonId, seasonId];
+        } else if (seasonId === CURRENT_DUNGEON_SEASON && (type === 'progress' || type === 'conquest' || type === 'ss_count')) {
+          const predicate = type === 'ss_count' ? "dp.best_rating='SS'" : "dp.status='cleared'";
+          query = `SELECT dp.device_hash, p.display_name, p.school, COALESCE(s.rank_tier,1) rank_tier, COUNT(DISTINCT dp.dungeon_id) value
+                   FROM dungeon_season_progress dp JOIN dungeon_players p ON dp.device_hash=p.device_hash
+                   LEFT JOIN dungeon_season_stats s ON s.device_hash=p.device_hash AND s.season_id=?
+                   WHERE dp.season_id=? AND p.status='active' ${classFilter} AND ${predicate}
+                   GROUP BY dp.device_hash ORDER BY value DESC LIMIT 50`;
+          params = (scope === 'class' && cc) ? [seasonId, seasonId, cc] : [seasonId, seasonId];
+        } else if (seasonId === CURRENT_DUNGEON_SEASON) {
+          const valueExpr = type === 'streak' ? 's.max_streak' : type === 'badge'
+            ? '(SELECT COUNT(*) FROM dungeon_season_badges b WHERE b.device_hash=p.device_hash AND b.season_id=?)'
+            : 's.rank_points';
+          query = `SELECT p.device_hash, p.display_name, p.school, COALESCE(s.rank_tier,1) rank_tier, COALESCE(${valueExpr},0) value
+                   FROM dungeon_season_stats s JOIN dungeon_players p ON s.device_hash=p.device_hash
+                   WHERE s.season_id=? AND p.status='active' ${classFilter} ORDER BY value DESC LIMIT 50`;
+          const prefix = type === 'badge' ? [seasonId, seasonId] : [seasonId];
+          params = (scope === 'class' && cc) ? [...prefix, cc] : prefix;
+        } else if (type === 'wins' || type === 'warrior') {
           // created_at 是 datetime('now') 格式（"YYYY-MM-DD HH:MM:SS"），
           // 边界值必须同格式，否则字符串比较在 'T' vs ' ' 处出错，边界日数据被误排除
           const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().replace('T', ' ').slice(0, 19);
@@ -2146,7 +2267,7 @@ export default {
           if (idx >= 0) playerEntry = { rank: idx + 1, ...sanitizeEntry(entries.results[idx]) };
         }
         return new Response(JSON.stringify({
-          success: true, scope, type,
+          success: true, scope, type, season: seasonId,
           entries: (entries.results || []).map((e, i) => ({ rank: i + 1, ...sanitizeEntry(e) })),
           playerEntry,
         }), { headers: cors });

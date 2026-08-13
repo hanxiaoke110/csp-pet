@@ -68,6 +68,24 @@ export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRE
       if (question.options?.some(option => /\b\d+\s+um\s*=\s*sum\b/.test(String(option)))) {
         failures.push(`ocrCodeResidue=${logicalName}:${question.id}`);
       }
+      if (logicalName === 'super-cspj.json') {
+        if (!['reading', 'fillBlank'].includes(question.type)
+            || (!String(question.code || '').trim() && !(question.assets?.length > 0))
+            || !(question.children?.length > 0)) {
+          failures.push(`invalidSuperStructure=${question.id}`);
+        } else {
+          for (const child of question.children) {
+            if (!String(child.label || '').trim()
+                || !(child.options?.length >= 2)
+                || child.options.some(option => !String(option).trim())
+                || !Number.isInteger(child.correctIndex)
+                || child.correctIndex < 0
+                || child.correctIndex >= child.options.length) {
+              failures.push(`invalidSuperChild=${question.id}:${child.id || child.position || '?'}`);
+            }
+          }
+        }
+      }
     }
   }
   return { ready: failures.length === 0, failures: [...new Set(failures)] };

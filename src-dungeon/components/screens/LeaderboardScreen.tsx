@@ -4,6 +4,7 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import { getLeaderboard } from '../../utils/api';
 import { getRankName } from '../../utils/gameLogic';
 import type { LeaderboardType, LeaderboardScope, LeaderboardEntry } from '../../types/dungeon';
+import { CURRENT_DUNGEON_SEASON_NAME } from '../../data/season';
 
 const SCHOOL_ICONS: Record<string, string> = {
   cultivation: '🏯', tactical: '🎯', star: '🌌', minecraft: '⛏️', code: '💻', dream: '✨',
@@ -78,7 +79,7 @@ export default function LeaderboardScreen() {
   return (
     <div className="dungeon-page-bg dungeon-subpage" style={{
       minHeight: '100vh',
-      backgroundImage: 'linear-gradient(180deg, rgba(5, 10, 18, 0.35), rgba(7, 10, 16, 0.62) 46%, rgba(5, 6, 9, 0.88)), url("/dungeon-art-v3/map.webp")',
+      backgroundImage: 'linear-gradient(180deg, rgba(5, 10, 18, 0.42), rgba(7, 10, 16, 0.70) 46%, rgba(5, 6, 9, 0.92)), url("/dungeon-art-v3/season-2-key-art.webp")',
       padding: '16px',
     }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
@@ -90,7 +91,7 @@ export default function LeaderboardScreen() {
           <h2 style={{
             fontFamily: 'var(--pixel-font)', fontSize: '14px', color: 'var(--gold)',
           }}>
-            🏆 排行榜
+            {CURRENT_DUNGEON_SEASON_NAME} · 赛季榜
           </h2>
           <div style={{ width: '60px' }} />
         </div>

@@ -55,7 +55,10 @@ export default function TrialSupplyScreen() {
                     {equipped ? '已装备' : '装备'}
                   </button>
                 ) : (
-                  <button className="pixel-btn primary" disabled={coins < item.cost} onClick={() => buy(item.id)} style={{ fontSize: '11px' }}>
+                  <button className="pixel-btn primary" disabled={coins < item.cost} onClick={() => {
+                    if (!window.confirm(`确认花费 ${item.cost} 通用金币购买「${item.name}」？`)) return;
+                    if (!buy(item.id)) window.alert('购买失败，请检查金币余额或是否已拥有。');
+                  }} style={{ fontSize: '11px' }}>
                     购买 {item.cost} 金币
                   </button>
                 )}

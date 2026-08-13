@@ -3,6 +3,7 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import { usePetStore } from '../../../src/stores/petStore';
 import { getRankName } from '../../utils/gameLogic';
 import type { DungeonDefinition, DungeonProgress } from '../../types/dungeon';
+import { CURRENT_DUNGEON_SEASON_NAME } from '../../data/season';
 
 export default function DungeonMap() {
   const coins = usePetStore(s => s.coins);
@@ -32,7 +33,7 @@ export default function DungeonMap() {
   return (
     <div className="dungeon-page-bg dungeon-map-page" style={{
       minHeight: '100vh',
-      backgroundImage: 'linear-gradient(180deg, rgba(5, 15, 20, 0.35) 0%, rgba(4, 12, 14, 0.58) 50%, rgba(3, 7, 9, 0.86) 100%), url("/dungeon-art-v3/map.webp")',
+      backgroundImage: 'linear-gradient(180deg, rgba(5, 15, 20, 0.40) 0%, rgba(4, 12, 14, 0.66) 50%, rgba(3, 7, 9, 0.92) 100%), url("/dungeon-art-v3/season-2-key-art.webp")',
       padding: '16px',
     }}>
       {/* Status bar */}
@@ -92,10 +93,10 @@ export default function DungeonMap() {
           fontFamily: 'var(--pixel-font)', fontSize: '14px', color: 'var(--gold)',
           textShadow: '0 0 10px rgba(255,215,0,0.2)',
         }}>
-          🗺️ 潜龙秘境 · 世界地图
+          潜龙秘境 · {CURRENT_DUNGEON_SEASON_NAME}
         </h2>
         <p style={{ color: 'var(--text-dim)', fontSize: '11px', marginTop: '6px' }}>
-          已征服：{progress.filter(p => p.status === 'cleared').length}/8 副本
+          第二赛季 · 已征服 {progress.filter(p => p.status === 'cleared').length}/8 副本
         </p>
         {trialInventory.equippedTitle === 'title-data-scout' && (
           <div style={{ display: 'inline-block', marginTop: '6px', padding: '3px 8px', border: '1px solid #2dd4bf', color: '#99f6e4', fontSize: '10px' }}>数据侦察员</div>
@@ -117,11 +118,13 @@ export default function DungeonMap() {
           const locked = !unlocked;
 
           return (
-            <div
+            <button
               key={dungeon.id}
+              type="button"
               className={`pixel-card dungeon-map-card ${locked ? 'is-locked' : ''}`}
               onClick={() => handleEnterDungeon(dungeon)}
               style={{
+                width: '100%', textAlign: 'left', color: 'inherit', font: 'inherit',
                 cursor: locked ? 'not-allowed' : 'pointer',
                 opacity: locked ? 0.5 : 1,
                 borderColor: locked ? 'var(--border-pixel)' : cleared ? dungeon.color : 'var(--gold-dark)',
@@ -202,7 +205,7 @@ export default function DungeonMap() {
                   </div>
                 )}
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

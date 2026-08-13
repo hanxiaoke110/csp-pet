@@ -12,7 +12,8 @@ export type WindowSkin =
   | 'wanmu'
   | 'suanfa'
   | 'tiansuan'
-  | 'qianlong';
+  | 'qianlong'
+  | 'shanhai';
 
 export type WindowSkinCategory = 'basic' | 'learning' | 'trial';
 export type WindowSkinUnlock =
@@ -110,6 +111,10 @@ export const WINDOW_SKINS: ReadonlyArray<WindowSkinDefinition> = [
     image: '/dungeon-art-v2/dungeon-08-bg.webp', category: 'trial',
     unlock: { type: 'dungeon', dungeonId: 'dungeon-08', dungeonName: '潜龙觉醒' },
   },
+  {
+    id: 'shanhai', name: '山海新章', description: '云岭古城与天工机关',
+    image: '/dungeon-art-v3/season-2-key-art.webp', category: 'trial', unlock: { type: 'default' },
+  },
 ];
 
 export const WINDOW_SKIN_STORAGE_KEY = 'csp_window_skin';
@@ -175,6 +180,7 @@ export function collectUnlockedWindowSkins(
   const unlocked = new Set<WindowSkin>(existing);
   unlocked.add('default');
   unlocked.add('academy');
+  unlocked.add('shanhai');
   for (const skin of WINDOW_SKINS) {
     if (getWindowSkinProgress(skin, metrics).unlocked) unlocked.add(skin.id);
   }
@@ -183,7 +189,7 @@ export function collectUnlockedWindowSkins(
 
 export function loadUnlockedWindowSkins(): WindowSkin[] {
   const known = new Set(WINDOW_SKINS.map(skin => skin.id));
-  const unlocked = new Set<WindowSkin>(['default', 'academy']);
+  const unlocked = new Set<WindowSkin>(['default', 'academy', 'shanhai']);
   try {
     const saved = JSON.parse(localStorage.getItem(WINDOW_SKIN_UNLOCKED_KEY) || '[]');
     if (Array.isArray(saved)) {

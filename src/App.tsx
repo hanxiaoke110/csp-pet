@@ -168,7 +168,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.33';
+  const VER = '1.7.34';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -179,11 +179,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>⚔️ 修复试炼场偶发“题库准备中”导致战斗无法继续</div>
-          <div>🧹 残缺题会在出题前自动淘汰</div>
-          <div>🛡️ 新增离线应急题，网络异常也能继续战斗</div>
-          <div>✅ 判断题只显示“正确 / 错误”，不再出现空 C、D</div>
-          <div>📚 试炼场已校验题目更新至 849 道</div>
+          <div>🏔️ 智子试炼场开启“山海新章”第二赛季</div>
+          <div>🏆 新赛季关卡与排行榜重新起跑，智子、金币和已购物品保留</div>
+          <div>🧭 八个副本按知识点分区，后期加入综合真题挑战</div>
+          <div>🎨 试炼场地图、战斗界面与客户端视觉全面升级</div>
+          <div>🖼️ 新增“山海新章”窗口皮肤，可在侧边栏直接切换</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

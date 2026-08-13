@@ -1,4 +1,4 @@
-export const CHANNEL_RULES_REVISION = 3;
+export const CHANNEL_RULES_REVISION = 4;
 
 // These program sets were re-imported from local source copies and then matched
 // exactly against the canonical code, children and answers. Other legacy program

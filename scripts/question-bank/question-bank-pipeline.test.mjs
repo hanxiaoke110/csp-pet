@@ -160,6 +160,46 @@ describe('release cutover gate', () => {
     expect(result.ready).toBe(true);
     expect(result.failures).toEqual([]);
   });
+
+  it('blocks a super snapshot with missing child options', () => {
+    const summary = JSON.stringify({
+      publishedBlockers: 0,
+      channelCounts: { daily: 120, super: 5, dungeon: 120 },
+    });
+    const papers = Array.from({ length: 12 }, (_, index) => ({
+      id: `paper-${index}`,
+      questionIds: ['a', 'b', 'c', 'd', 'e'],
+    }));
+    const exam = JSON.stringify({ papers });
+    const superSnapshot = JSON.stringify({
+      questions: [{
+        id: 'broken-super',
+        type: 'reading',
+        code: 'int main() {}',
+        assets: [],
+        verificationStatus: 'auto_verified',
+        children: [{ id: 'child-1', label: '输出是什么？', options: [], correctIndex: 0 }],
+      }],
+    });
+    const hash = value => createHash('sha256').update(value).digest('hex');
+    const manifest = {
+      files: {
+        'verification-summary.json': { sha256: hash(summary) },
+        'exam-manifests.json': { sha256: hash(exam) },
+        'super-cspj.json': { sha256: hash(superSnapshot) },
+      },
+    };
+    const result = evaluateReleaseGate({
+      manifest,
+      files: {
+        'verification-summary.json': summary,
+        'exam-manifests.json': exam,
+        'super-cspj.json': superSnapshot,
+      },
+    });
+    expect(result.ready).toBe(false);
+    expect(result.failures).toContain('invalidSuperChild=broken-super:child-1');
+  });
 });
 
 describe('verified channel publishing', () => {

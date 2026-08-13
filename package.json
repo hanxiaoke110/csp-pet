@@ -1,7 +1,7 @@
 {
   "name": "csp-desktop-pet",
   "private": true,
-  "version": "1.7.33",
+  "version": "1.7.34",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -45,6 +45,7 @@
     "@tauri-apps/plugin-updater": "^2.10.1",
     "dompurify": "^3.4.10",
     "highlight.js": "^11.11.1",
+    "lucide-react": "^0.468.0",
     "pdfjs-dist": "^6.1.200",
     "phaser": "^3.90.0",
     "react": "^19.1.0",

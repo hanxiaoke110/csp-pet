@@ -12,6 +12,7 @@ import {
   FIRST_CLEAR_MULTIPLIER,
   BOSS_CLEAR_EXP, BOSS_CLEAR_GOLD, STAGE_CLEAR_EXP, STAGE_CLEAR_GOLD,
 } from '../utils/gameLogic';
+import { CURRENT_DUNGEON_SEASON_ID, SEASON_RESET_STORAGE_KEYS } from '../data/season';
 
 // ── Week start helper ──
 function getWeekStart(): string {
@@ -61,7 +62,7 @@ function defaultPlayer(): PlayerState {
     maxStreak: 0,
     loginStreak: 0,
     lastLoginDate: '',
-    season: '2026-autumn',
+    season: CURRENT_DUNGEON_SEASON_ID,
   };
 }
 
@@ -122,6 +123,7 @@ interface DungeonState {
 
   // Dungeon
   initDungeons: (dungeons: DungeonDefinition[]) => void;
+  migrateSeason: (dungeons: DungeonDefinition[]) => boolean;
   initProgress: (progress: DungeonProgress[]) => void;
   setQuestionBank: (bank: Question[]) => void;
   setQuestionMapping: (mapping: Record<string, Record<string, string[]>>) => void;
@@ -286,6 +288,52 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   }),
 
   initDungeons: (dungeons) => set({ dungeons }),
+  migrateSeason: (dungeons) => {
+    const state = get();
+    if (state.player.season === CURRENT_DUNGEON_SEASON_ID) return false;
+    const previousSeason = state.player.season || 'legacy';
+    try {
+      for (const key of SEASON_RESET_STORAGE_KEYS) {
+        const value = localStorage.getItem(key);
+        if (value !== null) localStorage.setItem(`dungeon_archive_${previousSeason}_${key}`, value);
+      }
+    } catch { /* archive is best-effort; migration itself must still complete */ }
+
+    const progress: DungeonProgress[] = dungeons.map(dungeon => ({
+      dungeonId: dungeon.id,
+      status: dungeon.requiredDungeon ? 'locked' : 'unlocked',
+      completedStages: 0,
+      totalStages: dungeon.stages.length,
+      currentStageId: null,
+      bossDefeated: false,
+      bestScore: 0,
+      bestRating: 'D',
+    }));
+    set({
+      player: {
+        ...state.player,
+        season: CURRENT_DUNGEON_SEASON_ID,
+        playerLevel: 1,
+        exp: 0,
+        expToNext: expToNextLevel(1),
+        rankTier: 1,
+        rankPoints: 0,
+        totalAnswered: 0,
+        totalCorrect: 0,
+        currentStreak: 0,
+        maxStreak: 0,
+      },
+      dungeonProgress: progress,
+      earnedBadges: [],
+      weakPoints: {},
+      mistakeNotebook: [],
+      _firstClears: {},
+      weeklyChallenges: { used: 0, limit: 5, resetAt: getWeekStart() },
+      schoolPassiveDaily: { used: 0, limit: 50, resetAt: todayStr() },
+    });
+    get().saveToLocalStorage();
+    return true;
+  },
   initProgress: (progress) => set({ dungeonProgress: progress }),
   setQuestionBank: (bank) => set({ questionBank: bank }),
   setQuestionMapping: (mapping) => set({ questionMapping: mapping }),

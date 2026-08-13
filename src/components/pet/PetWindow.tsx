@@ -219,54 +219,91 @@ export default function PetWindow() {
   useEffect(() => {
     const win = getCurrentWindow();
     const isMac = /Mac/i.test(navigator.userAgent);
-    let ignoring = true;
+    let appliedIgnoring = true;
+    let desiredIgnoring = true;
+    let transition: Promise<void> | null = null;
     let ignoreTimer: ReturnType<typeof setTimeout> | null = null;
-    let latestShouldIgnore = false;
+    let sampling = false;
     let disposed = false;
-    const apply = async () => {
-      const info = stageInfoRef.current;
-      if (!info) return;
-      // 顺带刷新缩放：运行途中系统 DPI 变更（插拔外接显示器等）时命中数学仍保持正确
-      const [cursor, scale] = await Promise.all([cursorPosition(), win.scaleFactor()]);
-      info.scale = Number(scale) || info.scale;
-      if (disposed) return;
-      const s = info.scale;
-      const mainScale = mainScaleRef.current || s;
-      const winOx = isMac ? info.physX / s : info.physX;
-      const winOy = isMac ? info.physY / s : info.physY;
-      const cx = isMac ? cursor.x / mainScale : cursor.x;
-      const cy = isMac ? cursor.y / mainScale : cursor.y;
-      const k = isMac ? 1 : s;
-      const over = petsRef.current.some(({ slot }) => {
-        const el = petRefs.current.get(slot);
-        if (!el) return false;
-        const rect = el.getBoundingClientRect();
-        return cx >= winOx + rect.left * k
-          && cx <= winOx + rect.right * k
-          && cy >= winOy + rect.top * k
-          && cy <= winOy + rect.bottom * k;
-      });
-      // 拖拽途中光标可能短暂移出精灵（窗口跟随有延迟），此时不能切穿透
-      const shouldIgnore = !over && !dragRef.current;
-      latestShouldIgnore = shouldIgnore;
-      if (shouldIgnore !== ignoring) {
-        if (shouldIgnore) {
-          // 切穿透延迟 400ms：光标短暂移出精灵（拖拽抖动/快速移动）时不切，
-          // 避免全屏透明窗口反复切换穿透导致 Windows 合成器黑屏
-          if (ignoreTimer === null) {
-            ignoreTimer = setTimeout(() => {
-              ignoreTimer = null;
-              if (latestShouldIgnore) {
-                ignoring = true;
-                win.setIgnoreCursorEvents(true).catch(() => {});
-              }
-            }, 400);
-          }
-        } else {
-          if (ignoreTimer !== null) { clearTimeout(ignoreTimer); ignoreTimer = null; }
-          ignoring = false;
-          await win.setIgnoreCursorEvents(false);
+
+    const applyTransition = (target: boolean) => {
+      if (disposed || transition || target !== desiredIgnoring || target === appliedIgnoring) return;
+      let succeeded = false;
+      transition = win.setIgnoreCursorEvents(target)
+        .then(() => {
+          succeeded = true;
+          appliedIgnoring = target;
+        })
+        .catch(() => { /* 下一轮坐标采样会重试，不能提前修改本地状态 */ })
+        .finally(() => {
+          transition = null;
+          if (succeeded && !disposed && desiredIgnoring !== appliedIgnoring) reconcile();
+        });
+    };
+
+    const reconcile = () => {
+      if (disposed || transition || desiredIgnoring === appliedIgnoring) return;
+      const target = desiredIgnoring;
+      if (target) {
+        if (ignoreTimer === null) {
+          // 给拖拽结束留一点缓冲，避免 Windows 合成器频繁切换透明窗口状态。
+          // 120ms 足以吸收指针抖动，又不会明显吞掉用户松手后的下一次点击。
+          ignoreTimer = setTimeout(() => {
+            ignoreTimer = null;
+            applyTransition(true);
+          }, 120);
         }
+        return;
+      }
+      if (!target && ignoreTimer !== null) {
+        clearTimeout(ignoreTimer);
+        ignoreTimer = null;
+      }
+      applyTransition(target);
+    };
+
+    const setDesiredIgnoring = (next: boolean) => {
+      desiredIgnoring = next;
+      if (!next && ignoreTimer !== null) {
+        clearTimeout(ignoreTimer);
+        ignoreTimer = null;
+      }
+      reconcile();
+    };
+
+    const apply = async () => {
+      if (sampling) return;
+      sampling = true;
+      const info = stageInfoRef.current;
+      if (!info) {
+        sampling = false;
+        return;
+      }
+      try {
+        // 顺带刷新缩放：运行途中系统 DPI 变更（插拔外接显示器等）时命中数学仍保持正确
+        const [cursor, scale] = await Promise.all([cursorPosition(), win.scaleFactor()]);
+        info.scale = Number(scale) || info.scale;
+        if (disposed) return;
+        const s = info.scale;
+        const mainScale = mainScaleRef.current || s;
+        const winOx = isMac ? info.physX / s : info.physX;
+        const winOy = isMac ? info.physY / s : info.physY;
+        const cx = isMac ? cursor.x / mainScale : cursor.x;
+        const cy = isMac ? cursor.y / mainScale : cursor.y;
+        const k = isMac ? 1 : s;
+        const over = petsRef.current.some(({ slot }) => {
+          const el = petRefs.current.get(slot);
+          if (!el) return false;
+          const rect = el.getBoundingClientRect();
+          return cx >= winOx + rect.left * k
+            && cx <= winOx + rect.right * k
+            && cy >= winOy + rect.top * k
+            && cy <= winOy + rect.bottom * k;
+        });
+        // 拖拽途中光标可能短暂移出精灵（窗口跟随有延迟），此时不能切穿透。
+        setDesiredIgnoring(!over && !dragRef.current);
+      } finally {
+        sampling = false;
       }
     };
     const timer = window.setInterval(() => { apply().catch(() => {}); }, 150);

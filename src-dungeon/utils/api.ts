@@ -1,5 +1,6 @@
-// 潜龙闭关 — API 客户端
+import { CURRENT_DUNGEON_SEASON_ID } from '../data/season';
 
+// 潜龙闭关 — API 客户端
 const API_BASE = 'https://api.cspstudy.top';
 
 function getDeviceHash(): string {
@@ -52,6 +53,7 @@ async function apiCall<T>(
   if (method === 'GET') {
     url.searchParams.set('device_hash', dh);
     if (cc) url.searchParams.set('class_code', cc);
+    url.searchParams.set('season_id', CURRENT_DUNGEON_SEASON_ID);
   }
 
   const headers: Record<string, string> = {
@@ -61,7 +63,7 @@ async function apiCall<T>(
   const options: RequestInit = { method, headers };
 
   if (body && method !== 'GET') {
-    options.body = JSON.stringify({ ...body, device_hash: dh, class_code: cc });
+    options.body = JSON.stringify({ ...body, device_hash: dh, class_code: cc, season_id: CURRENT_DUNGEON_SEASON_ID });
   }
 
   const resp = await fetch(url.toString(), options);

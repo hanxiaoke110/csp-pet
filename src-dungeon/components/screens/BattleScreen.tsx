@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { SKILLS, getSkillById, type SkillDefinition } from '../../data/skills';
-import { getTrustedQuestionImage, pickQuestionsByTag, pickBigMoveQuestions, pickFallbackChoiceQuestions, pickEmergencyQuestions, getDungeonDifficulty, loadQuestionBank } from '../../utils/questionLoader';
+import { getTrustedQuestionImage, pickStagePlanQuestions, loadQuestionBank } from '../../utils/questionLoader';
 import { calculateStats, calculateTrialPlayerStats } from '../../utils/combatLogic';
 import {
   applySchoolAnswerPassive,
@@ -414,28 +414,10 @@ export default function BattleScreen() {
     };
   }, []);
 
-  // 技能 → 题目：知识点匹配优先，大招回退选择题，最后兜底任意可用选择题
-  const pickSkillQuestions = useCallback((skill: SkillDefinition, bank: Question[]): Question[] => {
-    const isBigMove = skill.id === 'skill-4';
-    const diffRange = getDungeonDifficulty(dungeonId || '');
-    let questions = isBigMove
-      ? pickBigMoveQuestions(bank, 1)
-      : pickQuestionsByTag(bank, skill.knowledgeTag, 1, diffRange);
-    if (questions.length === 0) {
-      // 大招无 reading/fillBlank 题时回退到普通选择题
-      const fallback = isBigMove ? pickQuestionsByTag(bank, skill.knowledgeTag, 1, diffRange) : [];
-      questions.push(...fallback);
-    }
-    if (questions.length === 0) {
-      // 知识点/难度覆盖缺口：兜底任意可用选择题，避免技能完全无法使用
-      questions = pickFallbackChoiceQuestions(bank, 1, diffRange);
-    }
-    if (questions.length === 0) {
-      // 最后使用随安装包发布的人工核对题，网络或缓存异常也不会卡住战斗。
-      questions = pickEmergencyQuestions(skill.knowledgeTag, 1, diffRange);
-    }
-    return questions;
-  }, [dungeonId]);
+  // 技能只决定战斗效果，当前小关决定题目范围，避免跨副本抽到无关知识点。
+  const pickSkillQuestions = useCallback((_skill: SkillDefinition, bank: Question[]): Question[] => (
+    pickStagePlanQuestions(bank, dungeonId || '', stageId || getBossStage(dungeon)?.id || '', 1)
+  ), [dungeonId, stageId, dungeon]);
 
   const handlePhaserEvent = useCallback(async (event: string, data: unknown) => {
     switch (event) {
@@ -468,7 +450,7 @@ export default function BattleScreen() {
           setCurrentQuestion(null);
           setSelectedSkillId(null);
           setNoticeSkillId(skillId);
-          setBattleNotice('题库正在准备中，请稍后重新选择技能。');
+          setBattleNotice('当前关卡没有可用题目，已安全取消本次技能，不消耗能量。');
           return;
         }
 

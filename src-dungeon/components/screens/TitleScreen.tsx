@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { readDesktopBinding, isBindingComplete } from '../../utils/autoRegister';
 import { navigateToMainApp } from '../../utils/routeBridge';
+import { CURRENT_DUNGEON_SEASON_NAME } from '../../data/season';
 
 // 智子试炼场标题页：复用桌面端「班级绑定」身份，不再有独立注册/登录流程。
 // - 已建档（本地 dungeon_player 有昵称+班级码）→ 继续修炼，进地图
@@ -32,18 +33,16 @@ export default function TitleScreen() {
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
       justifyContent: 'center', minHeight: '100vh',
-      background: "linear-gradient(180deg, rgba(5,12,20,0.28) 0%, rgba(4,10,16,0.55) 45%, rgba(2,5,8,0.85) 100%), url('/dungeon-art-v3/home.webp') center/cover no-repeat",
+      background: "linear-gradient(180deg, rgba(5,12,20,0.12) 0%, rgba(4,10,16,0.45) 48%, rgba(2,5,8,0.92) 100%), url('/dungeon-art-v3/season-2-key-art.webp') center/cover no-repeat",
       padding: '20px', textAlign: 'center', gap: '24px',
     }}>
-      <div style={{ fontSize: '48px', opacity: 0.6 }}>🐉</div>
-
       <div>
         <h1 style={{
           fontFamily: 'var(--pixel-font)', fontSize: 'clamp(16px, 4vw, 28px)',
           color: 'var(--gold)', textShadow: '0 0 20px rgba(255,215,0,0.4), 0 2px 4px rgba(0,0,0,0.8)',
           letterSpacing: '4px', lineHeight: 1.8,
         }}>
-          潜 龙 闭 关
+          智 子 试 炼 场
         </h1>
         <h2 style={{
           fontFamily: 'var(--pixel-font)', fontSize: 'clamp(10px, 2.5vw, 16px)',
@@ -51,7 +50,7 @@ export default function TitleScreen() {
           textShadow: '0 0 10px rgba(204,153,51,0.3)',
           letterSpacing: '3px',
         }}>
-          学 霸 副 本 攻 略
+          第二赛季 · {CURRENT_DUNGEON_SEASON_NAME}
         </h2>
       </div>
 
@@ -59,8 +58,8 @@ export default function TitleScreen() {
         color: 'var(--text-dim)', fontSize: '13px', maxWidth: '400px',
         lineHeight: 1.8,
       }}>
-        CSP-J 初赛备战 · 沉浸式闯关修炼<br />
-        将枯燥的知识点背诵，化为斩妖除魔的修行
+        八大知识副本重新开启，关卡与排行榜从零出发<br />
+        桌宠智子及其等级经验、通用金币、商城购买与皮肤均会保留
       </p>
 
       {hasRegistered ? (
@@ -100,12 +99,8 @@ export default function TitleScreen() {
         </>
       )}
 
-      <div style={{ fontSize: '24px', opacity: 0.3, marginTop: '20px' }}>
-        ⚔️ 🛡️ 🏰 📜 🔮
-      </div>
-
-      <p style={{ color: '#444', fontSize: '10px', position: 'absolute', bottom: '20px' }}>
-        v1.0 · 潜龙秘境 · 韩老师出品
+      <p style={{ color: 'rgba(238,245,233,.62)', fontSize: '11px', position: 'absolute', bottom: '20px' }}>
+        赛季资产保护：智子与通用金币不重置
       </p>
     </div>
   );

@@ -3,6 +3,7 @@ import { useDungeonStore } from './dungeonStore';
 import { usePetStore } from '../../src/stores/petStore';
 import { expToNextLevel } from '../utils/gameLogic';
 import type { BattleState, DungeonProgress, PlayerState } from '../types/dungeon';
+import { CURRENT_DUNGEON_SEASON_ID } from '../data/season';
 
 function makeLocalStorage() {
   const data = new Map<string, string>();
@@ -118,6 +119,40 @@ beforeEach(() => {
 });
 
 describe('智子试炼场核心结算', () => {
+  it('新赛季只重置试炼数据，不影响桌宠金币与试炼道具', () => {
+    usePetStore.setState({ coins: 2680 });
+    useDungeonStore.setState({
+      player: makePlayer({ season: '2026-autumn', playerLevel: 15, exp: 488, rankTier: 6, rankPoints: 800 }),
+      dungeonProgress: [makeProgress({ status: 'cleared', completedStages: 5, bossDefeated: true, bestRating: 'SS' })],
+      earnedBadges: ['first_clear'],
+      weakPoints: { '循环': 3 },
+      trialInventory: { hintTickets: 4, healingPotions: 2, ownedCosmetics: ['frame-crystal'], equippedTitle: null, equippedAvatarFrame: 'frame-crystal' },
+    });
+
+    const migrated = useDungeonStore.getState().migrateSeason([{
+      id: 'dungeon-01', name: '天机阁', subtitle: '', icon: '', description: '', guardianName: '', guardianLine: '', bossName: '', bossLine: '', bossDescription: '', color: '#fff', requiredDungeon: null, unlockLevel: 1, stages: [{ id: 'dungeon-01-stage-01', name: '', description: '', questionIds: [], requiredCorrect: 3, hp: 3 }], bossQuestionCount: 10, bossPassScore: 60,
+    }]);
+
+    const state = useDungeonStore.getState();
+    expect(migrated).toBe(true);
+    expect(state.player.season).toBe(CURRENT_DUNGEON_SEASON_ID);
+    expect(state.player.playerLevel).toBe(1);
+    expect(state.dungeonProgress[0].completedStages).toBe(0);
+    expect(state.earnedBadges).toEqual([]);
+    expect(state.trialInventory.hintTickets).toBe(4);
+    expect(state.trialInventory.ownedCosmetics).toEqual(['frame-crystal']);
+    expect(usePetStore.getState().coins).toBe(2680);
+  });
+
+  it('同一赛季重复启动不会再次清空进度', () => {
+    useDungeonStore.setState({
+      player: makePlayer({ season: CURRENT_DUNGEON_SEASON_ID }),
+      dungeonProgress: [makeProgress({ completedStages: 2 })],
+    });
+    expect(useDungeonStore.getState().migrateSeason([])).toBe(false);
+    expect(useDungeonStore.getState().dungeonProgress[0].completedStages).toBe(2);
+  });
+
   it('升级后继续获得经验不会掉级', () => {
     useDungeonStore.setState({
       player: makePlayer({ playerLevel: 3, exp: 0, expToNext: expToNextLevel(3) }),

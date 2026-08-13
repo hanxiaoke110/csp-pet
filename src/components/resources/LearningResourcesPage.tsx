@@ -199,8 +199,8 @@ export default function LearningResourcesPage() {
   }
 
   return (
-    <div className="quiz-practice" style={{ maxWidth: 1180 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'flex-start', marginBottom: 18 }}>
+    <div className="quiz-practice learning-resources" style={{ maxWidth: 1180 }}>
+      <div className="learning-resources-header">
         <div>
           <h2 style={{ marginBottom: 6 }}>学习资料</h2>
           <p style={{ color: '#64748b', fontSize: 14, maxWidth: 760 }}>
@@ -214,20 +214,12 @@ export default function LearningResourcesPage() {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(150px, 1fr))', gap: 10, marginBottom: 14 }}>
+      <div className="learning-path-tabs">
         {VIEWS.map(item => (
           <button
             key={item.key}
             onClick={() => setView(item.key)}
-            style={{
-              textAlign: 'left',
-              padding: '12px 14px',
-              borderRadius: 8,
-              border: view === item.key ? '1px solid #f59e0b' : '1px solid #e2e8f0',
-              background: view === item.key ? '#fff7ed' : '#fff',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
+            className={view === item.key ? 'learning-path-tab active' : 'learning-path-tab'}
           >
             <div style={{ fontWeight: 800, color: view === item.key ? '#c2410c' : '#0f172a' }}>{item.label}</div>
             <div style={{ fontSize: 12, color: '#64748b', marginTop: 3 }}>{item.hint}</div>
@@ -266,7 +258,7 @@ export default function LearningResourcesPage() {
       {view === 'courses' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {courses.map(lesson => (
-            <div key={lesson.lessonNo} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8, padding: 12 }}>
+            <div key={lesson.lessonNo} className="learning-course-row">
               <div style={{ display: 'grid', gridTemplateColumns: 'minmax(180px, 1fr) 2.4fr auto', gap: 14, alignItems: 'center' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
@@ -324,7 +316,7 @@ export default function LearningResourcesPage() {
                 const kpLectures = lectureByKp.get(kp.id) || [];
                 const mainLecture = kpLectures[0];
                 return (
-                  <div key={kp.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8, padding: 14 }}>
+                  <div key={kp.id} className="learning-resource-card">
                     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
                       <strong style={{ fontSize: 15 }}>{kp.name}</strong>
                       <span style={{ fontSize: 11, color: '#64748b', background: '#f1f5f9', borderRadius: 6, padding: '2px 7px' }}>{kp.batch || 'A'}批</span>
@@ -353,7 +345,7 @@ export default function LearningResourcesPage() {
             <h3 style={{ margin: '2px 0 10px' }}>专题讲解</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
               {lectures.map(item => (
-                <div key={item.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8, padding: 14 }}>
+                <div key={item.id} className="learning-resource-card">
                   <div style={{ fontSize: 12, color: '#0f766e', fontWeight: 800, marginBottom: 6 }}>{item.knowledgePointNames.join(' / ')}</div>
                   <strong style={{ display: 'block', fontSize: 15, marginBottom: 8 }}>{compactTitle(item.title)}</strong>
                   <p style={{ color: '#64748b', fontSize: 12, lineHeight: 1.5, minHeight: 36 }}>适合一轮复习时系统学习概念、例题和易错点。</p>
@@ -408,7 +400,7 @@ function ModuleCard({
   onClick?: () => void;
 }) {
   return (
-    <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8, padding: 14 }}>
+    <div className="learning-resource-card">
       <strong style={{ display: 'block', fontSize: 15, marginBottom: 6 }}>{title}</strong>
       <p style={{ color: '#64748b', fontSize: 12, lineHeight: 1.5, minHeight: 36 }}>{desc}</p>
       {onClick ? (

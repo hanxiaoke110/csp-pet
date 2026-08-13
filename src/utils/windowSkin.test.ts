@@ -19,8 +19,8 @@ function metrics(overrides: Partial<WindowSkinMetrics> = {}): WindowSkinMetrics 
 }
 
 describe('window skin unlocks', () => {
-  it('always unlocks the two starter skins', () => {
-    expect(collectUnlockedWindowSkins([], metrics())).toEqual(['default', 'academy']);
+  it('always unlocks the starter skins and the current-season scene', () => {
+    expect(collectUnlockedWindowSkins([], metrics())).toEqual(['default', 'academy', 'shanhai']);
   });
 
   it('unlocks learning skins at their exact thresholds', () => {
@@ -39,6 +39,7 @@ describe('window skin unlocks', () => {
       'verdant',
       'skyline',
       'cloud',
+      'shanhai',
     ]);
   });
 

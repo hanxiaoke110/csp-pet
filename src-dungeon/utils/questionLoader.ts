@@ -5,6 +5,7 @@ import { loadExcludedQuestionIds, getCachedExcludedQuestionIds } from '../../src
 import { loadVersionedRemoteJson } from '../../src/utils/versionedRemoteJson';
 import { beginQuestionBankSession } from '../../src/question-bank/repository';
 import { toLegacyQuestion } from '../../src/question-bank/adapters';
+import { DUNGEON_QUESTION_PLANS, getDungeonQuestionPlan } from '../data/question-plans';
 
 const CACHE_PREFIX = 'dungeon_';
 const REVIEWED_BANK_API = 'https://api.cspstudy.top/api/question-bank';
@@ -377,6 +378,85 @@ export function isUsableChoiceQuestion(q: Question | undefined): q is Question {
     q!.correctIndex! >= 0 &&
     q!.correctIndex! < q!.options.length &&
     !isBrokenCodeQuestion(q!);
+}
+
+function questionSearchText(question: Question): string {
+  return `${question.knowledgePoint || ''} ${question.question || ''}`.toLowerCase();
+}
+
+function matchesQuestionPlan(question: Question, dungeonId: string, stageId: string): boolean {
+  const plan = getDungeonQuestionPlan(dungeonId, stageId);
+  if (!plan || !isUsableChoiceQuestion(question)) return false;
+  if (!plan.groups.includes(question.group as 'J' | 'GESP')) return false;
+  if (question.group === 'GESP' && (!question.level || question.level > 4)) return false;
+  if (question.difficulty < plan.difficulty[0] || question.difficulty > plan.difficulty[1]) return false;
+  if (plan.years?.length && !plan.years.includes(question.year)) return false;
+  const text = questionSearchText(question);
+  if (plan.excludeKeywords?.some(keyword => text.includes(keyword.toLowerCase()))) return false;
+  return plan.includeKeywords.length === 0
+    || plan.includeKeywords.some(keyword => text.includes(keyword.toLowerCase()));
+}
+
+function isDungeonEligibleChoice(question: Question): boolean {
+  return isUsableChoiceQuestion(question) &&
+    (question.group === 'J' || (question.group === 'GESP' && Boolean(question.level) && question.level! <= 4));
+}
+
+/**
+ * Skills affect combat only; the stage controls the curriculum mix.
+ * Core questions dominate, while same-dungeon and whole-bank review keep the complete bank useful.
+ */
+export function pickStagePlanQuestions(
+  allQuestions: Question[],
+  dungeonId: string,
+  stageId: string,
+  count: number = 1,
+): Question[] {
+  const plan = getDungeonQuestionPlan(dungeonId, stageId);
+  const exact = allQuestions.filter(question => matchesQuestionPlan(question, dungeonId, stageId));
+  const siblingStageIds = DUNGEON_QUESTION_PLANS
+    .filter(item => item.dungeonId === dungeonId)
+    .map(item => item.stageId);
+  const exactIds = new Set(exact.map(question => question.id));
+  const sameDungeon = allQuestions.filter(question =>
+    !exactIds.has(question.id) &&
+    siblingStageIds.some(siblingStageId => matchesQuestionPlan(question, dungeonId, siblingStageId))
+  );
+  const sameDungeonIds = new Set(sameDungeon.map(question => question.id));
+  const wholeBankReview = allQuestions.filter(question =>
+    isDungeonEligibleChoice(question) && !exactIds.has(question.id) && !sameDungeonIds.has(question.id)
+  );
+
+  const reviewRatio = Math.min(0.35, Math.max(0.1, plan?.reviewRatio || 0.1));
+  const sameDungeonRatio = 0.25;
+  const selected: Question[] = [];
+
+  while (selected.length < count) {
+    const roll = Math.random();
+    const preferred = roll < reviewRatio
+      ? wholeBankReview
+      : roll < reviewRatio + sameDungeonRatio
+        ? sameDungeon
+        : exact;
+    const selectedIds = new Set(selected.map(question => question.id));
+    const pools = [preferred, exact, sameDungeon, wholeBankReview]
+      .map(pool => pool.filter(question => !selectedIds.has(question.id)));
+    const pool = pools.find(candidate => candidate.length > 0);
+    if (!pool) break;
+    const picked = chooseFreshQuestions(pool, 1, `dungeon-stage-${stageId}`)[0];
+    if (!picked) break;
+    selected.push(picked);
+  }
+
+  return selected;
+}
+
+export function getQuestionPlanCoverage(allQuestions: Question[]) {
+  return DUNGEON_QUESTION_PLANS.map(plan => ({
+    dungeonId: plan.dungeonId,
+    stageId: plan.stageId,
+    count: allQuestions.filter(question => matchesQuestionPlan(question, plan.dungeonId, plan.stageId)).length,
+  }));
 }
 
 // ── Pick questions by skill knowledge tag ──

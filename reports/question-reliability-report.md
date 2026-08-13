@@ -1,6 +1,6 @@
 # 题库可靠性报告 (Question Reliability Report)
 
-生成时间: 2026-08-04T05:34:07.550Z
+生成时间: 2026-08-13T17:56:36.941Z
 
 ## 总览
 
@@ -62,13 +62,14 @@ disputed 表示模型/官方答案存在分歧或题面歧义，需人工复核�
 配置文件: `public/course-data/excluded-question-ids.json`（单一数据源，客户端与审计共用）
 
 - reason: `missing_corrupted_or_answer_disputed`
-- note: 共 8 道题暂时隔离。2026-08-04 处理：修复/复核 40+ 道解除隔离；新增 2 道 CSP-S 阅读题（csp_model_answer_conflict，子题答案分歧待人工复核）；其余为缺原卷/OCR 歧义或结构不适配。
+- note: 共 9 道题暂时隔离。2026-08-14 新增 gesp-2024-09-2-06：题干依赖缺失的源代码，无法独立作答；其余为缺原卷、OCR 歧义、答案分歧或结构不适配。
 
 | id | 隔离原因 |
 | --- | --- |
 | csp-s-2020-r01 | missing_corrupted_or_answer_disputed |
 | csp-s-2023-r01 | missing_corrupted_or_answer_disputed |
 | gesp-2023-09-2-07 | missing_corrupted_or_answer_disputed |
+| gesp-2024-09-2-06 | missing_corrupted_or_answer_disputed |
 | gesp-2025-09-1-04 | missing_corrupted_or_answer_disputed |
 | gesp-2025-09-2-13 | missing_corrupted_or_answer_disputed |
 | gesp-2025-12-3-22 | missing_corrupted_or_answer_disputed |
@@ -91,6 +92,7 @@ disputed 表示模型/官方答案存在分歧或题面歧义，需人工复核�
 - csp-s-2020-r01
 - csp-s-2023-r01
 - gesp-2023-09-2-07
+- gesp-2024-09-2-06
 - gesp-2025-09-1-04
 - gesp-2025-09-2-13
 - gesp-2025-12-3-22

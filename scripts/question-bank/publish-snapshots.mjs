@@ -7,6 +7,7 @@ import { buildChannels, CHANNEL_RULES_REVISION } from './lib/channels.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const outputDirectory = path.join(root, 'public/course-data/question-bank-v2');
+const excludedQuestionIdsPath = path.join(root, 'public/course-data/excluded-question-ids.json');
 
 // Papers with fewer verified questions than this are not a usable exam
 // experience and are dropped from the manifest until re-verified.
@@ -61,13 +62,14 @@ export function publishSnapshots() {
   }
 
   const verdicts = new Map(verification.results.map(result => [result.questionId, result]));
+  const excludedQuestionIds = new Set(JSON.parse(fs.readFileSync(excludedQuestionIdsPath, 'utf8')).ids || []);
   const joined = canonical.questions.map(question => {
     const verdict = verdicts.get(question.id);
     if (!verdict || verdict.contentHash !== question.contentHash) {
       throw new Error(`stale or missing verdict for ${question.id}`);
     }
     return studentQuestion(question, verdict);
-  });
+  }).filter(question => !excludedQuestionIds.has(question.id));
   const channels = buildChannels(joined);
   const generatedAt = new Date().toISOString();
   const revisions = {

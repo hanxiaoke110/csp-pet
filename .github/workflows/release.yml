@@ -9,8 +9,32 @@ env:
   TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ''
 
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - name: Run release gates
+        run: |
+          npm test
+          npm run test:question-bank
+          npm run validate:assets
+          npm run build
+      - name: Verify deployed dungeon season API
+        run: |
+          season=$(curl -fsSL --retry 3 --max-time 30 \
+            'https://api.cspstudy.top/api/dungeon/leaderboard?scope=global&type=power&season_id=2026-season-2' \
+            | jq -r '.season // empty')
+          test "$season" = '2026-season-2' || {
+            echo "::error::Dungeon Worker is not serving season 2026-season-2"
+            exit 1
+          }
+
   # ── macOS (Apple Silicon) ──
   macos-aarch64:
+    needs: preflight
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +49,7 @@ jobs:
 
   # ── macOS (Intel) ──
   macos-x86_64:
+    needs: preflight
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,6 +65,7 @@ jobs:
 
   # ── Windows ──
   windows-x86_64:
+    needs: preflight
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -64,8 +90,6 @@ jobs:
       actions: read
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITEE_PAT || secrets.GITHUB_TOKEN }}
 
       - uses: actions/download-artifact@v4
         with: { name: macos-aarch64, path: dist/macos-aarch64 }
@@ -107,6 +131,18 @@ jobs:
           MAC_INTEL=$(rename_eng "$MAC_INTEL")
           WIN_MSI=$(rename_eng "$WIN_MSI")
 
+          for package in "$MAC_ARM" "$MAC_INTEL" "$WIN_MSI"; do
+            if [ -z "$package" ] || [ ! -f "$package" ]; then
+              echo "::error::Missing release package: $package"
+              exit 1
+            fi
+            size=$(stat -c%s "$package")
+            if [ "$size" -ge 100000000 ]; then
+              echo "::error::$(basename "$package") is $size bytes, exceeding Gitee's 100 MB limit"
+              exit 1
+            fi
+          done
+
           echo "$PRIVKEY" > /tmp/privkey
 
           sign_file() {
@@ -128,6 +164,13 @@ jobs:
           SIG_MAC_INTEL=$(sign_file "$MAC_INTEL")
           SIG_WIN=$(sign_file "$WIN_MSI")
 
+          for signature in "$SIG_MAC_ARM" "$SIG_MAC_INTEL" "$SIG_WIN"; do
+            if ! printf '%s' "$signature" | grep -Eq '^dW50[A-Za-z0-9+/=]+$'; then
+              echo "::error::Updater signature is missing or malformed"
+              exit 1
+            fi
+          done
+
           GITEE_API="https://gitee.com/api/v5/repos/hanliuliu110/csp-pet"
 
           # Gitee free repositories have a 1 GB release-attachment quota. Keep the
@@ -148,8 +191,8 @@ jobs:
             -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"Release $VERSION\",\"prerelease\":false,\"target_commitish\":\"master\"}" | jq -r '.id // empty')
 
           if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
-            echo "WARNING: Failed to create Gitee release, falling back to GitHub URLs"
-            RELEASE_ID=""
+            echo "::error::Failed to create Gitee release"
+            exit 1
           fi
 
           upload_file() {
@@ -180,11 +223,12 @@ jobs:
           URL_MAC_INTEL=$(cat /tmp/url_mac_intel)
           URL_WIN=$(cat /tmp/url_win)
 
-          # Fallback to GitHub Release URLs（GitHub 会把中文文件名 sanitize 成点）
-          GH_RELEASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
-          URL_MAC_ARM="${URL_MAC_ARM:-$GH_RELEASE/$(sanitize_name "$MAC_ARM")}"
-          URL_MAC_INTEL="${URL_MAC_INTEL:-$GH_RELEASE/$(sanitize_name "$MAC_INTEL")}"
-          URL_WIN="${URL_WIN:-$GH_RELEASE/$(sanitize_name "$WIN_MSI")}"
+          for url in "$URL_MAC_ARM" "$URL_MAC_INTEL" "$URL_WIN"; do
+            if ! printf '%s' "$url" | grep -Eq '^https://gitee\.com/hanliuliu110/csp-pet/releases/download/'; then
+              echo "::error::A required Gitee package upload failed: $url"
+              exit 1
+            fi
+          done
 
           cat > dist/update.json << JSONEOF
           {
@@ -217,16 +261,18 @@ jobs:
           ENCODED=$(base64 -w0 dist/update.json)
 
           if [ -n "$SHA" ] && [ "$SHA" != "null" ]; then
-            curl -s -X PUT "$GITEE_API/contents/update.json" \
+            RESPONSE=$(curl -fsS -X PUT "$GITEE_API/contents/update.json" \
               -H "Content-Type: application/json" \
               -H "Authorization: token $GITEE_TOKEN" \
-              -d "{\"content\":\"$ENCODED\",\"sha\":\"$SHA\",\"message\":\"release: $VERSION\"}" | head -5
+              -d "{\"content\":\"$ENCODED\",\"sha\":\"$SHA\",\"message\":\"release: $VERSION\"}")
           else
-            curl -s -X POST "$GITEE_API/contents/update.json" \
+            RESPONSE=$(curl -fsS -X POST "$GITEE_API/contents/update.json" \
               -H "Content-Type: application/json" \
               -H "Authorization: token $GITEE_TOKEN" \
-              -d "{\"content\":\"$ENCODED\",\"message\":\"release: $VERSION\"}" | head -5
+              -d "{\"content\":\"$ENCODED\",\"message\":\"release: $VERSION\"}")
           fi
+
+          echo "$RESPONSE" | jq -e '.content.sha and .content.path == "update.json"' >/dev/null
 
           echo "Update endpoint: https://gitee.com/hanliuliu110/csp-pet/raw/master/update.json"
 

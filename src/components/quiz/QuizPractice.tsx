@@ -9,6 +9,7 @@ import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
 import KnowledgePointHelp from '../shared/KnowledgePointHelp';
 import { beginQuestionBankSession } from '../../question-bank/repository';
 import { toLegacyQuestion } from '../../question-bank/adapters';
+import { getSuperChallengeItems, isCompleteSuperChallenge } from './superChallenge';
 
 // 月度复盘单次奖励封顶（金币/经验）
 const MONTHLY_REVIEW_COIN_CAP = 300;
@@ -188,6 +189,7 @@ export default function QuizPractice() {
     setCurrentIdx(0);
     setSelected(null);
     setSubmitted(false);
+    setSuperAnswers([]);
     setResults({ correct: 0, total: 0, done: false });
     setKpResults(new Map());
     freeStreakRef.current = 0;
@@ -213,7 +215,7 @@ export default function QuizPractice() {
       const reviewQs = bank.filter(q => errorIds.has(q.id));
       setQuestions(chooseFreshQuestions(reviewQs, reviewQs.length, m));
     } else if (m === 'super') {
-      const superQs = bank.filter(q => q.source === 'super_challenge');
+      const superQs = bank.filter(q => q.source === 'super_challenge' && isCompleteSuperChallenge(q));
       setQuestions(chooseFreshQuestions(superQs, 1, m));
     } else {
       // Random CSP/GESP exam questions with optional filters
@@ -711,33 +713,35 @@ export default function QuizPractice() {
   // --- Super Challenge answering screen ---
   if (mode === 'super' && questions.length > 0) {
     const q = questions[0];
-    const subItems = q.type === 'fillBlank' ? (q.blanks || []) : (q.subQuestions || []);
+    if (!isCompleteSuperChallenge(q)) {
+      return (
+        <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
+          <h2>这道挑战题数据不完整</h2>
+          <p style={{ color: '#64748b', marginBottom: 20 }}>已跳过本题，不会扣除挑战次数或奖励。</p>
+          <button className="mode-btn" onClick={() => startMode('super')}>自动换一题</button>
+        </div>
+      );
+    }
+    const subItems = getSuperChallengeItems(q);
     const subCount = subItems.length;
 
     const handleSuperSubmit = () => {
       if (superAnswers.length < subCount) return;
-      const correctAnswers = q.answers || [];
       let correct = 0;
       for (let i = 0; i < subCount; i++) {
-        const expected = correctAnswers[i];
+        const expected = subItems[i].correctIndex;
         const got = superAnswers[i];
-        if (typeof expected === 'boolean') {
-          if ((expected && got === 0) || (!expected && got === 1)) correct++;
-        } else {
-          if (got === expected) correct++;
-        }
+        if (got === expected) correct++;
       }
       setResults({ correct, total: subCount, done: true });
       quizStore.completeSuperChallenge(correct, subCount);
       // Add wrong sub-questions to error pool for monthly review
       for (let i = 0; i < subCount; i++) {
-        const expected = correctAnswers[i];
+        const expected = subItems[i].correctIndex;
         const got = superAnswers[i];
-        const isCorrect = typeof expected === 'boolean'
-          ? ((expected && got === 0) || (!expected && got === 1))
-          : got === expected;
+        const isCorrect = got === expected;
         if (!isCorrect) {
-          quizStore.addError(`${q.id}-q${i+1}`, got ?? -1, typeof expected === 'boolean' ? (expected ? 0 : 1) : expected);
+          quizStore.addError(`${q.id}-q${i+1}`, got ?? -1, Number(expected));
         }
       }
       const sr = getSuperReward(correct, subCount);

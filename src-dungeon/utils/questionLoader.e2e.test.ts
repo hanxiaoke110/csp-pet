@@ -9,8 +9,8 @@ if (typeof (globalThis as any).window === 'undefined') {
   (globalThis as any).window = { setTimeout, clearTimeout };
 }
 
-import { loadQuestionBank, pickQuestionsByTag, pickFallbackChoiceQuestions, getDungeonDifficulty } from './questionLoader';
-import { getSkillById, SKILLS } from '../data/skills';
+import { getQuestionPlanCoverage, loadQuestionBank, pickStagePlanQuestions } from './questionLoader';
+import { DUNGEON_QUESTION_PLANS } from '../data/question-plans';
 
 // fetch 映射到 public/ 下的真实文件（模拟生产打包后的 /course-data/ 协议）
 beforeAll(() => {
@@ -33,27 +33,21 @@ beforeAll(() => {
 });
 
 describe('试炼场题库端到端（真实加载链）', () => {
-  it('每个副本每个技能都能抽出题', async () => {
+  it('新赛季每个小关都有独立题池并能抽题', async () => {
     const bank = await loadQuestionBank();
     expect(bank.length).toBeGreaterThan(500);
 
-    const dungeons = ['dungeon-01', 'dungeon-02', 'dungeon-03', 'dungeon-04', 'dungeon-05', 'dungeon-06', 'dungeon-07', 'dungeon-08'];
-    for (const dungeonId of dungeons) {
-      const diffRange = getDungeonDifficulty(dungeonId);
-      for (const skill of SKILLS) {
-        const def = getSkillById(skill.id)!;
-        let questions = skill.id === 'skill-4'
-          ? [] // 大招走 pickBigMoveQuestions，单独断言
-          : pickQuestionsByTag(bank, def.knowledgeTag, 1, diffRange);
-        if (questions.length === 0) {
-          questions = pickFallbackChoiceQuestions(bank, 1, diffRange);
-        }
-        expect(
-          questions.length,
-          `${dungeonId} 技能 ${def.name}(${def.knowledgeTag}) 难度 [${diffRange}] 应能抽题`,
-        ).toBeGreaterThan(0);
-      }
+    for (const plan of DUNGEON_QUESTION_PLANS) {
+      const questions = pickStagePlanQuestions(bank, plan.dungeonId, plan.stageId, 5);
+      expect(questions.length, `${plan.stageId} 应有完整五题`).toBe(5);
+      expect(new Set(questions.map(question => question.id)).size, `${plan.stageId} 单场不得重复`).toBe(5);
+      expect(questions.some(question => question.group === 'S'), `${plan.stageId} 不允许 CSP-S`).toBe(false);
     }
+
+    const coverage = getQuestionPlanCoverage(bank);
+    expect(coverage.filter(item => item.count === 0).map(item => item.stageId)).toEqual([]);
+    // Each lesson must retain a real core pool; layered review supplies variety without changing its focus.
+    expect(coverage.filter(item => item.count < 2).map(item => `${item.stageId}:${item.count}`)).toEqual([]);
   }, 30_000);
 
   it('排除名单远程失败时仍有题（降级内置 8 条）', async () => {
