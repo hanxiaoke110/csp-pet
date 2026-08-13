@@ -8,21 +8,21 @@
   --body-font: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 
   /* Dungeon theme colors */
-  --gold: #FFD700;
-  --gold-dark: #B8860B;
-  --bg-dark: #0a0a0a;
-  --bg-panel: #1a1a2e;
-  --bg-card: #16213e;
-  --border-pixel: #4a4a6a;
-  --text-light: #e0e0e0;
-  --text-dim: #8888aa;
+  --gold: #efbd57;            /* 山海暗金 */
+  --gold-dark: #a66f20;
+  --bg-dark: #0b1412;
+  --bg-panel: rgba(18, 36, 38, 0.92);   /* 墨玉青 */
+  --bg-card: rgba(20, 40, 44, 0.88);
+  --border-pixel: rgba(77, 168, 143, 0.62); /* 玉青绿 */
+  --text-light: #eef5e9;
+  --text-dim: #9db8ae;
 
   /* RPG colors */
-  --hp-green: #00ff41;
-  --hp-red: #ff3333;
-  --exp-blue: #4488ff;
-  --crit-yellow: #ffaa00;
-  --gold-coin: #ffcc00;
+  --hp-green: #2f9373;        /* 山海 success */
+  --hp-red: #cc4e42;          /* 山海 danger */
+  --exp-blue: #69d7e3;        /* 山海 sky */
+  --crit-yellow: #ffd56a;
+  --gold-coin: #ffd56a;
   --rarity-common: #aaaaaa;
   --rarity-rare: #00ff41;
   --rarity-epic: #4488ff;
@@ -30,8 +30,8 @@
   --rarity-mythic: #ff8800;
 
   /* Sizing */
-  --pixel-border: 4px;
-  --card-radius: 0px;
+  --pixel-border: 2px;
+  --card-radius: 12px;
 }
 
 /* ── Reset ── */
@@ -137,26 +137,24 @@ body {
 /* ── Pixel border utility ── */
 .pixel-border {
   border: var(--pixel-border) solid var(--border-pixel);
-  box-shadow:
-    inset -2px -2px 0 0 rgba(0,0,0,0.3),
-    inset 2px 2px 0 0 rgba(255,255,255,0.05);
+  border-radius: var(--card-radius);
+  box-shadow: 0 2px 10px rgba(35, 103, 94, 0.12), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 .pixel-border-gold {
   border: var(--pixel-border) solid var(--gold-dark);
-  box-shadow:
-    inset -2px -2px 0 0 rgba(0,0,0,0.4),
-    inset 2px 2px 0 0 rgba(255,215,0,0.1),
-    0 0 12px rgba(255,215,0,0.15);
+  border-radius: var(--card-radius);
+  box-shadow: 0 0 14px rgba(239, 189, 87, 0.18), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 /* ── Buttons ── */
 .pixel-btn {
   display: inline-block;
   padding: 12px 24px;
-  background: var(--bg-card);
+  background: linear-gradient(180deg, #244b48, #1b3a38);
   color: var(--text-light);
   border: var(--pixel-border) solid var(--border-pixel);
+  border-radius: 10px;
   font-family: var(--body-font);
   font-size: 14px;
   font-weight: 700;
@@ -169,9 +167,9 @@ body {
 }
 
 .pixel-btn:hover {
-  background: #1e2a4a;
+  background: linear-gradient(180deg, #2c5a55, #214741);
   transform: translateY(-2px);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.4);
+  box-shadow: 0 4px 12px rgba(35, 103, 94, 0.25);
 }
 
 .pixel-btn:active {
@@ -180,20 +178,20 @@ body {
 }
 
 .pixel-btn.primary {
-  background: linear-gradient(180deg, var(--gold-dark), #8B6914);
+  background: linear-gradient(180deg, #efbd57, #a66f20);
   border-color: var(--gold);
   color: #fff;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 .pixel-btn.danger {
-  background: linear-gradient(180deg, #cc3333, #881111);
-  border-color: #ff4444;
+  background: linear-gradient(180deg, #cc4e42, #8a2f28);
+  border-color: #e77c5b;
 }
 
 .pixel-btn.success {
-  background: linear-gradient(180deg, #228833, #115522);
-  border-color: #44cc44;
+  background: linear-gradient(180deg, #2f9373, #1e5f4a);
+  border-color: #4da88f;
 }
 
 .pixel-btn:disabled {
@@ -206,8 +204,9 @@ body {
 .pixel-progress {
   width: 100%;
   height: 16px;
-  background: #111;
+  background: #14201f;
   border: 2px solid var(--border-pixel);
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
 }
@@ -239,6 +238,7 @@ body {
 .dialog-box {
   background: var(--bg-panel);
   border: var(--pixel-border) solid var(--border-pixel);
+  border-radius: var(--card-radius);
   padding: 16px 20px;
   position: relative;
   margin: 12px 0;
@@ -274,8 +274,9 @@ body {
 .pixel-card {
   background: var(--bg-card);
   border: var(--pixel-border) solid var(--border-pixel);
+  border-radius: var(--card-radius);
   padding: 20px;
-  box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 8px 24px rgba(35, 103, 94, 0.18);
 }
 
 /* ── Status bar ── */
