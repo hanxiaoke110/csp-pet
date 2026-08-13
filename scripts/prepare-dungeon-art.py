@@ -68,11 +68,11 @@ html = ["<!doctype html><html lang='zh'><meta charset='utf-8'><title>试炼场 V
         "h2{color:#7fd0b0}.row{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:24px}"
         ".card{width:420px}.card img{width:420px;border-radius:8px;border:1px solid #333;display:block}"
         ".card span{font-size:12px;color:#aaa}</style><body>"]
-all_files = list(DUNGEON_MAP.keys()) + list(GLOBAL.keys())
+all_files = [(k, f"{k}-bg.webp") for k in DUNGEON_MAP] + [(k, f"{k}.webp") for k in GLOBAL]
 for i in range(0, len(all_files), 3):
     html.append("<div class='row'>")
-    for name in all_files[i:i+3]:
-        html.append(f"<div class='card'><img src='{name}.webp'><span>{name}</span></div>")
+    for label, fname in all_files[i:i+3]:
+        html.append(f"<div class='card'><img src='{fname}'><span>{label}</span></div>")
     html.append("</div>")
 html.append("</body></html>")
 with open(os.path.join(OUT, "preview.html"), "w", encoding="utf-8") as f:
