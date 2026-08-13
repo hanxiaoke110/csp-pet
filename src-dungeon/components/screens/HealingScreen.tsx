@@ -102,7 +102,7 @@ export default function HealingScreen() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #0a1505, #0a0a0a)',
+      background: "linear-gradient(180deg, rgba(8,20,10,0.30), rgba(4,10,6,0.82)), url('/dungeon-art-v3/dungeon-04-bg.webp') center/cover no-repeat",
       display: 'flex', flexDirection: 'column',
     }}>
       {/* Healing status bar */}

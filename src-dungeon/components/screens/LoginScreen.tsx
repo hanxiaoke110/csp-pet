@@ -99,7 +99,7 @@ export default function LoginScreen() {
 
   return (
     <div style={{
-      minHeight: '100vh', background: 'linear-gradient(180deg, #0a0015, #1a0a2e, #0a0a0a)',
+      minHeight: '100vh', background: "linear-gradient(180deg, rgba(5,12,20,0.30), rgba(3,7,12,0.82)), url('/dungeon-art-v3/home.webp') center/cover no-repeat",
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
     }}>
       <div className="pixel-card pixel-border-gold" style={{ maxWidth: '400px', width: '100%' }}>

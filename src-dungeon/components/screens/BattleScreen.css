@@ -140,10 +140,16 @@
   transition: all 0.1s;
 }
 
-.battle-option-btn:hover:not(:disabled) {
+.battle-options:not(.has-selection) .battle-option-btn:hover:not(:disabled) {
   background: #1e2a4a;
   border-color: #ffd700;
   transform: translateX(4px);
+}
+
+.battle-options.has-selection .battle-option-btn:not(.selected):hover:not(:disabled) {
+  background: #1e2a4a;
+  border-color: #4a4a6a;
+  transform: none;
 }
 
 .battle-option-btn:disabled {

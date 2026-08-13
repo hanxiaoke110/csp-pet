@@ -712,7 +712,7 @@ export default function BattleScreen() {
               </div>
             )}
 
-            <div className="battle-options">
+            <div className={`battle-options${selectedOption !== null ? ' has-selection' : ''}`}>
               {!currentQuestion.options || currentQuestion.options.length === 0 ? (
                 <div style={{ textAlign: 'center', color: '#ff4444', padding: '12px' }}>
                   该题目缺少选项，无法作答

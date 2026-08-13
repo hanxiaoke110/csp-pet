@@ -32,7 +32,7 @@ export default function DungeonMap() {
   return (
     <div className="dungeon-page-bg dungeon-map-page" style={{
       minHeight: '100vh',
-      backgroundImage: 'linear-gradient(180deg, rgba(3, 13, 18, 0.78) 0%, rgba(3, 12, 10, 0.91) 50%, rgba(5, 7, 8, 0.98) 100%), url("/dungeon-art-v2/dungeon-01-bg.webp")',
+      backgroundImage: 'linear-gradient(180deg, rgba(5, 15, 20, 0.35) 0%, rgba(4, 12, 14, 0.58) 50%, rgba(3, 7, 9, 0.86) 100%), url("/dungeon-art-v3/map.webp")',
       padding: '16px',
     }}>
       {/* Status bar */}
@@ -136,7 +136,7 @@ export default function DungeonMap() {
               <div
                 className="dungeon-map-card-art"
                 style={{
-                  backgroundImage: `linear-gradient(180deg, rgba(4, 10, 15, 0.02), rgba(10, 18, 27, 0.92)), url("${dungeon.bgImage}")`,
+                  backgroundImage: `linear-gradient(180deg, rgba(6, 14, 18, 0.05), rgba(10, 16, 20, 0.70)), url("${dungeon.bgImage}")`,
                 }}
               >
                 {dungeon.bossImage && (

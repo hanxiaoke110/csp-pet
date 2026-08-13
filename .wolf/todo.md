@@ -110,6 +110,14 @@
 - 已改（`PetWindow.tsx`）：① 切穿透延迟 400ms（光标短暂移出不切，拖拽途中不切）；② 拖拽期间精灵 `willChange: transform` 提升合成层。
 - 验证：tsc/vitest 139 通过、生产构建通过；待 Windows 真机确认黑屏消失后发 v1.7.34。
 
+## 试炼场 V35 国风皮肤（2026-08-13 第一期已完成，待看效果）
+
+- 用户选定《山海算法志》V35（明亮国风插画）风格，两套风格已区分（V33 暗色 VOX / V35 明亮国风）。
+- 素材预处理：`scripts/prepare-dungeon-art.py` 把 1024x1536 竖图裁成 960x540 横屏（保留中上部异兽 + 底部压暗），输出 `public/dungeon-art-v3/`（13 张约 700KB）。
+- 副本映射：01→玄龟 02→三足乌 03→夔 04→九尾狐 05→应龙 06→獬豸 07→饕餮 08→青鸟；全局 home/map/success/failure/bond。
+- 已接入：dungeons.json 背景、战斗背景 alpha 0.3→0.92、Reward 成功/失败背景、Title/Login/Register/Healing 背景、Map/Leaderboard/Profile/TrialSupply/Entrance 换图+遮罩调浅。
+- 预览：`public/dungeon-art-v3/preview.html`；待用户看效果后决定是否继续第二期（UI token 微调）。
+
 ## 飞书版本更新文档（2026-08-10）
 
 - 文档：https://scncdgmg7m6w.feishu.cn/docx/VJmgd3RB0oOzPfxV9MxcKzzyn1b（bot 创建，老师 full_access；分享前设“链接可阅读”）

@@ -64,7 +64,9 @@ export default function RewardScreen() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: won ? 'linear-gradient(180deg, #0a2005, #0a0a0a)' : 'linear-gradient(180deg, #200505, #0a0a0a)',
+      background: won
+        ? "linear-gradient(180deg, rgba(8,24,12,0.30), rgba(3,9,5,0.82)), url('/dungeon-art-v3/success.webp') center/cover no-repeat"
+        : "linear-gradient(180deg, rgba(30,8,8,0.30), rgba(10,3,3,0.82)), url('/dungeon-art-v3/failure.webp') center/cover no-repeat",
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
     }}>
       <div className="pixel-card pixel-border-gold" style={{

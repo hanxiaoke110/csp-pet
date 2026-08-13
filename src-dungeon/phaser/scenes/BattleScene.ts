@@ -183,7 +183,7 @@ export class BattleScene extends Phaser.Scene {
       this.load.once('complete', () => {
         const bg = this.add.image(width / 2, height / 2, 'dungeonBg');
         bg.setDisplaySize(width, height);
-        bg.setAlpha(0.3);
+        bg.setAlpha(0.92);
         bg.setDepth(-1);
       });
       this.load.start();

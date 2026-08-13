@@ -25,7 +25,7 @@ export default function TrialSupplyScreen() {
       style={{
         minHeight: '100vh',
         padding: '20px',
-        backgroundImage: 'linear-gradient(180deg, rgba(4, 12, 20, 0.74), rgba(8, 14, 22, 0.93) 50%, rgba(7, 8, 12, 0.98)), url("/dungeon-art-v2/dungeon-08-bg.webp")',
+        backgroundImage: 'linear-gradient(180deg, rgba(4, 12, 20, 0.35), rgba(8, 14, 22, 0.62) 50%, rgba(6, 7, 10, 0.88)), url("/dungeon-art-v3/dungeon-08-bg.webp")',
       }}
     >
       <div style={{ maxWidth: '820px', margin: '0 auto' }}>

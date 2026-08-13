@@ -69,7 +69,7 @@ export default function DungeonEntrance() {
 
   const bgStyle = dungeon.bgImage
     ? {
-        backgroundImage: `linear-gradient(180deg, ${dungeon.color}88, rgba(10,10,10,0.92)), url(${dungeon.bgImage})`,
+        backgroundImage: `linear-gradient(180deg, ${dungeon.color}55, rgba(8,8,8,0.82)), url(${dungeon.bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',

@@ -32,7 +32,7 @@ export default function TitleScreen() {
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
       justifyContent: 'center', minHeight: '100vh',
-      background: 'linear-gradient(180deg, #0a0015 0%, #1a0030 30%, #0a0a0a 100%)',
+      background: "linear-gradient(180deg, rgba(5,12,20,0.28) 0%, rgba(4,10,16,0.55) 45%, rgba(2,5,8,0.85) 100%), url('/dungeon-art-v3/home.webp') center/cover no-repeat",
       padding: '20px', textAlign: 'center', gap: '24px',
     }}>
       <div style={{ fontSize: '48px', opacity: 0.6 }}>🐉</div>
