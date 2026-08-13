@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = "/Users/hanliuliu/Desktop/老师成长计划/学习平台/shanhai-algorithm-h5/public/assets-v2"
+SRC_BOSS = "/Users/hanliuliu/Desktop/老师成长计划/学习平台/shanhai-algorithm-h5/dist/assets"
 OUT = os.path.join(ROOT, "public", "dungeon-art-v3")
 W, H = 960, 540
 
@@ -23,6 +24,17 @@ DUNGEON_MAP = {
     "dungeon-06": "levels/05-enumeration/enumeration-xiezhi-bg-v1.webp",
     "dungeon-07": "levels/12-binary/binary-taotie-bg-v1.webp",
     "dungeon-08": "levels/01-sequence/sequence-qingniao-bg-v1.webp",
+}
+# Boss 图：各异兽的独立 active 大图（优先 v2，缺失用 v1）裁成 960x1200 竖版入口展示图
+DUNGEON_BOSS_MAP = {
+    "dungeon-01": "simulation-tortoise-active-v2.webp",
+    "dungeon-02": "counting-sun-crow-active-v2.webp",
+    "dungeon-03": "loop-kui-active-v2.webp",
+    "dungeon-04": "array-nine-tail-active-v2.webp",
+    "dungeon-05": "quick-yinglong-active-v1.webp",
+    "dungeon-06": "enumeration-xiezhi-active-v1.webp",
+    "dungeon-07": "binary-taotie-active-v1.webp",
+    "dungeon-08": "sequence-qingniao-active-v2.webp",
 }
 GLOBAL = {
     "home": "global/world-home-sunlit-v1.webp",
@@ -57,10 +69,37 @@ def process(src_rel: str, out_name: str):
     im.save(os.path.join(OUT, out_name), "WEBP", quality=82, method=6)
     print(f"{out_name}  <- {src_rel}  ({os.path.getsize(os.path.join(OUT, out_name))//1024} KB)")
 
+def process_boss(src_rel: str, out_name: str):
+    """异兽独立大图 → 960x1200 竖版入口展示图（cover 裁 + 上下轻微压暗）"""
+    src = os.path.join(SRC_BOSS, src_rel)
+    im = Image.open(src).convert("RGB")
+    tw, th = 960, 1200
+    scale = max(tw / im.width, th / im.height)
+    im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
+    # 宽度居中，高度从 15% 起取 1200（异兽集中在画面中上部）
+    x0 = (im.width - tw) // 2
+    y0 = min(int(im.height * 0.15), im.height - th)
+    im = im.crop((x0, y0, x0 + tw, y0 + th))
+    grad = Image.new("L", (960, 1200), 0)
+    d = ImageDraw.Draw(grad)
+    for y in range(1200):
+        a = 0
+        if y > 980:
+            a = int(150 * (y - 980) / 220)
+        elif y < 90:
+            a = int(70 * (1 - y / 90))
+        d.line([(0, y), (960, y)], fill=a)
+    black = Image.new("RGB", (960, 1200), (0, 0, 0))
+    im = Image.composite(black, im, grad)
+    im.save(os.path.join(OUT, out_name), "WEBP", quality=82, method=6)
+    print(f"{out_name}  <- {src_rel}  ({os.path.getsize(os.path.join(OUT, out_name))//1024} KB)")
+
 for key, rel in DUNGEON_MAP.items():
     process(rel, f"{key}-bg.webp")
 for name, rel in GLOBAL.items():
     process(rel, f"{name}.webp")
+for key, rel in DUNGEON_BOSS_MAP.items():
+    process_boss(rel, f"{key}-boss.webp")
 
 # 预览页
 html = ["<!doctype html><html lang='zh'><meta charset='utf-8'><title>试炼场 V35 背景预览</title>",
@@ -68,7 +107,7 @@ html = ["<!doctype html><html lang='zh'><meta charset='utf-8'><title>试炼场 V
         "h2{color:#7fd0b0}.row{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:24px}"
         ".card{width:420px}.card img{width:420px;border-radius:8px;border:1px solid #333;display:block}"
         ".card span{font-size:12px;color:#aaa}</style><body>"]
-all_files = [(k, f"{k}-bg.webp") for k in DUNGEON_MAP] + [(k, f"{k}.webp") for k in GLOBAL]
+all_files = [(k, f"{k}-bg.webp") for k in DUNGEON_MAP] + [(k, f"{k}-boss.webp") for k in DUNGEON_BOSS_MAP] + [(k, f"{k}.webp") for k in GLOBAL]
 for i in range(0, len(all_files), 3):
     html.append("<div class='row'>")
     for label, fname in all_files[i:i+3]:
