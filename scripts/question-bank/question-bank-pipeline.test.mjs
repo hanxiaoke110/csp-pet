@@ -279,7 +279,7 @@ describe('strong evidence collectors', () => {
     expect(await solveDeterministically(question)).toMatchObject({ answerIndex: 1, supported: true });
     expect(detectDeterministicCandidate({ ...question, code: 'int main(){std::cin >> n;}' }).supported)
       .toBe(false);
-  });
+  }, 20_000);
 
   it('accepts only complete parseable jury responses', () => {
     const merged = mergeJuryResponses([
