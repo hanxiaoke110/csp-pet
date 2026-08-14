@@ -185,10 +185,18 @@ jobs:
           done
 
           # Create Gitee release
-          RELEASE_ID=$(curl -s -X POST "$GITEE_API/releases" \
+          RELEASE_RESPONSE=$(curl -s -X POST "$GITEE_API/releases" \
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITEE_TOKEN" \
-            -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"Release $VERSION\",\"prerelease\":false,\"target_commitish\":\"master\"}" | jq -r '.id // empty')
+            -d "{\"tag_name\":\"$VERSION\",\"name\":\"$VERSION\",\"body\":\"Release $VERSION\",\"prerelease\":false,\"target_commitish\":\"master\"}")
+          RELEASE_ID=$(echo "$RELEASE_RESPONSE" | jq -r '.id // empty')
+
+          # A failed upload may leave the release behind. Reuse it on reruns so
+          # transient Gitee failures do not require deleting the tag by hand.
+          if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
+            RELEASE_ID=$(curl -s "$GITEE_API/releases/tags/$VERSION" \
+              -H "Authorization: token $GITEE_TOKEN" | jq -r '.id // empty')
+          fi
 
           if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
             echo "::error::Failed to create Gitee release"
@@ -199,29 +207,36 @@ jobs:
             local f="$1"
             if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then return; fi
             if [ -z "$f" ] || [ ! -f "$f" ]; then return; fi
-            local attempt resp url
+            local attempt resp_file status url existing_url
+            existing_url=$(curl -s "$GITEE_API/releases/$RELEASE_ID" \
+              -H "Authorization: token $GITEE_TOKEN" \
+              | jq -r --arg name "$(basename "$f")" '.assets[]? | select(.name == $name) | .browser_download_url // .download_url // empty' \
+              | head -1)
+            if [ -n "$existing_url" ]; then
+              echo "$existing_url"
+              return
+            fi
             # GitHub runner → Gitee 上传不稳定（v1.7.31/32 曾三次全失败静默回退
             # GitHub URL，国内学生无法下载）：失败打日志 + 最多重试 3 次
             for attempt in 1 2 3; do
-              resp=$(curl -s --connect-timeout 30 --max-time 900 -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
+              resp_file=$(mktemp)
+              status=$(curl -sS --connect-timeout 30 --max-time 1200 -o "$resp_file" -w '%{http_code}' \
+                -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
                 -H "Authorization: token $GITEE_TOKEN" \
-                -F "file=@$f")
-              url=$(echo "$resp" | jq -r '.browser_download_url // .download_url // empty' 2>/dev/null)
-              if [ -n "$url" ]; then echo "$url"; return; fi
-              echo "Gitee upload attempt $attempt failed for $(basename "$f"): $(echo "$resp" | head -c 200)" >&2
-              sleep 5
+                -F "file=@$f" || true)
+              url=$(jq -r '.browser_download_url // .download_url // empty' "$resp_file" 2>/dev/null)
+              if [ -n "$url" ]; then rm -f "$resp_file"; echo "$url"; return; fi
+              echo "Gitee upload attempt $attempt failed for $(basename "$f") (HTTP $status): $(head -c 200 "$resp_file")" >&2
+              rm -f "$resp_file"
+              sleep 10
             done
           }
 
-          # 三个包并行上传（每个约 90MB，串行曾让发布步骤耗时 30 分钟）
-          upload_to_file() { upload_file "$1" > "$2"; }
-          upload_to_file "$MAC_ARM" /tmp/url_mac_arm &
-          upload_to_file "$MAC_INTEL" /tmp/url_mac_intel &
-          upload_to_file "$WIN_MSI" /tmp/url_win &
-          wait
-          URL_MAC_ARM=$(cat /tmp/url_mac_arm)
-          URL_MAC_INTEL=$(cat /tmp/url_mac_intel)
-          URL_WIN=$(cat /tmp/url_win)
+          # Gitee's free release endpoint is unreliable with three concurrent
+          # 90+ MB uploads. Upload sequentially and reuse completed attachments.
+          URL_MAC_ARM=$(upload_file "$MAC_ARM")
+          URL_MAC_INTEL=$(upload_file "$MAC_INTEL")
+          URL_WIN=$(upload_file "$WIN_MSI")
 
           for url in "$URL_MAC_ARM" "$URL_MAC_INTEL" "$URL_WIN"; do
             if ! printf '%s' "$url" | grep -Eq '^https://gitee\.com/hanliuliu110/csp-pet/releases/download/'; then
