@@ -58,7 +58,7 @@ export default function LeaderboardScreen() {
     { key: 'streak', label: '连击榜', icon: '⚡' },
     { key: 'progress', label: '通关榜', icon: '🗺️' },
     { key: 'warrior', label: '勇者榜', icon: '🔥' },
-    { key: 'wins', label: '近30天胜场', icon: '⚔️' },
+    { key: 'wins', label: '赛季首胜', icon: '⚔️' },
     { key: 'ss_count', label: 'SS副本', icon: '🛡️' },
   ];
 

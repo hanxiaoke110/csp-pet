@@ -70,15 +70,15 @@ def process(src_rel: str, out_name: str):
     print(f"{out_name}  <- {src_rel}  ({os.path.getsize(os.path.join(OUT, out_name))//1024} KB)")
 
 def process_boss(src_rel: str, out_name: str):
-    """异兽独立大图 → 960x1200 竖版入口展示图（cover 裁 + 上下轻微压暗）"""
+    """异兽独立大图 → 960x1200 竖版入口展示图（保留画面上方的异兽主体）。"""
     src = os.path.join(SRC_BOSS, src_rel)
     im = Image.open(src).convert("RGB")
     tw, th = 960, 1200
     scale = max(tw / im.width, th / im.height)
     im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
-    # 宽度居中，高度从 15% 起取 1200（异兽集中在画面中上部）
+    # 这些 active 图的异兽集中在顶部；从 15% 起裁会只剩场景，入口头像看不到 Boss。
     x0 = (im.width - tw) // 2
-    y0 = min(int(im.height * 0.15), im.height - th)
+    y0 = 0
     im = im.crop((x0, y0, x0 + tw, y0 + th))
     grad = Image.new("L", (960, 1200), 0)
     d = ImageDraw.Draw(grad)

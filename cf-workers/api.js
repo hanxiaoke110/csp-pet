@@ -2080,11 +2080,12 @@ export default {
 
         const actualReward = rewardInserted ? reward : 0;
 
-        // 更新玩家金币与答题统计：仅首次胜利发奖时才加金币与累加统计。
-        // 同步客户端权威的等级/段位/连胜字段（加上界防刷），供跨设备登录恢复。
-        // 失败/重复胜利不累加统计，彻底杜绝刷答题统计（受速率限制 + INSERT OR IGNORE 双重保护）。
-        if (rewardInserted) {
-          // 防刷上界：等级≤100，段位≤8，经验/段位分/连胜合理上限
+        // 金币与答题数只在首次胜利时累加；重复挑战不重复发奖。
+        // 但符合奖励资格的重打仍可能提升等级、段位积分和连击，因此赛季快照必须更新，
+        // 否则客户端显示的新积分会在排行榜和跨设备登录时回退。
+        const hasProgressionSnapshot = [player_level, exp, rank_tier, rank_points, current_streak, max_streak]
+          .every(value => value !== undefined && value !== null);
+        if (rewardInserted || (seasonId === CURRENT_DUNGEON_SEASON && winFlag && hasProgressionSnapshot)) {
           const lv = Math.max(1, Math.min(100, parseInt(player_level) || 1));
           const expVal = Math.max(0, Math.min(999999, parseInt(exp) || 0));
           const rt = Math.max(1, Math.min(8, parseInt(rank_tier) || 1));
@@ -2092,19 +2093,27 @@ export default {
           const cs = Math.max(0, Math.min(9999, parseInt(current_streak) || 0));
           const ms = Math.max(0, Math.min(9999, parseInt(max_streak) || 0));
           if (seasonId === CURRENT_DUNGEON_SEASON) {
-            // Shared wallet is permanent. All progression/ranking fields live only in the season
-            // table so an older client cannot merge the new season into archived standings.
-            await db.prepare(`UPDATE dungeon_players SET gold=gold+?, updated_at=datetime('now') WHERE device_hash=?`)
-              .bind(actualReward, device_hash).run();
+            if (rewardInserted) {
+              await db.prepare(`UPDATE dungeon_players SET gold=gold+?, updated_at=datetime('now') WHERE device_hash=?`)
+                .bind(actualReward, device_hash).run();
+            }
+            const answeredDelta = rewardInserted ? answered : 0;
+            const correctDelta = rewardInserted ? correct : 0;
             await db.prepare(`INSERT INTO dungeon_season_stats (device_hash, season_id, player_level, exp, rank_tier, rank_points, total_answered, total_correct, current_streak, max_streak)
               VALUES (?,?,?,?,?,?,?,?,?,?)
-              ON CONFLICT(device_hash, season_id) DO UPDATE SET player_level=excluded.player_level, exp=excluded.exp,
-                rank_tier=excluded.rank_tier, rank_points=excluded.rank_points,
+              ON CONFLICT(device_hash, season_id) DO UPDATE SET
+                exp=CASE
+                  WHEN excluded.player_level > dungeon_season_stats.player_level THEN excluded.exp
+                  WHEN excluded.player_level = dungeon_season_stats.player_level THEN MAX(dungeon_season_stats.exp, excluded.exp)
+                  ELSE dungeon_season_stats.exp END,
+                player_level=MAX(dungeon_season_stats.player_level, excluded.player_level),
+                rank_tier=MAX(dungeon_season_stats.rank_tier, excluded.rank_tier),
+                rank_points=MAX(dungeon_season_stats.rank_points, excluded.rank_points),
                 total_answered=dungeon_season_stats.total_answered+excluded.total_answered,
                 total_correct=dungeon_season_stats.total_correct+excluded.total_correct,
                 current_streak=excluded.current_streak, max_streak=MAX(dungeon_season_stats.max_streak, excluded.max_streak)`)
-              .bind(device_hash, seasonId, lv, expVal, rt, rp, answered, correct, cs, ms).run();
-          } else {
+              .bind(device_hash, seasonId, lv, expVal, rt, rp, answeredDelta, correctDelta, cs, ms).run();
+          } else if (rewardInserted) {
             await db.prepare(`UPDATE dungeon_players SET gold = gold + ?, total_answered = total_answered + ?, total_correct = total_correct + ?,
                               player_level=?, exp=?, rank_tier=?, rank_points=?, current_streak=?, max_streak=?, updated_at=datetime('now') WHERE device_hash=?`)
               .bind(actualReward, answered, correct, lv, expVal, rt, rp, cs, ms, device_hash).run();
@@ -2153,6 +2162,10 @@ export default {
         const cc = url.searchParams.get('class_code') || '';
         const dh = request.headers.get('X-Device-Hash') || url.searchParams.get('device_hash') || '';
         const VALID_TYPES = ['power', 'streak', 'conquest', 'badge', 'wins', 'ss_count', 'progress', 'warrior'];
+        const VALID_SCOPES = ['class', 'global'];
+        if (!VALID_SCOPES.includes(scope)) {
+          return new Response(JSON.stringify({ error: '无效的排行榜范围' }), { status: 400, headers: cors });
+        }
         if (!VALID_TYPES.includes(type)) {
           return new Response(JSON.stringify({ error: '无效的排行榜类型' }), { status: 400, headers: cors });
         }
@@ -2177,14 +2190,14 @@ export default {
 
         if (seasonId === CURRENT_DUNGEON_SEASON && (type === 'wins' || type === 'warrior')) {
           const selectValue = type === 'warrior'
-            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.rating = 'S' THEN 1 END) * 15) as value"
+            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.is_win = 1 AND a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.is_win = 1 AND a.rating = 'S' THEN 1 END) * 15) as value"
             : 'COUNT(*) as value';
           const whereExtra = type === 'wins' ? 'AND a.is_win = 1' : '';
           query = `SELECT a.device_hash, p.display_name, p.school, COALESCE(s.rank_tier,1) rank_tier, ${selectValue}
                    FROM dungeon_season_attempts a JOIN dungeon_players p ON a.device_hash=p.device_hash
                    LEFT JOIN dungeon_season_stats s ON s.device_hash=p.device_hash AND s.season_id=?
                    WHERE a.season_id=? AND p.status='active' ${classFilter} ${whereExtra}
-                   GROUP BY a.device_hash ORDER BY value DESC LIMIT 50`;
+                   GROUP BY a.device_hash ORDER BY value DESC, p.display_name COLLATE NOCASE ASC, a.device_hash ASC LIMIT 50`;
           params = (scope === 'class' && cc) ? [seasonId, seasonId, cc] : [seasonId, seasonId];
         } else if (seasonId === CURRENT_DUNGEON_SEASON && (type === 'progress' || type === 'conquest' || type === 'ss_count')) {
           const predicate = type === 'ss_count' ? "dp.best_rating='SS'" : "dp.status='cleared'";
@@ -2192,7 +2205,7 @@ export default {
                    FROM dungeon_season_progress dp JOIN dungeon_players p ON dp.device_hash=p.device_hash
                    LEFT JOIN dungeon_season_stats s ON s.device_hash=p.device_hash AND s.season_id=?
                    WHERE dp.season_id=? AND p.status='active' ${classFilter} AND ${predicate}
-                   GROUP BY dp.device_hash ORDER BY value DESC LIMIT 50`;
+                   GROUP BY dp.device_hash ORDER BY value DESC, p.display_name COLLATE NOCASE ASC, dp.device_hash ASC LIMIT 50`;
           params = (scope === 'class' && cc) ? [seasonId, seasonId, cc] : [seasonId, seasonId];
         } else if (seasonId === CURRENT_DUNGEON_SEASON) {
           const valueExpr = type === 'streak' ? 's.max_streak' : type === 'badge'
@@ -2200,7 +2213,8 @@ export default {
             : 's.rank_points';
           query = `SELECT p.device_hash, p.display_name, p.school, COALESCE(s.rank_tier,1) rank_tier, COALESCE(${valueExpr},0) value
                    FROM dungeon_season_stats s JOIN dungeon_players p ON s.device_hash=p.device_hash
-                   WHERE s.season_id=? AND p.status='active' ${classFilter} ORDER BY value DESC LIMIT 50`;
+                   WHERE s.season_id=? AND p.status='active' ${classFilter}
+                   ORDER BY value DESC, p.display_name COLLATE NOCASE ASC, s.device_hash ASC LIMIT 50`;
           const prefix = type === 'badge' ? [seasonId, seasonId] : [seasonId];
           params = (scope === 'class' && cc) ? [...prefix, cc] : prefix;
         } else if (type === 'wins' || type === 'warrior') {
@@ -2210,14 +2224,14 @@ export default {
           let whereExtra = '';
           if (type === 'wins') whereExtra = 'AND a.is_win = 1';
           const selectValue = type === 'warrior'
-            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.rating = 'S' THEN 1 END) * 15) as value"
+            ? "(COUNT(CASE WHEN a.is_win = 1 THEN 1 END) * 10 + COUNT(CASE WHEN a.is_win = 1 AND a.rating = 'SS' THEN 1 END) * 30 + COUNT(CASE WHEN a.is_win = 1 AND a.rating = 'S' THEN 1 END) * 15) as value"
             : 'COUNT(*) as value';
           query = `SELECT a.device_hash, p.display_name, p.school, p.rank_tier, ${selectValue}
                    FROM dungeon_attempts a
                    JOIN dungeon_players p ON a.device_hash = p.device_hash
                    WHERE p.status = 'active' ${classFilter} ${whereExtra} AND a.created_at >= ?
                    GROUP BY a.device_hash
-                   ORDER BY value DESC
+                   ORDER BY value DESC, p.display_name COLLATE NOCASE ASC, a.device_hash ASC
                    LIMIT 50`;
           params = (scope === 'class' && cc) ? [cc, thirtyDaysAgo] : [thirtyDaysAgo];
         } else if (type === 'progress') {
@@ -2226,7 +2240,7 @@ export default {
                    JOIN dungeon_players p ON dp.device_hash = p.device_hash
                    WHERE p.status = 'active' ${classFilter} AND dp.status = 'cleared'
           GROUP BY dp.device_hash
-          ORDER BY value DESC
+          ORDER BY value DESC, p.display_name COLLATE NOCASE ASC, dp.device_hash ASC
           LIMIT 50`;
           params = (scope === 'class' && cc) ? [cc] : [];
         } else if (type === 'ss_count') {
@@ -2235,7 +2249,7 @@ export default {
                    JOIN dungeon_players p ON dp.device_hash = p.device_hash
                    WHERE p.status = 'active' ${classFilter} AND dp.best_rating = 'SS'
                    GROUP BY dp.device_hash
-                   ORDER BY value DESC, SUM(dp.best_score) DESC
+                   ORDER BY value DESC, SUM(dp.best_score) DESC, p.display_name COLLATE NOCASE ASC, dp.device_hash ASC
                    LIMIT 50`;
           params = (scope === 'class' && cc) ? [cc] : [];
         } else {
@@ -2260,15 +2274,24 @@ export default {
 
         const entries = await db.prepare(query).bind(...params).all();
         const sanitizeEntry = (e) => ({ display_name: e.display_name, school: e.school, rank_tier: e.rank_tier, value: e.value });
-        // Find player rank (device_hash only used internally)
+        let previousValue = null;
+        let previousRank = 0;
+        const rankedEntries = (entries.results || []).map((entry, index) => {
+          const value = Number(entry.value) || 0;
+          const rank = index > 0 && value === previousValue ? previousRank : index + 1;
+          previousValue = value;
+          previousRank = rank;
+          return { rank, ...entry };
+        });
+        // Find player rank (device_hash only used internally). Equal values share the same rank.
         let playerEntry = null;
-        if (dh && entries.results) {
-          const idx = entries.results.findIndex(e => e.device_hash === dh);
-          if (idx >= 0) playerEntry = { rank: idx + 1, ...sanitizeEntry(entries.results[idx]) };
+        if (dh) {
+          const own = rankedEntries.find(e => e.device_hash === dh);
+          if (own) playerEntry = { rank: own.rank, ...sanitizeEntry(own) };
         }
         return new Response(JSON.stringify({
           success: true, scope, type, season: seasonId,
-          entries: (entries.results || []).map((e, i) => ({ rank: i + 1, ...sanitizeEntry(e) })),
+          entries: rankedEntries.map(e => ({ rank: e.rank, ...sanitizeEntry(e) })),
           playerEntry,
         }), { headers: cors });
       }

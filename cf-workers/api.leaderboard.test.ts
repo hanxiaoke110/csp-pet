@@ -182,4 +182,112 @@ describe('Worker 智子试炼场排行榜', () => {
     expect(updates[0].sql).not.toMatch(/school=|gold=|player_level=|exp=|real_name=|phone=/);
     expect(updates[0].args).toEqual(['NEWCLASS', 'teacher-2', '新昵称', 'existing-device']);
   });
+
+  it('拒绝未知范围，避免错误参数静默退化成全服榜', async () => {
+    const response = await worker.fetch(
+      new Request('https://api.example.test/api/dungeon/leaderboard?scope=other&type=power&season_id=2026-season-2'),
+      { DB: makeDb() },
+      { waitUntil() {} } as any,
+    );
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({ error: '无效的排行榜范围' });
+  });
+
+  it('勇者榜只给胜利的 S/SS 评级加分', async () => {
+    const db = makeDb();
+    const response = await worker.fetch(
+      new Request('https://api.example.test/api/dungeon/leaderboard?scope=global&type=warrior&season_id=2026-season-2'),
+      { DB: db },
+      { waitUntil() {} } as any,
+    );
+
+    expect(response.status).toBe(200);
+    const query = db.queries.find(q => q.includes('FROM dungeon_season_attempts a')) || '';
+    expect(query).toContain("a.is_win = 1 AND a.rating = 'SS'");
+    expect(query).toContain("a.is_win = 1 AND a.rating = 'S'");
+  });
+
+  it('同分玩家使用稳定顺序并共享并列名次', async () => {
+    const queries: string[] = [];
+    const db = {
+      async exec() {},
+      prepare(sql: string) {
+        queries.push(sql);
+        return {
+          bind() { return this; },
+          async first() { return null; },
+          async run() { return { meta: { changes: 1 } }; },
+          async all() {
+            if (sql.includes('FROM dungeon_season_stats s')) {
+              return { results: [
+                { device_hash: 'a', display_name: '甲', school: 'code', rank_tier: 2, value: 100 },
+                { device_hash: 'b', display_name: '乙', school: 'star', rank_tier: 2, value: 100 },
+                { device_hash: 'c', display_name: '丙', school: 'dream', rank_tier: 2, value: 100 },
+                { device_hash: 'd', display_name: '丁', school: 'code', rank_tier: 1, value: 80 },
+              ] };
+            }
+            return { results: [] };
+          },
+        };
+      },
+    };
+    const response = await worker.fetch(
+      new Request('https://api.example.test/api/dungeon/leaderboard?scope=global&type=power&season_id=2026-season-2&device_hash=b'),
+      { DB: db },
+      { waitUntil() {} } as any,
+    );
+    const body = await response.json() as any;
+
+    expect(response.status).toBe(200);
+    expect(body.entries.map((entry: any) => entry.rank)).toEqual([1, 1, 1, 4]);
+    expect(body.playerEntry).toMatchObject({ rank: 1, display_name: '乙', value: 100 });
+    expect(queries.find(q => q.includes('FROM dungeon_season_stats s'))).toContain('p.display_name COLLATE NOCASE ASC');
+  });
+
+  it('重复挑战不再发金币，但会同步更高的赛季段位积分', async () => {
+    const statWrites: any[][] = [];
+    const db = {
+      async exec() {},
+      prepare(sql: string) {
+        let args: any[] = [];
+        return {
+          bind(...values: any[]) { args = values; return this; },
+          async first() {
+            if (sql.includes('FROM dungeon_players WHERE device_hash=? AND class_code=?')) {
+              return { device_hash: 'device-1', class_code: 'CLASS1', status: 'active' };
+            }
+            if (sql.includes('FROM rate_limits')) return null;
+            return null;
+          },
+          async run() {
+            if (sql.includes('INSERT OR IGNORE INTO dungeon_season_attempts')) return { meta: { changes: 0 } };
+            if (sql.includes('INSERT INTO dungeon_season_stats')) statWrites.push(args);
+            return { meta: { changes: 1 } };
+          },
+          async all() { return { results: [] }; },
+        };
+      },
+    };
+    const response = await worker.fetch(
+      new Request('https://api.example.test/api/dungeon/report-battle', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          device_hash: 'device-1', class_code: 'CLASS1', season_id: '2026-season-2',
+          dungeon_id: 'dungeon-01', stage_id: 'dungeon-01-stage-01', is_win: 1,
+          rating: 'SS', questions_answered: 5, correct_count: 5,
+          player_level: 4, exp: 30, rank_tier: 2, rank_points: 180,
+          current_streak: 6, max_streak: 8,
+        }),
+      }),
+      { DB: db },
+      { waitUntil() {} } as any,
+    );
+    const body = await response.json() as any;
+
+    expect(response.status).toBe(200);
+    expect(body.gold_added).toBe(0);
+    expect(statWrites).toEqual([['device-1', '2026-season-2', 4, 30, 2, 180, 0, 0, 6, 8]]);
+  });
 });
