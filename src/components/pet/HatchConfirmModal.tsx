@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import type { HatchRarity } from '../../stores/hatchStore';
 import { HATCH_DURATIONS } from '../../stores/hatchStore';
 
@@ -30,7 +31,8 @@ export default function HatchConfirmModal({ petName, rarity, onStart, onLater, o
     return () => clearTimeout(t);
   }, []);
 
-  return (
+  // portal 到 body：避免祖先卡片的 backdrop-filter 让 fixed 定位失效
+  return createPortal(
     <div className="hatch-overlay" onClick={onClose}>
       <div className="hatch-modal" onClick={e => e.stopPropagation()}>
         <button className="hatch-modal-close" onClick={onClose}>×</button>
@@ -91,6 +93,7 @@ export default function HatchConfirmModal({ petName, rarity, onStart, onLater, o
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 type CeremonyType = 'summon' | 'hatch' | 'evolve';
 
@@ -50,7 +51,8 @@ export default function CeremonyModal({ type, petName, petElement, petIcon, oldN
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
-  return (
+  // portal 到 body：避免祖先卡片的 backdrop-filter 让 fixed 定位失效
+  return createPortal(
     <div className="ceremony-overlay">
       <div className="ceremony-modal">
         {/* Background effects */}
@@ -120,6 +122,7 @@ export default function CeremonyModal({ type, petName, petElement, petIcon, oldN
           <p className="step-text">{steps[type][step]}</p>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

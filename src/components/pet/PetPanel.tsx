@@ -7,6 +7,7 @@ import type { OwnedPet } from '../../types/pet';
 import { validatePetName } from '../../utils/validateName';
 import { safeListen } from '../../lib/tauriEvents';
 import CeremonyModal from './CeremonyModal';
+import ModalPortal from '../ModalPortal';
 import PetSprite from './PetSprite';
 import HatchPanel from './HatchPanel';
 import RaisingGuide from './RaisingGuide';
@@ -221,7 +222,8 @@ export default function PetPanel() {
 
       {/* Rename modal */}
       {renameModal && displayPet && (
-        <div className="gacha-overlay" key={displayPet.petId} onClick={() => setRenameModal(false)}>
+        <ModalPortal key={displayPet.petId}>
+        <div className="gacha-overlay" onClick={() => setRenameModal(false)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
             <div className="buy-confirm-header">
               <span>📝 修改名字</span>
@@ -271,6 +273,7 @@ export default function PetPanel() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {toastMsg && <div className="milestone-toast">{toastMsg}</div>}

@@ -168,7 +168,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.35';
+  const VER = '1.7.36';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -179,11 +179,9 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🐢 八个山海 Boss 重新取景，入口可清楚看到异兽主体</div>
-          <div>📜 Boss 名称、台词与描述统一为山海编程设定</div>
-          <div>🏆 排行榜同分并列且顺序稳定，不再刷新后乱跳</div>
-          <div>⚡ 重复挑战可同步更高段位积分、等级与连击</div>
-          <div>🛡️ 重复挑战仍不重复发金币，赛季和永久资产均保留</div>
+          <div>🏫 修复绑定班级弹窗被遮挡、无法填写完整信息的问题</div>
+          <div>🪟 修复开窗口皮肤后购买/许愿/孵化等弹窗可能被裁切的问题</div>
+          <div>🎨 设置页全新样式：卡片分区更清晰，输入框与按钮风格统一</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

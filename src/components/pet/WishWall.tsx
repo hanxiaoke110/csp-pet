@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getDeviceId, getTicketCount, useTicket } from '../../utils/crypto';
 import { usePetStore } from '../../stores/petStore';
 import { useQuizStore } from '../../stores/quizStore';
+import ModalPortal from '../ModalPortal';
 
 const API = 'https://api.cspstudy.top';
 
@@ -401,6 +402,7 @@ export default function WishWall() {
 
       {/* ── Submit Modal ── */}
       {showForm && (
+        <ModalPortal>
         <div className="gacha-overlay" onClick={() => setShowForm(false)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()} style={{ width: 380 }}>
             <div className="buy-confirm-header">
@@ -432,6 +434,7 @@ export default function WishWall() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* ── Workshop ── */}

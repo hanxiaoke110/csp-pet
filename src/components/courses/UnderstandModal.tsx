@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { TYPE_CONFIG, type SectionType } from './ProblemViewer';
 
 interface Props {
@@ -10,7 +11,8 @@ interface Props {
 export default function UnderstandModal({ sectionType, problemTitle, onClose, onConfirm }: Props) {
   const cfg = TYPE_CONFIG[sectionType];
 
-  return (
+  // portal 到 body：避免祖先卡片的 backdrop-filter 让 fixed 定位失效
+  return createPortal(
     <div className="quiz-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="quiz-modal" style={{ maxWidth: 400 }}>
         <div className="quiz-header">
@@ -43,6 +45,7 @@ export default function UnderstandModal({ sectionType, problemTitle, onClose, on
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

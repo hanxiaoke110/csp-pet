@@ -1,4 +1,5 @@
-import { useState, useEffect, type CSSProperties } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { getVersion } from '@tauri-apps/api/app';
 import { useAIStore } from '../../stores/aiStore';
 import { usePetStore } from '../../stores/petStore';
@@ -168,19 +169,21 @@ function TrainingCampSection() {
   return (
     <div style={{ marginTop: 8 }}>
       {campActive ? (
-        <div style={{ background: '#065f46', borderRadius: 10, padding: '10px 14px', color: '#d1fae5' }}>
+        <div className="settings-status-card">
           <strong>🏕️ 集训进行中</strong> · 剩余 <strong>{daysLeft}</strong> 天
-          <br /><span style={{ fontSize: 12 }}>所有奖励 ×1.5 · 每日可领 3 份食物 · 超级挑战每日 1 次</span>
-          <div style={{ marginTop: 6 }}>
-            <button onClick={handleClaim} style={{ padding: '4px 12px', borderRadius: 6, border: 'none', background: '#34d399', color: '#000', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>🍞 领取今日食物</button>
+          <br /><span style={{ fontSize: 12, opacity: 0.85 }}>所有奖励 ×1.5 · 每日可领 3 份食物 · 超级挑战每日 1 次</span>
+          <div style={{ marginTop: 8 }}>
+            <button className="settings-btn settings-btn-secondary" onClick={handleClaim} style={{ padding: '5px 12px', fontSize: 12 }}>🍞 领取今日食物</button>
           </div>
-          {msg && <div style={{ marginTop: 4, fontSize: 11 }}>{msg}</div>}
+          {msg && <div style={{ marginTop: 6, fontSize: 12, fontWeight: 600 }}>{msg}</div>}
         </div>
       ) : (
         <div>
-          <input value={code} onChange={e => setCode(e.target.value)} placeholder="输入教师激活码" style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #475569', background: '#1e293b', color: '#e2e8f0', fontSize: 12, width: 160 }} />
-          <button onClick={handleActivate} style={{ marginLeft: 6, padding: '6px 14px', borderRadius: 6, border: 'none', background: '#f59e0b', color: '#000', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>激活集训</button>
-          {msg && <div style={{ marginTop: 6, fontSize: 12, color: msg.startsWith('✅') ? '#34d399' : '#f87171' }}>{msg}</div>}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input className="settings-input" value={code} onChange={e => setCode(e.target.value)} placeholder="输入教师激活码" style={{ width: 200 }} />
+            <button className="settings-btn" onClick={handleActivate}>激活集训</button>
+          </div>
+          {msg && <div style={{ marginTop: 6, fontSize: 12, color: msg.startsWith('✅') ? '#16a34a' : '#dc2626' }}>{msg}</div>}
         </div>
       )}
     </div>
@@ -282,7 +285,7 @@ function ClassBindingSection() {
   return (
     <div style={{ marginTop: 8 }}>
       {classInfo ? (
-        <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, padding: '12px 14px' }}>
+        <div className="settings-status-card">
           <div style={{ fontWeight: 700, color: '#16a34a', marginBottom: 2 }}>
             ✅ 已绑定：{classInfo.label}
           </div>
@@ -316,8 +319,10 @@ function ClassBindingSection() {
         </div>
       )}
 
-      {/* ── Bind / Edit Modal ── */}
-      {showModal && (
+      {/* ── Bind / Edit Modal ──
+          必须 portal 到 body：窗口皮肤会给 .settings-section 加 backdrop-filter，
+          它会让后代 position:fixed 相对卡片而不是视口定位，导致弹窗被裁掉 */}
+      {showModal && createPortal(
         <div className="gacha-overlay" onClick={() => setShowModal(false)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()} style={{ width: 380 }}>
             <div className="buy-confirm-header">
@@ -326,26 +331,22 @@ function ClassBindingSection() {
             </div>
             <div className="buy-confirm-body" style={{ alignItems: 'stretch', gap: 12 }}>
               {!classInfo && (
-                <div>
-                  <label style={{ fontSize: 12, fontWeight: 600, color: '#334155', display: 'block', marginBottom: 4 }}>班级码</label>
-                  <input value={code} onChange={e => setCode(e.target.value)} placeholder="输入老师给的班级码"
-                    style={{ width: '100%', padding: '8px 10px', boxSizing: 'border-box', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#1e293b', outline: 'none' }} />
+                <div className="bind-modal-field">
+                  <label>班级码</label>
+                  <input className="bind-modal-input" value={code} onChange={e => setCode(e.target.value)} placeholder="输入老师给的班级码" />
                 </div>
               )}
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#334155', display: 'block', marginBottom: 4 }}>昵称 *（同学可见）</label>
-                <input value={nickname} onChange={e => setNickname(e.target.value.slice(0, 10))} placeholder="在许愿墙显示的名字"
-                  style={{ width: '100%', padding: '8px 10px', boxSizing: 'border-box', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#1e293b', outline: 'none' }} />
+              <div className="bind-modal-field">
+                <label>昵称 *（同学可见）</label>
+                <input className="bind-modal-input" value={nickname} onChange={e => setNickname(e.target.value.slice(0, 10))} placeholder="在许愿墙显示的名字" />
               </div>
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#334155', display: 'block', marginBottom: 4 }}>真实姓名 🔒（仅老师可见）</label>
-                <input value={realName} onChange={e => setRealName(e.target.value)} placeholder="用于老师联系你"
-                  style={{ width: '100%', padding: '8px 10px', boxSizing: 'border-box', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#1e293b', outline: 'none' }} />
+              <div className="bind-modal-field">
+                <label>真实姓名 🔒（仅老师可见）</label>
+                <input className="bind-modal-input" value={realName} onChange={e => setRealName(e.target.value)} placeholder="用于老师联系你" />
               </div>
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#334155', display: 'block', marginBottom: 4 }}>手机号 🔒（仅老师可见）</label>
-                <input value={phone} onChange={e => setPhone(e.target.value.slice(0, 11))} placeholder="请输入11位手机号（必填）"
-                  style={{ width: '100%', padding: '8px 10px', boxSizing: 'border-box', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#1e293b', outline: 'none' }} />
+              <div className="bind-modal-field">
+                <label>手机号 🔒（仅老师可见）</label>
+                <input className="bind-modal-input" value={phone} onChange={e => setPhone(e.target.value.slice(0, 11))} placeholder="请输入11位手机号（必填）" />
               </div>
               {msg && <div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600 }}>{msg}</div>}
             </div>
@@ -356,7 +357,8 @@ function ClassBindingSection() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -428,20 +430,13 @@ function BackupSection() {
     }
   };
 
-  const btnStyle: CSSProperties = {
-    padding: '10px 20px', borderRadius: 10, border: 'none', cursor: 'pointer',
-    fontWeight: 700, fontSize: 13, color: '#fff',
-    background: busy ? '#cbd5e1' : 'linear-gradient(135deg, #0ea5e9, #0284c7)',
-  };
-
   return (
     <div style={{ marginTop: 8 }}>
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-        <button onClick={handleExport} disabled={busy !== null} style={btnStyle}>
+        <button className="settings-btn" onClick={handleExport} disabled={busy !== null}>
           {busy === 'export' ? '正在导出…' : '📤 导出备份'}
         </button>
-        <button onClick={handlePickImport} disabled={busy !== null}
-          style={{ ...btnStyle, background: busy ? '#cbd5e1' : 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}>
+        <button className="settings-btn settings-btn-secondary" onClick={handlePickImport} disabled={busy !== null}>
           {busy === 'import' ? '正在导入…' : '📥 导入备份'}
         </button>
       </div>

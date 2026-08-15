@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import type { Problem } from '../../types/course';
 import AIService from '../../services/ai/ai-service';
 import { renderMarkdown, escapeHtml } from '../../utils/markdown';
@@ -75,7 +76,8 @@ export default function AskAIModal({ problem, onClose }: Props) {
     }
   };
 
-  return (
+  // portal 到 body：避免祖先卡片的 backdrop-filter 让 fixed 定位失效
+  return createPortal(
     <div className="ai-modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="ai-modal">
         <div className="ai-modal-header">
@@ -118,6 +120,7 @@ export default function AskAIModal({ problem, onClose }: Props) {
           <button onClick={sendMsg} disabled={loading || !input.trim()}>发送</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

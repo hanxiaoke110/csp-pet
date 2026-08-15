@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+
 interface ConfirmModalProps {
   icon: string;
   title: string;
@@ -11,7 +13,9 @@ interface ConfirmModalProps {
 }
 
 export default function ConfirmModal({ icon, title, desc, price, coins, confirmText, danger, onConfirm, onCancel }: ConfirmModalProps) {
-  return (
+  // portal 到 body：窗口皮肤会给卡片加 backdrop-filter，
+  // 它会让后代 position:fixed 相对卡片而不是视口定位，导致弹窗被裁掉
+  return createPortal(
     <div className="gacha-overlay" onClick={onCancel}>
       <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
         <div className="buy-confirm-header">
@@ -30,6 +34,7 @@ export default function ConfirmModal({ icon, title, desc, price, coins, confirmT
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

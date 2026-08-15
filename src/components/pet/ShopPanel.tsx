@@ -6,6 +6,7 @@ import { ALL_SHOP_ITEMS, getPetConfig, PET_TIERS, getPetTier } from '../../types
 import { validatePetName } from '../../utils/validateName';
 import { addTickets, canBuyTickets } from '../../utils/crypto';
 import HatchConfirmModal from './HatchConfirmModal';
+import ModalPortal from '../ModalPortal';
 
 function localDateKey() {
   const date = new Date();
@@ -242,6 +243,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
 
       {/* Purchase confirmation modal */}
       {buyConfirm && (
+        <ModalPortal>
         <div className="gacha-overlay" onClick={() => setBuyConfirm(null)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
             <div className="buy-confirm-header">
@@ -306,10 +308,12 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* Food purchase confirmation */}
       {foodConfirm && (
+        <ModalPortal>
         <div className="gacha-overlay" onClick={() => setFoodConfirm(null)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
             <div className="buy-confirm-header">
@@ -341,10 +345,12 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* Action confirmation (rename card / gacha / exp items / feeder) */}
       {actionConfirm && (
+        <ModalPortal>
         <div className="gacha-overlay" onClick={() => setActionConfirm(null)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
             <div className="buy-confirm-header">
@@ -389,10 +395,12 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* Gacha pull animation + result reveal */}
       {gachaAnim && (
+        <ModalPortal>
         <div className="gacha-overlay">
           {gachaAnim.phase === 'rolling' ? (
             <div className="gacha-ceremony" style={{ background: 'linear-gradient(135deg, #eef2ff, #f5f3ff)' }}>
@@ -446,6 +454,7 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             );
           })()}
         </div>
+        </ModalPortal>
       )}
 
       {/* Hatch confirmation modal */}

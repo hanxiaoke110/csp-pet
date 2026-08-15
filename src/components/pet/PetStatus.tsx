@@ -4,6 +4,7 @@ import { useQuizStore } from '../../stores/quizStore';
 import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { invoke } from '@tauri-apps/api/core';
 import PetSprite from './PetSprite';
+import ModalPortal from '../ModalPortal';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import ConfirmModal from './ConfirmModal';
@@ -238,6 +239,7 @@ export default function PetStatus({
       )}
 
       {switchTarget && (
+        <ModalPortal>
         <div className="gacha-overlay" onClick={() => setSwitchTarget(null)}>
           <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
             <div className="buy-confirm-header">
@@ -270,6 +272,7 @@ export default function PetStatus({
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {displayPet && (
@@ -337,6 +340,7 @@ export default function PetStatus({
             };
             const cost = displayPet.freeElementChangeUsed ? 200 : 0;
             return (
+              <ModalPortal>
               <div className="gacha-overlay" onClick={() => setPendingElement(null)}>
                 <div className="buy-confirm-modal" onClick={event => event.stopPropagation()}>
                   <div className="buy-confirm-header">
@@ -368,6 +372,7 @@ export default function PetStatus({
                   </div>
                 </div>
               </div>
+              </ModalPortal>
             );
           })()}
 
