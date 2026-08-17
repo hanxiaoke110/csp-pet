@@ -1,6 +1,35 @@
 {
   "bugs": [
     {
+      "date": "2026-08-17",
+      "error_message": "学生反馈：自由练习「数据类型与运算」出现残缺题「下面的程序中，如果输入10 0，会输出（ ）。」选项 Division by zero condition!/0/10/100，题目无代码无法作答",
+      "root_cause": "gesp-2024-06-4-13（GESP 2024-06 四级第13题）V2 canonical 中 code=null（原题代码在官方 PDF 中是图片，导入丢失），被发布进 daily-gesp 渠道。可靠性审计 stemNeedsCode 漏检：outputRef 正则 /(输出|运行|执行).{0,12}(结果|是|为)|不能输出/ 不匹配「会输出（ ）」（输出后跟的是括号不是 是/为/结果），且 sourceRef&&outputRef 双条件全挂 → 未标 P1 → 发布门禁未拦截。此前 dungeon 侧 csp-exam-bank.json 已有人补全过该题官方原卷代码，但 canonical 没同步",
+      "fix": "新增 scripts/question-bank/fix-gesp-2024-06-4-13-code.mjs：canonical 补 code（与 csp-exam-bank 同源的 Division 除零异常代码）+ 题干 NFKC 归一（下⾯→下面、输⼊→输入）+ stableContentHash 重算 + contentRevision 50005479324；verification 同步 verdict/evidence contentHash + 标记 codeRestored。publish-snapshots 重新发布（daily 728/super 19/exam 239/dungeon 845），test-full-chain 86/86 通过，审计 visible P0/P1=0。审计 outputRef 正则补 (（|\(|的)|会输出 分支（全库模拟只命中本题，零误伤）；questionLoader CODE_REQUIRED_PATTERNS 补「下面的程序」兜底。清理 12 个未被 manifest 引用的旧 hash 快照",
+      "tags": [
+        "question-bank",
+        "gesp",
+        "missing-code",
+        "canonical",
+        "audit-gap",
+        "data-quality",
+        "student-report"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "error_message": "学生端 v1.7.36 点击试炼场「+1 次 · 120 金币」或补给站「购买」报错：Promise Error: Command plugin:dialog|confirm not allowed by ACL，底部红条反复弹出",
+      "root_cause": "tauri-plugin-dialog 2.7.0+ 把 Rust confirm 命令合并进 message（generate_handler 只剩 open/save/message），dialog:allow-confirm 变成 allow-message 的废弃别名，但插件注入的 init-iife.js 仍把 window.confirm 转发到已不存在的 plugin:dialog|confirm → ACL 拒绝 → index.html 全局 unhandledrejection 画红条。触发点：v1.7.34 山海赛季新增的两处 window.confirm（DungeonMap 周挑战加购 + TrialSupplyScreen 补给站购买）。v1.7.26 加的 dialog:allow-confirm 在插件 2.7.x 下已被中和",
+      "fix": "新建 src-dungeon/components/shared/DungeonConfirmModal.tsx（像素风应用内确认弹窗，替代原生 confirm）；DungeonMap 与 TrialSupplyScreen 两处改为弹窗 + 内联 3s 结果提示；tsc + build + build:dungeon 全绿，产物 grep 0 处 confirm(。修复需发 v1.7.37 学生才能收到",
+      "tags": [
+        "dungeon",
+        "tauri-plugin-dialog",
+        "acl",
+        "window-confirm",
+        "regression",
+        "src-dungeon"
+      ]
+    },
+    {
       "date": "2026-07-17",
       "error_message": "v1.7.11 发布前发现版本号不一致：package.json/tauri.conf.json 已更新到 1.7.11，但 src/App.tsx 更新日志 VER 仍为 1.7.7，update.json 仍为 1.7.6",
       "root_cause": "发布流程中 App.tsx 的 changelog VER 与 update.json 未纳入自动化同步，仅手动更新了 package.json 和 tauri.conf.json。导致用户看不到 v1.7.8-v1.7.11 的更新日志，且自动更新仍指向 v1.7.6 的 release 附件。",

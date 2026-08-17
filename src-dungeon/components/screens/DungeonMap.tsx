@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { usePetStore } from '../../../src/stores/petStore';
 import { getRankName } from '../../utils/gameLogic';
 import type { DungeonDefinition, DungeonProgress } from '../../types/dungeon';
 import { CURRENT_DUNGEON_SEASON_NAME } from '../../data/season';
+import DungeonConfirmModal from '../shared/DungeonConfirmModal';
 
 export default function DungeonMap() {
   const coins = usePetStore(s => s.coins);
@@ -16,6 +18,14 @@ export default function DungeonMap() {
   const weeklyChallenges = useDungeonStore(s => s.weeklyChallenges);
   const buyRewardChallenge = useDungeonStore(s => s.buyRewardChallenge);
   const trialInventory = useDungeonStore(s => s.trialInventory);
+  const [buyConfirmOpen, setBuyConfirmOpen] = useState(false);
+  const [notice, setNotice] = useState('');
+
+  useEffect(() => {
+    if (!notice) return;
+    const t = setTimeout(() => setNotice(''), 3000);
+    return () => clearTimeout(t);
+  }, [notice]);
 
   const rankName = getRankName(player.school, player.rankTier);
   const rewardChallengesRemaining = Math.max(0, weeklyChallenges.limit - weeklyChallenges.used);
@@ -66,11 +76,7 @@ export default function DungeonMap() {
           <button
             className="pixel-btn reward-pass-buy"
             title="消耗 120 个通用金币，增加 1 次本周有奖挑战资格"
-            onClick={() => {
-            if (!window.confirm('消耗 120 个通用金币，增加 1 次本周有奖挑战资格？')) return;
-              const ok = buyRewardChallenge();
-              window.alert(ok ? '已增加 1 次本周有奖挑战资格。' : '通用金币不足，需要 120 金币。');
-            }}
+            onClick={() => setBuyConfirmOpen(true)}
           >
             +1 次 · 120 金币
           </button>
@@ -86,6 +92,12 @@ export default function DungeonMap() {
           👤
         </button>
       </div>
+
+      {notice && (
+        <div style={{ textAlign: 'center', margin: '0 auto 12px', maxWidth: 320, padding: '8px 12px', background: 'rgba(0,0,0,0.55)', border: '1px solid var(--gold-dark)', color: 'var(--gold)', fontSize: '12px', borderRadius: 6 }}>
+          {notice}
+        </div>
+      )}
 
       {/* Map title */}
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
@@ -224,6 +236,20 @@ export default function DungeonMap() {
           🧪 试炼补给
         </button>
       </div>
+      {buyConfirmOpen && (
+        <DungeonConfirmModal
+          title="增加挑战资格"
+          message="消耗 120 个通用金币，增加 1 次本周有奖挑战资格？"
+          confirmLabel="确认"
+          cancelLabel="取消"
+          onCancel={() => setBuyConfirmOpen(false)}
+          onConfirm={() => {
+            const ok = buyRewardChallenge();
+            setNotice(ok ? '已增加 1 次本周有奖挑战资格。' : '通用金币不足，需要 120 金币。');
+            setBuyConfirmOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

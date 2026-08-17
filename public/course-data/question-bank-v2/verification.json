@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50005479323,
-  "verificationRevision": 50005479322,
+  "contentRevision": 50005479324,
+  "verificationRevision": 50005479324,
   "generatedAt": "2026-07-25T07:36:16.162Z",
   "questionCount": 1183,
   "statusCounts": {
@@ -34402,12 +34402,12 @@
     },
     {
       "questionId": "gesp-2024-06-4-13",
-      "contentHash": "56e654606e283b078d6480490098052e341b0ae3fda22b8eb5732ac043f38aa5",
+      "contentHash": "5d93f81af18cc62c6cb9c71a0902a7a1664583f35425c0221b7db26390ae7f45",
       "status": "auto_verified",
       "blockers": [],
       "warnings": [],
       "evidence": {
-        "contentHash": "56e654606e283b078d6480490098052e341b0ae3fda22b8eb5732ac043f38aa5",
+        "contentHash": "5d93f81af18cc62c6cb9c71a0902a7a1664583f35425c0221b7db26390ae7f45",
         "collectedAt": "2026-07-23T09:43:47.494Z",
         "officialMatch": false,
         "sourceUrl": "https://gesp.ccf.org.cn/101/attach/1621071528722464.pdf",
@@ -34423,7 +34423,7 @@
         "deterministic": {
           "answerIndex": null,
           "supported": false,
-          "reason": "incomplete_program"
+          "reason": "code_restored_after_verification"
         },
         "modelAnswers": [
           0,
@@ -34440,7 +34440,11 @@
         ],
         "explanationAttempts": 0,
         "_5juryConsensus": true,
-        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）"
+        "paperVerified20260804": "官方 GESP 原卷答案表确认（修复脚本 fix-gesp-20260804-14.mjs）",
+        "codeRestored": {
+          "at": "2026-08-17",
+          "note": "学生反馈缺代码无法作答；从 src-dungeon/data/csp-exam-bank.json 同步官方原卷代码（Division 除零异常处理示例）。答案保持 A（官方原卷答案表 2026-08-04 已确认）。"
+        }
       }
     },
     {

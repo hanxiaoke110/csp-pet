@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { usePetStore } from '../../../src/stores/petStore';
+import DungeonConfirmModal from '../shared/DungeonConfirmModal';
 
 const ITEMS = [
   { id: 'hint-ticket' as const, icon: '💡', name: '知识提示券', cost: 18, description: '战斗答题前查看一次解题方向。' },
@@ -15,6 +17,14 @@ export default function TrialSupplyScreen() {
   const inventory = useDungeonStore(s => s.trialInventory);
   const buy = useDungeonStore(s => s.buyTrialItem);
   const equip = useDungeonStore(s => s.equipTrialCosmetic);
+  const [confirmItem, setConfirmItem] = useState<(typeof ITEMS)[number] | null>(null);
+  const [notice, setNotice] = useState('');
+
+  useEffect(() => {
+    if (!notice) return;
+    const t = setTimeout(() => setNotice(''), 3000);
+    return () => clearTimeout(t);
+  }, [notice]);
 
   const amountFor = (id: string) => id === 'hint-ticket' ? inventory.hintTickets : id === 'healing-potion' ? inventory.healingPotions : 0;
   const equippedFor = (id: string) => id === 'title-data-scout' ? inventory.equippedTitle === id : id === 'frame-crystal' ? inventory.equippedAvatarFrame === id : false;
@@ -55,10 +65,7 @@ export default function TrialSupplyScreen() {
                     {equipped ? '已装备' : '装备'}
                   </button>
                 ) : (
-                  <button className="pixel-btn primary" disabled={coins < item.cost} onClick={() => {
-                    if (!window.confirm(`确认花费 ${item.cost} 通用金币购买「${item.name}」？`)) return;
-                    if (!buy(item.id)) window.alert('购买失败，请检查金币余额或是否已拥有。');
-                  }} style={{ fontSize: '11px' }}>
+                  <button className="pixel-btn primary" disabled={coins < item.cost} onClick={() => setConfirmItem(item)} style={{ fontSize: '11px' }}>
                     购买 {item.cost} 金币
                   </button>
                 )}
@@ -66,7 +73,26 @@ export default function TrialSupplyScreen() {
             );
           })}
         </div>
+        {notice && (
+          <div style={{ textAlign: 'center', margin: '16px auto 0', maxWidth: 320, padding: '8px 12px', background: 'rgba(0,0,0,0.55)', border: '1px solid var(--gold-dark)', color: 'var(--gold)', fontSize: '12px', borderRadius: 6 }}>
+            {notice}
+          </div>
+        )}
       </div>
+      {confirmItem && (
+        <DungeonConfirmModal
+          title="确认购买"
+          message={`确认花费 ${confirmItem.cost} 通用金币购买「${confirmItem.name}」？`}
+          confirmLabel="购买"
+          cancelLabel="取消"
+          onCancel={() => setConfirmItem(null)}
+          onConfirm={() => {
+            const ok = buy(confirmItem.id);
+            setNotice(ok ? `已购买「${confirmItem.name}」` : '购买失败，请检查金币余额或是否已拥有。');
+            setConfirmItem(null);
+          }}
+        />
+      )}
     </div>
   );
 }

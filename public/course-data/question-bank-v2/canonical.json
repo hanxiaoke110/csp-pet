@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "baseVersion": 21,
-  "contentRevision": 50005479323,
+  "contentRevision": 50005479324,
   "generatedAt": "2026-07-25T07:34:17.833Z",
   "questionCount": 1183,
   "conflictCount": 1008,
@@ -30747,8 +30747,8 @@
         "originalNumber": 13
       },
       "type": "choice",
-      "question": "下⾯的程序中，如果输⼊10 0，会输出（ ）。",
-      "code": null,
+      "question": "下面的程序中,如果输入10 0,会输出( )。",
+      "code": "#include <iostream>\nusing namespace std;\ndouble Division(int a, int b)\n{\n    if (b == 0)\n        throw \"Division by zero condition!\";\n    else\n        return ((double)a / (double)b);\n}\nvoid func()\n{\n    int len, time;\n    cin >> len >> time;\n    cout << Division(len, time) << endl;\n}\nint main()\n{\n    try {\n        func();\n    }\n    catch (const char* errmsg) {\n        cout << errmsg << endl;\n    }\n    catch (const int errmsg) {\n        cout << errmsg << endl;\n    }\n    return 0;\n}",
       "assets": [],
       "options": [
         "A. Division by zero condition!",
@@ -30772,7 +30772,7 @@
       },
       "importOrigin": "reviewed_cloud",
       "importPriority": 100,
-      "contentHash": "56e654606e283b078d6480490098052e341b0ae3fda22b8eb5732ac043f38aa5"
+      "contentHash": "5d93f81af18cc62c6cb9c71a0902a7a1664583f35425c0221b7db26390ae7f45"
     },
     {
       "id": "gesp-2024-06-4-14",

@@ -1,6 +1,6 @@
 # anatomy.md — CSP 学习助手项目结构
 
-> 最后更新：2026-07-26（v1.7.16 发版：CRLF修复 + 20级满级 + productName改英文）
+> 最后更新：2026-08-17（修复 v1.7.36 学生端 dialog ACL 报错：新增 DungeonConfirmModal 替换两处 window.confirm）
 
 ## 项目目录
 
@@ -173,7 +173,8 @@ src-dungeon/
 │   │   ├── LeaderboardScreen.tsx  # 排行榜（班级/全服 × 8维度）
 │   │   └── ProfileScreen.tsx      # 个人档案+24徽章墙
 │   └── shared/
-│       └── FableCard.tsx          # 知识点寓言卡片
+│       ├── FableCard.tsx          # 知识点寓言卡片
+│       └── DungeonConfirmModal.tsx  # 试炼场应用内确认弹窗（替代 window.confirm，dialog 插件 2.7+ 移除 confirm 命令；2026-08-17 新增，DungeonMap/TrialSupplyScreen 使用）
 ├── phaser/                        # Phaser.js 战斗场景（2026-07-01 新增）
 │   ├── BattlePhaserGame.ts        # Phaser.Game 实例管理
 │   ├── types.ts                   # Phaser 战斗内部类型

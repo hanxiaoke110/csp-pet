@@ -114,7 +114,7 @@ function stemNeedsCode(stem) {
   if (/流程图/.test(s)) return false;
   const sourceRef = /(下列|以下|下面|如下).{0,12}(代码|程序)|阅读.{0,12}(代码|程序)|代码段/.test(s);
   const codeHoleRef = /(代码|程序).{0,12}(横线|空白|填入|补全|划线)|横线处|空白处|补全|划线/.test(s);
-  const outputRef = /(输出|运行|执行).{0,12}(结果|是|为)|不能输出/.test(s);
+  const outputRef = /(输出|运行|执行).{0,12}(结果|是|为|（|\(|的)|不能输出|会输出/.test(s);
   const inlineOnly = !sourceRef && !codeHoleRef && /([a-zA-Z_]\w*|\d+)\s*(<<|>>|[+\-*/%]?=|[+\-*/%])/.test(s);
   if (inlineOnly) return false;
   if (/DevC\+\+|集成开发环境|调试代码段/.test(s) && !sourceRef && !codeHoleRef) return false;

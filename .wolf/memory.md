@@ -1917,3 +1917,20 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - 过程：CI 三平台构建成功；release 任务（Gitee 上传）跑 19 分钟无进展，取消后手动补传：本地签名（csp-updater-v2.key）→ Gitee release v1.7.29（id 773844）attach_files → update.json 写 Gitee URLs 并推 GitHub/Gitee master → 删除 v1.7.26 旧 release（保留 1.7.27/1.7.29）→ 公告已发（id 17，X-Admin-Token=csp-teacher-2026）。
 - 下载链接已验证 200：gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.29/CSP_1.7.29_{aarch64.dmg,x64.dmg,x64-setup.exe}。
 - 注意：CI release 上传仍不稳（本次又卡住），后续可考虑 release job 内直传 R2 或换上传策略；v1.7.28 tag 已删除（从未发版）。
+
+## 2026-08-17 — 学生端 v1.7.36 dialog ACL 报错修复（未发版）
+
+- 学生反馈：v1.7.36 点击试炼场「+1 次 · 120 金币」或补给站「购买」报 `Promise Error: Command plugin:dialog|confirm not allowed by ACL`，红条反复弹出。经核实为真 Bug。
+- 根因链：tauri-plugin-dialog 2.7.0+ 把 Rust confirm 命令合并进 message（`generate_handler![open, save, message]`），`dialog:allow-confirm` 仅是 `allow-message` 的废弃别名；但插件注入的 init-iife.js 仍把 `window.confirm` 转发到不存在的 `plugin:dialog|confirm` → ACL 拒绝 → 全局 unhandledrejection 红条。触发点：v1.7.34 山海赛季新增的两处 window.confirm（DungeonMap 周挑战加购、TrialSupplyScreen 补给站购买）。v1.7.26 加的 dialog:allow-confirm 在 2.7.x 插件下已被中和，加权限救不了。
+- 修复：新建 `src-dungeon/components/shared/DungeonConfirmModal.tsx`（像素风应用内确认弹窗）；两处调用点改为弹窗 + 内联 3s 结果提示（成功/余额不足分文案）。tsc + build + build:dungeon 全绿，产物 grep `confirm(` 0 处。
+- 遗留（不报错但违反项目策略）：`src/components/shared/KnowledgePointHelp.tsx` 与 `src/components/pet/WorkshopShop.tsx` 仍有 window.alert（走 message 命令，能弹出原生对话框），后续可统一换成应用内提示。
+- 待发版 v1.7.37 学生才能收到修复（版本号三处：package.json + tauri.conf.json + App.tsx VER）。
+
+## 2026-08-17 — 自由练习残缺题 gesp-2024-06-4-13 补代码（题库 revision 50005479324）
+
+- 学生反馈：自由练习「数据类型与运算」出现「下面的程序中，如果输入10 0，会输出（ ）。」选项 Division by zero condition!/0/10/100，无代码无法作答。
+- 定位：gesp-2024-06-4-13 在 V2 canonical 中 code=null（原题代码是 PDF 图片），被发布进 daily-gesp。漏检原因：可靠性审计 `stemNeedsCode` 的 outputRef 只认「输出+是/为/结果」，不认「会输出（ ）」→ 未标 P1 → 门禁未拦。同时发现 canonical 题干混有 Kangxi 兼容字符（下⾯U+2F91/输⼊U+2F0B），正则需 NFKC。
+- 修复：官方原卷代码此前已在 src-dungeon/data/csp-exam-bank.json 补全，直接同步回 canonical。新增 `scripts/question-bank/fix-gesp-2024-06-4-13-code.mjs`：补 code + 题干 NFKC 归一 + stableContentHash 重算 + revision 50005479324；verification 同步 verdict/evidence（标记 codeRestored）。publish-snapshots 重发（daily 728/super 19/exam 239/dungeon 845），test-full-chain 86/86 通过，审计 visible P0/P1=0。
+- 防复发：审计 outputRef 补 `（|\(|的|会输出` 分支（全库模拟仅命中本题零误伤）；questionLoader CODE_REQUIRED_PATTERNS 补「下面的程序」。清理 12 个未引用旧 hash 快照。
+- 待办：远程热更新依赖 manifest.json 推送到 GitHub/Gitee master（学生联网启动即自动重下新快照）；随 v1.7.37 内置新题库数据。
+

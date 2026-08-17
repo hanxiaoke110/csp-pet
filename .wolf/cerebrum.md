@@ -41,6 +41,9 @@
 - **Gitee 安装包命名规则**：`CSP_${version}_${arch}.dmg` / `CSP_${version}_x64-setup.exe`。productName 用中文（`CSP 学习助手`），CI 构建后重命名为英文再签名。
 - **Gitee contents API 鉴权**：`/contents/update.json` 更新必须用 `?access_token=` query 参数；`Authorization: token` header 在 attach_files 上传可用，但在 contents 接口会报 40001「登录失效」
 - **dialog ACL 权限拆分**：`dialog:default` 只含 allow-message/save/open，`window.confirm`（被插件注入脚本转发为 `plugin:dialog|confirm`）需要显式 `dialog:allow-confirm`；客户端避免使用原生 confirm/alert，统一应用内弹窗
+- **dialog 插件 2.7+ 变更（2026-08-17 实测）**：tauri-plugin-dialog 2.7.0 起 confirm 命令合并进 message（`generate_handler![open, save, message]`，无 confirm），`dialog:allow-confirm` 只是 `allow-message` 的废弃别名，**但注入的 init-iife.js 仍把 `window.confirm` 转发到不存在的 `plugin:dialog|confirm`** → 必然 ACL 报错。加权限也没用，唯一可靠修复是代码里不用原生 confirm
+- **题库「会输出（ ）」类残缺题（2026-08-17）**：GESP 原卷代码是图片时，题干常剩「下面的程序中，如果输入X，会输出（ ）」。审计 `stemNeedsCode` 的 outputRef 只认 输出+是/为/结果，不认 输出+（，故漏检。修 canonical 题的固定流程：改题 → `stableContentHash` 重算 contentHash（排除 contentHash/importOrigin/importPriority 字段）→ verification 同步 verdict+evidence contentHash → canonical/verification contentRevision 一起 bump → publish-snapshots → test-full-chain
+- **GESP 题库文本含 Kangxi 兼容字符（⾯U+2F91、⼊U+2F0B 等）**：正则匹配前必须 `.normalize('NFKC')`，否则「下⾯的程序」匹配不到「下面的程序」；修题时顺手归一化题干文本
 - **Gitee 大文件下载加速**：GitHub 直连 ~30KB/s、ghfast.top ~50KB/s 时，用本机代理 `curl -x http://127.0.0.1:7897 -C -` 可达 ~2.3MB/s
 - **CI `npm ci` 只装 `csp-desktop-pet/package.json` 的依赖**，如果根目录 `package.json` 有额外依赖，必须同步到子项目
 - **CI `sign_file` 用 `grep '^dW50' | head -1` 提取纯签名**，不再读 `.sig` 文件（含说明文字）
@@ -81,6 +84,9 @@
 - **绝不**: 用宠物系统等级（喂养升级）作为智子试炼场的战斗属性等级——应使用潜龙闭关的 playerLevel，两者是完全独立的升级体系。宠物等级通常 1-3 级而副本敌人 1-10 级，混用导致后期指数碾压。
 - **绝不**: 敌方伤害跳过玩家防御——resolveEnemyIntent 必须像 calculateDamage 一样先减 defender.defense 再乘元素克制，否则后期高攻敌人一击秒杀。
 - **绝不**: 发版操作前不读 .wolf/cerebrum.md——已有教训：签名格式、Gitee 配额、macOS 重定向等问题都有记录，不读就踩坑。
+- **绝不**: 在客户端代码用 `window.confirm`/`window.alert`/`window.prompt`——dialog 插件 2.7+ 已移除 confirm 命令，注入脚本仍转发 `plugin:dialog|confirm`，任何原生 confirm 都会 ACL 报错（v1.7.36 学生端红条教训）。统一应用内弹窗：试炼场用 `src-dungeon/components/shared/DungeonConfirmModal.tsx`
+- **绝不**: 改 canonical.json 的题后只改文件不改 contentHash/verification——publish-snapshots 会因 verdict.contentHash 不匹配直接抛错；必须按固定流程同步（见 Learnings 2026-08-17）
+- **绝不**: 在题库正则里直接匹配「下面/程序」类中文而不先 NFKC 归一——题库文本混有 Kangxi 兼容字符，不归一必然漏检
 
 ## 2026-06-02/03 许愿墙 + 班级系统新增
 
