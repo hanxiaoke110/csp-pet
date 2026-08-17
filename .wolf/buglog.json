@@ -2,9 +2,22 @@
   "bugs": [
     {
       "date": "2026-08-17",
+      "error_message": "v1.7.37 CI release job（run 32028555947）在「Sign packages & generate update.json」卡 35+ 分钟：Gitee v1.7.37 release 已建但只有源码包，aarch64.dmg 已传、x64.dmg/exe 未传，update.json 停在 1.7.36",
+      "root_cause": "GitHub runner → Gitee 跨境上传再次卡死（v1.7.27/29/37 第三次同类，网络层停滞，v1.7.35 加的 3 次重试 + 20min max-time 也救不回来/周期过长）。等 35 分钟无进展后按先例取消改手动。",
+      "fix": "手动补传全流程（10 分钟内完成）：gh run download 三 artifact → rename_eng 英文名 → npx tauri signer sign 本地签名 → minisign 验签三包通过（~/.tauri/*.key.pub 是 base64 包装，需 base64 -d -i 解码；tauri-cli 2.11.4 无 signer verify 子命令）→ 删 v1.7.35 旧 release 释放配额 → attach_files 上传（复用 CI 已传的 aarch64，补传 x64 dmg + exe）→ update.json 重新生成（sig+URL 对齐）→ git push 双远端（绕开 Gitee contents API 40001 坑）→ gh release create GitHub 备份 → 三 URL HEAD 200 → 公告 + 飞书文档同步",
+      "tags": [
+        "ci",
+        "gitee",
+        "release",
+        "upload-hang",
+        "manual-fallback"
+      ]
+    },
+    {
+      "date": "2026-08-17",
       "error_message": "学生反馈：自由练习「数据类型与运算」出现残缺题「下面的程序中，如果输入10 0，会输出（ ）。」选项 Division by zero condition!/0/10/100，题目无代码无法作答",
       "root_cause": "gesp-2024-06-4-13（GESP 2024-06 四级第13题）V2 canonical 中 code=null（原题代码在官方 PDF 中是图片，导入丢失），被发布进 daily-gesp 渠道。可靠性审计 stemNeedsCode 漏检：outputRef 正则 /(输出|运行|执行).{0,12}(结果|是|为)|不能输出/ 不匹配「会输出（ ）」（输出后跟的是括号不是 是/为/结果），且 sourceRef&&outputRef 双条件全挂 → 未标 P1 → 发布门禁未拦截。此前 dungeon 侧 csp-exam-bank.json 已有人补全过该题官方原卷代码，但 canonical 没同步",
-      "fix": "新增 scripts/question-bank/fix-gesp-2024-06-4-13-code.mjs：canonical 补 code（与 csp-exam-bank 同源的 Division 除零异常代码）+ 题干 NFKC 归一（下⾯→下面、输⼊→输入）+ stableContentHash 重算 + contentRevision 50005479324；verification 同步 verdict/evidence contentHash + 标记 codeRestored。publish-snapshots 重新发布（daily 728/super 19/exam 239/dungeon 845），test-full-chain 86/86 通过，审计 visible P0/P1=0。审计 outputRef 正则补 (（|\(|的)|会输出 分支（全库模拟只命中本题，零误伤）；questionLoader CODE_REQUIRED_PATTERNS 补「下面的程序」兜底。清理 12 个未被 manifest 引用的旧 hash 快照",
+      "fix": "新增 scripts/question-bank/fix-gesp-2024-06-4-13-code.mjs：canonical 补 code（与 csp-exam-bank 同源的 Division 除零异常代码）+ 题干 NFKC 归一（下⾯→下面、输⼊→输入）+ stableContentHash 重算 + contentRevision 50005479324；verification 同步 verdict/evidence contentHash + 标记 codeRestored。publish-snapshots 重新发布（daily 728/super 19/exam 239/dungeon 845），test-full-chain 86/86 通过，审计 visible P0/P1=0。审计 outputRef 正则补 (（|\\(|的)|会输出 分支（全库模拟只命中本题，零误伤）；questionLoader CODE_REQUIRED_PATTERNS 补「下面的程序」兜底。清理 12 个未被 manifest 引用的旧 hash 快照",
       "tags": [
         "question-bank",
         "gesp",

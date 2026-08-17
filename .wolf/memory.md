@@ -1934,3 +1934,10 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - 防复发：审计 outputRef 补 `（|\(|的|会输出` 分支（全库模拟仅命中本题零误伤）；questionLoader CODE_REQUIRED_PATTERNS 补「下面的程序」。清理 12 个未引用旧 hash 快照。
 - 待办：远程热更新依赖 manifest.json 推送到 GitHub/Gitee master（学生联网启动即自动重下新快照）；随 v1.7.37 内置新题库数据。
 
+
+## 2026-08-17 — v1.7.37 发版记录
+
+- 内容：dialog ACL 修复（DungeonConfirmModal 替换两处 window.confirm，v1.7.36 红条根因）+ gesp-2024-06-4-13 补代码（题库 revision 50005479324）+ 部分已知问题修复。changelog 三条：试炼场报错红条 / 自由练习残缺题 / 已知问题优化。
+- 过程：版本三处同步 + vitest 154/154 + build + build:dungeon + 题库 86/86 → commit 1b1e44f + tag v1.7.37 → push 双远端触发 CI。三平台构建全成功（6m42s/7m34s/11m57s），release job 在 Gitee 上传又卡死（35 分钟无进展，第 3 次复现）→ 按先例取消手动补传：gh run download → rename_eng → 本地签名（~/.tauri/csp-updater-v2.key）→ minisign 验签三包通过 → 删 v1.7.35 旧 release → attach_files（复用 CI 已传 aarch64，补传 x64 dmg + exe）→ update.json 重新生成并 git push 双远端（绕开 contents API）→ GitHub Release 备份（gh release create）→ 公告（X-Admin-Token=csp-teacher-2026）→ 飞书文档文字同步 v1.7.37。
+- 验证：Gitee v1.7.37 release 三包齐全，三 URL HEAD 200；update.json=1.7.37（API 验证无 CDN 缓存，sig/URL 三平台全对齐）；旧 release 清理后保留 v1.7.36/37。
+- 经验：本地验签用 minisign（~/.tauri/*.key.pub 是 base64 包装需 `base64 -d -i` 解码；tauri-cli 2.11.4 无 `signer verify` 子命令）；macOS `base64`/zsh `status` 只读变量小坑；CI 卡死判断阈值固化 30 分钟。

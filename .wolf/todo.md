@@ -2,8 +2,8 @@
 
 ## 待办（近期）
 
-- [ ] **题库数据修复已就绪、未推送**：gesp-2024-06-4-13 补代码（revision 50005479324，2026-08-17）。推送 public/course-data/question-bank-v2/（manifest + 新快照 + canonical + verification）到 GitHub/Gitee master 后，学生联网启动自动重下；随 v1.7.37 内置。
-- [ ] **dialog ACL 修复已就绪、未发版**：DungeonConfirmModal 替换两处 window.confirm（v1.7.36 红条根因），随 v1.7.37 发版。
+- [x] **题库数据修复已推送（v1.7.37，2026-08-17）**：gesp-2024-06-4-13 补代码（revision 50005479324）。public/course-data/question-bank-v2/ 已随 commit 1b1e44f 推 GitHub/Gitee master，学生联网启动自动重下；同时内置进 v1.7.37。
+- [x] **dialog ACL 修复已发版（v1.7.37，2026-08-17）**：DungeonConfirmModal 替换两处 window.confirm（v1.7.36 红条根因），随 v1.7.37 发版。
 
 - [ ] **客户端发版前，教师端不要发 CMP 补偿码**：教师端补偿码面板已上线（teacher.cspstudy.top），但学生端旧版（v1.7.26）不认识 CMP- 码，兑了只会提示无效；等客户端新版本发版后再开始发补偿码。
 - [x] **PetWindow 加“超时强制显示”兜底**：已实现 2.5s 超时强制显示 + `pet-companion-shown` 事件握手；`waitForCompanionVisible` 双通道（事件 + isVisible 轮询）确认，10s 超时自动回滚位置并销毁窗口（2026-08-04）。
