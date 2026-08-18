@@ -1941,3 +1941,11 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - 过程：版本三处同步 + vitest 154/154 + build + build:dungeon + 题库 86/86 → commit 1b1e44f + tag v1.7.37 → push 双远端触发 CI。三平台构建全成功（6m42s/7m34s/11m57s），release job 在 Gitee 上传又卡死（35 分钟无进展，第 3 次复现）→ 按先例取消手动补传：gh run download → rename_eng → 本地签名（~/.tauri/csp-updater-v2.key）→ minisign 验签三包通过 → 删 v1.7.35 旧 release → attach_files（复用 CI 已传 aarch64，补传 x64 dmg + exe）→ update.json 重新生成并 git push 双远端（绕开 contents API）→ GitHub Release 备份（gh release create）→ 公告（X-Admin-Token=csp-teacher-2026）→ 飞书文档文字同步 v1.7.37 → 附件同步（--sync-attachments，用户确认后执行，三包附件已换成 v1.7.37）。
 - 验证：Gitee v1.7.37 release 三包齐全，三 URL HEAD 200；update.json=1.7.37（API 验证无 CDN 缓存，sig/URL 三平台全对齐）；旧 release 清理后保留 v1.7.36/37。
 - 经验：本地验签用 minisign（~/.tauri/*.key.pub 是 base64 包装需 `base64 -d -i` 解码；tauri-cli 2.11.4 无 `signer verify` 子命令）；macOS `base64`/zsh `status` 只读变量小坑；CI 卡死判断阈值固化 30 分钟。
+
+## 2026-08-18 — 学生反馈题库强制刷新后一直加载（客户端健壮性修复，待发版）
+
+- 现象：题库 Gitee 远程热更新后，学生强制刷新（重启）选择题练习页一直「加载题库中…」，题库加载不出来。用户问是否孩子网络问题。
+- 诊断结论（不是网络问题）：服务端全链路验证健康——Worker manifest=revision 50005479324、6 个快照文件 HTTP 200 + sha256 与 manifest 一致；用真实数据模拟客户端适配器无崩溃；加载路径纯本地（内置包 + localStorage），不存在「远程一直加载」的环节。
+- 根因（两个叠加，均为客户端 bug）：① `beginQuestionBankSession` 把 `loadBundled` 放进 `Promise.all`——内置数据损坏（安装不完整/文件缺失）时整个 session reject，即使 localStorage 有有效缓存也不回退；② `QuizPractice` 挂载 effect `loadBank().then(() => setLoading(false))` 无 `.catch`——任何异常页面永久转圈。
+- 修复：repository.ts（loadBundled 非致命 try/catch→null；chooseQuestionSnapshot 的 bundled 参数改可空，缓存有效优先；fetchText 加 20s AbortController 超时）+ 6 条新测试（4 条会话级回归：内置损坏回退缓存/回退 previous/全坏抛错/内置正常加载）；QuizPractice.tsx（挂载 effect 加 cancelled + catch；startMode 补 catch 回模式选择页；新增 loadError 状态 + renderLoadError 错误页带 🔄 重试按钮，两个渲染分支都有错误门）；retryLoad 与 ExamTraining 重试先触发 refreshQuestionBankV2 远程热更新写缓存再本地加载——内置+缓存全坏时纯本地重试永远无法成功；错误页实时区分有网/无网（navigator.onLine + online/offline 监听，联网后文案自动切换）。repository.test 11/11、全量 160/160、tsc、build 全过。
+- 状态：代码已就绪，待用户确认后随下个版本发版（暂定 v1.7.38）。

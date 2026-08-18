@@ -168,7 +168,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.37';
+  const VER = '1.7.38';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -179,8 +179,7 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🧪 修复试炼场「+1 次挑战」「购买补给」点击后报错红条反复弹出的问题</div>
-          <div>📚 修复自由练习中一道「数据类型与运算」缺代码无法作答的题目</div>
+          <div>📡 修复题库偶尔加载不出来、一直转圈的问题：现在会显示明确提示，联网后点「重试」即可自动修复</div>
           <div>🛠️ 修复部分已知问题，优化使用体验</div>
         </div>
         <button onClick={dismiss} style={{

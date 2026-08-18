@@ -56,7 +56,7 @@ export interface QuestionBankSession {
 export function chooseQuestionSnapshot<T>(
   current: SnapshotCandidate<T> | null,
   previous: SnapshotCandidate<T> | null,
-  bundled: SnapshotCandidate<T>,
+  bundled: SnapshotCandidate<T> | null,
 ): SnapshotCandidate<T> {
   const candidates = [current, previous, bundled]
     .filter((candidate): candidate is SnapshotCandidate<T> => Boolean(candidate?.valid));
@@ -131,10 +131,18 @@ function bundledMatchesRemote(bundled: QuestionBankManifest, remote: QuestionBan
   return true;
 }
 
+const FETCH_TIMEOUT_MS = 20_000;
+
 async function fetchText(url: string): Promise<string> {
-  const response = await fetch(url, { cache: 'no-store' });
-  if (!response.ok) throw new Error(`Question bank HTTP ${response.status}: ${url}`);
-  return response.text();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+    if (!response.ok) throw new Error(`Question bank HTTP ${response.status}: ${url}`);
+    return response.text();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function loadBundled(requiredFiles: string[]): Promise<CachedRevision> {
@@ -179,19 +187,26 @@ export async function beginQuestionBankSession(requiredChannels: QuestionChannel
     ...requiredChannels.map(channel => LOGICAL_FILES[channel]),
     ...(requiredChannels.includes('exam') ? ['exam-manifests.json'] : []),
   ])];
-  const [bundled, current, previous] = await Promise.all([
-    loadBundled(requiredFiles),
-    Promise.resolve(readCache(V2_KEYS.current)),
-    Promise.resolve(readCache(V2_KEYS.previous)),
-  ]);
+  const [current, previous] = [
+    readCache(V2_KEYS.current),
+    readCache(V2_KEYS.previous),
+  ];
   const [currentValid, previousValid] = await Promise.all([
     validateCache(current, requiredFiles),
     validateCache(previous, requiredFiles),
   ]);
+  // 内置数据损坏（安装不完整/文件缺失）不应致命：仍有有效缓存时优先用缓存，
+  // 全部无效才抛出，由 UI 显示可重试的错误而不是永远转圈。
+  let bundled: CachedRevision | null = null;
+  try {
+    bundled = await loadBundled(requiredFiles);
+  } catch {
+    bundled = null;
+  }
   const selected = chooseQuestionSnapshot(
     current ? { revision: current.manifest.contentRevision, valid: currentValid, data: { cache: current, source: 'current' as const } } : null,
     previous ? { revision: previous.manifest.contentRevision, valid: previousValid, data: { cache: previous, source: 'previous' as const } } : null,
-    { revision: bundled.manifest.contentRevision, valid: true, data: { cache: bundled, source: 'bundled' as const } },
+    bundled ? { revision: bundled.manifest.contentRevision, valid: true, data: { cache: bundled, source: 'bundled' as const } } : null,
   );
   return parseSession(selected.data.cache, requiredChannels, selected.data.source);
 }

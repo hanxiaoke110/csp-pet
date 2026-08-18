@@ -2,13 +2,14 @@
 
 ## 待办（近期）
 
+- [ ] **题库「强制刷新后一直加载」修复（代码已就绪、待发版）**：① repository.ts loadBundled 非致命（内置损坏不再拖垮整个 session，有有效缓存就回退）+ fetchText 20s 超时；② QuizPractice 挂载 effect 补 catch + loadError 错误页（🔄 重试按钮）。根因不是网络：服务端全链路已验证健康，加载路径纯本地。测试 156/156、tsc、build 全过，待随下个版本发版（暂定 v1.7.38）。
 - [x] **题库数据修复已推送（v1.7.37，2026-08-17）**：gesp-2024-06-4-13 补代码（revision 50005479324）。public/course-data/question-bank-v2/ 已随 commit 1b1e44f 推 GitHub/Gitee master，学生联网启动自动重下；同时内置进 v1.7.37。
 - [x] **dialog ACL 修复已发版（v1.7.37，2026-08-17）**：DungeonConfirmModal 替换两处 window.confirm（v1.7.36 红条根因），随 v1.7.37 发版。
 
-- [ ] **客户端发版前，教师端不要发 CMP 补偿码**：教师端补偿码面板已上线（teacher.cspstudy.top），但学生端旧版（v1.7.26）不认识 CMP- 码，兑了只会提示无效；等客户端新版本发版后再开始发补偿码。
+- [x] **教师端可以发 CMP 补偿码了**：补偿码 CMP 兑换 + 优秀码服务端校验 v1.7.27 已发（a55a43e）、一码一次双保险 v1.7.30 已发（878b53a）、仅当天有效在服务端、本地密钥 csp-coach-2025 已移除。学生端 v1.7.37 认识 CMP- 码，可正常兑换。（2026-08-18 核对 tag 包含关系后勾掉）
 - [x] **PetWindow 加“超时强制显示”兜底**：已实现 2.5s 超时强制显示 + `pet-companion-shown` 事件握手；`waitForCompanionVisible` 双通道（事件 + isVisible 轮询）确认，10s 超时自动回滚位置并销毁窗口（2026-08-04）。
-- [ ] **新客户端发版内容清单**（代码已就绪、未发版）：补偿码 CMP 兑换、优秀码服务端校验、优秀码仅当天有效（北京时间）、学生端移除本地密钥 `csp-coach-2025`。
-- [x] **阅读题“没选项”修复（代码已改、未发版）**：① `refreshQuestionBankV2` 改为内容级校验（版本号相同也比对缓存 sha256 与远程 manifest，不一致强制重下/丢弃坏缓存）；快照选择同版本优先内置；② `toLegacyQuestion` 兜底：带 code、无 options、有 children 的 choice 自动按 reading 转 multipart；③ 选择题入口过滤掉无选项题。测试 120/120、构建通过、坏缓存 e2e 复现通过。**需随下个客户端版本发版**。
+- [x] **新客户端发版内容清单**（v1.7.27/v1.7.30 已全部发版）：补偿码 CMP 兑换、优秀码服务端校验、优秀码仅当天有效（北京时间）、学生端移除本地密钥 `csp-coach-2025`。（2026-08-18 核对后勾掉——此前漏勾）
+- [x] **阅读题“没选项”修复（v1.7.36 已发版，此前漏勾）**：① `refreshQuestionBankV2` 改为内容级校验（版本号相同也比对缓存 sha256 与远程 manifest，不一致强制重下/丢弃坏缓存）；快照选择同版本优先内置；② `toLegacyQuestion` 兜底：带 code、无 options、有 children 的 choice 自动按 reading 转 multipart；③ 选择题入口过滤掉无选项题。commit 181743c 已包含在 v1.7.36/37 tag（2026-08-18 核对）。
 - [ ] 发版后提醒老师：优秀码“当天有效 + 需联网兑换”。
 
 ## 性能优化 backlog（Windows 卡顿，待真机验证后推进）

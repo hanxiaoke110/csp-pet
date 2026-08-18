@@ -7,7 +7,7 @@ import { renderCodeText } from '../../utils/markdown';
 import { useNavigate } from 'react-router-dom';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
 import KnowledgePointHelp from '../shared/KnowledgePointHelp';
-import { beginQuestionBankSession } from '../../question-bank/repository';
+import { beginQuestionBankSession, refreshQuestionBankV2 } from '../../question-bank/repository';
 import { toLegacyQuestion } from '../../question-bank/adapters';
 import { getSuperChallengeItems, isCompleteSuperChallenge } from './superChallenge';
 
@@ -121,6 +121,9 @@ export default function QuizPractice() {
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState<{ correct: number; total: number; done: boolean }>({ correct: 0, total: 0, done: false });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  // 错误页实时区分有网/无网：联网后提示自动切换，孩子知道点重试就能修好
+  const [online, setOnline] = useState(navigator.onLine);
   const [superAnswers, setSuperAnswers] = useState<number[]>([]);
   const [kpResults, setKpResults] = useState<Map<string, { correct: number; total: number }>>(new Map());
   const [levelFilter, setLevelFilter] = useState<number | 'all'>('all');
@@ -161,7 +164,47 @@ export default function QuizPractice() {
   }
 
   // Load bank on mount
-  useEffect(() => { loadBank().then(() => setLoading(false)); }, []);
+  useEffect(() => {
+    let cancelled = false;
+    loadBank()
+      .then(() => { if (!cancelled) setLoading(false); })
+      .catch(() => {
+        // 加载失败必须兜底：不加 catch 页面会永远停在“加载题库中...”
+        if (!cancelled) {
+          setLoadError(true);
+          setLoading(false);
+        }
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  // 网络状态监听：联网/断网时更新错误页文案
+  useEffect(() => {
+    const handleOnline = () => setOnline(true);
+    const handleOffline = () => setOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // 重试加载：重置模块级缓存，先远程热更新拉取最新题库写进缓存，再走本地加载。
+  // 必须带远程刷新：内置数据和缓存全坏时，本地加载不碰网络，纯本地重试永远无法成功。
+  const retryLoad = async () => {
+    questionBank = null;
+    setLoadError(false);
+    setLoading(true);
+    try {
+      await refreshQuestionBankV2().catch(() => {});
+      await loadBank();
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Get reward based on mode
   const getReward = (): { exp: number; coins: number } => {
@@ -205,6 +248,10 @@ export default function QuizPractice() {
     let bank: QuizQuestion[] = [];
     try {
       bank = await loadBank();
+    } catch {
+      setLoadError(true);
+      setMode(null);
+      return;
     } finally {
       setLoading(false);
     }
@@ -407,6 +454,20 @@ export default function QuizPractice() {
 
   const renderText = renderCodeText;
 
+  const renderLoadError = () => (
+    <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
+      <div style={{ fontSize: 56, marginBottom: 16 }}>{online ? '📚' : '📡'}</div>
+      <h2>题库加载失败</h2>
+      <p style={{ color: '#64748b', marginBottom: 20 }}>
+        {online
+          ? '题库数据不完整，点重试会自动从服务器修复。'
+          : '当前没有网络，题库数据需要联网修复。请联网后点重试。'}
+      </p>
+      <button className="mode-btn" onClick={retryLoad}>🔄 重试</button>
+      <p style={{ color: '#94a3b8', fontSize: 12, marginTop: 16 }}>如多次重试仍无法加载，请重启应用或重新安装最新版</p>
+    </div>
+  );
+
   // --- Mode selection screen ---
   if (!mode) {
     // 班级码门禁未通过（月度复盘 / 超级挑战）：展示提示，不进入答题
@@ -420,6 +481,10 @@ export default function QuizPractice() {
           onBack={() => setClassGate(null)}
         />
       );
+    }
+    // 题库加载失败：显示可重试的错误页，而不是永远“加载题库中...”
+    if (loadError) {
+      return renderLoadError();
     }
     return (
       <div className="quiz-practice">
@@ -799,6 +864,10 @@ export default function QuizPractice() {
   // --- Regular answering screen ---
   if (loading) {
     return <div className="quiz-practice"><div className="loading-spinner" /><p>加载题目中...</p></div>;
+  }
+
+  if (loadError) {
+    return renderLoadError();
   }
 
   if (questions.length === 0) {

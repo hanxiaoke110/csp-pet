@@ -7,7 +7,7 @@ import ExamMultiPart from './ExamMultiPart';
 import { emit } from '@tauri-apps/api/event';
 import { petCopy } from '../pet/PetCopy';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
-import { beginQuestionBankSession } from '../../question-bank/repository';
+import { beginQuestionBankSession, refreshQuestionBankV2 } from '../../question-bank/repository';
 import { toLegacyQuestion } from '../../question-bank/adapters';
 
 interface ExamQuestion {
@@ -131,7 +131,10 @@ export default function ExamTraining() {
       <button className="mode-btn" onClick={() => {
         setError(null);
         setLoading(true);
-        loadExamBank()
+        // 先远程热更新拉最新题库写缓存，再本地加载（内置/缓存全坏时纯本地重试无法成功）
+        refreshQuestionBankV2()
+          .catch(() => {})
+          .then(() => loadExamBank())
           .then(setBank)
           .catch(e => setError(e instanceof Error ? e.message : '题库加载失败'))
           .finally(() => setLoading(false));

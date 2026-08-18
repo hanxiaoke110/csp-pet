@@ -1080,6 +1080,23 @@
       "found": "2026-07-24",
       "fixed": "2026-07-24",
       "detail": "questionSegment 只认 n+1 题号边界，跳号时下一题【答案】归到当前题。修复：边界改任意后续编号 + qStartRe 后瞻。教训：禁止单一 OCR 来源改答案，必须 jury 交叉验证。"
+    },
+    {
+      "id": "BUG-2026-0818-quiz-bank-load-spinner",
+      "title": "题库强制刷新后一直加载，页面永久转圈",
+      "status": "fixed",
+      "found": "2026-08-18",
+      "fixed": "2026-08-18",
+      "error_message": "学生反馈题库 Gitee 远程热更新后，强制刷新（重启）选择题练习页一直加载，题库加载不出来",
+      "root_cause": "两个叠加：① beginQuestionBankSession 把 loadBundled 放进 Promise.all，内置数据损坏（安装不完整/文件缺失）时整个 session reject，即使 localStorage 缓存有效也不回退；② QuizPractice 挂载 effect 用 loadBank().then(() => setLoading(false)) 无 .catch，任何加载异常都会让页面永久停在「加载题库中…」。与网络无关：服务端（Worker+Gitee manifest/6 快照文件）全链路 200 + sha256 一致，加载路径纯本地。",
+      "fix": "① repository.ts：loadBundled 改非致命（try/catch → null），chooseQuestionSnapshot 的 bundled 参数改可空，缓存有效时优先用缓存；fetchText 加 20s AbortController 超时；② QuizPractice.tsx：挂载 effect 加 cancelled 标志 + .catch；startMode 补 catch（失败回模式选择页）；新增 loadError 状态 + renderLoadError 错误页（📡 重试按钮，retryLoad 重置模块级 questionBank 缓存）；模式选择页与答题页两个渲染分支都加了错误门。测试 156/156、tsc、build 全过。 ③ 重试按钮先触发 refreshQuestionBankV2 远程热更新写缓存再本地加载（内置+缓存全坏时纯本地重试永远无法成功），ExamTraining 重试同步改造。 ④ 错误页实时区分有网/无网（navigator.onLine + online/offline 事件监听）：有网提示「点重试自动修复」，没网提示「请联网后点重试」，联网后文案自动切换。",
+      "tags": [
+        "题库",
+        "V2-热更新",
+        "无限加载",
+        "错误处理",
+        "客户端健壮性"
+      ]
     }
   ]
 }

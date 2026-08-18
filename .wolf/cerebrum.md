@@ -89,6 +89,8 @@
 - **绝不**: 改 canonical.json 的题后只改文件不改 contentHash/verification——publish-snapshots 会因 verdict.contentHash 不匹配直接抛错；必须按固定流程同步（见 Learnings 2026-08-17）
 - **绝不**: 在题库正则里直接匹配「下面/程序」类中文而不先 NFKC 归一——题库文本混有 Kangxi 兼容字符，不归一必然漏检
 - **绝不**: CI release job 在 Gitee 上传卡 30 分钟以上还继续等——已 3 次复现（v1.7.27/29/37），v1.7.35 加的 3 次重试 + 20min 超时兜不住网络层停滞；直接取消走手动补传（下载→改名→签名→minisign 验签→attach_files→git push update.json）
+- **绝不**: 页面加载 effect 用 `.then()` 不带 `.catch()`——题库加载失败会永久转圈（2026-08-18 学生反馈强制刷新后一直加载的根因之一）；且加载链路里“内置数据损坏”这类可回退错误不能放进 `Promise.all` 当致命错误，有有效缓存就应回退
+- **绝不**: 把 todo.md 里未勾选的旧待办直接当“未发版”引用——先 `git merge-base --is-ancestor <commit> <tag>` 核对功能 commit 是否已包含在最新发版 tag 里（2026-08-18 教训：CMP 补偿码其实 v1.7.27 就发了，todo 没勾只是过期状态，向用户报错）
 
 ## 2026-06-02/03 许愿墙 + 班级系统新增
 
