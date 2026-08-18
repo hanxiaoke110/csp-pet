@@ -2,7 +2,7 @@
 
 ## 待办（近期）
 
-- [ ] **题库「强制刷新后一直加载」修复（代码已就绪、待发版）**：① repository.ts loadBundled 非致命（内置损坏不再拖垮整个 session，有有效缓存就回退）+ fetchText 20s 超时；② QuizPractice 挂载 effect 补 catch + loadError 错误页（🔄 重试按钮）。根因不是网络：服务端全链路已验证健康，加载路径纯本地。测试 156/156、tsc、build 全过，待随下个版本发版（暂定 v1.7.38）。
+- [x] **题库「强制刷新后一直加载」修复（v1.7.38 已发版，2026-08-18）**：① repository.ts loadBundled 非致命（内置损坏不再拖垮整个 session，有有效缓存就回退）+ fetchText 20s 超时；② QuizPractice 挂载 effect 补 catch + 错误页（🔄 重试按钮 + 有网/无网区分提示）；③ 重试先远程热更新（全坏场景可自愈）。测试 160/160、tsc、build、build:dungeon、题库 86/86 全过。
 - [x] **题库数据修复已推送（v1.7.37，2026-08-17）**：gesp-2024-06-4-13 补代码（revision 50005479324）。public/course-data/question-bank-v2/ 已随 commit 1b1e44f 推 GitHub/Gitee master，学生联网启动自动重下；同时内置进 v1.7.37。
 - [x] **dialog ACL 修复已发版（v1.7.37，2026-08-17）**：DungeonConfirmModal 替换两处 window.confirm（v1.7.36 红条根因），随 v1.7.37 发版。
 

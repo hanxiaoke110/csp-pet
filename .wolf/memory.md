@@ -1949,3 +1949,10 @@ unified-quiz-bank.json 中 11 道题的选项字段出现腐败：
 - 根因（两个叠加，均为客户端 bug）：① `beginQuestionBankSession` 把 `loadBundled` 放进 `Promise.all`——内置数据损坏（安装不完整/文件缺失）时整个 session reject，即使 localStorage 有有效缓存也不回退；② `QuizPractice` 挂载 effect `loadBank().then(() => setLoading(false))` 无 `.catch`——任何异常页面永久转圈。
 - 修复：repository.ts（loadBundled 非致命 try/catch→null；chooseQuestionSnapshot 的 bundled 参数改可空，缓存有效优先；fetchText 加 20s AbortController 超时）+ 6 条新测试（4 条会话级回归：内置损坏回退缓存/回退 previous/全坏抛错/内置正常加载）；QuizPractice.tsx（挂载 effect 加 cancelled + catch；startMode 补 catch 回模式选择页；新增 loadError 状态 + renderLoadError 错误页带 🔄 重试按钮，两个渲染分支都有错误门）；retryLoad 与 ExamTraining 重试先触发 refreshQuestionBankV2 远程热更新写缓存再本地加载——内置+缓存全坏时纯本地重试永远无法成功；错误页实时区分有网/无网（navigator.onLine + online/offline 监听，联网后文案自动切换）。repository.test 11/11、全量 160/160、tsc、build 全过。
 - 状态：代码已就绪，待用户确认后随下个版本发版（暂定 v1.7.38）。
+
+## 2026-08-18 — v1.7.38 发版记录
+
+- 内容：题库「强制刷新后一直加载」兜底修复（loadBundled 非致命 + 挂载 effect 补 catch + 错误页重试按钮 + 有网/无网区分提示 + 重试先远程热更新）。学生反馈的非网络问题客户端 bug。
+- 过程：版本三处同步（package.json/tauri.conf.json/App.tsx）+ package-lock 顺手同步（此前停在 1.7.36）+ vitest 160/160 + tsc + build + build:dungeon + 题库 86/86 → commit 1639de8 + tag v1.7.38 → push 双远端。CI 三平台构建全 success（约 12 分钟），**release job 启动即取消**（用户定调：不再等 30 分钟）→ 手动补传：下载→改名→签名→验签（signer 写的 .sig 是 base64 包装，需 base64 -d -i 解码后再 minisign -Vm）→ Gitee v1.7.38 release 已由 release job 建好（含源码包），attach_files 三包 201 → update.json 生成并 git push 双远端 + API 验证=1.7.38 → 删 v1.7.36 旧 release（保留 1.7.37/38）→ GitHub Release 备份 → 公告 id 27 置顶 → 飞书文档文字同步。
+- 验证：Gitee v1.7.38 release 三包齐全（5 assets），三 URL 200；update.json API 验证 1.7.38 sig 三平台全对齐。
+- 新经验：① Gitee token 现在从 git credential store 取（remote URL 已不含 token）；② signer 的 .sig 文件是 base64 单行，minisign 验签前要解码；③ Homebrew Python 3.14 SSL 证书链不信任系统根证书，发公告 API 用 curl 不用 python urllib。

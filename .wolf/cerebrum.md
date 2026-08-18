@@ -51,7 +51,7 @@
 - **GitHub Token 需 `workflow` scope** 才能 push `.github/workflows/` 下的文件
 - **update.json 统一走 Gitee**，所有平台都可用 Gitee Release URL
 - **发版后清理旧 Gitee Release**，保留最近 2 个版本，释放 1GB 配额
-- **CI release 上传卡死已 3 次（v1.7.27/29/37，2026-08-17 复盘）**：卡 30+ 分钟无进展直接取消走手动补传，全程约 10 分钟。要点：gh run download 产物是中文名（先 rename 再签名）；attach_files 会复用已传同名资产（CI 传了一半的接着用）；本地验签用 minisign——`~/.tauri/*.key.pub` 内容是 base64 包装的 minisign key，需 `base64 -d -i` 解码，tauri-cli 2.11.4 没有 `signer verify` 子命令；update.json 直接 git push 双远端即可，绕开 contents API 40001 坑
+- **CI release 上传卡死已 3 次（v1.7.27/29/37，2026-08-17 复盘；2026-08-18 用户定调不再等待）**：上传卡住**立即取消**走手动补传，全程约 10 分钟。要点：gh run download 产物是中文名（先 rename 再签名）；attach_files 会复用已传同名资产（CI 传了一半的接着用）；本地验签用 minisign——`~/.tauri/*.key.pub` 内容是 base64 包装的 minisign key，需 `base64 -d -i` 解码，tauri-cli 2.11.4 没有 `signer verify` 子命令；update.json 直接 git push 双远端即可，绕开 contents API 40001 坑
 
 ## Do-Not-Repeat
 - **绝不**: 将 C++ 代码塞进 quiz options 数组 — 应放在 `code` 字段，选项用简短标签
@@ -88,7 +88,7 @@
 - **绝不**: 在客户端代码用 `window.confirm`/`window.alert`/`window.prompt`——dialog 插件 2.7+ 已移除 confirm 命令，注入脚本仍转发 `plugin:dialog|confirm`，任何原生 confirm 都会 ACL 报错（v1.7.36 学生端红条教训）。统一应用内弹窗：试炼场用 `src-dungeon/components/shared/DungeonConfirmModal.tsx`
 - **绝不**: 改 canonical.json 的题后只改文件不改 contentHash/verification——publish-snapshots 会因 verdict.contentHash 不匹配直接抛错；必须按固定流程同步（见 Learnings 2026-08-17）
 - **绝不**: 在题库正则里直接匹配「下面/程序」类中文而不先 NFKC 归一——题库文本混有 Kangxi 兼容字符，不归一必然漏检
-- **绝不**: CI release job 在 Gitee 上传卡 30 分钟以上还继续等——已 3 次复现（v1.7.27/29/37），v1.7.35 加的 3 次重试 + 20min 超时兜不住网络层停滞；直接取消走手动补传（下载→改名→签名→minisign 验签→attach_files→git push update.json）
+- **绝不**: 等 CI release job 的 Gitee 上传卡住还继续等——已 3 次复现（v1.7.27/29/37），v1.7.35 加的 3 次重试 + 20min 超时兜不住网络层停滞。**用户定调（2026-08-18）：上传卡住立即取消，直接走手动补传，不用等 30 分钟**（下载→改名→签名→minisign 验签→attach_files→git push update.json，全程约 10 分钟）
 - **绝不**: 页面加载 effect 用 `.then()` 不带 `.catch()`——题库加载失败会永久转圈（2026-08-18 学生反馈强制刷新后一直加载的根因之一）；且加载链路里“内置数据损坏”这类可回退错误不能放进 `Promise.all` 当致命错误，有有效缓存就应回退
 - **绝不**: 把 todo.md 里未勾选的旧待办直接当“未发版”引用——先 `git merge-base --is-ancestor <commit> <tag>` 核对功能 commit 是否已包含在最新发版 tag 里（2026-08-18 教训：CMP 补偿码其实 v1.7.27 就发了，todo 没勾只是过期状态，向用户报错）
 
