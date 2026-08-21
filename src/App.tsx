@@ -140,7 +140,11 @@ function WelcomeModal() {
         textAlign: 'center', maxWidth: 360, boxShadow: '0 8px 40px rgba(0,0,0,0.2)',
         animation: 'popIn .3s ease',
       }}>
-        <div style={{ fontSize: 48, marginBottom: 8 }}>🐣</div>
+        <img
+          src="/app-icon.png"
+          alt="CSP 学习助手"
+          style={{ width: 76, height: 76, objectFit: 'contain', marginBottom: 8 }}
+        />
         <h2 style={{ fontSize: 20, marginBottom: 4, color: '#f59e0b' }}>欢迎来到 CSP 学习助手！</h2>
         <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.8, marginBottom: 20 }}>
           领取你的第一只灵犀智子，<br />
@@ -168,7 +172,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.38';
+  const VER = '1.7.39';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -179,8 +183,9 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>📡 修复题库偶尔加载不出来、一直转圈的问题：现在会显示明确提示，联网后点「重试」即可自动修复</div>
-          <div>🛠️ 修复部分已知问题，优化使用体验</div>
+          <div>🐉 启用全新智子龙应用图标，统一客户端、试炼场和下载页品牌形象</div>
+          <div>🏛️ 试炼场每赛季首次更换流派免费，之后每次消耗 300 通用金币，支付前会再次确认</div>
+          <div>🏆 修复班级榜遗漏同一老师其他班级学生的问题</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { usePetStore } from '../../../src/stores/petStore';
 import { getRankName, getSchoolPassive } from '../../utils/gameLogic';
 import schoolsData from '../../data/schools.json';
 import type { School, SchoolDefinition } from '../../types/dungeon';
+import DungeonConfirmModal from '../shared/DungeonConfirmModal';
+
+const SCHOOL_CHANGE_COST = 300;
 
 const BADGE_RARITY_STARS: Record<string, { stars: string; color: string; label: string }> = {
   common:    { stars: '⭐',        color: '#999',     label: '普通' },
@@ -42,8 +45,12 @@ const BADGE_DEFS: Record<string, { name: string; desc: string; rarity: string; i
 
 export default function ProfileScreen() {
   const coins = usePetStore(s => s.coins);
+  const spendCoins = usePetStore(s => s.spendCoins);
   const navigate = useNavigate();
   const [changingSchool, setChangingSchool] = useState(false);
+  const [pendingSchool, setPendingSchool] = useState<School | null>(null);
+  const [schoolChangeError, setSchoolChangeError] = useState('');
+  const schoolChangeBusyRef = useRef(false);
   const player = useDungeonStore(s => s.player);
   const earnedBadges = useDungeonStore(s => s.earnedBadges);
   const progress = useDungeonStore(s => s.dungeonProgress);
@@ -77,10 +84,22 @@ export default function ProfileScreen() {
   const rarityOrder = ['mythic', 'legendary', 'epic', 'rare', 'common'];
 
   const changeSchool = (nextSchool: School) => {
-    if (nextSchool === player.school || hasChangedSchool) return;
+    if (nextSchool === player.school || schoolChangeBusyRef.current) return;
+    schoolChangeBusyRef.current = true;
+
+    const freeChangeUsed = localStorage.getItem(schoolChangeKey) === 'true';
+    const cost = freeChangeUsed ? SCHOOL_CHANGE_COST : 0;
+    if (cost > 0 && !spendCoins(cost)) {
+      setSchoolChangeError(`金币不足，需要 ${cost} 金币，当前只有 ${usePetStore.getState().coins} 金币。`);
+      schoolChangeBusyRef.current = false;
+      return;
+    }
+
     setSchool(nextSchool);
     localStorage.setItem(schoolChangeKey, 'true');
     saveToLocalStorage();
+    setPendingSchool(null);
+    setSchoolChangeError('');
     setChangingSchool(false);
   };
 
@@ -319,18 +338,18 @@ export default function ProfileScreen() {
                 更换修行流派
               </div>
               <div style={{ fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: 14 }}>
-                每赛季可更换 1 次。更换后段位积分、等级、副本进度都会保留，同时改变称号体系、流派外观和轻量被动效果。
+                每赛季第一次更换免费，之后每次消耗 {SCHOOL_CHANGE_COST} 通用金币。更换后段位积分、等级、副本进度都会保留，同时改变称号体系、流派外观和轻量被动效果。
               </div>
               {hasChangedSchool && (
                 <div style={{
                   padding: '10px 12px',
                   marginBottom: 12,
-                  border: '1px solid var(--hp-red)',
-                  color: 'var(--hp-red)',
-                  background: 'rgba(255,51,51,0.1)',
+                  border: '1px solid var(--gold)',
+                  color: 'var(--gold)',
+                  background: 'rgba(255,170,0,0.08)',
                   fontSize: 12,
                 }}>
-                  本赛季已经更换过流派。
+                  本赛季免费机会已使用，后续每次更换需要 🪙 {SCHOOL_CHANGE_COST} 金币。当前余额：🪙 {coins}
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -340,13 +359,16 @@ export default function ProfileScreen() {
                   return (
                     <button
                       key={next.id}
-                      disabled={selected || hasChangedSchool}
-                      onClick={() => changeSchool(next.id)}
+                      disabled={selected}
+                      onClick={() => {
+                        schoolChangeBusyRef.current = false;
+                        setSchoolChangeError('');
+                        setPendingSchool(next.id);
+                      }}
                       className="pixel-card"
                       style={{
                         textAlign: 'left',
-                        cursor: selected || hasChangedSchool ? 'default' : 'pointer',
-                        opacity: hasChangedSchool && !selected ? 0.45 : 1,
+                        cursor: selected ? 'default' : 'pointer',
                         borderColor: selected ? next.themeColor : 'var(--border-pixel)',
                         background: selected ? next.bgGradient : 'var(--bg-card)',
                         color: 'inherit',
@@ -358,6 +380,11 @@ export default function ProfileScreen() {
                           <div style={{ fontWeight: 700, color: next.themeColor }}>
                             {next.name} · {next.subtitle}{selected ? ' · 当前' : ''}
                           </div>
+                          {!selected && (
+                            <div style={{ fontSize: 11, color: hasChangedSchool ? 'var(--gold)' : 'var(--hp-green)', marginTop: 4, fontWeight: 700 }}>
+                              {hasChangedSchool ? `更换费用：🪙 ${SCHOOL_CHANGE_COST}` : '本次更换免费'}
+                            </div>
+                          )}
                           <div style={{ fontSize: 11, color: next.themeColor, marginTop: 4, fontWeight: 700 }}>
                             被动：{nextPassive.name} · {nextPassive.description}
                           </div>
@@ -370,12 +397,37 @@ export default function ProfileScreen() {
                   );
                 })}
               </div>
-              <button className="pixel-btn" onClick={() => setChangingSchool(false)} style={{ width: '100%', marginTop: 14 }}>
+              <button className="pixel-btn" onClick={() => {
+                schoolChangeBusyRef.current = false;
+                setPendingSchool(null);
+                setSchoolChangeError('');
+                setChangingSchool(false);
+              }} style={{ width: '100%', marginTop: 14 }}>
                 关闭
               </button>
             </div>
           </div>
         )}
+
+        {pendingSchool && (() => {
+          const nextSchool = schools.find(item => item.id === pendingSchool);
+          const cost = hasChangedSchool ? SCHOOL_CHANGE_COST : 0;
+          const balanceAfter = Math.max(0, coins - cost);
+          return (
+            <DungeonConfirmModal
+              title="确认更换修行流派"
+              zIndex={100003}
+              message={`${school?.name || '当前流派'} → ${nextSchool?.name || '目标流派'}。${cost > 0 ? `本次需要 ${cost} 通用金币，当前余额 ${coins}，更换后余额 ${balanceAfter}。` : '本次使用本赛季免费更换机会。'}等级、段位积分和副本进度都会保留。${schoolChangeError ? ` ${schoolChangeError}` : ''}`}
+              confirmLabel={cost > 0 ? `支付 ${cost} 金币` : '确认免费更换'}
+              onConfirm={() => changeSchool(pendingSchool)}
+              onCancel={() => {
+                schoolChangeBusyRef.current = false;
+                setPendingSchool(null);
+                setSchoolChangeError('');
+              }}
+            />
+          );
+        })()}
       </div>
     </div>
   );

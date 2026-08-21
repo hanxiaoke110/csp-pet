@@ -12,7 +12,7 @@ import {
 import { getWeekKey, loadCheckin, nextCheckin } from '../../utils/checkin';
 import {
   BookOpen, Bot, ClipboardList, Gift, Images, Laptop, Library, ListChecks,
-  Medal, Megaphone, PawPrint, Settings, Sparkles, Swords, Trophy, Zap,
+  Medal, Megaphone, PawPrint, Settings, Swords, Trophy, Zap,
 } from 'lucide-react';
 
 interface Props { children: ReactNode; }
@@ -111,7 +111,10 @@ export default function AppShell({ children }: Props) {
   return (
     <div className="app-shell" data-window-skin={windowSkin}>
       <nav className="sidebar">
-        <div className="sidebar-logo"><Sparkles /> <span>CSP 学习助手</span></div>
+        <div className="sidebar-logo">
+          <img src="/app-icon.png" alt="" />
+          <span>CSP 学习助手</span>
+        </div>
 
         <DailyCheckin />
 

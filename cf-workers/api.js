@@ -2186,7 +2186,15 @@ export default {
         }
 
         let query, params;
-        const classFilter = (scope === 'class' && cc) ? 'AND p.class_code = ?' : '';
+        // "班级榜"按老师统一展示：学生从任一班级码进入，都能看到该老师名下
+        // 所有有效班级的试炼场排名。这也兼容学生换班和历史班级码数据。
+        const classFilter = (scope === 'class' && cc)
+          ? `AND p.class_code IN (
+               SELECT class_code FROM classes
+               WHERE teacher_id=(SELECT teacher_id FROM classes WHERE class_code=? AND status='active')
+                 AND status='active'
+             )`
+          : '';
 
         if (seasonId === CURRENT_DUNGEON_SEASON && (type === 'wins' || type === 'warrior')) {
           const selectValue = type === 'warrior'
@@ -2264,7 +2272,12 @@ export default {
             selectValue = '(SELECT COUNT(*) FROM dungeon_badges db2 WHERE db2.device_hash=dungeon_players.device_hash) as value';
           }
           if (scope === 'class' && cc) {
-            query = `SELECT device_hash, display_name, school, rank_tier, ${selectValue} FROM dungeon_players WHERE status='active' AND class_code=? ORDER BY ${orderBy} LIMIT 50`;
+            query = `SELECT device_hash, display_name, school, rank_tier, ${selectValue} FROM dungeon_players
+                     WHERE status='active' AND class_code IN (
+                       SELECT class_code FROM classes
+                       WHERE teacher_id=(SELECT teacher_id FROM classes WHERE class_code=? AND status='active')
+                         AND status='active'
+                     ) ORDER BY ${orderBy} LIMIT 50`;
             params = [cc];
           } else {
             query = `SELECT device_hash, display_name, school, rank_tier, ${selectValue} FROM dungeon_players WHERE status='active' ORDER BY ${orderBy} LIMIT 50`;

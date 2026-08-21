@@ -65,7 +65,12 @@
   border-bottom: 1px solid var(--border);
   margin-bottom: 8px;
 }
-.sidebar-logo svg { width: 18px; height: 18px; stroke-width: 2; }
+.sidebar-logo img {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  object-fit: contain;
+}
 
 .nav-item {
   display: flex;

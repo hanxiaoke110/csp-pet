@@ -3,13 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="./app-icon.png">
 <title>CSP 教师管理后台</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#f8fafc;color:#1e293b;font-size:14px;line-height:1.5}
 #app{max-width:900px;margin:0 auto;padding:20px}
 .header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:2px solid #e2e8f0;margin-bottom:20px}
-.header h1{font-size:20px;color:#FF8C00}
+.header h1{font-size:20px;color:#FF8C00;display:flex;align-items:center;gap:9px}
+.brand-icon{width:34px;height:34px;object-fit:contain;flex:0 0 34px}
+.login-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;color:#FF8C00}
+.login-brand .brand-icon{width:46px;height:46px;flex-basis:46px}
 .header .user{font-size:13px;color:#64748b}
 .btn{padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
 .btn-primary{background:#FF8C00;color:#fff}.btn-primary:hover{background:#F96D00}
@@ -168,7 +172,10 @@ function LoginPage() {
   };
 
   return React.createElement('div', { className: 'login-box card' },
-    React.createElement('h2', { style: { textAlign:'center', marginBottom:20, color:'#FF8C00' } }, '🎓 CSP 教师管理'),
+    React.createElement('div', { className:'login-brand' },
+      React.createElement('img', { className:'brand-icon', src:'./app-icon.png', alt:'' }),
+      React.createElement('h2', null, 'CSP 教师管理'),
+    ),
     React.createElement('div', { className:'tabs', style:{ justifyContent:'center' } },
       React.createElement('button', { className:`tab ${mode==='login'?'active':''}`, onClick:()=>setMode('login') }, '教师登录'),
       React.createElement('button', { className:`tab ${mode==='register'?'active':''}`, onClick:()=>setMode('register') }, '注册'),
@@ -333,7 +340,10 @@ function Dashboard() {
   // ═══ RENDER ═══
   return React.createElement('div', { className:tab==='question-bank'?'wide-dashboard':'' },
     React.createElement('div', { className:'header' },
-      React.createElement('h1', null, isAdmin ? '🎓 管理员后台' : '📋 班级管理'),
+      React.createElement('h1', null,
+        React.createElement('img', { className:'brand-icon', src:'./app-icon.png', alt:'' }),
+        isAdmin ? '管理员后台' : '班级管理',
+      ),
       React.createElement('div', { className:'row', style:{ gap:12 } },
         React.createElement('span', { className:'user' }, state.teacher?.name || ''),
         React.createElement('button', { className:'btn btn-outline btn-sm', onClick:logout }, '退出'),

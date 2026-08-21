@@ -3,6 +3,7 @@ interface DungeonConfirmModalProps {
   message: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  zIndex?: number;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -17,11 +18,12 @@ export default function DungeonConfirmModal({
   message,
   confirmLabel = '确认',
   cancelLabel = '取消',
+  zIndex = 1000,
   onConfirm,
   onCancel,
 }: DungeonConfirmModalProps) {
   return (
-    <div className="dungeon-confirm-modal" role="dialog" aria-modal="true">
+    <div className="dungeon-confirm-modal" role="dialog" aria-modal="true" style={{ zIndex }}>
       <div className="dungeon-confirm-card">
         <h3>{title}</h3>
         <p>{message}</p>

@@ -88,6 +88,21 @@ describe('Worker 智子试炼场排行榜', () => {
     expect(query).not.toContain('LEFT JOIN dungeon_season_stats');
   });
 
+  it('班级榜包含同一老师名下的所有有效班级', async () => {
+    const db = makeDb();
+    const response = await worker.fetch(
+      new Request('https://api.example.test/api/dungeon/leaderboard?scope=class&type=power&season_id=2026-season-2&class_code=CLASS-A&device_hash=device-a'),
+      { DB: db },
+      { waitUntil() {} } as any,
+    );
+
+    expect(response.status).toBe(200);
+    const query = db.queries.find(q => q.includes('FROM dungeon_season_stats s')) || '';
+    expect(query).toContain('p.class_code IN');
+    expect(query).toContain('SELECT teacher_id FROM classes WHERE class_code=?');
+    expect(query).toContain("AND status='active'");
+  });
+
   it('旧账号首次登录第二赛季会补齐八个副本进度', async () => {
     const inserted: Array<{ dungeonId: string; status: string }> = [];
     const db = {
