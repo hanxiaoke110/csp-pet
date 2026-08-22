@@ -1,4 +1,4 @@
-import { usePetStore, FOODS, getLevelMilestone, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
+import { usePetStore, FOODS, currentWeekKey, getLevelMilestone, getWeeklyPassiveCoinReward, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
 import { getPetTier, type OwnedPet, type PetElement } from '../../types/pet';
 import { useQuizStore } from '../../stores/quizStore';
 import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
@@ -112,8 +112,13 @@ export default function PetStatus({
   const companionSlots = usePetStore(s => s.companionSlots);
   const desktopCompanionIds = usePetStore(s => s.desktopCompanionIds);
   const setDesktopCompanion = usePetStore(s => s.setDesktopCompanion);
+  const weeklyPassiveClaimWeek = usePetStore(s => s.weeklyPassiveClaimWeek);
+  const claimWeeklyPassiveCoins = usePetStore(s => s.claimWeeklyPassiveCoins);
 
   const activePet = ownedPets.find(p => p.petId === activePetId);
+  const highestPetLevel = ownedPets.reduce((max, pet) => Math.max(max, pet.level), 0);
+  const weeklyPassiveCoins = getWeeklyPassiveCoinReward(ownedPets);
+  const weeklyPassiveClaimed = weeklyPassiveClaimWeek === currentWeekKey();
   const displayPet = viewingPetId
     ? ownedPets.find(p => p.petId === viewingPetId) || activePet
     : activePet;
@@ -227,6 +232,35 @@ export default function PetStatus({
             })}
           </div>
         )}
+      </div>
+
+      <div style={{
+        margin: '12px 0', padding: '11px 13px', border: '1px solid #fde68a', borderRadius: 8,
+        background: 'rgba(255,251,235,0.92)', display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', gap: 12, flexWrap: 'wrap',
+      }}>
+        <div>
+          <div style={{ fontWeight: 700, color: '#92400e', marginBottom: 3 }}>🪙 每周修行津贴</div>
+          <div style={{ fontSize: 12, color: '#64748b' }}>
+            {weeklyPassiveCoins === 0
+              ? `当前最高 Lv.${highestPetLevel}，达到 Lv.10 后解锁；每个账号每周只能领取一次。`
+              : weeklyPassiveClaimed
+                ? `本周 ${weeklyPassiveCoins} 金币已领取，下周一刷新；多只智子不会重复发放。`
+                : `按最高等级智子计算，本周可领取 ${weeklyPassiveCoins} 金币；多只智子共用一次。`}
+          </div>
+        </div>
+        <button
+          disabled={weeklyPassiveCoins === 0 || weeklyPassiveClaimed}
+          onClick={() => showToast(claimWeeklyPassiveCoins().message)}
+          style={{
+            minWidth: 116, padding: '7px 12px', border: 0, borderRadius: 6, fontWeight: 700,
+            color: weeklyPassiveCoins === 0 || weeklyPassiveClaimed ? '#94a3b8' : '#fff',
+            background: weeklyPassiveCoins === 0 || weeklyPassiveClaimed ? '#e2e8f0' : '#f59e0b',
+            cursor: weeklyPassiveCoins === 0 || weeklyPassiveClaimed ? 'default' : 'pointer',
+          }}
+        >
+          {weeklyPassiveCoins === 0 ? 'Lv.10 解锁' : weeklyPassiveClaimed ? '本周已领取' : `领取 ${weeklyPassiveCoins} 金币`}
+        </button>
       </div>
 
       {viewingPet && viewingPet.petId !== activePetId && (
@@ -436,7 +470,7 @@ export default function PetStatus({
             return (
               <div className="pet-evolve" style={{ borderColor: getLevelBadgeColor(activePet.level) }}>
                 <h4 style={{ color: getLevelBadgeColor(activePet.level) }}>⭐ {ms.title}伙伴</h4>
-                <p>Lv.{activePet.level} · {ms.dailyPassiveCoins > 0 ? `每周 +${ms.dailyPassiveCoins * 4}g` : ''} {ms.pityThreshold < 100 ? '· 保底 50 抽' : ''}</p>
+                <p>Lv.{activePet.level} · {ms.weeklyPassiveCoins > 0 ? `每周可领 ${ms.weeklyPassiveCoins}g` : ''} {ms.pityThreshold < 100 ? `· ${ms.pityThreshold} 抽保底` : ''}</p>
                 <p className="evolve-hint">继续学习提升等级解锁更多效果！</p>
               </div>
             );

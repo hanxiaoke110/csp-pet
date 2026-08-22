@@ -13,6 +13,27 @@ const QUESTION_BANK_V2_FILES = new Set([
   'exam-manifests.json', 'dungeon-mixed.json', 'verification-summary.json',
 ]);
 const QUESTION_BANK_PERMISSION = 'question_bank_review';
+const LEADERBOARD_RULES_META_KEY = 'dungeon_leaderboard_rules';
+const LEADERBOARD_RULE_KEYS = ['power', 'streak', 'progress', 'warrior', 'wins', 'ss_count'];
+const DEFAULT_LEADERBOARD_RULES = {
+  version: 1,
+  title: '排行榜与 SS 评价规则',
+  rules: [
+    { key: 'power', label: '段位积分', description: '有奖励次数内，普通答对 +10，暴击答对 +20；战术流派每次答对再 +2。重打冲评级不增加积分。' },
+    { key: 'streak', label: '最高连击', description: '统计一次战斗中连续答对的最高题数。' },
+    { key: 'progress', label: '通关副本', description: '统计本赛季已通关的不同副本数量。' },
+    { key: 'warrior', label: '勇者积分', description: '每场有效胜利 +10；S 评价再 +15，SS 评价再 +30。' },
+    { key: 'wins', label: '赛季首胜', description: '统计获得奖励的有效胜利场次；同一关重复获胜不重复累计。' },
+    { key: 'ss_count', label: 'SS评价副本', description: '统计拿到过 SS 最佳评价的不同副本数量，不是单独的新副本。' },
+  ],
+  ssCriteria: [
+    '本场全部答对',
+    '战斗结束时剩余生命不少于 70%',
+    '本场使用 4 种不同技能',
+    '在目标回合内获胜（普通关 20 回合，Boss 战 30 回合）',
+  ],
+  footer: '每周默认有 5 次奖励挑战，可在试炼补给中购买额外次数；无奖励重打不增加段位、连击、勇者或首胜数据，但仍可刷新副本最佳评级（含 SS）。',
+};
 // Confirmed corrections made before the cloud review layer existed. Keeping these
 // here makes production consistent immediately, even before the source JSON is released.
 const BUILTIN_QUESTION_PATCHES = {
@@ -470,6 +491,53 @@ function sanitizeQuestionPatch(input) {
   return patch;
 }
 
+function cleanLeaderboardRuleText(value, fallback, maxLength) {
+  const text = typeof value === 'string' ? value.trim() : '';
+  return text ? text.slice(0, maxLength) : fallback;
+}
+
+function normalizeLeaderboardRules(input, previous = DEFAULT_LEADERBOARD_RULES) {
+  const source = input && typeof input === 'object' && !Array.isArray(input) ? input : {};
+  const incomingRules = new Map(
+    (Array.isArray(source.rules) ? source.rules : [])
+      .filter(rule => rule && typeof rule === 'object' && LEADERBOARD_RULE_KEYS.includes(rule.key))
+      .map(rule => [rule.key, rule]),
+  );
+  const previousRules = new Map((previous.rules || []).map(rule => [rule.key, rule]));
+  const rules = DEFAULT_LEADERBOARD_RULES.rules.map(fallback => {
+    const oldRule = previousRules.get(fallback.key) || fallback;
+    const rule = incomingRules.get(fallback.key) || {};
+    return {
+      key: fallback.key,
+      label: cleanLeaderboardRuleText(rule.label, oldRule.label || fallback.label, 40),
+      description: cleanLeaderboardRuleText(rule.description, oldRule.description || fallback.description, 500),
+    };
+  });
+  const criteria = Array.isArray(source.ssCriteria)
+    ? source.ssCriteria.map(item => cleanLeaderboardRuleText(item, '', 300)).filter(Boolean).slice(0, 8)
+    : [];
+  return {
+    version: Math.max(1, Number(source.version) || Number(previous.version) || 1),
+    title: cleanLeaderboardRuleText(source.title, previous.title || DEFAULT_LEADERBOARD_RULES.title, 80),
+    rules,
+    ssCriteria: criteria.length ? criteria : (previous.ssCriteria || DEFAULT_LEADERBOARD_RULES.ssCriteria),
+    footer: cleanLeaderboardRuleText(source.footer, previous.footer || DEFAULT_LEADERBOARD_RULES.footer, 800),
+    updatedAt: typeof source.updatedAt === 'string'
+      ? source.updatedAt
+      : (typeof previous.updatedAt === 'string' ? previous.updatedAt : undefined),
+  };
+}
+
+async function getLeaderboardRulesConfig(db) {
+  try {
+    const row = await db.prepare('SELECT value FROM meta WHERE key=?').bind(LEADERBOARD_RULES_META_KEY).first();
+    if (!row?.value) return DEFAULT_LEADERBOARD_RULES;
+    return normalizeLeaderboardRules(JSON.parse(row.value));
+  } catch {
+    return DEFAULT_LEADERBOARD_RULES;
+  }
+}
+
 // ═══════════════════════════════════════
 export default {
   async fetch(request, env, ctx) {
@@ -538,6 +606,32 @@ export default {
     if (path === '/api/question-bank/data' && request.method === 'GET') {
       const [{ bank }, overrides] = await Promise.all([fetchQuestionBankBase(), loadQuestionBankOverrides(db)]);
       return new Response(JSON.stringify(mergeQuestionBank(bank, overrides)), { headers: { ...cors, 'Cache-Control': 'no-store' } });
+    }
+
+    // ── Online dungeon leaderboard explanations ──
+    // Text is editable online, while scoring and SS calculations remain server-authoritative.
+    if (path === '/api/dungeon/leaderboard-rules' && request.method === 'GET') {
+      const rules = await getLeaderboardRulesConfig(db);
+      return new Response(JSON.stringify({ rules }), {
+        headers: { ...cors, 'Cache-Control': 'public, max-age=300' },
+      });
+    }
+
+    if (path === '/admin/dungeon/leaderboard-rules' && request.method === 'GET') {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const rules = await getLeaderboardRulesConfig(db);
+      return new Response(JSON.stringify({ rules }), { headers: cors });
+    }
+
+    if (path === '/admin/dungeon/leaderboard-rules' && request.method === 'PUT') {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const previous = await getLeaderboardRulesConfig(db);
+      const rules = normalizeLeaderboardRules(await request.json(), previous);
+      rules.version = (Number(previous.version) || 1) + 1;
+      rules.updatedAt = new Date().toISOString();
+      await db.prepare('INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)')
+        .bind(LEADERBOARD_RULES_META_KEY, JSON.stringify(rules)).run();
+      return new Response(JSON.stringify({ success: true, rules }), { headers: cors });
     }
 
     // ── Online announcements ──

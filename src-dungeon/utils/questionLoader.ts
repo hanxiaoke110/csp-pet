@@ -36,6 +36,15 @@ interface ReviewedBankVersion {
   revision: number;
 }
 
+function normalizeKnownQuestionText(question: Question): Question {
+  if (!question.question.includes('对应的中级表达式')) return question;
+  return {
+    ...question,
+    question: question.question.replace('对应的中级表达式', '对应的中缀表达式'),
+    knowledgePoint: question.id === 'csp-j-2023-c08' ? '表达式求值' : question.knowledgePoint,
+  };
+}
+
 // 人工核对的离线应急题。只在题库快照不可用，或某技能的候选题
 // 全部被可靠性规则淘汰时使用，保证战斗不被单道坏题卡住。
 const EMERGENCY_QUESTIONS: Question[] = [
@@ -74,7 +83,8 @@ export async function loadQuestionBank(): Promise<Question[]> {
   }
   try {
     const session = await beginQuestionBankSession(['dungeon']);
-    const verified = (session.channels.dungeon || []).map(question => toLegacyQuestion(question)) as Question[];
+    const verified = (session.channels.dungeon || [])
+      .map(question => normalizeKnownQuestionText(toLegacyQuestion(question) as Question));
     if (verified.length > 0) return verified;
   } catch {
     // Older installations can still use the legacy three-level cache below.
@@ -111,7 +121,7 @@ export async function loadQuestionBank(): Promise<Question[]> {
     const versionKey = `${Number(version.baseVersion) || 0}:${Number(version.revision) || 0}`;
 
     if (cachedReviewed?.length && localStorage.getItem(REVIEWED_BANK_VERSION_KEY) === versionKey) {
-      return cachedReviewed;
+      return cachedReviewed.map(normalizeKnownQuestionText);
     }
 
     const bankResponse = await fetch(`${REVIEWED_BANK_API}/data`, { cache: 'no-store' });
@@ -120,9 +130,9 @@ export async function loadQuestionBank(): Promise<Question[]> {
     const merged = mergeReviewedQuestionBank(data.questions, reviewedBank);
     saveToCache(REVIEWED_BANK_CACHE_KEY, merged);
     localStorage.setItem(REVIEWED_BANK_VERSION_KEY, versionKey);
-    return merged;
+    return merged.map(normalizeKnownQuestionText);
   } catch {
-    return cachedReviewed?.length ? cachedReviewed : data.questions;
+    return (cachedReviewed?.length ? cachedReviewed : data.questions).map(normalizeKnownQuestionText);
   }
 }
 

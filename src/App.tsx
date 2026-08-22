@@ -271,19 +271,6 @@ function App() {
       hungerTimer = setInterval(() => {
         usePetStore.getState().tickHunger();
       }, 900000); // 15 min
-      // 7. Weekly passive coins for Lv10+ pets
-      try {
-        const store = usePetStore.getState();
-        const activePet = store.ownedPets.find(p => p.petId === store.activePetId);
-        if (activePet && activePet.level >= 10) {
-          const lastGrant = localStorage.getItem('csp_last_passive_coin');
-          const now = Date.now();
-          if (!lastGrant || (now - parseInt(lastGrant)) >= 7 * 86400000) {
-            store.addCoins(20);
-            localStorage.setItem('csp_last_passive_coin', String(now));
-          }
-        }
-      } catch {}
       const cleanupPetClick = safeListen('pet-click', () => {
         usePetStore.getState().save();
       });

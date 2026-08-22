@@ -313,6 +313,7 @@ function Dashboard() {
       { key:'teachers', label:'👥 教师管理' },
       { key:'wishes', label:'💡 许愿管理' },
       { key:'announcements', label:'📣 公告管理' },
+      { key:'dungeon-rules', label:'📜 试炼规则' },
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求收集' },
       { key:'question-bank', label:'✓ 题库质检' },
@@ -588,6 +589,7 @@ function Dashboard() {
     // ═══ FEEDBACK TAB ═══
     tab === 'feedback' && !loading && React.createElement(FeedbackPanel),
     tab === 'announcements' && !loading && React.createElement(AnnouncementPanel, { isAdmin }),
+    tab === 'dungeon-rules' && isAdmin && !loading && React.createElement(LeaderboardRulesPanel),
     tab === 'question-bank' && !loading && React.createElement(QuestionBankPanel),
     // ═══ PERMISSION-GATED TABS ═══
     tab === 'qianlong' && !loading && React.createElement(QianLongPanel),
@@ -702,6 +704,108 @@ function AnnouncementPanel({ isAdmin }) {
             ),
             React.createElement('div', { className:'announcement-content' }, item.content),
           )),
+  );
+}
+
+const LEADERBOARD_RULE_LABELS = {
+  power:'段位积分', streak:'最高连击', progress:'通关副本',
+  warrior:'勇者积分', wins:'赛季首胜', ss_count:'SS评价副本',
+};
+
+function LeaderboardRulesPanel() {
+  const [rules, setRules] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
+
+  async function load() {
+    setLoading(true);
+    const data = await api('/api/admin/dungeon/leaderboard-rules');
+    if (data.error) toast(data.error, 'error');
+    else setRules(data.rules || null);
+    setLoading(false);
+  }
+
+  React.useEffect(() => { load(); }, []);
+
+  function updateRule(key, field, value) {
+    setRules(current => ({
+      ...current,
+      rules: (current.rules || []).map(rule => rule.key === key ? { ...rule, [field]:value } : rule),
+    }));
+  }
+
+  async function save() {
+    if (!rules) return;
+    if (!String(rules.title || '').trim()) return toast('说明标题不能为空', 'error');
+    if ((rules.ssCriteria || []).filter(Boolean).length === 0) return toast('至少填写一条 SS 条件', 'error');
+    setSaving(true);
+    const data = await api('/api/admin/dungeon/leaderboard-rules', {
+      method:'PUT',
+      body:JSON.stringify({
+        title:rules.title,
+        rules:rules.rules,
+        ssCriteria:rules.ssCriteria,
+        footer:rules.footer,
+      }),
+    });
+    setSaving(false);
+    if (data.error) return toast(data.error, 'error');
+    setRules(data.rules);
+    toast('试炼排行榜说明已在线更新');
+  }
+
+  if (loading) return React.createElement('div', { className:'spinner' });
+  if (!rules) return React.createElement('div', { className:'empty' }, '规则加载失败，请稍后重试');
+
+  return React.createElement('div', null,
+    React.createElement('div', { className:'card' },
+      React.createElement('div', { className:'row', style:{ alignItems:'flex-start', marginBottom:16 } },
+        React.createElement('div', null,
+          React.createElement('h3', null, '智子试炼场排行榜说明'),
+          React.createElement('div', { style:{ fontSize:12, color:'#64748b', maxWidth:620 } },
+            '这里只修改学生看到的规则说明，不会改变实际计分、奖励或 SS 判定逻辑。已安装支持在线说明版本的客户端会在 6 小时内自动更新。'),
+        ),
+        rules.updatedAt && React.createElement('span', { style:{ fontSize:11, color:'#94a3b8', whiteSpace:'nowrap' } },
+          '上次更新：' + new Date(rules.updatedAt).toLocaleString('zh-CN')),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '说明标题'),
+        React.createElement('input', { className:'input', maxLength:80, value:rules.title || '', onChange:e=>setRules({ ...rules, title:e.target.value }) }),
+      ),
+      (rules.rules || []).map(rule => React.createElement('div', { key:rule.key, className:'form-group' },
+        React.createElement('label', null, LEADERBOARD_RULE_LABELS[rule.key] || rule.key),
+        React.createElement('input', {
+          className:'input', maxLength:40, value:rule.label || '',
+          onChange:e=>updateRule(rule.key, 'label', e.target.value),
+          style:{ marginBottom:6 }, placeholder:'榜单名称',
+        }),
+        React.createElement('textarea', {
+          className:'input', maxLength:500, value:rule.description || '',
+          onChange:e=>updateRule(rule.key, 'description', e.target.value),
+          style:{ minHeight:76, resize:'vertical', lineHeight:1.6 }, placeholder:'说明这项榜单如何累计',
+        }),
+      )),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, 'SS 评价条件（每行一条）'),
+        React.createElement('textarea', {
+          className:'input', maxLength:2400, value:(rules.ssCriteria || []).join('\n'),
+          onChange:e=>setRules({ ...rules, ssCriteria:e.target.value.split('\n').slice(0,8) }),
+          style:{ minHeight:130, resize:'vertical', lineHeight:1.7 },
+        }),
+      ),
+      React.createElement('div', { className:'form-group' },
+        React.createElement('label', null, '补充说明'),
+        React.createElement('textarea', {
+          className:'input', maxLength:800, value:rules.footer || '',
+          onChange:e=>setRules({ ...rules, footer:e.target.value }),
+          style:{ minHeight:100, resize:'vertical', lineHeight:1.7 },
+        }),
+      ),
+      React.createElement('div', { className:'row' },
+        React.createElement('button', { className:'btn btn-outline', disabled:saving, onClick:load }, '放弃未保存修改'),
+        React.createElement('button', { className:'btn btn-primary', disabled:saving, onClick:save }, saving ? '保存中...' : '保存并在线生效'),
+      ),
+    ),
   );
 }
 

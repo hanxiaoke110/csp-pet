@@ -16,6 +16,8 @@ interface PetState {
   coins: number;
   foods: Record<string, number>;
   expPool: number;
+  weeklyPassiveClaimWeek: string;
+  claimWeeklyPassiveCoins: () => { ok: boolean; amount: number; message: string };
 
   // Pet management
   selectStarter: (speciesId: string, petName: string) => void;
@@ -123,6 +125,33 @@ function currentDay(): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+export function currentWeekKey(date = new Date()): string {
+  const local = new Date(date);
+  local.setHours(0, 0, 0, 0);
+  const day = local.getDay() || 7;
+  local.setDate(local.getDate() - day + 1);
+  return `${local.getFullYear()}-${String(local.getMonth() + 1).padStart(2, '0')}-${String(local.getDate()).padStart(2, '0')}`;
+}
+
+export function getWeeklyPassiveCoinReward(pets: Pick<OwnedPet, 'level'>[]): number {
+  const highestLevel = pets.reduce((max, pet) => Math.max(max, Number(pet.level) || 0), 0);
+  if (highestLevel >= 20) return 32;
+  if (highestLevel >= 10) return 20;
+  return 0;
+}
+
+export function migrateWeeklyPassiveClaimWeek(
+  savedWeek: unknown,
+  legacyGrantAt: unknown,
+  now = new Date(),
+): string {
+  const existing = String(savedWeek || '');
+  if (existing) return existing;
+  const legacyTimestamp = Number(legacyGrantAt);
+  if (!Number.isFinite(legacyTimestamp) || legacyTimestamp <= 0) return '';
+  return currentWeekKey(new Date(legacyTimestamp)) === currentWeekKey(now) ? currentWeekKey(now) : '';
+}
+
 function readCompanionSlotReceipt(): number {
   try {
     const receipt = JSON.parse(localStorage.getItem(COMPANION_SLOT_RECEIPT_KEY) || '{}');
@@ -183,12 +212,12 @@ function calculatePetBattleStats(speciesId: string, level: number, currentHp?: n
 }
 
 // Level milestones
-export function getLevelMilestone(level: number): { title: string; pityThreshold: number; dailyPassiveCoins: number } {
-  if (level >= 20) return { title: '大乘(满级)', pityThreshold: 30, dailyPassiveCoins: 8 };
-  if (level >= 15) return { title: '化神', pityThreshold: 50, dailyPassiveCoins: 5 };
-  if (level >= 10) return { title: '元婴', pityThreshold: 100, dailyPassiveCoins: 5 };
-  if (level >= 5)  return { title: '金丹', pityThreshold: 100, dailyPassiveCoins: 0 };
-  return { title: '筑基', pityThreshold: 100, dailyPassiveCoins: 0 };
+export function getLevelMilestone(level: number): { title: string; pityThreshold: number; weeklyPassiveCoins: number } {
+  if (level >= 20) return { title: '大乘(满级)', pityThreshold: 30, weeklyPassiveCoins: 32 };
+  if (level >= 15) return { title: '化神', pityThreshold: 50, weeklyPassiveCoins: 20 };
+  if (level >= 10) return { title: '元婴', pityThreshold: 100, weeklyPassiveCoins: 20 };
+  if (level >= 5)  return { title: '金丹', pityThreshold: 100, weeklyPassiveCoins: 0 };
+  return { title: '筑基', pityThreshold: 100, weeklyPassiveCoins: 0 };
 }
 
 // Display name with milestone prefix: [大乘(满级)] 宠物名
@@ -214,6 +243,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   pendingExp: 0,
   pendingCoins: 0,
   expPool: 0,
+  weeklyPassiveClaimWeek: '',
   renameCards: 0,
   foodItems: [],
   wishTickets: 0,
@@ -235,6 +265,19 @@ export const usePetStore = create<PetState>((set, get) => ({
   recycledPets: [],
   companionSlots: 1,
   desktopCompanionIds: [],
+
+  claimWeeklyPassiveCoins: () => {
+    const state = get();
+    const amount = getWeeklyPassiveCoinReward(state.ownedPets);
+    if (amount <= 0) return { ok: false, amount: 0, message: '最高等级达到 Lv.10 后解锁' };
+    const week = currentWeekKey();
+    if (state.weeklyPassiveClaimWeek === week) {
+      return { ok: false, amount: 0, message: '本周修行金币已领取' };
+    }
+    set(s => ({ coins: s.coins + amount, weeklyPassiveClaimWeek: week }));
+    get().save();
+    return { ok: true, amount, message: `本周修行金币 +${amount}，已到账` };
+  },
 
   selectStarter: (speciesId, petName) => {
     const species = STARTER_PETS.find(s => s.speciesId === speciesId);
@@ -938,8 +981,8 @@ export const usePetStore = create<PetState>((set, get) => ({
   checkCollectionRewards: () => {},
 
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
-    const data = { savedAt: new Date().toISOString(), ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
+    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
+    const data = { savedAt: new Date().toISOString(), ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     // save() 只管数据同步，不管窗口显隐
@@ -1012,6 +1055,10 @@ export const usePetStore = create<PetState>((set, get) => ({
           return id;
         });
         const storedCoins = Number(data.coins);
+        const weeklyPassiveClaimWeek = migrateWeeklyPassiveClaimWeek(
+          data.weeklyPassiveClaimWeek,
+          localStorage.getItem('csp_last_passive_coin'),
+        );
         set({
           ownedPets: loadedPets,
           activePetId,
@@ -1020,6 +1067,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           pendingExp: data.pendingExp || 0,
           pendingCoins: data.pendingCoins || 0,
           expPool: data.expPool || 0,
+          weeklyPassiveClaimWeek,
           renameCards: data.renameCards || 0,
           foodItems: [],
           wishTickets: 0,

@@ -177,7 +177,7 @@ function LevelTable() {
               <td style={{ padding: '3px 4px', fontWeight: 600 }}>Lv.{lv}</td>
               <td style={{ color: lv >= 20 ? '#dc2626' : lv >= 15 ? '#f59e0b' : lv >= 10 ? '#3b82f6' : lv >= 5 ? '#22c55e' : '#94a3b8' }}>{m.title}</td>
               <td style={{ fontSize: 10, color: '#94a3b8' }}>
-                {lv === 1 ? '—' : lv === 5 ? '新称号「金丹」' : lv === 10 ? '每周自动 +20g' : lv === 15 ? '保底减半至 50 抽 · 每周 +20g' : '每周自动 +32g · 修行圆满 🎉'}
+                {lv === 1 ? '—' : lv === 5 ? '新称号「金丹」' : lv === 10 ? '每周可领 20g' : lv === 15 ? '保底降至 50 抽 · 每周可领 20g' : '保底降至 30 抽 · 每周可领 32g · 修行圆满 🎉'}
               </td>
             </tr>
           );

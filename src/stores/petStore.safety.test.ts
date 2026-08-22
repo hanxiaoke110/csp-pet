@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { usePetStore } from './petStore';
+import { currentWeekKey, getWeeklyPassiveCoinReward, migrateWeeklyPassiveClaimWeek, usePetStore } from './petStore';
 import { useHatchStore } from './hatchStore';
 import { getPetConfig, type OwnedPet } from '../types/pet';
 
@@ -45,6 +45,7 @@ beforeEach(() => {
     coins: 200,
     foods: { basic: 3 },
     expPool: 0,
+    weeklyPassiveClaimWeek: '',
     renameCards: 0,
     gachaHistory: [],
     gachaDailyPulls: 0,
@@ -58,6 +59,40 @@ beforeEach(() => {
     recycledPets: [],
     companionSlots: 1,
     desktopCompanionIds: [],
+  });
+});
+
+describe('每周修行津贴', () => {
+  it('按账号最高等级发放一次，多只智子不会叠加', () => {
+    const pets = [makePet('p1', 'capi', 10), makePet('p2', 'boba', 20), makePet('p3', 'miga', 15)];
+    usePetStore.setState({ ownedPets: pets, activePetId: 'p1', coins: 200, weeklyPassiveClaimWeek: '' });
+
+    expect(getWeeklyPassiveCoinReward(pets)).toBe(32);
+    expect(usePetStore.getState().claimWeeklyPassiveCoins()).toMatchObject({ ok: true, amount: 32 });
+    expect(usePetStore.getState()).toMatchObject({ coins: 232, weeklyPassiveClaimWeek: currentWeekKey() });
+
+    expect(usePetStore.getState().claimWeeklyPassiveCoins()).toMatchObject({ ok: false, amount: 0 });
+    expect(usePetStore.getState().coins).toBe(232);
+  });
+
+  it('最高等级不足 10 时不会发放', () => {
+    usePetStore.setState({ ownedPets: [makePet('p1', 'capi', 9)], activePetId: 'p1', coins: 200 });
+
+    expect(usePetStore.getState().claimWeeklyPassiveCoins()).toMatchObject({ ok: false, amount: 0 });
+    expect(usePetStore.getState().coins).toBe(200);
+  });
+
+  it('周标识按周一刷新', () => {
+    expect(currentWeekKey(new Date('2026-08-17T12:00:00+08:00'))).toBe('2026-08-17');
+    expect(currentWeekKey(new Date('2026-08-23T23:59:59+08:00'))).toBe('2026-08-17');
+    expect(currentWeekKey(new Date('2026-08-24T00:00:00+08:00'))).toBe('2026-08-24');
+  });
+
+  it('旧版在本周已自动发放时迁移为已领取，跨周则允许重新领取', () => {
+    const now = new Date('2026-08-22T12:00:00+08:00');
+    expect(migrateWeeklyPassiveClaimWeek('', new Date('2026-08-20T12:00:00+08:00').getTime(), now)).toBe('2026-08-17');
+    expect(migrateWeeklyPassiveClaimWeek('', new Date('2026-08-16T12:00:00+08:00').getTime(), now)).toBe('');
+    expect(migrateWeeklyPassiveClaimWeek('2026-08-10', null, now)).toBe('2026-08-10');
   });
 });
 

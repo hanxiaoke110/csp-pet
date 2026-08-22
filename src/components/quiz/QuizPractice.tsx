@@ -10,6 +10,8 @@ import KnowledgePointHelp from '../shared/KnowledgePointHelp';
 import { beginQuestionBankSession, refreshQuestionBankV2 } from '../../question-bank/repository';
 import { toLegacyQuestion } from '../../question-bank/adapters';
 import { getSuperChallengeItems, isCompleteSuperChallenge } from './superChallenge';
+import { isStandaloneChoiceQuestion } from './questionEligibility';
+import { buildMonthlyReviewQuestions } from './reviewQuestions';
 
 // 月度复盘单次奖励封顶（金币/经验）
 const MONTHLY_REVIEW_COIN_CAP = 300;
@@ -34,6 +36,9 @@ interface QuizQuestion {
   subQuestions?: { label: string; options: string[]; correctIndex: number; explanation?: string }[];
   blanks?: { label?: string; position: number; options: string[]; correctIndex: number; explanation?: string }[];
   answers?: number[];
+  reviewErrorId?: string;
+  reviewParentQuestion?: string;
+  reviewPartLabel?: string;
 }
 
 type Mode = 'weekly' | 'extra' | 'free' | 'review' | 'super';
@@ -45,11 +50,10 @@ async function loadBank(): Promise<QuizQuestion[]> {
   const session = await beginQuestionBankSession(['daily', 'super', 'exam']);
   const daily = (session.channels.daily || []).map(question => toLegacyQuestion(question));
   const superQuestions = (session.channels.super || []).map(question => toLegacyQuestion(question, 'super_challenge'));
-  // 自由练习只放选择题；阅读/填空大题走 CSP 真题页和超级挑战
-  const examChoices = (session.channels.exam || [])
-    .filter(question => question.type === 'choice')
-    .map(question => toLegacyQuestion(question));
-  questionBank = [...daily, ...superQuestions, ...examChoices] as QuizQuestion[];
+  // 保留完整真题供月度复盘重建子题；普通练习入口仍会单独筛选选择题。
+  const examQuestions = (session.channels.exam || []).map(question => toLegacyQuestion(question));
+  // 同一题可同时属于多个频道，不能在这里按 ID 去重，否则会丢失 super_challenge 来源。
+  questionBank = [...daily, ...superQuestions, ...examQuestions] as QuizQuestion[];
   return questionBank!;
 }
 
@@ -259,7 +263,8 @@ export default function QuizPractice() {
     if (m === 'review') {
       // Use error pool
       const errorIds = new Set(quizStore.errors.map(e => e.questionId));
-      const reviewQs = bank.filter(q => errorIds.has(q.id));
+      const reviewQs = buildMonthlyReviewQuestions(bank, errorIds)
+        .filter(isStandaloneChoiceQuestion);
       setQuestions(chooseFreshQuestions(reviewQs, reviewQs.length, m));
     } else if (m === 'super') {
       const superQs = bank.filter(q => q.source === 'super_challenge' && isCompleteSuperChallenge(q));
@@ -269,8 +274,7 @@ export default function QuizPractice() {
       // 选择题练习只放真正的选择题：带 code 但无选项的题（含兜底转出的阅读题）不进入本入口，
       // 避免渲染出“有题干没选项”的空白页
       let pool = bank.filter(q => (q.source === 'csp_exam' || q.source === 'gesp')
-        && q.type === 'choice'
-        && (q.options?.length || 0) > 0);
+        && isStandaloneChoiceQuestion(q));
       if (sourceFilter !== 'all') {
         pool = pool.filter(q => q.source === sourceFilter);
       }
@@ -287,8 +291,7 @@ export default function QuizPractice() {
       if (pool.length === 0) {
         // Fallback to all exam questions if filter leaves nothing
         pool = bank.filter(q => (q.source === 'csp_exam' || q.source === 'gesp')
-          && q.type === 'choice'
-          && (q.options?.length || 0) > 0);
+          && isStandaloneChoiceQuestion(q));
       }
       setQuestions(chooseFreshQuestions(pool, m === 'free' ? 15 : 5, m));
     }
@@ -370,7 +373,7 @@ export default function QuizPractice() {
 
       // In review mode, remove from errors
       if (mode === 'review') {
-        quizStore.removeError(q.id);
+        quizStore.removeError(q.reviewErrorId || q.id);
       }
     } else {
       setResults(r => ({ ...r, total: r.total + 1 }));
@@ -388,6 +391,9 @@ export default function QuizPractice() {
         });
       }
       // Report error to error pool and server
+      if (mode === 'review' && q.reviewErrorId && q.reviewErrorId !== q.id) {
+        quizStore.removeError(q.reviewErrorId);
+      }
       quizStore.addError(q.id, selected, q.correctIndex, q.knowledgePoint);
       quizStore.recordAnswer(false);
     }
@@ -553,7 +559,8 @@ export default function QuizPractice() {
         <p className="quiz-filter-hint">
           {(() => {
             if (!questionBank) return '加载题库中...';
-            let pool = questionBank.filter(q => q.source === 'csp_exam' || q.source === 'gesp');
+            let pool = questionBank.filter(q => (q.source === 'csp_exam' || q.source === 'gesp')
+              && isStandaloneChoiceQuestion(q));
             if (sourceFilter !== 'all') pool = pool.filter(q => q.source === sourceFilter);
             if (sourceFilter === 'csp_exam' && groupFilter !== 'all') pool = pool.filter(q => q.group === groupFilter);
             if (!includeSGroup) pool = pool.filter(q => q.group !== 'S');
@@ -913,6 +920,12 @@ export default function QuizPractice() {
       <div className="quiz-question-card">
         {q.code && <pre className="code-block"><code>{q.code}</code></pre>}
         {shouldShowQuizImage(q) && <QuizImage src={q.image || q.codeImage} />}
+        {mode === 'review' && q.reviewPartLabel && (
+          <div style={{ marginBottom: 12, color: '#64748b', fontSize: 14, lineHeight: 1.6 }}>
+            <strong style={{ color: '#0f766e' }}>{q.reviewPartLabel}</strong>
+            {q.reviewParentQuestion && <span> · {q.reviewParentQuestion}</span>}
+          </div>
+        )}
         <div className="quiz-q-body" dangerouslySetInnerHTML={renderText(q.question)} />
 
         <div className="quiz-options">

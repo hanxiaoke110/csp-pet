@@ -4,7 +4,8 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import fables from '../../data/fables.json';
 import FableCard from '../shared/FableCard';
 import type { Question } from '../../types/dungeon';
-import { getTrustedQuestionImage, isUsableChoiceQuestion } from '../../utils/questionLoader';
+import { getTrustedQuestionImage } from '../../utils/questionLoader';
+import { pickHealingQuestions } from '../../utils/healingQuestions';
 
 function resolveQuestionImage(src?: string | null): string | null {
   if (!src) return null;
@@ -17,7 +18,6 @@ export default function HealingScreen() {
   const store = useDungeonStore();
   const healing = store.healing;
   const questionBank = store.questionBank;
-  const questionMapping = store.questionMapping;
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -39,29 +39,15 @@ export default function HealingScreen() {
       navigate('/map');
       return;
     }
-    if (questionBank.length > 0 && Object.keys(questionMapping).length > 0) {
-      // Find questions matching the weak KP across all dungeons
-      const matchingIds: string[] = [];
-      for (const [, stages] of Object.entries(questionMapping)) {
-        for (const stageIds of Object.values(stages)) {
-          for (const qid of stageIds as string[]) {
-            const q = questionBank.find(bq => bq.id === qid);
-            if (q && (q.knowledgePoint.includes(healing.knowledgePoint) ||
-                healing.knowledgePoint.includes(q.knowledgePoint))) {
-              matchingIds.push(qid);
-            }
-          }
-        }
-      }
-      // Get full questions, shuffle, take 5
-      const matchedQs = matchingIds
-        .map(id => questionBank.find(q => q.id === id))
-        .filter(isUsableChoiceQuestion);
-      const fallbackQs = questionBank.filter(isUsableChoiceQuestion);
-      const shuffled = [...matchedQs].sort(() => Math.random() - 0.5).slice(0, 5);
-      setQuestions(shuffled.length > 0 ? shuffled : fallbackQs.slice(0, 3));
+    if (questionBank.length > 0) {
+      const recentKey = `dungeon_healing_recent_${healing.knowledgePoint}`;
+      let recentIds: string[] = [];
+      try { recentIds = JSON.parse(localStorage.getItem(recentKey) || '[]'); } catch { /* ignore old invalid cache */ }
+      const selected = pickHealingQuestions(questionBank, healing.knowledgePoint, 5, recentIds);
+      setQuestions(selected);
+      try { localStorage.setItem(recentKey, JSON.stringify(selected.map(question => question.id))); } catch { /* storage can be unavailable */ }
     }
-  }, [healing, questionBank.length, questionMapping]);
+  }, [healing?.knowledgePoint, questionBank]);
 
   if (!healing) return null;
 
@@ -82,7 +68,7 @@ export default function HealingScreen() {
         setHealed(true);
         setTimeout(() => {
           store.clearHealing();
-          try { navigate(-1); } catch { navigate('/map'); }
+          navigate('/profile');
         }, 2000);
       } else if (currentIdx < questions.length - 1) {
         setCurrentIdx(i => i + 1);
@@ -90,7 +76,13 @@ export default function HealingScreen() {
         setSubmitted(false);
         setShowFable(false);
       } else {
-        // Out of questions, reload
+        const selected = pickHealingQuestions(
+          questionBank,
+          healing.knowledgePoint,
+          5,
+          questions.map(question => question.id),
+        );
+        setQuestions(selected);
         setCurrentIdx(0);
         setSelectedOption(null);
         setSubmitted(false);
@@ -143,7 +135,7 @@ export default function HealingScreen() {
               「{healing.knowledgePoint}」已从弱点中清除
             </p>
             <p style={{ color: 'var(--hp-green)', fontSize: '11px', marginTop: '4px' }}>
-              +30 EXP · +20 金币 · 正在返回副本...
+              +30 EXP · +20 金币 · 正在返回个人档案...
             </p>
           </div>
         )}
@@ -232,10 +224,10 @@ export default function HealingScreen() {
             <div className="loading-title">🩹 准备疗伤题...</div>
             <button
               className="pixel-btn"
-              onClick={() => { store.clearHealing(); navigate('/map'); }}
+              onClick={() => { store.clearHealing(); navigate('/profile'); }}
               style={{ fontSize: '14px' }}
             >
-              返回地图 →
+              返回个人档案 →
             </button>
           </div>
         )}

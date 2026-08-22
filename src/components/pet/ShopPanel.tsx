@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { usePetStore, FOODS } from '../../stores/petStore';
+import { usePetStore, FOODS, getLevelMilestone } from '../../stores/petStore';
 import { useHatchStore } from '../../stores/hatchStore';
 import type { HatchRarity } from '../../stores/hatchStore';
 import { ALL_SHOP_ITEMS, getPetConfig, PET_TIERS, getPetTier } from '../../types/pet';
@@ -30,6 +30,8 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   const gachaHistory = usePetStore(s => s.gachaHistory);
   const gachaPulls = usePetStore(s => s.gachaDailyPulls);
   const gachaDate = usePetStore(s => s.gachaDate);
+  const gachaPity = usePetStore(s => s.gachaPity);
+  const activePetId = usePetStore(s => s.activePetId);
   const buyRenameCard = usePetStore(s => s.buyRenameCard);
   const autoFeederOwned = usePetStore(s => s.autoFeederOwned);
   const buyAutoFeeder = usePetStore(s => s.buyAutoFeeder);
@@ -42,6 +44,8 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   const isOwned = usePetStore(s => s.isOwned);
   const today = localDateKey();
   const todayGachaPulls = gachaDate === today ? gachaPulls : 0;
+  const activePet = ownedPets.find(p => p.petId === activePetId);
+  const pityThreshold = activePet ? getLevelMilestone(activePet.level).pityThreshold : 100;
 
   const allPets = ALL_SHOP_ITEMS.filter(i => i.itemType === 'pet');
   const commons = allPets.filter(i => (PET_TIERS[i.speciesId!] || 'common') === 'common');
@@ -220,10 +224,10 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
           <div className="special-card">
             <div className="special-icon">🎰</div>
             <h4>灵犀抽卡</h4>
-            <p>随机获得一只宠物<br />每 100 抽必出稀有+</p>
-            <div className="special-stock">今日剩余：{5 - todayGachaPulls} 次</div>
+            <p>随机获得智子或养成道具<br />第 {pityThreshold} 抽前必出传说智子</p>
+            <div className="special-stock">保底进度：{gachaPity}/{pityThreshold} · 今日剩余：{5 - todayGachaPulls} 次</div>
             <button className="shop-card-buy" disabled={coins < 150 || todayGachaPulls >= 5}
-              onClick={() => setActionConfirm({ type: 'gacha', icon: '🎰', title: '灵犀抽卡', desc: '随机获得精灵/食物/许愿票/改名卡\n每 100 抽保底传说', price: 150 })}>
+              onClick={() => setActionConfirm({ type: 'gacha', icon: '🎰', title: '灵犀抽卡', desc: `随机获得智子/食物/许愿票/改名卡\n当前保底 ${gachaPity}/${pityThreshold}，第 ${pityThreshold} 抽前必出传说智子`, price: 150 })}>
               🎯 单抽 150g
             </button>
           </div>

@@ -5,6 +5,11 @@ import { getLeaderboard } from '../../utils/api';
 import { getRankName } from '../../utils/gameLogic';
 import type { LeaderboardType, LeaderboardScope, LeaderboardEntry } from '../../types/dungeon';
 import { CURRENT_DUNGEON_SEASON_NAME } from '../../data/season';
+import {
+  DEFAULT_LEADERBOARD_RULES,
+  loadLeaderboardRules,
+  type LeaderboardRulesConfig,
+} from '../../data/leaderboardRules';
 
 const SCHOOL_ICONS: Record<string, string> = {
   cultivation: '🏯', tactical: '🎯', star: '🌌', minecraft: '⛏️', code: '💻', dream: '✨',
@@ -31,6 +36,15 @@ export default function LeaderboardScreen() {
   const [playerEntry, setPlayerEntry] = useState<LeaderboardEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [rulesConfig, setRulesConfig] = useState<LeaderboardRulesConfig>(DEFAULT_LEADERBOARD_RULES);
+
+  useEffect(() => {
+    let active = true;
+    loadLeaderboardRules().then(config => {
+      if (active) setRulesConfig(config);
+    });
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -53,14 +67,19 @@ export default function LeaderboardScreen() {
     }).finally(() => setLoading(false));
   }, [scope, type, player.classCode]);
 
-  const tabs: { key: LeaderboardType; label: string; icon: string }[] = [
+  const tabs = ([
     { key: 'power', label: '段位积分榜', icon: '🏆' },
     { key: 'streak', label: '连击榜', icon: '⚡' },
     { key: 'progress', label: '通关榜', icon: '🗺️' },
     { key: 'warrior', label: '勇者榜', icon: '🔥' },
     { key: 'wins', label: '赛季首胜', icon: '⚔️' },
-    { key: 'ss_count', label: 'SS副本', icon: '🛡️' },
-  ];
+    { key: 'ss_count', label: 'SS评价副本', icon: '🛡️' },
+  ] satisfies { key: LeaderboardType; label: string; icon: string }[]).map(tab => ({
+    ...tab,
+    label: rulesConfig.rules.find(rule => rule.key === tab.key)?.label || tab.label,
+  }));
+
+  const activeRule = rulesConfig.rules.find(rule => rule.key === type);
 
   const getTypeValue = (entry: LeaderboardEntry, t: LeaderboardType): string => {
     // 后端所有类型都返回 value 作为排序值，这里统一用它显示
@@ -125,6 +144,32 @@ export default function LeaderboardScreen() {
           </button>
         </div>
 
+        <details open style={{
+          marginBottom: '12px', padding: '10px 12px',
+          background: 'rgba(8, 18, 28, 0.88)', border: '2px solid var(--border-pixel)',
+        }}>
+          <summary style={{ cursor: 'pointer', color: 'var(--gold)', fontWeight: 700, fontSize: '12px' }}>
+            📜 {rulesConfig.title}
+          </summary>
+          <div style={{ marginTop: '9px', display: 'grid', gap: '6px', fontSize: '11px', lineHeight: 1.65 }}>
+            {rulesConfig.rules.map(rule => (
+              <div key={rule.key}>
+                <strong style={{ color: 'var(--text-light)' }}>{rule.label}：</strong>
+                <span style={{ color: 'var(--text-dim)' }}>{rule.description}</span>
+              </div>
+            ))}
+            <div style={{ marginTop: '4px', padding: '8px 9px', borderLeft: '3px solid var(--gold)', background: 'rgba(255, 193, 7, 0.08)' }}>
+              <strong style={{ color: 'var(--gold)' }}>SS 必须同时满足：</strong>
+              <ul style={{ margin: '5px 0 0 18px', padding: 0, color: 'var(--text-light)' }}>
+                {rulesConfig.ssCriteria.map(item => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+            <div style={{ color: 'var(--text-dim)' }}>
+              {rulesConfig.footer}
+            </div>
+          </div>
+        </details>
+
         {/* Type tabs */}
         <div style={{
           display: 'flex', gap: '4px', marginBottom: '16px',
@@ -144,6 +189,14 @@ export default function LeaderboardScreen() {
               {tab.icon} {tab.label}
             </button>
           ))}
+        </div>
+
+        <div style={{
+          margin: '-6px 0 14px', padding: '9px 12px',
+          color: 'var(--text-dim)', background: 'rgba(8, 18, 28, 0.82)',
+          borderLeft: '3px solid var(--exp-blue)', fontSize: '11px', lineHeight: 1.7,
+        }}>
+          {activeRule ? `${activeRule.label}：${activeRule.description}` : '排行榜数据按本赛季有效挑战统计。'}
         </div>
 
         {/* Player's own rank */}

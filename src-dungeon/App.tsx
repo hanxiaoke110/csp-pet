@@ -89,11 +89,24 @@ export function AppContent() {
         if (hasLocal) {
           const localCc = useDungeonStore.getState().player.classCode;
           const desktopCc = getStoredClassCode();
-          if (desktopCc && localCc && localCc !== desktopCc) {
+          const identityPatch: Record<string, string> = {};
+          if (desktopCc && localCc !== desktopCc) {
             useDungeonStore.getState().setClassCode(desktopCc);
+            identityPatch.class_code = desktopCc;
+          }
+
+          // 主应用允许学生修改昵称。试炼场已有档案不能继续沿用注册时的旧昵称，
+          // 否则许愿墙、个人档案和排行榜会显示成三个不同的名字。
+          const binding = readDesktopBinding();
+          const dungeonPlayer = useDungeonStore.getState().player;
+          if (binding?.displayName && binding.displayName !== dungeonPlayer.displayName) {
+            useDungeonStore.getState().initPlayer({ displayName: binding.displayName });
+            identityPatch.display_name = binding.displayName;
+          }
+          if (Object.keys(identityPatch).length > 0) {
             useDungeonStore.getState().saveToLocalStorage();
             import('./utils/api').then(({ syncProgress }) => {
-              syncProgress({ class_code: desktopCc }).catch(() => {});
+              syncProgress(identityPatch).catch(() => {});
             }).catch(() => {});
           }
         }

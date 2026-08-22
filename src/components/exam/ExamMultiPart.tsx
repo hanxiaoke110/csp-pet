@@ -17,8 +17,15 @@ interface Props {
   question: string;
   subItems: SubItem[];
   questionId: string;
-  onSubmit: (correctCount: number, total: number) => void;
+  onSubmit: (correctCount: number, total: number, results: SubItemResult[]) => void;
   onBack: () => void;
+}
+
+export interface SubItemResult {
+  index: number;
+  selectedIndex: number;
+  correctIndex: number;
+  correct: boolean;
 }
 
 // 题目图片渲染，加载失败时降级提示
@@ -71,10 +78,14 @@ export default function ExamMultiPart({ title, code, image, codeImage, question,
     if (!allAnswered || submitted) return;
     setSubmitted(true);
     let correct = 0;
+    const results: SubItemResult[] = [];
     for (let i = 0; i < subItems.length; i++) {
-      if (answers[i] === getEffectiveCorrectIndex(subItems[i])) correct++;
+      const correctIndex = getEffectiveCorrectIndex(subItems[i]);
+      const isCorrect = answers[i] === correctIndex;
+      if (isCorrect) correct++;
+      results.push({ index: i, selectedIndex: answers[i], correctIndex, correct: isCorrect });
     }
-    onSubmit(correct, subItems.length);
+    onSubmit(correct, subItems.length, results);
   };
 
   const passThreshold = subItems.length >= 5 ? 3 : 2;

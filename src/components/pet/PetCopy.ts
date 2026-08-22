@@ -21,7 +21,7 @@ export const petCopy = {
   examReward: (exp: number, coins: number, bonus = '') => `今日任务通关！+${exp} EXP、+${coins} 金币${bonus ? `，${bonus}` : ''}。`,
   levelUp: (level: number, title: string) => ({
     5: `叮！智子升级到 ${title}，抽卡大门打开啦。`,
-    10: `叮！智子升级到 ${title}，每周自动领 20g 小零花。`,
+    10: `叮！智子升级到 ${title}，每周可在智子页领取 20g 修行津贴。`,
     15: `叮！智子升级到 ${title}，保底缩到 50 抽，欧气加载中！`,
   })[level] || `叮！智子升级到 ${title}。`,
   maxLevel: () => '满级达成！智子已经是传说中的学习搭子啦。',

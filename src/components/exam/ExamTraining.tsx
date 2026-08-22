@@ -4,6 +4,7 @@ import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import ExamChoice from './ExamChoice';
 import ExamMultiPart from './ExamMultiPart';
+import type { SubItemResult } from './ExamMultiPart';
 import { emit } from '@tauri-apps/api/event';
 import { petCopy } from '../pet/PetCopy';
 import { useClassAccess, ClassAccessRequired } from '../access/ClassAccessGate';
@@ -182,13 +183,22 @@ export default function ExamTraining() {
     setView('type-select');
   };
 
-  const handleMultiPartSubmit = (correctCount: number, total: number) => {
+  const handleMultiPartSubmit = (correctCount: number, total: number, itemResults: SubItemResult[]) => {
     const q = questions[currentIdx];
     const pass = total >= 5 ? correctCount >= 3 : correctCount >= 2;
     examStore.completeExamQuestion(q.id, activeType as 'reading' | 'fillBlank', pass);
+    // 新记录精确到小问；同时清理旧版本留下的整题级错题记录。
+    examStore.removeError(q.id);
+    const kp = (q as any).knowledgePoint || '';
+    itemResults.forEach(result => {
+      const childId = `${q.id}-q${result.index + 1}`;
+      if (result.correct) {
+        examStore.removeError(childId);
+      } else {
+        examStore.addError(childId, result.selectedIndex, result.correctIndex, kp);
+      }
+    });
     if (!pass) {
-      const kp = (q as any).knowledgePoint || '';
-      examStore.addError(q.id, total - correctCount, correctCount, kp);
       emit('pet-bubble', { text: petCopy.examResult(correctCount, total, false) }).catch(() => {});
     } else {
       emit('pet-bubble', { text: petCopy.examResult(correctCount, total, true) }).catch(() => {});
