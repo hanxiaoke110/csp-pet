@@ -83,15 +83,15 @@ describe('每周修行津贴', () => {
   });
 
   it('周标识按周一刷新', () => {
-    expect(currentWeekKey(new Date('2026-08-17T12:00:00+08:00'))).toBe('2026-08-17');
-    expect(currentWeekKey(new Date('2026-08-23T23:59:59+08:00'))).toBe('2026-08-17');
-    expect(currentWeekKey(new Date('2026-08-24T00:00:00+08:00'))).toBe('2026-08-24');
+    expect(currentWeekKey(new Date(2026, 7, 17, 12))).toBe('2026-08-17');
+    expect(currentWeekKey(new Date(2026, 7, 23, 23, 59, 59))).toBe('2026-08-17');
+    expect(currentWeekKey(new Date(2026, 7, 24, 0))).toBe('2026-08-24');
   });
 
   it('旧版在本周已自动发放时迁移为已领取，跨周则允许重新领取', () => {
-    const now = new Date('2026-08-22T12:00:00+08:00');
-    expect(migrateWeeklyPassiveClaimWeek('', new Date('2026-08-20T12:00:00+08:00').getTime(), now)).toBe('2026-08-17');
-    expect(migrateWeeklyPassiveClaimWeek('', new Date('2026-08-16T12:00:00+08:00').getTime(), now)).toBe('');
+    const now = new Date(2026, 7, 22, 12);
+    expect(migrateWeeklyPassiveClaimWeek('', new Date(2026, 7, 20, 12).getTime(), now)).toBe('2026-08-17');
+    expect(migrateWeeklyPassiveClaimWeek('', new Date(2026, 7, 16, 12).getTime(), now)).toBe('');
     expect(migrateWeeklyPassiveClaimWeek('2026-08-10', null, now)).toBe('2026-08-10');
   });
 });
