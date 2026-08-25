@@ -120,6 +120,7 @@ interface DungeonState {
   addRankPoints: (amount: number) => void;
   checkRankUp: () => { upgraded: boolean; newTier: number } | null;
   recordAnswer: (correct: boolean) => void;
+  recordDailyLogin: () => string[];
 
   // Dungeon
   initDungeons: (dungeons: DungeonDefinition[]) => void;
@@ -287,6 +288,25 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     };
   }),
 
+  recordDailyLogin: () => {
+    const { player } = get();
+    const today = todayStr();
+    if (player.lastLoginDate === today) {
+      const repairedBadges = get().checkAndAwardBadges();
+      if (repairedBadges.length > 0) get().saveToLocalStorage();
+      return repairedBadges;
+    }
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayText = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+    const loginStreak = player.lastLoginDate === yesterdayText ? player.loginStreak + 1 : 1;
+    set((s) => ({ player: { ...s.player, loginStreak, lastLoginDate: today } }));
+    const newBadges = get().checkAndAwardBadges();
+    get().saveToLocalStorage();
+    return newBadges;
+  },
+
   initDungeons: (dungeons) => set({ dungeons }),
   migrateSeason: (dungeons) => {
     const state = get();
@@ -364,6 +384,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     if (!battle) return null;
     // 保留结算前快照供 RewardScreen 展示
     const snapshot = { ...battle };
+    const progressBeforeBattle = get().dungeonProgress.find(p => p.dungeonId === dungeonId);
     let earnedRewardsThisBattle = false;
     const stageIndex = Math.max(0, Number((battle.stageId.match(/stage-0(\d)$/) || [])[1] || 1) - 1);
 
@@ -460,7 +481,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
 
     // 3. 段位重算 + 徽章检查（此时 progress 已更新）
     get().checkRankUp();
-    get().checkAndAwardBadges();
+    const newBadges = get().checkAndAwardBadges();
     get().saveToLocalStorage();
 
     // 4. 服务端同步：仅胜利时上报（失败不上报，省 D1 写次数；失败不影响排行榜/进度/金币）。
@@ -490,15 +511,22 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         const s = get();
         // 仅同步本场副本的进度（report-battle 已在服务端推进通关状态，这里只补 best_score/best_rating）
         const changedDp = s.dungeonProgress.find(dp => dp.dungeonId === dungeonId);
-        syncProgress({
-          display_name: s.player.displayName,
-          school: s.player.school,
-          dungeon_progress: changedDp ? [{
-            dungeonId: changedDp.dungeonId, status: changedDp.status, completedStages: changedDp.completedStages,
-            totalStages: changedDp.totalStages, bossDefeated: changedDp.bossDefeated,
-            bestScore: changedDp.bestScore, bestRating: changedDp.bestRating,
-          }] : [],
-        }).catch(() => {});
+        const progressChanged = !!changedDp && (!progressBeforeBattle
+          || changedDp.status !== progressBeforeBattle.status
+          || changedDp.completedStages !== progressBeforeBattle.completedStages
+          || changedDp.bossDefeated !== progressBeforeBattle.bossDefeated
+          || changedDp.bestScore !== progressBeforeBattle.bestScore
+          || changedDp.bestRating !== progressBeforeBattle.bestRating);
+        if (progressChanged || newBadges.length > 0) {
+          syncProgress({
+            ...(newBadges.length > 0 ? { badges: newBadges } : {}),
+            dungeon_progress: progressChanged && changedDp ? [{
+              dungeonId: changedDp.dungeonId, status: changedDp.status, completedStages: changedDp.completedStages,
+              totalStages: changedDp.totalStages, bossDefeated: changedDp.bossDefeated,
+              bestScore: changedDp.bestScore, bestRating: changedDp.bestRating,
+            }] : [],
+          }).catch(() => {});
+        }
       });
     }
 

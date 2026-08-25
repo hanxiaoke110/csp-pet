@@ -80,14 +80,21 @@ export default function LoginScreen() {
         useDungeonStore.setState({ dungeonProgress: merged });
       }
 
-      // Restore badges
-      if (resp.badges && resp.badges.length > 0) {
-        useDungeonStore.setState({ earnedBadges: resp.badges });
-      }
+      // Merge server and local badges, then repair any achievement that became
+      // eligible while offline or from the newly updated login streak.
+      const localBadges = useDungeonStore.getState().earnedBadges;
+      const serverBadges = Array.isArray(resp.badges) ? resp.badges : [];
+      useDungeonStore.setState({ earnedBadges: [...new Set([...localBadges, ...serverBadges])] });
+      const repairedBadges = store.checkAndAwardBadges();
 
       // Save class code
       if (p.class_code) localStorage.setItem('csp_class_code', p.class_code);
       store.saveToLocalStorage();
+      if (repairedBadges.length > 0) {
+        import('../../utils/api').then(({ syncProgress }) => {
+          syncProgress({ badges: repairedBadges }).catch(() => {});
+        }).catch(() => {});
+      }
 
       store.setView('map');
       navigate('/map');

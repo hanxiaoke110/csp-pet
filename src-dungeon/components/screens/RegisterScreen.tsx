@@ -59,7 +59,7 @@ export default function RegisterScreen() {
       );
       if (resp.success) {
         store.initPlayer(resp.player);
-        store.saveToLocalStorage();
+        store.recordDailyLogin();
         // 同步初始进度到服务端（fire and forget）
         import('../../utils/api').then(({ syncProgress }) => {
           syncProgress({

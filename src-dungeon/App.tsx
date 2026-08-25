@@ -152,6 +152,17 @@ export function AppContent() {
           store.initProgress(defaultProgress);
         }
 
+        // 桌面版已复用主应用班级绑定，不再经过独立登录页；在启动时记录每日登录，
+        // 否则连续登录类徽章永远没有递增入口。同一天重复打开不会重复累计。
+        if (hasLocal) {
+          const loginBadges = store.recordDailyLogin();
+          if (loginBadges.length > 0) {
+            import('./utils/api').then(({ syncProgress }) => {
+              syncProgress({ badges: loginBadges }).catch(() => {});
+            }).catch(() => {});
+          }
+        }
+
         // Load questions in background, with retry:
         // 题库未就绪时战斗技能完全无法出题，失败重试（0s/3s/8s）降低空库概率。
         const loadBankWithRetry = async (attempt = 0) => {

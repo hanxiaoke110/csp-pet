@@ -17,31 +17,39 @@ const BADGE_RARITY_STARS: Record<string, { stars: string; color: string; label: 
   mythic:    { stars: '🌟🌟🌟🌟🌟', color: '#ffaa00',  label: '神话' },
 };
 
-const BADGE_DEFS: Record<string, { name: string; desc: string; rarity: string; icon: string }> = {
-  first_blood: { name: '初出茅庐', desc: '完成第一次答题', rarity: 'common', icon: '⚔️' },
-  apprentice: { name: '修行学徒', desc: '累计答题10道', rarity: 'common', icon: '📜' },
-  marathon: { name: '马拉松', desc: '累计答题100道', rarity: 'rare', icon: '🏃' },
-  sharpshooter: { name: '神射手', desc: '最高连击达到10', rarity: 'rare', icon: '🎯' },
-  combo_master: { name: '连击大师', desc: '最高连击达到30', rarity: 'epic', icon: '⚡' },
-  unstoppable: { name: '势不可挡', desc: '最高连击达到50', rarity: 'legendary', icon: '🔥' },
-  perfectionist: { name: '完美主义者', desc: '正确率超过95%', rarity: 'epic', icon: '💎' },
-  speed_demon: { name: '速度之魂', desc: '获得SS评价', rarity: 'epic', icon: '💨' },
-  time_lord: { name: '时间领主', desc: '获得3次SS评价', rarity: 'legendary', icon: '⏰' },
-  first_clear: { name: '首通勇士', desc: '通关第一个副本', rarity: 'common', icon: '🏰' },
-  dungeon_crawler: { name: '副本探索者', desc: '通关3个副本', rarity: 'rare', icon: '🗺️' },
-  dungeon_master: { name: '副本大师', desc: '通关6个副本', rarity: 'epic', icon: '👑' },
-  all_clear: { name: '全境守护者', desc: '通关全部8个副本', rarity: 'legendary', icon: '🌟' },
-  flawless: { name: '无伤通关', desc: '完美通关1个副本', rarity: 'epic', icon: '🛡️' },
-  immortal_dragon: { name: '不灭之龙', desc: '完美通关3个副本', rarity: 'legendary', icon: '🐉' },
-  supreme_dragon: { name: '至尊龙神', desc: '完美通关全部副本', rarity: 'mythic', icon: '🔮' },
-  rising_star: { name: '冉冉升起', desc: '段位达到第3段', rarity: 'common', icon: '⭐' },
-  dragon_warrior: { name: '龙之战将', desc: '段位达到第5段', rarity: 'rare', icon: '⚔️' },
-  dragon_lord: { name: '龙之君主', desc: '段位达到第7段', rarity: 'epic', icon: '👑' },
-  dragon_god: { name: '龙神', desc: '段位达到第8段', rarity: 'legendary', icon: '🐲' },
-  dedicated: { name: '坚持不懈', desc: '连续登录3天', rarity: 'common', icon: '📅' },
-  devoted: { name: '忠心耿耿', desc: '连续登录7天', rarity: 'rare', icon: '💪' },
-  immortal_dedication: { name: '永恒之志', desc: '连续登录30天', rarity: 'legendary', icon: '♾️' },
+const BADGE_DEFS: Record<string, { name: string; desc: string; rarity: string; icon: string; category: string }> = {
+  first_blood: { name: '初出茅庐', desc: '累计答题1道', rarity: 'common', icon: '⚔️', category: 'answer' },
+  apprentice: { name: '修行学徒', desc: '累计答题10道', rarity: 'common', icon: '📜', category: 'answer' },
+  marathon: { name: '马拉松', desc: '累计答题100道', rarity: 'rare', icon: '🏃', category: 'answer' },
+  sharpshooter: { name: '神射手', desc: '最高连击达到10', rarity: 'rare', icon: '🎯', category: 'combo' },
+  combo_master: { name: '连击大师', desc: '最高连击达到30', rarity: 'epic', icon: '⚡', category: 'combo' },
+  unstoppable: { name: '势不可挡', desc: '最高连击达到50', rarity: 'legendary', icon: '🔥', category: 'combo' },
+  perfectionist: { name: '完美主义者', desc: '累计答题≥50道且正确率≥95%', rarity: 'epic', icon: '💎', category: 'answer' },
+  speed_demon: { name: '速度之魂', desc: '1个副本获得SS评价', rarity: 'epic', icon: '💨', category: 'dungeon' },
+  time_lord: { name: '时间领主', desc: '3个不同副本获得SS评价', rarity: 'legendary', icon: '⏰', category: 'dungeon' },
+  first_clear: { name: '首通勇士', desc: '通关1个副本', rarity: 'common', icon: '🏰', category: 'dungeon' },
+  dungeon_crawler: { name: '副本探索者', desc: '通关3个副本', rarity: 'rare', icon: '🗺️', category: 'dungeon' },
+  dungeon_master: { name: '副本大师', desc: '通关6个副本', rarity: 'epic', icon: '👑', category: 'dungeon' },
+  all_clear: { name: '全境守护者', desc: '通关全部8个副本', rarity: 'legendary', icon: '🌟', category: 'dungeon' },
+  flawless: { name: '无伤通关', desc: '1个副本达到S或SS', rarity: 'epic', icon: '🛡️', category: 'dungeon' },
+  immortal_dragon: { name: '不灭之龙', desc: '3个副本达到S或SS', rarity: 'legendary', icon: '🐉', category: 'dungeon' },
+  supreme_dragon: { name: '至尊龙神', desc: '全部8个副本达到S或SS', rarity: 'mythic', icon: '🔮', category: 'dungeon' },
+  rising_star: { name: '冉冉升起', desc: '段位达到第3段', rarity: 'common', icon: '⭐', category: 'rank' },
+  dragon_warrior: { name: '龙之战将', desc: '段位达到第5段', rarity: 'rare', icon: '⚔️', category: 'rank' },
+  dragon_lord: { name: '龙之君主', desc: '段位达到第7段', rarity: 'epic', icon: '👑', category: 'rank' },
+  dragon_god: { name: '龙神', desc: '段位达到第8段', rarity: 'legendary', icon: '🐲', category: 'rank' },
+  dedicated: { name: '坚持不懈', desc: '连续登录3天', rarity: 'common', icon: '📅', category: 'login' },
+  devoted: { name: '忠心耿耿', desc: '连续登录7天', rarity: 'rare', icon: '💪', category: 'login' },
+  immortal_dedication: { name: '永恒之志', desc: '连续登录30天', rarity: 'legendary', icon: '♾️', category: 'login' },
 };
+
+const BADGE_CATEGORIES = [
+  { id: 'answer', label: '答题历练' },
+  { id: 'combo', label: '连击挑战' },
+  { id: 'dungeon', label: '副本征服' },
+  { id: 'rank', label: '段位成长' },
+  { id: 'login', label: '坚持修炼' },
+];
 
 export default function ProfileScreen() {
   const coins = usePetStore(s => s.coins);
@@ -70,18 +78,47 @@ export default function ProfileScreen() {
     ? Math.round((player.totalCorrect / player.totalAnswered) * 100)
     : 0;
   const clearedCount = progress.filter(p => p.status === 'cleared').length;
+  const earnedBadgeSet = new Set(earnedBadges);
+  const ssDungeonCount = progress.filter(p => p.bossDefeated && p.bestRating === 'SS').length;
+  const highRatingDungeonCount = progress.filter(p => p.bestRating === 'SS' || p.bestRating === 'S').length;
 
-  // Group badges by rarity
-  const badgesByRarity: Record<string, string[]> = {};
-  earnedBadges.forEach(bid => {
-    const def = BADGE_DEFS[bid];
-    if (def) {
-      if (!badgesByRarity[def.rarity]) badgesByRarity[def.rarity] = [];
-      badgesByRarity[def.rarity].push(bid);
+  const getBadgeProgress = (badgeId: string) => {
+    const targets: Record<string, { current: number; target: number; unit: string }> = {
+      first_blood: { current: player.totalAnswered, target: 1, unit: '道' },
+      apprentice: { current: player.totalAnswered, target: 10, unit: '道' },
+      marathon: { current: player.totalAnswered, target: 100, unit: '道' },
+      sharpshooter: { current: player.maxStreak, target: 10, unit: '连击' },
+      combo_master: { current: player.maxStreak, target: 30, unit: '连击' },
+      unstoppable: { current: player.maxStreak, target: 50, unit: '连击' },
+      speed_demon: { current: ssDungeonCount, target: 1, unit: '个副本' },
+      time_lord: { current: ssDungeonCount, target: 3, unit: '个副本' },
+      first_clear: { current: clearedCount, target: 1, unit: '个副本' },
+      dungeon_crawler: { current: clearedCount, target: 3, unit: '个副本' },
+      dungeon_master: { current: clearedCount, target: 6, unit: '个副本' },
+      all_clear: { current: clearedCount, target: 8, unit: '个副本' },
+      flawless: { current: highRatingDungeonCount, target: 1, unit: '个副本' },
+      immortal_dragon: { current: highRatingDungeonCount, target: 3, unit: '个副本' },
+      supreme_dragon: { current: highRatingDungeonCount, target: 8, unit: '个副本' },
+      rising_star: { current: player.rankTier, target: 3, unit: '段' },
+      dragon_warrior: { current: player.rankTier, target: 5, unit: '段' },
+      dragon_lord: { current: player.rankTier, target: 7, unit: '段' },
+      dragon_god: { current: player.rankTier, target: 8, unit: '段' },
+      dedicated: { current: player.loginStreak, target: 3, unit: '天' },
+      devoted: { current: player.loginStreak, target: 7, unit: '天' },
+      immortal_dedication: { current: player.loginStreak, target: 30, unit: '天' },
+    };
+    if (badgeId === 'perfectionist') {
+      const questionProgress = Math.min(player.totalAnswered, 50);
+      const percent = Math.min(questionProgress / 50, accuracy / 95) * 100;
+      return { label: `答题 ${questionProgress}/50 · 正确率 ${accuracy}%/95%`, percent };
     }
-  });
-
-  const rarityOrder = ['mythic', 'legendary', 'epic', 'rare', 'common'];
+    const item = targets[badgeId];
+    if (!item) return { label: '', percent: 0 };
+    return {
+      label: `${Math.min(item.current, item.target)}/${item.target} ${item.unit}`,
+      percent: Math.min(100, item.current / item.target * 100),
+    };
+  };
 
   const changeSchool = (nextSchool: School) => {
     if (nextSchool === player.school || schoolChangeBusyRef.current) return;
@@ -250,57 +287,52 @@ export default function ProfileScreen() {
           🏅 成就徽章 ({earnedBadges.length}/{Object.keys(BADGE_DEFS).length})
         </h3>
 
-        {rarityOrder.map(rarity => {
-          const bids = badgesByRarity[rarity];
-          if (!bids || bids.length === 0) return null;
-          const rs = BADGE_RARITY_STARS[rarity];
+        {BADGE_CATEGORIES.map(category => {
+          const entries = Object.entries(BADGE_DEFS).filter(([, def]) => def.category === category.id);
           return (
-            <div key={rarity} style={{ marginBottom: '16px' }}>
+            <div key={category.id} style={{ marginBottom: '18px' }}>
               <div style={{
-                fontSize: '13px', color: rs.color, marginBottom: '8px', fontWeight: 700,
+                fontSize: '12px', color: 'var(--text-main)', marginBottom: '8px', fontWeight: 700,
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}>
-                <span>{rs.stars}</span>
-                <span style={{ fontSize: '11px', opacity: 0.8 }}>{rs.label}</span>
+                <span>{category.label}</span>
+                <span style={{ fontSize: '10px', color: 'var(--text-dim)' }}>
+                  {entries.filter(([id]) => earnedBadgeSet.has(id)).length}/{entries.length}
+                </span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '8px' }}>
-                {bids.map(bid => {
-                  const def = BADGE_DEFS[bid];
-                  if (!def) return null;
-                  const isMythic = rarity === 'mythic';
-                  const isLegendary = rarity === 'legendary';
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '8px' }}>
+                {entries.map(([badgeId, def]) => {
+                  const unlocked = earnedBadgeSet.has(badgeId);
+                  const rs = BADGE_RARITY_STARS[def.rarity];
+                  const badgeProgress = getBadgeProgress(badgeId);
                   return (
-                    <div key={bid} className="pixel-card" style={{
-                      padding: '14px 10px', textAlign: 'center',
-                      borderColor: rs.color,
-                      borderWidth: isMythic ? '3px' : isLegendary ? '2px' : '1px',
-                      background: isMythic
-                        ? `linear-gradient(135deg, rgba(255,170,0,0.1), rgba(255,170,0,0.02))`
-                        : isLegendary
-                          ? `linear-gradient(135deg, rgba(170,68,255,0.08), rgba(170,68,255,0.01))`
-                          : undefined,
-                      animation: isMythic ? 'mythicPulse 2s ease-in-out infinite' : undefined,
+                    <div key={badgeId} className="pixel-card" style={{
+                      padding: '12px', minHeight: 150,
+                      borderColor: unlocked ? rs.color : 'var(--border-pixel)',
+                      background: unlocked ? 'rgba(15, 36, 50, 0.94)' : 'rgba(12, 22, 31, 0.72)',
+                      opacity: unlocked ? 1 : 0.72,
                       position: 'relative', overflow: 'hidden',
                     }}>
-                      {isMythic && (
-                        <div style={{
-                          position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
-                          background: 'linear-gradient(90deg, transparent, #ffaa00, #ffdd00, #ffaa00, transparent)',
-                          animation: 'shine 2s linear infinite',
-                        }} />
-                      )}
-                      <div style={{ fontSize: '28px', marginBottom: '6px' }}>{def.icon}</div>
-                      <div style={{
-                        fontSize: '12px', fontWeight: 700,
-                        color: rs.color, marginBottom: '2px',
-                      }}>
-                        {def.name}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        <span style={{ fontSize: 24, filter: unlocked ? undefined : 'grayscale(1)' }}>{def.icon}</span>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontSize: 12, fontWeight: 700, color: unlocked ? rs.color : 'var(--text-dim)' }}>
+                            {def.name}
+                          </div>
+                          <div style={{ fontSize: 9, color: rs.color }}>{rs.label}</div>
+                        </div>
+                        <span style={{ marginLeft: 'auto', fontSize: 10, color: unlocked ? '#49d17d' : 'var(--text-dim)' }}>
+                          {unlocked ? '已获得' : '未解锁'}
+                        </span>
                       </div>
-                      <div style={{ fontSize: '10px', color: 'var(--text-dim)', lineHeight: 1.4 }}>
+                      <div style={{ fontSize: 10, color: 'var(--text-main)', lineHeight: 1.5, minHeight: 30 }}>
                         {def.desc}
                       </div>
-                      <div style={{ fontSize: '12px', marginTop: '4px', letterSpacing: '2px' }}>
-                        {rs.stars}
+                      <div style={{ marginTop: 9, height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 3, overflow: 'hidden' }}>
+                        <div style={{ width: `${unlocked ? 100 : badgeProgress.percent}%`, height: '100%', background: unlocked ? '#49d17d' : rs.color }} />
+                      </div>
+                      <div style={{ fontSize: 9, color: 'var(--text-dim)', marginTop: 5 }}>
+                        {unlocked ? '条件已达成' : badgeProgress.label}
                       </div>
                     </div>
                   );
@@ -309,14 +341,6 @@ export default function ProfileScreen() {
             </div>
           );
         })}
-
-        {earnedBadges.length === 0 && (
-          <div className="pixel-card" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-dim)' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🏅</div>
-            <div>还没有获得任何徽章</div>
-            <div style={{ fontSize: '11px', marginTop: '4px' }}>去打副本吧！</div>
-          </div>
-        )}
 
         {changingSchool && (
           <div style={{

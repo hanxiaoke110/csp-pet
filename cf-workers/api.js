@@ -1999,7 +1999,8 @@ export default {
         }
         // Dedup: skip if last sync was < 5 seconds ago (prevents 200-student wave from serializing on D1 write lock)
         const lastSync = await db.prepare("SELECT updated_at FROM dungeon_players WHERE device_hash=?").bind(device_hash).first();
-        if (lastSync && lastSync.updated_at) {
+        const hasBadgeSync = Array.isArray(body.badges) && body.badges.length > 0;
+        if (!hasBadgeSync && lastSync && lastSync.updated_at) {
           const elapsed = Date.now() - new Date(lastSync.updated_at + 'Z').getTime();
           if (elapsed < 5000) return new Response(JSON.stringify({ success: true, synced: false, reason: 'too_frequent' }), { headers: cors });
         }

@@ -119,6 +119,82 @@ beforeEach(() => {
 });
 
 describe('智子试炼场核心结算', () => {
+  it('全部 23 个成就在达成条件后都能触发，且不会重复发放', () => {
+    const perfectProgress = Array.from({ length: 8 }, (_, index) => makeProgress({
+      dungeonId: `dungeon-${String(index + 1).padStart(2, '0')}`,
+      status: 'cleared',
+      bossDefeated: true,
+      completedStages: 5,
+      bestRating: 'SS',
+    }));
+    useDungeonStore.setState({
+      player: makePlayer({
+        totalAnswered: 100,
+        totalCorrect: 100,
+        currentStreak: 50,
+        maxStreak: 50,
+        rankTier: 8,
+        loginStreak: 30,
+      }),
+      dungeonProgress: perfectProgress,
+    });
+
+    const firstAward = useDungeonStore.getState().checkAndAwardBadges();
+    expect(firstAward).toHaveLength(23);
+    expect(new Set(firstAward).size).toBe(23);
+    expect(useDungeonStore.getState().earnedBadges).toHaveLength(23);
+
+    const secondAward = useDungeonStore.getState().checkAndAwardBadges();
+    expect(secondAward).toEqual([]);
+    expect(useDungeonStore.getState().earnedBadges).toHaveLength(23);
+  });
+
+  it('连续登录和正确率成就严格按阈值触发', () => {
+    useDungeonStore.setState({
+      player: makePlayer({ totalAnswered: 49, totalCorrect: 49, loginStreak: 2 }),
+    });
+    expect(useDungeonStore.getState().checkAndAwardBadges()).not.toContain('perfectionist');
+    expect(useDungeonStore.getState().earnedBadges).not.toContain('dedicated');
+
+    useDungeonStore.setState({
+      player: makePlayer({ totalAnswered: 50, totalCorrect: 48, loginStreak: 3 }),
+      earnedBadges: [],
+    });
+    const awarded = useDungeonStore.getState().checkAndAwardBadges();
+    expect(awarded).toContain('perfectionist');
+    expect(awarded).toContain('dedicated');
+  });
+
+  it('桌面版启动会累计连续登录，同一天重复打开不重复计数', () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayText = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+    useDungeonStore.setState({
+      player: makePlayer({ loginStreak: 2, lastLoginDate: yesterdayText }),
+    });
+
+    const firstOpen = useDungeonStore.getState().recordDailyLogin();
+    expect(useDungeonStore.getState().player.loginStreak).toBe(3);
+    expect(firstOpen).toContain('dedicated');
+
+    const secondOpen = useDungeonStore.getState().recordDailyLogin();
+    expect(useDungeonStore.getState().player.loginStreak).toBe(3);
+    expect(secondOpen).toEqual([]);
+  });
+
+  it('当天已登录时升级新版本，也会立即补发历史达成的徽章', () => {
+    const today = new Date();
+    const todayText = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    useDungeonStore.setState({
+      player: makePlayer({ totalAnswered: 10, totalCorrect: 8, lastLoginDate: todayText }),
+      earnedBadges: [],
+    });
+
+    const repaired = useDungeonStore.getState().recordDailyLogin();
+    expect(repaired).toContain('apprentice');
+    expect(useDungeonStore.getState().player.loginStreak).toBe(0);
+  });
+
   it('新赛季只重置试炼数据，不影响桌宠金币与试炼道具', () => {
     usePetStore.setState({ coins: 2680 });
     useDungeonStore.setState({
