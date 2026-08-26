@@ -1,9 +1,9 @@
 // 数据备份 / 恢复 — 换电脑迁移用。
-// 备份内容：localStorage（csp_*/dungeon_*）+ SQLite settings 表 + AppData 精灵素材。
-// 备份文件只存文件名不存绝对路径，Mac / Windows 之间可以互相导入。
+// 备份内容：localStorage（csp_*/dungeon_*）+ SQLite settings 表。
+// 精灵图片是可恢复缓存，不写入新备份，避免 Windows WebView2 因 Base64 大对象卡死。
 import { invoke } from '@tauri-apps/api/core';
 import { getVersion } from '@tauri-apps/api/app';
-import { readDir, readFile, writeFile, writeTextFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { writeFile, writeTextFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { sqliteSet } from './sqlite-storage';
 
 const FORMAT = 'csp-pet-backup';
@@ -82,19 +82,25 @@ export function base64ToBytes(b64: string): Uint8Array {
   return bytes;
 }
 
-async function collectSprites(): Promise<Record<string, string>> {
-  const out: Record<string, string> = {};
+function isValidPetSnapshot(raw: string | undefined): boolean {
+  if (!raw) return false;
   try {
-    const entries = await readDir(SPRITE_DIR, { baseDir: BaseDirectory.AppData });
-    for (const entry of entries) {
-      if (!entry.isFile || !entry.name) continue;
-      try {
-        const buf = await readFile(`${SPRITE_DIR}/${entry.name}`, { baseDir: BaseDirectory.AppData });
-        out[entry.name] = bytesToBase64(buf);
-      } catch { /* 单个文件读取失败不阻塞整体导出 */ }
-    }
-  } catch { /* 目录不存在 = 没有缓存素材 */ }
-  return out;
+    const data = JSON.parse(raw);
+    return Array.isArray(data?.ownedPets)
+      && Number.isFinite(Number(data?.coins))
+      && Number(data.coins) >= 0;
+  } catch {
+    return false;
+  }
+}
+
+/** 导出前确认智子与金币至少在一套持久化存储中完整可读。 */
+export function validateBackupState(backup: BackupFile): string | null {
+  if (
+    isValidPetSnapshot(backup.localStorage.csp_pet_data)
+    || isValidPetSnapshot(backup.sqlite.pet_data)
+  ) return null;
+  return '未读取到完整的智子与金币数据，请先重启应用确认数据正常后再导出';
 }
 
 /** 收集当前全部可迁移数据，组装成备份对象 */
@@ -113,8 +119,6 @@ export async function buildBackup(): Promise<BackupFile> {
     sqlite = Object.fromEntries(rows);
   } catch { /* SQLite 不可用时只导出 localStorage */ }
 
-  const sprites = await collectSprites();
-
   let appVersion = 'unknown';
   try { appVersion = await getVersion(); } catch {}
 
@@ -125,13 +129,16 @@ export async function buildBackup(): Promise<BackupFile> {
     exportedAt: new Date().toISOString(),
     localStorage: ls,
     sqlite,
-    sprites,
+    // 保留字段用于兼容旧备份导入；新备份不再复制可重新获取的图片缓存。
+    sprites: {},
   };
 }
 
 /** 导出：弹系统另存为对话框，返回保存路径；取消时抛 'cancelled' */
 export async function exportBackup(): Promise<string> {
   const backup = await buildBackup();
+  const validationError = validateBackupState(backup);
+  if (validationError) throw new Error(validationError);
   const date = backup.exportedAt.slice(0, 10);
   return await invoke<string>('export_backup', {
     contents: JSON.stringify(backup),
@@ -142,6 +149,8 @@ export async function exportBackup(): Promise<string> {
 /** 导入前兜底：把当前数据快照存到 AppData，返回快照文件名 */
 export async function snapshotCurrentToAppData(): Promise<string> {
   const backup = await buildBackup();
+  const validationError = validateBackupState(backup);
+  if (validationError) throw new Error(validationError);
   const name = `backup-before-import-${Date.now()}.json`;
   await writeTextFile(name, JSON.stringify(backup), { baseDir: BaseDirectory.AppData });
   return name;

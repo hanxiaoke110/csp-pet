@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   shouldIncludeKey, parseBackup, compareVersions, bytesToBase64, base64ToBytes,
+  validateBackupState,
   type BackupFile,
 } from './backup';
 
@@ -91,5 +92,28 @@ describe('base64 roundtrip', () => {
     expect(decoded.length).toBe(bytes.length);
     expect(decoded[0]).toBe(0);
     expect(decoded[69999]).toBe(69999 % 256);
+  });
+});
+
+describe('validateBackupState', () => {
+  it('accepts a complete pet snapshot from localStorage', () => {
+    expect(validateBackupState(makeBackup({
+      localStorage: { csp_pet_data: '{"ownedPets":[],"coins":100}' },
+      sqlite: {},
+    }))).toBeNull();
+  });
+
+  it('falls back to SQLite when the localStorage copy is damaged', () => {
+    expect(validateBackupState(makeBackup({
+      localStorage: { csp_pet_data: '{broken' },
+      sqlite: { pet_data: '{"ownedPets":[],"coins":100}' },
+    }))).toBeNull();
+  });
+
+  it('rejects an export with no readable pet and coin snapshot', () => {
+    expect(validateBackupState(makeBackup({
+      localStorage: {},
+      sqlite: {},
+    }))).toContain('智子与金币');
   });
 });

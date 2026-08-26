@@ -102,7 +102,7 @@ interface PetState {
 
   // Persistence
   save: () => void;
-  load: () => Promise<void>;
+  load: () => Promise<boolean>;
 }
 
 export const FOODS: Record<string, { name: string; price: number; hunger: number; icon: string }> = {
@@ -991,10 +991,10 @@ export const usePetStore = create<PetState>((set, get) => ({
 
   load: async () => {
     const raw = await dualLoad('pet_data', 'csp_pet_data');
-    if (!raw) return;
+    if (!raw) return false;
     try {
       const data = JSON.parse(raw);
-      if (data.ownedPets) {
+      if (Array.isArray(data.ownedPets)) {
         // Repair legacy fields while keeping each student's existing pet identity intact.
         const migrated = data.ownedPets.map((p: any) => {
           const config = getPetConfig(p.speciesId);
@@ -1100,7 +1100,9 @@ export const usePetStore = create<PetState>((set, get) => ({
             gachaRewardMigrationDone: true,
           }));
         }
+        return true;
       }
-    } catch { /* corrupted data — ignore */ }
+    } catch { /* corrupted data — do not overwrite it with defaults */ }
+    return false;
   },
 }));

@@ -172,7 +172,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.39';
+  const VER = '1.7.43';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -183,9 +183,9 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🐉 启用全新智子龙应用图标，统一客户端、试炼场和下载页品牌形象</div>
-          <div>🏛️ 试炼场每赛季首次更换流派免费，之后每次消耗 300 通用金币，支付前会再次确认</div>
-          <div>🏆 修复班级榜遗漏同一老师其他班级学生的问题</div>
+          <div>💾 重做数据备份，移除可恢复的图片缓存，Windows 导出更轻更稳定</div>
+          <div>🛡️ 导出前自动核验智子与金币存档，不再生成不完整的备份文件</div>
+          <div>🔒 启动读取异常时不再用初始状态回写，进一步保护原有智子和金币</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -246,6 +246,7 @@ function App() {
   useEffect(() => {
     let hungerTimer: ReturnType<typeof setInterval>;
     const init = async () => {
+      let petDataLoaded = false;
       // Each step is wrapped independently — failure in one doesn't block the rest
       // 1. One-time migration: localStorage → SQLite (failure → fall back to localStorage)
       try { await migrateLocalStorageToSqlite(); } catch (e) { console.error('[init] migration failed:', e); }
@@ -253,18 +254,23 @@ function App() {
       try { await loadProblemStatuses(); } catch (e) { console.error('[init] problemStatuses failed:', e); }
       // 3. Load all stores from SQLite (parallel). Each store has internal localStorage fallback.
       try {
-        await Promise.all([
+        const [loaded] = await Promise.all([
           petLoaded(),
           useHatchStore.getState().load(),
           useQuizStore.getState().load(),
         ]);
+        petDataLoaded = loaded;
       } catch (e) { console.error('[init] store load failed:', e); }
       // 4. Apply offline hunger (before first save)
-      try { usePetStore.getState().applyOfflineHunger(); } catch {}
+      if (petDataLoaded) {
+        try { usePetStore.getState().applyOfflineHunger(); } catch {}
+      }
       // 4.5 Auto feeder: catch up if hunger is already below the threshold at startup
-      try { usePetStore.getState().runAutoFeeder(); } catch {}
+      if (petDataLoaded) {
+        try { usePetStore.getState().runAutoFeeder(); } catch {}
+      }
       // 5. Sync to pet window
-      usePetStore.getState().save();
+      if (petDataLoaded) usePetStore.getState().save();
       // 独立桌宠窗口的启动恢复延后到主界面加载完成后再做（见下方 effect），
       // 避免启动阶段创建第二个 WebView2 环境与课程数据加载竞争。
       // 6. Start hunger timer: tick every 15 minutes while app is open
@@ -272,12 +278,14 @@ function App() {
         usePetStore.getState().tickHunger();
       }, 900000); // 15 min
       const cleanupPetClick = safeListen('pet-click', () => {
-        usePetStore.getState().save();
+        const state = usePetStore.getState();
+        if (petDataLoaded || state.ownedPets.length > 0) state.save();
       });
       const cleanupPetSync = safeListen('pet-request-sync', () => {
-        usePetStore.getState().save();
+        const state = usePetStore.getState();
+        if (petDataLoaded || state.ownedPets.length > 0) state.save();
       });
-      setTimeout(() => usePetStore.getState().save(), 500);
+      if (petDataLoaded) setTimeout(() => usePetStore.getState().save(), 500);
       return () => {
         cleanupPetClick();
         cleanupPetSync();

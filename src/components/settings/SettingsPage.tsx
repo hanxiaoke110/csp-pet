@@ -132,7 +132,7 @@ export default function SettingsPage() {
 
       <div className="settings-section">
         <h3>💾 数据备份</h3>
-        <p className="settings-desc">换电脑或重装前，先导出备份文件（含智子、金币、课程进度和精灵素材），在新电脑上导入即可恢复全部数据</p>
+        <p className="settings-desc">换电脑或重装前，先导出备份文件（含智子、金币和学习进度）；图片素材会在导入后自动恢复</p>
         <BackupSection />
       </div>
 
@@ -441,7 +441,7 @@ function BackupSection() {
         </button>
       </div>
       <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 8, lineHeight: 1.7 }}>
-        💡 把导出的 .json 文件拷到 U 盘或发送到新电脑，在新电脑的同一页面导入即可。导入前会自动为当前数据保留一份快照，不会丢东西。
+        💡 把导出的 .json 文件拷到 U 盘或发送到新电脑，在新电脑的同一页面导入即可。备份不再复制可重新获取的图片，因此体积更小，在 Windows 上也更稳定。
       </div>
       {msg && (
         <div style={{ marginTop: 8, fontSize: 12, fontWeight: 600, color: msg.ok ? '#16a34a' : '#dc2626', wordBreak: 'break-all' }}>
