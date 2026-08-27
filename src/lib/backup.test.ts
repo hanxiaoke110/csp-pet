@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   shouldIncludeKey, parseBackup, compareVersions, bytesToBase64, base64ToBytes,
-  validateBackupState,
+  validateBackupState, summarizeBackup,
   type BackupFile,
 } from './backup';
 
@@ -31,6 +31,11 @@ describe('shouldIncludeKey', () => {
     expect(shouldIncludeKey('csp_reviewed_quiz_bank_version')).toBe(false);
     expect(shouldIncludeKey('csp_imported_lessons')).toBe(false);
     expect(shouldIncludeKey('csp_data_version')).toBe(false);
+    expect(shouldIncludeKey('csp_last_automatic_backup_date')).toBe(false);
+    expect(shouldIncludeKey('dungeon_reviewed_exam_bank_v1')).toBe(false);
+    expect(shouldIncludeKey('dungeon_dungeons_v1')).toBe(false);
+    expect(shouldIncludeKey('dungeon_leaderboard_rules_v1')).toBe(false);
+    expect(shouldIncludeKey('dungeon_cache_questions')).toBe(false);
   });
 
   it('excludes unrelated keys', () => {
@@ -115,5 +120,21 @@ describe('validateBackupState', () => {
       localStorage: {},
       sqlite: {},
     }))).toContain('智子与金币');
+  });
+});
+
+describe('summarizeBackup', () => {
+  it('reports pet count and coins from the validated snapshot', () => {
+    expect(summarizeBackup(makeBackup({
+      localStorage: { csp_pet_data: '{"ownedPets":[{},{}],"coins":2500}' },
+      sqlite: {},
+    }))).toEqual({ petCount: 2, coins: 2500 });
+  });
+
+  it('falls back to SQLite when the local snapshot is unreadable', () => {
+    expect(summarizeBackup(makeBackup({
+      localStorage: { csp_pet_data: '{broken' },
+      sqlite: { pet_data: '{"ownedPets":[{}],"coins":88}' },
+    }))).toEqual({ petCount: 1, coins: 88 });
   });
 });

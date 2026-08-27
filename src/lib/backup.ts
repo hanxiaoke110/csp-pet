@@ -3,12 +3,18 @@
 // 精灵图片是可恢复缓存，不写入新备份，避免 Windows WebView2 因 Base64 大对象卡死。
 import { invoke } from '@tauri-apps/api/core';
 import { getVersion } from '@tauri-apps/api/app';
-import { writeFile, writeTextFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
+import {
+  writeFile, writeTextFile, readTextFile, readDir, remove, mkdir, BaseDirectory,
+} from '@tauri-apps/plugin-fs';
 import { sqliteSet } from './sqlite-storage';
 
 const FORMAT = 'csp-pet-backup';
 const BACKUP_VERSION = 1;
 const SPRITE_DIR = 'pet-sprites/2d';
+export const AUTO_BACKUP_DIR = 'backups';
+export const MAX_BACKUP_FILE_BYTES = 12 * 1024 * 1024;
+const MAX_AUTOMATIC_BACKUPS = 3;
+const AUTO_BACKUP_DATE_KEY = 'csp_last_automatic_backup_date';
 
 // 可从服务器重新下载的内容，不打包进备份（减小文件体积）
 const EXCLUDED_LS_KEYS = new Set([
@@ -17,6 +23,11 @@ const EXCLUDED_LS_KEYS = new Set([
   'csp_reviewed_quiz_bank_version',
   'csp_imported_lessons',
   'csp_data_version',
+  'csp_last_automatic_backup_date',
+  'dungeon_reviewed_exam_bank_v1',
+  'dungeon_reviewed_exam_bank_version',
+  'dungeon_dungeons_v1',
+  'dungeon_leaderboard_rules_v1',
 ]);
 
 export interface BackupFile {
@@ -32,8 +43,16 @@ export interface BackupFile {
 /** 判断一个 localStorage key 是否属于需要迁移的用户数据 */
 export function shouldIncludeKey(key: string): boolean {
   if (EXCLUDED_LS_KEYS.has(key)) return false;
+  if (key.startsWith('dungeon_cache_')) return false;
   return key.startsWith('csp_') || key.startsWith('dungeon_');
 }
+
+const SQLITE_BACKUP_KEYS = new Set([
+  'pet_data',
+  'hatch_eggs',
+  'quiz_state',
+  'problem_status',
+]);
 
 /** 解析并校验备份文件；不通过时给出孩子能看懂的拒绝原因 */
 export function parseBackup(raw: string): { ok: true; data: BackupFile } | { ok: false; error: string } {
@@ -103,6 +122,24 @@ export function validateBackupState(backup: BackupFile): string | null {
   return '未读取到完整的智子与金币数据，请先重启应用确认数据正常后再导出';
 }
 
+export interface BackupSummary {
+  coins: number;
+  petCount: number;
+}
+
+export function summarizeBackup(backup: BackupFile): BackupSummary {
+  for (const raw of [backup.localStorage.csp_pet_data, backup.sqlite.pet_data]) {
+    if (!raw) continue;
+    try {
+      const data = JSON.parse(raw);
+      if (Array.isArray(data?.ownedPets) && Number.isFinite(Number(data?.coins))) {
+        return { coins: Number(data.coins), petCount: data.ownedPets.length };
+      }
+    } catch { /* 继续读取另一份快照 */ }
+  }
+  return { coins: 0, petCount: 0 };
+}
+
 /** 收集当前全部可迁移数据，组装成备份对象 */
 export async function buildBackup(): Promise<BackupFile> {
   const ls: Record<string, string> = {};
@@ -116,7 +153,7 @@ export async function buildBackup(): Promise<BackupFile> {
   let sqlite: Record<string, string> = {};
   try {
     const rows = await invoke<[string, string][]>('get_all_settings');
-    sqlite = Object.fromEntries(rows);
+    sqlite = Object.fromEntries(rows.filter(([key]) => SQLITE_BACKUP_KEYS.has(key)));
   } catch { /* SQLite 不可用时只导出 localStorage */ }
 
   let appVersion = 'unknown';
@@ -134,26 +171,89 @@ export async function buildBackup(): Promise<BackupFile> {
   };
 }
 
-/** 导出：弹系统另存为对话框，返回保存路径；取消时抛 'cancelled' */
-export async function exportBackup(): Promise<string> {
-  const backup = await buildBackup();
-  const validationError = validateBackupState(backup);
-  if (validationError) throw new Error(validationError);
-  const date = backup.exportedAt.slice(0, 10);
-  return await invoke<string>('export_backup', {
-    contents: JSON.stringify(backup),
-    defaultName: `CSP备份-${date}.json`,
-  });
+function timestampForFilename(date: Date): string {
+  return date.toISOString().replace(/[:.]/g, '-');
 }
 
-/** 导入前兜底：把当前数据快照存到 AppData，返回快照文件名 */
-export async function snapshotCurrentToAppData(): Promise<string> {
+async function backupNames(): Promise<string[]> {
+  try {
+    const entries = await readDir(AUTO_BACKUP_DIR, { baseDir: BaseDirectory.AppData });
+    return entries
+      .filter(entry => entry.isFile && entry.name.toLowerCase().endsWith('.json'))
+      .map(entry => entry.name)
+      .sort((a, b) => b.localeCompare(a));
+  } catch {
+    return [];
+  }
+}
+
+async function rotateAutomaticBackups(): Promise<void> {
+  const names = await backupNames();
+  for (const name of names.slice(MAX_AUTOMATIC_BACKUPS)) {
+    try {
+      await remove(`${AUTO_BACKUP_DIR}/${name}`, { baseDir: BaseDirectory.AppData });
+    } catch { /* 清理旧备份失败不影响新备份 */ }
+  }
+}
+
+export interface AutomaticBackupInfo {
+  name: string;
+  exportedAt: string;
+  appVersion: string;
+}
+
+export async function ensureAutomaticBackupDirectory(): Promise<void> {
+  await mkdir(AUTO_BACKUP_DIR, { baseDir: BaseDirectory.AppData, recursive: true });
+}
+
+/** 写入 AppData/backups，全程不弹系统文件框，避免 Windows 置顶窗口死锁。 */
+export async function createAutomaticBackup(reason: 'startup' | 'manual' | 'before-update' | 'before-restore' = 'manual'): Promise<AutomaticBackupInfo> {
   const backup = await buildBackup();
   const validationError = validateBackupState(backup);
   if (validationError) throw new Error(validationError);
-  const name = `backup-before-import-${Date.now()}.json`;
-  await writeTextFile(name, JSON.stringify(backup), { baseDir: BaseDirectory.AppData });
-  return name;
+  const contents = JSON.stringify(backup);
+  if (new TextEncoder().encode(contents).byteLength > MAX_BACKUP_FILE_BYTES) {
+    throw new Error('备份数据异常过大，已停止写入');
+  }
+  await ensureAutomaticBackupDirectory();
+  const name = `CSP-${timestampForFilename(new Date(backup.exportedAt))}-${reason}.json`;
+  await writeTextFile(`${AUTO_BACKUP_DIR}/${name}`, contents, { baseDir: BaseDirectory.AppData });
+  await rotateAutomaticBackups();
+  return { name, exportedAt: backup.exportedAt, appVersion: backup.appVersion };
+}
+
+/** 每天首次启动后备份一次；只有成功写入后才记录日期。 */
+export async function ensureDailyAutomaticBackup(): Promise<AutomaticBackupInfo | null> {
+  const today = new Date().toISOString().slice(0, 10);
+  if (localStorage.getItem(AUTO_BACKUP_DATE_KEY) === today) return null;
+  const info = await createAutomaticBackup('startup');
+  localStorage.setItem(AUTO_BACKUP_DATE_KEY, today);
+  return info;
+}
+
+export async function listAutomaticBackups(): Promise<AutomaticBackupInfo[]> {
+  const result: AutomaticBackupInfo[] = [];
+  for (const name of await backupNames()) {
+    try {
+      const raw = await readTextFile(`${AUTO_BACKUP_DIR}/${name}`, { baseDir: BaseDirectory.AppData });
+      const parsed = parseBackup(raw);
+      if (!parsed.ok || validateBackupState(parsed.data)) continue;
+      result.push({ name, exportedAt: parsed.data.exportedAt, appVersion: parsed.data.appVersion });
+    } catch { /* 忽略损坏或不可读文件 */ }
+  }
+  return result;
+}
+
+export async function readAutomaticBackup(name: string): Promise<BackupFile> {
+  if (!name || /[/\\]/.test(name) || !name.toLowerCase().endsWith('.json')) {
+    throw new Error('备份文件名无效');
+  }
+  const raw = await readTextFile(`${AUTO_BACKUP_DIR}/${name}`, { baseDir: BaseDirectory.AppData });
+  const parsed = parseBackup(raw);
+  if (!parsed.ok) throw new Error(parsed.error);
+  const validationError = validateBackupState(parsed.data);
+  if (validationError) throw new Error(validationError);
+  return parsed.data;
 }
 
 export interface ApplyResult {
@@ -167,16 +267,30 @@ export interface ApplyResult {
  * 调用方必须先完成快照；成功后应尽快刷新页面，避免内存中的旧状态覆盖写入。
  */
 export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
+  const validationError = validateBackupState(data);
+  if (validationError) throw new Error(validationError);
+  let localPetSnapshotWritten = false;
   for (const [key, value] of Object.entries(data.localStorage)) {
-    try { localStorage.setItem(key, value); } catch { /* 忽略单项失败 */ }
+    try {
+      localStorage.setItem(key, value);
+      if (key === 'csp_pet_data' && localStorage.getItem(key) === value) {
+        localPetSnapshotWritten = true;
+      }
+    } catch { /* SQLite 快照仍可作为兜底 */ }
   }
 
   let sqliteCount = 0;
+  let sqlitePetSnapshotWritten = false;
   for (const [key, value] of Object.entries(data.sqlite || {})) {
     try {
       await sqliteSet(key, value);
       sqliteCount++;
+      if (key === 'pet_data') sqlitePetSnapshotWritten = true;
     } catch { /* 记录并继续 */ }
+  }
+
+  if (!localPetSnapshotWritten && !sqlitePetSnapshotWritten) {
+    throw new Error('智子与金币数据无法写入，请检查应用数据目录权限后重试');
   }
 
   let spriteCount = 0;
@@ -195,9 +309,4 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
   }
 
   return { lsCount: Object.keys(data.localStorage).length, sqliteCount, spriteCount };
-}
-
-/** 导入第一步：弹打开对话框读入文件原文；取消时抛 'cancelled' */
-export async function pickBackupFile(): Promise<string> {
-  return await invoke<string>('import_backup');
 }

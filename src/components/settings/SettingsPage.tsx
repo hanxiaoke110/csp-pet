@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { getVersion } from '@tauri-apps/api/app';
+import { appDataDir, join } from '@tauri-apps/api/path';
+import { openPath } from '@tauri-apps/plugin-opener';
 import { useAIStore } from '../../stores/aiStore';
 import { usePetStore } from '../../stores/petStore';
 import { AI_MODELS, type AIProvider } from '../../types/ai';
@@ -8,8 +10,10 @@ import { getDeviceId } from '../../utils/crypto';
 import { clearClassAccessCache, markClassAccessChecked } from '../access/ClassAccessGate';
 import ConfirmModal from '../pet/ConfirmModal';
 import {
-  pickBackupFile, parseBackup, exportBackup, snapshotCurrentToAppData, applyBackup,
-  compareVersions, type BackupFile, type ApplyResult,
+  AUTO_BACKUP_DIR, createAutomaticBackup, ensureAutomaticBackupDirectory,
+  listAutomaticBackups, readAutomaticBackup, applyBackup, parseBackup,
+  validateBackupState, summarizeBackup, compareVersions, MAX_BACKUP_FILE_BYTES,
+  type AutomaticBackupInfo, type ApplyResult, type BackupFile, type BackupSummary,
 } from '../../lib/backup';
 import UpdateChecker from './UpdateChecker';
 
@@ -132,7 +136,7 @@ export default function SettingsPage() {
 
       <div className="settings-section">
         <h3>💾 数据备份</h3>
-        <p className="settings-desc">换电脑或重装前，先导出备份文件（含智子、金币和学习进度）；图片素材会在导入后自动恢复</p>
+        <p className="settings-desc">自动保护智子、金币和学习进度，不再弹出 Windows 文件选择窗口</p>
         <BackupSection />
       </div>
 
@@ -365,66 +369,113 @@ function ClassBindingSection() {
 }
 
 function BackupSection() {
-  const [busy, setBusy] = useState<'export' | 'import' | null>(null);
+  const [busy, setBusy] = useState<'backup' | 'restore' | 'folder' | null>(null);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
-  const [pendingImport, setPendingImport] = useState<{ data: BackupFile; warning: string | null } | null>(null);
+  const [backups, setBackups] = useState<AutomaticBackupInfo[]>([]);
+  const [pendingRestore, setPendingRestore] = useState<{
+    info: AutomaticBackupInfo;
+    data?: BackupFile;
+    summary: BackupSummary;
+    warning?: string;
+  } | null>(null);
   const [doneInfo, setDoneInfo] = useState<ApplyResult | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleExport = async () => {
-    setBusy('export');
+  const refreshBackups = async () => {
+    try { setBackups(await listAutomaticBackups()); } catch { setBackups([]); }
+  };
+
+  useEffect(() => { void refreshBackups(); }, []);
+
+  const handleBackup = async () => {
+    setBusy('backup');
     setMsg(null);
     try {
-      const path = await exportBackup();
-      setMsg({ text: `✅ 备份已保存到：${path}`, ok: true });
+      await createAutomaticBackup('manual');
+      await refreshBackups();
+      setMsg({ text: '✅ 安全备份已完成，仅保留最近 3 份', ok: true });
     } catch (e: any) {
-      if (String(e) !== 'cancelled' && !String(e).includes('cancelled')) {
-        setMsg({ text: `❌ 导出失败：${e}`, ok: false });
-      }
+      setMsg({ text: `❌ 备份失败：${e}，当前数据未受影响`, ok: false });
     } finally {
       setBusy(null);
     }
   };
 
-  const handlePickImport = async () => {
-    setBusy('import');
+  const handleOpenFolder = async () => {
+    setBusy('folder');
     setMsg(null);
     try {
-      const raw = await pickBackupFile();
-      const parsed = parseBackup(raw);
-      if (!parsed.ok) {
-        setMsg({ text: `❌ ${parsed.error}`, ok: false });
-        return;
-      }
-      let warning: string | null = null;
-      try {
-        const current = await getVersion();
-        if (compareVersions(parsed.data.appVersion, current) > 0) {
-          warning = `备份来自更新版本（v${parsed.data.appVersion}，当前 v${current}），建议先更新 App 再导入`;
-        }
-      } catch { /* 版本对比失败不阻塞 */ }
-      setPendingImport({ data: parsed.data, warning });
+      await ensureAutomaticBackupDirectory();
+      const dir = await join(await appDataDir(), AUTO_BACKUP_DIR);
+      await openPath(dir);
     } catch (e: any) {
-      if (String(e) !== 'cancelled' && !String(e).includes('cancelled')) {
-        setMsg({ text: `❌ 读取备份失败：${e}`, ok: false });
-      }
+      setMsg({ text: `❌ 无法打开备份目录：${e}`, ok: false });
     } finally {
       setBusy(null);
     }
   };
 
-  const handleConfirmImport = async () => {
-    if (!pendingImport) return;
-    const { data } = pendingImport;
-    setPendingImport(null);
-    setBusy('import');
+  const prepareAutomaticRestore = async () => {
+    const info = backups[0];
+    if (!info) return;
+    setBusy('restore');
     setMsg(null);
     try {
-      // 导入前强制快照，失败则中止，绝不在没有兜底的情况下覆盖数据
-      await snapshotCurrentToAppData();
+      const data = await readAutomaticBackup(info.name);
+      setPendingRestore({ info, data, summary: summarizeBackup(data) });
+    } catch (e: any) {
+      setMsg({ text: `❌ 备份无法读取：${e}`, ok: false });
+      await refreshBackups();
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handleMigrationFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    setBusy('restore');
+    setMsg(null);
+    try {
+      if (file.size > MAX_BACKUP_FILE_BYTES) {
+        throw new Error(`备份超过 ${Math.floor(MAX_BACKUP_FILE_BYTES / 1024 / 1024)}MB，为避免低配电脑卡死已拒绝读取`);
+      }
+      const parsed = parseBackup(await file.text());
+      if (!parsed.ok) throw new Error(parsed.error);
+      const validationError = validateBackupState(parsed.data);
+      if (validationError) throw new Error(validationError);
+      const currentVersion = await getVersion().catch(() => '0.0.0');
+      const warning = compareVersions(parsed.data.appVersion, currentVersion) > 0
+        ? `备份来自更新版本 v${parsed.data.appVersion}，建议先更新应用`
+        : undefined;
+      setPendingRestore({
+        info: { name: file.name, exportedAt: parsed.data.exportedAt, appVersion: parsed.data.appVersion },
+        data: parsed.data,
+        summary: summarizeBackup(parsed.data),
+        warning,
+      });
+    } catch (e: any) {
+      setMsg({ text: `❌ 迁移备份无法使用：${e}，当前数据未受影响`, ok: false });
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handleConfirmRestore = async () => {
+    if (!pendingRestore) return;
+    const target = pendingRestore;
+    setPendingRestore(null);
+    setBusy('restore');
+    setMsg(null);
+    try {
+      // 先把目标读入内存，再保存当前快照，避免轮换时删到目标。
+      const data = target.data || await readAutomaticBackup(target.info.name);
+      await createAutomaticBackup('before-restore');
       const result = await applyBackup(data);
       setDoneInfo(result);
     } catch (e: any) {
-      setMsg({ text: `❌ 导入失败：${e}。现有数据未受影响`, ok: false });
+      setMsg({ text: `❌ 恢复失败：${e}。现有数据未受影响`, ok: false });
     } finally {
       setBusy(null);
     }
@@ -433,15 +484,23 @@ function BackupSection() {
   return (
     <div style={{ marginTop: 8 }}>
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-        <button className="settings-btn" onClick={handleExport} disabled={busy !== null}>
-          {busy === 'export' ? '正在导出…' : '📤 导出备份'}
+        <button className="settings-btn" onClick={handleBackup} disabled={busy !== null}>
+          {busy === 'backup' ? '正在备份…' : '💾 立即安全备份'}
         </button>
-        <button className="settings-btn settings-btn-secondary" onClick={handlePickImport} disabled={busy !== null}>
-          {busy === 'import' ? '正在导入…' : '📥 导入备份'}
+        <button className="settings-btn settings-btn-secondary" onClick={prepareAutomaticRestore} disabled={busy !== null || backups.length === 0}>
+          {busy === 'restore' ? '正在恢复…' : '↩ 恢复最近备份'}
+        </button>
+        <button className="settings-btn settings-btn-secondary" onClick={() => fileInputRef.current?.click()} disabled={busy !== null}>
+          📥 从文件恢复
+        </button>
+        <input ref={fileInputRef} type="file" accept=".json,application/json" onChange={handleMigrationFile} style={{ display: 'none' }} />
+        <button className="settings-btn settings-btn-secondary" onClick={handleOpenFolder} disabled={busy !== null}>
+          {busy === 'folder' ? '正在打开…' : '📂 打开备份目录'}
         </button>
       </div>
       <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 8, lineHeight: 1.7 }}>
-        💡 把导出的 .json 文件拷到 U 盘或发送到新电脑，在新电脑的同一页面导入即可。备份不再复制可重新获取的图片，因此体积更小，在 Windows 上也更稳定。
+        💡 每天首次启动后会自动备份，仅保留最近 3 份。备份不包含可重新下载的题库和图片，失败不会改动当前存档。
+        {backups[0] && <><br />最近备份：{new Date(backups[0].exportedAt).toLocaleString('zh-CN')}（v{backups[0].appVersion}）</>}
       </div>
       {msg && (
         <div style={{ marginTop: 8, fontSize: 12, fontWeight: 600, color: msg.ok ? '#16a34a' : '#dc2626', wordBreak: 'break-all' }}>
@@ -449,20 +508,20 @@ function BackupSection() {
         </div>
       )}
 
-      {pendingImport && (
+      {pendingRestore && (
         <ConfirmModal
-          icon="📥" title="确认导入备份"
-          desc={`备份时间：${new Date(pendingImport.data.exportedAt).toLocaleString('zh-CN')}\n包含 ${Object.keys(pendingImport.data.localStorage).length} 项设置与进度、${Object.keys(pendingImport.data.sprites || {}).length} 个精灵素材。\n导入会覆盖本机现有数据（已自动保留当前快照）。${pendingImport.warning ? `\n⚠️ ${pendingImport.warning}` : ''}`}
-          confirmText="确认导入"
-          onCancel={() => setPendingImport(null)}
-          onConfirm={handleConfirmImport}
+          icon="↩" title="确认恢复备份"
+          desc={`文件：${pendingRestore.info.name}\n备份时间：${new Date(pendingRestore.info.exportedAt).toLocaleString('zh-CN')}\n内容：${pendingRestore.summary.petCount} 只智子、${pendingRestore.summary.coins} 金币及学习进度。\n当前数据将恢复到该时间点，恢复前会再自动保存一份。${pendingRestore.warning ? `\n⚠️ ${pendingRestore.warning}` : ''}`}
+          confirmText="确认恢复"
+          onCancel={() => setPendingRestore(null)}
+          onConfirm={handleConfirmRestore}
         />
       )}
 
       {doneInfo && (
         <ConfirmModal
-          icon="✅" title="导入完成"
-          desc={`已恢复 ${doneInfo.lsCount} 项设置与进度、${doneInfo.spriteCount} 个精灵素材。\n重启应用后全部生效。`}
+          icon="✅" title="恢复完成"
+          desc={`已恢复 ${doneInfo.lsCount} 项设置与进度。\n重启应用后全部生效。`}
           confirmText="立即重启"
           onCancel={() => setDoneInfo(null)}
           onConfirm={() => window.location.reload()}

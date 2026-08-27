@@ -29,6 +29,7 @@ import { useQuizStore } from './stores/quizStore';
 import { useAIStore } from './stores/aiStore';
 import { migrateLocalStorageToSqlite } from './lib/migration';
 import { loadProblemStatuses } from './lib/problemStatusCache';
+import { ensureDailyAutomaticBackup } from './lib/backup';
 import { nextCheckin } from './utils/checkin';
 import type { Lesson, Stage, LessonsData } from './types/course';
 import './App.css';
@@ -172,7 +173,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.43';
+  const VER = '1.7.44';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -183,9 +184,9 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>💾 重做数据备份，移除可恢复的图片缓存，Windows 导出更轻更稳定</div>
-          <div>🛡️ 导出前自动核验智子与金币存档，不再生成不完整的备份文件</div>
-          <div>🔒 启动读取异常时不再用初始状态回写，进一步保护原有智子和金币</div>
+          <div>💾 每天自动备份智子、金币和学习进度，仅保留最近三份</div>
+          <div>🛡️ Windows 不再弹阻塞式备份窗口，备份失败也不会影响使用和更新</div>
+          <div>📥 支持从备份文件迁移到新电脑，恢复前会先保护当前存档</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -270,7 +271,12 @@ function App() {
         try { usePetStore.getState().runAutoFeeder(); } catch {}
       }
       // 5. Sync to pet window
-      if (petDataLoaded) usePetStore.getState().save();
+      if (petDataLoaded) {
+        usePetStore.getState().save();
+        void ensureDailyAutomaticBackup().catch(error => {
+          console.error('[backup] daily automatic backup failed:', error);
+        });
+      }
       // 独立桌宠窗口的启动恢复延后到主界面加载完成后再做（见下方 effect），
       // 避免启动阶段创建第二个 WebView2 环境与课程数据加载竞争。
       // 6. Start hunger timer: tick every 15 minutes while app is open

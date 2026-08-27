@@ -250,9 +250,6 @@ pub fn run() {
             commands::settings::get_setting,
             commands::settings::set_setting,
             commands::settings::get_all_settings,
-            // backup
-            commands::backup::export_backup,
-            commands::backup::import_backup,
             // chat
             commands::chat::create_chat_session,
             commands::chat::get_chat_sessions,

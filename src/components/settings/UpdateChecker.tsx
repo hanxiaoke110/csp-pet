@@ -3,6 +3,7 @@ import { check, type Update } from '@tauri-apps/plugin-updater';
 import { getVersion } from '@tauri-apps/api/app';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { fetch } from '@tauri-apps/plugin-http';
+import { createAutomaticBackup } from '../../lib/backup';
 
 function isMac(): boolean {
   return navigator.userAgent.includes('Mac');
@@ -68,6 +69,12 @@ export default function UpdateChecker() {
 
   const doUpdate = async () => {
     if (!update) return;
+    try {
+      await createAutomaticBackup('before-update');
+    } catch (e) {
+      // 更新本身不会删除 AppData；备份权限异常时不能让孩子永远无法升级。
+      setError('⚠️ 更新前自动备份失败，更新仍会继续：' + String(e));
+    }
     if (isMac()) {
       setShowLinks(!showLinks);
     } else {
