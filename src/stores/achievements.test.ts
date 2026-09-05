@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { createAchievements, countUnlockedForDisplay } from './achievements';
+import { ACHIEVEMENT_REWARDS, createAchievements, countUnlockedForDisplay } from './achievements';
 
 let store: Record<string, string> = {};
 
@@ -22,6 +22,12 @@ function build(weeklyPerfects = 0, superBestScore = 0, superBestTotal = 0) {
 }
 
 describe('成就判定', () => {
+  it('每个成就都有可领取奖励，奖励表没有失效条目', () => {
+    const ids = build().map(a => a.id);
+    expect(ids.filter(id => !ACHIEVEMENT_REWARDS[id])).toEqual([]);
+    expect(Object.keys(ACHIEVEMENT_REWARDS).filter(id => !ids.includes(id))).toEqual([]);
+  });
+
   it('完美首秀：周常 5/5 全对（weeklyPerfects>=1）解锁', () => {
     store['csp_quiz_state'] = JSON.stringify({ weeklyPerfects: 1 });
     expect(build().find(a => a.id === 'quiz-perfect-1')!.check().unlocked).toBe(true);
@@ -69,6 +75,18 @@ describe('成就判定', () => {
     // 周常没全对
     store['csp_quiz_state'] = JSON.stringify({ weeklyPerfects: 0 });
     expect(build(0, 5, 5).find(a => a.id === 'super-double')!.check().unlocked).toBe(false);
+  });
+
+  it('富可敌国：历史最高金币达到 10000 后解锁并显示进度', () => {
+    const below = createAchievements(1, 1, 0, 9999, 0, false, 0, 0, 0, 0, 0, 0, 0, []);
+    expect(below.find(a => a.id === 'pet-coins-10000')!.check()).toEqual({
+      unlocked: false,
+      progress: 9999,
+      total: 10000,
+    });
+
+    const reached = createAchievements(1, 1, 0, 10000, 0, false, 0, 0, 0, 0, 0, 0, 0, []);
+    expect(reached.find(a => a.id === 'pet-coins-10000')!.check().unlocked).toBe(true);
   });
 
   it('计数与卡片同口径：旧存档条件回退但已领取的成就仍计入（回归：标题 4/6 vs 卡片已领取）', () => {

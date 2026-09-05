@@ -14,6 +14,7 @@ interface PetState {
   activePetId: string | null;
   ownedPets: OwnedPet[];
   coins: number;
+  maxCoinBalance: number;
   foods: Record<string, number>;
   expPool: number;
   weeklyPassiveClaimWeek: string;
@@ -239,6 +240,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   activePetId: null,
   ownedPets: [],
   coins: 200,
+  maxCoinBalance: 200,
   foods: { basic: 3 },
   pendingExp: 0,
   pendingCoins: 0,
@@ -981,8 +983,13 @@ export const usePetStore = create<PetState>((set, get) => ({
   checkCollectionRewards: () => {},
 
   save: () => {
-    const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
-    const data = { savedAt: new Date().toISOString(), ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
+    const { ownedPets, activePetId, coins, maxCoinBalance: storedMaxCoinBalance, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
+    const maxCoinBalance = Math.max(
+      Number.isFinite(storedMaxCoinBalance) ? storedMaxCoinBalance : 0,
+      coins,
+    );
+    if (maxCoinBalance !== storedMaxCoinBalance) set({ maxCoinBalance });
+    const data = { savedAt: new Date().toISOString(), ownedPets, activePetId, coins, maxCoinBalance, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     // save() 只管数据同步，不管窗口显隐
@@ -1055,6 +1062,12 @@ export const usePetStore = create<PetState>((set, get) => ({
           return id;
         });
         const storedCoins = Number(data.coins);
+        const coins = Number.isFinite(storedCoins) && storedCoins >= 0 ? storedCoins : 200;
+        const storedMaxCoinBalance = Number(data.maxCoinBalance);
+        const maxCoinBalance = Math.max(
+          coins,
+          Number.isFinite(storedMaxCoinBalance) && storedMaxCoinBalance >= 0 ? storedMaxCoinBalance : 0,
+        );
         const weeklyPassiveClaimWeek = migrateWeeklyPassiveClaimWeek(
           data.weeklyPassiveClaimWeek,
           localStorage.getItem('csp_last_passive_coin'),
@@ -1062,7 +1075,8 @@ export const usePetStore = create<PetState>((set, get) => ({
         set({
           ownedPets: loadedPets,
           activePetId,
-          coins: Number.isFinite(storedCoins) && storedCoins >= 0 ? storedCoins : 200,
+          coins,
+          maxCoinBalance,
           foods: migratedFoods,
           pendingExp: data.pendingExp || 0,
           pendingCoins: data.pendingCoins || 0,

@@ -1,34 +1,9 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { usePetStore } from '../../stores/petStore';
 import { useQuizStore } from '../../stores/quizStore';
-import { createAchievements, countUnlockedForDisplay, type Achievement } from '../../stores/achievements';
+import { ACHIEVEMENT_REWARDS, createAchievements, countUnlockedForDisplay, type Achievement } from '../../stores/achievements';
 
 const CLAIM_KEY = 'csp_achievement_claimed';
-
-const REWARDS: Record<string, { coins: number; renameCards?: number }> = {
-  'course-1': { coins: 20 }, 'course-10': { coins: 50 }, 'course-30': { coins: 80 },
-  'course-60': { coins: 120 }, 'course-100': { coins: 200, renameCards: 1 },
-  'quiz-weekly-1': { coins: 30 }, 'quiz-weekly-5': { coins: 80 },
-  'quiz-weekly-20': { coins: 150 }, 'quiz-perfect-1': { coins: 50 },
-  'quiz-perfect-5': { coins: 100 }, 'quiz-streak': { coins: 60 },
-  'quiz-total-100': { coins: 100 }, 'quiz-review-1': { coins: 30 },
-  'quiz-review-80': { coins: 80 }, 'quiz-extra-10': { coins: 50 },
-  'super-1': { coins: 50 }, 'super-5': { coins: 150 },
-  'super-3of5': { coins: 80 }, 'super-4of5': { coins: 120 },
-  'super-5of5': { coins: 200, renameCards: 1 }, 'super-double': { coins: 300, renameCards: 2 },
-  'pet-first': { coins: 30 }, 'pet-2': { coins: 40 }, 'pet-3': { coins: 60 },
-  'pet-5': { coins: 100 }, 'pet-8': { coins: 150 },
-  'pet-lv5': { coins: 50 }, 'pet-lv10': { coins: 100 }, 'pet-lv15': { coins: 150 },
-  'pet-lv20': { coins: 200, renameCards: 1 }, 'pet-feed-20': { coins: 40 },
-  'pet-coins-500': { coins: 50 }, 'pet-coins-2000': { coins: 100 },
-  'pet-affection': { coins: 80 },
-  'stage-c1': { coins: 30 }, 'stage-c2': { coins: 60 }, 'stage-c3': { coins: 100 },
-  'stage-c4': { coins: 150 },
-  'oj-cm-1': { coins: 50 }, 'oj-cm-all': { coins: 200, renameCards: 1 },
-  'hidden-triple': { coins: 100, renameCards: 1 }, 'hidden-name': { coins: 50 },
-  'hidden-3perfect': { coins: 80 }, 'hidden-starve': { coins: 20 },
-  'hidden-ai-csp': { coins: 30 }, 'hidden-perfect-review': { coins: 100 },
-};
 
 const CATEGORIES: Record<string, { label: string; color: string }> = {
   course:   { label: '📚 学海无涯', color: '#16a34a' },
@@ -40,8 +15,7 @@ const CATEGORIES: Record<string, { label: string; color: string }> = {
 
 export default function AchievementsPanel() {
   const ownedPets = usePetStore(s => s.ownedPets);
-  const activePet = usePetStore(s => s.getActivePet());
-  const coins = usePetStore(s => s.coins);
+  const maxCoinBalance = usePetStore(s => s.maxCoinBalance);
   const quizState = useQuizStore();
   const [refreshTick, setRefreshTick] = useState(0);
 
@@ -59,9 +33,9 @@ export default function AchievementsPanel() {
   const achievements = useMemo(() => {
     return createAchievements(
       ownedPets.length,
-      activePet?.level || 0,
-      activePet?.affection || 0,
-      coins,
+      Math.max(0, ...ownedPets.map(p => p.level || 0)),
+      Math.max(0, ...ownedPets.map(p => p.affection || 0)),
+      maxCoinBalance,
       feedCount,
       false,
       quizState.superCompletions,
@@ -73,7 +47,7 @@ export default function AchievementsPanel() {
       quizState.lastReviewTotal,
       ownedPets,
     );
-  }, [ownedPets, activePet, coins, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.superBestTotal, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal, refreshTick]);
+  }, [ownedPets, maxCoinBalance, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.superBestTotal, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal, refreshTick]);
 
   // Group by category
   const grouped = useMemo(() => {
@@ -102,12 +76,15 @@ export default function AchievementsPanel() {
   const prevUnlocked = useRef<Set<string> | null>(null);
 
   const handleClaim = useCallback((achId: string) => {
-    const reward = REWARDS[achId];
+    const reward = ACHIEVEMENT_REWARDS[achId];
     if (!reward) return;
+    let persisted = new Set<string>();
+    try { persisted = new Set(JSON.parse(localStorage.getItem(CLAIM_KEY) || '[]')); } catch {}
+    if (persisted.has(achId)) return;
     const store = usePetStore.getState();
     store.addCoins(reward.coins);
     if (reward.renameCards) { store.addRenameCards(reward.renameCards); }
-    const next = new Set(claimed);
+    const next = new Set([...claimed, ...persisted]);
     next.add(achId);
     setClaimed(next);
     saveClaimed(next);
@@ -167,11 +144,11 @@ export default function AchievementsPanel() {
                           <span className="ach-bar-text">{result.progress}/{result.total}</span>
                         </div>
                       )}
-                      {unlocked && !isClaimed && REWARDS[a.id] && (
+                      {unlocked && !isClaimed && ACHIEVEMENT_REWARDS[a.id] && (
                         <button className="ach-claim-btn" onClick={() => handleClaim(a.id)}
                           style={{ marginTop: 6, padding: '4px 12px', fontSize: 12, fontWeight: 600, border: 'none', borderRadius: 8, cursor: 'pointer',
                             background: 'linear-gradient(135deg, #f59e0b, #fbbf24)', color: '#fff' }}>
-                          🎁 领取 +{REWARDS[a.id].coins}g
+                          🎁 领取 +{ACHIEVEMENT_REWARDS[a.id].coins}g
                         </button>
                       )}
                       {isClaimed && <span className="ach-claimed" style={{ fontSize: 11, color: '#94a3b8', marginTop: 4, display: 'block' }}>✅ 已领取</span>}

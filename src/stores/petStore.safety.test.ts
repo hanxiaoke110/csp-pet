@@ -43,6 +43,7 @@ beforeEach(() => {
     ownedPets: [],
     activePetId: null,
     coins: 200,
+    maxCoinBalance: 200,
     foods: { basic: 3 },
     expPool: 0,
     weeklyPassiveClaimWeek: '',
@@ -275,6 +276,7 @@ describe('孵化与旧版本升级', () => {
     expect(state.ownedPets).toHaveLength(2);
     expect(state.activePetId).toBe('legacy-1');
     expect(state.coins).toBe(4_321);
+    expect(state.maxCoinBalance).toBe(4_321);
     expect(state.foods).toMatchObject({ basic: 7, deluxe: 2 });
     expect(state.expPool).toBe(640);
     expect(state.ownedPets[0].battle?.attack).toBeGreaterThan(0);
@@ -285,6 +287,29 @@ describe('孵化与旧版本升级', () => {
     const saved = JSON.parse(localStorage.getItem('csp_pet_data') || '{}');
     expect(saved.ownedPets).toHaveLength(2);
     expect(saved.coins).toBe(4_321);
+    expect(saved.maxCoinBalance).toBe(4_321);
+  });
+
+  it('消费后保留历史最高金币，重新加载也不会回退', async () => {
+    const pet = makePet('peak-coin-pet');
+    localStorage.setItem('csp_pet_data', JSON.stringify({
+      ownedPets: [pet],
+      activePetId: pet.petId,
+      coins: 6_000,
+      maxCoinBalance: 10_000,
+      foods: { basic: 3 },
+      gachaRewardMigrationDone: true,
+    }));
+
+    await usePetStore.getState().load();
+
+    expect(usePetStore.getState()).toMatchObject({ coins: 6_000, maxCoinBalance: 10_000 });
+    expect(usePetStore.getState().spendCoins(500)).toBe(true);
+    expect(usePetStore.getState()).toMatchObject({ coins: 5_500, maxCoinBalance: 10_000 });
+    expect(JSON.parse(localStorage.getItem('csp_pet_data') || '{}')).toMatchObject({
+      coins: 5_500,
+      maxCoinBalance: 10_000,
+    });
   });
 
   it('旧存档缺失 acquisitionCost 时按商城价回填，回收站金币返还不为 0', async () => {

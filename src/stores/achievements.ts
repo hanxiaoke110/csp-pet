@@ -8,6 +8,40 @@ export interface Achievement {
   check: () => { unlocked: boolean; progress?: number; total?: number };
 }
 
+export interface AchievementReward {
+  coins: number;
+  renameCards?: number;
+}
+
+/** Every visible achievement has a claimable reward. Keep this beside the definitions. */
+export const ACHIEVEMENT_REWARDS: Record<string, AchievementReward> = {
+  'course-1': { coins: 20 }, 'course-10': { coins: 50 }, 'course-30': { coins: 80 },
+  'course-60': { coins: 120 }, 'course-100': { coins: 200, renameCards: 1 },
+  'quiz-weekly-1': { coins: 30 }, 'quiz-weekly-5': { coins: 80 },
+  'quiz-weekly-20': { coins: 150 }, 'quiz-perfect-1': { coins: 50 },
+  'quiz-perfect-5': { coins: 100 }, 'quiz-streak': { coins: 60 },
+  'quiz-total-100': { coins: 100 }, 'quiz-review-1': { coins: 30 },
+  'quiz-review-80': { coins: 80 }, 'quiz-extra-10': { coins: 50 },
+  'super-1': { coins: 50 }, 'super-5': { coins: 150 },
+  'super-3of5': { coins: 80 }, 'super-4of5': { coins: 120 },
+  'super-5of5': { coins: 200, renameCards: 1 }, 'super-double': { coins: 300, renameCards: 2 },
+  'pet-first': { coins: 30 }, 'pet-2': { coins: 40 }, 'pet-3': { coins: 60 },
+  'pet-5': { coins: 100 }, 'pet-8': { coins: 150 },
+  'pet-lv5': { coins: 50 }, 'pet-lv10': { coins: 100 }, 'pet-lv15': { coins: 150 },
+  'pet-lv20': { coins: 200, renameCards: 1 }, 'pet-feed-20': { coins: 40 },
+  'pet-coins-500': { coins: 50 }, 'pet-coins-2000': { coins: 100 },
+  'pet-coins-10000': { coins: 300, renameCards: 1 },
+  'pet-affection': { coins: 80 },
+  'stage-c1': { coins: 30 }, 'stage-c2': { coins: 60 }, 'stage-c3': { coins: 100 },
+  'stage-c4': { coins: 150 },
+  'oj-cm-1': { coins: 50 }, 'oj-cm-all': { coins: 200, renameCards: 1 },
+  'oj-lg-10': { coins: 80 }, 'oj-lg-50': { coins: 200, renameCards: 1 },
+  'checkin-7': { coins: 100 }, 'checkin-12': { coins: 180, renameCards: 1 },
+  'hidden-triple': { coins: 100, renameCards: 1 }, 'hidden-name': { coins: 50 },
+  'hidden-3perfect': { coins: 80 }, 'hidden-starve': { coins: 20 },
+  'hidden-ai-csp': { coins: 30 }, 'hidden-perfect-review': { coins: 100 },
+};
+
 // 显示口径：领取过的成就永远视为已解锁（条件回退后卡片不缩水），与卡片渲染一致
 export function isUnlockedForDisplay(a: Achievement, claimed: Set<string>): boolean {
   return a.check().unlocked || claimed.has(a.id);
@@ -52,9 +86,9 @@ function getFreeStreak(): number {
 
 export function createAchievements(
   petCount: number,
-  activePetLevel: number,
-  activePetAffection: number,
-  totalCoins: number,
+  highestPetLevel: number,
+  highestPetAffection: number,
+  maxCoinBalance: number,
   feedCount: number,
   _hasAllElements: boolean,
   superCompletions: number,
@@ -157,23 +191,25 @@ export function createAchievements(
     { id: 'pet-5', name: '小小收藏家', description: '拥有 5 只灵犀智子', category: 'pet', icon: '🦄',
       check: () => ({ unlocked: petCount >= 5, progress: Math.min(petCount, 5), total: 5 }) },
     { id: 'pet-lv5', name: '初露锋芒', description: '智子伙伴达到 Lv.5', category: 'pet', icon: '⬆️',
-      check: () => ({ unlocked: activePetLevel >= 5, progress: Math.min(activePetLevel, 5), total: 5 }) },
+      check: () => ({ unlocked: highestPetLevel >= 5, progress: Math.min(highestPetLevel, 5), total: 5 }) },
     { id: 'pet-lv10', name: '渐入佳境', description: '智子伙伴达到 Lv.10', category: 'pet', icon: '📈',
-      check: () => ({ unlocked: activePetLevel >= 10, progress: Math.min(activePetLevel, 10), total: 10 }) },
+      check: () => ({ unlocked: highestPetLevel >= 10, progress: Math.min(highestPetLevel, 10), total: 10 }) },
     { id: 'pet-lv15', name: '炉火纯青', description: '智子伙伴达到 Lv.15', category: 'pet', icon: '💪',
-      check: () => ({ unlocked: activePetLevel >= 15, progress: Math.min(activePetLevel, 15), total: 15 }) },
+      check: () => ({ unlocked: highestPetLevel >= 15, progress: Math.min(highestPetLevel, 15), total: 15 }) },
     { id: 'pet-lv20', name: '登峰造极', description: '智子伙伴达到 Lv.20', category: 'pet', icon: '👑',
-      check: () => ({ unlocked: activePetLevel >= 20, progress: Math.min(activePetLevel, 20), total: 20 }) },
+      check: () => ({ unlocked: highestPetLevel >= 20, progress: Math.min(highestPetLevel, 20), total: 20 }) },
     { id: 'pet-8', name: '智子收藏家', description: '拥有 8 只灵犀智子', category: 'pet', icon: '🎖️',
       check: () => ({ unlocked: petCount >= 8, progress: Math.min(petCount, 8), total: 8 }) },
     { id: 'pet-feed-20', name: '饱食无忧', description: '累计喂食 20 次', category: 'pet', icon: '🍖',
       check: () => ({ unlocked: feedCount >= 20, progress: Math.min(feedCount, 20), total: 20 }) },
     { id: 'pet-coins-500', name: '小有积蓄', description: '金币达到 500', category: 'pet', icon: '🪙',
-      check: () => ({ unlocked: totalCoins >= 500, progress: Math.min(totalCoins, 500), total: 500 }) },
+      check: () => ({ unlocked: maxCoinBalance >= 500, progress: Math.min(maxCoinBalance, 500), total: 500 }) },
     { id: 'pet-coins-2000', name: '财富自由', description: '金币达到 2000', category: 'pet', icon: '💰',
-      check: () => ({ unlocked: totalCoins >= 2000, progress: Math.min(totalCoins, 2000), total: 2000 }) },
+      check: () => ({ unlocked: maxCoinBalance >= 2000, progress: Math.min(maxCoinBalance, 2000), total: 2000 }) },
+    { id: 'pet-coins-10000', name: '富可敌国', description: '历史最高金币达到 10000', category: 'pet', icon: '🏦',
+      check: () => ({ unlocked: maxCoinBalance >= 10000, progress: Math.min(maxCoinBalance, 10000), total: 10000 }) },
     { id: 'pet-affection', name: '心有灵犀', description: '任意智子好感度达到 100', category: 'pet', icon: '💕',
-      check: () => ({ unlocked: activePetAffection >= 100, progress: Math.min(activePetAffection, 100), total: 100 }) },
+      check: () => ({ unlocked: highestPetAffection >= 100, progress: Math.min(highestPetAffection, 100), total: 100 }) },
     // === 💻 OJ 训练 ===
     { id: 'oj-cm-1', name: '初涉编程猫', description: '完成第 1 个编程猫题单', category: 'quiz', icon: '🐱',
       check: () => {
