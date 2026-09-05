@@ -486,7 +486,7 @@ function BackupSection() {
     <div style={{ marginTop: 8 }}>
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <button className="settings-btn" onClick={handleBackup} disabled={busy !== null}>
-          {busy === 'backup' ? '正在备份…' : '💾 立即安全备份'}
+          {busy === 'backup' ? '正在同步最新进度并备份…' : '💾 立即安全备份'}
         </button>
         <button className="settings-btn settings-btn-secondary" onClick={prepareAutomaticRestore} disabled={busy !== null || backups.length === 0}>
           {busy === 'restore' ? '正在恢复…' : '↩ 恢复最近备份'}
@@ -500,7 +500,7 @@ function BackupSection() {
         </button>
       </div>
       <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 8, lineHeight: 1.7 }}>
-        💡 每天首次启动时自动备份一次；点击“立即安全备份”会保存点击时的最新进度。仅保留最近 3 份，不包含可重新下载的题库和图片。
+        💡 做完题可直接点击，无需等待；系统会先同步最新学习进度再备份。每天首次启动时也会自动备份一次，仅保留最近 3 份。
         {backups[0] && <><br />最近备份：{new Date(backups[0].exportedAt).toLocaleString('zh-CN')}（v{backups[0].appVersion}）</>}
       </div>
       {msg && (
