@@ -236,6 +236,18 @@ export function getLevelBadgeColor(level: number): string {
   return '#94a3b8'; // gray
 }
 
+export function claimedCoinAchievementFloor(raw: string | null): number {
+  if (!raw) return 0;
+  try {
+    const claimed = JSON.parse(raw);
+    if (!Array.isArray(claimed)) return 0;
+    if (claimed.includes('pet-coins-10000')) return 10_000;
+    if (claimed.includes('pet-coins-2000')) return 2_000;
+    if (claimed.includes('pet-coins-500')) return 500;
+  } catch {}
+  return 0;
+}
+
 export const usePetStore = create<PetState>((set, get) => ({
   activePetId: null,
   ownedPets: [],
@@ -1067,6 +1079,7 @@ export const usePetStore = create<PetState>((set, get) => ({
         const maxCoinBalance = Math.max(
           coins,
           Number.isFinite(storedMaxCoinBalance) && storedMaxCoinBalance >= 0 ? storedMaxCoinBalance : 0,
+          claimedCoinAchievementFloor(localStorage.getItem('csp_achievement_claimed')),
         );
         const weeklyPassiveClaimWeek = migrateWeeklyPassiveClaimWeek(
           data.weeklyPassiveClaimWeek,

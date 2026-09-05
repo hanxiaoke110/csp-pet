@@ -96,13 +96,17 @@ export default function AchievementsPanel() {
   useEffect(() => {
     const nowUnlocked = new Set(achievements.filter(a => a.check().unlocked).map(a => a.id));
     if (!prevUnlocked.current) { prevUnlocked.current = nowUnlocked; return; }
-    const newlyUnlocked = achievements.find(a => a.check().unlocked && !prevUnlocked.current!.has(a.id));
+    const newlyUnlocked = achievements.find(a =>
+      a.check().unlocked
+      && !claimed.has(a.id)
+      && !prevUnlocked.current!.has(a.id)
+    );
     if (newlyUnlocked) {
       setNewUnlock(newlyUnlocked);
       setTimeout(() => setNewUnlock(null), 4000);
     }
     prevUnlocked.current = nowUnlocked;
-  }, [achievements]);
+  }, [achievements, claimed]);
 
   return (
     <div className="achievements-panel">

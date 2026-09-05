@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { currentWeekKey, getWeeklyPassiveCoinReward, migrateWeeklyPassiveClaimWeek, usePetStore } from './petStore';
+import { claimedCoinAchievementFloor, currentWeekKey, getWeeklyPassiveCoinReward, migrateWeeklyPassiveClaimWeek, usePetStore } from './petStore';
 import { useHatchStore } from './hatchStore';
 import { getPetConfig, type OwnedPet } from '../types/pet';
 
@@ -98,6 +98,13 @@ describe('每周修行津贴', () => {
 });
 
 describe('高额金币消费保护', () => {
+  it('旧版已领取金币成就可恢复对应的历史最高余额', () => {
+    expect(claimedCoinAchievementFloor('["pet-coins-500"]')).toBe(500);
+    expect(claimedCoinAchievementFloor('["pet-coins-500","pet-coins-2000"]')).toBe(2_000);
+    expect(claimedCoinAchievementFloor('["pet-coins-10000"]')).toBe(10_000);
+    expect(claimedCoinAchievementFloor('{broken')).toBe(0);
+  });
+
   it('三智子位置按 2500/5000 解锁，重复旧请求不会跨档扣款', () => {
     usePetStore.setState({ coins: 10_000 });
 
@@ -310,6 +317,22 @@ describe('孵化与旧版本升级', () => {
       coins: 5_500,
       maxCoinBalance: 10_000,
     });
+  });
+
+  it('旧存档余额已消费时，从已领取成就补回金币峰值', async () => {
+    const pet = makePet('claimed-coin-pet');
+    localStorage.setItem('csp_achievement_claimed', JSON.stringify(['pet-coins-500']));
+    localStorage.setItem('csp_pet_data', JSON.stringify({
+      ownedPets: [pet],
+      activePetId: pet.petId,
+      coins: 120,
+      foods: { basic: 3 },
+      gachaRewardMigrationDone: true,
+    }));
+
+    await usePetStore.getState().load();
+
+    expect(usePetStore.getState()).toMatchObject({ coins: 120, maxCoinBalance: 500 });
   });
 
   it('旧存档缺失 acquisitionCost 时按商城价回填，回收站金币返还不为 0', async () => {
