@@ -335,6 +335,22 @@ describe('孵化与旧版本升级', () => {
     expect(usePetStore.getState()).toMatchObject({ coins: 120, maxCoinBalance: 500 });
   });
 
+  it('尚未领奖的历史解锁记录也能补回金币峰值', async () => {
+    const pet = makePet('unclaimed-coin-pet');
+    localStorage.setItem('csp_achievement_unlocked', JSON.stringify(['pet-coins-2000']));
+    localStorage.setItem('csp_pet_data', JSON.stringify({
+      ownedPets: [pet],
+      activePetId: pet.petId,
+      coins: 300,
+      foods: { basic: 3 },
+      gachaRewardMigrationDone: true,
+    }));
+
+    await usePetStore.getState().load();
+
+    expect(usePetStore.getState()).toMatchObject({ coins: 300, maxCoinBalance: 2_000 });
+  });
+
   it('旧存档缺失 acquisitionCost 时按商城价回填，回收站金币返还不为 0', async () => {
     const shopPet = makePet('shop-1', 'peach', 3);
     const starterPet = makePet('starter-1', 'capi', 1);

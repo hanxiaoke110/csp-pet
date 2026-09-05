@@ -77,6 +77,21 @@ describe('成就判定', () => {
     expect(build(0, 5, 5).find(a => a.id === 'super-double')!.check().unlocked).toBe(false);
   });
 
+  it('三位一体：必须签到、超级挑战全对、额外挑战各完成一次', () => {
+    store['csp_checkin'] = JSON.stringify({ streak: 1 });
+    const incomplete = createAchievements(
+      1, 1, 0, 0, 0, false,
+      1, 4, 5, 0, 1, 0, 0, [],
+    );
+    expect(incomplete.find(a => a.id === 'hidden-triple')!.check().unlocked).toBe(false);
+
+    const perfect = createAchievements(
+      1, 1, 0, 0, 0, false,
+      1, 5, 5, 0, 1, 0, 0, [],
+    );
+    expect(perfect.find(a => a.id === 'hidden-triple')!.check().unlocked).toBe(true);
+  });
+
   it('富可敌国：历史最高金币达到 10000 后解锁并显示进度', () => {
     const below = createAchievements(1, 1, 0, 9999, 0, false, 0, 0, 0, 0, 0, 0, 0, []);
     expect(below.find(a => a.id === 'pet-coins-10000')!.check()).toEqual({
@@ -108,5 +123,17 @@ describe('成就判定', () => {
     // 只领取其中一个条件回退的成就：计数 5/6
     const claimed2 = new Set(['super-5of5']);
     expect(countUnlockedForDisplay(superItems, claimed2)).toBe(5);
+  });
+
+  it('达成历史可让可回退条件永久保持解锁且计数不缩水', () => {
+    const achievements = createAchievements(
+      1, 1, 0, 100, 0, false,
+      0, 0, 0, 0, 0, 0, 0, [],
+    );
+    const coinAchievement = achievements.find(a => a.id === 'pet-coins-500')!;
+    const history = new Set(['pet-coins-500']);
+
+    expect(coinAchievement.check().unlocked).toBe(false);
+    expect(countUnlockedForDisplay([coinAchievement], new Set(), history)).toBe(1);
   });
 });

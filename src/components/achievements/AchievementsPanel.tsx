@@ -4,6 +4,16 @@ import { useQuizStore } from '../../stores/quizStore';
 import { ACHIEVEMENT_REWARDS, createAchievements, countUnlockedForDisplay, type Achievement } from '../../stores/achievements';
 
 const CLAIM_KEY = 'csp_achievement_claimed';
+const UNLOCKED_KEY = 'csp_achievement_unlocked';
+
+function readIdSet(key: string): Set<string> {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key) || '[]');
+    return new Set(Array.isArray(parsed) ? parsed.filter(id => typeof id === 'string') : []);
+  } catch {
+    return new Set();
+  }
+}
 
 const CATEGORIES: Record<string, { label: string; color: string }> = {
   course:   { label: '📚 学海无涯', color: '#16a34a' },
@@ -61,7 +71,10 @@ export default function AchievementsPanel() {
 
   // Load claimed set from localStorage
   const [claimed, setClaimed] = useState<Set<string>>(() => {
-    try { return new Set(JSON.parse(localStorage.getItem(CLAIM_KEY) || '[]')); } catch { return new Set(); }
+    return readIdSet(CLAIM_KEY);
+  });
+  const [unlockedHistory, setUnlockedHistory] = useState<Set<string>>(() => {
+    return new Set([...readIdSet(UNLOCKED_KEY), ...readIdSet(CLAIM_KEY)]);
   });
 
   const saveClaimed = (next: Set<string>) => {
@@ -69,11 +82,11 @@ export default function AchievementsPanel() {
   };
 
   // 计数与卡片同口径：领取过的成就即使实时条件回退也计入“已解锁”
-  const unlockedCount = countUnlockedForDisplay(achievements, claimed);
+  const unlockedCount = countUnlockedForDisplay(achievements, claimed, unlockedHistory);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [newUnlock, setNewUnlock] = useState<Achievement | null>(null);
   const [toast, setToast] = useState<string | null>(null);
-  const prevUnlocked = useRef<Set<string> | null>(null);
+  const unlockHistoryInitialized = useRef(false);
 
   const handleClaim = useCallback((achId: string) => {
     const reward = ACHIEVEMENT_REWARDS[achId];
@@ -92,21 +105,27 @@ export default function AchievementsPanel() {
     setTimeout(() => setToast(null), 3000);
   }, [claimed]);
 
-  // Detect new unlocks for notification only (no auto-reward)
+  // Persist first-time unlocks independently from reward claims. Conditions such
+  // as pet count, hunger and latest review score can later move backwards.
   useEffect(() => {
-    const nowUnlocked = new Set(achievements.filter(a => a.check().unlocked).map(a => a.id));
-    if (!prevUnlocked.current) { prevUnlocked.current = nowUnlocked; return; }
-    const newlyUnlocked = achievements.find(a =>
-      a.check().unlocked
-      && !claimed.has(a.id)
-      && !prevUnlocked.current!.has(a.id)
+    const newlyUnlocked = achievements.filter(a =>
+      a.check().unlocked && !unlockedHistory.has(a.id)
     );
-    if (newlyUnlocked) {
-      setNewUnlock(newlyUnlocked);
+    const isInitialScan = !unlockHistoryInitialized.current;
+    unlockHistoryInitialized.current = true;
+    if (newlyUnlocked.length === 0) return;
+
+    const next = new Set(unlockedHistory);
+    for (const achievement of newlyUnlocked) next.add(achievement.id);
+    setUnlockedHistory(next);
+    try { localStorage.setItem(UNLOCKED_KEY, JSON.stringify([...next])); } catch {}
+
+    const notification = newlyUnlocked.find(a => !claimed.has(a.id));
+    if (!isInitialScan && notification) {
+      setNewUnlock(notification);
       setTimeout(() => setNewUnlock(null), 4000);
     }
-    prevUnlocked.current = nowUnlocked;
-  }, [achievements, claimed]);
+  }, [achievements, claimed, unlockedHistory]);
 
   return (
     <div className="achievements-panel">
@@ -126,7 +145,7 @@ export default function AchievementsPanel() {
               <span className="ach-cat-arrow">{expanded[key] ? '▼' : '▶'}</span>
               <span>{cat.label}</span>
               <span className="ach-cat-count">
-                {countUnlockedForDisplay(items, claimed)}/{items.length}
+                {countUnlockedForDisplay(items, claimed, unlockedHistory)}/{items.length}
               </span>
             </div>
             {expanded[key] && (
@@ -135,7 +154,7 @@ export default function AchievementsPanel() {
                 const result = a.check();
                 const isClaimed = claimed.has(a.id);
                 // Once claimed, always treat as unlocked so hidden achievements don't revert to ???
-                const unlocked = result.unlocked || isClaimed;
+                const unlocked = result.unlocked || isClaimed || unlockedHistory.has(a.id);
                 return (
                   <div key={a.id} className={`ach-card ${unlocked ? 'unlocked' : 'locked'}`}>
                     <div className="ach-icon">{unlocked ? a.icon : '🔒'}</div>

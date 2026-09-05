@@ -43,13 +43,21 @@ export const ACHIEVEMENT_REWARDS: Record<string, AchievementReward> = {
 };
 
 // 显示口径：领取过的成就永远视为已解锁（条件回退后卡片不缩水），与卡片渲染一致
-export function isUnlockedForDisplay(a: Achievement, claimed: Set<string>): boolean {
-  return a.check().unlocked || claimed.has(a.id);
+export function isUnlockedForDisplay(
+  a: Achievement,
+  claimed: Set<string>,
+  unlockedHistory: Set<string> = new Set(),
+): boolean {
+  return a.check().unlocked || claimed.has(a.id) || unlockedHistory.has(a.id);
 }
 
 // 成就计数：与卡片显示口径一致，避免“标题 4/6、卡片 6 个已领取”的差异
-export function countUnlockedForDisplay(achievements: Achievement[], claimed: Set<string>): number {
-  return achievements.filter(a => isUnlockedForDisplay(a, claimed)).length;
+export function countUnlockedForDisplay(
+  achievements: Achievement[],
+  claimed: Set<string>,
+  unlockedHistory: Set<string> = new Set(),
+): number {
+  return achievements.filter(a => isUnlockedForDisplay(a, claimed, unlockedHistory)).length;
 }
 
 // Helper: count completed course problems from localStorage
@@ -176,7 +184,7 @@ export function createAchievements(
       check: () => ({ unlocked: superBestTotal > 0 ? superBestScore / superBestTotal >= 0.6 : superBestScore >= 3 }) },
     { id: 'super-4of5', name: '差一步完美', description: '超级挑战正确率 ≥80%', category: 'super', icon: '💎',
       check: () => ({ unlocked: superBestTotal > 0 ? superBestScore / superBestTotal >= 0.8 : superBestScore >= 4 }) },
-    { id: 'super-5of5', name: '完美通关', description: '超级挑战 5/5 全对', category: 'super', icon: '👑',
+    { id: 'super-5of5', name: '完美通关', description: '超级挑战全部答对', category: 'super', icon: '👑',
       check: () => ({ unlocked: superBestScore >= 5 && superBestScore === superBestTotal }) },
     { id: 'super-double', name: '双料冠军', description: '超级完美 + 周常完美各 1 次', category: 'super', icon: '🏅',
       check: () => ({ unlocked: superBestScore >= 5 && superBestScore === superBestTotal && getWeeklyPerfectCount() >= 1 }) },
@@ -257,7 +265,10 @@ export function createAchievements(
       check: () => {
         try {
           const ci = JSON.parse(localStorage.getItem('csp_checkin') || '{}');
-          return { unlocked: (ci.streak || 0) >= 1 && superCompletions >= 1 && extraChallengeCount >= 1 };
+          const superPerfect = superBestTotal > 0
+            ? superBestScore === superBestTotal
+            : superBestScore >= 5;
+          return { unlocked: (ci.streak || 0) >= 1 && superPerfect && extraChallengeCount >= 1 };
         } catch { return { unlocked: false }; }
       }},
     { id: 'hidden-name', name: '代码之魂', description: '给智子起名包含「C++」「编程」或「代码」', category: 'hidden', icon: '💻', hidden: true,

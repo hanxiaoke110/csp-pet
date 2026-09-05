@@ -1080,6 +1080,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           coins,
           Number.isFinite(storedMaxCoinBalance) && storedMaxCoinBalance >= 0 ? storedMaxCoinBalance : 0,
           claimedCoinAchievementFloor(localStorage.getItem('csp_achievement_claimed')),
+          claimedCoinAchievementFloor(localStorage.getItem('csp_achievement_unlocked')),
         );
         const weeklyPassiveClaimWeek = migrateWeeklyPassiveClaimWeek(
           data.weeklyPassiveClaimWeek,
