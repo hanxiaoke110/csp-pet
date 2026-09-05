@@ -2,6 +2,7 @@
 // Provides synchronous reads (for React render) with async persistence.
 import { sqliteGet, sqliteSetFireAndForget } from './sqlite-storage';
 import type { ProblemStatus } from '../components/courses/ProblemViewer';
+import { mergeProblemStatusSnapshots } from './problemStatusMerge';
 
 let cache: Record<string, ProblemStatus> = {};
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -11,17 +12,20 @@ let saveTimer: ReturnType<typeof setTimeout> | null = null;
  * Call once at app startup before any component reads problem status.
  */
 export async function loadProblemStatuses(): Promise<void> {
-  // Primary: SQLite
-  const raw = await sqliteGet('problem_status');
-  if (raw) {
-    try { cache = JSON.parse(raw); return; } catch { /* corrupted, fall through */ }
-  }
+  const sqliteRaw = await sqliteGet('problem_status');
+  let localRaw: string | null = null;
+  try { localRaw = localStorage.getItem('csp_problem_status'); } catch {}
 
-  // Fallback: localStorage
-  try {
-    const lsRaw = localStorage.getItem('csp_problem_status');
-    if (lsRaw) cache = JSON.parse(lsRaw);
-  } catch { /* unrecoverable */ }
+  const merged = mergeProblemStatusSnapshots(localRaw, sqliteRaw);
+  if (!merged) {
+    cache = {};
+    return;
+  }
+  cache = JSON.parse(merged);
+
+  // Repair both copies so a later backup or restart observes the same progress.
+  try { localStorage.setItem('csp_problem_status', merged); } catch {}
+  if (sqliteRaw !== merged) sqliteSetFireAndForget('problem_status', merged);
 }
 
 /**

@@ -1,9 +1,25 @@
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import {
   shouldIncludeKey, parseBackup, compareVersions, bytesToBase64, base64ToBytes,
-  validateBackupState, summarizeBackup,
+  validateBackupState, summarizeBackup, applyBackup,
   type BackupFile,
 } from './backup';
+
+function makeLocalStorage() {
+  const data = new Map<string, string>();
+  return {
+    get length() { return data.size; },
+    key: (index: number) => [...data.keys()][index] ?? null,
+    getItem: (key: string) => data.get(key) ?? null,
+    setItem: (key: string, value: string) => { data.set(key, String(value)); },
+    removeItem: (key: string) => { data.delete(key); },
+  };
+}
+
+beforeEach(() => {
+  vi.stubGlobal('localStorage', makeLocalStorage());
+  vi.stubGlobal('window', {});
+});
 
 function makeBackup(overrides: Partial<BackupFile> = {}): BackupFile {
   return {
@@ -121,6 +137,19 @@ describe('validateBackupState', () => {
       sqlite: {},
     }))).toContain('智子与金币');
   });
+
+  it('accepts an older backup without a SQLite section', () => {
+    const backup = makeBackup({
+      localStorage: { csp_pet_data: '{"ownedPets":[],"coins":100}' },
+    });
+    (backup as any).sqlite = undefined;
+    expect(validateBackupState(backup)).toBeNull();
+    expect(summarizeBackup(backup)).toEqual({
+      petCount: 0,
+      coins: 100,
+      completedCourses: 0,
+    });
+  });
 });
 
 describe('summarizeBackup', () => {
@@ -128,13 +157,51 @@ describe('summarizeBackup', () => {
     expect(summarizeBackup(makeBackup({
       localStorage: { csp_pet_data: '{"ownedPets":[{},{}],"coins":2500}' },
       sqlite: {},
-    }))).toEqual({ petCount: 2, coins: 2500 });
+    }))).toEqual({ petCount: 2, coins: 2500, completedCourses: 0 });
   });
 
   it('falls back to SQLite when the local snapshot is unreadable', () => {
     expect(summarizeBackup(makeBackup({
       localStorage: { csp_pet_data: '{broken' },
       sqlite: { pet_data: '{"ownedPets":[{}],"coins":88}' },
-    }))).toEqual({ petCount: 1, coins: 88 });
+    }))).toEqual({ petCount: 1, coins: 88, completedCourses: 0 });
+  });
+
+  it('merges local and SQLite course progress without losing completions', () => {
+    expect(summarizeBackup(makeBackup({
+      localStorage: {
+        csp_pet_data: '{"ownedPets":[],"coins":100}',
+        csp_problem_status: '{"lesson-a":"completed","lesson-b":"retry"}',
+      },
+      sqlite: {
+        problem_status: '{"lesson-a":"retry","lesson-b":"completed","lesson-c":"completed"}',
+      },
+    }))).toEqual({ petCount: 0, coins: 100, completedCourses: 3 });
+  });
+});
+
+describe('applyBackup', () => {
+  it('repairs conflicting course progress in both persistence copies', async () => {
+    const result = await applyBackup(makeBackup({
+      localStorage: {
+        csp_pet_data: '{"ownedPets":[],"coins":100}',
+        csp_problem_status: '{"lesson-a":"completed","lesson-b":"retry"}',
+      },
+      sqlite: {
+        pet_data: '{"ownedPets":[],"coins":100}',
+        problem_status: '{"lesson-a":"retry","lesson-b":"completed"}',
+      },
+      sprites: {},
+    }));
+
+    expect(JSON.parse(localStorage.getItem('csp_problem_status')!)).toEqual({
+      'lesson-a': 'completed',
+      'lesson-b': 'completed',
+    });
+    expect(JSON.parse(localStorage.getItem('problem_status')!)).toEqual({
+      'lesson-a': 'completed',
+      'lesson-b': 'completed',
+    });
+    expect(result).toMatchObject({ lsCount: 2, sqliteCount: 2 });
   });
 });

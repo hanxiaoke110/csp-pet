@@ -391,9 +391,10 @@ function BackupSection() {
     setBusy('backup');
     setMsg(null);
     try {
-      await createAutomaticBackup('manual');
+      const info = await createAutomaticBackup('manual');
+      const summary = summarizeBackup(await readAutomaticBackup(info.name));
       await refreshBackups();
-      setMsg({ text: '✅ 安全备份已完成，仅保留最近 3 份', ok: true });
+      setMsg({ text: `✅ 安全备份已完成：${summary.petCount} 只智子、${summary.coins} 金币、${summary.completedCourses} 道课程进度`, ok: true });
     } catch (e: any) {
       setMsg({ text: `❌ 备份失败：${e}，当前数据未受影响`, ok: false });
     } finally {
@@ -499,7 +500,7 @@ function BackupSection() {
         </button>
       </div>
       <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 8, lineHeight: 1.7 }}>
-        💡 每天首次启动后会自动备份，仅保留最近 3 份。备份不包含可重新下载的题库和图片，失败不会改动当前存档。
+        💡 每天首次启动时自动备份一次；点击“立即安全备份”会保存点击时的最新进度。仅保留最近 3 份，不包含可重新下载的题库和图片。
         {backups[0] && <><br />最近备份：{new Date(backups[0].exportedAt).toLocaleString('zh-CN')}（v{backups[0].appVersion}）</>}
       </div>
       {msg && (
@@ -511,7 +512,7 @@ function BackupSection() {
       {pendingRestore && (
         <ConfirmModal
           icon="↩" title="确认恢复备份"
-          desc={`文件：${pendingRestore.info.name}\n备份时间：${new Date(pendingRestore.info.exportedAt).toLocaleString('zh-CN')}\n内容：${pendingRestore.summary.petCount} 只智子、${pendingRestore.summary.coins} 金币及学习进度。\n当前数据将恢复到该时间点，恢复前会再自动保存一份。${pendingRestore.warning ? `\n⚠️ ${pendingRestore.warning}` : ''}`}
+          desc={`文件：${pendingRestore.info.name}\n备份时间：${new Date(pendingRestore.info.exportedAt).toLocaleString('zh-CN')}\n内容：${pendingRestore.summary.petCount} 只智子、${pendingRestore.summary.coins} 金币、${pendingRestore.summary.completedCourses} 道课程进度。\n当前数据将恢复到该时间点，恢复前会再自动保存一份。${pendingRestore.warning ? `\n⚠️ ${pendingRestore.warning}` : ''}`}
           confirmText="确认恢复"
           onCancel={() => setPendingRestore(null)}
           onConfirm={handleConfirmRestore}

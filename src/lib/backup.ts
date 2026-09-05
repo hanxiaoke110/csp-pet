@@ -7,6 +7,7 @@ import {
   writeFile, writeTextFile, readTextFile, readDir, remove, mkdir, BaseDirectory,
 } from '@tauri-apps/plugin-fs';
 import { sqliteSet } from './sqlite-storage';
+import { countCompletedProblems, mergeProblemStatusSnapshots } from './problemStatusMerge';
 
 const FORMAT = 'csp-pet-backup';
 const BACKUP_VERSION = 1;
@@ -117,7 +118,7 @@ function isValidPetSnapshot(raw: string | undefined): boolean {
 export function validateBackupState(backup: BackupFile): string | null {
   if (
     isValidPetSnapshot(backup.localStorage.csp_pet_data)
-    || isValidPetSnapshot(backup.sqlite.pet_data)
+    || isValidPetSnapshot(backup.sqlite?.pet_data)
   ) return null;
   return '未读取到完整的智子与金币数据，请先重启应用确认数据正常后再导出';
 }
@@ -125,19 +126,39 @@ export function validateBackupState(backup: BackupFile): string | null {
 export interface BackupSummary {
   coins: number;
   petCount: number;
+  completedCourses: number;
 }
 
 export function summarizeBackup(backup: BackupFile): BackupSummary {
-  for (const raw of [backup.localStorage.csp_pet_data, backup.sqlite.pet_data]) {
+  const mergedProgress = mergeProblemStatusSnapshots(
+    backup.localStorage.csp_problem_status,
+    backup.sqlite?.problem_status,
+  );
+  const completedCourses = countCompletedProblems(mergedProgress);
+  for (const raw of [backup.localStorage.csp_pet_data, backup.sqlite?.pet_data]) {
     if (!raw) continue;
     try {
       const data = JSON.parse(raw);
       if (Array.isArray(data?.ownedPets) && Number.isFinite(Number(data?.coins))) {
-        return { coins: Number(data.coins), petCount: data.ownedPets.length };
+        return { coins: Number(data.coins), petCount: data.ownedPets.length, completedCourses };
       }
     } catch { /* 继续读取另一份快照 */ }
   }
-  return { coins: 0, petCount: 0 };
+  return { coins: 0, petCount: 0, completedCourses };
+}
+
+function reconcileBackupProgress(backup: BackupFile): BackupFile {
+  const localStorageData = { ...backup.localStorage };
+  const sqliteData = { ...(backup.sqlite || {}) };
+  const merged = mergeProblemStatusSnapshots(
+    localStorageData.csp_problem_status,
+    sqliteData.problem_status,
+  );
+  if (merged !== null) {
+    localStorageData.csp_problem_status = merged;
+    sqliteData.problem_status = merged;
+  }
+  return { ...backup, localStorage: localStorageData, sqlite: sqliteData };
 }
 
 /** 收集当前全部可迁移数据，组装成备份对象 */
@@ -159,7 +180,7 @@ export async function buildBackup(): Promise<BackupFile> {
   let appVersion = 'unknown';
   try { appVersion = await getVersion(); } catch {}
 
-  return {
+  return reconcileBackupProgress({
     format: FORMAT,
     version: BACKUP_VERSION,
     appVersion,
@@ -168,7 +189,7 @@ export async function buildBackup(): Promise<BackupFile> {
     sqlite,
     // 保留字段用于兼容旧备份导入；新备份不再复制可重新获取的图片缓存。
     sprites: {},
-  };
+  });
 }
 
 function timestampForFilename(date: Date): string {
@@ -269,8 +290,9 @@ export interface ApplyResult {
 export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
   const validationError = validateBackupState(data);
   if (validationError) throw new Error(validationError);
+  const reconciled = reconcileBackupProgress(data);
   let localPetSnapshotWritten = false;
-  for (const [key, value] of Object.entries(data.localStorage)) {
+  for (const [key, value] of Object.entries(reconciled.localStorage)) {
     try {
       localStorage.setItem(key, value);
       if (key === 'csp_pet_data' && localStorage.getItem(key) === value) {
@@ -281,7 +303,7 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
 
   let sqliteCount = 0;
   let sqlitePetSnapshotWritten = false;
-  for (const [key, value] of Object.entries(data.sqlite || {})) {
+  for (const [key, value] of Object.entries(reconciled.sqlite || {})) {
     try {
       await sqliteSet(key, value);
       sqliteCount++;
@@ -294,7 +316,7 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
   }
 
   let spriteCount = 0;
-  const sprites = data.sprites || {};
+  const sprites = reconciled.sprites || {};
   const names = Object.keys(sprites);
   if (names.length > 0) {
     try { await mkdir(SPRITE_DIR, { baseDir: BaseDirectory.AppData, recursive: true }); } catch {}
@@ -308,5 +330,5 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
     }
   }
 
-  return { lsCount: Object.keys(data.localStorage).length, sqliteCount, spriteCount };
+  return { lsCount: Object.keys(reconciled.localStorage).length, sqliteCount, spriteCount };
 }
