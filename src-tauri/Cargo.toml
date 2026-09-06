@@ -1,6 +1,6 @@
 [package]
 name = "csp-desktop-pet"
-version = "1.7.44"
+version = "1.7.45"
 description = "A Tauri App"
 authors = ["you"]
 edition = "2021"

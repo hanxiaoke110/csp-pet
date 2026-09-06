@@ -207,7 +207,7 @@
       ],
       "relatedLessonIds": [],
       "isClassCodeRequired": false,
-      "questionCount": 0
+      "questionCount": 20
     },
     {
       "id": "binary-search",
@@ -229,7 +229,7 @@
         66
       ],
       "isClassCodeRequired": false,
-      "questionCount": 15
+      "questionCount": 20
     },
     {
       "id": "flood-fill",
@@ -248,7 +248,7 @@
       ],
       "relatedLessonIds": [],
       "isClassCodeRequired": false,
-      "questionCount": 0
+      "questionCount": 20
     },
     {
       "id": "encoding-and-decoding",
@@ -268,7 +268,7 @@
         5
       ],
       "isClassCodeRequired": false,
-      "questionCount": 0
+      "questionCount": 48
     },
     {
       "id": "dynamic-programming",
@@ -287,7 +287,7 @@
       ],
       "relatedLessonIds": [],
       "isClassCodeRequired": false,
-      "questionCount": 0
+      "questionCount": 20
     },
     {
       "id": "computer-networks",
@@ -411,7 +411,7 @@
       "prerequisiteIds": [],
       "relatedLessonIds": [],
       "isClassCodeRequired": false,
-      "questionCount": 14
+      "questionCount": 25
     },
     {
       "id": "program-reading",

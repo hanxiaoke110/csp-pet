@@ -1,7 +1,7 @@
 {
   "_note": "题目 → 知识点映射。每题 1 个 primary，客户端题后按钮据此显示'没懂？看XX知识卡'。secondary 后续补充。_method 和 _needsReview 为生成时标注，发布前可删除。",
   "version": 1,
-  "updated": "2026-07-25",
+  "updated": "2026-09-05",
   "mappings": {
     "csp-j-2019-c01": {
       "primary": "computer-networks",
@@ -5548,6 +5548,416 @@
       "primary": "computer-history",
       "_method": "auto-mapped-by-knowledgePoint",
       "_needsReview": true
+    },
+    "original-topic-binary-001": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-002": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-003": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-004": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-005": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-006": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-007": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-008": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-009": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-010": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-binary-011": {
+      "primary": "binary-search",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-001": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-002": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-003": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-004": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-005": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-006": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-007": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-008": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-009": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-010": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-011": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-012": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-013": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-014": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-015": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-016": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-017": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-018": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-019": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-combinatorics-020": {
+      "primary": "combinatorics",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-001": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-002": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-003": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-004": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-005": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-006": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-007": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-008": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-009": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-010": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-011": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-012": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-dp-013": {
+      "primary": "dynamic-programming",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-001": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-002": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-003": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-004": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-005": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-006": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-007": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-008": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-009": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-010": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-011": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-012": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-013": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-014": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-015": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-016": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-017": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-greedy-018": {
+      "primary": "greedy",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-001": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-002": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-003": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-004": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-005": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-006": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-007": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-008": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-009": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-010": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-011": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-012": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-013": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-014": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-015": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-016": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-017": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-018": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-019": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
+    },
+    "original-topic-search-020": {
+      "primary": "flood-fill",
+      "_method": "project-authored-topic-source-v1",
+      "_needsReview": false
     }
   }
 }

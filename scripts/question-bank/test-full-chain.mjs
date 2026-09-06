@@ -87,6 +87,7 @@ const channelFiles = {
   super: loadChannel('super-cspj.json'),
   exam: loadChannel('exam-questions.json'),
   dungeon: loadChannel('dungeon-mixed.json'),
+  topic: loadChannel('topic-practice.json'),
 };
 const examManifestFile = loadChannel('exam-manifests.json');
 const summaryFile = loadChannel('verification-summary.json');
@@ -410,6 +411,7 @@ const requiredFiles = [
   'exam-questions.json',
   'exam-manifests.json',
   'dungeon-mixed.json',
+  'topic-practice.json',
   'verification-summary.json',
 ];
 for (const logicalName of requiredFiles) {
@@ -613,7 +615,11 @@ if (summary) {
     (summary.channelCounts?.exam || 0) >= 100,
     `exam=${summary.channelCounts?.exam}`);
 
-  console.log(`  ${CYAN}Channel counts:${RST} daily=${summary.channelCounts?.daily} super=${summary.channelCounts?.super} exam=${summary.channelCounts?.exam} dungeon=${summary.channelCounts?.dungeon}`);
+  test('verification summary: channelCounts.topic >= 100',
+    (summary.channelCounts?.topic || 0) >= 100,
+    `topic=${summary.channelCounts?.topic}`);
+
+  console.log(`  ${CYAN}Channel counts:${RST} daily=${summary.channelCounts?.daily} super=${summary.channelCounts?.super} exam=${summary.channelCounts?.exam} dungeon=${summary.channelCounts?.dungeon} topic=${summary.channelCounts?.topic}`);
   console.log(`  ${CYAN}Status counts:${RST} auto_verified=${summary.statusCounts?.auto_verified} auto_probable=${summary.statusCounts?.auto_probable} disputed=${summary.statusCounts?.disputed} broken=${summary.statusCounts?.broken}`);
 }
 

@@ -17,6 +17,7 @@ const LOGICAL_FILES: Record<QuestionChannel, string> = {
   super: 'super-cspj.json',
   exam: 'exam-questions.json',
   dungeon: 'dungeon-mixed.json',
+  topic: 'topic-practice.json',
 };
 
 interface SnapshotCandidate<T> {

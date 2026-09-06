@@ -127,7 +127,9 @@ export function normalizeLegacyQuestion(raw) {
     knowledgePoint: asText(raw?.knowledgePoint) || '未分类',
     difficulty: Number(raw?.difficulty || raw?.level || 1),
     provenance: {
-      level: raw?.sourceUrl ? 'official_unlinked' : 'secondary',
+      level: source === 'practice_original'
+        ? 'project_authored'
+        : raw?.sourceUrl ? 'official_unlinked' : 'secondary',
       url: asNullableText(raw?.sourceUrl || raw?.provenance?.url),
       page: asNullableNumber(raw?.sourcePage || raw?.provenance?.page),
       answerUrl: asNullableText(raw?.answerSourceUrl || raw?.provenance?.answerUrl),

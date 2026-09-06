@@ -12,6 +12,13 @@ import { toLegacyQuestion } from '../../question-bank/adapters';
 import { getSuperChallengeItems, isCompleteSuperChallenge } from './superChallenge';
 import { isStandaloneChoiceQuestion } from './questionEligibility';
 import { buildMonthlyReviewQuestions } from './reviewQuestions';
+import { ArrowLeft, BookOpenCheck, Play, Target } from 'lucide-react';
+import {
+  availableSessionSizes,
+  findPracticeTopic,
+  PRACTICE_TOPIC_GROUPS,
+  questionsForTopic,
+} from './topicPractice';
 
 // 月度复盘单次奖励封顶（金币/经验）
 const MONTHLY_REVIEW_COIN_CAP = 300;
@@ -39,19 +46,25 @@ interface QuizQuestion {
   reviewErrorId?: string;
   reviewParentQuestion?: string;
   reviewPartLabel?: string;
+  topicId?: string;
 }
 
-type Mode = 'weekly' | 'extra' | 'free' | 'review' | 'super';
+type Mode = 'weekly' | 'extra' | 'free' | 'topic' | 'review' | 'super';
 
 let questionBank: QuizQuestion[] | null = null;
+let topicQuestionBank: QuizQuestion[] | null = null;
 
 async function loadBank(): Promise<QuizQuestion[]> {
   if (questionBank) return questionBank;
-  const session = await beginQuestionBankSession(['daily', 'super', 'exam']);
+  const session = await beginQuestionBankSession(['daily', 'super', 'exam', 'topic']);
   const daily = (session.channels.daily || []).map(question => toLegacyQuestion(question));
   const superQuestions = (session.channels.super || []).map(question => toLegacyQuestion(question, 'super_challenge'));
   // 保留完整真题供月度复盘重建子题；普通练习入口仍会单独筛选选择题。
   const examQuestions = (session.channels.exam || []).map(question => toLegacyQuestion(question));
+  topicQuestionBank = (session.channels.topic || []).map(question => ({
+    ...toLegacyQuestion(question),
+    topicId: question.topicId,
+  })) as QuizQuestion[];
   // 同一题可同时属于多个频道，不能在这里按 ID 去重，否则会丢失 super_challenge 来源。
   questionBank = [...daily, ...superQuestions, ...examQuestions] as QuizQuestion[];
   return questionBank!;
@@ -117,6 +130,14 @@ function shouldShowQuizImage(q: QuizQuestion): boolean {
   return !isExtractedCodeScreenshot || !q.code;
 }
 
+function questionSourceLabel(source: string): string {
+  if (source === 'practice_original') return '原创练习';
+  if (source === 'csp_exam') return 'CSP 真题';
+  if (source === 'gesp') return 'GESP';
+  if (source === 'noip') return 'NOIP';
+  return '精选题库';
+}
+
 export default function QuizPractice() {
   const [mode, setMode] = useState<Mode | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -134,6 +155,8 @@ export default function QuizPractice() {
   const [sourceFilter, setSourceFilter] = useState<string | 'all'>('all');
   const [groupFilter, setGroupFilter] = useState<'all' | 'J' | 'S'>('all');
   const [includeSGroup, setIncludeSGroup] = useState(false); // CSP-S opt-in: too hard for most students
+  const [topicPickerOpen, setTopicPickerOpen] = useState(false);
+  const [activeTopicName, setActiveTopicName] = useState('');
 
   // 来源切换时让级别选择跟着适配：GESP 按等级（1-4 级），CSP 按组别（J/S）
   const handleSourceFilter = (key: string) => {
@@ -147,6 +170,8 @@ export default function QuizPractice() {
   // 月度复盘单次奖励封顶追踪（session 级，不持久化）
   const reviewSessionCoins = useRef(0);
   const reviewSessionExp = useRef(0);
+  const practiceSessionCoins = useRef(0);
+  const practiceSessionExp = useRef(0);
 
   const quizStore = useQuizStore();
   const addCoins = usePetStore(s => s.addCoins);
@@ -198,6 +223,7 @@ export default function QuizPractice() {
   // 必须带远程刷新：内置数据和缓存全坏时，本地加载不碰网络，纯本地重试永远无法成功。
   const retryLoad = async () => {
     questionBank = null;
+    topicQuestionBank = null;
     setLoadError(false);
     setLoading(true);
     try {
@@ -216,6 +242,7 @@ export default function QuizPractice() {
       case 'weekly': return { exp: 15, coins: 8 };
       case 'extra': return { exp: 8, coins: 5 };
       case 'free': return { exp: 3, coins: 3 };
+      case 'topic': return { exp: 3, coins: 3 };
       case 'review': return { exp: 20, coins: 15 };
       case 'super': return { exp: 0, coins: 0 };
       default: return { exp: 0, coins: 0 };
@@ -230,7 +257,7 @@ export default function QuizPractice() {
     return { exp: 50, coins: 30, label: '👑 完美通关！' };
   };
 
-  const startMode = async (m: Mode) => {
+  const startMode = async (m: Mode, topicConfig?: { topicId: string; count: number }) => {
     setClassGate(null);
     setMode(m);
     setCurrentIdx(0);
@@ -248,6 +275,10 @@ export default function QuizPractice() {
       reviewSessionCoins.current = 0;
       reviewSessionExp.current = 0;
     }
+    if (m === 'free' || m === 'topic') {
+      practiceSessionCoins.current = 0;
+      practiceSessionExp.current = 0;
+    }
 
     let bank: QuizQuestion[] = [];
     try {
@@ -260,7 +291,15 @@ export default function QuizPractice() {
       setLoading(false);
     }
 
-    if (m === 'review') {
+    if (m === 'topic') {
+      const topic = topicConfig ? findPracticeTopic(topicConfig.topicId) : undefined;
+      const pool = topic && topicQuestionBank
+        ? questionsForTopic(topicQuestionBank.filter(isStandaloneChoiceQuestion), topic)
+        : [];
+      setActiveTopicName(topic?.name || '专项刷题');
+      setTopicPickerOpen(false);
+      setQuestions(chooseFreshQuestions(pool, topicConfig?.count || 5, m));
+    } else if (m === 'review') {
       // Use error pool
       const errorIds = new Set(quizStore.errors.map(e => e.questionId));
       const reviewQs = buildMonthlyReviewQuestions(bank, errorIds)
@@ -316,6 +355,7 @@ export default function QuizPractice() {
     setSubmitted(true);
     const q = questions[currentIdx];
     const reward = getReward();
+    const knowledgePoint = mode === 'topic' ? activeTopicName : q.knowledgePoint;
 
     if (selected === q.correctIndex) {
       quizStore.recordAnswer(true);
@@ -332,11 +372,11 @@ export default function QuizPractice() {
       else emit('pet-anim', { anim: 'interact', duration: 1500 }).catch(() => {});
 
       // Track KP result
-      if (q.knowledgePoint) {
+      if (knowledgePoint) {
         setKpResults(prev => {
           const next = new Map(prev);
-          const cur = next.get(q.knowledgePoint) || { correct: 0, total: 0 };
-          next.set(q.knowledgePoint, { correct: cur.correct + 1, total: cur.total + 1 });
+          const cur = next.get(knowledgePoint) || { correct: 0, total: 0 };
+          next.set(knowledgePoint, { correct: cur.correct + 1, total: cur.total + 1 });
           return next;
         });
       }
@@ -346,12 +386,15 @@ export default function QuizPractice() {
         const activePetId = usePetStore.getState().activePetId;
         const mult = usePetStore.getState().getRewardMultiplier();
 
-        if (mode === 'free') {
-          // 自由练习：每日前 N 题有奖励（方案A），超出可继续做题但不发奖
+        if (mode === 'free' || mode === 'topic') {
+          // 自由练习和专项刷题共享每日奖励额度，避免新增入口放大金币产出。
           if (quizStore.canRewardFreePractice()) {
             if (activePetId) addExp(activePetId, reward.exp);
-            addCoins(Math.floor(reward.coins * mult));
+            const coins = Math.floor(reward.coins * mult);
+            addCoins(coins);
             quizStore.recordFreeReward();
+            practiceSessionExp.current += reward.exp;
+            practiceSessionCoins.current += coins;
           }
         } else if (mode === 'review') {
           // 月度复盘：单次金币/经验封顶，超出部分只清错题不发奖
@@ -380,13 +423,13 @@ export default function QuizPractice() {
       if (mode === 'free') freeStreakRef.current = 0;
       // Pet reacts to wrong answer
       emit('pet-anim', { anim: 'unhappy', duration: 2000 }).catch(() => {});
-      emit('pet-bubble', { text: petCopy.quizWrong(q.knowledgePoint) }).catch(() => {});
+      emit('pet-bubble', { text: petCopy.quizWrong(knowledgePoint) }).catch(() => {});
       // Track KP result (wrong)
-      if (q.knowledgePoint) {
+      if (knowledgePoint) {
         setKpResults(prev => {
           const next = new Map(prev);
-          const cur = next.get(q.knowledgePoint) || { correct: 0, total: 0 };
-          next.set(q.knowledgePoint, { correct: cur.correct, total: cur.total + 1 });
+          const cur = next.get(knowledgePoint) || { correct: 0, total: 0 };
+          next.set(knowledgePoint, { correct: cur.correct, total: cur.total + 1 });
           return next;
         });
       }
@@ -394,7 +437,7 @@ export default function QuizPractice() {
       if (mode === 'review' && q.reviewErrorId && q.reviewErrorId !== q.id) {
         quizStore.removeError(q.reviewErrorId);
       }
-      quizStore.addError(q.id, selected, q.correctIndex, q.knowledgePoint);
+      quizStore.addError(q.id, selected, q.correctIndex, knowledgePoint);
       quizStore.recordAnswer(false);
     }
   };
@@ -491,6 +534,57 @@ export default function QuizPractice() {
     // 题库加载失败：显示可重试的错误页，而不是永远“加载题库中...”
     if (loadError) {
       return renderLoadError();
+    }
+    if (topicPickerOpen) {
+      return (
+        <div className="quiz-practice topic-practice-picker">
+          <button className="topic-back-btn" onClick={() => setTopicPickerOpen(false)}>
+            <ArrowLeft size={17} aria-hidden="true" /> 返回练习模式
+          </button>
+          <div className="topic-picker-heading">
+            <div className="topic-picker-title">
+              <Target size={24} aria-hidden="true" />
+              <div>
+                <h2>专项刷题</h2>
+                <p>选择一个知识点集中练习，答错题目会自动加入月度复盘。</p>
+              </div>
+            </div>
+            <div className="topic-reward-summary">
+              <BookOpenCheck size={18} aria-hidden="true" />
+              答对 +3 EXP、+3 基础金币 · 今日还可奖励 {quizStore.freeRewardRemaining()} 题
+            </div>
+          </div>
+
+          {PRACTICE_TOPIC_GROUPS.map(group => (
+            <section key={group.id} className="topic-group">
+              <h3>{group.name}</h3>
+              <div className="topic-grid">
+                {group.topics.map(topic => {
+                  const count = questionsForTopic(topicQuestionBank || [], topic).length;
+                  const sizes = availableSessionSizes(count);
+                  return (
+                    <article key={topic.id} className="topic-card">
+                      <div className="topic-card-copy">
+                        <strong>{topic.name}</strong>
+                        <span>{topic.description}</span>
+                      </div>
+                      <div className="topic-card-meta">题库 {count} 道</div>
+                      <div className="topic-size-actions" aria-label={`${topic.name}练习题量`}>
+                        {sizes.map(size => (
+                          <button key={size} onClick={() => startMode('topic', { topicId: topic.id, count: size })}>
+                            <Play size={13} fill="currentColor" aria-hidden="true" /> {size}题
+                          </button>
+                        ))}
+                        {sizes.length === 0 && <span>题目准备中</span>}
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+        </div>
+      );
     }
     return (
       <div className="quiz-practice">
@@ -596,6 +690,18 @@ export default function QuizPractice() {
               onClick={() => startMode('weekly')}
             >
               {quizStore.canDoWeeklyTask() ? '开始答题 (5题)' : '✅ 本周已完成'}
+            </button>
+          </div>
+
+          <div className="quiz-mode-card mode-topic">
+            <div className="mode-header">
+              <Target className="mode-lucide-icon" size={21} aria-hidden="true" />
+              <span className="mode-title">专项刷题</span>
+              <span className="mode-badge mode-topic-badge">13 个知识专题</span>
+            </div>
+            <p className="mode-desc">按知识点集中练习，包含排列组合、分支循环、计算机常识等专题</p>
+            <button className="mode-btn mode-btn-topic" onClick={() => setTopicPickerOpen(true)}>
+              选择知识点
             </button>
           </div>
 
@@ -711,7 +817,16 @@ export default function QuizPractice() {
                   <span className="stat-label">金币</span>
                 </div>
               </>;
-            })() : <>
+            })() : (mode === 'free' || mode === 'topic') ? <>
+              <div className="stat">
+                <span className="stat-value">+{practiceSessionExp.current}</span>
+                <span className="stat-label">实际经验</span>
+              </div>
+              <div className="stat">
+                <span className="stat-value">+{practiceSessionCoins.current}</span>
+                <span className="stat-label">实际金币</span>
+              </div>
+            </> : <>
               <div className="stat">
                 <span className="stat-value">+{results.correct * getReward().exp}</span>
                 <span className="stat-label">经验</span>
@@ -773,8 +888,11 @@ export default function QuizPractice() {
                 🔥 想要更多奖励？额外挑战 →
               </button>
             )}
-            <button className="mode-btn mode-btn-back" onClick={() => setMode(null)}>
-              返回
+            <button className="mode-btn mode-btn-back" onClick={() => {
+              setMode(null);
+              if (mode === 'topic') setTopicPickerOpen(true);
+            }}>
+              {mode === 'topic' ? '返回专项选择' : '返回'}
             </button>
           </div>
         </div>
@@ -882,6 +1000,7 @@ export default function QuizPractice() {
       weekly: '当前筛选条件下没有可用题目。',
       extra: '当前额外挑战没有可用题目。',
       free: '当前筛选条件下没有可用练习题。',
+      topic: '当前专项没有足够的可用选择题。',
       review: '当前错题已清空，暂无可复盘题目。',
       super: '当前超级挑战题库为空。',
     };
@@ -889,23 +1008,27 @@ export default function QuizPractice() {
       <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
         <h2>暂无题目</h2>
         <p className="quiz-subtitle">{emptyText[mode]}</p>
-        <button className="mode-btn mode-btn-back" onClick={() => setMode(null)}>
-          返回选择
+        <button className="mode-btn mode-btn-back" onClick={() => {
+          setMode(null);
+          if (mode === 'topic') setTopicPickerOpen(true);
+        }}>
+          {mode === 'topic' ? '返回专项选择' : '返回选择'}
         </button>
       </div>
     );
   }
 
   const q = questions[currentIdx];
-  const modeLabel: Record<Mode, string> = { weekly: '每周任务', extra: '额外挑战', free: '自由练习', review: '月度复盘', super: '超级挑战' };
+  const modeLabel: Record<Mode, string> = { weekly: '每周任务', extra: '额外挑战', free: '自由练习', topic: activeTopicName || '专项刷题', review: '月度复盘', super: '超级挑战' };
 
   return (
     <div className="quiz-practice">
       <div className="quiz-question-header">
         <span className="quiz-mode-label">{modeLabel[mode]}</span>
         <span className="quiz-progress">{currentIdx + 1}/{questions.length}</span>
-        <span className="quiz-kp">{q.knowledgePoint}</span>
-        {mode === 'free' && (
+        <span className="quiz-kp">{mode === 'topic' ? activeTopicName : q.knowledgePoint}</span>
+        {mode === 'topic' && <span className="quiz-source-label">{questionSourceLabel(q.source)}</span>}
+        {(mode === 'free' || mode === 'topic') && (
           <span className="quiz-kp" style={{ marginLeft: 'auto' }}>
             今日奖励 {quizStore.freeRewardRemaining()}/30
           </span>

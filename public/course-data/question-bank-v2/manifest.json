@@ -1,44 +1,50 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50005479324,
-  "verificationRevision": 50005479324,
-  "channelRulesRevision": 4,
-  "generatedAt": "2026-08-17T11:56:30.458Z",
+  "contentRevision": 50005479327,
+  "verificationRevision": 50005479327,
+  "channelRulesRevision": 5,
+  "generatedAt": "2026-09-05T13:46:54.686Z",
   "files": {
     "daily-gesp.json": {
-      "path": "daily-gesp.ae3aa46b1ffc.json",
-      "sha256": "ae3aa46b1ffc0a8dbc3d6967c3960436985a9478df7e422f65fdedecb2b3a625",
+      "path": "daily-gesp.654a92346a66.json",
+      "sha256": "654a92346a66d0f3d470bfc5c9c8cfc5a377d155fae6b2a8782700123e4f5555",
       "bytes": 942990,
       "count": 728
     },
     "super-cspj.json": {
-      "path": "super-cspj.42f9aa791e91.json",
-      "sha256": "42f9aa791e91ff6d79080fd13f7e19a94d64dadc8ad5cced517bc02e43572375",
+      "path": "super-cspj.1c2fdf8ca15d.json",
+      "sha256": "1c2fdf8ca15db340532858c248f8f6f14c8daba6112f0ad4974950ace875e0c6",
       "bytes": 89543,
       "count": 19
     },
     "exam-questions.json": {
-      "path": "exam-questions.e526ebae7843.json",
-      "sha256": "e526ebae7843fa4a648818bf045d3d185723aecda08a5b2e711c8929a33eb5eb",
+      "path": "exam-questions.848accbfe972.json",
+      "sha256": "848accbfe972228bd60402898c989975012746c45cd920dd56941449767b9ce5",
       "bytes": 527638,
       "count": 239
     },
     "exam-manifests.json": {
-      "path": "exam-manifests.9c42069c17d9.json",
-      "sha256": "9c42069c17d91cfe5e4ab774b94735844b5396c92fa3322c1a2443682b48c3d2",
+      "path": "exam-manifests.c28e208f18bf.json",
+      "sha256": "c28e208f18bf1d4a27339eda18f9e741c6ad5a0d92459dc4cbc7e6c91a69622b",
       "bytes": 7737,
       "count": 12
     },
     "dungeon-mixed.json": {
-      "path": "dungeon-mixed.d0c763d105fc.json",
-      "sha256": "d0c763d105fc142ee32a88d1355f33e9203fccbda86513f46fa667327917a8ec",
+      "path": "dungeon-mixed.237b2a75a406.json",
+      "sha256": "237b2a75a40611441a36596a4371e81ef5284e0d180e16de04a274db57dfd0ed",
       "bytes": 1175337,
       "count": 845
     },
+    "topic-practice.json": {
+      "path": "topic-practice.3c071b672ec2.json",
+      "sha256": "3c071b672ec26bc777dbd04ef17a727db47b67f2c3a2cb70858940039d8c46e6",
+      "bytes": 1325067,
+      "count": 998
+    },
     "verification-summary.json": {
-      "path": "verification-summary.eabda86f8fff.json",
-      "sha256": "eabda86f8fffac835ef4e603d65ddebd16c15f7bed77a61966724579338ddf76",
-      "bytes": 489,
+      "path": "verification-summary.a7299b68df5d.json",
+      "sha256": "a7299b68df5de9d4b882db1e65e40af15c639d7caac5cfb41ef1ee17eec47868",
+      "bytes": 507,
       "count": 1
     }
   }

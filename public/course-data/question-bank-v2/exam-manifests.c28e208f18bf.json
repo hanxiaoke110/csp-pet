@@ -1,7 +1,9 @@
 {
   "schemaVersion": 2,
   "contentRevision": 50005479327,
-  "generatedAt": "2026-09-05T06:35:54.352Z",
+  "verificationRevision": 50005479327,
+  "channelRulesRevision": 5,
+  "generatedAt": "2026-09-05T13:46:54.686Z",
   "papers": [
     {
       "id": "2019-J",
@@ -53,8 +55,7 @@
         "csp-s-2019-r01",
         "csp-s-2019-r02",
         "csp-s-2019-r03",
-        "csp-s-2019-f01",
-        "csp-s-2019-f02"
+        "csp-s-2019-f01"
       ]
     },
     {
@@ -104,7 +105,6 @@
         "csp-s-2020-c13",
         "csp-s-2020-c14",
         "csp-s-2020-c15",
-        "csp-s-2020-r01",
         "csp-s-2020-r02",
         "csp-s-2020-r03",
         "csp-s-2020-f01",
@@ -136,7 +136,6 @@
         "csp-j-2021-r02",
         "super-2021-reading-2",
         "csp-j-2021-r03",
-        "super-2021-reading-3",
         "csp-j-2021-f01",
         "super-2021-completion-1",
         "csp-j-2021-f02"
@@ -222,8 +221,7 @@
         "csp-s-2022-r01",
         "csp-s-2022-r02",
         "csp-s-2022-r03",
-        "csp-s-2022-f01",
-        "csp-s-2022-f02"
+        "csp-s-2022-f01"
       ]
     },
     {
@@ -246,7 +244,6 @@
         "csp-j-2023-c13",
         "csp-j-2023-c14",
         "csp-j-2023-c15",
-        "csp-j-2023-r01",
         "super-2023-reading-1",
         "csp-j-2023-r02",
         "super-2023-reading-2",
@@ -276,9 +273,7 @@
         "csp-s-2023-c13",
         "csp-s-2023-c14",
         "csp-s-2023-c15",
-        "csp-s-2023-r01",
         "csp-s-2023-r02",
-        "csp-s-2023-r03",
         "csp-s-2023-f01",
         "csp-s-2023-f02"
       ]
@@ -304,15 +299,8 @@
         "csp-j-2024-c14",
         "csp-j-2024-c15",
         "csp-j-2024-r01",
-        "super-2024-reading-1",
         "csp-j-2024-r02",
-        "super-2024-reading-2",
-        "csp-j-2024-r03",
-        "super-2024-reading-3",
-        "csp-j-2024-f01",
-        "super-2024-completion-1",
-        "csp-j-2024-f02",
-        "super-2024-completion-2"
+        "csp-j-2024-r03"
       ]
     },
     {
@@ -337,9 +325,7 @@
         "csp-s-2024-c15",
         "csp-s-2024-r01",
         "csp-s-2024-r02",
-        "csp-s-2024-r03",
-        "csp-s-2024-f01",
-        "csp-s-2024-f02"
+        "csp-s-2024-r03"
       ]
     }
   ]

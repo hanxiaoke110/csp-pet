@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50005479324,
-  "verificationRevision": 50005479324,
-  "generatedAt": "2026-07-25T07:36:16.162Z",
-  "questionCount": 1183,
+  "contentRevision": 50005479327,
+  "verificationRevision": 50005479327,
+  "generatedAt": "2026-09-05T06:35:54.459Z",
+  "questionCount": 1265,
   "statusCounts": {
-    "auto_verified": 1170,
+    "auto_verified": 1252,
     "auto_probable": 0,
     "disputed": 12,
     "broken": 1
@@ -60830,6 +60830,2138 @@
         "modelAnswers": [],
         "modelComplete": false,
         "explanationVerified": false
+      }
+    },
+    {
+      "questionId": "original-topic-binary-001",
+      "contentHash": "9e5e77d851a131abfebbb0b6fb1270c0378de467d1bdb3b243d0b2038e88f23c",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "9e5e77d851a131abfebbb0b6fb1270c0378de467d1bdb3b243d0b2038e88f23c",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-002",
+      "contentHash": "c3bade236ebe3b7e42aa75d86d4aeda343d01b466d8f4b0e182179686da89e8e",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "c3bade236ebe3b7e42aa75d86d4aeda343d01b466d8f4b0e182179686da89e8e",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-003",
+      "contentHash": "4d037ad36ea04b6c116cf61c39677df9ea69e520714fab1c7f718fd5cf489e99",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "4d037ad36ea04b6c116cf61c39677df9ea69e520714fab1c7f718fd5cf489e99",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-004",
+      "contentHash": "997fbbeac259f01f932730f335c4d470691a4e3551f84c097eb39f11ede0b282",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "997fbbeac259f01f932730f335c4d470691a4e3551f84c097eb39f11ede0b282",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-005",
+      "contentHash": "54dd368629ae40582c1e74f8500d1588d025b17520fb9e3d84bce7caafc1af77",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "54dd368629ae40582c1e74f8500d1588d025b17520fb9e3d84bce7caafc1af77",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-006",
+      "contentHash": "876960c566085e4172fc86f33736bf4a7031b95aa6cc2880cd76ce3eb8dd8d63",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "876960c566085e4172fc86f33736bf4a7031b95aa6cc2880cd76ce3eb8dd8d63",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-007",
+      "contentHash": "68e53a007ec1db1298ba68368a2814aaee3ca796fc63a6074bd872c99540c53c",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "68e53a007ec1db1298ba68368a2814aaee3ca796fc63a6074bd872c99540c53c",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-008",
+      "contentHash": "65eb9c2011cd738648d2f2ec6c02697e97eff7aed17cabe614ebadc2353674c7",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "65eb9c2011cd738648d2f2ec6c02697e97eff7aed17cabe614ebadc2353674c7",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-009",
+      "contentHash": "9cb46feac2aabbca96c58f9a0e0265ae87104780172e8bfb6968016d2ff2615d",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "9cb46feac2aabbca96c58f9a0e0265ae87104780172e8bfb6968016d2ff2615d",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-010",
+      "contentHash": "9587e235a5bb633845e7127132fa85aa81868a38d915a32bbf36efb1f539333c",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "9587e235a5bb633845e7127132fa85aa81868a38d915a32bbf36efb1f539333c",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-binary-011",
+      "contentHash": "81fa753fa6828f4336e125a1472f5f09fc7f9124c81e129e45c0e30804ee2e59",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "81fa753fa6828f4336e125a1472f5f09fc7f9124c81e129e45c0e30804ee2e59",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-001",
+      "contentHash": "0e8dd1533db61b98d75b65df0e8507dd1366f3e8d73a468f8345f152e086d85d",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "0e8dd1533db61b98d75b65df0e8507dd1366f3e8d73a468f8345f152e086d85d",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-002",
+      "contentHash": "84ab761e3ca11ce8fb81eca940cdf4a9b352062060761f1261bb98a339785626",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "84ab761e3ca11ce8fb81eca940cdf4a9b352062060761f1261bb98a339785626",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-003",
+      "contentHash": "59ddbff546a7d999689b4088db47b17ab31ec359f66d4613dab3e9a2c9625262",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "59ddbff546a7d999689b4088db47b17ab31ec359f66d4613dab3e9a2c9625262",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-004",
+      "contentHash": "8bfbb99f66e52d013dd2ebfa9dc9b7c5f84084bc9235e299c7c7c7bb7d264a02",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "8bfbb99f66e52d013dd2ebfa9dc9b7c5f84084bc9235e299c7c7c7bb7d264a02",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-005",
+      "contentHash": "1069039f54a6298052e6400c95950a0b674e8c4d7dfa734551afa9e032d91a80",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "1069039f54a6298052e6400c95950a0b674e8c4d7dfa734551afa9e032d91a80",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-006",
+      "contentHash": "6d45a84fbf5d28ef41edb67f1fd21db92881aac0d6bad47ff1fc41e679ebd3e5",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "6d45a84fbf5d28ef41edb67f1fd21db92881aac0d6bad47ff1fc41e679ebd3e5",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-007",
+      "contentHash": "97f86162bf73554ed003b01ec570fd489514e20e0026e73868401bed25375e78",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "97f86162bf73554ed003b01ec570fd489514e20e0026e73868401bed25375e78",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-008",
+      "contentHash": "21343b27f5cab0f0ccd58398dda0b9dd8d6667dc4397903f4ef09ee89239f888",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "21343b27f5cab0f0ccd58398dda0b9dd8d6667dc4397903f4ef09ee89239f888",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-009",
+      "contentHash": "cb18eb064ba85a9fcee50632fced8ea5995e2b40e17e93576b8f20f0f9966881",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "cb18eb064ba85a9fcee50632fced8ea5995e2b40e17e93576b8f20f0f9966881",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-010",
+      "contentHash": "da9bfa11f59014f94606c05b3b7164ec5fdc072a7d9ad5d4d0722d3a9ec3b30c",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "da9bfa11f59014f94606c05b3b7164ec5fdc072a7d9ad5d4d0722d3a9ec3b30c",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-011",
+      "contentHash": "57eaf1acd98d1925e5ca87f9ab988cdc354d5020af120d5884b89500ba6a082a",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "57eaf1acd98d1925e5ca87f9ab988cdc354d5020af120d5884b89500ba6a082a",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-012",
+      "contentHash": "1d9986235ca53cd6fbddcb4cd28be41a7bca6b2e769878eba3b837ff19fe70b5",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "1d9986235ca53cd6fbddcb4cd28be41a7bca6b2e769878eba3b837ff19fe70b5",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-013",
+      "contentHash": "dd22382884d234e256dde86f3e32326dc13ea10de2bfc1aa3d22138996929560",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "dd22382884d234e256dde86f3e32326dc13ea10de2bfc1aa3d22138996929560",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-014",
+      "contentHash": "132ac86ecbe817e5da24bec6b37db69a5ddd3424233b3f15b32b0ea25b6f04fa",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "132ac86ecbe817e5da24bec6b37db69a5ddd3424233b3f15b32b0ea25b6f04fa",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-015",
+      "contentHash": "c68a6f5ba82d0d35dad6c219bc0a414d42184bb2d0657c772505dd750ff38a7c",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "c68a6f5ba82d0d35dad6c219bc0a414d42184bb2d0657c772505dd750ff38a7c",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-016",
+      "contentHash": "4ed23dd0977a7480a2cfe9bc00eb6dbb93f9efe482a178ea3fbba86b31b3bdc7",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "4ed23dd0977a7480a2cfe9bc00eb6dbb93f9efe482a178ea3fbba86b31b3bdc7",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-017",
+      "contentHash": "24032e44f51654c1e48a9a9ea737634717756a1d8e3882a1be6e7020697dd835",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "24032e44f51654c1e48a9a9ea737634717756a1d8e3882a1be6e7020697dd835",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-018",
+      "contentHash": "e0e387ff8972ba2b8daf58da736b1c524e3c455546c07577b2eb923a794a0baf",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "e0e387ff8972ba2b8daf58da736b1c524e3c455546c07577b2eb923a794a0baf",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-019",
+      "contentHash": "fbcc8326193c1018184f1afe903385b5162dbe2b034fa848035cf4eb0d949f97",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "fbcc8326193c1018184f1afe903385b5162dbe2b034fa848035cf4eb0d949f97",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-combinatorics-020",
+      "contentHash": "69cfb5f5b67f69ba118ae32a77d7efa444cdf3793bd745ba97ec4393b2ecb9dd",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "69cfb5f5b67f69ba118ae32a77d7efa444cdf3793bd745ba97ec4393b2ecb9dd",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-001",
+      "contentHash": "00024551d44f8a77673b8c3943ed3f183a6ba7331bbbf3e07c8a24b60e29bb72",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "00024551d44f8a77673b8c3943ed3f183a6ba7331bbbf3e07c8a24b60e29bb72",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-002",
+      "contentHash": "94f228537b2c14f38c1593468c63f3ba6c2b186ceb980e664f7fea383ddd01c5",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "94f228537b2c14f38c1593468c63f3ba6c2b186ceb980e664f7fea383ddd01c5",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-003",
+      "contentHash": "2c12ee29d9a05039a4c89df6814c3818fbf7daf396e01b1de7bbf0eea18ef8a9",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "2c12ee29d9a05039a4c89df6814c3818fbf7daf396e01b1de7bbf0eea18ef8a9",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-004",
+      "contentHash": "4ca80d09e59251c34c459bcd5a7dbfc9f73c3121e20b55e9105eb8224f72d6b0",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "4ca80d09e59251c34c459bcd5a7dbfc9f73c3121e20b55e9105eb8224f72d6b0",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-005",
+      "contentHash": "463c5d90a1d833f9c469cbebb65c8c59ee116cfe9fe17144f051d362a6616f06",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "463c5d90a1d833f9c469cbebb65c8c59ee116cfe9fe17144f051d362a6616f06",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-006",
+      "contentHash": "aba28adffc873f320ef04f0a9d3835b78034a7ee5653901e830352feda722443",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "aba28adffc873f320ef04f0a9d3835b78034a7ee5653901e830352feda722443",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-007",
+      "contentHash": "ff1f8930c2525eb6fb7c8b2e39c24e2c457fd5a81ac1f218cf805721ecedf269",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "ff1f8930c2525eb6fb7c8b2e39c24e2c457fd5a81ac1f218cf805721ecedf269",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-008",
+      "contentHash": "a70b73a38a68ac722c7807582190f17492a81eec58796f474541c4de2d8569e7",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "a70b73a38a68ac722c7807582190f17492a81eec58796f474541c4de2d8569e7",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-009",
+      "contentHash": "71f067f73c50eaf69b7b91c5bf588b9298548a83fbb1da584a0b5e6ec43d3dea",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "71f067f73c50eaf69b7b91c5bf588b9298548a83fbb1da584a0b5e6ec43d3dea",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-010",
+      "contentHash": "c7e5d9f0cca116f689552e4e3836aae46df94822c46ef49a722847f61a90016c",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "c7e5d9f0cca116f689552e4e3836aae46df94822c46ef49a722847f61a90016c",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-011",
+      "contentHash": "39a109383a17aae676a53356ac05c88d9d1857313c1638cb0efed154bbd66149",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "39a109383a17aae676a53356ac05c88d9d1857313c1638cb0efed154bbd66149",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-012",
+      "contentHash": "9bdf8dc700f44c2bc9ea8fce4cb75e1f606fa10a09a1ec94074d07170c443701",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "9bdf8dc700f44c2bc9ea8fce4cb75e1f606fa10a09a1ec94074d07170c443701",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-dp-013",
+      "contentHash": "d0c3a92d3b2e3dca8a1fa24a043b750b0817fcde135fb8921e748d3f5b8ba4ef",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "d0c3a92d3b2e3dca8a1fa24a043b750b0817fcde135fb8921e748d3f5b8ba4ef",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-001",
+      "contentHash": "603abbde07f0a36e0d6aea2cae8d46a6eb6bb185d49002c9d09f2fbc3ce21ed0",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "603abbde07f0a36e0d6aea2cae8d46a6eb6bb185d49002c9d09f2fbc3ce21ed0",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-002",
+      "contentHash": "58320aa509b107336f01ddb14e6b8d9e02d85c112f47e251e892ba17aecc94de",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "58320aa509b107336f01ddb14e6b8d9e02d85c112f47e251e892ba17aecc94de",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-003",
+      "contentHash": "b3ca21d80aa27ea9df13258c7cda1fb6e2584decd8c1de68a3dc46b3c63fca9f",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "b3ca21d80aa27ea9df13258c7cda1fb6e2584decd8c1de68a3dc46b3c63fca9f",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-004",
+      "contentHash": "3f275ee24357cfb31488ec940b49a732feb0a15feffd493fb2547df2501ed3ab",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "3f275ee24357cfb31488ec940b49a732feb0a15feffd493fb2547df2501ed3ab",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-005",
+      "contentHash": "184324d84cf8ff61bd49c23e86794a69dd6ff8b0a13b3c533a784105e0bbe862",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "184324d84cf8ff61bd49c23e86794a69dd6ff8b0a13b3c533a784105e0bbe862",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-006",
+      "contentHash": "1baa5af289ae40adfebfd4bcd52b9282ef7d6969a59a81f0a8bbf8c3203f01b8",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "1baa5af289ae40adfebfd4bcd52b9282ef7d6969a59a81f0a8bbf8c3203f01b8",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-007",
+      "contentHash": "6b25e64a6c7900df39bf81b268f86e969afac6d3e407b7468d6ddcc9ad0a1e83",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "6b25e64a6c7900df39bf81b268f86e969afac6d3e407b7468d6ddcc9ad0a1e83",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-008",
+      "contentHash": "7d3cbc33a8b3093582b29c6d44b206aeb434a9165a02371d2781fd1d065d8921",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "7d3cbc33a8b3093582b29c6d44b206aeb434a9165a02371d2781fd1d065d8921",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-009",
+      "contentHash": "8d29331eb9ac8234fc06f5aee575fbe2d4f8d4dd6dc0c4f178d39fa609aab8a5",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "8d29331eb9ac8234fc06f5aee575fbe2d4f8d4dd6dc0c4f178d39fa609aab8a5",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-010",
+      "contentHash": "fe1c74b2ff38d8a4c97cf62f171111b7df5373fcd78fbdfdb191d910bf634e5e",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "fe1c74b2ff38d8a4c97cf62f171111b7df5373fcd78fbdfdb191d910bf634e5e",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-011",
+      "contentHash": "89eec194a0a4a7c1c5656e400a478c5123e8fa0efcd5abad74000381177d086f",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "89eec194a0a4a7c1c5656e400a478c5123e8fa0efcd5abad74000381177d086f",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-012",
+      "contentHash": "1e52d50a2964765632d92c2767d74c09c248e71ab103a2c9ff803b76ba049ecc",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "1e52d50a2964765632d92c2767d74c09c248e71ab103a2c9ff803b76ba049ecc",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-013",
+      "contentHash": "96a64f9c79b7f65acae7434fec6f4e3310c8334dde9f5aaf15258ee977088e0d",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "96a64f9c79b7f65acae7434fec6f4e3310c8334dde9f5aaf15258ee977088e0d",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-014",
+      "contentHash": "3d1d44b93a602f87cb1ba85486f9631b21899e88c3bed7f1fa44dc0156e79e52",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "3d1d44b93a602f87cb1ba85486f9631b21899e88c3bed7f1fa44dc0156e79e52",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-015",
+      "contentHash": "10b3147c2d694885d57ff4a98d168ded0d2cbcf65198e5c77d67d154b0951ec2",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "10b3147c2d694885d57ff4a98d168ded0d2cbcf65198e5c77d67d154b0951ec2",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-016",
+      "contentHash": "7de9d7e96f2a0f679bb83a0145e19ba49630667e408680456e694600bdd1f731",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "7de9d7e96f2a0f679bb83a0145e19ba49630667e408680456e694600bdd1f731",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-017",
+      "contentHash": "f3e18808419a3dfe10d3402fa6323cd2de2974b0985288f49c8c632e17e89257",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "f3e18808419a3dfe10d3402fa6323cd2de2974b0985288f49c8c632e17e89257",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-greedy-018",
+      "contentHash": "70277cc09d4c5adba6eba828b8a5d80f97cc8fecfbf97f097a9f7390681e556b",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "70277cc09d4c5adba6eba828b8a5d80f97cc8fecfbf97f097a9f7390681e556b",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-001",
+      "contentHash": "b6ede4a96821e2c0925bcbbb98f99b1307719276bcd92d83a9c7e024bda0e814",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "b6ede4a96821e2c0925bcbbb98f99b1307719276bcd92d83a9c7e024bda0e814",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-002",
+      "contentHash": "cdbb562c82ce9ce56013d86c44ea69f045b1904767e764daabd245f9ec9fa906",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "cdbb562c82ce9ce56013d86c44ea69f045b1904767e764daabd245f9ec9fa906",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-003",
+      "contentHash": "e4cc455f2b04c90c27306aaa5d54442257c52a4a686ac865aac69bb8cf29ab2e",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "e4cc455f2b04c90c27306aaa5d54442257c52a4a686ac865aac69bb8cf29ab2e",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-004",
+      "contentHash": "50857c29c028545252089dcb5e559959f31f235ce36f524b229cca5dc52fb506",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "50857c29c028545252089dcb5e559959f31f235ce36f524b229cca5dc52fb506",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-005",
+      "contentHash": "4fe02106c3973b294061449aca9fad8cb647e63c78bd01f3dd4ffcb955c2db62",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "4fe02106c3973b294061449aca9fad8cb647e63c78bd01f3dd4ffcb955c2db62",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-006",
+      "contentHash": "7b8a6a4a339cd9f38b11aa9de256c129a25f934a679092cf8edb8606637ca384",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "7b8a6a4a339cd9f38b11aa9de256c129a25f934a679092cf8edb8606637ca384",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-007",
+      "contentHash": "c0a19bcc8d26ab6cf72b054aec4bbd4fdaf6ebb550136b3ff27e7eb518a07501",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "c0a19bcc8d26ab6cf72b054aec4bbd4fdaf6ebb550136b3ff27e7eb518a07501",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-008",
+      "contentHash": "a847c95d665552fb6497b13c7c4ed1af7d08afe93ca37f2bf53bc98c8410574a",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "a847c95d665552fb6497b13c7c4ed1af7d08afe93ca37f2bf53bc98c8410574a",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-009",
+      "contentHash": "7b7a0666c924f4f213eb771173998af862595ffb01feb572d547b866bf143f67",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "7b7a0666c924f4f213eb771173998af862595ffb01feb572d547b866bf143f67",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-010",
+      "contentHash": "ffc4e29b207f46c5873e9eda4188655af2eaeec29b7dc23e63bada6a39955075",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "ffc4e29b207f46c5873e9eda4188655af2eaeec29b7dc23e63bada6a39955075",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-011",
+      "contentHash": "7f9ac4b33880507e1b19b0a283052f1ec5d277b67269c378b40848ee60057baa",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "7f9ac4b33880507e1b19b0a283052f1ec5d277b67269c378b40848ee60057baa",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-012",
+      "contentHash": "c929df562236e596189dd3da617ef08a2a1771232836158f6aeedfe0c59eb04f",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "c929df562236e596189dd3da617ef08a2a1771232836158f6aeedfe0c59eb04f",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-013",
+      "contentHash": "5c54449ab16ff34b8bbb9181ae7c51f45ad35748cde46172587d6be5800c44b8",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "5c54449ab16ff34b8bbb9181ae7c51f45ad35748cde46172587d6be5800c44b8",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-014",
+      "contentHash": "dfac17c90f6c26bec66e3e7d4f25f7dd78a142bbe84fa3ed13319fe7094733c4",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "dfac17c90f6c26bec66e3e7d4f25f7dd78a142bbe84fa3ed13319fe7094733c4",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-015",
+      "contentHash": "e69deeaf37347fbf4d0f3a53c9aab5fb04c324488f1e2b328877223699e1c110",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "e69deeaf37347fbf4d0f3a53c9aab5fb04c324488f1e2b328877223699e1c110",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-016",
+      "contentHash": "1cc3e6c00f507e9fe2fe4c9b758f4bd7efd569531556b351dcb99db63dce0d97",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "1cc3e6c00f507e9fe2fe4c9b758f4bd7efd569531556b351dcb99db63dce0d97",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-017",
+      "contentHash": "dc6971fee9a355c036901910bb0a19e73d397d0928148a8987900529d18d5f25",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "dc6971fee9a355c036901910bb0a19e73d397d0928148a8987900529d18d5f25",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-018",
+      "contentHash": "2e9db68a5f9fbcf0484fe4a6696b7a755ed90387162b90af9aefae9f4a2b5cd4",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "2e9db68a5f9fbcf0484fe4a6696b7a755ed90387162b90af9aefae9f4a2b5cd4",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-019",
+      "contentHash": "f5460f2c3cef82968e49685a5eebe9b50cffc193c7caeaabbc5b4884e7a8883b",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "f5460f2c3cef82968e49685a5eebe9b50cffc193c7caeaabbc5b4884e7a8883b",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
+      }
+    },
+    {
+      "questionId": "original-topic-search-020",
+      "contentHash": "dc85b85cb49c23c93bea5a29729f85bb9d1ac4be9180d9c8ee9460505a71ee6d",
+      "status": "auto_verified",
+      "blockers": [],
+      "warnings": [],
+      "evidence": {
+        "contentHash": "dc85b85cb49c23c93bea5a29729f85bb9d1ac4be9180d9c8ee9460505a71ee6d",
+        "collectedAt": "2026-09-05T06:35:54.459Z",
+        "officialMatch": false,
+        "deterministicAnswer": null,
+        "modelAnswers": [],
+        "modelComplete": false,
+        "explanationVerified": true,
+        "knowledgeSources": [
+          "project_authored_curriculum",
+          "local_answer_and_rationale_review"
+        ],
+        "manualVerified": {
+          "approved": true,
+          "reviewer": "CSP learning assistant project review",
+          "reviewedAt": "2026-09-05T06:35:54.459Z",
+          "reason": "Original practice item passed source, structure, answer-range, explanation and topic review."
+        }
       }
     },
     {

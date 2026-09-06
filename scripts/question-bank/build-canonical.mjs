@@ -126,15 +126,21 @@ export function buildCanonicalBank({
   const dungeonRaw = readJson(path.join(root, 'public/course-data/dungeon-exam-bank.json'));
   const recoveryPath = path.join(root, 'scripts/question-bank/data/csp-choice-recovery.json');
   const recoveryRaw = readJson(recoveryPath);
-  const recoveryRevision = Number.parseInt(
-    createHash('sha256').update(fs.readFileSync(recoveryPath)).digest('hex').slice(0, 6),
+  const originalPracticePath = path.join(root, 'scripts/question-bank/data/original-topic-practice.json');
+  const originalPracticeRaw = readJson(originalPracticePath);
+  const localSourcesRevision = Number.parseInt(
+    createHash('sha256')
+      .update(fs.readFileSync(recoveryPath))
+      .update(fs.readFileSync(originalPracticePath))
+      .digest('hex').slice(0, 6),
     16,
   );
-  const contentRevision = reviewedExport.revision * 100_000_000 + recoveryRevision;
+  const contentRevision = reviewedExport.revision * 100_000_000 + localSourcesRevision;
 
   const groups = [
     { priority: 120, origin: 'official_source_recovery', questions: recoveryRaw.questions },
     { priority: 100, origin: 'reviewed_cloud', questions: Object.values(reviewedExport.questions).map(normalizeLegacyQuestion) },
+    { priority: 80, origin: 'original_topic_practice', questions: originalPracticeRaw.questions.map(normalizeLegacyQuestion) },
     { priority: 20, origin: 'legacy_exam', questions: examRaw.questions.map(normalizeLegacyQuestion) },
     { priority: 10, origin: 'legacy_dungeon', questions: dungeonRaw.questions.map(normalizeLegacyQuestion) },
   ];

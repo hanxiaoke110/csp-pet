@@ -8,6 +8,7 @@ import { buildChannels, CHANNEL_RULES_REVISION } from './lib/channels.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const outputDirectory = path.join(root, 'public/course-data/question-bank-v2');
 const excludedQuestionIdsPath = path.join(root, 'public/course-data/excluded-question-ids.json');
+const knowledgeMappingPath = path.join(root, 'public/course-data/question-knowledge-mapping.json');
 
 // Papers with fewer verified questions than this are not a usable exam
 // experience and are dropped from the manifest until re-verified.
@@ -63,6 +64,7 @@ export function publishSnapshots() {
 
   const verdicts = new Map(verification.results.map(result => [result.questionId, result]));
   const excludedQuestionIds = new Set(JSON.parse(fs.readFileSync(excludedQuestionIdsPath, 'utf8')).ids || []);
+  const knowledgeMappings = JSON.parse(fs.readFileSync(knowledgeMappingPath, 'utf8')).mappings || {};
   const joined = canonical.questions.map(question => {
     const verdict = verdicts.get(question.id);
     if (!verdict || verdict.contentHash !== question.contentHash) {
@@ -71,6 +73,13 @@ export function publishSnapshots() {
     return studentQuestion(question, verdict);
   }).filter(question => !excludedQuestionIds.has(question.id));
   const channels = buildChannels(joined);
+  channels.topic = joined
+    .filter(question => question.verificationStatus === 'auto_verified'
+      && question.type === 'choice'
+      && question.options.length >= 2
+      && Number.isInteger(question.answer?.correctIndex)
+      && knowledgeMappings[question.id]?.primary)
+    .map(question => ({ ...question, topicId: knowledgeMappings[question.id].primary }));
   const generatedAt = new Date().toISOString();
   const revisions = {
     contentRevision: canonical.contentRevision,
@@ -132,6 +141,7 @@ export function publishSnapshots() {
     'exam-questions.json': snapshot(channels.exam),
     'exam-manifests.json': examManifests,
     'dungeon-mixed.json': snapshot(channels.dungeon),
+    'topic-practice.json': snapshot(channels.topic),
     'verification-summary.json': summary,
   };
   const files = Object.fromEntries(

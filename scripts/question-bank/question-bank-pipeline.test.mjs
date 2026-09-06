@@ -93,7 +93,7 @@ describe('CSP source indexing', () => {
 
 describe('release cutover gate', () => {
   it('blocks a bank with an empty super channel', () => {
-    const summary = JSON.stringify({ publishedBlockers: 0, channelCounts: { daily: 120, super: 0, dungeon: 120 } });
+    const summary = JSON.stringify({ publishedBlockers: 0, channelCounts: { daily: 120, super: 0, dungeon: 120, topic: 120 } });
     const exam = JSON.stringify({ papers: [] });
     const hash = value => createHash('sha256').update(value).digest('hex');
     const manifest = {
@@ -113,7 +113,7 @@ describe('release cutover gate', () => {
   it('blocks thin exam papers and non-zero published blockers', () => {
     const summary = JSON.stringify({
       publishedBlockers: 2,
-      channelCounts: { daily: 120, super: 5, dungeon: 120 },
+      channelCounts: { daily: 120, super: 5, dungeon: 120, topic: 120 },
     });
     const papers = Array.from({ length: 12 }, (_, index) => ({
       id: `paper-${index}`,
@@ -139,7 +139,7 @@ describe('release cutover gate', () => {
   it('passes a healthy bank', () => {
     const summary = JSON.stringify({
       publishedBlockers: 0,
-      channelCounts: { daily: 120, super: 5, dungeon: 120 },
+      channelCounts: { daily: 120, super: 5, dungeon: 120, topic: 120 },
     });
     const papers = Array.from({ length: 12 }, (_, index) => ({
       id: `paper-${index}`,
@@ -164,7 +164,7 @@ describe('release cutover gate', () => {
   it('blocks a super snapshot with missing child options', () => {
     const summary = JSON.stringify({
       publishedBlockers: 0,
-      channelCounts: { daily: 120, super: 5, dungeon: 120 },
+      channelCounts: { daily: 120, super: 5, dungeon: 120, topic: 120 },
     });
     const papers = Array.from({ length: 12 }, (_, index) => ({
       id: `paper-${index}`,

@@ -88,6 +88,7 @@ async function makeCache(contentRevision: number): Promise<TestCache> {
     'super-cspj.json': JSON.stringify({ questions: [] }),
     'exam-questions.json': JSON.stringify({ questions: [] }),
     'exam-manifests.json': JSON.stringify({ papers: [] }),
+    'topic-practice.json': JSON.stringify({ questions: [] }),
   };
   const manifest: TestManifest = {
     schemaVersion: 2,
@@ -165,8 +166,22 @@ describe('beginQuestionBankSession robustness (corrupted install guard)', () => 
 
   it('loads bundled data when no cache exists and bundled assets are intact', async () => {
     installFetchMock(await makeCache(3));
-    const session = await beginQuestionBankSession(['daily', 'super', 'exam']);
+    const session = await beginQuestionBankSession(['daily', 'super', 'exam', 'topic']);
     expect(session.source).toBe('bundled');
     expect(session.revision).toBe(3);
+    expect(session.channels.topic).toEqual([]);
+  });
+
+  it('falls back to bundled data when an older cache has no topic channel', async () => {
+    const bundled = await makeCache(4);
+    const oldCache = await makeCache(3);
+    delete oldCache.files['topic-practice.json'];
+    delete oldCache.manifest.files['topic-practice.json'];
+    localStorage.setItem(V2_KEYS.current, JSON.stringify({ manifest: oldCache.manifest, files: oldCache.files, cachedAt: '' }));
+    installFetchMock(bundled);
+
+    const session = await beginQuestionBankSession(['daily', 'super', 'exam', 'topic']);
+    expect(session.source).toBe('bundled');
+    expect(session.revision).toBe(4);
   });
 });

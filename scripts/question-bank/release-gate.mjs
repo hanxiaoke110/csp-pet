@@ -12,6 +12,7 @@ export const DEFAULT_THRESHOLDS = {
   examPapers: 12,
   examQuestionsPerPaper: 5,
   dungeon: 100,
+  topic: 100,
 };
 
 function readJson(filePath) {
@@ -43,6 +44,7 @@ export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRE
   if ((channelCounts.daily ?? 0) < thresholds.daily) failures.push(`daily=${channelCounts.daily ?? 0}<${thresholds.daily}`);
   if ((channelCounts.super ?? 0) < thresholds.super) failures.push(`super=${channelCounts.super ?? 0}<${thresholds.super}`);
   if ((channelCounts.dungeon ?? 0) < thresholds.dungeon) failures.push(`dungeon=${channelCounts.dungeon ?? 0}<${thresholds.dungeon}`);
+  if ((channelCounts.topic ?? 0) < thresholds.topic) failures.push(`topic=${channelCounts.topic ?? 0}<${thresholds.topic}`);
 
   const examManifests = parsed['exam-manifests.json'];
   const paperCount = examManifests?.papers?.length ?? 0;

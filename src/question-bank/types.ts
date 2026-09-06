@@ -1,6 +1,6 @@
 export type VerificationStatus = 'auto_verified' | 'auto_probable' | 'disputed' | 'broken';
 
-export type QuestionChannel = 'daily' | 'super' | 'exam' | 'dungeon';
+export type QuestionChannel = 'daily' | 'super' | 'exam' | 'dungeon' | 'topic';
 
 export interface CanonicalQuestionChild {
   id: string;
@@ -41,6 +41,7 @@ export interface CanonicalQuestion {
   };
   contentHash: string;
   verificationStatus?: VerificationStatus;
+  topicId?: string;
 }
 
 export interface QuestionBankManifestFile {

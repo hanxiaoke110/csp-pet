@@ -173,7 +173,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.44';
+  const VER = '1.7.45';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -184,9 +184,10 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>💾 每天自动备份智子、金币和学习进度，仅保留最近三份</div>
-          <div>🛡️ Windows 不再弹阻塞式备份窗口，备份失败也不会影响使用和更新</div>
-          <div>📥 支持从备份文件迁移到新电脑，恢复前会先保护当前存档</div>
+          <div>🎯 新增 13 个知识专题刷题，可选 5/10/20 题集中练习</div>
+          <div>📚 专项题库扩充至 998 道，程序阅读与填空题不会混入</div>
+          <div>🏆 新增“富可敌国”成就，并修复成就反复弹出</div>
+          <div>💾 备份会先同步最新做题进度，再安全导出</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
