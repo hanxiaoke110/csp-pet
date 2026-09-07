@@ -3,7 +3,8 @@
 // 保留文档里已有的视频、图片、提醒、系统要求等手工内容。
 //
 // 用法：
-//   node scripts/update-feishu-release-doc.mjs            # 自动抓最新版本并更新文档
+//   node scripts/update-feishu-release-doc.mjs            # 更新文档并同步最新版安装包附件
+//   node scripts/update-feishu-release-doc.mjs --links-only # 只更新文字和下载链接
 //   node scripts/update-feishu-release-doc.mjs --dry-run  # 只打印将要执行的替换，不改文档
 //
 // 环境变量：
@@ -18,7 +19,7 @@ const GITEE_REPO = process.env.GITEE_REPO || 'hanliuliu110/csp-pet';
 const DOC_TOKEN = process.env.LARK_DOC_TOKEN || 'VJmgd3RB0oOzPfxV9MxcKzzyn1b';
 const CLI_AS = process.env.LARK_CLI_AS || 'bot';
 const DRY_RUN = process.argv.includes('--dry-run');
-const SYNC_ATTACHMENTS = process.argv.includes('--sync-attachments');
+const SYNC_ATTACHMENTS = !process.argv.includes('--links-only');
 
 function esc(text) {
   return String(text)
@@ -105,8 +106,8 @@ function buildReplacements(release, changelog) {
   ];
 }
 
-// 同步安装包附件：删除文档里旧版本的 CSP_*.exe/dmg 附件块，再上传最新版。
-// 仅在 --sync-attachments 时执行（默认不动附件，保持轻量更新）。
+// 同步安装包附件：先上传最新版，全部成功后再删除旧版本附件块。
+// 默认同步附件；需要轻量更新时显式传入 --links-only。
 async function syncAttachments(docXml, release) {
   const targets = [
     { marker: '下载链接（Windows 10 版本）：', file: release.win.name, url: release.win.url },
@@ -114,18 +115,11 @@ async function syncAttachments(docXml, release) {
     { marker: '苹果电脑 Intel 芯片下载链接：', file: release.macIntel.name, url: release.macIntel.url },
   ];
 
-  // 1. 删除旧附件块（只匹配安装包，不动视频/图片）
+  // 1. 记录旧附件块（只匹配安装包，不动视频/图片）
   const oldIds = [];
   const re = /<source[^>]*id="([^"]+)"[^>]*name="(CSP_[^"]+\.(?:exe|dmg))"/g;
   let m;
   while ((m = re.exec(docXml))) oldIds.push(m[1]);
-  if (oldIds.length > 0) {
-    runCli([
-      'docs', '+update', '--doc', DOC_TOKEN, '--command', 'block_delete',
-      '--block-id', oldIds.join(','), '--as', CLI_AS,
-    ]);
-    console.log(`已删除旧安装包附件块：${oldIds.length} 个`);
-  }
 
   // 2. 确保最新安装包已在本地（缺才下载，Gitee 源）
   mkdirSync('.tmp/doc-assets', { recursive: true });
@@ -149,6 +143,15 @@ async function syncAttachments(docXml, release) {
       '--as', CLI_AS,
     ]);
     console.log(`已上传新附件：${t.file}`);
+  }
+
+  // 4. 三份新附件全部上传成功后才删除旧附件，失败时学生仍可下载旧包。
+  if (oldIds.length > 0) {
+    runCli([
+      'docs', '+update', '--doc', DOC_TOKEN, '--command', 'block_delete',
+      '--block-id', oldIds.join(','), '--as', CLI_AS,
+    ]);
+    console.log(`已删除旧安装包附件块：${oldIds.length} 个`);
   }
 }
 
