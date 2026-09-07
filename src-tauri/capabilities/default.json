@@ -16,6 +16,10 @@
     "core:window:allow-set-ignore-cursor-events",
     "core:webview:allow-create-webview-window",
     "opener:default",
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [{ "path": "$APPDATA/backups" }]
+    },
     "updater:default",
     "dialog:default",
     "dialog:allow-confirm",
