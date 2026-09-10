@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { getRankName } from '../../utils/gameLogic';
+import { hasFinishedExploration } from '../../stores/explorationStore';
+import { getExplorationStageConfig } from '../../data/explorationStages';
 
 export default function RewardScreen() {
   const { dungeonId } = useParams<{ dungeonId: string }>();
@@ -44,6 +46,10 @@ export default function RewardScreen() {
   const uniqueSkillCount = battle.usedSkillIds.length;
   const roundCount = battle.roundCount;
   const rankName = getRankName(player.school, player.rankTier);
+  const explorationConfig = getExplorationStageConfig(dungeonId, battle.stageId || undefined);
+  const canEnterExploration = won
+    && Boolean(explorationConfig)
+    && !hasFinishedExploration(explorationConfig!.mapId);
 
   const handleContinue = () => {
     // 结算与进度更新已在 finalizeBattle（战斗结束时）完成，这里清空快照并导航。
@@ -186,6 +192,20 @@ export default function RewardScreen() {
 
         {/* Continue */}
         <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+          {canEnterExploration && explorationConfig && (
+            <button
+              className="explore-reward-entry"
+              onClick={() => {
+                useDungeonStore.setState({ lastBattleResult: null });
+                setView('exploration');
+                navigate(`/explore/${explorationConfig.dungeonId}/${explorationConfig.stageId}`);
+              }}
+            >
+              <span>新区域已开启</span>
+              <strong>进入{explorationConfig.title}</strong>
+              <small>首通免费 · 自动保存 · 约 6 分钟</small>
+            </button>
+          )}
           <button
             className={`pixel-btn ${won ? 'primary' : ''}`}
             onClick={won ? handleReplay : handleReplay}

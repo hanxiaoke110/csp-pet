@@ -19,6 +19,7 @@ import LeaderboardScreen from './components/screens/LeaderboardScreen';
 import ProfileScreen from './components/screens/ProfileScreen';
 import HealingScreen from './components/screens/HealingScreen';
 import TrialSupplyScreen from './components/screens/TrialSupplyScreen';
+import ExplorationScreen from './components/screens/ExplorationScreen';
 
 // 战斗路由门禁：题库未就绪时不进战斗，避免“选技能永远弹‘题库准备中’、打不过去”。
 function BattleRoute({ children }: { children: ReactNode }) {
@@ -224,6 +225,7 @@ export function AppContent() {
       <Route path="/battle/:dungeonId/:stageId" element={<BattleRoute><BattleScreen /></BattleRoute>} />
       <Route path="/battle/:dungeonId" element={<BattleRoute><BattleScreen /></BattleRoute>} />
       <Route path="/reward/:dungeonId" element={<RewardScreen />} />
+      <Route path="/explore/:dungeonId/:stageId" element={<BattleRoute><ExplorationScreen /></BattleRoute>} />
       <Route path="/leaderboard" element={<LeaderboardScreen />} />
       <Route path="/profile" element={<ProfileScreen />} />
       <Route path="/healing" element={<HealingScreen />} />

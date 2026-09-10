@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { claimedCoinAchievementFloor, currentWeekKey, getWeeklyPassiveCoinReward, migrateWeeklyPassiveClaimWeek, usePetStore } from './petStore';
+import { claimedCoinAchievementFloor, currentWeekKey, getElementReforgeCost, getWeeklyPassiveCoinReward, migrateWeeklyPassiveClaimWeek, SEASON_TWO_ELEMENT_REFORGE_KEY, usePetStore } from './petStore';
 import { useHatchStore } from './hatchStore';
 import { getPetConfig, type OwnedPet } from '../types/pet';
 
@@ -150,6 +150,26 @@ describe('高额金币消费保护', () => {
     expect(usePetStore.getState().spendCoins(0)).toBe(false);
     expect(usePetStore.getState().spendCoins(Number.NaN)).toBe(false);
     expect(usePetStore.getState().coins).toBe(500);
+  });
+});
+
+describe('第二赛季元素调整补偿', () => {
+  it('保留每只智子的首次免费机会，不消耗账号补偿', () => {
+    const pet = makePet('p1');
+    usePetStore.setState({ ownedPets: [pet], activePetId: pet.petId, coins: 0 });
+
+    expect(getElementReforgeCost(pet)).toBe(0);
+    expect(usePetStore.getState().reforgeElement(pet.petId, 'fire')).toMatchObject({ ok: true, cost: 0 });
+    expect(localStorage.getItem(SEASON_TWO_ELEMENT_REFORGE_KEY)).toBeNull();
+  });
+
+  it('已用首次机会的智子可享受一次账号补偿，之后恢复原价', () => {
+    const pet = { ...makePet('p1'), freeElementChangeUsed: true };
+    usePetStore.setState({ ownedPets: [pet], activePetId: pet.petId, coins: 0 });
+
+    expect(usePetStore.getState().reforgeElement(pet.petId, 'fire')).toMatchObject({ ok: true, cost: 0 });
+    expect(localStorage.getItem(SEASON_TWO_ELEMENT_REFORGE_KEY)).toBe('1');
+    expect(usePetStore.getState().reforgeElement(pet.petId, 'water')).toMatchObject({ ok: false, cost: 200, message: '金币不足' });
   });
 });
 

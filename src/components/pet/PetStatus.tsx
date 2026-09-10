@@ -1,4 +1,4 @@
-import { usePetStore, FOODS, currentWeekKey, getLevelMilestone, getWeeklyPassiveCoinReward, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
+import { usePetStore, FOODS, currentWeekKey, getElementReforgeCost, getLevelMilestone, getWeeklyPassiveCoinReward, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
 import { getPetTier, type OwnedPet, type PetElement } from '../../types/pet';
 import { useQuizStore } from '../../stores/quizStore';
 import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
@@ -372,7 +372,8 @@ export default function PetStatus({
             const labels: Record<PetElement, string> = {
               earth: '🟫 地', fire: '🔴 火', wind: '🟢 风', water: '🔵 水', light: '🌟 光',
             };
-            const cost = displayPet.freeElementChangeUsed ? 200 : 0;
+            const cost = getElementReforgeCost(displayPet);
+            const isSeasonCredit = Boolean(displayPet.freeElementChangeUsed && cost === 0);
             return (
               <ModalPortal>
               <div className="gacha-overlay" onClick={() => setPendingElement(null)}>
@@ -389,7 +390,11 @@ export default function PetStatus({
                       {labels[pendingElement]}
                     </div>
                     <div style={{ fontSize: 13, color: cost ? '#b45309' : '#15803d', fontWeight: 700 }}>
-                      {cost ? `本次消耗 ${cost} 金币` : '本次使用免费修改机会'}
+                      {cost
+                        ? `本次消耗 ${cost} 金币`
+                        : isSeasonCredit
+                          ? '第二赛季补偿：本账号免费调整 1 次'
+                          : '本次使用这只智子的首次免费机会'}
                     </div>
                     <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 8 }}>确认后立即生效，请核对属性。</div>
                   </div>

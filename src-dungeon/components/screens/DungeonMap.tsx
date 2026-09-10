@@ -6,6 +6,9 @@ import { getRankName } from '../../utils/gameLogic';
 import type { DungeonDefinition, DungeonProgress } from '../../types/dungeon';
 import { CURRENT_DUNGEON_SEASON_NAME } from '../../data/season';
 import DungeonConfirmModal from '../shared/DungeonConfirmModal';
+import { ElementGuide } from './ElementGuide';
+
+const ELEMENT_GUIDE_STORAGE_KEY = 'csp_dungeon_element_guide_v2_seen';
 
 export default function DungeonMap() {
   const coins = usePetStore(s => s.coins);
@@ -20,6 +23,7 @@ export default function DungeonMap() {
   const trialInventory = useDungeonStore(s => s.trialInventory);
   const [buyConfirmOpen, setBuyConfirmOpen] = useState(false);
   const [notice, setNotice] = useState('');
+  const [showElementGuide, setShowElementGuide] = useState(() => localStorage.getItem(ELEMENT_GUIDE_STORAGE_KEY) !== '1');
 
   useEffect(() => {
     if (!notice) return;
@@ -113,6 +117,11 @@ export default function DungeonMap() {
         {trialInventory.equippedTitle === 'title-data-scout' && (
           <div style={{ display: 'inline-block', marginTop: '6px', padding: '3px 8px', border: '1px solid #2dd4bf', color: '#99f6e4', fontSize: '10px' }}>数据侦察员</div>
         )}
+        <div style={{ marginTop: '10px' }}>
+          <button className="pixel-btn" style={{ fontSize: '10px', padding: '6px 12px' }} onClick={() => setShowElementGuide(true)}>
+            ◉ 元素说明
+          </button>
+        </div>
       </div>
 
       {/* Dungeon grid */}
@@ -249,6 +258,12 @@ export default function DungeonMap() {
             setBuyConfirmOpen(false);
           }}
         />
+      )}
+      {showElementGuide && (
+        <ElementGuide onClose={() => {
+          localStorage.setItem(ELEMENT_GUIDE_STORAGE_KEY, '1');
+          setShowElementGuide(false);
+        }} />
       )}
     </div>
   );

@@ -128,10 +128,13 @@ export function buildCanonicalBank({
   const recoveryRaw = readJson(recoveryPath);
   const originalPracticePath = path.join(root, 'scripts/question-bank/data/original-topic-practice.json');
   const originalPracticeRaw = readJson(originalPracticePath);
+  const advancedGespPath = path.join(root, 'scripts/question-bank/data/gesp-advanced-choice.json');
+  const advancedGespRaw = readJson(advancedGespPath);
   const localSourcesRevision = Number.parseInt(
     createHash('sha256')
       .update(fs.readFileSync(recoveryPath))
       .update(fs.readFileSync(originalPracticePath))
+      .update(advancedGespRaw.sourceDigest)
       .digest('hex').slice(0, 6),
     16,
   );
@@ -139,6 +142,7 @@ export function buildCanonicalBank({
 
   const groups = [
     { priority: 120, origin: 'official_source_recovery', questions: recoveryRaw.questions },
+    { priority: 110, origin: 'reviewed_gesp_learning_h5', questions: advancedGespRaw.questions.map(normalizeLegacyQuestion) },
     { priority: 100, origin: 'reviewed_cloud', questions: Object.values(reviewedExport.questions).map(normalizeLegacyQuestion) },
     { priority: 80, origin: 'original_topic_practice', questions: originalPracticeRaw.questions.map(normalizeLegacyQuestion) },
     { priority: 20, origin: 'legacy_exam', questions: examRaw.questions.map(normalizeLegacyQuestion) },

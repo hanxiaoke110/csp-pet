@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 2,
+  "contentRevision": 50013743513,
+  "verificationRevision": 50013743513,
+  "channelRulesRevision": 5,
+  "generatedAt": "2026-09-09T04:29:02.497Z",
+  "canonicalCount": 1953,
+  "statusCounts": {
+    "auto_verified": 1856,
+    "auto_probable": 46,
+    "disputed": 35,
+    "broken": 16
+  },
+  "channelCounts": {
+    "daily": 1365,
+    "super": 5,
+    "exam": 226,
+    "dungeon": 790,
+    "topic": 958
+  },
+  "publishedBlockers": 0,
+  "publishedBlockerIds": [],
+  "droppedExamPapers": []
+}

@@ -92,6 +92,45 @@ describe('CSP source indexing', () => {
 });
 
 describe('release cutover gate', () => {
+  it('blocks a published question whose bundled local asset is missing', () => {
+    const summary = JSON.stringify({
+      publishedBlockers: 0,
+      channelCounts: { daily: 120, super: 5, dungeon: 120, topic: 120 },
+    });
+    const snapshot = JSON.stringify({
+      questions: [{
+        id: 'missing-image',
+        type: 'choice',
+        options: ['A', 'B', 'C', 'D'],
+        assets: ['/course-data/gesp-question-images/not-there.png'],
+        verificationStatus: 'auto_verified',
+      }],
+    });
+    const exam = JSON.stringify({ papers: Array.from({ length: 12 }, (_, index) => ({
+      id: `paper-${index}`,
+      questionIds: ['a', 'b', 'c', 'd', 'e'],
+    })) });
+    const hash = value => createHash('sha256').update(value).digest('hex');
+    const manifest = { files: {
+      'verification-summary.json': { sha256: hash(summary) },
+      'exam-manifests.json': { sha256: hash(exam) },
+      'daily-gesp.json': { sha256: hash(snapshot) },
+    } };
+
+    const result = evaluateReleaseGate({
+      manifest,
+      files: {
+        'verification-summary.json': summary,
+        'exam-manifests.json': exam,
+        'daily-gesp.json': snapshot,
+      },
+      assetRoot: '/definitely-not-a-real-public-directory',
+    });
+
+    expect(result.ready).toBe(false);
+    expect(result.failures).toContain('missingAsset=daily-gesp.json:missing-image:/course-data/gesp-question-images/not-there.png');
+  });
+
   it('blocks a bank with an empty super channel', () => {
     const summary = JSON.stringify({ publishedBlockers: 0, channelCounts: { daily: 120, super: 0, dungeon: 120, topic: 120 } });
     const exam = JSON.stringify({ papers: [] });

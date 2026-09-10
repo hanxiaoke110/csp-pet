@@ -1995,6 +1995,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 .buy-confirm-actions .mode-btn { flex: 1; }
 .buy-confirm-actions .mode-btn-back { background: #f1f5f9 !important; color: var(--text) !important; }
+.food-quantity-field { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.food-quantity-control { display: grid; grid-template-columns: 40px 88px 40px; gap: 8px; align-items: center; }
+.food-quantity-control button { width: 40px; height: 36px; border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; color: var(--text); font-size: 20px; cursor: pointer; }
+.food-quantity-control input { width: 88px; height: 36px; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px; text-align: center; font: inherit; font-weight: 700; color: var(--text); }
+.food-quantity-max { border: 0; background: transparent; color: var(--primary-dark); font-size: 12px; cursor: pointer; }
 
 /* ─── Bind Class Modal form fields ─── */
 .bind-modal-field label {

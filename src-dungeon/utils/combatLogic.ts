@@ -12,15 +12,24 @@ export interface CombatPet {
 }
 
 export const ELEMENT_ADVANTAGE: Record<PetElement, Partial<Record<PetElement, number>>> = {
-  fire:  { wind: 1.5, water: 0.7 },
-  wind:  { earth: 1.5, fire: 0.7 },
-  earth: { water: 1.5, wind: 0.7 },
-  water: { fire: 1.5, earth: 0.7 },
-  light: {},
+  fire:  { wind: 1.25, light: 0.85 },
+  wind:  { earth: 1.25, fire: 0.85 },
+  earth: { water: 1.25, wind: 0.85 },
+  water: { light: 1.25, earth: 0.85 },
+  light: { fire: 1.25, water: 0.85 },
 };
 
 export function getElementMultiplier(attacker: PetElement, defender: PetElement): number {
   return ELEMENT_ADVANTAGE[attacker]?.[defender] ?? 1.0;
+}
+
+export type ElementRelation = 'advantage' | 'disadvantage' | 'neutral';
+
+export function getElementRelation(attacker: PetElement, defender: PetElement): ElementRelation {
+  const multiplier = getElementMultiplier(attacker, defender);
+  if (multiplier > 1) return 'advantage';
+  if (multiplier < 1) return 'disadvantage';
+  return 'neutral';
 }
 
 /**

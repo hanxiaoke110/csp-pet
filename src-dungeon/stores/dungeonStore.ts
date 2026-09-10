@@ -85,7 +85,7 @@ interface DungeonState {
   weakPoints: Record<string, number>;     // knowledgePoint → errorCount
   mistakeNotebook: string[];              // question IDs that were answered wrong
   healing: { knowledgePoint: string; requiredCorrect: number; currentCorrect: number } | null;
-  view: 'title' | 'register' | 'map' | 'dungeon-preview' | 'battle' | 'boss' | 'reward' | 'profile' | 'leaderboard' | 'hall-of-fame';
+  view: 'title' | 'register' | 'map' | 'dungeon-preview' | 'battle' | 'boss' | 'reward' | 'exploration' | 'profile' | 'leaderboard' | 'hall-of-fame';
   loading: boolean;
   error: string | null;
 

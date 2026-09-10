@@ -17,12 +17,15 @@ import { DamageText, type DamageTextType } from '../entities/DamageText';
 import {
   calculateDamage,
   calculateShieldAmount,
+  getElementRelation,
   generateEnemyIntent,
   resolveEnemyIntent,
   tickBurnStacks,
 } from '../../utils/combatLogic';
 import { SKILLS } from '../../data/skills';
 import type { SkillDefinition } from '../../data/skills';
+import { TRIAL_EQUIPMENT } from '../../data/explorationItems';
+import { getTrialCombatProfile, type TrialCombatProfile } from '../../utils/trialEquipmentEffects';
 
 
 const MAX_ENERGY = 5;
@@ -59,11 +62,18 @@ export class BattleScene extends Phaser.Scene {
   private comboCounter!: ComboCounter;
   private intentBubble!: IntentBubble;
   private roundText!: Phaser.GameObjects.Text;
+  private equipmentStatusText?: Phaser.GameObjects.Text;
 
   private state!: BattleSnapshot;
   private isProcessing: boolean = false;
   private pendingSkillId: string | null = null;
   private sceneBuilt: boolean = false;
+  private equipmentProfile!: TrialCombatProfile;
+  private correctShieldTriggers = 0;
+  private attackBoostTriggers = 0;
+  private comboBoostTriggers = 0;
+  private firstHpReductionUsed = false;
+  private lowHpRecoveryUsed = false;
 
   constructor() {
     super({ key: 'BattleScene' });
@@ -74,6 +84,13 @@ export class BattleScene extends Phaser.Scene {
   init(data: { initData: BattleInitData; onEvent: BattleEventCallback }): void {
     this.initData = data.initData;
     this.onEvent = data.onEvent;
+    this.equipmentProfile = getTrialCombatProfile(data.initData.trialLoadout?.weaponId, data.initData.trialLoadout?.armorId);
+    this.correctShieldTriggers = 0;
+    this.attackBoostTriggers = 0;
+    this.comboBoostTriggers = 0;
+    this.firstHpReductionUsed = false;
+    this.lowHpRecoveryUsed = false;
+    const initialShield = Math.max(0, Math.floor(data.initData.playerPet.maxHp * this.equipmentProfile.initialShieldRatio));
 
     // 初始化战斗快照
     this.state = {
@@ -83,7 +100,7 @@ export class BattleScene extends Phaser.Scene {
       enemyMaxHp: data.initData.enemyPet.maxHp,
       energy: data.initData.initialEnergy - 1,
       maxEnergy: data.initData.maxEnergy,
-      shield: 0,
+      shield: initialShield,
       combo: 0,
       round: 0,
       currentTurn: 'player',
@@ -133,6 +150,8 @@ export class BattleScene extends Phaser.Scene {
       color: '#aaaaaa',
     }).setOrigin(0.5, 0);
 
+    this.createElementRelationLabel();
+
     // 敌方宠物（左侧）
     this.enemyPet = new PetSprite(this, 220, 180, this.initData.enemyPet);
 
@@ -147,6 +166,9 @@ export class BattleScene extends Phaser.Scene {
 
     // 我方血条
     this.playerHpBar = new HealthBar(this, width - 220, 285, 180, 18, this.initData.playerPet.maxHp, this.initData.playerPet.currentHp, 0x00ff41);
+
+    this.createEquipmentLabel();
+    if (this.state.shield > 0) this.showTraitText(`护甲生效：+${this.state.shield} 护盾`, '#7dd3fc');
 
     // 能量球
     this.createEnergyOrbs();
@@ -301,6 +323,8 @@ export class BattleScene extends Phaser.Scene {
 
     if (result.isCorrect) {
       this.state.combo++;
+      this.applyPlayerElementTrait();
+      this.applyCorrectEquipmentEffect();
       this.executePlayerSkill(skill, true);
     } else {
       this.state.combo = 0;
@@ -321,14 +345,18 @@ export class BattleScene extends Phaser.Scene {
 
   private executePlayerSkill(skill: SkillDefinition, isCorrect: boolean): void {
     const answerQuality = isCorrect ? 1.0 : 0.3;
+    const equipmentMultiplier = skill.effectType === 'shield' ? 1 : this.getEquipmentDamageMultiplier(isCorrect);
 
     switch (skill.effectType) {
       case 'shield': {
         const shieldAmount = calculateShieldAmount(this.state.playerMaxHp, isCorrect);
-        this.state.shield += shieldAmount;
-        this.showDamageText(this.playerPet.x, this.playerPet.y - 80, `+${shieldAmount} 护盾`, 'heal');
-        this.playerPet.playCelebrateAnimation();
-        this.finishPlayerTurn();
+        this.playSkillEffect(skill, () => {
+          this.state.shield += shieldAmount;
+          this.updateEquipmentStatus();
+          this.showDamageText(this.playerPet.x, this.playerPet.y - 80, `+${shieldAmount} 护盾`, 'heal');
+          this.playerPet.playCelebrateAnimation();
+          this.finishPlayerTurn();
+        });
         break;
       }
 
@@ -338,19 +366,21 @@ export class BattleScene extends Phaser.Scene {
           this.toCombatPet(this.initData.playerPet, this.state.playerHp),
           this.toCombatPet(this.initData.enemyPet, this.state.enemyHp),
           skill.multiplier,
-          answerQuality * defenseMultiplier,
+          answerQuality * defenseMultiplier * this.getFireDamageBoost(isCorrect) * equipmentMultiplier,
           this.state.combo
         ));
 
         this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {
-          this.applyDamageToEnemy(damage, isCorrect ? 'normal' : 'miss');
-          this.enemyPet.playHitAnimation();
+          this.playSkillEffect(skill, () => {
+            this.applyDamageToEnemy(damage, isCorrect ? 'normal' : 'miss');
+            this.enemyPet.playHitAnimation();
 
-          if (isCorrect) {
-            this.state.burnStacks.push({ damage: 3, turnsRemaining: 2, sourceSkillId: skill.id });
-          }
+            if (isCorrect) {
+              this.state.burnStacks.push({ damage: 3, turnsRemaining: 2, sourceSkillId: skill.id });
+            }
 
-          this.finishPlayerTurn();
+            this.finishPlayerTurn();
+          });
         });
         break;
       }
@@ -364,14 +394,16 @@ export class BattleScene extends Phaser.Scene {
           this.toCombatPet(this.initData.playerPet, this.state.playerHp),
           this.toCombatPet(this.initData.enemyPet, this.state.enemyHp),
           skill.multiplier,
-          answerQuality * critMultiplier * defenseMultiplier,
+          answerQuality * critMultiplier * defenseMultiplier * this.getFireDamageBoost(isCorrect) * equipmentMultiplier,
           this.state.combo
         ));
 
         this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {
-          this.applyDamageToEnemy(damage, isCorrect ? (isCrit ? 'crit' : 'normal') : 'miss');
-          this.enemyPet.playHitAnimation();
-          this.finishPlayerTurn();
+          this.playSkillEffect(skill, () => {
+            this.applyDamageToEnemy(damage, isCorrect ? (isCrit ? 'crit' : 'normal') : 'miss');
+            this.enemyPet.playHitAnimation();
+            this.finishPlayerTurn();
+          });
         });
         break;
       }
@@ -394,6 +426,213 @@ export class BattleScene extends Phaser.Scene {
     this.time.delayedCall(500, () => {
       this.startEnemyTurn();
     });
+  }
+
+  private createElementRelationLabel(): void {
+    const { width } = this.scale;
+    const playerElement = this.getElementInfo(this.initData.playerPet.element);
+    const enemyElement = this.getElementInfo(this.initData.enemyPet.element);
+    const relation = getElementRelation(this.initData.playerPet.element, this.initData.enemyPet.element);
+    const relationText = relation === 'advantage' ? '克制' : relation === 'disadvantage' ? '被克制' : '势均力敌';
+    const color = relation === 'advantage' ? '#6ee7b7' : relation === 'disadvantage' ? '#fca5a5' : '#cbd5e1';
+    this.add.text(width / 2, 94, `${playerElement.icon}${playerElement.name}  ${relationText}  ${enemyElement.icon}${enemyElement.name}`, {
+      fontSize: '13px',
+      color,
+      fontStyle: 'bold',
+      stroke: '#000000',
+      strokeThickness: 3,
+    }).setOrigin(0.5, 0).setDepth(10);
+  }
+
+  private createEquipmentLabel(): void {
+    if (!this.initData.trialLoadout?.weaponId && !this.initData.trialLoadout?.armorId && !this.initData.trialLoadout?.artifactId) return;
+    this.equipmentStatusText = this.add.text(this.scale.width / 2, 116, '', {
+      fontSize: '10px', color: '#f8d477', align: 'center', lineSpacing: 3, stroke: '#000000', strokeThickness: 3,
+    }).setOrigin(0.5, 0).setDepth(10);
+    this.updateEquipmentStatus();
+  }
+
+  private updateEquipmentStatus(): void {
+    if (!this.equipmentStatusText) return;
+    const weaponId = this.initData.trialLoadout?.weaponId;
+    const armorId = this.initData.trialLoadout?.armorId;
+    const artifactId = this.initData.trialLoadout?.artifactId;
+    const parts: string[] = [];
+    if (weaponId) {
+      const name = TRIAL_EQUIPMENT[weaponId]?.name || '武器';
+      if (this.equipmentProfile.comboThreeLimit > 0) parts.push(`${name}：三连追击 ${this.comboBoostTriggers}/${this.equipmentProfile.comboThreeLimit}`);
+      else if (this.equipmentProfile.correctShieldLimit > 0) parts.push(`${name}：答对触发 ${Math.max(this.correctShieldTriggers, this.attackBoostTriggers)}/${this.equipmentProfile.correctShieldLimit}`);
+      else parts.push(`${name}：本场生效`);
+    }
+    if (armorId) {
+      const name = TRIAL_EQUIPMENT[armorId]?.name || '护甲';
+      if (this.equipmentProfile.firstHpHitReduction > 0) parts.push(`${name}：首次减伤${this.firstHpReductionUsed ? '已触发' : '可用'}`);
+      else if (this.equipmentProfile.lowHpShieldRatio > 0) parts.push(`${name}：低生命恢复${this.lowHpRecoveryUsed ? '已触发' : '可用'}`);
+      else if (this.equipmentProfile.shieldedElementBoost > 0) parts.push(`${name}：护盾增伤${this.state.shield > 0 ? '生效中' : '已暂停'}`);
+      else parts.push(`${name}：开场护盾已生效`);
+    }
+    if (artifactId) parts.push(`${TRIAL_EQUIPMENT[artifactId]?.name || '法器'}：仅普通迷宫生效`);
+    this.equipmentStatusText.setText(parts.join('　|　'));
+  }
+
+  private applyCorrectEquipmentEffect(): void {
+    const profile = this.equipmentProfile;
+    if (profile.correctShieldRatio <= 0 || this.correctShieldTriggers >= profile.correctShieldLimit) return;
+    const amount = Math.max(1, Math.floor(this.state.playerMaxHp * profile.correctShieldRatio));
+    this.correctShieldTriggers++;
+    this.state.shield += amount;
+    this.updateEquipmentStatus();
+    this.showTraitText(`装备触发：+${amount} 护盾（${this.correctShieldTriggers}/${profile.correctShieldLimit}）`, '#67e8f9');
+  }
+
+  private getEquipmentDamageMultiplier(isCorrect: boolean): number {
+    if (!isCorrect) return 1;
+    const profile = this.equipmentProfile;
+    let multiplier = 1;
+    if (profile.nextAttackBoost > 0 && this.attackBoostTriggers < profile.correctShieldLimit) {
+      this.attackBoostTriggers++;
+      multiplier += profile.nextAttackBoost;
+      this.showTraitText(`武器增幅 +${Math.round(profile.nextAttackBoost * 100)}%（${this.attackBoostTriggers}/${profile.correctShieldLimit}）`, '#fcd34d');
+      this.updateEquipmentStatus();
+    }
+    if (profile.shieldedElementBoost > 0 && this.state.shield > 0 && ['water', 'earth'].includes(this.initData.playerPet.element)) {
+      multiplier += profile.shieldedElementBoost;
+      this.showTraitText('玄鳞铠：伤害 +8%', '#93c5fd');
+    }
+    if (profile.comboThreeBoost > 0 && this.state.combo > 0 && this.state.combo % 3 === 0 && this.comboBoostTriggers < profile.comboThreeLimit) {
+      this.comboBoostTriggers++;
+      multiplier += profile.comboThreeBoost;
+      this.showTraitText(`三连追击 +${Math.round(profile.comboThreeBoost * 100)}%（${this.comboBoostTriggers}/${profile.comboThreeLimit}）`, '#f0abfc');
+      this.updateEquipmentStatus();
+    }
+    return multiplier;
+  }
+
+  private getFireDamageBoost(isCorrect: boolean): number {
+    return isCorrect && this.initData.playerPet.element === 'fire' ? 1.08 : 1;
+  }
+
+  private applyPlayerElementTrait(): void {
+    const element = this.initData.playerPet.element;
+    if (element === 'earth') {
+      const amount = Math.max(1, Math.floor(this.state.playerMaxHp * 0.03));
+      this.state.shield += amount;
+      this.updateEquipmentStatus();
+      this.showTraitText(`地之守护 +${amount} 护盾`, '#d6a66a');
+      return;
+    }
+    if (element === 'fire') {
+      this.showTraitText('火之锋芒：伤害 +8%', '#fb7185');
+      return;
+    }
+    if (this.state.combo === 0 || this.state.combo % 3 !== 0) return;
+    if (element === 'wind') {
+      this.state.skillUsages.forEach(usage => {
+        usage.cooldownRemaining = Math.max(0, usage.cooldownRemaining - 1);
+      });
+      this.showTraitText('风之迅捷：冷却 -1', '#86efac');
+    } else if (element === 'water') {
+      this.state.energy = Math.min(this.state.maxEnergy, this.state.energy + 1);
+      this.updateEnergyDisplay();
+      this.showTraitText('水之回响：能量 +1', '#7dd3fc');
+    } else if (element === 'light') {
+      const amount = Math.max(1, Math.floor(this.state.playerMaxHp * 0.04));
+      this.healPlayer(amount);
+      this.showTraitText('光之复苏：恢复生命', '#fde68a');
+    }
+  }
+
+  private showTraitText(text: string, color: string): void {
+    const label = this.add.text(this.playerPet.x, this.playerPet.y - 112, text, {
+      fontSize: '13px',
+      color,
+      fontStyle: 'bold',
+      stroke: '#000000',
+      strokeThickness: 3,
+    }).setOrigin(0.5).setDepth(30);
+    this.tweens.add({ targets: label, y: label.y - 24, alpha: 0, duration: 850, onComplete: () => label.destroy() });
+  }
+
+  private playSkillEffect(skill: SkillDefinition, onImpact: () => void): void {
+    const reduceMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const duration = reduceMotion ? 80 : 280;
+    const graphics = this.add.graphics().setDepth(25);
+
+    if (skill.id === 'skill-2') {
+      graphics.fillStyle(0xff7a18, 1);
+      graphics.fillCircle(0, 0, 14);
+      graphics.lineStyle(4, 0xffd166, 0.9);
+      graphics.strokeCircle(0, 0, 18);
+      graphics.setPosition(this.playerPet.x - 40, this.playerPet.y - 10);
+      this.tweens.add({
+        targets: graphics,
+        x: this.enemyPet.x,
+        y: this.enemyPet.y,
+        scale: 1.35,
+        duration,
+        ease: 'Quad.easeIn',
+        onComplete: () => { graphics.destroy(); onImpact(); },
+      });
+      return;
+    }
+
+    if (skill.id === 'skill-3') {
+      graphics.lineStyle(8, 0x38bdf8, 0.9);
+      graphics.strokeCircle(0, 0, 72);
+      graphics.lineStyle(3, 0xffffff, 0.75);
+      graphics.strokeCircle(0, 0, 58);
+      graphics.setPosition(this.playerPet.x, this.playerPet.y);
+      this.tweens.add({
+        targets: graphics,
+        scale: 1.2,
+        alpha: 0.2,
+        duration,
+        onComplete: () => { graphics.destroy(); onImpact(); },
+      });
+      return;
+    }
+
+    if (skill.id === 'skill-4') {
+      graphics.lineStyle(7, 0xa855f7, 0.95);
+      graphics.strokeCircle(0, 0, 24);
+      graphics.lineStyle(4, 0xf0abfc, 0.8);
+      graphics.strokeCircle(0, 0, 48);
+      graphics.strokeCircle(0, 0, 76);
+      graphics.setPosition(this.enemyPet.x, this.enemyPet.y);
+      graphics.setScale(0.35);
+      this.tweens.add({
+        targets: graphics,
+        scale: 1.35,
+        angle: 120,
+        alpha: 0,
+        duration: reduceMotion ? 100 : 360,
+        ease: 'Cubic.easeOut',
+        onComplete: () => { graphics.destroy(); onImpact(); },
+      });
+      return;
+    }
+
+    graphics.lineStyle(8, 0x67e8f9, 0.95);
+    graphics.lineBetween(this.playerPet.x - 35, this.playerPet.y, this.enemyPet.x + 35, this.enemyPet.y);
+    graphics.lineStyle(2, 0xffffff, 1);
+    graphics.lineBetween(this.playerPet.x - 35, this.playerPet.y, this.enemyPet.x + 35, this.enemyPet.y);
+    this.tweens.add({
+      targets: graphics,
+      alpha: 0,
+      duration: reduceMotion ? 60 : 180,
+      onComplete: () => { graphics.destroy(); onImpact(); },
+    });
+  }
+
+  private getElementInfo(element: string): { icon: string; name: string } {
+    const map: Record<string, { icon: string; name: string }> = {
+      earth: { icon: '🟫', name: '地' },
+      fire: { icon: '🔴', name: '火' },
+      wind: { icon: '🟢', name: '风' },
+      water: { icon: '🔵', name: '水' },
+      light: { icon: '🌟', name: '光' },
+    };
+    return map[element] || { icon: '❓', name: '未知' };
   }
 
   private startEnemyTurn(): void {
@@ -430,12 +669,20 @@ export class BattleScene extends Phaser.Scene {
       );
 
       this.state.shield = remainingShield;
+      this.updateEquipmentStatus();
 
       if (blocked) {
         this.showDamageText(this.playerPet.x, this.playerPet.y - 80, 'BLOCK!', 'blocked');
         this.playerPet.playCelebrateAnimation();
       } else {
-        this.applyDamageToPlayer(damageTaken);
+        let finalDamage = damageTaken;
+        if (!this.firstHpReductionUsed && this.equipmentProfile.firstHpHitReduction > 0 && finalDamage > 0) {
+          finalDamage = Math.max(1, Math.floor(finalDamage * (1 - this.equipmentProfile.firstHpHitReduction)));
+          this.firstHpReductionUsed = true;
+          this.updateEquipmentStatus();
+          this.showTraitText(`护甲减伤 ${Math.round(this.equipmentProfile.firstHpHitReduction * 100)}%`, '#93c5fd');
+        }
+        this.applyDamageToPlayer(finalDamage);
         this.playerPet.playHitAnimation();
       }
 
@@ -467,6 +714,16 @@ export class BattleScene extends Phaser.Scene {
     this.state.playerHp = Math.max(0, this.state.playerHp - damage);
     this.playerHpBar.updateHp(this.state.playerHp);
     this.showDamageText(this.playerPet.x, this.playerPet.y - 80, `-${damage}`, 'normal');
+
+    if (!this.lowHpRecoveryUsed && this.state.playerHp > 0 && this.state.playerHp / this.state.playerMaxHp < 0.4 && this.equipmentProfile.lowHpShieldRatio > 0) {
+      this.lowHpRecoveryUsed = true;
+      const shield = Math.max(1, Math.floor(this.state.playerMaxHp * this.equipmentProfile.lowHpShieldRatio));
+      const heal = Math.max(1, Math.floor(this.state.playerMaxHp * this.equipmentProfile.lowHpHealRatio));
+      this.state.shield += shield;
+      this.healPlayer(heal);
+      this.updateEquipmentStatus();
+      this.showTraitText(`玄武圣铠：恢复生命并获得 ${shield} 护盾`, '#fde68a');
+    }
 
     // 屏幕震动
     this.cameras.main.shake(150, 0.01);

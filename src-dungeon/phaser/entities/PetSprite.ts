@@ -34,8 +34,13 @@ export class PetSprite extends Phaser.GameObjects.Container {
       }
     }
     this.sprite = scene.add.image(0, 0, textureExists ? config.textureKey : 'petFallback');
-    this.sprite.setDisplaySize(160, 160);
-    this.sprite.setOrigin(0.5, 0.5);
+    const source = this.sprite.texture.getSourceImage() as { width?: number; height?: number };
+    const sourceWidth = source.width || 160;
+    const sourceHeight = source.height || 160;
+    const maxWidth = config.portraitArt ? 180 : 160;
+    const maxHeight = config.portraitArt ? 180 : 160;
+    const scale = Math.min(maxWidth / sourceWidth, maxHeight / sourceHeight);
+    this.sprite.setDisplaySize(Math.round(sourceWidth * scale), Math.round(sourceHeight * scale));
     this.sprite.setOrigin(0.5, 0.5);
     this.add(this.sprite);
 

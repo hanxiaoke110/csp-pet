@@ -13,6 +13,19 @@ function localDateKey() {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+interface FoodPurchase {
+  id: string;
+  name: string;
+  price: number;
+  hunger: number;
+  icon: string;
+}
+
+function clampFoodQuantity(value: number, max: number): number {
+  if (!Number.isFinite(value)) return 1;
+  return Math.max(1, Math.min(Math.floor(value), Math.max(1, max)));
+}
+
 export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   coins: number; ownedPets: any[]; spendCoins: (a: number) => boolean; setTab: (t: 'status' | 'shop' | 'hatch' | 'guide' | 'settings') => void;
 }) {
@@ -20,7 +33,8 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
   const [buyConfirm, setBuyConfirm] = useState<{ speciesId: string; name: string; price: number; icon: string } | null>(null);
   const [pendingHatch, setPendingHatch] = useState<{ eggId: string; speciesId: string; petName: string; rarity: HatchRarity } | null>(null);
   const [buyNameInput, setBuyNameInput] = useState('');
-  const [foodConfirm, setFoodConfirm] = useState<any>(null);
+  const [foodConfirm, setFoodConfirm] = useState<FoodPurchase | null>(null);
+  const [foodQuantity, setFoodQuantity] = useState(1);
   const [shopToast, setShopToast] = useState<string | null>(null);
   const showShopToast = (msg: string) => { setShopToast(msg); setTimeout(() => setShopToast(null), 3000); };
   const [actionConfirm, setActionConfirm] = useState<{ type: 'rename' | 'gacha' | 'capsule' | 'core' | 'feeder'; icon: string; title: string; desc: string; price: number } | null>(null);
@@ -88,7 +102,10 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
               <div className="shop-card-name">{f.name}</div>
               <div style={{ fontSize: 11, color: '#94a3b8' }}>饱食 +{f.hunger}</div>
               <button className="shop-card-buy" disabled={coins < f.price}
-                onClick={() => setFoodConfirm({ id, name: f.name, price: f.price, hunger: f.hunger, icon: f.icon })}>
+                onClick={() => {
+                  setFoodQuantity(1);
+                  setFoodConfirm({ id, name: f.name, price: f.price, hunger: f.hunger, icon: f.icon });
+                }}>
                 🪙 {f.price}
               </button>
             </div>
@@ -327,24 +344,49 @@ export function ShopPanel({ coins, ownedPets, spendCoins, setTab }: {
             <div className="buy-confirm-body">
               <div style={{ fontSize: 48 }}>{foodConfirm.icon}</div>
               <div className="buy-confirm-name">{foodConfirm.name}</div>
-              <div className="buy-confirm-price">🪙 {foodConfirm.price} 金币</div>
-              <div style={{ fontSize: 13, color: '#22c55e' }}>回复饱食度 +{foodConfirm.hunger}</div>
+              <div style={{ fontSize: 13, color: '#22c55e' }}>每份回复饱食度 +{foodConfirm.hunger}</div>
+              <div className="food-quantity-field">
+                <span className="buy-confirm-label">购买数量</span>
+                <div className="food-quantity-control">
+                  <button type="button" aria-label="减少数量" title="减少数量" onClick={() => setFoodQuantity(quantity => Math.max(1, quantity - 1))}>−</button>
+                  <input
+                    type="number"
+                    min={1}
+                    max={Math.max(1, Math.min(99, Math.floor(coins / foodConfirm.price)))}
+                    inputMode="numeric"
+                    aria-label="食物购买数量"
+                    value={foodQuantity}
+                    onChange={(event) => setFoodQuantity(clampFoodQuantity(Number(event.target.value), Math.min(99, Math.floor(coins / foodConfirm.price))))}
+                  />
+                  <button type="button" aria-label="增加数量" title="增加数量" onClick={() => setFoodQuantity(quantity => clampFoodQuantity(quantity + 1, Math.min(99, Math.floor(coins / foodConfirm.price))))}>＋</button>
+                </div>
+                <button
+                  type="button"
+                  className="food-quantity-max"
+                  onClick={() => setFoodQuantity(Math.max(1, Math.min(99, Math.floor(coins / foodConfirm.price))))}
+                >
+                  最大可买 {Math.min(99, Math.floor(coins / foodConfirm.price))} 份
+                </button>
+              </div>
+              <div className="buy-confirm-price">合计：🪙 {foodConfirm.price * foodQuantity} 金币</div>
               <div className="buy-confirm-balance">当前余额：🪙 {coins} 金币</div>
             </div>
             <div className="buy-confirm-actions">
               <button className="mode-btn mode-btn-back" onClick={() => setFoodConfirm(null)}>取消</button>
-              <button className="mode-btn"
+              <button className="mode-btn" disabled={foodConfirm.price * foodQuantity > coins}
                 onClick={() => {
-                  if (spendCoins(foodConfirm.price)) {
-                    usePetStore.setState(s => ({ foods: { ...s.foods, [foodConfirm.id]: (s.foods[foodConfirm.id] || 0) + 1 } }));
+                  const quantity = clampFoodQuantity(foodQuantity, Math.min(99, Math.floor(coins / foodConfirm.price)));
+                  const totalPrice = foodConfirm.price * quantity;
+                  if (spendCoins(totalPrice)) {
+                    usePetStore.setState(s => ({ foods: { ...s.foods, [foodConfirm.id]: (s.foods[foodConfirm.id] || 0) + quantity } }));
                     usePetStore.getState().save();
-                    showShopToast(`成功购买「${foodConfirm.name}」！`);
+                    showShopToast(`成功购买「${foodConfirm.name}」×${quantity}！`);
                   } else {
                     showShopToast('金币不足，无法购买。');
                   }
                   setFoodConfirm(null);
                 }}>
-                确认购买 🪙 {foodConfirm.price}
+                确认购买 🪙 {foodConfirm.price * foodQuantity}
               </button>
             </div>
           </div>

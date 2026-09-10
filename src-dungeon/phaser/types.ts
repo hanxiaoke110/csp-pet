@@ -19,6 +19,7 @@ export interface PhaserPetConfig {
   isPlayer: boolean;
   previewUrl: string;
   textureKey: string;
+  portraitArt?: boolean;
 }
 
 export interface PhaserSkillCard {
@@ -38,6 +39,11 @@ export interface BattleInitData {
   dungeonColor: string;
   dungeonBgImage?: string;
   dungeonName: string;
+  trialLoadout?: {
+    weaponId?: string;
+    armorId?: string;
+    artifactId?: string;
+  };
 }
 
 export interface SkillSelectResult {

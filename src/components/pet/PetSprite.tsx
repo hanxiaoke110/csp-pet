@@ -19,7 +19,7 @@ interface SpriteMeta {
   animsOrder?: string[]; // 早期工坊生成器的错别字键
   durations?: Record<string, number>;
 }
-interface SpriteData { img: HTMLImageElement; meta: SpriteMeta; }
+interface SpriteData { img: HTMLImageElement; meta: SpriteMeta; sourceUrl?: string; }
 
 const ANIM_ORDER = ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhappy'];
 // Codex/Petdex 风格 9 行布局（与 ws-NK728B1914 等正确声明的素材一致）
@@ -105,19 +105,32 @@ function getPetId(modelPath: string): string {
 }
 
 // ─── Load bundled/common pet sprites ───
-async function loadSpriteSheet(jsonPath: string, pngPath: string): Promise<SpriteData> {
+async function loadImageWithFallback(paths: string[]): Promise<{ img: HTMLImageElement; sourceUrl: string }> {
+  let lastError: unknown;
+  for (const sourceUrl of paths) {
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const candidate = new Image();
+        candidate.onload = () => resolve(candidate);
+        candidate.onerror = () => reject(new Error(`Failed to load sprite: ${sourceUrl}`));
+        candidate.src = sourceUrl;
+      });
+      return { img, sourceUrl };
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('Failed to load sprite');
+}
+
+async function loadSpriteSheet(jsonPath: string, imagePaths: string[]): Promise<SpriteData> {
   const cacheKey = jsonPath;
   if (spriteCache.has(cacheKey)) return spriteCache.get(cacheKey)!;
-  const [metaResp, img] = await Promise.all([
+  const [metaResp, loadedImage] = await Promise.all([
     fetch(jsonPath).then(r => r.json()),
-    new Promise<HTMLImageElement>((resolve, reject) => {
-      const i = new Image();
-      i.onload = () => resolve(i);
-      i.onerror = () => reject(new Error(`Failed to load sprite: ${pngPath}`));
-      i.src = pngPath;
-    }),
+    loadImageWithFallback(imagePaths),
   ]);
-  const data: SpriteData = { img, meta: metaResp as SpriteMeta };
+  const data: SpriteData = { img: loadedImage.img, meta: metaResp as SpriteMeta, sourceUrl: loadedImage.sourceUrl };
   spriteCache.set(cacheKey, data);
   return data;
 }
@@ -175,7 +188,7 @@ export default function PetSprite({
   const smRef = useRef(createStateMachine());
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [currentAnim, setCurrentAnim] = useState<PetAnimState>('idle');
-  const [resolvedPngUrl, setResolvedPngUrl] = useState<string>('');
+  const [resolvedSpriteUrl, setResolvedSpriteUrl] = useState<string>('');
   const mountCountRef = useRef(0);
   const [, setMetaVersion] = useState(0);
   const frameWidth = spriteRef.current?.meta.frameWidth || 192;
@@ -223,7 +236,7 @@ export default function PetSprite({
           if (cancelled) return;
           spriteRef.current = data;
           setMetaVersion(v => v + 1);
-          setResolvedPngUrl(blobUrl);
+          setResolvedSpriteUrl(blobUrl);
           setStatus('ready');
           return;
         } catch {
@@ -239,7 +252,7 @@ export default function PetSprite({
               if (cancelled) return;
               spriteRef.current = data;
               setMetaVersion(v => v + 1);
-              setResolvedPngUrl(blobUrl);
+              setResolvedSpriteUrl(blobUrl);
               setStatus('ready');
               return;
             } catch { /* show the normal sprite error below */ }
@@ -249,14 +262,15 @@ export default function PetSprite({
 
       // Common pet or remote pet without cache
       const jsonUrl = modelPath!;
+      const webpUrl = modelPath!.replace('.json', '.webp');
       const pngUrl = modelPath!.replace('.json', '.png');
       if (isFirstMount) setStatus('loading');
-      setResolvedPngUrl(pngUrl);
 
-      loadSpriteSheet(jsonUrl, pngUrl).then(data => {
+      loadSpriteSheet(jsonUrl, [webpUrl, pngUrl]).then(data => {
         if (cancelled) return;
         spriteRef.current = data;
         setMetaVersion(v => v + 1);
+        setResolvedSpriteUrl(data.sourceUrl || pngUrl);
         setStatus('ready');
       }).catch(() => { if (!cancelled) setStatus('error'); });
     }
@@ -307,7 +321,7 @@ export default function PetSprite({
 
   const anim = currentAnim;
   const spr = spriteRef.current;
-  // meta 与真实 PNG 可能不一致：以图片真实几何为准做归一化（行数定布局）
+  // meta 与真实精灵图可能不一致：以图片真实几何为准做归一化（行数定布局）
   const sheet = spr ? normalizeSheet(spr.meta, spr.img) : null;
   const order = sheet?.order || ANIM_ORDER;
   // 解析动画：pet 自有布局优先；csp 名不在则查别名（Petdex running/waving 等）；都没有回退 idle
@@ -331,7 +345,7 @@ export default function PetSprite({
         <div ref={spriteDivRef} style={{
           width: stripCols * renderWidth,
           height: sz,
-          backgroundImage: resolvedPngUrl ? `url("${resolvedPngUrl}")` : 'none',
+          backgroundImage: resolvedSpriteUrl ? `url("${resolvedSpriteUrl}")` : 'none',
           backgroundSize: `${stripCols * renderWidth}px auto`,
           backgroundPositionY: `-${rowIdx * displayH}px`,
           backgroundRepeat: 'no-repeat',

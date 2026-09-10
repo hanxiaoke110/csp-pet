@@ -1,6 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import type { DungeonDefinition } from '../../types/dungeon';
+import { getExplorationProgress } from '../../stores/explorationStore';
+import { getDungeonExplorationConfigs } from '../../data/explorationStages';
+import { getExplorationTheme } from '../../data/explorationThemes';
 
 export default function DungeonEntrance() {
   const { dungeonId } = useParams<{ dungeonId: string }>();
@@ -46,6 +49,10 @@ export default function DungeonEntrance() {
 
   const nextStageIndex = dp?.completedStages || 0;
   const nextStage = nextStageIndex < dungeon.stages.length ? dungeon.stages[nextStageIndex] : null;
+  const explorationConfigs = getDungeonExplorationConfigs(dungeon.id).slice(0, dp?.completedStages || 0);
+  const featuredExploration = explorationConfigs.find(config => !getExplorationProgress(config.mapId)?.completed)
+    || explorationConfigs[explorationConfigs.length - 1];
+  const explorationTheme = getExplorationTheme(dungeon.id);
 
   const handleStartStage = (stageId: string) => {
     setView('battle');
@@ -185,6 +192,27 @@ export default function DungeonEntrance() {
             })}
           </div>
         </div>
+
+        {featuredExploration && (
+          <section className="exploration-entrance-card">
+            <div className="exploration-entrance-art" style={{ backgroundImage: `linear-gradient(90deg, transparent, rgba(5,20,20,.18)), url(${explorationTheme.surface})` }} />
+            <div className="exploration-entrance-content">
+              <span>迷雾探索 · 已开放 {explorationConfigs.length}/5</span>
+              <h3>{featuredExploration.title}</h3>
+              <p>{featuredExploration.description}</p>
+              <div className="exploration-stage-links">
+                {explorationConfigs.map((config, index) => {
+                  const saved = getExplorationProgress(config.mapId);
+                  const state = saved?.completed ? '已完成' : saved ? '探索中' : '未开始';
+                  return <button key={config.mapId} className={config.mapId === featuredExploration.mapId ? 'active' : ''} onClick={() => { setView('exploration'); navigate(`/explore/${config.dungeonId}/${config.stageId}`); }}>第{index + 1}关<small>{state}</small></button>;
+                })}
+              </div>
+            </div>
+            <button className="pixel-btn primary" onClick={() => { setView('exploration'); navigate(`/explore/${featuredExploration.dungeonId}/${featuredExploration.stageId}`); }}>
+              {getExplorationProgress(featuredExploration.mapId)?.completed ? '查看记录' : getExplorationProgress(featuredExploration.mapId) ? '继续探索' : '进入探索'}
+            </button>
+          </section>
+        )}
 
         {/* Boss */}
         <div className="pixel-card" style={{

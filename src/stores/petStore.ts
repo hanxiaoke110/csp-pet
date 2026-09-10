@@ -114,12 +114,27 @@ export const FOODS: Record<string, { name: string; price: number; hunger: number
 
 export const MAX_PET_LEVEL = 20;
 export const ELEMENT_REFORGE_COST = 200;
+export const SEASON_TWO_ELEMENT_REFORGE_KEY = 'csp_season_two_element_reforge_used';
 export const AUTO_FEEDER_COST = 1500;
 const EXP_SHOP_CAPSULE_COST = 400;
 const EXP_SHOP_CORE_COST = 1000;
 const EXP_SHOP_CAPSULE_EXP = 120;
 const EXP_SHOP_CORE_EXP = 360;
 const COMPANION_SLOT_RECEIPT_KEY = 'csp_companion_slot_receipt';
+
+export function hasSeasonTwoElementReforgeCredit(): boolean {
+  try {
+    return typeof localStorage !== 'undefined'
+      && localStorage.getItem(SEASON_TWO_ELEMENT_REFORGE_KEY) !== '1';
+  } catch {
+    return false;
+  }
+}
+
+export function getElementReforgeCost(pet: Pick<OwnedPet, 'freeElementChangeUsed'>): number {
+  if (!pet.freeElementChangeUsed || hasSeasonTwoElementReforgeCredit()) return 0;
+  return ELEMENT_REFORGE_COST;
+}
 
 function currentDay(): string {
   const date = new Date();
@@ -583,7 +598,8 @@ export const usePetStore = create<PetState>((set, get) => ({
     const pet = get().ownedPets.find(p => p.petId === petId);
     if (!pet) return { ok: false, cost: 0, message: '没有找到这只智子' };
     if (pet.element === element) return { ok: false, cost: 0, message: `已经是${elementLabel(element)}属性` };
-    const cost = pet.freeElementChangeUsed ? ELEMENT_REFORGE_COST : 0;
+    const usesSeasonCredit = Boolean(pet.freeElementChangeUsed && hasSeasonTwoElementReforgeCredit());
+    const cost = getElementReforgeCost(pet);
     if (get().coins < cost) return { ok: false, cost, message: '金币不足' };
     set(s => ({
       coins: s.coins - cost,
@@ -592,6 +608,9 @@ export const usePetStore = create<PetState>((set, get) => ({
         : p),
     }));
     get().save();
+    if (usesSeasonCredit) {
+      try { localStorage.setItem(SEASON_TWO_ELEMENT_REFORGE_KEY, '1'); } catch { /* app data remains valid */ }
+    }
     return { ok: true, cost };
   },
 

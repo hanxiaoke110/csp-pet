@@ -26,8 +26,11 @@ export function createBattleGame(
 ): BattlePhaserGame {
   const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.CANVAS, // 强制 Canvas: Tauri WebView 中 WebGL 易崩溃
-    width: 960,
-    height: 540,
+    // 维持 16:9 并提高基础画布像素，避免大窗口把 960px 画面直接拉糊。
+    // Canvas 约增加 1.6MB 像素内存，远低于加载额外动画资源的开销。
+    width: 1280,
+    height: 720,
+    antialias: true,
     parent: container,
     transparent: true,
     scale: {

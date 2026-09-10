@@ -19,7 +19,7 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRESHOLDS }) {
+export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRESHOLDS, assetRoot = null }) {
   const failures = [];
   const parsed = {};
   for (const [logicalName, entry] of Object.entries(manifest.files)) {
@@ -70,6 +70,13 @@ export function evaluateReleaseGate({ manifest, files, thresholds = DEFAULT_THRE
       if (question.options?.some(option => /\b\d+\s+um\s*=\s*sum\b/.test(String(option)))) {
         failures.push(`ocrCodeResidue=${logicalName}:${question.id}`);
       }
+      if (assetRoot) {
+        for (const asset of question.assets || []) {
+          if (!String(asset).startsWith('/course-data/')) continue;
+          const assetPath = path.join(assetRoot, String(asset).replace(/^\/+/, ''));
+          if (!fs.existsSync(assetPath)) failures.push(`missingAsset=${logicalName}:${question.id}:${asset}`);
+        }
+      }
       if (logicalName === 'super-cspj.json') {
         if (!['reading', 'fillBlank'].includes(question.type)
             || (!String(question.code || '').trim() && !(question.assets?.length > 0))
@@ -99,7 +106,7 @@ export function runReleaseGate() {
     logicalName,
     fs.readFileSync(path.join(directory, entry.path), 'utf8'),
   ]));
-  return evaluateReleaseGate({ manifest, files });
+  return evaluateReleaseGate({ manifest, files, assetRoot: path.join(root, 'public') });
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

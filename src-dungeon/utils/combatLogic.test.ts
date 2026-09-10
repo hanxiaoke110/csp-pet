@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateDamage, calculateTrialPlayerStats, getElementMultiplier, determineFirstAttacker, resolveEnemyIntent } from './combatLogic';
+import { calculateDamage, calculateTrialPlayerStats, getElementMultiplier, getElementRelation, determineFirstAttacker, resolveEnemyIntent } from './combatLogic';
 import { PetElement } from '../../src/types/pet';
 
 const makePet = (element: PetElement, attack: number, defense: number, speed: number) => ({
@@ -8,13 +8,22 @@ const makePet = (element: PetElement, attack: number, defense: number, speed: nu
 
 describe('元素克制', () => {
   it('火克风', () => {
-    expect(getElementMultiplier('fire', 'wind')).toBe(1.5);
+    expect(getElementMultiplier('fire', 'wind')).toBe(1.25);
   });
-  it('火被水克', () => {
-    expect(getElementMultiplier('fire', 'water')).toBe(0.7);
+  it('火被光克', () => {
+    expect(getElementMultiplier('fire', 'light')).toBe(0.85);
   });
-  it('光无克制', () => {
-    expect(getElementMultiplier('light', 'fire')).toBe(1.0);
+  it('五种元素形成完整克制链', () => {
+    expect(getElementMultiplier('wind', 'earth')).toBe(1.25);
+    expect(getElementMultiplier('earth', 'water')).toBe(1.25);
+    expect(getElementMultiplier('water', 'light')).toBe(1.25);
+    expect(getElementMultiplier('light', 'fire')).toBe(1.25);
+  });
+  it('非相邻元素保持中立', () => {
+    expect(getElementMultiplier('fire', 'water')).toBe(1.0);
+    expect(getElementRelation('fire', 'water')).toBe('neutral');
+    expect(getElementRelation('light', 'fire')).toBe('advantage');
+    expect(getElementRelation('fire', 'light')).toBe('disadvantage');
   });
 });
 
@@ -45,7 +54,7 @@ describe('伤害计算', () => {
   it('元素克制在扣防后生效', () => {
     const enemy = makePet('fire', 41, 27, 8);
     const player = makePet('wind', 37, 25, 10);
-    expect(resolveEnemyIntent({ type: 'attack', power: 41 }, enemy, player, 0).damageTaken).toBe(24);
+    expect(resolveEnemyIntent({ type: 'attack', power: 41 }, enemy, player, 0).damageTaken).toBe(20);
   });
 
   it('护盾可以完全或部分吸收伤害', () => {

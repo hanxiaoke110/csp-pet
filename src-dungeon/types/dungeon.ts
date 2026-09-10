@@ -72,6 +72,7 @@ export interface DungeonDefinition {
   bgImage?: string;              // 副本背景图路径（可选，缺省用 color 渐变）
   simulationBgImage?: string;    // 日常演算场背景（自由练习/周任务复用）
   bossImage?: string;            // Boss 角色图路径（用于副本入口展示）
+  bossBattleSprite?: string;     // 透明 Boss 战斗立绘（与入口场景图分离）
   color: string;                 // 主题色
   requiredDungeon: string | null; // 前置副本 id，null=无需前置
   unlockLevel: number;           // 所需玩家等级
@@ -313,6 +314,7 @@ export type View =
   | 'battle'
   | 'boss'
   | 'reward'
+  | 'exploration'
   | 'profile'
   | 'leaderboard'
   | 'hall-of-fame';

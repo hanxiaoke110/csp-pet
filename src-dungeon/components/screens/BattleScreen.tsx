@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
+import { useTrialEquipmentStore } from '../../stores/trialEquipmentStore';
 import { SKILLS, getSkillById, type SkillDefinition } from '../../data/skills';
 import { getTrustedQuestionImage, pickStagePlanQuestions, loadQuestionBank } from '../../utils/questionLoader';
 import { calculateStats, calculateTrialPlayerStats } from '../../utils/combatLogic';
@@ -20,6 +21,7 @@ import { PET_BASE_STATS, TIER_MULTIPLIERS } from '../../../src/types/pet';
 import { loadWebPet } from '../../utils/webPet';
 import { formatCppCode } from '../../utils/codeFormat';
 import { isWorkshopPet, loadWorkshopThumbUrl } from '../../utils/petPreview';
+import { getEquippedDefinitionId } from '../../utils/trialEquipmentEffects';
 import FableCard from '../shared/FableCard';
 import KnowledgePointHelp from '../../../src/components/shared/KnowledgePointHelp';
 import fables from '../../data/fables.json';
@@ -196,7 +198,7 @@ function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isB
 
     const enemy: PhaserPetConfig = {
       petId: `enemy-${cfg.speciesId}`,
-      displayName: cfg.displayName,
+      displayName: isBoss ? dungeon.bossName : cfg.displayName,
       speciesId: cfg.speciesId,
       element: cfg.element,
       level: cfg.level,
@@ -206,8 +208,9 @@ function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isB
       defense: stats.defense,
       speed: stats.speed,
       isPlayer: false,
-      previewUrl: `/pet-sprites/previews/${cfg.speciesId}.png`,
+      previewUrl: isBoss && dungeon.bossBattleSprite ? dungeon.bossBattleSprite : `/pet-sprites/previews/${cfg.speciesId}.png`,
       textureKey: 'enemyPet',
+      portraitArt: Boolean(isBoss && dungeon.bossBattleSprite),
     };
     return scaleBossForPlayer(enemy, playerPet, dungeon.id, isBoss);
   }
@@ -231,8 +234,9 @@ function makeEnemyPetConfig(dungeon: DungeonDefinition, stage: DungeonStage, isB
     defense: stats.defense,
     speed: stats.speed,
     isPlayer: false,
-    previewUrl: `/pet-sprites/previews/glitch-bot.png`,
+    previewUrl: isBoss && dungeon.bossBattleSprite ? dungeon.bossBattleSprite : `/pet-sprites/previews/glitch-bot.png`,
     textureKey: 'enemyPet',
+    portraitArt: Boolean(isBoss && dungeon.bossBattleSprite),
   };
   return scaleBossForPlayer(enemy, playerPet, dungeon.id, isBoss);
 }
@@ -358,6 +362,11 @@ export default function BattleScreen() {
 
       if (cancelled) return;
 
+      // 装备存档是独立模块；进入战斗前同步装载并把稳定的定义 ID 交给 Phaser。
+      // 这样切换装备后下一场立即生效，也不会把一次性的战斗状态写回背包。
+      useTrialEquipmentStore.getState().load();
+      const equipmentState = useTrialEquipmentStore.getState();
+
       const initData: BattleInitData = {
         dungeonId,
         stageId: stageId || 'boss',
@@ -369,6 +378,11 @@ export default function BattleScreen() {
         dungeonColor: dungeon?.color || '#1a1a2e',
         dungeonBgImage: dungeon?.bgImage,
         dungeonName: dungeon?.name || '潜龙秘境',
+        trialLoadout: {
+          weaponId: getEquippedDefinitionId(equipmentState.ownedItems, equipmentState.equippedWeaponId),
+          armorId: getEquippedDefinitionId(equipmentState.ownedItems, equipmentState.equippedArmorId),
+          artifactId: getEquippedDefinitionId(equipmentState.ownedItems, equipmentState.equippedArtifactId),
+        },
       };
 
       statsRef.current = {

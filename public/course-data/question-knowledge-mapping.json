@@ -1,7 +1,7 @@
 {
   "_note": "题目 → 知识点映射。每题 1 个 primary，客户端题后按钮据此显示'没懂？看XX知识卡'。secondary 后续补充。_method 和 _needsReview 为生成时标注，发布前可删除。",
   "version": 1,
-  "updated": "2026-09-05",
+  "updated": "2026-09-09",
   "mappings": {
     "csp-j-2019-c01": {
       "primary": "computer-networks",

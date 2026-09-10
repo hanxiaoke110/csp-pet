@@ -11,6 +11,7 @@ import { beginQuestionBankSession, refreshQuestionBankV2 } from '../../question-
 import { toLegacyQuestion } from '../../question-bank/adapters';
 import { getSuperChallengeItems, isCompleteSuperChallenge } from './superChallenge';
 import { isStandaloneChoiceQuestion } from './questionEligibility';
+import { gespLevelLabel, matchesGespLevel, type GespLevelFilter } from './questionFilters';
 import { buildMonthlyReviewQuestions } from './reviewQuestions';
 import { ArrowLeft, BookOpenCheck, Play, Target } from 'lucide-react';
 import {
@@ -151,17 +152,17 @@ export default function QuizPractice() {
   const [online, setOnline] = useState(navigator.onLine);
   const [superAnswers, setSuperAnswers] = useState<number[]>([]);
   const [kpResults, setKpResults] = useState<Map<string, { correct: number; total: number }>>(new Map());
-  const [levelFilter, setLevelFilter] = useState<number | 'all'>('all');
+  const [levelFilter, setLevelFilter] = useState<GespLevelFilter>('foundation');
   const [sourceFilter, setSourceFilter] = useState<string | 'all'>('all');
   const [groupFilter, setGroupFilter] = useState<'all' | 'J' | 'S'>('all');
   const [includeSGroup, setIncludeSGroup] = useState(false); // CSP-S opt-in: too hard for most students
   const [topicPickerOpen, setTopicPickerOpen] = useState(false);
   const [activeTopicName, setActiveTopicName] = useState('');
 
-  // 来源切换时让级别选择跟着适配：GESP 按等级（1-4 级），CSP 按组别（J/S）
+  // 默认只练 1-4 级；5-8 级必须由学生主动选择，避免高阶题进入普通任务。
   const handleSourceFilter = (key: string) => {
     setSourceFilter(key);
-    setLevelFilter('all');
+    setLevelFilter(key === 'csp_exam' ? 'all' : 'foundation');
     setGroupFilter('all');
   };
   const freeStreakRef = useRef(0); // 自由练习连续答对计数（学霸时刻成就）
@@ -324,13 +325,12 @@ export default function QuizPractice() {
       if (!includeSGroup) {
         pool = pool.filter(q => q.group !== 'S');
       }
-      if (levelFilter !== 'all') {
-        pool = pool.filter(q => q.level === levelFilter);
-      }
+      pool = pool.filter(q => matchesGespLevel(q, levelFilter));
       if (pool.length === 0) {
-        // Fallback to all exam questions if filter leaves nothing
+        // 数据异常时退回基础题池，不能把高阶题静默塞回普通任务。
         pool = bank.filter(q => (q.source === 'csp_exam' || q.source === 'gesp')
-          && isStandaloneChoiceQuestion(q));
+          && isStandaloneChoiceQuestion(q)
+          && matchesGespLevel(q, 'foundation'));
       }
       setQuestions(chooseFreshQuestions(pool, m === 'free' ? 15 : 5, m));
     }
@@ -627,13 +627,13 @@ export default function QuizPractice() {
                       {label}
                     </button>
                   ))
-                : (['all', 1, 2, 3, 4] as const).map(lv => (
+                : (['foundation', 1, 2, 3, 4, 5, 6, 7, 8, 'all'] as const).map(lv => (
                     <button
                       key={String(lv)}
                       className={`quiz-filter-btn ${levelFilter === lv ? 'active' : ''}`}
                       onClick={() => setLevelFilter(lv)}
                     >
-                      {lv === 'all' ? '全部' : `GESP ${lv}级`}
+                      {lv === 'foundation' ? '基础 1-4级' : lv === 'all' ? '全部 1-8级' : `${lv}级`}
                     </button>
                   ))}
             </div>
@@ -658,11 +658,12 @@ export default function QuizPractice() {
             if (sourceFilter !== 'all') pool = pool.filter(q => q.source === sourceFilter);
             if (sourceFilter === 'csp_exam' && groupFilter !== 'all') pool = pool.filter(q => q.group === groupFilter);
             if (!includeSGroup) pool = pool.filter(q => q.group !== 'S');
-            if (levelFilter !== 'all') pool = pool.filter(q => q.level === levelFilter);
+            pool = pool.filter(q => matchesGespLevel(q, levelFilter));
             const parts: string[] = [];
             if (sourceFilter !== 'all') parts.push(sourceFilter === 'gesp' ? 'GESP' : 'CSP 真题');
             if (sourceFilter === 'csp_exam' && groupFilter !== 'all') parts.push(groupFilter === 'J' ? '入门级' : '提高级');
-            if (levelFilter !== 'all') parts.push(`GESP ${levelFilter}级`);
+            const levelLabel = gespLevelLabel(levelFilter);
+            if (levelLabel && sourceFilter !== 'csp_exam') parts.push(levelLabel);
             const scope = parts.length > 0 ? parts.join(' · ') : '全部';
             return `当前练习范围：${scope}，共 ${pool.length} 道题`;
           })()}
