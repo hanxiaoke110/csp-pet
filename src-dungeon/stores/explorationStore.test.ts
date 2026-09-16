@@ -56,6 +56,29 @@ describe('迷雾探索存档与结算', () => {
     expect(useExplorationStore.getState().current).toEqual(saved);
   });
 
+  it('关闭脚下事件后重开不会反复弹出，离开格子后允许再次触发', () => {
+    const map = generateFirstExplorationMap();
+    const event = map.events.find(item => item.type === 'clue')!;
+    const exitCell = map.tiles.flatMap((row, y) => row.map((value, x) => ({ value, x, y })))
+      .find(cell => cell.value === 0 && (cell.x !== event.position.x || cell.y !== event.position.y));
+    expect(exitCell).toBeTruthy();
+
+    useExplorationStore.getState().reset(map, ['q1', 'q2', 'q3']);
+    useExplorationStore.getState().move(map, event.position);
+    useExplorationStore.getState().dismissEvent(event.id);
+    expect(useExplorationStore.getState().current?.dismissedEventId).toBe(event.id);
+
+    useExplorationStore.setState({ current: null });
+    useExplorationStore.getState().load(map, ['other']);
+    expect(useExplorationStore.getState().current?.dismissedEventId).toBe(event.id);
+    expect(useExplorationStore.getState().current?.resolvedEventIds).not.toContain(event.id);
+
+    useExplorationStore.getState().move(map, { x: exitCell!.x, y: exitCell!.y });
+    expect(useExplorationStore.getState().current?.dismissedEventId).toBeUndefined();
+    useExplorationStore.getState().move(map, event.position);
+    expect(useExplorationStore.getState().current?.resolvedEventIds).not.toContain(event.id);
+  });
+
   it('净化减益和消耗玉符都只能成功一次', () => {
     const map = generateFirstExplorationMap();
     useExplorationStore.getState().reset(map, ['q1', 'q2', 'q3']);
@@ -130,5 +153,31 @@ describe('迷雾探索存档与结算', () => {
       equippedArmorId: equipped.equippedArmorId,
       equippedArtifactId: equipped.equippedArtifactId,
     });
+  });
+
+  it('旧背包中的坏数据会被清理，之后仍能正常领取事件装备', () => {
+    values.set('csp_trial_equipment_v1', JSON.stringify({
+      ownedItems: [
+        null,
+        { id: 'missing-definition', definitionId: 'removed-item', acquiredAt: 1, quantity: 1 },
+        { id: 'old-hammer', definitionId: 'xuanwu-hammer-common', acquiredAt: 'bad', quantity: 0 },
+      ],
+      equippedWeaponId: 'missing-definition',
+      equippedArmorId: 'old-hammer',
+      equippedArtifactId: 42,
+      soulFragments: -8,
+    }));
+
+    useTrialEquipmentStore.getState().load();
+    expect(useTrialEquipmentStore.getState()).toMatchObject({
+      ownedItems: [{ id: 'old-hammer', definitionId: 'xuanwu-hammer-common', quantity: 1 }],
+      equippedWeaponId: null,
+      equippedArmorId: null,
+      equippedArtifactId: null,
+      soulFragments: 0,
+    });
+
+    expect(() => useTrialEquipmentStore.getState().grantItem('xuanwu-armor-common')).not.toThrow();
+    expect(useTrialEquipmentStore.getState().ownedItems.map(item => item.definitionId)).toContain('xuanwu-armor-common');
   });
 });

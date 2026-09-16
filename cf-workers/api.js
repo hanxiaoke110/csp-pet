@@ -13,6 +13,16 @@ const QUESTION_BANK_V2_FILES = new Set([
   'exam-manifests.json', 'dungeon-mixed.json', 'verification-summary.json',
 ]);
 const QUESTION_BANK_PERMISSION = 'question_bank_review';
+const COLLECTOR_VOTE_META_KEY = 'collector_vote_config';
+const COLLECTOR_VOTE_COUNT_META_KEY = 'collector_vote_ballot_count';
+const COLLECTOR_VOTE_FINAL_META_KEY = 'collector_vote_final_results';
+const COLLECTOR_VOTE_MAX_CHOICES = 5;
+const DEFAULT_COLLECTOR_VOTE_CONFIG = {
+  status: 'closed',
+  title: '谁能闪耀成卡？智子典藏人气大选！',
+  startsAt: '',
+  endsAt: '',
+};
 const LEADERBOARD_RULES_META_KEY = 'dungeon_leaderboard_rules';
 const LEADERBOARD_RULE_KEYS = ['power', 'streak', 'progress', 'warrior', 'wins', 'ss_count'];
 const DEFAULT_LEADERBOARD_RULES = {
@@ -274,8 +284,8 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-// v9: 智子试炼场新赛季使用独立统计/进度/战斗/徽章表，旧赛季只读归档。
-const SCHEMA_VERSION = 9;
+// v11: 新增免登录智子典藏卡投票、唯一选票、常量时间计数和每日统计快照。
+const SCHEMA_VERSION = 11;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
@@ -306,6 +316,8 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_overrides (question_id TEXT PRIMARY KEY, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', updated_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS question_bank_history (id INTEGER PRIMARY KEY AUTOINCREMENT, question_id TEXT NOT NULL, patch_json TEXT NOT NULL DEFAULT '{}', review_status TEXT NOT NULL DEFAULT 'pending', review_note TEXT NOT NULL DEFAULT '', updated_by TEXT NOT NULL DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS announcements (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, scope TEXT DEFAULT 'global', teacher_id TEXT DEFAULT '', teacher_name TEXT DEFAULT '', pinned INTEGER DEFAULT 0, status TEXT DEFAULT 'published', published_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS collector_ballots (id INTEGER PRIMARY KEY AUTOINCREMENT, device_hash TEXT NOT NULL UNIQUE, choices_json TEXT NOT NULL, choice_count INTEGER NOT NULL, receipt_code TEXT NOT NULL UNIQUE, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
+  try { await db.exec(`CREATE TABLE IF NOT EXISTS collector_vote_snapshots (snapshot_date TEXT PRIMARY KEY, ballot_count INTEGER NOT NULL, results_json TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))`); } catch {}
   try { await db.exec(`ALTER TABLE feedback ADD COLUMN submitter TEXT DEFAULT 'teacher'`); } catch {}
   // Migrations for existing tables
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN phone_enc TEXT DEFAULT ''`); } catch {}
@@ -351,6 +363,9 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, count INTEGER DEFAULT 0, reset_at TEXT)`); } catch {}
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_question_bank_history_question ON question_bank_history(question_id, created_at DESC)`); } catch {}
   try { await db.exec(`INSERT OR IGNORE INTO meta(key,value) VALUES('question_bank_revision','0')`); } catch {}
+  try { await db.exec(`INSERT OR IGNORE INTO meta(key,value) VALUES('${COLLECTOR_VOTE_META_KEY}','${JSON.stringify(DEFAULT_COLLECTOR_VOTE_CONFIG)}')`); } catch {}
+  try { await db.exec(`INSERT OR IGNORE INTO meta(key,value) VALUES('${COLLECTOR_VOTE_COUNT_META_KEY}', CAST((SELECT COUNT(*) FROM collector_ballots) AS TEXT))`); } catch {}
+  try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_collector_ballots_created ON collector_ballots(created_at)`); } catch {}
   // Record schema version so future cold starts skip these ~25 statements
   try { await db.exec(`INSERT OR REPLACE INTO meta(key,value) VALUES('schema_version','${SCHEMA_VERSION}')`); } catch {}
   _schemaEnsured = true;
@@ -538,6 +553,112 @@ async function getLeaderboardRulesConfig(db) {
   }
 }
 
+async function getCollectorVoteConfig(db) {
+  try {
+    const row = await db.prepare('SELECT value FROM meta WHERE key=?').bind(COLLECTOR_VOTE_META_KEY).first();
+    const parsed = row?.value ? JSON.parse(row.value) : {};
+    const config = { ...DEFAULT_COLLECTOR_VOTE_CONFIG, ...parsed };
+    const now = Date.now();
+    if (config.startsAt && Date.parse(config.startsAt) > now) config.status = 'scheduled';
+    if (config.endsAt && Date.parse(config.endsAt) <= now) config.status = 'closed';
+    return config;
+  } catch {
+    return DEFAULT_COLLECTOR_VOTE_CONFIG;
+  }
+}
+
+async function getPublishedCollectorResults(db) {
+  try {
+    const final = await db.prepare('SELECT value FROM meta WHERE key=?').bind(COLLECTOR_VOTE_FINAL_META_KEY).first();
+    if (final?.value) return JSON.parse(final.value).results || [];
+    const snapshot = await db.prepare('SELECT results_json FROM collector_vote_snapshots ORDER BY snapshot_date DESC LIMIT 1').first();
+    return snapshot?.results_json ? JSON.parse(snapshot.results_json) : [];
+  } catch {
+    return [];
+  }
+}
+
+function isCollectorDeviceHash(value) {
+  return /^vote_[A-Za-z0-9_-]{20,80}$/.test(String(value || ''));
+}
+
+async function collectorNetworkKey(request, env) {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const ua = (request.headers.get('User-Agent') || '').slice(0, 180);
+  const salt = env.SERVER_SECRET || 'collector-vote-rate-limit';
+  const bytes = new TextEncoder().encode(`${salt}|${ip}|${ua}`);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest).slice(0, 12), byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+async function verifyCollectorTurnstile(token, request, env) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (!token) return false;
+  try {
+    const body = new FormData();
+    body.set('secret', env.TURNSTILE_SECRET);
+    body.set('response', token);
+    const ip = request.headers.get('CF-Connecting-IP');
+    if (ip) body.set('remoteip', ip);
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body });
+    const result = await response.json();
+    return Boolean(result.success);
+  } catch {
+    return false;
+  }
+}
+
+async function getCollectorResults(db) {
+  const ballots = await db.prepare('SELECT COUNT(*) AS count FROM collector_ballots').first();
+  const rows = await db.prepare(`
+    SELECT CAST(j.value AS TEXT) AS pet_id, p.name AS name, COUNT(*) AS votes
+    FROM collector_ballots b, json_each(b.choices_json) j
+    LEFT JOIN workshop_pets p ON p.id = CAST(j.value AS TEXT)
+    GROUP BY CAST(j.value AS TEXT), p.name
+    ORDER BY votes DESC, p.name ASC
+  `).all();
+  let previousVotes = null;
+  let previousRank = 0;
+  const results = (rows.results || []).map((row, index) => {
+    const votes = Number(row.votes) || 0;
+    const rank = index > 0 && votes === previousVotes ? previousRank : index + 1;
+    previousVotes = votes;
+    previousRank = rank;
+    return {
+      rank,
+      petId: row.pet_id,
+      name: row.name || '已下架智子',
+      votes,
+    };
+  });
+  return {
+    ballotCount: Number(ballots?.count) || 0,
+    results,
+  };
+}
+
+async function saveCollectorSnapshot(db, backupStore) {
+  const snapshotDate = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+  const summary = await getCollectorResults(db);
+  await db.prepare(`
+    INSERT INTO collector_vote_snapshots (snapshot_date, ballot_count, results_json, created_at)
+    VALUES (?, ?, ?, datetime('now'))
+    ON CONFLICT(snapshot_date) DO UPDATE SET
+      ballot_count=excluded.ballot_count,
+      results_json=excluded.results_json,
+      created_at=datetime('now')
+  `).bind(snapshotDate, summary.ballotCount, JSON.stringify(summary.results)).run();
+  if (backupStore?.put) {
+    const backupKey = `collector-vote-snapshots/${snapshotDate}.json`;
+    await backupStore.put(backupKey, JSON.stringify({
+      snapshotDate,
+      ballotCount: summary.ballotCount,
+      results: summary.results,
+      sealedAt: new Date().toISOString(),
+    }), { metadata: { contentType: 'application/json' } });
+  }
+}
+
 // ═══════════════════════════════════════
 export default {
   async fetch(request, env, ctx) {
@@ -569,6 +690,170 @@ export default {
       } catch (e) {
         return new Response(JSON.stringify({ ok: false, db: false, error: e.message }), { status: 500, headers: cors });
       }
+    }
+
+    // ── 智子典藏卡人气投票（公开、免登录）──
+    if (path === '/api/collector-vote/config' && request.method === 'GET') {
+      const config = await getCollectorVoteConfig(db);
+      const count = await db.prepare('SELECT value FROM meta WHERE key=?').bind(COLLECTOR_VOTE_COUNT_META_KEY).first();
+      const payload = {
+        ...config,
+        maxChoices: COLLECTOR_VOTE_MAX_CHOICES,
+        ballotCount: Number(count?.value) || 0,
+        turnstileSiteKey: env.TURNSTILE_SITE_KEY || '',
+      };
+      if (config.status === 'closed') {
+        payload.topTen = (await getPublishedCollectorResults(db)).slice(0, 10);
+      }
+      return new Response(JSON.stringify(payload), { headers: { ...cors, 'Cache-Control': 'no-store' } });
+    }
+
+    if (path === '/api/collector-vote/status' && request.method === 'GET') {
+      const deviceHash = url.searchParams.get('device_hash') || '';
+      if (!isCollectorDeviceHash(deviceHash)) {
+        return new Response(JSON.stringify({ error: '设备标识无效' }), { status: 400, headers: cors });
+      }
+      const ballot = await db.prepare('SELECT choices_json, receipt_code, created_at FROM collector_ballots WHERE device_hash=?').bind(deviceHash).first();
+      return new Response(JSON.stringify(ballot ? {
+        voted: true,
+        choices: JSON.parse(ballot.choices_json),
+        receiptCode: ballot.receipt_code,
+        submittedAt: ballot.created_at,
+      } : { voted: false }), { headers: { ...cors, 'Cache-Control': 'no-store' } });
+    }
+
+    if (path === '/api/collector-vote/ballots' && request.method === 'POST') {
+      const body = await request.json();
+      const deviceHash = String(body.device_hash || '').trim();
+      const choices = Array.isArray(body.choices)
+        ? [...new Set(body.choices.map(value => String(value || '').trim()).filter(Boolean))]
+        : [];
+      if (!isCollectorDeviceHash(deviceHash)) {
+        return new Response(JSON.stringify({ error: '设备标识无效，请刷新页面后重试' }), { status: 400, headers: cors });
+      }
+      if (choices.length < 1 || choices.length > COLLECTOR_VOTE_MAX_CHOICES) {
+        return new Response(JSON.stringify({ error: `请选择 1 至 ${COLLECTOR_VOTE_MAX_CHOICES} 只智子` }), { status: 400, headers: cors });
+      }
+      if (choices.some(id => !/^ws-[A-Z0-9]{6,20}$/.test(id))) {
+        return new Response(JSON.stringify({ error: '选票中包含无效智子' }), { status: 400, headers: cors });
+      }
+
+      const existing = await db.prepare('SELECT choices_json, receipt_code, created_at FROM collector_ballots WHERE device_hash=?').bind(deviceHash).first();
+      if (existing) {
+        return new Response(JSON.stringify({
+          error: '这台设备已经投过票啦',
+          voted: true,
+          choices: JSON.parse(existing.choices_json),
+          receiptCode: existing.receipt_code,
+          submittedAt: existing.created_at,
+        }), { status: 409, headers: cors });
+      }
+
+      const config = await getCollectorVoteConfig(db);
+      if (config.status !== 'open') {
+        return new Response(JSON.stringify({ error: config.status === 'scheduled' ? '投票还没有开始' : '本轮投票已经结束' }), { status: 403, headers: cors });
+      }
+      if (!await verifyCollectorTurnstile(body.turnstile_token, request, env)) {
+        return new Response(JSON.stringify({ error: '安全验证没有通过，请刷新后重试' }), { status: 403, headers: cors });
+      }
+
+      const networkKey = await collectorNetworkKey(request, env);
+      if (!await checkRateLimit(db, `collector-vote:${networkKey}`, 30, 60)) {
+        return new Response(JSON.stringify({ error: '当前网络投票太集中，请稍等一分钟再试' }), { status: 429, headers: cors });
+      }
+
+      const placeholders = choices.map(() => '?').join(',');
+      const activePets = await db.prepare(`SELECT id FROM workshop_pets WHERE status='active' AND id IN (${placeholders})`).bind(...choices).all();
+      const validIds = new Set((activePets.results || []).map(row => row.id));
+      if (choices.some(id => !validIds.has(id))) {
+        return new Response(JSON.stringify({ error: '有智子刚刚离开了候选名单，请刷新页面后重新选择' }), { status: 400, headers: cors });
+      }
+
+      let receiptCode = '';
+      let inserted = false;
+      for (let attempt = 0; attempt < 3 && !inserted; attempt++) {
+        receiptCode = `STAR-${randomChars(4)}-${randomChars(4)}`;
+        const result = await db.prepare(`
+          INSERT OR IGNORE INTO collector_ballots (device_hash, choices_json, choice_count, receipt_code)
+          VALUES (?, ?, ?, ?)
+        `).bind(deviceHash, JSON.stringify(choices), choices.length, receiptCode).run();
+        inserted = Boolean(result.meta?.changes);
+      }
+      if (!inserted) {
+        const duplicate = await db.prepare('SELECT choices_json, receipt_code, created_at FROM collector_ballots WHERE device_hash=?').bind(deviceHash).first();
+        if (duplicate) {
+          return new Response(JSON.stringify({
+            error: '这台设备已经投过票啦', voted: true,
+            choices: JSON.parse(duplicate.choices_json),
+            receiptCode: duplicate.receipt_code,
+            submittedAt: duplicate.created_at,
+          }), { status: 409, headers: cors });
+        }
+        throw new Error('collector ballot insert failed');
+      }
+      // 展示用参与人数采用常量时间计数器；最终结果仍从选票原始表重算并封存。
+      await db.prepare(`UPDATE meta SET value=CAST(CAST(value AS INTEGER) + 1 AS TEXT) WHERE key=?`).bind(COLLECTOR_VOTE_COUNT_META_KEY).run();
+
+      return new Response(JSON.stringify({
+        success: true,
+        voted: true,
+        choices,
+        receiptCode,
+      }), { status: 201, headers: cors });
+    }
+
+    // 管理端始终可查看完整结果、配置活动状态和导出匿名选票。
+    if (path === '/admin/collector-vote/results' && request.method === 'GET') {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const [config, summary, snapshots] = await Promise.all([
+        getCollectorVoteConfig(db),
+        getCollectorResults(db),
+        db.prepare('SELECT snapshot_date, ballot_count, results_json, created_at FROM collector_vote_snapshots ORDER BY snapshot_date DESC LIMIT 31').all(),
+      ]);
+      return new Response(JSON.stringify({ ...summary, config, snapshots: snapshots.results || [] }), { headers: cors });
+    }
+
+    if (path === '/admin/collector-vote/config' && request.method === 'PUT') {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const body = await request.json();
+      const previous = await getCollectorVoteConfig(db);
+      const status = ['open', 'closed'].includes(body.status) ? body.status : previous.status;
+      const config = {
+        status,
+        title: String(body.title || previous.title).trim().slice(0, 80),
+        startsAt: body.startsAt === undefined ? previous.startsAt : String(body.startsAt || ''),
+        endsAt: body.endsAt === undefined ? previous.endsAt : String(body.endsAt || ''),
+      };
+      if (status === 'closed') {
+        const summary = await getCollectorResults(db);
+        await db.prepare('INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)').bind(COLLECTOR_VOTE_FINAL_META_KEY, JSON.stringify({
+          results: summary.results,
+          ballotCount: summary.ballotCount,
+          finalizedAt: new Date().toISOString(),
+        })).run();
+      } else {
+        await db.prepare('DELETE FROM meta WHERE key=?').bind(COLLECTOR_VOTE_FINAL_META_KEY).run();
+      }
+      await db.prepare('INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)').bind(COLLECTOR_VOTE_META_KEY, JSON.stringify(config)).run();
+      return new Response(JSON.stringify({ success: true, config }), { headers: cors });
+    }
+
+    if (path === '/admin/collector-vote/export' && request.method === 'GET') {
+      if (!checkAdmin(request, env)) return new Response(JSON.stringify({ error: '未授权' }), { status: 401, headers: cors });
+      const ballots = await db.prepare('SELECT id, choices_json, receipt_code, created_at FROM collector_ballots ORDER BY id ASC').all();
+      const escapeCsv = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+      const lines = ['id,choices,receipt_code,created_at'];
+      for (const row of ballots.results || []) {
+        lines.push([row.id, row.choices_json, row.receipt_code, row.created_at].map(escapeCsv).join(','));
+      }
+      return new Response('\uFEFF' + lines.join('\n'), {
+        headers: {
+          ...cors,
+          'Content-Type': 'text/csv; charset=utf-8',
+          'Content-Disposition': 'attachment; filename="collector-vote-ballots.csv"',
+          'Cache-Control': 'no-store',
+        },
+      });
     }
 
     // Public merged bank used by the desktop hot-update client.
@@ -2468,8 +2753,11 @@ export default {
     }
   },
 
-  // Cron trigger — keeps Worker warm, no-op
+  // Cron trigger — keeps Worker warm and seals one anonymous vote snapshot per Beijing day.
   async scheduled(event, env, ctx) {
-    try { await env.DB.prepare('SELECT 1').first(); } catch {}
+    try {
+      await ensureSchema(env.DB);
+      await saveCollectorSnapshot(env.DB, env.SPRITES);
+    } catch {}
   },
 };

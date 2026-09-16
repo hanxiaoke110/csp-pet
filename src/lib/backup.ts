@@ -25,6 +25,10 @@ const EXCLUDED_LS_KEYS = new Set([
   'csp_imported_lessons',
   'csp_data_version',
   'csp_last_automatic_backup_date',
+  'csp_collector_card_catalog_cache_v1',
+  'csp_collector_card_cache_v1',
+  'csp_wardrobe_catalog_cache_v1',
+  'csp_wardrobe_asset_cache_v1',
   'dungeon_reviewed_exam_bank_v1',
   'dungeon_reviewed_exam_bank_version',
   'dungeon_dungeons_v1',
@@ -53,6 +57,8 @@ const SQLITE_BACKUP_KEYS = new Set([
   'hatch_eggs',
   'quiz_state',
   'problem_status',
+  'collector_cards',
+  'profile_data',
 ]);
 
 /** 解析并校验备份文件；不通过时给出孩子能看懂的拒绝原因 */

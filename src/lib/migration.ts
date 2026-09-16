@@ -13,6 +13,7 @@ const CORE_KEYS: Record<string, string> = {
   hatch_eggs: 'csp_hatch_eggs',
   quiz_state: 'csp_quiz_state',
   problem_status: 'csp_problem_status',
+  collector_cards: 'csp_collector_cards_v1',
 };
 
 /**

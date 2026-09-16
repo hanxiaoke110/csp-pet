@@ -37,7 +37,8 @@
       "identifier": "http:allow-fetch",
       "allow": [
         { "url": "https://gitee.com/**" },
-        { "url": "https://raw.giteeusercontent.com/**" }
+        { "url": "https://raw.giteeusercontent.com/**" },
+        { "url": "https://cards.cspstudy.top/**" }
       ]
     }
   ]

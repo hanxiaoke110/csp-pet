@@ -232,6 +232,7 @@ export default function ExplorationScreen() {
   const load = useExplorationStore(state => state.load);
   const move = useExplorationStore(state => state.move);
   const resolveEvent = useExplorationStore(state => state.resolveEvent);
+  const dismissEvent = useExplorationStore(state => state.dismissEvent);
   const previewEvent = useExplorationStore(state => state.previewEvent);
   const chooseRoute = useExplorationStore(state => state.chooseRoute);
   const clearDebuff = useExplorationStore(state => state.clearDebuff);
@@ -311,7 +312,7 @@ export default function ExplorationScreen() {
   useEffect(() => {
     if (!current || current.mapId !== map.id || current.completed || activeEvent) return;
     const event = eventAt(current.position);
-    if (event && !current.resolvedEventIds.includes(event.id)) setActiveEvent(event);
+    if (event && !current.resolvedEventIds.includes(event.id) && current.dismissedEventId !== event.id) setActiveEvent(event);
   }, [current, eventAt, activeEvent]);
 
   const draw = useCallback(() => {
@@ -581,6 +582,13 @@ export default function ExplorationScreen() {
     setActiveEvent(null);
   };
 
+  const handleCloseEvent = () => {
+    if (!activeEvent) return;
+    dismissEvent(activeEvent.id);
+    setActiveEvent(null);
+    setNotice('已暂时离开事件；走开后再次返回仍可继续');
+  };
+
   const handleUseItem = (ownedItemId: string, definitionId: string) => {
     if (definitionId !== 'cleansing-talisman') {
       setNotice('这个道具会在符合条件时自动生效');
@@ -749,7 +757,7 @@ export default function ExplorationScreen() {
           </aside>
         </div>
       )}
-      {activeEvent && <EventModal config={activeConfig} event={activeEvent} question={currentQuestion} sealsSolved={current.sealsSolved} onResolve={handleResolve} onChooseRoute={handleChooseRoute} onClose={() => setActiveEvent(null)} onFinish={finishExploration} clueTarget={clueTarget} clueTopic={clueTopic} />}
+      {activeEvent && <EventModal config={activeConfig} event={activeEvent} question={currentQuestion} sealsSolved={current.sealsSolved} onResolve={handleResolve} onChooseRoute={handleChooseRoute} onClose={handleCloseEvent} onFinish={finishExploration} clueTarget={clueTarget} clueTopic={clueTopic} />}
     </main>
   );
 }

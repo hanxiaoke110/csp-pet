@@ -1,0 +1,430 @@
+{
+  "generatedAt": "2026-09-12T10:42:16.507Z",
+  "count": 53,
+  "pets": [
+    {
+      "id": "ws-612TLNHBGN",
+      "name": "利奥老师",
+      "element": "light",
+      "tier": "legendary",
+      "description": "一个短黑发、笑容亲切、穿深蓝Polo衫并帅气的Q版人物桌宠。",
+      "image": "./assets/pets/ws-612TLNHBGN.webp"
+    },
+    {
+      "id": "ws-81X0N622N9",
+      "name": "夺舍红狼",
+      "element": "earth",
+      "tier": "rare",
+      "description": "",
+      "image": "./assets/pets/ws-81X0N622N9.webp"
+    },
+    {
+      "id": "ws-JDTRDNEMU4",
+      "name": "维维美",
+      "element": "fire",
+      "tier": "rare",
+      "description": "来自刘庆垚许愿",
+      "image": "./assets/pets/ws-JDTRDNEMU4.webp"
+    },
+    {
+      "id": "ws-CG4LCDE99Y",
+      "name": "若藻",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-CG4LCDE99Y.webp"
+    },
+    {
+      "id": "ws-QFMS4P8AWC",
+      "name": "扫兴客",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-QFMS4P8AWC.webp"
+    },
+    {
+      "id": "ws-YWS6Q4VHVP",
+      "name": "妙脆角猫猫",
+      "element": "wind",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-YWS6Q4VHVP.webp"
+    },
+    {
+      "id": "ws-3VED4MMJTW",
+      "name": "喜羊羊(蜚合体)",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-3VED4MMJTW.webp"
+    },
+    {
+      "id": "ws-BKK9XJUL6M",
+      "name": "西蒙海耶",
+      "element": "earth",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-BKK9XJUL6M.webp"
+    },
+    {
+      "id": "ws-WY6LY0K99L",
+      "name": "电能豌豆射手",
+      "element": "light",
+      "tier": "legendary",
+      "description": "全身Q版电能豌豆射手桌宠，发光豌豆炮头、闪电角、绿色叶片底座和电光光感。",
+      "image": "./assets/pets/ws-WY6LY0K99L.webp"
+    },
+    {
+      "id": "ws-0NSVRY6785",
+      "name": "线条小狗",
+      "element": "light",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-0NSVRY6785.webp"
+    },
+    {
+      "id": "ws-KBE7P0DU8X",
+      "name": "那兔",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-KBE7P0DU8X.webp"
+    },
+    {
+      "id": "ws-K7M14VMK19",
+      "name": "lcb鸿璐",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-K7M14VMK19.webp"
+    },
+    {
+      "id": "ws-60HFK5LAQ1",
+      "name": "哈基蜂",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-60HFK5LAQ1.webp"
+    },
+    {
+      "id": "ws-FBKQMR9773",
+      "name": "霍雨浩",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-FBKQMR9773.webp"
+    },
+    {
+      "id": "ws-2BC4UCQ66V",
+      "name": "林克",
+      "element": "light",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-2BC4UCQ66V.webp"
+    },
+    {
+      "id": "ws-08QZZSFP3X",
+      "name": "二月红",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-08QZZSFP3X.webp"
+    },
+    {
+      "id": "ws-FYY4UFQCGR",
+      "name": "冰公主",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-FYY4UFQCGR.webp"
+    },
+    {
+      "id": "ws-1M9LNG6LWF",
+      "name": "乐魂",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-1M9LNG6LWF.webp"
+    },
+    {
+      "id": "ws-6NHBEPG661",
+      "name": "哈利波特",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-6NHBEPG661.webp"
+    },
+    {
+      "id": "ws-274GF78ERC",
+      "name": "月薪猫",
+      "element": "wind",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-274GF78ERC.webp"
+    },
+    {
+      "id": "ws-NDDE44KXV8",
+      "name": "沙丘之主",
+      "element": "light",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-NDDE44KXV8.webp"
+    },
+    {
+      "id": "ws-9ETZVMP700",
+      "name": "烟头叔叔",
+      "element": "earth",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-9ETZVMP700.webp"
+    },
+    {
+      "id": "ws-Y9ETBFAUQN",
+      "name": "周嫑嫑",
+      "element": "light",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-Y9ETBFAUQN.webp"
+    },
+    {
+      "id": "ws-2FAEZJ72J0",
+      "name": "皓月",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-2FAEZJ72J0.webp"
+    },
+    {
+      "id": "ws-6CSEZV32KH",
+      "name": "蛇刃",
+      "element": "earth",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-6CSEZV32KH.webp"
+    },
+    {
+      "id": "ws-KVG1NBCT7V",
+      "name": "伊佳蓝",
+      "element": "earth",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-KVG1NBCT7V.webp"
+    },
+    {
+      "id": "ws-VRP781S1W8",
+      "name": "萌之",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-VRP781S1W8.webp"
+    },
+    {
+      "id": "ws-2F5FDMCF6V",
+      "name": "可莉",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-2F5FDMCF6V.webp"
+    },
+    {
+      "id": "ws-N3RBJ4ABFR",
+      "name": "猪神",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-N3RBJ4ABFR.webp"
+    },
+    {
+      "id": "ws-NS44FXXV3A",
+      "name": "罗辑(Q)",
+      "element": "earth",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-NS44FXXV3A.webp"
+    },
+    {
+      "id": "ws-NK728B1914",
+      "name": "Dream",
+      "element": "wind",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-NK728B1914.webp"
+    },
+    {
+      "id": "ws-36JQT1N16D",
+      "name": "韩老师",
+      "element": "earth",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-36JQT1N16D.webp"
+    },
+    {
+      "id": "ws-XSG0GG56C1",
+      "name": "空崎日奈",
+      "element": "wind",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-XSG0GG56C1.webp"
+    },
+    {
+      "id": "ws-24TAC93GSU",
+      "name": "威虫",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-24TAC93GSU.webp"
+    },
+    {
+      "id": "ws-8UGTMBGSKU",
+      "name": "砂狼白子",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-8UGTMBGSKU.webp"
+    },
+    {
+      "id": "ws-GPR1WUKWRC",
+      "name": "善逸",
+      "element": "light",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-GPR1WUKWRC.webp"
+    },
+    {
+      "id": "ws-7BWUDJXNLH",
+      "name": "猪猪侠",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-7BWUDJXNLH.webp"
+    },
+    {
+      "id": "ws-PGVD3C1RPF",
+      "name": "张起灵(Q)",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-PGVD3C1RPF.webp"
+    },
+    {
+      "id": "ws-GQ4VZ6H8FX",
+      "name": "银狼",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-GQ4VZ6H8FX.webp"
+    },
+    {
+      "id": "ws-0J0H5D1TFP",
+      "name": "红龙高达",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-0J0H5D1TFP.webp"
+    },
+    {
+      "id": "ws-YQ6NR13SU8",
+      "name": "自由高达",
+      "element": "wind",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-YQ6NR13SU8.webp"
+    },
+    {
+      "id": "ws-VPHQ08AF50",
+      "name": "芙宁娜",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-VPHQ08AF50.webp"
+    },
+    {
+      "id": "ws-WZC0ZL6ALP",
+      "name": "罗小黑(兽形)",
+      "element": "wind",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-WZC0ZL6ALP.webp"
+    },
+    {
+      "id": "ws-NT21SMLS1Z",
+      "name": "罗小黑(人形)",
+      "element": "wind",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-NT21SMLS1Z.webp"
+    },
+    {
+      "id": "ws-DRG4AZ8BZY",
+      "name": "皮皮",
+      "element": "water",
+      "tier": "legendary",
+      "description": "貔貅天禄，失忆后被叫做皮皮。有兽焉",
+      "image": "./assets/pets/ws-DRG4AZ8BZY.webp"
+    },
+    {
+      "id": "ws-41JLJL8Z8Q",
+      "name": "哪吒",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-41JLJL8Z8Q.webp"
+    },
+    {
+      "id": "ws-KK0RAGGM9K",
+      "name": "周可可2",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-KK0RAGGM9K.webp"
+    },
+    {
+      "id": "ws-Z6RBG4LBB5",
+      "name": "豆包",
+      "element": "water",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-Z6RBG4LBB5.webp"
+    },
+    {
+      "id": "ws-9HGS0JHAH8",
+      "name": "Elaina",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-9HGS0JHAH8.webp"
+    },
+    {
+      "id": "ws-Z1CQQZZ8ZP",
+      "name": "BananaCat",
+      "element": "wind",
+      "tier": "rare",
+      "description": "",
+      "image": "./assets/pets/ws-Z1CQQZZ8ZP.webp"
+    },
+    {
+      "id": "ws-YMZML12ASC",
+      "name": "Aniya(玩偶版)",
+      "element": "fire",
+      "tier": "legendary",
+      "description": "",
+      "image": "./assets/pets/ws-YMZML12ASC.webp"
+    },
+    {
+      "id": "ws-V6K7C3U4QJ",
+      "name": "圣诞僵尸",
+      "element": "earth",
+      "tier": "rare",
+      "description": "",
+      "image": "./assets/pets/ws-V6K7C3U4QJ.webp"
+    },
+    {
+      "id": "ws-EU446MESHU",
+      "name": "Doro",
+      "element": "fire",
+      "tier": "rare",
+      "description": "A tiny yellow-hat Doro desktop pet with pink hair, purple eyes",
+      "image": "./assets/pets/ws-EU446MESHU.webp"
+    }
+  ]
+}

@@ -41,6 +41,7 @@ export interface ExplorationProgress {
   pendingExp: number;
   activeDebuffs: string[];
   previewedEventIds: string[];
+  dismissedEventId?: string;
   routeChoice?: ExplorationRouteChoice;
   completed: boolean;
   settled: boolean;

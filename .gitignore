@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 dist-dungeon
+.cloudflare-static
+cloud-assets-source/
 src-tauri/target
 .wrangler
 *.local

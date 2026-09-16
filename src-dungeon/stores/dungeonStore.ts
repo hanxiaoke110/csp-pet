@@ -490,23 +490,27 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     const totalAnswered = battle.correctCount + battle.wrongCount;
     if (battle.isWon) {
       const s0 = get();
-      import('../utils/api').then(({ reportBattle, syncProgress }) => {
+      import('../utils/api').then(async ({ reportBattle, syncProgress }) => {
+        let reportSucceeded = false;
         if (earnedRewardsThisBattle) {
-          reportBattle({
-            dungeon_id: dungeonId,
-            stage_id: stageIdForReport,
-            is_win: true,
-            rating: battle.rating,
-            questions_answered: totalAnswered,
-            correct_count: battle.correctCount,
-            // 同步客户端权威字段到服务端（供跨设备登录恢复）
-            player_level: s0.player.playerLevel,
-            exp: s0.player.exp,
-            rank_tier: s0.player.rankTier,
-            rank_points: s0.player.rankPoints,
-            current_streak: s0.player.currentStreak,
-            max_streak: s0.player.maxStreak,
-          }).catch(() => {});
+          try {
+            await reportBattle({
+              dungeon_id: dungeonId,
+              stage_id: stageIdForReport,
+              is_win: true,
+              rating: battle.rating,
+              questions_answered: totalAnswered,
+              correct_count: battle.correctCount,
+              // 同步客户端权威字段到服务端（供跨设备登录恢复）
+              player_level: s0.player.playerLevel,
+              exp: s0.player.exp,
+              rank_tier: s0.player.rankTier,
+              rank_points: s0.player.rankPoints,
+              current_streak: s0.player.currentStreak,
+              max_streak: s0.player.maxStreak,
+            });
+            reportSucceeded = true;
+          } catch { /* syncProgress below preserves progress when the reward report is offline */ }
         }
         const s = get();
         // 仅同步本场副本的进度（report-battle 已在服务端推进通关状态，这里只补 best_score/best_rating）
@@ -517,10 +521,12 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
           || changedDp.bossDefeated !== progressBeforeBattle.bossDefeated
           || changedDp.bestScore !== progressBeforeBattle.bestScore
           || changedDp.bestRating !== progressBeforeBattle.bestRating);
-        if (progressChanged || newBadges.length > 0) {
-          syncProgress({
+        // report-battle already writes progress and the best score. Do not write the
+        // same row again; keep sync as an offline fallback and for newly earned badges.
+        if ((progressChanged && !reportSucceeded) || newBadges.length > 0) {
+          await syncProgress({
             ...(newBadges.length > 0 ? { badges: newBadges } : {}),
-            dungeon_progress: progressChanged && changedDp ? [{
+            dungeon_progress: progressChanged && !reportSucceeded && changedDp ? [{
               dungeonId: changedDp.dungeonId, status: changedDp.status, completedStages: changedDp.completedStages,
               totalStages: changedDp.totalStages, bossDefeated: changedDp.bossDefeated,
               bestScore: changedDp.bestScore, bestRating: changedDp.bestRating,

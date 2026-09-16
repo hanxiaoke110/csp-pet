@@ -185,8 +185,47 @@ function validatePetAssets() {
   return { registered: registered.length, remoteCovered: remoteCovered.length, failures };
 }
 
+function validateWardrobeAssets() {
+  const failures = [];
+  const dataFile = path.join(root, 'src/data/wardrobe.ts');
+  const text = fs.readFileSync(dataFile, 'utf8');
+  const paths = [...text.matchAll(/asset:\s*'([^']+)'/g)].map(match => match[1]);
+  for (const asset of paths) {
+    if (!asset.startsWith('/')) continue;
+    const abs = path.join(root, 'public', asset.replace(/^\/+/, ''));
+    if (!fs.existsSync(abs)) failures.push(`missing ${asset}`);
+    else if (fs.statSync(abs).size <= 0) failures.push(`empty ${asset}`);
+  }
+  const avatarRoot = path.join(root, 'public/profile/avatars');
+  const avatarCount = ['zodiac', 'constellation'].reduce((count, group) => {
+    const dir = path.join(avatarRoot, group);
+    return count + (fs.existsSync(dir) ? fs.readdirSync(dir).filter(name => name.endsWith('.webp')).length : 0);
+  }, 0);
+  const founderArtCount = paths.filter(asset => asset.startsWith('/wardrobe/founders/')).length;
+  const interactiveRoot = path.join(root, 'cloud-assets-source/profile/avatars-interactive');
+  const interactiveAvatarCount = ['zodiac', 'constellation'].reduce((count, group) => {
+    const dir = path.join(interactiveRoot, group);
+    return count + (fs.existsSync(dir) ? fs.readdirSync(dir).filter(name => name.endsWith('-atlas.png')).length : 0);
+  }, 0);
+  const bundledInteractiveRoot = path.join(root, 'public/profile/avatars-interactive');
+  const bundledInteractiveAvatarCount = ['zodiac', 'constellation'].reduce((count, group) => {
+    const dir = path.join(bundledInteractiveRoot, group);
+    return count + (fs.existsSync(dir) ? fs.readdirSync(dir).filter(name => name.endsWith('-atlas.webp')).length : 0);
+  }, 0);
+  if (avatarCount !== 24) failures.push(`expected 24 profile avatars, found ${avatarCount}`);
+  // Raw PNG atlases are authoring sources only. Validate them when present on a
+  // maintainer's machine, without making release CI depend on large source art.
+  if (fs.existsSync(interactiveRoot) && interactiveAvatarCount !== 24) {
+    failures.push(`expected 24 interactive avatar atlases, found ${interactiveAvatarCount}`);
+  }
+  if (bundledInteractiveAvatarCount !== 24) failures.push(`expected 24 bundled interactive avatar atlases, found ${bundledInteractiveAvatarCount}`);
+  if (founderArtCount !== 10) failures.push(`expected 10 founder art assets, found ${founderArtCount}`);
+  return { registered: paths.length + avatarCount + interactiveAvatarCount + bundledInteractiveAvatarCount, avatarCount, interactiveAvatarCount, bundledInteractiveAvatarCount, founderArtCount, failures };
+}
+
 const questionResults = questionFiles.map(validateQuestionFile);
 const petResult = validatePetAssets();
+const wardrobeResult = validateWardrobeAssets();
 let failed = false;
 
 for (const result of questionResults) {
@@ -203,6 +242,12 @@ if (petResult.failures.length) {
   failed = true;
   petResult.failures.slice(0, 120).forEach(item => console.log(`  - ${item}`));
   if (petResult.failures.length > 120) console.log(`  ... ${petResult.failures.length - 120} more`);
+}
+
+console.log(`wardrobe assets: ${wardrobeResult.registered} registered (${wardrobeResult.avatarCount} avatars + ${wardrobeResult.interactiveAvatarCount} source atlases + ${wardrobeResult.bundledInteractiveAvatarCount} bundled atlases + ${wardrobeResult.founderArtCount} founder art), ${wardrobeResult.failures.length} issue(s)`);
+if (wardrobeResult.failures.length) {
+  failed = true;
+  wardrobeResult.failures.forEach(item => console.log(`  - ${item}`));
 }
 
 if (failed) process.exit(1);

@@ -11,8 +11,8 @@ import {
 } from '../../utils/windowSkin';
 import { getWeekKey, loadCheckin, nextCheckin } from '../../utils/checkin';
 import {
-  BookOpen, Bot, ClipboardList, Gift, Images, Laptop, Library, ListChecks,
-  Medal, Megaphone, PawPrint, Settings, Swords, Trophy, Zap,
+  Album, BookOpen, Bot, ClipboardList, Gift, Images, Laptop, Library, ListChecks,
+  Medal, Megaphone, PawPrint, Settings, Swords, UserRound, Zap,
 } from 'lucide-react';
 
 interface Props { children: ReactNode; }
@@ -142,8 +142,11 @@ export default function AppShell({ children }: Props) {
         <NavLink to="/pet" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           <PawPrint /> <span>灵犀智子</span>
         </NavLink>
-        <NavLink to="/achievements" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          <Trophy /> <span>成就</span>
+        <NavLink to="/me" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          <UserRound /> <span>我的</span>
+        </NavLink>
+        <NavLink to="/collector-cards" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          <Album /> <span>典藏卡</span>
         </NavLink>
         {/* 智子试炼场：全屏地牢，需整体切换到 MemoryRouter，用 pushState 触发顶层路由二选一 */}
         <button

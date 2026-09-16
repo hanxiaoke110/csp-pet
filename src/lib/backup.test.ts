@@ -39,6 +39,8 @@ describe('shouldIncludeKey', () => {
     expect(shouldIncludeKey('csp_pet_data')).toBe(true);
     expect(shouldIncludeKey('dungeon_progress')).toBe(true);
     expect(shouldIncludeKey('csp_wish_tickets')).toBe(true);
+    expect(shouldIncludeKey('csp_collector_cards_v1')).toBe(true);
+    expect(shouldIncludeKey('csp_profile_data')).toBe(true);
   });
 
   it('excludes re-downloadable curriculum content', () => {
@@ -48,6 +50,8 @@ describe('shouldIncludeKey', () => {
     expect(shouldIncludeKey('csp_imported_lessons')).toBe(false);
     expect(shouldIncludeKey('csp_data_version')).toBe(false);
     expect(shouldIncludeKey('csp_last_automatic_backup_date')).toBe(false);
+    expect(shouldIncludeKey('csp_collector_card_catalog_cache_v1')).toBe(false);
+    expect(shouldIncludeKey('csp_collector_card_cache_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_reviewed_exam_bank_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_dungeons_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_leaderboard_rules_v1')).toBe(false);

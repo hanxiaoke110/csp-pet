@@ -10,7 +10,8 @@ import CourseList from './components/courses/CourseList';
 import AIChat from './components/ai/AIChat';
 import QuizPractice from './components/quiz/QuizPractice';
 import PetPanel from './components/pet/PetPanel';
-import AchievementsPanel from './components/achievements/AchievementsPanel';
+import MyPage from './components/profile/MyPage';
+import CollectorCardsPage from './components/cards/CollectorCardsPage';
 import OJTraining from './components/oj/OJTraining';
 import ExamTraining from './components/exam/ExamTraining';
 import SettingsPage from './components/settings/SettingsPage';
@@ -27,6 +28,7 @@ import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
 import { useQuizStore } from './stores/quizStore';
 import { useAIStore } from './stores/aiStore';
+import { useCollectorCardStore } from './stores/collectorCardStore';
 import { migrateLocalStorageToSqlite } from './lib/migration';
 import { loadProblemStatuses } from './lib/problemStatusCache';
 import { ensureDailyAutomaticBackup } from './lib/backup';
@@ -243,6 +245,7 @@ function App() {
   }, []);
   const loadConfig = useAIStore(s => s.loadConfig);
   const petLoaded = usePetStore(s => s.load);
+  const collectorCardsLoaded = useCollectorCardStore(s => s.load);
 
   // Sync pet data to pet window and listen for clicks from pet window
   useEffect(() => {
@@ -260,6 +263,7 @@ function App() {
           petLoaded(),
           useHatchStore.getState().load(),
           useQuizStore.getState().load(),
+          collectorCardsLoaded(),
         ]);
         petDataLoaded = loaded;
       } catch (e) { console.error('[init] store load failed:', e); }
@@ -332,48 +336,58 @@ function App() {
       let stages: Stage[] = [];
       let lessons: Lesson[] = [];
 
-      // 1. Try remote update first (use Tauri HTTP plugin to bypass CORS)
-      const REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
-      try {
-        const verResp = await tauriFetch(`${REMOTE_BASE}/version.json`, { connectTimeout: 15_000 });
-        if (verResp.ok) {
-          const remoteVer = await verResp.json();
-          const localVer = parseInt(localStorage.getItem('csp_data_version') || '0');
-          if (remoteVer.version > localVer) {
-            const [stagesResp, lessonsResp, quizResp] = await Promise.all([
-              tauriFetch(`${REMOTE_BASE}/stages.json`, { connectTimeout: 15_000 }),
-              tauriFetch(`${REMOTE_BASE}/lessons.json`, { connectTimeout: 15_000 }),
-              tauriFetch(`${REMOTE_BASE}/unified-quiz-bank.json`, { connectTimeout: 15_000 }),
-            ]);
-            if (stagesResp.ok && lessonsResp.ok) {
-              const remoteStages = await stagesResp.json();
-              const remoteLessonsData = await lessonsResp.json();
-              let flatLessons = [];
-              if (Array.isArray(remoteLessonsData)) {
-                flatLessons = remoteLessonsData;
-              } else if (remoteLessonsData.lessons) {
-                flatLessons = remoteLessonsData.lessons;
-              } else {
-                for (const stage of (remoteLessonsData.stages || [])) {
-                  for (const l of (stage.lessons || [])) {
-                    flatLessons.push(l);
-                  }
-                }
+      // 1. Static CDN first, Gitee mirror second, bundled data last. Only the tiny
+      // version file is checked on launch; the larger snapshots download on change.
+      const REMOTE_BASES = [
+        'https://cards.cspstudy.top/course-data',
+        'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data',
+      ];
+      for (const remoteBase of REMOTE_BASES) {
+        try {
+          const verResp = await tauriFetch(`${remoteBase}/version.json`, { connectTimeout: 10_000 });
+          if (!verResp.ok) continue;
+          const remoteVer = await verResp.json() as { version?: number };
+          const cachedCourse = localStorage.getItem('csp_imported_lessons');
+          const localVer = cachedCourse ? parseInt(localStorage.getItem('csp_data_version') || '0') : 0;
+          if (!Number.isInteger(remoteVer.version) || Number(remoteVer.version) <= localVer) break;
+
+          const [stagesResp, lessonsResp, quizResp] = await Promise.all([
+            tauriFetch(`${remoteBase}/stages.json`, { connectTimeout: 15_000 }),
+            tauriFetch(`${remoteBase}/lessons.json`, { connectTimeout: 30_000 }),
+            tauriFetch(`${remoteBase}/unified-quiz-bank.json`, { connectTimeout: 20_000 }),
+          ]);
+          if (!stagesResp.ok || !lessonsResp.ok) continue;
+
+          const remoteStages = await stagesResp.json() as Stage[];
+          const remoteLessonsData = await lessonsResp.json() as Lesson[] | LessonsData;
+          const flatLessons: Lesson[] = Array.isArray(remoteLessonsData)
+            ? remoteLessonsData
+            : remoteLessonsData.lessons || (remoteLessonsData.stages || []).flatMap(stage => stage.lessons || []);
+          const stageIds = new Set(remoteStages.map(stage => stage.id));
+          const lessonIds = new Set(flatLessons.map(lesson => lesson.id));
+          const validStages = remoteStages.length > 0 && stageIds.size === remoteStages.length
+            && remoteStages.every(stage => typeof stage.id === 'string' && typeof stage.name === 'string'
+              && Array.isArray(stage.lessonRange) && stage.lessonRange.length === 2);
+          const validLessons = flatLessons.length > 0 && lessonIds.size === flatLessons.length
+            && flatLessons.every(lesson => typeof lesson.id === 'string' && Number.isInteger(lesson.order)
+              && typeof lesson.title === 'string');
+          if (!validStages || !validLessons) continue;
+
+          localStorage.setItem('csp_imported_lessons', JSON.stringify({ stages: remoteStages, lessons: flatLessons }));
+          localStorage.setItem('csp_data_version', String(remoteVer.version));
+          localStorage.setItem('csp_course_data_source', remoteBase);
+          if (quizResp.ok) {
+            try {
+              const quizData = await quizResp.json();
+              if (quizData && typeof quizData === 'object' && !Array.isArray(quizData)) {
+                localStorage.setItem('csp_quiz_bank', JSON.stringify(quizData));
+                localStorage.setItem('csp_quiz_bank_version', String(remoteVer.version));
               }
-              localStorage.setItem('csp_imported_lessons', JSON.stringify({ stages: remoteStages, lessons: flatLessons }));
-              localStorage.setItem('csp_data_version', String(remoteVer.version));
-              // Save quiz bank if available
-              if (quizResp.ok) {
-                try {
-                  const quizData = await quizResp.json();
-                  localStorage.setItem('csp_quiz_bank', JSON.stringify(quizData));
-                  localStorage.setItem('csp_quiz_bank_version', String(remoteVer.version));
-                } catch {}
-              }
-            }
+            } catch {}
           }
-        }
-      } catch { /* network error, use local */ }
+          break;
+        } catch { /* try the next static source, then bundled data */ }
+      }
 
       // Teacher-reviewed corrections are stored as a cloud overlay. Check its tiny
       // revision endpoint on every launch and download the merged bank only when needed.
@@ -495,7 +509,9 @@ function App() {
           <Route path="/ai-coach" element={<AIChat />} />
           <Route path="/quiz" element={<QuizPractice />} />
           <Route path="/pet" element={<PetPanel />} />
-          <Route path="/achievements" element={<AchievementsPanel />} />
+          <Route path="/me" element={<MyPage />} />
+          <Route path="/achievements" element={<Navigate to="/me" replace />} />
+          <Route path="/collector-cards" element={<CollectorCardsPage />} />
           <Route path="/exam" element={<ExamTraining />} />
           <Route path="/oj-training" element={<OJTraining />} />
           <Route path="/resources" element={<LearningResourcesPage />} />
