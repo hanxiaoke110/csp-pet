@@ -216,11 +216,11 @@ jobs:
               echo "$existing_url"
               return
             fi
-            # GitHub runner → Gitee 上传不稳定（v1.7.31/32 曾三次全失败静默回退
-            # GitHub URL，国内学生无法下载）：失败打日志 + 最多重试 3 次
-            for attempt in 1 2 3; do
+            # Gitee 大文件接口偶发长时间无响应。只做一次有界尝试；
+            # 失败时由下方回退到 GitHub Release，不再让整个发布卡住数小时。
+            for attempt in 1; do
               resp_file=$(mktemp)
-              status=$(curl -sS --connect-timeout 30 --max-time 1200 -o "$resp_file" -w '%{http_code}' \
+              status=$(curl -sS --connect-timeout 20 --max-time 180 -o "$resp_file" -w '%{http_code}' \
                 -X POST "$GITEE_API/releases/$RELEASE_ID/attach_files" \
                 -H "Authorization: token $GITEE_TOKEN" \
                 -F "file=@$f" || true)
@@ -238,12 +238,23 @@ jobs:
           URL_MAC_INTEL=$(upload_file "$MAC_INTEL")
           URL_WIN=$(upload_file "$WIN_MSI")
 
-          for url in "$URL_MAC_ARM" "$URL_MAC_INTEL" "$URL_WIN"; do
-            if ! printf '%s' "$url" | grep -Eq '^https://gitee\.com/hanliuliu110/csp-pet/releases/download/'; then
-              echo "::error::A required Gitee package upload failed: $url"
-              exit 1
-            fi
-          done
+          github_url() {
+            printf 'https://github.com/hanxiaoke110/csp-pet/releases/download/%s/%s' \
+              "$VERSION" "$(sanitize_name "$1")"
+          }
+
+          if ! printf '%s' "$URL_MAC_ARM" | grep -Eq '^https://gitee\.com/hanliuliu110/csp-pet/releases/download/'; then
+            URL_MAC_ARM=$(github_url "$MAC_ARM")
+            echo "::warning::Gitee macOS ARM upload unavailable; using GitHub Release URL"
+          fi
+          if ! printf '%s' "$URL_MAC_INTEL" | grep -Eq '^https://gitee\.com/hanliuliu110/csp-pet/releases/download/'; then
+            URL_MAC_INTEL=$(github_url "$MAC_INTEL")
+            echo "::warning::Gitee macOS Intel upload unavailable; using GitHub Release URL"
+          fi
+          if ! printf '%s' "$URL_WIN" | grep -Eq '^https://gitee\.com/hanliuliu110/csp-pet/releases/download/'; then
+            URL_WIN=$(github_url "$WIN_MSI")
+            echo "::warning::Gitee Windows upload unavailable; using GitHub Release URL"
+          fi
 
           cat > dist/update.json << JSONEOF
           {
