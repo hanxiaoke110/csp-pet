@@ -133,13 +133,13 @@ async function syncAttachments(docXml, release) {
     }
   }
 
-  // 3. 在对应下载链接后重新插入新附件卡片
+  // 3. 在文档末尾按 Windows、Mac ARM、Mac Intel 顺序插入新附件卡片。
+  // lark-cli 1.0.96 已移除按文本选区插入的参数，下载链接本身仍会原位更新。
   for (const t of targets) {
     runCli([
       'docs', '+media-insert', '--doc', DOC_TOKEN,
       '--file', `.tmp/doc-assets/${t.file}`,
       '--type', 'file', '--file-view', 'card',
-      '--selection-with-ellipsis', t.marker,
       '--as', CLI_AS,
     ]);
     console.log(`已上传新附件：${t.file}`);
