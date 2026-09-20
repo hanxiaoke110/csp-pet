@@ -18,6 +18,40 @@ for (const name of sources) {
   await rm(resolve(output, name, '.DS_Store'), { force: true });
 }
 
+// The desktop app caches the course catalog in localStorage. Keep the cloud
+// snapshot comfortably below the WebView quota by omitting authoring-only
+// fields that the course UI never reads. The complete source stays in public/.
+const courseLessonsPath = resolve(output, 'course-data', 'lessons.json');
+const courseLessons = JSON.parse(await readFile(courseLessonsPath, 'utf8'));
+const lessonFields = new Set([
+  'id', 'order', 'title', 'summary', 'kpSummary', 'knowledgePoints', 'tags', 'password',
+  'review', 'inClassCodes', 'inClassQuiz', 'homework', 'extended',
+]);
+const problemFields = new Set([
+  'id', 'platform', 'pid', 'title', 'description', 'inputFormat', 'outputFormat',
+  'samples', 'thinking', 'commonMistakes', 'progressiveHints',
+]);
+const problemBuckets = new Set(['review', 'inClassCodes', 'inClassQuiz', 'homework', 'extended']);
+const compactLessons = {
+  dataVersion: courseLessons.dataVersion,
+  stages: (courseLessons.stages || []).map(stage => ({
+    ...stage,
+    lessons: (stage.lessons || []).map(lesson => Object.fromEntries(
+      Object.entries(lesson)
+        .filter(([key]) => lessonFields.has(key))
+        .map(([key, value]) => [
+          key,
+          problemBuckets.has(key)
+            ? (value || []).map(problem => Object.fromEntries(
+              Object.entries(problem).filter(([problemKey]) => problemFields.has(problemKey)),
+            ))
+            : value,
+        ]),
+    )),
+  })),
+};
+await writeFile(courseLessonsPath, `${JSON.stringify(compactLessons)}\n`);
+
 const interactiveAvatarSource = resolve(root, 'cloud-assets-source', 'profile', 'avatars-interactive');
 const interactiveAvatarOutput = resolve(output, 'profile', 'avatars-interactive');
 const interactiveAvatarManifest = [];
