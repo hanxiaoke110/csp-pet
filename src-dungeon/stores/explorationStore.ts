@@ -14,6 +14,7 @@ interface ExplorationState {
   load: (map: ExplorationMapDefinition, questionIds: string[]) => void;
   move: (map: ExplorationMapDefinition, position: GridPoint) => void;
   resolveEvent: (eventId: string, update?: Partial<Pick<ExplorationProgress, 'sealsSolved' | 'sealsWrong' | 'pendingCoins' | 'pendingExp' | 'activeDebuffs'>>) => void;
+  dismissEvent: (eventId: string) => void;
   previewEvent: (eventId: string) => void;
   chooseRoute: (choice: ExplorationRouteChoice) => void;
   clearDebuff: (debuffId: string) => boolean;
@@ -29,6 +30,7 @@ function normalizeProgress(parsed: ExplorationProgress | null): ExplorationProgr
     ...parsed,
     activeDebuffs: Array.isArray(parsed.activeDebuffs) ? parsed.activeDebuffs.filter(item => typeof item === 'string') : [],
     previewedEventIds: Array.isArray(parsed.previewedEventIds) ? parsed.previewedEventIds.filter(item => typeof item === 'string') : [],
+    dismissedEventId: typeof parsed.dismissedEventId === 'string' ? parsed.dismissedEventId : undefined,
   };
 }
 
@@ -95,7 +97,7 @@ export const useExplorationStore = create<ExplorationState>((set, get) => ({
     if (!current || current.completed || map.tiles[position.y]?.[position.x] !== 0) return;
     const revealed = new Set(current.revealed);
     for (const key of computeVisible(map, position)) revealed.add(key);
-    const next = { ...current, position, steps: current.steps + 1, revealed: [...revealed].sort() };
+    const next = { ...current, position, steps: current.steps + 1, revealed: [...revealed].sort(), dismissedEventId: undefined };
     set({ current: next });
     persist(next);
   },
@@ -106,7 +108,15 @@ export const useExplorationStore = create<ExplorationState>((set, get) => ({
       ...current,
       ...update,
       resolvedEventIds: [...current.resolvedEventIds, eventId],
+      dismissedEventId: current.dismissedEventId === eventId ? undefined : current.dismissedEventId,
     };
+    set({ current: next });
+    persist(next);
+  },
+  dismissEvent: (eventId) => {
+    const current = get().current;
+    if (!current || current.resolvedEventIds.includes(eventId)) return;
+    const next = { ...current, dismissedEventId: eventId };
     set({ current: next });
     persist(next);
   },

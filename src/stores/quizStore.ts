@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { dualSave, dualLoad } from '../lib/persist';
 import { usePetStore } from './petStore';
+import { markLearningActivity } from '../utils/localDate';
 
 export interface ErrorRecord {
   questionId: string;
@@ -310,6 +311,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
     },
 
     recordAnswer: (correct: boolean) => {
+      markLearningActivity();
       set(s => ({
         totalPractice: (s.totalPractice || 0) + 1,
         totalCorrect: correct ? (s.totalCorrect || 0) + 1 : (s.totalCorrect || 0),

@@ -21,8 +21,9 @@ import {
   isAdjacent,
   pointKey,
 } from '../../utils/explorationLogic';
-import { isUsableChoiceQuestion, pickStagePlanQuestions } from '../../utils/questionLoader';
+import { getTrustedQuestionImage, isUsableChoiceQuestion, pickStagePlanQuestions } from '../../utils/questionLoader';
 import { formatChoiceOption } from '../../utils/questionDisplay';
+import { formatCppCode } from '../../utils/codeFormat';
 import { findArtifactPreviewTarget } from '../../utils/trialEquipmentEffects';
 
 const EVENT_ICONS: Record<ExplorationEvent['type'], string> = {
@@ -69,6 +70,24 @@ function chooseExplorationQuestions(bank: Question[], config: ExplorationStageCo
   return [...planned, ...fallback].slice(0, 3);
 }
 
+function resolveQuestionImage(src?: string | null): string | null {
+  if (!src) return null;
+  if (/^https?:\/\//.test(src)) return src;
+  return src.startsWith('/') ? src : `/${src.replace(/^\/+/, '')}`;
+}
+
+function ExplorationQuestionImage({ src }: { src: string }) {
+  const [errored, setErrored] = useState(false);
+  if (errored) {
+    return <div className="explore-question-image-error">🖼️ 题目图片加载失败，请检查网络后重试</div>;
+  }
+  return (
+    <div className="explore-question-image-wrap">
+      <img className="explore-question-image" src={src} alt="题目配图" onError={() => setErrored(true)} />
+    </div>
+  );
+}
+
 function HelpModal({ config, onClose, onOpenGuide }: { config: ExplorationStageConfig; onClose: () => void; onOpenGuide: () => void }) {
   const equipment = getExplorationEquipment(config);
   return (
@@ -83,7 +102,7 @@ function HelpModal({ config, onClose, onOpenGuide }: { config: ExplorationStageC
           <div><strong>三区</strong><span>依次穿过{config.regionNames.join('、')}；每一区都有一道必做封印。</span></div>
           <div><strong>玉简</strong><span>找到天机玉简会标记最近一道未解封印，并提前提示其考查知识点。</span></div>
           <div><strong>岔路</strong><span>稳妥路线直接获得少量金币；试炼路线缩小视野，到下一道封印答对可得更多奖励。</span></div>
-          <div><strong>奖励</strong><span>地图内奖励先暂存，到达出口后一次性结算，不会重复发放。</span></div>
+          <div><strong>奖励</strong><span>地图内奖励先暂存，到达出口后一次性结算，不会重复发放。试炼金币每日最多到账 30、每周最多到账 150；达到上限不会扣除已有金币。</span></div>
           <div><strong>装备</strong><span>装备标明生效范围。武器、护甲和法器的首件收获会自动装备，可在右侧背包切换。</span></div>
           <div><strong>道具</strong><span>在背包中点击“使用”。没有适用状态时按钮会禁用，不会误消耗。</span></div>
           <div><strong>品级来源</strong><span>每关掉落与品级均为固定配置，没有抽卡、概率或暗池。本关固定掉落：{RARITY_LABELS[equipment.rarity]}「{equipment.name}」。</span></div>
@@ -141,13 +160,15 @@ interface EventModalProps {
   clueTopic?: string;
 }
 
-function EventModal({ config, event, question, sealsSolved, onResolve, onChooseRoute, onClose, onFinish, clueTarget, clueTopic }: EventModalProps) {
+export function EventModal({ config, event, question, sealsSolved, onResolve, onChooseRoute, onClose, onFinish, clueTarget, clueTopic }: EventModalProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const correct = selected === question?.correctIndex;
   const exitReady = sealsSolved >= 3;
   const equipment = getExplorationEquipment(config);
   const eventIcon = event.type === 'equipment' ? equipment.icon : EVENT_ICONS[event.type];
+  const trustedQuestionImage = question ? getTrustedQuestionImage(question) : null;
+  const questionImage = resolveQuestionImage(trustedQuestionImage);
 
   return (
     <div className="explore-modal-backdrop">
@@ -160,6 +181,13 @@ function EventModal({ config, event, question, sealsSolved, onResolve, onChooseR
           <>
             <h2>校验{question.knowledgePoint || '数字根基'}</h2>
             <p className="explore-question-stem">{question.question}</p>
+            {question.code && (
+              <div className="explore-question-code-wrap">
+                <div className="explore-question-material-label">题目代码</div>
+                <pre className="explore-question-code"><code>{formatCppCode(question.code)}</code></pre>
+              </div>
+            )}
+            {questionImage && <ExplorationQuestionImage key={questionImage} src={questionImage} />}
             <div className="explore-options">
               {question.options!.map((option, index) => (
                 <button
@@ -232,6 +260,7 @@ export default function ExplorationScreen() {
   const load = useExplorationStore(state => state.load);
   const move = useExplorationStore(state => state.move);
   const resolveEvent = useExplorationStore(state => state.resolveEvent);
+  const dismissEvent = useExplorationStore(state => state.dismissEvent);
   const previewEvent = useExplorationStore(state => state.previewEvent);
   const chooseRoute = useExplorationStore(state => state.chooseRoute);
   const clearDebuff = useExplorationStore(state => state.clearDebuff);
@@ -311,7 +340,7 @@ export default function ExplorationScreen() {
   useEffect(() => {
     if (!current || current.mapId !== map.id || current.completed || activeEvent) return;
     const event = eventAt(current.position);
-    if (event && !current.resolvedEventIds.includes(event.id)) setActiveEvent(event);
+    if (event && !current.resolvedEventIds.includes(event.id) && current.dismissedEventId !== event.id) setActiveEvent(event);
   }, [current, eventAt, activeEvent]);
 
   const draw = useCallback(() => {
@@ -581,6 +610,13 @@ export default function ExplorationScreen() {
     setActiveEvent(null);
   };
 
+  const handleCloseEvent = () => {
+    if (!activeEvent) return;
+    dismissEvent(activeEvent.id);
+    setActiveEvent(null);
+    setNotice('已暂时离开事件；走开后再次返回仍可继续');
+  };
+
   const handleUseItem = (ownedItemId: string, definitionId: string) => {
     if (definitionId !== 'cleansing-talisman') {
       setNotice('这个道具会在符合条件时自动生效');
@@ -619,8 +655,10 @@ export default function ExplorationScreen() {
     return <div className="loading-screen"><div className="loading-title">正在校准天机迷阵...</div></div>;
   }
   if (current.completed) {
-    const grantedCoins = current.settledCoins ?? current.pendingCoins + activeConfig.rewards.clearCoins;
+    const discoveredCoins = current.pendingCoins + activeConfig.rewards.clearCoins;
+    const grantedCoins = current.settledCoins ?? discoveredCoins;
     const grantedExp = current.settledExp ?? current.pendingExp + activeConfig.rewards.clearExp;
+    const limitedCoins = Math.max(0, discoveredCoins - grantedCoins);
     return (
       <main className="explore-page explore-complete-page" style={{ '--explore-surface': `url(${theme.surface})` } as CSSProperties}>
         <section className="explore-complete-card">
@@ -628,7 +666,12 @@ export default function ExplorationScreen() {
           <div className="explore-modal-kicker">{activeConfig.dungeonName} · {activeConfig.stageName}</div>
           <h1>迷雾探索完成</h1>
           <p>你穿过{activeConfig.regionNames.join('、')}，解除了三道知识封印，本关探索记录已保存。</p>
-          <div className="explore-summary-grid"><div><strong>{current.steps}</strong><span>探索步数</span></div><div><strong>{3 - current.sealsWrong}/3</strong><span>封印答对</span></div><div><strong>+{grantedCoins}</strong><span>发现金币</span></div><div><strong>+{grantedExp}</strong><span>试炼 EXP</span></div></div>
+          <div className="explore-summary-grid"><div><strong>{current.steps}</strong><span>探索步数</span></div><div><strong>{3 - current.sealsWrong}/3</strong><span>封印答对</span></div><div><strong>+{grantedCoins}</strong><span>金币到账</span></div><div><strong>+{grantedExp}</strong><span>试炼 EXP</span></div></div>
+          <p className={`explore-settlement-note ${limitedCoins > 0 ? 'is-limited' : ''}`}>
+            {limitedCoins > 0
+              ? `本局共发现 ${discoveredCoins} 金币，实际到账 ${grantedCoins}。未到账的 ${limitedCoins} 金币是因为已达试炼场每日或每周奖励上限；孩子原有金币不会被扣除。`
+              : `本局发现的 ${discoveredCoins} 金币已全部到账。`}
+          </p>
           <button className="explore-action primary" onClick={() => navigate(`/dungeon/${activeConfig.dungeonId}`)}>返回{activeConfig.dungeonName}</button>
         </section>
       </main>
@@ -749,7 +792,7 @@ export default function ExplorationScreen() {
           </aside>
         </div>
       )}
-      {activeEvent && <EventModal config={activeConfig} event={activeEvent} question={currentQuestion} sealsSolved={current.sealsSolved} onResolve={handleResolve} onChooseRoute={handleChooseRoute} onClose={() => setActiveEvent(null)} onFinish={finishExploration} clueTarget={clueTarget} clueTopic={clueTopic} />}
+      {activeEvent && <EventModal config={activeConfig} event={activeEvent} question={currentQuestion} sealsSolved={current.sealsSolved} onResolve={handleResolve} onChooseRoute={handleChooseRoute} onClose={handleCloseEvent} onFinish={finishExploration} clueTarget={clueTarget} clueTopic={clueTopic} />}
     </main>
   );
 }

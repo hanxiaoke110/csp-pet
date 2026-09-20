@@ -1,4 +1,7 @@
-const DEFAULT_REMOTE_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
+const DEFAULT_REMOTE_BASES = [
+  'https://cards.cspstudy.top/course-data',
+  'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data',
+];
 
 interface VersionInfo {
   version: number;
@@ -12,6 +15,7 @@ interface LoadVersionedJsonOptions<T> {
   bundledUrl: string;
   validate: (data: unknown) => data is T;
   remoteBase?: string;
+  remoteBases?: string[];
   versionTimeoutMs?: number;
   dataTimeoutMs?: number;
   updateJitterMs?: number;
@@ -99,7 +103,8 @@ export async function loadVersionedRemoteJson<T>(options: LoadVersionedJsonOptio
     dataFile,
     bundledUrl,
     validate,
-    remoteBase = DEFAULT_REMOTE_BASE,
+    remoteBase,
+    remoteBases,
     versionTimeoutMs = 8000,
     dataTimeoutMs = 15000,
     updateJitterMs = 120000,
@@ -117,21 +122,25 @@ export async function loadVersionedRemoteJson<T>(options: LoadVersionedJsonOptio
     if (localVersion > 0) localStorage.setItem(versionKey, String(localVersion));
   }
 
-  try {
-    const remoteVersion = await fetchJson<VersionInfo>(`${remoteBase}/${versionFile}`, versionTimeoutMs);
-    if (Number.isFinite(remoteVersion.version) && remoteVersion.version > localVersion) {
-      refreshCachedInBackground({
-        url: `${remoteBase}/${dataFile}`,
-        timeoutMs: dataTimeoutMs,
-        jitterMs: updateJitterMs,
-        cacheKey,
-        versionKey,
-        version: remoteVersion.version,
-        validate,
-      });
+  const candidates = remoteBases?.length ? remoteBases : remoteBase ? [remoteBase] : DEFAULT_REMOTE_BASES;
+  for (const candidate of candidates) {
+    try {
+      const remoteVersion = await fetchJson<VersionInfo>(`${candidate}/${versionFile}`, versionTimeoutMs);
+      if (Number.isFinite(remoteVersion.version) && remoteVersion.version > localVersion) {
+        refreshCachedInBackground({
+          url: `${candidate}/${dataFile}`,
+          timeoutMs: dataTimeoutMs,
+          jitterMs: updateJitterMs,
+          cacheKey,
+          versionKey,
+          version: remoteVersion.version,
+          validate,
+        });
+      }
+      break;
+    } catch {
+      /* try the next static source, then keep cached/bundled data */
     }
-  } catch {
-    /* network errors fall back to cached/bundled data */
   }
 
   return data;

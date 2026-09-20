@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { openUrl } from '@tauri-apps/plugin-opener';
 
 type ViewKey = 'courses' | 'firstRound' | 'secondRound';
-type StageFilter = 'all' | 'C1 入门阶段' | 'C2 基础阶段' | 'C3 进阶阶段';
+type StageFilter = 'all' | 'C1 入门阶段' | 'C2 基础阶段' | 'C3 进阶阶段' | 'C4 提高阶段';
 
 interface CourseCardSet {
   title: string;
@@ -66,7 +66,7 @@ interface KnowledgeLecturesData {
 }
 
 const VIEWS: { key: ViewKey; label: string; hint: string }[] = [
-  { key: 'courses', label: '常规课课程目录', hint: 'P1-P69，后续随课程继续增加' },
+  { key: 'courses', label: '常规课课程目录', hint: 'P1-P77，后续随课程继续增加' },
   { key: 'firstRound', label: 'CSP-J 一轮知识点', hint: '知识点、专题、真题梳理、535计划' },
   { key: 'secondRound', label: 'CSP-J 二轮知识点', hint: '复赛算法、代码模板、真题讲评' },
 ];
@@ -79,13 +79,14 @@ const STAGES: { key: StageFilter; label: string }[] = [
   { key: 'C1 入门阶段', label: 'C1 入门' },
   { key: 'C2 基础阶段', label: 'C2 基础' },
   { key: 'C3 进阶阶段', label: 'C3 进阶' },
+  { key: 'C4 提高阶段', label: 'C4 提高' },
 ];
 
 const STAGE_LABELS: Record<string, StageFilter> = {
   C1: 'C1 入门阶段',
   C2: 'C2 基础阶段',
   C3: 'C3 进阶阶段',
-  C4: 'C3 进阶阶段',
+  C4: 'C4 提高阶段',
 };
 
 const CARD_TYPES = [

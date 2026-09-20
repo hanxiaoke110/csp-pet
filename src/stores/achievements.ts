@@ -124,10 +124,10 @@ export function createAchievements(
       check: () => ({ unlocked: getCompletedCount() >= 25, progress: Math.min(getCompletedCount(), 25), total: 25 }) },
     { id: 'stage-c2', name: 'C2 毕业', description: '完成阶段 2 全部课程验证（累计 50 题）', category: 'course', icon: '🎓',
       check: () => ({ unlocked: getCompletedCount() >= 50, progress: Math.min(getCompletedCount(), 50), total: 50 }) },
-    { id: 'stage-c3', name: 'C3 毕业', description: '完成阶段 3 全部课程验证（累计 68 题）', category: 'course', icon: '🎓',
-      check: () => ({ unlocked: getCompletedCount() >= 68, progress: Math.min(getCompletedCount(), 68), total: 68 }) },
-    { id: 'stage-c4', name: 'C4 毕业', description: '完成 100 道课程验证（C4 阶段即将上线）', category: 'course', icon: '🎓',
-      check: () => ({ unlocked: getCompletedCount() >= 100, progress: Math.min(getCompletedCount(), 100), total: 100 }) },
+    { id: 'stage-c3', name: 'C3 毕业', description: '完成阶段 3 全部课程验证（累计 71 题）', category: 'course', icon: '🎓',
+      check: () => ({ unlocked: getCompletedCount() >= 71, progress: Math.min(getCompletedCount(), 71), total: 71 }) },
+    { id: 'stage-c4', name: 'C4 毕业', description: '完成阶段 4 当前全部课程验证（累计 77 题）', category: 'course', icon: '🎓',
+      check: () => ({ unlocked: getCompletedCount() >= 77, progress: Math.min(getCompletedCount(), 77), total: 77 }) },
 
     // === 🧠 头脑风暴 ===
     { id: 'quiz-weekly-1', name: '周常首胜', description: '完成 1 次每周任务', category: 'quiz', icon: '📋',

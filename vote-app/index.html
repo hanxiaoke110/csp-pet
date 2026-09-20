@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#081a2d">
+  <meta name="description" content="为你最喜欢的智子点亮星光，选出下一批动态典藏卡。">
+  <title>谁能闪耀成卡？智子典藏人气大选！</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回页面顶部">
+      <span class="brand-mark">✦</span>
+      <span>星灵典藏局</span>
+    </a>
+    <a class="header-chip" href="#rules">投票规则</a>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="kicker"><span>第一届</span> 智子典藏卡人气票选</p>
+        <h1 id="hero-title">谁能<br><em>闪耀成卡？</em></h1>
+        <p class="hero-lead">智子工坊全员集合！选出你最想珍藏的 <strong>5 位伙伴</strong>，人气前 10 名将有机会变成闪闪发光的动态典藏卡。</p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#vote">开始挑选我的智子 <span>↓</span></a>
+          <span class="free-note">免费投票 · 不消耗金币</span>
+        </div>
+        <div class="hero-stats" aria-live="polite">
+          <div><strong id="candidate-count">—</strong><span>位候选智子</span></div>
+          <div><strong id="ballot-count">—</strong><span>份星光选票</span></div>
+          <div><strong>TOP 10</strong><span>晋级典藏系列</span></div>
+        </div>
+      </div>
+
+      <div class="demo-wrap" id="demo">
+        <div class="demo-label"><span>✨</span><strong>典藏卡抢先看</strong><small>轻触卡片翻面</small></div>
+        <div class="card-scene" id="card-scene">
+          <button class="holo-card" id="holo-card" type="button" aria-label="阿斯特拉典藏卡，点击翻面" aria-pressed="false">
+            <span class="card-face card-front">
+              <img src="./assets/astra-collector-card.webp" alt="阿斯特拉·星辉守望典藏卡">
+              <span class="foil"></span><span class="glare"></span><span class="sparkles"></span>
+            </span>
+            <span class="card-face card-back" aria-hidden="true">
+              <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
+              <span class="back-star">✦</span>
+              <strong>星灵典藏</strong><small>ASTRAL COLLECTION</small>
+              <span class="edition">NO. 001</span>
+              <q>每一次好奇，都是通往星海的坐标。</q>
+            </span>
+          </button>
+        </div>
+        <p>第一张样品卡「阿斯特拉 · NO.001」已经苏醒！</p>
+      </div>
+    </section>
+
+    <section class="rules-strip" id="rules" aria-label="投票规则">
+      <article><span>①</span><div><strong>组建应援小队</strong><p>最多选择 5 只智子</p></div></article>
+      <article><span>②</span><div><strong>送出一束星光</strong><p>每台设备提交一次</p></div></article>
+      <article><span>③</span><div><strong>等待荣耀揭晓</strong><p>结束后统一公布前十</p></div></article>
+    </section>
+
+    <section class="vote-section" id="vote" aria-labelledby="vote-title">
+      <div class="section-heading">
+        <div>
+          <p class="kicker">工坊智子 · 全员登场</p>
+          <h2 id="vote-title">点亮你的梦幻阵容</h2>
+          <p>轻轻点一下，为喜欢的智子戴上星星。候选顺序已随机排列，每一位都有公平的出场机会。</p>
+        </div>
+        <div class="selection-medallion" aria-live="polite"><strong id="selection-count">0</strong><span>/ 5</span><small>已点亮</small></div>
+      </div>
+
+      <div class="catalog-tools">
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <span class="sr-only">搜索智子</span>
+          <input id="search" type="search" placeholder="搜索智子的名字……" autocomplete="off">
+        </label>
+        <div class="filters" id="filters" aria-label="按属性筛选">
+          <button class="filter active" type="button" data-element="all">全部</button>
+          <button class="filter" type="button" data-element="fire">火</button>
+          <button class="filter" type="button" data-element="water">水</button>
+          <button class="filter" type="button" data-element="wind">风</button>
+          <button class="filter" type="button" data-element="earth">地</button>
+          <button class="filter" type="button" data-element="light">光</button>
+        </div>
+      </div>
+
+      <div class="catalog-status" id="catalog-status" role="status">智子们正在赶来集合……</div>
+      <div class="pet-grid" id="pet-grid" aria-live="polite"></div>
+      <button class="load-more" id="load-more" type="button" hidden>再看看更多智子</button>
+    </section>
+
+    <section class="promise">
+      <span class="promise-star">✦</span>
+      <div><p>你的选择，会变成下一张闪耀的收藏。</p><small>投票无需登录，不收集姓名和手机号。请每台设备只提交一张选票，让每一颗星光都公平闪耀。</small></div>
+    </section>
+  </main>
+
+  <div class="vote-dock" id="vote-dock" aria-live="polite">
+    <div class="dock-copy"><strong id="dock-title">还没有点亮智子</strong><span id="dock-subtitle">从喜欢的伙伴开始吧</span></div>
+    <div class="chosen-faces" id="chosen-faces" aria-hidden="true"></div>
+    <button class="submit-button" id="submit-button" type="button" disabled>投出我的星光！</button>
+  </div>
+
+  <dialog class="confirm-dialog" id="confirm-dialog">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+      <span class="dialog-star">✦</span>
+      <p class="kicker">最后确认</p>
+      <h2>就是它们了吗？</h2>
+      <p>选票提交后不能修改，再看你的应援小队一眼吧！</p>
+      <div class="confirm-team" id="confirm-team"></div>
+      <div class="turnstile-slot" id="turnstile-slot" hidden></div>
+      <div class="dialog-actions">
+        <button class="secondary-button" value="cancel">再想一想</button>
+        <button class="primary-button" id="confirm-submit" value="default">就是它们，出发！</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="success-dialog" id="success-dialog">
+    <div class="success-burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <span class="success-mark">✓</span>
+    <p class="kicker">投票成功</p>
+    <h2>星光已经送达！</h2>
+    <p>谢谢你为喜欢的智子加油。活动结束后，记得回来看看谁成功晋级典藏卡前十名！</p>
+    <div class="success-team" id="success-team"></div>
+    <p class="receipt">星光回执 <strong id="receipt-code">—</strong></p>
+    <button class="primary-button" id="success-close" type="button">看看我的应援小队</button>
+  </dialog>
+
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

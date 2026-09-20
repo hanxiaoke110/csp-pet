@@ -392,7 +392,9 @@ function BackupSection() {
     setMsg(null);
     try {
       const info = await createAutomaticBackup('manual');
-      const summary = summarizeBackup(await readAutomaticBackup(info.name));
+      // 摘要随刚写入的快照返回，避免自动轮换与二次读取之间出现竞态。
+      const summary = info.summary;
+      if (!summary) throw new Error('备份已写入，但未能生成内容摘要');
       await refreshBackups();
       setMsg({ text: `✅ 安全备份已完成：${summary.petCount} 只智子、${summary.coins} 金币、${summary.completedCourses} 道课程进度`, ok: true });
     } catch (e: any) {
@@ -417,11 +419,17 @@ function BackupSection() {
   };
 
   const prepareAutomaticRestore = async () => {
-    const info = backups[0];
-    if (!info) return;
     setBusy('restore');
     setMsg(null);
     try {
+      // 恢复前重新扫描目录，避免使用被自动轮换淘汰的过期列表。
+      const latestBackups = await listAutomaticBackups();
+      setBackups(latestBackups);
+      const info = latestBackups[0];
+      if (!info) {
+        setMsg({ text: '⚠️ 当前没有可用的自动备份，请先点击“立即安全备份”', ok: false });
+        return;
+      }
       const data = await readAutomaticBackup(info.name);
       setPendingRestore({ info, data, summary: summarizeBackup(data) });
     } catch (e: any) {

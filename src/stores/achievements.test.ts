@@ -56,15 +56,19 @@ describe('成就判定', () => {
     expect(c.find(x => x.id === 'super-3of5')!.check().unlocked).toBe(false);
   });
 
-  it('阶段毕业成就：按课程阶段累计题数判定（25/50/68）', () => {
+  it('阶段毕业成就：按课程阶段累计题数判定（25/50/71/77）', () => {
     const completed: Record<string, string> = {};
-    for (let i = 0; i < 68; i++) completed[`lesson-${i}`] = 'completed';
+    for (let i = 0; i < 71; i++) completed[`lesson-${i}`] = 'completed';
     store['csp_problem_status'] = JSON.stringify(completed);
     const all = build(0, 0, 0);
     expect(all.find(a => a.id === 'stage-c1')!.check().unlocked).toBe(true);
     expect(all.find(a => a.id === 'stage-c2')!.check().unlocked).toBe(true);
     expect(all.find(a => a.id === 'stage-c3')!.check().unlocked).toBe(true);
     expect(all.find(a => a.id === 'stage-c4')!.check().unlocked).toBe(false);
+
+    for (let i = 71; i < 77; i++) completed[`lesson-${i}`] = 'completed';
+    store['csp_problem_status'] = JSON.stringify(completed);
+    expect(build().find(a => a.id === 'stage-c4')!.check().unlocked).toBe(true);
   });
 
   it('双料冠军：超级完美 + 周常完美各 1 次才解锁', () => {

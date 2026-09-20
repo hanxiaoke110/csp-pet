@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "updatedAt": "2026-09-15T10:00:00.000Z",
+  "cards": [
+    {
+      "id": "astra-stargazer-001",
+      "version": 1,
+      "number": "001",
+      "name": "阿斯特拉",
+      "title": "星辉守望",
+      "element": "light",
+      "rarity": "legendary",
+      "price": 688,
+      "description": "守望星图与智慧之光的初代典藏卡。",
+      "quote": "愿求知的星光，永远照亮下一段旅程。",
+      "featured": true,
+      "assetBytes": 684282,
+      "assets": {
+        "thumbnail": "./astra-stargazer-001/thumbnail.webp",
+        "background": "./astra-stargazer-001/front.webp"
+      },
+      "checksums": {
+        "thumbnail": "0d0005cccce004115108018d7e383344088489d84270a6a83c9c66fd8c052857",
+        "background": "d6fabb977002e57a889b9ab1ba8090551a50d72fca02c0a71f802316a13614f7"
+      }
+    },
+    {
+      "id": "furina-water-stage-002",
+      "version": 1,
+      "number": "002",
+      "name": "芙宁娜",
+      "title": "万众瞩目的谢幕",
+      "element": "water",
+      "rarity": "legendary",
+      "price": 888,
+      "description": "珍珠水幕与鎏金舞台交织的首期全息典藏。",
+      "quote": "让每一滴水，都为勇气鼓掌。",
+      "featured": true,
+      "assetBytes": 6239526,
+      "assets": {
+        "thumbnail": "./furina-water-stage-002/thumbnail.webp",
+        "background": "./furina-water-stage-002/background.png",
+        "subject": "./furina-water-stage-002/subject.png",
+        "text": "./furina-water-stage-002/text.png"
+      },
+      "checksums": {
+        "thumbnail": "926e8498c8d2e4ecaf39af9e408e1d9892335aee7ce978cb733fd1268d9db55c",
+        "background": "c0fae0af3063c39df22034abffddb734f659ad86fe476fe5839e36e3aef1548f",
+        "subject": "83e72c324ce28c70409f99baff5c7ad9a9d7395c8bfa5e22edcd646a6b518c35",
+        "text": "d5e98658ae3310446b8647715e3261f7931f01eb0debbd66490bb72a42fdc99d"
+      }
+    }
+  ]
+}

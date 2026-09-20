@@ -1,7 +1,7 @@
 {
   "name": "csp-desktop-pet",
   "private": true,
-  "version": "1.7.46",
+  "version": "1.7.47",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,6 +9,12 @@
     "build": "tsc && vite build && node scripts/prune-dist-question-bank.mjs dist",
     "build:dungeon": "vite build --config vite.config.dungeon.ts && cp dist-dungeon/index-dungeon.html dist-dungeon/index.html && node scripts/prune-dist-question-bank.mjs dist-dungeon",
     "preview": "vite preview",
+    "vote:catalog": "node scripts/build-vote-catalog.mjs",
+    "vote:dev": "vite vote-app --host 127.0.0.1",
+    "vote:deploy": "npm run vote:catalog && npx wrangler deploy --cwd deploy --config wrangler.vote.toml",
+    "wardrobe:catalog": "node scripts/build-wardrobe-catalog.mjs",
+    "cloud-assets:build": "node scripts/build-cloud-assets.mjs",
+    "cloud-assets:deploy": "npm run wardrobe:catalog && npm run cloud-assets:build && npx wrangler deploy --cwd deploy --config wrangler.cards.toml",
     "tauri": "tauri",
     "test": "vitest run",
     "test:watch": "vitest",

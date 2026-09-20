@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T11:56:48.664Z",
+  "generatedAt": "2026-09-20T06:21:22.106Z",
   "sourceFiles": [
     "public/course-data/unified-quiz-bank.json",
     "public/course-data/quiz-bank.json",
@@ -24,31 +24,31 @@
   },
   "totals": {
     "questions": 2490,
-    "sourceIssuesTotal": 23,
+    "sourceIssuesTotal": 71,
     "excludedIssuesTotal": 7,
     "visibleP0": 0,
-    "visibleP1": 0,
-    "visibleP2": 16,
+    "visibleP1": 15,
+    "visibleP2": 49,
     "sourceP0": 0,
-    "sourceP1": 1,
-    "sourceP2": 22,
-    "v2VisibleDisputed": 8,
-    "v2VisibleBroken": 0,
+    "sourceP1": 16,
+    "sourceP2": 55,
+    "v2VisibleDisputed": 31,
+    "v2VisibleBroken": 15,
     "v2Excluded": 7
   },
   "byCategory": {
-    "P1:v2": 1,
-    "P2:v2": 22
+    "P2:v2": 55,
+    "P1:v2": 16
   },
   "summaries": [
     {
       "file": "public/course-data/unified-quiz-bank.json",
       "total": 1023,
-      "findings": 3,
+      "findings": 41,
       "bySev": {
         "P0": 0,
-        "P1": 1,
-        "P2": 2
+        "P1": 16,
+        "P2": 25
       }
     },
     {
@@ -74,15 +74,479 @@
     {
       "file": "src-dungeon/data/csp-exam-bank.json",
       "total": 795,
-      "findings": 10,
+      "findings": 20,
       "bySev": {
         "P0": 0,
         "P1": 0,
-        "P2": 10
+        "P2": 20
       }
     }
   ],
   "findings": [
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-09-2-14",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_canonical_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2023-12-1-12",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-1-13",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-06-1-07",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-2-11",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-2-13",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2024-reading-1",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2024-reading-2",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2024-reading-3",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2024-completion-1",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2024-completion-2",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2023-reading-1",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2023-reading-2",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2023-reading-3",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2022-reading-1",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2022-reading-2",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2022-reading-3",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2021-reading-1",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2021-reading-2",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2021-reading-3",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "super-2021-completion-1",
+      "type": "v2",
+      "group": "",
+      "severity": "P1",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P1",
+          "cat": "v2",
+          "msg": "V2 验证状态: broken (missing_children)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-03-3-09",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-09-3-02",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2024-12-3-05",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-06-4-07",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "noip-2016-p-398",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "noip-2016-p-429",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "noip-2017-p-464",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "noip-2017-p-468",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
     {
       "file": "public/course-data/unified-quiz-bank.json",
       "id": "noip-2018-p-721",
@@ -117,11 +581,155 @@
     },
     {
       "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-17",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-3-20",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-4-18",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-09-4-20",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-2-21",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2025-12-2-22",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
       "id": "gesp-2025-12-3-22",
       "type": "v2",
       "group": "",
       "severity": "P2",
       "excluded": true,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-1-05",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-3-03",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "public/course-data/unified-quiz-bank.json",
+      "id": "gesp-2026-03-4-22",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
       "issues": [
         {
           "sev": "P2",
@@ -447,6 +1055,166 @@
           "sev": "P2",
           "cat": "v2",
           "msg": "V2 验证状态: disputed (model_reports_ambiguity)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-09-2-14",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_canonical_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2023-12-1-12",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-03-1-13",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-06-1-07",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-09-2-11",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-2-13",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-03-3-09",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-09-3-02",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2024-12-3-05",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
+        }
+      ],
+      "question": ""
+    },
+    {
+      "file": "src-dungeon/data/csp-exam-bank.json",
+      "id": "gesp-2025-06-4-07",
+      "type": "v2",
+      "group": "",
+      "severity": "P2",
+      "excluded": false,
+      "issues": [
+        {
+          "sev": "P2",
+          "cat": "v2",
+          "msg": "V2 验证状态: disputed (model_conflict)"
         }
       ],
       "question": ""

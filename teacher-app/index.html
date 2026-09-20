@@ -52,6 +52,7 @@ h3{font-size:15px;margin-bottom:8px}
 .announcement-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#94a3b8}
 .announcement-scope{padding:2px 7px;border-radius:4px;background:#eff6ff;color:#1d4ed8;font-weight:600}
 .announcement-scope.global{background:#fff7ed;color:#c2410c}
+.vote-admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.vote-admin-stat{padding:18px;background:linear-gradient(135deg,#fff7ed,#fff);border:1px solid #fed7aa;border-radius:12px}.vote-admin-stat strong{display:block;color:#c2410c;font-size:26px}.vote-admin-stat span{font-size:12px;color:#64748b}.vote-rank{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid #f1f5f9}.vote-rank:last-child{border-bottom:0}.vote-rank>b{color:#f97316;font-size:18px;text-align:center}.vote-rank small{color:#64748b}.vote-admin-actions{display:flex;gap:8px;flex-wrap:wrap}.vote-status-open{color:#16a34a}.vote-status-closed{color:#ef4444}@media(max-width:620px){.vote-admin-stats{grid-template-columns:1fr}.vote-rank{grid-template-columns:34px 1fr auto}}
 .login-box{max-width:380px;margin:80px auto}
 .element-btn{padding:10px 16px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;transition:all .15s;text-align:center;flex:1}
 .element-btn:hover{border-color:#fed7aa}
@@ -313,6 +314,7 @@ function Dashboard() {
       { key:'teachers', label:'👥 教师管理' },
       { key:'wishes', label:'💡 许愿管理' },
       { key:'announcements', label:'📣 公告管理' },
+      { key:'collector-vote', label:'✨ 典藏投票' },
       { key:'dungeon-rules', label:'📜 试炼规则' },
       { key:'codes', label:'🎫 兑换码' },
       { key:'feedback', label:'💬 需求收集' },
@@ -589,6 +591,7 @@ function Dashboard() {
     // ═══ FEEDBACK TAB ═══
     tab === 'feedback' && !loading && React.createElement(FeedbackPanel),
     tab === 'announcements' && !loading && React.createElement(AnnouncementPanel, { isAdmin }),
+    tab === 'collector-vote' && isAdmin && !loading && React.createElement(CollectorVotePanel),
     tab === 'dungeon-rules' && isAdmin && !loading && React.createElement(LeaderboardRulesPanel),
     tab === 'question-bank' && !loading && React.createElement(QuestionBankPanel),
     // ═══ PERMISSION-GATED TABS ═══
@@ -596,6 +599,90 @@ function Dashboard() {
     // ═══ WORKSHOP TABS ═══
     tab==='workshop-import' ? React.createElement(ImportPanel, { onCreated:loadWorkshopPets }) : null,
     tab==='workshop-my' ? React.createElement(MyPetsPanel, { pets:workshopPets, onRefresh:loadWorkshopPets }) : null,
+  );
+}
+
+function CollectorVotePanel() {
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
+
+  async function load() {
+    setLoading(true);
+    const result = await api('/api/admin/collector-vote/results');
+    if (result.error) toast(result.error, 'error'); else setData(result);
+    setLoading(false);
+  }
+
+  React.useEffect(() => { load(); }, []);
+
+  async function setStatus(status) {
+    const action = status === 'open' ? '开启' : '结束';
+    if (!confirm(`确认${action}本轮典藏卡投票？${status === 'closed' ? '结束后公开页面将显示前十名。' : ''}`)) return;
+    setSaving(true);
+    const result = await api('/api/admin/collector-vote/config', {
+      method:'PUT', body:JSON.stringify({ status }),
+    });
+    setSaving(false);
+    if (result.error) return toast(result.error, 'error');
+    toast(status === 'open' ? '投票已开启' : '投票已结束，前十名已公开');
+    load();
+  }
+
+  async function exportBallots() {
+    try {
+      const response = await fetch(`${API}/api/admin/collector-vote/export`, { headers:{ 'X-Admin-Token':state._adminToken } });
+      if (!response.ok) throw new Error('导出失败');
+      const blob = await response.blob();
+      const href = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = href; link.download = `典藏投票匿名选票-${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(href);
+      toast('匿名选票已导出');
+    } catch { toast('导出失败，请检查网络后重试', 'error'); }
+  }
+
+  if (loading) return React.createElement('div', { className:'spinner' });
+  if (!data) return React.createElement('div', { className:'empty' }, '投票数据加载失败');
+  const status = data.config?.status || 'closed';
+  const totalVotes = (data.results || []).reduce((sum, item) => sum + (Number(item.votes) || 0), 0);
+  return React.createElement('div', null,
+    React.createElement('div', { className:'card' },
+      React.createElement('div', { className:'row', style:{ alignItems:'flex-start', marginBottom:16 } },
+        React.createElement('div', null,
+          React.createElement('h3', null, '谁能闪耀成卡？智子典藏人气大选'),
+          React.createElement('div', { style:{ fontSize:12, color:'#64748b' } },
+            '公开站点：', React.createElement('a', { href:'https://vote.cspstudy.top', target:'_blank', rel:'noopener', style:{ color:'#f97316' } }, 'vote.cspstudy.top ↗')),
+        ),
+        React.createElement('strong', { className:status === 'open' ? 'vote-status-open' : 'vote-status-closed' }, status === 'open' ? '● 投票进行中' : '● 投票已结束'),
+      ),
+      React.createElement('div', { className:'vote-admin-stats' },
+        React.createElement('div', { className:'vote-admin-stat' }, React.createElement('strong', null, data.ballotCount || 0), React.createElement('span', null, '有效匿名选票')),
+        React.createElement('div', { className:'vote-admin-stat' }, React.createElement('strong', null, totalVotes), React.createElement('span', null, '送出的星光总数')),
+        React.createElement('div', { className:'vote-admin-stat' }, React.createElement('strong', null, (data.snapshots || []).length), React.createElement('span', null, '已封存每日快照')),
+      ),
+      React.createElement('div', { className:'vote-admin-actions' },
+        status !== 'open' && React.createElement('button', { className:'btn btn-primary', disabled:saving, onClick:()=>setStatus('open') }, '▶ 开启投票'),
+        status === 'open' && React.createElement('button', { className:'btn btn-danger', disabled:saving, onClick:()=>setStatus('closed') }, '■ 结束并公布前十'),
+        React.createElement('button', { className:'btn btn-outline', onClick:load }, '↻ 刷新统计'),
+        React.createElement('button', { className:'btn btn-outline', onClick:exportBallots }, '↓ 导出匿名选票'),
+      ),
+    ),
+    React.createElement('div', { className:'card' },
+      React.createElement('h3', null, '当前人气排名'),
+      !(data.results || []).length
+        ? React.createElement('div', { className:'empty' }, '还没有收到选票')
+        : data.results.slice(0, 20).map(item => React.createElement('div', { key:item.petId, className:'vote-rank' },
+            React.createElement('b', null, String(item.rank).padStart(2,'0')),
+            React.createElement('span', null, item.name),
+            React.createElement('small', null, item.votes, ' 束星光'),
+          )),
+    ),
+    React.createElement('div', { className:'card' },
+      React.createElement('h3', null, '数据安全说明'),
+      React.createElement('div', { style:{ color:'#64748b', fontSize:12, lineHeight:1.8 } },
+        '只保存匿名设备标识、选择结果、星光回执和提交时间，不收集姓名或手机号。服务端确认写入后前台才显示成功；重复提交返回原回执，不会重复计票。每天按北京时间自动封存一次结果快照。'),
+    ),
   );
 }
 

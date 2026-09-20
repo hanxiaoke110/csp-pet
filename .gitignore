@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 dist-dungeon
+.cloudflare-static
+cloud-assets-source/
+/artifacts/
+/design/holo-card-demo-*/
 src-tauri/target
 .wrangler
 *.local

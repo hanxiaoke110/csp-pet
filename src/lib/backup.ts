@@ -8,6 +8,7 @@ import {
 } from '@tauri-apps/plugin-fs';
 import { sqliteSet } from './sqlite-storage';
 import { countCompletedProblems, mergeProblemStatusSnapshots } from './problemStatusMerge';
+import { localDateKey } from '../utils/localDate';
 
 const FORMAT = 'csp-pet-backup';
 const BACKUP_VERSION = 1;
@@ -16,6 +17,7 @@ export const AUTO_BACKUP_DIR = 'backups';
 export const MAX_BACKUP_FILE_BYTES = 12 * 1024 * 1024;
 const MAX_AUTOMATIC_BACKUPS = 3;
 const AUTO_BACKUP_DATE_KEY = 'csp_last_automatic_backup_date';
+let backupWriteQueue: Promise<void> = Promise.resolve();
 
 // 可从服务器重新下载的内容，不打包进备份（减小文件体积）
 const EXCLUDED_LS_KEYS = new Set([
@@ -25,6 +27,10 @@ const EXCLUDED_LS_KEYS = new Set([
   'csp_imported_lessons',
   'csp_data_version',
   'csp_last_automatic_backup_date',
+  'csp_collector_card_catalog_cache_v1',
+  'csp_collector_card_cache_v1',
+  'csp_wardrobe_catalog_cache_v1',
+  'csp_wardrobe_asset_cache_v1',
   'dungeon_reviewed_exam_bank_v1',
   'dungeon_reviewed_exam_bank_version',
   'dungeon_dungeons_v1',
@@ -53,6 +59,8 @@ const SQLITE_BACKUP_KEYS = new Set([
   'hatch_eggs',
   'quiz_state',
   'problem_status',
+  'collector_cards',
+  'profile_data',
 ]);
 
 /** 解析并校验备份文件；不通过时给出孩子能看懂的拒绝原因 */
@@ -208,9 +216,20 @@ async function backupNames(): Promise<string[]> {
   }
 }
 
-async function rotateAutomaticBackups(): Promise<void> {
+export function selectBackupsToRemove(names: string[], protectedName?: string): string[] {
+  const sorted = [...new Set(names)].sort((a, b) => b.localeCompare(a));
+  const keep = new Set<string>();
+  if (protectedName && sorted.includes(protectedName)) keep.add(protectedName);
+  for (const name of sorted) {
+    if (keep.size >= MAX_AUTOMATIC_BACKUPS) break;
+    keep.add(name);
+  }
+  return sorted.filter(name => !keep.has(name));
+}
+
+async function rotateAutomaticBackups(protectedName?: string): Promise<void> {
   const names = await backupNames();
-  for (const name of names.slice(MAX_AUTOMATIC_BACKUPS)) {
+  for (const name of selectBackupsToRemove(names, protectedName)) {
     try {
       await remove(`${AUTO_BACKUP_DIR}/${name}`, { baseDir: BaseDirectory.AppData });
     } catch { /* 清理旧备份失败不影响新备份 */ }
@@ -221,6 +240,8 @@ export interface AutomaticBackupInfo {
   name: string;
   exportedAt: string;
   appVersion: string;
+  /** 新建备份时直接返回摘要，避免写完后为展示结果再次读取文件。 */
+  summary?: BackupSummary;
 }
 
 export async function ensureAutomaticBackupDirectory(): Promise<void> {
@@ -229,23 +250,42 @@ export async function ensureAutomaticBackupDirectory(): Promise<void> {
 
 /** 写入 AppData/backups，全程不弹系统文件框，避免 Windows 置顶窗口死锁。 */
 export async function createAutomaticBackup(reason: 'startup' | 'manual' | 'before-update' | 'before-restore' = 'manual'): Promise<AutomaticBackupInfo> {
-  const backup = await buildBackup();
-  const validationError = validateBackupState(backup);
-  if (validationError) throw new Error(validationError);
-  const contents = JSON.stringify(backup);
-  if (new TextEncoder().encode(contents).byteLength > MAX_BACKUP_FILE_BYTES) {
-    throw new Error('备份数据异常过大，已停止写入');
-  }
-  await ensureAutomaticBackupDirectory();
-  const name = `CSP-${timestampForFilename(new Date(backup.exportedAt))}-${reason}.json`;
-  await writeTextFile(`${AUTO_BACKUP_DIR}/${name}`, contents, { baseDir: BaseDirectory.AppData });
-  await rotateAutomaticBackups();
-  return { name, exportedAt: backup.exportedAt, appVersion: backup.appVersion };
+  let resolveResult!: (value: AutomaticBackupInfo) => void;
+  let rejectResult!: (reason: unknown) => void;
+  const result = new Promise<AutomaticBackupInfo>((resolve, reject) => {
+    resolveResult = resolve;
+    rejectResult = reject;
+  });
+  backupWriteQueue = backupWriteQueue.then(async () => {
+    try {
+      const backup = await buildBackup();
+      const validationError = validateBackupState(backup);
+      if (validationError) throw new Error(validationError);
+      const contents = JSON.stringify(backup);
+      if (new TextEncoder().encode(contents).byteLength > MAX_BACKUP_FILE_BYTES) {
+        throw new Error('备份数据异常过大，已停止写入');
+      }
+      await ensureAutomaticBackupDirectory();
+      const name = `CSP-${timestampForFilename(new Date(backup.exportedAt))}-${reason}.json`;
+      await writeTextFile(`${AUTO_BACKUP_DIR}/${name}`, contents, { baseDir: BaseDirectory.AppData });
+      await rotateAutomaticBackups(name);
+      resolveResult({
+        name,
+        exportedAt: backup.exportedAt,
+        appVersion: backup.appVersion,
+        summary: summarizeBackup(backup),
+      });
+    } catch (error) {
+      rejectResult(error);
+    }
+  });
+  backupWriteQueue = backupWriteQueue.catch(() => undefined);
+  return result;
 }
 
 /** 每天首次启动后备份一次；只有成功写入后才记录日期。 */
 export async function ensureDailyAutomaticBackup(): Promise<AutomaticBackupInfo | null> {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDateKey();
   if (localStorage.getItem(AUTO_BACKUP_DATE_KEY) === today) return null;
   const info = await createAutomaticBackup('startup');
   localStorage.setItem(AUTO_BACKUP_DATE_KEY, today);
@@ -269,7 +309,12 @@ export async function readAutomaticBackup(name: string): Promise<BackupFile> {
   if (!name || /[/\\]/.test(name) || !name.toLowerCase().endsWith('.json')) {
     throw new Error('备份文件名无效');
   }
-  const raw = await readTextFile(`${AUTO_BACKUP_DIR}/${name}`, { baseDir: BaseDirectory.AppData });
+  let raw: string;
+  try {
+    raw = await readTextFile(`${AUTO_BACKUP_DIR}/${name}`, { baseDir: BaseDirectory.AppData });
+  } catch {
+    throw new Error('备份文件已不存在或已被清理，请刷新备份列表后重试');
+  }
   const parsed = parseBackup(raw);
   if (!parsed.ok) throw new Error(parsed.error);
   const validationError = validateBackupState(parsed.data);

@@ -3,6 +3,7 @@
 import { sqliteGet, sqliteSetFireAndForget } from './sqlite-storage';
 import type { ProblemStatus } from '../components/courses/ProblemViewer';
 import { mergeProblemStatusSnapshots } from './problemStatusMerge';
+import { markLearningActivity } from '../utils/localDate';
 
 let cache: Record<string, ProblemStatus> = {};
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -41,6 +42,7 @@ export function getProblemStatus(problemId: string): ProblemStatus {
  */
 export function setProblemStatus(problemId: string, status: ProblemStatus): void {
   cache[problemId] = status;
+  if (status === 'completed') markLearningActivity();
 
   // Sync write to localStorage immediately so achievements & other readers see latest
   const json = JSON.stringify(cache);

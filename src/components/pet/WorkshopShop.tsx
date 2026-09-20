@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { usePetStore } from '../../stores/petStore';
 import { useHatchStore } from '../../stores/hatchStore';
 import { setWorkshopElement, type PetElement } from '../../types/pet';
@@ -8,6 +8,8 @@ import HatchConfirmModal from './HatchConfirmModal';
 import ConfirmModal from './ConfirmModal';
 
 const WORKSHOP_API = 'https://api.cspstudy.top';
+const WORKSHOP_STATIC = 'https://cards.cspstudy.top/workshop';
+const PAGE_SIZE = 24;
 
 function GoldCoin() {
   return <span className="gold-coin-icon" aria-hidden="true">G</span>;
@@ -29,14 +31,72 @@ export function WorkshopShop() {
   const [hasMore, setHasMore] = useState(false);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
+  const staticPets = useRef<any[]>([]);
 
-  const loadPets = (cursor?: string | null) => {
+  const resolveStaticPet = (pet: any) => ({
+    ...pet,
+    spritesheet_static_url: pet.spritesheet_static_url ? new URL(pet.spritesheet_static_url, `${WORKSHOP_STATIC}/catalog.json`).href : '',
+    thumbnail_static_url: pet.thumbnail_static_url ? new URL(pet.thumbnail_static_url, `${WORKSHOP_STATIC}/catalog.json`).href : '',
+  });
+
+  const registerElements = (items: any[]) => {
+    items.forEach((pet: any) => { if (pet.id && pet.element) setWorkshopElement(pet.id, pet.element); });
+    const elementById = new Map<string, PetElement>(items
+      .filter((pet: any) => pet.id && ['earth', 'fire', 'wind', 'water', 'light'].includes(pet.element))
+      .map((pet: any) => [`workshop-${pet.id}`, pet.element as PetElement]));
+    if (!elementById.size) return;
+    const state = usePetStore.getState();
+    let changed = false;
+    const ownedPets = state.ownedPets.map(owned => {
+      const nativeElement = elementById.get(owned.speciesId);
+      if (!nativeElement || owned.nativeElement) return owned;
+      changed = true;
+      return {
+        ...owned,
+        nativeElement,
+        element: owned.freeElementChangeUsed ? owned.element : nativeElement,
+      };
+    });
+    if (changed) {
+      usePetStore.setState({ ownedPets });
+      usePetStore.getState().save();
+    }
+  };
+
+  const loadPets = async (cursor?: string | null) => {
     const isLoadMore = !!cursor;
     if (isLoadMore) setLoadingMore(true); else setLoading(true);
+    if (cursor?.startsWith('static:')) {
+      const offset = Number(cursor.slice(7)) || 0;
+      const items = staticPets.current.slice(offset, offset + PAGE_SIZE);
+      setPets(previous => [...previous, ...items]);
+      const next = offset + items.length;
+      setHasMore(next < staticPets.current.length);
+      setNextCursor(next < staticPets.current.length ? `static:${next}` : null);
+      setLoadingMore(false);
+      return;
+    }
+    if (!isLoadMore) {
+      try {
+        const response = await fetch(`${WORKSHOP_STATIC}/catalog.json`, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        const all = (Array.isArray(data) ? data : data.items || []).map(resolveStaticPet);
+        if (all.length) {
+          staticPets.current = all;
+          const items = all.slice(0, PAGE_SIZE);
+          setPets(items);
+          registerElements(all);
+          setHasMore(all.length > items.length);
+          setNextCursor(all.length > items.length ? `static:${items.length}` : null);
+          setLoading(false);
+          return;
+        }
+      } catch { /* Cloudflare 未发布或不可用时使用动态 API */ }
+    }
     let url = WORKSHOP_API + '/api/workshop/pets?limit=24&paginated=1';
     if (cursor) url += '&cursor=' + encodeURIComponent(cursor);
-    fetch(url)
-      .then(r => r.json()).then(d => {
+    fetch(url).then(r => r.json()).then(d => {
         const items = Array.isArray(d) ? d : (d.items || []);
         if (isLoadMore) setPets(prev => {
           const existingIds = new Set(prev.map(pet => pet.id));
@@ -45,29 +105,7 @@ export function WorkshopShop() {
         else setPets(items);
         // Cache and repair workshop elements. Legacy pets without nativeElement were
         // created while every workshop pet was incorrectly treated as fire.
-        items.forEach((pet: any) => { if (pet.id && pet.element) setWorkshopElement(pet.id, pet.element); });
-        const elementById = new Map<string, PetElement>(items
-          .filter((pet: any) => pet.id && ['earth', 'fire', 'wind', 'water', 'light'].includes(pet.element))
-          .map((pet: any) => [`workshop-${pet.id}`, pet.element as PetElement]));
-        if (elementById.size) {
-          const state = usePetStore.getState();
-          let changed = false;
-          const ownedPets = state.ownedPets.map(owned => {
-            const nativeElement = elementById.get(owned.speciesId);
-            if (!nativeElement || owned.nativeElement) return owned;
-            changed = true;
-            return {
-              ...owned,
-              nativeElement,
-              // A legacy pet never had an intentional reforge, so repair its displayed element too.
-              element: owned.freeElementChangeUsed ? owned.element : nativeElement,
-            };
-          });
-          if (changed) {
-            usePetStore.setState({ ownedPets });
-            usePetStore.getState().save();
-          }
-        }
+        registerElements(items);
         if (!Array.isArray(d)) {
           setHasMore(!!d.hasMore);
           setNextCursor(d.nextCursor || null);
@@ -79,7 +117,7 @@ export function WorkshopShop() {
       .catch(() => {}).finally(() => { setLoading(false); setLoadingMore(false); });
   };
 
-  useEffect(() => { loadPets(); }, []);
+  useEffect(() => { void loadPets(); }, []);
 
   const handleBuy = async (pet: any) => {
     if (buyingId) return; // Prevent double-click
@@ -102,10 +140,18 @@ export function WorkshopShop() {
       if (!await exists('pet-sprites/2d', { baseDir: BaseDirectory.AppData })) {
         await mkdir('pet-sprites/2d', { baseDir: BaseDirectory.AppData, recursive: true });
       }
-      const ssUrl = WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url);
+      const ssUrl = pet.spritesheet_static_url
+        || WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.spritesheet_url);
       const resp = await fetch(ssUrl);
       if (!resp.ok) throw new Error('素材下载失败（' + resp.status + '），请联系老师重新上传精灵');
       const buf = new Uint8Array(await resp.arrayBuffer());
+      if (!buf.byteLength || buf.byteLength > 25 * 1024 * 1024) throw new Error('精灵素材大小异常');
+      if (pet.spritesheet_bytes && buf.byteLength !== pet.spritesheet_bytes) throw new Error('精灵素材大小校验失败');
+      if (pet.spritesheet_sha256) {
+        const digest = [...new Uint8Array(await crypto.subtle.digest('SHA-256', buf))]
+          .map(value => value.toString(16).padStart(2, '0')).join('');
+        if (digest !== String(pet.spritesheet_sha256).toLowerCase()) throw new Error('精灵素材校验失败');
+      }
       const petId = pet.id; // pet.id already has ws- prefix from API
       await writeFile('pet-sprites/2d/' + petId + '.png', buf, { baseDir: BaseDirectory.AppData });
       let pj: any = { frameWidth: 192, frameHeight: 208, maxFrames: 8, anims: { idle: 6 }, animOrder: ['idle'], durations: { idle: 1100 } };
@@ -156,7 +202,7 @@ export function WorkshopShop() {
        <div className="workshop-pet-grid">
         {pets.filter((pet: any) => filter === 'all' || pet.tier === filter).map((pet: any) => (
           <div key={pet.id} className="workshop-pet-card">
-            <img src={WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || '')}
+            <img src={pet.thumbnail_static_url || WORKSHOP_API + '/api/workshop/image?key=' + encodeURIComponent(pet.thumbnail_url || pet.spritesheet_url || '')}
               style={{ width: 60, height: 65, borderRadius: 8, objectFit: 'contain', background: '#f1f5f9' }}
               onError={(e: any) => { e.target.style.display = 'none'; }} />
             <div className="workshop-pet-name" title={pet.name}>{pet.name}</div>
@@ -178,7 +224,7 @@ export function WorkshopShop() {
       </div>}
       {hasMore && (
         <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <button onClick={() => loadPets(nextCursor)} disabled={loadingMore} style={{
+          <button onClick={() => void loadPets(nextCursor)} disabled={loadingMore} style={{
             padding: '10px 32px', fontSize: 13, fontWeight: 600,
             background: loadingMore ? '#f1f5f9' : '#fff',
             color: loadingMore ? '#94a3b8' : '#FF8C00',

@@ -52,7 +52,7 @@ export default function RedeemCode({ onClose }: Props) {
       const merged = new Set([...existing, ...idsToUnlock]);
       localStorage.setItem('csp_unlocked_lessons', JSON.stringify([...merged]));
 
-      const isStageEnd = lesson.order % 25 === 0;
+      const isStageEnd = courseStore.stages.some(stage => stage.lessonRange[1] === lesson.order);
       const reward = isStageEnd ? STAGE_REWARD : LESSON_REWARD;
       const activePetId = petStore.activePetId;
       if (activePetId) {

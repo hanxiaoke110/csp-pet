@@ -2,6 +2,7 @@ import { beforeEach, describe, it, expect, vi } from 'vitest';
 import {
   shouldIncludeKey, parseBackup, compareVersions, bytesToBase64, base64ToBytes,
   validateBackupState, summarizeBackup, applyBackup,
+  selectBackupsToRemove,
   type BackupFile,
 } from './backup';
 
@@ -39,6 +40,12 @@ describe('shouldIncludeKey', () => {
     expect(shouldIncludeKey('csp_pet_data')).toBe(true);
     expect(shouldIncludeKey('dungeon_progress')).toBe(true);
     expect(shouldIncludeKey('csp_wish_tickets')).toBe(true);
+    expect(shouldIncludeKey('csp_collector_cards_v1')).toBe(true);
+    expect(shouldIncludeKey('csp_profile_data')).toBe(true);
+    expect(shouldIncludeKey('csp_dungeon_exploration_v1')).toBe(true);
+    expect(shouldIncludeKey('csp_trial_equipment_v1')).toBe(true);
+    expect(shouldIncludeKey('dungeon_pet_coin_rewards')).toBe(true);
+    expect(shouldIncludeKey('dungeon_trial_inventory')).toBe(true);
   });
 
   it('excludes re-downloadable curriculum content', () => {
@@ -48,6 +55,10 @@ describe('shouldIncludeKey', () => {
     expect(shouldIncludeKey('csp_imported_lessons')).toBe(false);
     expect(shouldIncludeKey('csp_data_version')).toBe(false);
     expect(shouldIncludeKey('csp_last_automatic_backup_date')).toBe(false);
+    expect(shouldIncludeKey('csp_collector_card_catalog_cache_v1')).toBe(false);
+    expect(shouldIncludeKey('csp_collector_card_cache_v1')).toBe(false);
+    expect(shouldIncludeKey('csp_wardrobe_catalog_cache_v1')).toBe(false);
+    expect(shouldIncludeKey('csp_wardrobe_asset_cache_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_reviewed_exam_bank_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_dungeons_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_leaderboard_rules_v1')).toBe(false);
@@ -113,6 +124,26 @@ describe('base64 roundtrip', () => {
     expect(decoded.length).toBe(bytes.length);
     expect(decoded[0]).toBe(0);
     expect(decoded[69999]).toBe(69999 % 256);
+  });
+});
+
+describe('automatic backup rotation', () => {
+  it('always preserves the backup that was just created', () => {
+    const justCreated = 'CSP-2026-09-19T09-08-16-505Z-manual.json';
+    const names = [
+      'CSP-2027-01-01T00-00-00-000Z-startup.json',
+      'CSP-2026-12-01T00-00-00-000Z-startup.json',
+      'CSP-2026-11-01T00-00-00-000Z-startup.json',
+      justCreated,
+    ];
+    const removed = selectBackupsToRemove(names, justCreated);
+    expect(removed).not.toContain(justCreated);
+    expect(names.length - removed.length).toBe(3);
+  });
+
+  it('keeps the newest three backups during normal rotation', () => {
+    const names = ['CSP-04.json', 'CSP-02.json', 'CSP-03.json', 'CSP-01.json'];
+    expect(selectBackupsToRemove(names)).toEqual(['CSP-01.json']);
   });
 });
 
