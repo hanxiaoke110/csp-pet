@@ -20,6 +20,8 @@ function createBuildFixture() {
   fs.mkdirSync(bankDirectory, { recursive: true });
   fs.writeFileSync(path.join(root, 'pet-preview.html'), 'preview');
   fs.writeFileSync(path.join(root, 'course-data/gesp-code-images/unsafe.png'), 'image');
+  fs.writeFileSync(path.join(root, 'course-data/lessons.json'), 'retired course catalog');
+  fs.writeFileSync(path.join(root, 'course-data/stages.json'), 'retired course stages');
   fs.writeFileSync(path.join(bankDirectory, 'manifest.json'), JSON.stringify({
     files: { daily: { path: 'daily-gesp.aaaaaaaaaaaa.json' } },
   }));
@@ -39,8 +41,10 @@ describe('pruneDistAssets', () => {
     expect(fs.existsSync(path.join(root, 'course-data/question-bank-v2/daily-gesp.bbbbbbbbbbbb.json'))).toBe(false);
     expect(fs.existsSync(path.join(root, 'course-data/question-bank-v2/canonical.json'))).toBe(false);
     expect(fs.existsSync(path.join(root, 'course-data/gesp-code-images'))).toBe(false);
+    expect(fs.existsSync(path.join(root, 'course-data/lessons.json'))).toBe(false);
+    expect(fs.existsSync(path.join(root, 'course-data/stages.json'))).toBe(false);
     expect(fs.existsSync(path.join(root, 'pet-preview.html'))).toBe(false);
     expect(result.questionBank.removed).toBe(2);
-    expect(result.unused.removedPaths).toBe(2);
+    expect(result.unused.removedPaths).toBe(4);
   });
 });

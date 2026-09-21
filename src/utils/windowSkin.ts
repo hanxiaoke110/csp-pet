@@ -19,8 +19,7 @@ export type WindowSkinCategory = 'basic' | 'learning' | 'trial';
 export type WindowSkinUnlock =
   | { type: 'default' }
   | { type: 'weekly'; target: number }
-  | { type: 'correct'; target: number }
-  | { type: 'course'; target: number }
+  | { type: 'correct'; target: number; legacyCourseTarget?: number }
   | { type: 'streak'; target: number }
   | { type: 'review'; target: number }
   | { type: 'dungeon'; dungeonId: string; dungeonName: string };
@@ -66,7 +65,7 @@ export const WINDOW_SKINS: ReadonlyArray<WindowSkinDefinition> = [
   },
   {
     id: 'verdant', name: '翠芯遗迹', description: '自然能量工坊',
-    image: '/dungeon-art/dungeon-04-bg.webp', category: 'learning', unlock: { type: 'course', target: 5 },
+    image: '/dungeon-art/dungeon-04-bg.webp', category: 'learning', unlock: { type: 'correct', target: 60, legacyCourseTarget: 5 },
   },
   {
     id: 'skyline', name: '浮空矩阵', description: '云端机械城邦',
@@ -138,16 +137,10 @@ export function getWindowSkinProgress(
   }
   if (unlock.type === 'correct') {
     const current = metrics.totalCorrect;
+    const legacyUnlocked = Boolean(unlock.legacyCourseTarget && metrics.completedCourses >= unlock.legacyCourseTarget);
     return {
-      current, target: unlock.target, unlocked: current >= unlock.target,
+      current, target: unlock.target, unlocked: legacyUnlocked || current >= unlock.target,
       label: `自由练习累计答对 ${unlock.target} 题`,
-    };
-  }
-  if (unlock.type === 'course') {
-    const current = metrics.completedCourses;
-    return {
-      current, target: unlock.target, unlocked: current >= unlock.target,
-      label: `完成 ${unlock.target} 道课程验证题`,
     };
   }
   if (unlock.type === 'streak') {

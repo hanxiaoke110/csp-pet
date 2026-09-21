@@ -223,48 +223,9 @@ function validateWardrobeAssets() {
   return { registered: paths.length + avatarCount + interactiveAvatarCount + bundledInteractiveAvatarCount, avatarCount, interactiveAvatarCount, bundledInteractiveAvatarCount, founderArtCount, failures };
 }
 
-function validateRecentCourseData() {
-  const failures = [];
-  const file = path.join(root, 'public/course-data/lessons.json');
-  if (!fs.existsSync(file)) return { lessons: 0, problems: 0, failures: ['course data missing'] };
-
-  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-  const lessons = (data.stages || []).flatMap(stage => stage.lessons || [])
-    .filter(lesson => lesson.order >= 69 && lesson.order <= 77);
-  const ids = new Set();
-  let problems = 0;
-
-  for (const lesson of lessons) {
-    for (const section of ['inClassCodes', 'homework', 'extended']) {
-      for (const problem of lesson[section] || []) {
-        problems += 1;
-        const owner = `P${lesson.order}.${section}.${problem.pid || problem.id || problems}`;
-        if (!String(problem.id || '').trim()) failures.push(`${owner}: id empty`);
-        else if (ids.has(problem.id)) failures.push(`${owner}: duplicate id ${problem.id}`);
-        else ids.add(problem.id);
-        if (!String(problem.description || '').trim()) failures.push(`${owner}: description empty`);
-        if (!String(problem.inputFormat || '').trim()) failures.push(`${owner}: inputFormat empty`);
-        if (!String(problem.outputFormat || '').trim()) failures.push(`${owner}: outputFormat empty`);
-        if (!Array.isArray(problem.samples) || problem.samples.length === 0) {
-          failures.push(`${owner}: samples empty`);
-        } else {
-          problem.samples.forEach((sample, index) => {
-            if (!String(sample.in ?? sample.input ?? '').trim()) failures.push(`${owner}: sample ${index + 1} input empty`);
-            if (!String(sample.out ?? sample.output ?? '').trim()) failures.push(`${owner}: sample ${index + 1} output empty`);
-          });
-        }
-      }
-    }
-  }
-
-  if (lessons.length !== 9) failures.push(`expected P69-P77 (9 lessons), found ${lessons.length}`);
-  return { lessons: lessons.length, problems, failures };
-}
-
 const questionResults = questionFiles.map(validateQuestionFile);
 const petResult = validatePetAssets();
 const wardrobeResult = validateWardrobeAssets();
-const courseResult = validateRecentCourseData();
 let failed = false;
 
 for (const result of questionResults) {
@@ -287,12 +248,6 @@ console.log(`wardrobe assets: ${wardrobeResult.registered} registered (${wardrob
 if (wardrobeResult.failures.length) {
   failed = true;
   wardrobeResult.failures.forEach(item => console.log(`  - ${item}`));
-}
-
-console.log(`recent course data: ${courseResult.lessons} lessons, ${courseResult.problems} problems, ${courseResult.failures.length} issue(s)`);
-if (courseResult.failures.length) {
-  failed = true;
-  courseResult.failures.forEach(item => console.log(`  - ${item}`));
 }
 
 if (failed) process.exit(1);

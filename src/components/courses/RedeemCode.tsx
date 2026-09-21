@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useCourseStore } from '../../stores/courseStore';
 import { usePetStore } from '../../stores/petStore';
-import type { Lesson } from '../../types/course';
 import { getDeviceId } from '../../utils/crypto';
 
 const API = 'https://api.cspstudy.top';
 
 // ─── Rewards ───
-const LESSON_REWARD = { exp: 50, coins: 30, affection: 10 };
-const STAGE_REWARD = { exp: 100, coins: 60, affection: 20 };
 const EXCELLENCE_REWARDS: Record<string, { exp: number; coins: number; label: string }> = {
   '1': { exp: 100, coins: 60, label: '🥇 一等奖' },
   '2': { exp: 60, coins: 40, label: '🥈 二等奖' },
@@ -22,56 +18,13 @@ export default function RedeemCode({ onClose }: Props) {
   const [input, setInput] = useState('');
   const [result, setResult] = useState<{ type: 'success' | 'error' | 'already'; message: string } | null>(null);
 
-  const courseStore = useCourseStore();
   const petStore = usePetStore();
-
-  const isLessonPassword = (code: string): Lesson | null => {
-    const lessons = courseStore.lessons || [];
-    return lessons.find(l => l.password && l.password === code) || null;
-  };
 
   const handleRedeem = async () => {
     const code = input.trim();
     if (!code) return;
 
-    // 1. Try lesson password
-    const lesson = isLessonPassword(code);
-    if (lesson) {
-      const rewarded = getRewardedLessons();
-      if (rewarded.has(lesson.id)) {
-        setResult({ type: 'already', message: `第 ${lesson.order} 课奖励已领取过了` });
-        return;
-      }
-
-      const { lessons } = useCourseStore.getState();
-      const idsToUnlock = lessons.filter(l => l.order <= lesson.order).map(l => l.id);
-      courseStore.unlockLessonsUpTo(lesson.order);
-
-      const saved = localStorage.getItem('csp_unlocked_lessons');
-      const existing: string[] = saved ? JSON.parse(saved) : [];
-      const merged = new Set([...existing, ...idsToUnlock]);
-      localStorage.setItem('csp_unlocked_lessons', JSON.stringify([...merged]));
-
-      const isStageEnd = courseStore.stages.some(stage => stage.lessonRange[1] === lesson.order);
-      const reward = isStageEnd ? STAGE_REWARD : LESSON_REWARD;
-      const activePetId = petStore.activePetId;
-      if (activePetId) {
-        petStore.addExp(activePetId, reward.exp);
-        petStore.addAffection(activePetId, reward.affection);
-      }
-      petStore.addCoins(reward.coins);
-      markRewarded(lesson.id);
-
-      setResult({
-        type: 'success',
-        message: isStageEnd
-          ? `🎓 阶段毕业！第 ${lesson.order} 课解锁\n+${reward.exp} EXP  +${reward.coins} 金币  +${reward.affection} 好感度`
-          : `🎉 第 ${lesson.order} 课解锁！\n+${reward.exp} EXP  +${reward.coins} 金币  +${reward.affection} 好感度`,
-      });
-      return;
-    }
-
-    // 1.5 Compensation code (CMP-): server-generated, class-bound, one-time
+    // 1. Compensation code (CMP-): server-generated, class-bound, one-time
     if (code.toUpperCase().startsWith('CMP-')) {
       const normalized = code.toUpperCase();
       try {
@@ -204,19 +157,4 @@ export default function RedeemCode({ onClose }: Props) {
     </div>,
     document.body
   );
-}
-
-// ─── helpers ───
-
-function getRewardedLessons(): Set<string> {
-  try {
-    const saved = localStorage.getItem('csp_rewarded_lessons');
-    return new Set(saved ? JSON.parse(saved) : []);
-  } catch { return new Set(); }
-}
-
-function markRewarded(lessonId: string) {
-  const set = getRewardedLessons();
-  set.add(lessonId);
-  localStorage.setItem('csp_rewarded_lessons', JSON.stringify([...set]));
 }

@@ -24,4 +24,16 @@ describe('wardrobe unlock conditions', () => {
     store.set('dungeon_player', JSON.stringify({ trialInventory: { ownedCosmetics: ['frame-crystal'] } }));
     expect(isWardrobeConditionMet(frame, 0)).toBe(false);
   });
+
+  it('unlocks migrated wardrobe rewards through their new achievement', () => {
+    const frame = WARDROBE_BY_ID.get('frame-scholar')!;
+    store.set('csp_achievement_unlocked', JSON.stringify(['quiz-total-100']));
+    expect(isWardrobeConditionMet(frame, 0)).toBe(true);
+  });
+
+  it('grandfathers the original course achievement after course retirement', () => {
+    const frame = WARDROBE_BY_ID.get('frame-scholar')!;
+    store.set('csp_achievement_claimed', JSON.stringify(['course-30']));
+    expect(isWardrobeConditionMet(frame, 0)).toBe(true);
+  });
 });

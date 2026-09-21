@@ -1,9 +1,10 @@
 // In-memory cache for problem statuses, backed by SQLite.
 // Provides synchronous reads (for React render) with async persistence.
 import { sqliteGet, sqliteSetFireAndForget } from './sqlite-storage';
-import type { ProblemStatus } from '../components/courses/ProblemViewer';
-import { mergeProblemStatusSnapshots } from './problemStatusMerge';
+import { mergeProblemStatusSnapshots, type PersistedProblemStatus } from './problemStatusMerge';
 import { markLearningActivity } from '../utils/localDate';
+
+export type ProblemStatus = PersistedProblemStatus;
 
 let cache: Record<string, ProblemStatus> = {};
 let saveTimer: ReturnType<typeof setTimeout> | null = null;

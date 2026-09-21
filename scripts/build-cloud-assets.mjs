@@ -18,39 +18,17 @@ for (const name of sources) {
   await rm(resolve(output, name, '.DS_Store'), { force: true });
 }
 
-// The desktop app caches the course catalog in localStorage. Keep the cloud
-// snapshot comfortably below the WebView quota by omitting authoring-only
-// fields that the course UI never reads. The complete source stays in public/.
-const courseLessonsPath = resolve(output, 'course-data', 'lessons.json');
-const courseLessons = JSON.parse(await readFile(courseLessonsPath, 'utf8'));
-const lessonFields = new Set([
-  'id', 'order', 'title', 'summary', 'kpSummary', 'knowledgePoints', 'tags', 'password',
-  'review', 'inClassCodes', 'inClassQuiz', 'homework', 'extended',
-]);
-const problemFields = new Set([
-  'id', 'platform', 'pid', 'title', 'description', 'inputFormat', 'outputFormat',
-  'samples', 'thinking', 'commonMistakes', 'progressiveHints',
-]);
-const problemBuckets = new Set(['review', 'inClassCodes', 'inClassQuiz', 'homework', 'extended']);
-const compactLessons = {
-  dataVersion: courseLessons.dataVersion,
-  stages: (courseLessons.stages || []).map(stage => ({
-    ...stage,
-    lessons: (stage.lessons || []).map(lesson => Object.fromEntries(
-      Object.entries(lesson)
-        .filter(([key]) => lessonFields.has(key))
-        .map(([key, value]) => [
-          key,
-          problemBuckets.has(key)
-            ? (value || []).map(problem => Object.fromEntries(
-              Object.entries(problem).filter(([problemKey]) => problemFields.has(problemKey)),
-            ))
-            : value,
-        ]),
-    )),
-  })),
-};
-await writeFile(courseLessonsPath, `${JSON.stringify(compactLessons)}\n`);
+// The v1.7.48 desktop bundle no longer ships the retired course catalog. Keep
+// its cloud copy for one compatibility cycle so clients that have not upgraded
+// continue to work. A later maintenance deploy can opt in to final retirement.
+if (process.env.RETIRE_COURSE_ASSETS === '1') {
+  for (const retiredPath of [
+    'course-card-index.json', 'lessons.json', 'stages.json', 'quiz-bank.json',
+    'unified-quiz-bank.json', 'unified-quiz-bank.backup-1783601740325.json', 'version.json',
+  ]) {
+    await rm(resolve(output, 'course-data', retiredPath), { force: true });
+  }
+}
 
 const interactiveAvatarSource = resolve(root, 'cloud-assets-source', 'profile', 'avatars-interactive');
 const interactiveAvatarOutput = resolve(output, 'profile', 'avatars-interactive');
@@ -184,7 +162,7 @@ await writeFile(resolve(output, 'workshop', 'catalog.json'), `${JSON.stringify({
 for (const catalogPath of ['collector-cards/catalog.json', 'wardrobe/catalog.json']) {
   JSON.parse(await readFile(resolve(output, catalogPath), 'utf8'));
 }
-for (const coursePath of ['course-data/version.json', 'course-data/stages.json', 'course-data/lessons.json', 'course-data/unified-quiz-bank.json']) {
+for (const coursePath of ['course-data/question-bank-v2/manifest.json', 'course-data/knowledge-points.json', 'course-data/knowledge-lectures.json']) {
   JSON.parse(await readFile(resolve(output, coursePath), 'utf8'));
 }
 

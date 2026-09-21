@@ -3,11 +3,8 @@ import { useEffect, useState } from 'react';
 import { emit } from '@tauri-apps/api/event';
 import { petCopy } from './components/pet/PetCopy';
 import { invoke } from '@tauri-apps/api/core';
-import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 import { MemoryRouter } from 'react-router-dom';
 import AppShell from './components/layout/AppShell';
-import CourseList from './components/courses/CourseList';
-import AIChat from './components/ai/AIChat';
 import QuizPractice from './components/quiz/QuizPractice';
 import PetPanel from './components/pet/PetPanel';
 import MyPage from './components/profile/MyPage';
@@ -23,17 +20,14 @@ import DungeonEmbed from '../src-dungeon/DungeonEmbed';
 import { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/utils/routeBridge';
 import { refreshQuestionBankV2 } from './question-bank/repository';
 import { safeListen } from './lib/tauriEvents';
-import { useCourseStore } from './stores/courseStore';
 import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
 import { useQuizStore } from './stores/quizStore';
-import { useAIStore } from './stores/aiStore';
 import { useCollectorCardStore } from './stores/collectorCardStore';
 import { migrateLocalStorageToSqlite } from './lib/migration';
 import { loadProblemStatuses } from './lib/problemStatusCache';
 import { ensureDailyAutomaticBackup } from './lib/backup';
 import { nextCheckin } from './utils/checkin';
-import type { Lesson, Stage, LessonsData } from './types/course';
 import './App.css';
 
 // Handle pet window actions (inside Router so we can use navigate)
@@ -175,7 +169,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.47';
+  const VER = '1.7.48';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -186,11 +180,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🌟 新增“我的星途”、成长手账与星相衣橱</div>
-          <div>🪪 新增两张全息典藏卡，支持翻面与自动赏卡</div>
-          <div>📚 课程扩展至 P77，C4 提高阶段正式开放</div>
-          <div>🧭 修复迷宫代码、配图、事件关闭与金币说明</div>
-          <div>💾 修复自动备份轮换，并支持新收藏跨电脑恢复</div>
+          <div>🧭 学习区精简为选择题、真题、OJ 与学习资料</div>
+          <div>📜 已完成的旧课程成就升级为永久“绝版荣誉”</div>
+          <div>✨ 课程关联装扮改用新挑战解锁，老玩家权益保留</div>
+          <div>🧹 移除课程与 AI 教练缓存，启动更轻、更稳定</div>
+          <div>💾 金币、智子、收藏、迷宫与备份数据全部兼容</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -200,22 +194,8 @@ function ChangelogModal() {
     </div>
   );
 }
-// 主应用布局：侧边栏 + 路由出口 + 里程碑提示（地牢页面不经过此布局，全屏沉浸）
+// 主应用布局：侧边栏 + 路由出口（地牢页面不经过此布局，全屏沉浸）
 function AppLayout() {
-  const [toast, setToast] = useState<string | null>(null);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const { count } = (e as CustomEvent).detail;
-      const badges: Record<number, string> = { 5: '🌟 学习新星', 20: '💪 坚持不懈', 50: '🔥 小有成就', 100: '👑 百题大王' };
-      const badge = badges[count] || '';
-      setToast(`${badge}！已完成 ${count} 道题的验证！`);
-      setTimeout(() => setToast(null), 4000);
-    };
-    window.addEventListener('csp-milestone', handler);
-    return () => window.removeEventListener('csp-milestone', handler);
-  }, []);
-
   return (
     <>
       <PetActionHandler />
@@ -223,7 +203,6 @@ function AppLayout() {
       <ChangelogModal />
       <AppShell>
         <Outlet />
-        {toast && <div className="milestone-toast">{toast}</div>}
       </AppShell>
     </>
   );
@@ -231,7 +210,6 @@ function AppLayout() {
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   // 顶层路由切换：进/出地牢时整体在 BrowserRouter 与 MemoryRouter 间二选一，避免 Router 嵌套。
   // 必须放在所有 early return 之前，保持 hooks 调用顺序稳定。
   const [routePath, setRoutePath] = useState(() => window.location.pathname);
@@ -244,7 +222,6 @@ function App() {
       window.removeEventListener(APP_ROUTE_CHANGE_EVENT, update);
     };
   }, []);
-  const loadConfig = useAIStore(s => s.loadConfig);
   const petLoaded = usePetStore(s => s.load);
   const collectorCardsLoaded = useCollectorCardStore(s => s.load);
 
@@ -258,6 +235,13 @@ function App() {
       try { await migrateLocalStorageToSqlite(); } catch (e) { console.error('[init] migration failed:', e); }
       // 2. Preload problem status cache
       try { await loadProblemStatuses(); } catch (e) { console.error('[init] problemStatuses failed:', e); }
+      // Retired course catalogs are disposable download caches, not student progress.
+      // Clear only those large caches; completed records, rewards and legacy honors stay intact.
+      try {
+        localStorage.removeItem('csp_imported_lessons');
+        localStorage.removeItem('csp_data_version');
+        localStorage.removeItem('csp_course_data_source');
+      } catch {}
       // 3. Load all stores from SQLite (parallel). Each store has internal localStorage fallback.
       try {
         const [loaded] = await Promise.all([
@@ -284,7 +268,7 @@ function App() {
         });
       }
       // 独立桌宠窗口的启动恢复延后到主界面加载完成后再做（见下方 effect），
-      // 避免启动阶段创建第二个 WebView2 环境与课程数据加载竞争。
+      // 避免启动阶段创建第二个 WebView2 环境与主界面初始化竞争。
       // 6. Start hunger timer: tick every 15 minutes while app is open
       hungerTimer = setInterval(() => {
         usePetStore.getState().tickHunger();
@@ -323,170 +307,17 @@ function App() {
   // 单窗多宠架构（v1.7.31）：桌面伙伴不再需要启动恢复——它们与主智子同在
   // 一个 pet 窗口里渲染，pet-data-sync 事件驱动，无独立窗口可恢复。
 
-  // Milestone toast listener — moved to AppLayout (only active in main app, not dungeon)
-
   useEffect(() => {
-    loadConfig();
-    useAIStore.getState().loadSessions();
-    loadCourseData();
+    refreshQuestionBankV2().catch(() => {});
+    setLoading(false);
     // 窗口尺寸/位置由 tauri-plugin-window-state 在启动阶段同步恢复，无需前端介入
   }, []);
-
-  async function loadCourseData() {
-    try {
-      let stages: Stage[] = [];
-      let lessons: Lesson[] = [];
-
-      // 1. Static CDN first, Gitee mirror second, bundled data last. Only the tiny
-      // version file is checked on launch; the larger snapshots download on change.
-      const REMOTE_BASES = [
-        'https://cards.cspstudy.top/course-data',
-        'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data',
-      ];
-      for (const remoteBase of REMOTE_BASES) {
-        try {
-          const verResp = await tauriFetch(`${remoteBase}/version.json`, { connectTimeout: 10_000 });
-          if (!verResp.ok) continue;
-          const remoteVer = await verResp.json() as { version?: number };
-          const cachedCourse = localStorage.getItem('csp_imported_lessons');
-          const localVer = cachedCourse ? parseInt(localStorage.getItem('csp_data_version') || '0') : 0;
-          if (!Number.isInteger(remoteVer.version) || Number(remoteVer.version) <= localVer) break;
-
-          const [stagesResp, lessonsResp, quizResp] = await Promise.all([
-            tauriFetch(`${remoteBase}/stages.json`, { connectTimeout: 15_000 }),
-            tauriFetch(`${remoteBase}/lessons.json`, { connectTimeout: 30_000 }),
-            tauriFetch(`${remoteBase}/unified-quiz-bank.json`, { connectTimeout: 20_000 }),
-          ]);
-          if (!stagesResp.ok || !lessonsResp.ok) continue;
-
-          const remoteStages = await stagesResp.json() as Stage[];
-          const remoteLessonsData = await lessonsResp.json() as Lesson[] | LessonsData;
-          const flatLessons: Lesson[] = Array.isArray(remoteLessonsData)
-            ? remoteLessonsData
-            : remoteLessonsData.lessons || (remoteLessonsData.stages || []).flatMap(stage => stage.lessons || []);
-          const stageIds = new Set(remoteStages.map(stage => stage.id));
-          const lessonIds = new Set(flatLessons.map(lesson => lesson.id));
-          const validStages = remoteStages.length > 0 && stageIds.size === remoteStages.length
-            && remoteStages.every(stage => typeof stage.id === 'string' && typeof stage.name === 'string'
-              && Array.isArray(stage.lessonRange) && stage.lessonRange.length === 2);
-          const validLessons = flatLessons.length > 0 && lessonIds.size === flatLessons.length
-            && flatLessons.every(lesson => typeof lesson.id === 'string' && Number.isInteger(lesson.order)
-              && typeof lesson.title === 'string');
-          if (!validStages || !validLessons) continue;
-
-          localStorage.setItem('csp_imported_lessons', JSON.stringify({ stages: remoteStages, lessons: flatLessons }));
-          localStorage.setItem('csp_data_version', String(remoteVer.version));
-          localStorage.setItem('csp_course_data_source', remoteBase);
-          if (quizResp.ok) {
-            try {
-              const quizData = await quizResp.json();
-              if (quizData && typeof quizData === 'object' && !Array.isArray(quizData)) {
-                localStorage.setItem('csp_quiz_bank', JSON.stringify(quizData));
-                localStorage.setItem('csp_quiz_bank_version', String(remoteVer.version));
-              }
-            } catch {}
-          }
-          break;
-        } catch { /* try the next static source, then bundled data */ }
-      }
-
-      // Teacher-reviewed corrections are stored as a cloud overlay. Check its tiny
-      // revision endpoint on every launch and download the merged bank only when needed.
-      try {
-        const reviewVersionResp = await tauriFetch('https://api.cspstudy.top/api/question-bank/version', { connectTimeout: 10_000 });
-        if (reviewVersionResp.ok) {
-          const reviewVersion = await reviewVersionResp.json();
-          const mergedVersion = `${Number(reviewVersion.baseVersion) || 0}:${Number(reviewVersion.revision) || 0}`;
-          if (mergedVersion !== localStorage.getItem('csp_reviewed_quiz_bank_version')) {
-            const mergedBankResp = await tauriFetch('https://api.cspstudy.top/api/question-bank/data', { connectTimeout: 20_000 });
-            if (mergedBankResp.ok) {
-              const mergedBank = await mergedBankResp.json();
-              if (mergedBank && typeof mergedBank === 'object' && !Array.isArray(mergedBank)) {
-                localStorage.setItem('csp_quiz_bank', JSON.stringify(mergedBank));
-                localStorage.setItem('csp_reviewed_quiz_bank_version', mergedVersion);
-              }
-            }
-          }
-        }
-      } catch { /* keep the Gitee or bundled question bank */ }
-
-      // V2 uses a tiny manifest check and downloads immutable snapshots only when
-      // their revision changes. A failed refresh never blocks bundled offline use.
-      refreshQuestionBankV2().catch(() => {});
-
-      // 2. Check for imported course data
-      const imported = localStorage.getItem('csp_imported_lessons');
-      if (imported) {
-        try {
-          const parsed = JSON.parse(imported);
-          if (parsed.stages && parsed.lessons) {
-            stages = parsed.stages;
-            lessons = parsed.lessons;
-          }
-        } catch { /* fall through to bundled */ }
-      }
-
-      // 3. Fallback to bundled data
-      if (lessons.length === 0) {
-        const [stagesResp, lessonsResp] = await Promise.all([
-          fetch('/course-data/stages.json'),
-          fetch('/course-data/lessons.json'),
-        ]);
-
-        if (!stagesResp.ok || !lessonsResp.ok) {
-          throw new Error('课程数据加载失败');
-        }
-
-        stages = await stagesResp.json();
-        const lessonsData: Lesson[] | LessonsData = await lessonsResp.json();
-
-        if (Array.isArray(lessonsData)) {
-          lessons = lessonsData;
-        } else if (lessonsData.lessons) {
-          lessons = lessonsData.lessons;
-        } else {
-          for (const stage of (lessonsData.stages || [])) {
-            for (const l of (stage.lessons || [])) {
-              lessons.push(l);
-            }
-          }
-        }
-      }
-
-      useCourseStore.getState().setData(stages, lessons);
-
-      try {
-        const saved = localStorage.getItem('csp_unlocked_lessons');
-        if (saved) {
-          const ids: string[] = JSON.parse(saved);
-          ids.forEach(id => useCourseStore.getState().unlockLesson(id));
-        }
-      } catch { /* ignore */ }
-
-      setLoading(false);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : '加载失败');
-      setLoading(false);
-    }
-  }
 
   if (loading) {
     return (
       <div className="app-loading">
         <div className="loading-spinner" />
-        <p>正在加载课程数据…</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="app-error">
-        <h2>加载失败</h2>
-        <p>{error}</p>
-        <button onClick={() => { setLoading(true); setError(null); loadCourseData(); }}>
-          重试
-        </button>
+        <p>正在加载学习数据…</p>
       </div>
     );
   }
@@ -505,9 +336,9 @@ function App() {
       <Routes>
         {/* 主应用：侧边栏 + 内容区 */}
         <Route element={<AppLayout />}>
-          <Route path="/" element={<Navigate to="/courses" replace />} />
-          <Route path="/courses" element={<CourseList />} />
-          <Route path="/ai-coach" element={<AIChat />} />
+          <Route path="/" element={<Navigate to="/quiz" replace />} />
+          <Route path="/courses" element={<Navigate to="/quiz" replace />} />
+          <Route path="/ai-coach" element={<Navigate to="/quiz" replace />} />
           <Route path="/quiz" element={<QuizPractice />} />
           <Route path="/pet" element={<PetPanel />} />
           <Route path="/me" element={<MyPage />} />
@@ -520,8 +351,8 @@ function App() {
           <Route path="/window-skins" element={<WindowSkinsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/admin" element={<AdminPage />} />
-          {/* 兜底：未知路径回课程页 */}
-          <Route path="*" element={<Navigate to="/courses" replace />} />
+          {/* 兜底：未知路径回选择题页 */}
+          <Route path="*" element={<Navigate to="/quiz" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

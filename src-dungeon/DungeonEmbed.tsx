@@ -41,7 +41,7 @@ export default function DungeonEmbed() {
 
   const returnToMainApp = () => {
     setPauseOpen(false);
-    navigateToMainApp('/courses');
+    navigateToMainApp('/quiz');
   };
 
   // 班级码门禁未通过：不进入 AppContent（保留下方主返回逻辑仅对已通过门禁的玩家生效）
@@ -79,7 +79,7 @@ export default function DungeonEmbed() {
             description="试炼场属于班级挑战内容，绑定班级码后即可进入。"
             message={classAccess.message}
             onBind={() => navigateToMainApp('/settings')}
-            onBack={() => navigateToMainApp('/courses')}
+            onBack={() => navigateToMainApp('/quiz')}
           />
         </div>
       </div>

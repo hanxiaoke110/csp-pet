@@ -10,8 +10,10 @@ function readSet(key: string): Set<string> {
 export function isWardrobeConditionMet(item: WardrobeItem, cardCount: number): boolean {
   if (item.acquisition.type !== 'condition') return false;
   if (item.acquisition.achievementId) {
-    const id = item.acquisition.achievementId;
-    return readSet('csp_achievement_claimed').has(id) || readSet('csp_achievement_unlocked').has(id);
+    const ids = [item.acquisition.achievementId, ...(item.acquisition.legacyAchievementIds || [])];
+    const claimed = readSet('csp_achievement_claimed');
+    const unlocked = readSet('csp_achievement_unlocked');
+    return ids.some(id => claimed.has(id) || unlocked.has(id));
   }
   if (item.acquisition.rule === 'two-cards') return cardCount >= 2;
   if (item.acquisition.rule === 'dungeon-crystal') {

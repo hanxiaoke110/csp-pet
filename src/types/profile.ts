@@ -4,7 +4,7 @@ export type WardrobeRarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic'
 export type WardrobeAcquisition =
   | { type: 'free' }
   | { type: 'coin'; price: number }
-  | { type: 'condition'; description: string; achievementId?: string; rule?: 'two-cards' | 'dungeon-crystal' };
+  | { type: 'condition'; description: string; achievementId?: string; legacyAchievementIds?: string[]; rule?: 'two-cards' | 'dungeon-crystal' };
 
 export interface WardrobeItem {
   id: string;

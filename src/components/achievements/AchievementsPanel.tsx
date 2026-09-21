@@ -16,7 +16,7 @@ function readIdSet(key: string): Set<string> {
 }
 
 const CATEGORIES: Record<string, { label: string; color: string }> = {
-  course:   { label: '📚 学海无涯', color: '#16a34a' },
+  legacy:   { label: '📜 绝版荣誉', color: '#64748b' },
   quiz:     { label: '🧠 头脑风暴', color: '#2563eb' },
   super:    { label: '⚡ 极限挑战', color: '#7c3aed' },
   pet:      { label: '🐾 灵犀智子', color: '#f59e0b' },
@@ -29,7 +29,7 @@ export default function AchievementsPanel() {
   const quizState = useQuizStore();
   const [refreshTick, setRefreshTick] = useState(0);
 
-  // Listen for problem status changes so course achievements refresh immediately
+  // Listen for restored historical learning records so legacy honors refresh immediately.
   useEffect(() => {
     const handler = () => setRefreshTick(t => t + 1);
     window.addEventListener('problem-status-changed', handler);
@@ -59,16 +59,6 @@ export default function AchievementsPanel() {
     );
   }, [ownedPets, maxCoinBalance, feedCount, quizState.superCompletions, quizState.superBestScore, quizState.superBestTotal, quizState.weeklyPerfects, quizState.extraChallengeCount, quizState.lastReviewCorrect, quizState.lastReviewTotal, refreshTick]);
 
-  // Group by category
-  const grouped = useMemo(() => {
-    const map: Record<string, Achievement[]> = {};
-    for (const a of achievements) {
-      if (!map[a.category]) map[a.category] = [];
-      map[a.category].push(a);
-    }
-    return map;
-  }, [achievements]);
-
   // Load claimed set from localStorage
   const [claimed, setClaimed] = useState<Set<string>>(() => {
     return readIdSet(CLAIM_KEY);
@@ -77,12 +67,30 @@ export default function AchievementsPanel() {
     return new Set([...readIdSet(UNLOCKED_KEY), ...readIdSet(CLAIM_KEY)]);
   });
 
+  // Locked retired-course achievements disappear. Achieved/claimed ones remain as
+  // permanent legacy honors and can still claim their original rewards.
+  const visibleAchievements = useMemo(() => achievements.filter(achievement =>
+    achievement.category !== 'legacy'
+      || achievement.check().unlocked
+      || claimed.has(achievement.id)
+      || unlockedHistory.has(achievement.id)
+  ), [achievements, claimed, unlockedHistory]);
+
+  const grouped = useMemo(() => {
+    const map: Record<string, Achievement[]> = {};
+    for (const achievement of visibleAchievements) {
+      if (!map[achievement.category]) map[achievement.category] = [];
+      map[achievement.category].push(achievement);
+    }
+    return map;
+  }, [visibleAchievements]);
+
   const saveClaimed = (next: Set<string>) => {
     try { localStorage.setItem(CLAIM_KEY, JSON.stringify([...next])); } catch {}
   };
 
   // 计数与卡片同口径：领取过的成就即使实时条件回退也计入“已解锁”
-  const unlockedCount = countUnlockedForDisplay(achievements, claimed, unlockedHistory);
+  const unlockedCount = countUnlockedForDisplay(visibleAchievements, claimed, unlockedHistory);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [newUnlock, setNewUnlock] = useState<Achievement | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -131,7 +139,7 @@ export default function AchievementsPanel() {
     <div className="achievements-panel">
       <div className="ach-header">
         <h2>🏆 成就</h2>
-        <span className="ach-count">{unlockedCount}/{achievements.length} 已解锁</span>
+        <span className="ach-count">{unlockedCount}/{visibleAchievements.length} 已解锁</span>
       </div>
 
       {Object.entries(CATEGORIES).map(([key, cat]) => {

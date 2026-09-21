@@ -109,7 +109,7 @@ export default function ExamTraining() {
         description="绑定老师提供的班级码后即可进入历年真题训练。"
         message={classAccess.message}
         onBind={() => navigate('/settings')}
-        onBack={() => navigate('/courses')}
+        onBack={() => navigate('/quiz')}
       />
     );
   }

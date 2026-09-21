@@ -11,7 +11,7 @@ import {
 } from '../../utils/windowSkin';
 import { getWeekKey, loadCheckin, nextCheckin } from '../../utils/checkin';
 import {
-  Album, BookOpen, Bot, ClipboardList, Gift, Images, Laptop, Library, ListChecks,
+  Album, ClipboardList, Gift, Images, Laptop, Library, ListChecks,
   Medal, Megaphone, PawPrint, Settings, Swords, UserRound, Zap,
 } from 'lucide-react';
 
@@ -19,8 +19,8 @@ interface Props { children: ReactNode; }
 
 const TIPS = [
   { do: '做 5 道选择题', avoid: '不喂灵犀智子', lucky: '🟫 地系智子' },
-  { do: '完成一道 OJ 题目', avoid: '跳过课程验证', lucky: '🔴 火系智子' },
-  { do: '和 AI 教练讨论一道题', avoid: '熬夜学到太晚', lucky: '🟢 风系智子' },
+  { do: '完成一道 OJ 题目', avoid: '只看题不动手', lucky: '🔴 火系智子' },
+  { do: '复盘一道经典错题', avoid: '熬夜学到太晚', lucky: '🟢 风系智子' },
   { do: '复习昨天的错题', avoid: '连续学 2 小时不休息', lucky: '🔵 水系智子' },
   { do: '把错题彻底搞懂', avoid: '只做题不总结', lucky: '📚 C++ 基础语法' },
   { do: '完成每周任务', avoid: '忘记每日签到', lucky: '🧠 动态规划' },
@@ -119,12 +119,6 @@ export default function AppShell({ children }: Props) {
         <DailyCheckin />
 
         <div className="sidebar-section">学习</div>
-        <NavLink to="/courses" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          <BookOpen /> <span>课程</span>
-        </NavLink>
-        <NavLink to="/ai-coach" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          <Bot /> <span>AI 教练</span>
-        </NavLink>
         <NavLink to="/quiz" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           <ListChecks /> <span>选择题</span>
         </NavLink>

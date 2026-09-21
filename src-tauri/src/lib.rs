@@ -237,24 +237,10 @@ pub fn run() {
             toggle_pet_window,
             show_pet_window,
             hide_pet_window,
-            // courses
-            commands::courses::get_course_version,
-            commands::courses::set_course_version,
-            // progress
-            commands::progress::get_progress,
-            commands::progress::save_progress,
-            commands::progress::get_all_progress,
-            commands::progress::unlock_lesson,
-            commands::progress::get_unlocked_lessons,
             // settings
             commands::settings::get_setting,
             commands::settings::set_setting,
             commands::settings::get_all_settings,
-            // chat
-            commands::chat::create_chat_session,
-            commands::chat::get_chat_sessions,
-            commands::chat::add_chat_message,
-            commands::chat::get_chat_messages,
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application");

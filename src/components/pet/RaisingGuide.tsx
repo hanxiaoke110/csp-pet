@@ -29,7 +29,7 @@ export default function RaisingGuide() {
 
       {/* Guide sections */}
       <Section title="📈 经验 & 升级" icon="📈">
-        <p>完成课程验证、每周任务、额外挑战、月度复盘、超级挑战、CSP 真题都能获得经验。</p>
+        <p>完成每周任务、额外挑战、月度复盘、超级挑战、OJ 训练和 CSP 真题都能获得经验。</p>
         <p>老师发放的<strong>优秀码</strong>直接加经验；<strong>补偿码</strong>的金币直接到账，经验存入经验池。</p>
         <p><strong>30%</strong> 直接给活跃智子，<strong>70%</strong> 存入经验池，可在「智子页 → 经验池」自由分配给任意智子。</p>
         <p>智子<strong>心情 ≥ 80</strong> 时经验 ×1.2，<strong>心情 ≤ 20</strong> 时 ×0.8。</p>
@@ -40,7 +40,7 @@ export default function RaisingGuide() {
         <p>初始：心情 <strong>80</strong>、好感 <strong>50</strong>（上限 100）。</p>
         <p>🍖 喂食：心情 <strong>+5</strong>、好感 <strong>+3</strong>。</p>
         <p>📈 获得经验：心情 <strong>+3</strong>。</p>
-        <p>✅ 完成课程验证：好感 <strong>+10</strong>（阶段毕业 +20）。</p>
+        <p>✅ 喂食、陪伴和参与挑战，都能帮助智子保持好心情并积累成长。</p>
         <p>😵 饱食 ≤ 20 时，心情每次下降 <strong>-1</strong>。</p>
         <p>好感达到 100 可解锁成就「心有灵犀」💕</p>
       </Section>
@@ -120,11 +120,11 @@ export default function RaisingGuide() {
       </Section>
 
       <Section title="🏆 成就奖励" icon="🏆">
-        <p>完成课程、周常、超级挑战、签到等目标会解锁成就，在「成就」页<strong>手动领取</strong>金币/改名卡奖励。</p>
+        <p>完成周常、超级挑战、签到等目标会解锁成就，在「成就」页<strong>手动领取</strong>金币/改名卡奖励。</p>
         <p>金币成就按<strong>历史最高余额</strong>计算；曾达到目标后即使后来消费，也不会失去进度。达到 10000 金币可解锁「富可敌国」。</p>
         <p>💎 完美通关（超级挑战全对）：+200g + 1 张改名卡</p>
         <p>🏅 双料冠军（超级完美 + 周常完美）：+300g + 2 张改名卡</p>
-        <p>🎓 百炼成钢（累计答对 100 道课程验证）：+200g + 1 张改名卡</p>
+        <p>🧠 选题如流（累计答对 100 道选择题）：+100g</p>
         <p>🐾 拥有 8 只智子：+150g</p>
         <p>每周任务 5/5 全对、超级挑战全对都能解锁成就，别漏领啦~</p>
       </Section>

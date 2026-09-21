@@ -2,31 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { openUrl } from '@tauri-apps/plugin-opener';
 
-type ViewKey = 'courses' | 'firstRound' | 'secondRound';
+type ViewKey = 'firstRound' | 'secondRound';
 type StageFilter = 'all' | 'C1 入门阶段' | 'C2 基础阶段' | 'C3 进阶阶段' | 'C4 提高阶段';
-
-interface CourseCardSet {
-  title: string;
-  use: string;
-}
-
-interface CourseLessonResource {
-  lessonNo: number;
-  title: string;
-  stage: StageFilter;
-  feishuUrl: string;
-  documentId: string;
-  cards: {
-    preclassFable: CourseCardSet;
-    knowledgeSummary: CourseCardSet;
-    reviewCombo: CourseCardSet;
-  };
-}
-
-interface CourseCardIndexData {
-  updated: string;
-  lessons: CourseLessonResource[];
-}
 
 interface KnowledgePoint {
   id: string;
@@ -66,7 +43,6 @@ interface KnowledgeLecturesData {
 }
 
 const VIEWS: { key: ViewKey; label: string; hint: string }[] = [
-  { key: 'courses', label: '常规课课程目录', hint: 'P1-P77，后续随课程继续增加' },
   { key: 'firstRound', label: 'CSP-J 一轮知识点', hint: '知识点、专题、真题梳理、535计划' },
   { key: 'secondRound', label: 'CSP-J 二轮知识点', hint: '复赛算法、代码模板、真题讲评' },
 ];
@@ -89,12 +65,6 @@ const STAGE_LABELS: Record<string, StageFilter> = {
   C4: 'C4 提高阶段',
 };
 
-const CARD_TYPES = [
-  { key: 'preclassFable', label: '课前寓言', color: '#8b5cf6' },
-  { key: 'knowledgeSummary', label: '知识总览', color: '#2563eb' },
-  { key: 'reviewCombo', label: '复习结合', color: '#0f766e' },
-] as const;
-
 async function fetchJson<T>(path: string): Promise<T> {
   const resp = await fetch(path);
   if (!resp.ok) throw new Error(`${path} HTTP ${resp.status}`);
@@ -113,12 +83,11 @@ function compactTitle(title: string): string {
 
 export default function LearningResourcesPage() {
   const navigate = useNavigate();
-  const [courseData, setCourseData] = useState<CourseCardIndexData | null>(null);
   const [kpData, setKpData] = useState<KnowledgePointsData | null>(null);
   const [lectureData, setLectureData] = useState<KnowledgeLecturesData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<ViewKey>('courses');
+  const [view, setView] = useState<ViewKey>('firstRound');
   const [stage, setStage] = useState<StageFilter>('all');
   const [query, setQuery] = useState('');
 
@@ -126,13 +95,11 @@ export default function LearningResourcesPage() {
     let cancelled = false;
     (async () => {
       try {
-        const [courseCards, knowledgePoints, lectures] = await Promise.all([
-          fetchJson<CourseCardIndexData>('/course-data/course-card-index.json'),
+        const [knowledgePoints, lectures] = await Promise.all([
           fetchJson<KnowledgePointsData>('/course-data/knowledge-points.json'),
           fetchJson<KnowledgeLecturesData>('/course-data/knowledge-lectures.json'),
         ]);
         if (!cancelled) {
-          setCourseData(courseCards);
           setKpData(knowledgePoints);
           setLectureData(lectures);
         }
@@ -156,12 +123,6 @@ export default function LearningResourcesPage() {
     }
     return map;
   }, [lectureData]);
-
-  const courses = useMemo(() => {
-    return (courseData?.lessons || [])
-      .filter(item => stage === 'all' || item.stage === stage)
-      .filter(item => includesQuery([item.lessonNo, item.title, item.stage], query));
-  }, [courseData, query, stage]);
 
   const lectures = useMemo(() => {
     return (lectureData?.lectures || [])
@@ -194,7 +155,7 @@ export default function LearningResourcesPage() {
     return (
       <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
         <p style={{ color: '#ef4444' }}>学习资料加载失败：{error}</p>
-        <button className="mode-btn" onClick={() => navigate('/courses')}>返回课程</button>
+        <button className="mode-btn" onClick={() => navigate('/quiz')}>返回选择题</button>
       </div>
     );
   }
@@ -205,7 +166,7 @@ export default function LearningResourcesPage() {
         <div>
           <h2 style={{ marginBottom: 6 }}>学习资料</h2>
           <p style={{ color: '#64748b', fontSize: 14, maxWidth: 760 }}>
-            按常规课、CSP-J 一轮和 CSP-J 二轮三条线整理。桌宠负责带你找到入口，完整内容从飞书文档打开，单独分享飞书链接也能阅读。
+            按 CSP-J 一轮和二轮知识体系整理。桌宠负责带你找到入口，完整内容从飞书文档打开，单独分享飞书链接也能阅读。
           </p>
         </div>
         {kpData?.totalNavigationUrl && (
@@ -232,7 +193,7 @@ export default function LearningResourcesPage() {
         <input
           value={query}
           onChange={e => setQuery(e.target.value)}
-          placeholder="搜索 P 编号、标题、知识点"
+          placeholder="搜索标题、知识点"
           className="search-input"
           style={{ width: 260 }}
         />
@@ -255,51 +216,6 @@ export default function LearningResourcesPage() {
           ))}
         </div>
       </div>
-
-      {view === 'courses' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {courses.map(lesson => (
-            <div key={lesson.lessonNo} className="learning-course-row">
-              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(180px, 1fr) 2.4fr auto', gap: 14, alignItems: 'center' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
-                    <span style={{ background: '#2563eb', color: '#fff', fontSize: 12, fontWeight: 800, borderRadius: 6, padding: '2px 7px' }}>P{lesson.lessonNo}</span>
-                    <strong style={{ fontSize: 15 }}>{lesson.title}</strong>
-                  </div>
-                  <div style={{ fontSize: 12, color: '#64748b' }}>{lesson.stage}</div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(120px, 1fr))', gap: 8 }}>
-                  {CARD_TYPES.map(cardType => {
-                    const card = lesson.cards[cardType.key];
-                    return (
-                      <div
-                        key={cardType.key}
-                        style={{
-                          textAlign: 'left',
-                          border: '1px solid #e2e8f0',
-                          borderRadius: 8,
-                          background: '#f8fafc',
-                          padding: '8px 10px',
-                          minWidth: 0,
-                        }}
-                      >
-                        <span style={{ display: 'block', fontWeight: 800, color: cardType.color, fontSize: 12 }}>{cardType.label}</span>
-                        <span style={{ display: 'block', color: '#64748b', fontSize: 11, lineHeight: 1.35 }}>{card.use}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <button className="mode-btn" onClick={() => openExternal(lesson.feishuUrl)} disabled={!lesson.feishuUrl}>
-                  打开飞书
-                </button>
-              </div>
-            </div>
-          ))}
-          {courses.length === 0 && <EmptyState />}
-        </div>
-      )}
 
       {view === 'firstRound' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>

@@ -20,6 +20,12 @@ const UNUSED_RUNTIME_PATHS = [
   'tauri.svg',
   'vite.svg',
   'course-data/unified-quiz-bank.backup-1783601740325.json',
+  'course-data/course-card-index.json',
+  'course-data/lessons.json',
+  'course-data/stages.json',
+  'course-data/quiz-bank.json',
+  'course-data/unified-quiz-bank.json',
+  'course-data/version.json',
   // These answer-sheet crops are deliberately blocked by every quiz renderer.
   // Their structured code equivalents remain in the bundled question banks.
   'course-data/gesp-code-images',

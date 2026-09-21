@@ -89,7 +89,7 @@ export default function CollectorCardsPage() {
         description="绑定老师提供的班级码后，即可进入星辉工坊并收藏典藏卡。"
         message={classAccess.message}
         onBind={() => navigate('/settings')}
-        onBack={() => navigate('/courses')}
+        onBack={() => navigate('/pet')}
       />
     );
   }

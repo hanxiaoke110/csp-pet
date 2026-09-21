@@ -54,7 +54,7 @@ export class PetDialogueDirector {
     if (context.clickCount && context.clickCount % 5 === 0) return { id: 'click-playful', text: '第 5 次摸摸打卡！你是戳戳小能手。', priority: 'normal' };
     const candidates = [
       { id: 'click-company', text: '这题我们组队打，先从样例开局！', priority: 'normal' as const },
-      { id: 'click-help', text: '卡关别硬扛，召唤 AI 教练来组队。', priority: 'normal' as const },
+      { id: 'click-help', text: '卡关别硬扛，先看看解析和错题记录。', priority: 'normal' as const },
       { id: 'click-praise', text: '认真敲代码的你，今天自带主角光环。', priority: 'normal' as const },
     ];
     const available = candidates.filter(item => !this.recentIds.includes(item.id));

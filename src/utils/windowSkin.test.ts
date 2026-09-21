@@ -43,6 +43,16 @@ describe('window skin unlocks', () => {
     ]);
   });
 
+  it('unlocks the migrated verdant skin with new quiz progress', () => {
+    const unlocked = collectUnlockedWindowSkins([], metrics({ totalCorrect: 60 }));
+    expect(unlocked).toContain('verdant');
+  });
+
+  it('grandfathers the verdant skin from old completed-course progress', () => {
+    const unlocked = collectUnlockedWindowSkins([], metrics({ completedCourses: 5 }));
+    expect(unlocked).toContain('verdant');
+  });
+
   it('unlocks only the defeated dungeon scene', () => {
     const unlocked = collectUnlockedWindowSkins([], metrics({
       defeatedDungeons: new Set(['dungeon-03']),

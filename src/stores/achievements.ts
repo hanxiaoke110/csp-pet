@@ -2,7 +2,7 @@ export interface Achievement {
   id: string;
   name: string;
   description: string;
-  category: 'course' | 'quiz' | 'super' | 'pet' | 'hidden';
+  category: 'legacy' | 'quiz' | 'super' | 'pet' | 'hidden';
   icon: string;
   hidden?: boolean;
   check: () => { unlocked: boolean; progress?: number; total?: number };
@@ -109,24 +109,24 @@ export function createAchievements(
   ownedPets: { petName?: string; hunger?: number }[],
 ): Achievement[] {
   return [
-    // === 📚 学海无涯 ===
-    { id: 'course-1', name: '初出茅庐', description: '完成第 1 道课程验证', category: 'course', icon: '🌱',
+    // === 📜 旧版课程绝版荣誉（仅展示已经达成或领取过的项目）===
+    { id: 'course-1', name: '初出茅庐', description: '旧版课程：完成第 1 道课程验证', category: 'legacy', icon: '🌱',
       check: () => ({ unlocked: getCompletedCount() >= 1 }) },
-    { id: 'course-10', name: '小试牛刀', description: '完成 10 道课程验证', category: 'course', icon: '📝',
+    { id: 'course-10', name: '小试牛刀', description: '旧版课程：完成 10 道课程验证', category: 'legacy', icon: '📝',
       check: () => ({ unlocked: getCompletedCount() >= 10, progress: Math.min(getCompletedCount(), 10), total: 10 }) },
-    { id: 'course-30', name: '渐入佳境', description: '完成 30 道课程验证', category: 'course', icon: '📚',
+    { id: 'course-30', name: '渐入佳境', description: '旧版课程：完成 30 道课程验证', category: 'legacy', icon: '📚',
       check: () => ({ unlocked: getCompletedCount() >= 30, progress: Math.min(getCompletedCount(), 30), total: 30 }) },
-    { id: 'course-60', name: '题海战术', description: '完成 60 道课程验证', category: 'course', icon: '💪',
+    { id: 'course-60', name: '题海战术', description: '旧版课程：完成 60 道课程验证', category: 'legacy', icon: '💪',
       check: () => ({ unlocked: getCompletedCount() >= 60, progress: Math.min(getCompletedCount(), 60), total: 60 }) },
-    { id: 'course-100', name: '百炼成钢', description: '完成 100 道课程验证', category: 'course', icon: '🏆',
+    { id: 'course-100', name: '百炼成钢', description: '旧版课程：完成 100 道课程验证', category: 'legacy', icon: '🏆',
       check: () => ({ unlocked: getCompletedCount() >= 100, progress: Math.min(getCompletedCount(), 100), total: 100 }) },
-    { id: 'stage-c1', name: 'C1 毕业', description: '完成阶段 1 全部课程验证（25 题）', category: 'course', icon: '🎓',
+    { id: 'stage-c1', name: 'C1 毕业', description: '旧版课程：完成阶段 1 全部验证', category: 'legacy', icon: '🎓',
       check: () => ({ unlocked: getCompletedCount() >= 25, progress: Math.min(getCompletedCount(), 25), total: 25 }) },
-    { id: 'stage-c2', name: 'C2 毕业', description: '完成阶段 2 全部课程验证（累计 50 题）', category: 'course', icon: '🎓',
+    { id: 'stage-c2', name: 'C2 毕业', description: '旧版课程：完成阶段 2 全部验证', category: 'legacy', icon: '🎓',
       check: () => ({ unlocked: getCompletedCount() >= 50, progress: Math.min(getCompletedCount(), 50), total: 50 }) },
-    { id: 'stage-c3', name: 'C3 毕业', description: '完成阶段 3 全部课程验证（累计 71 题）', category: 'course', icon: '🎓',
+    { id: 'stage-c3', name: 'C3 毕业', description: '旧版课程：完成阶段 3 全部验证', category: 'legacy', icon: '🎓',
       check: () => ({ unlocked: getCompletedCount() >= 71, progress: Math.min(getCompletedCount(), 71), total: 71 }) },
-    { id: 'stage-c4', name: 'C4 毕业', description: '完成阶段 4 当前全部课程验证（累计 77 题）', category: 'course', icon: '🎓',
+    { id: 'stage-c4', name: 'C4 毕业', description: '旧版课程：完成阶段 4 全部验证', category: 'legacy', icon: '🎓',
       check: () => ({ unlocked: getCompletedCount() >= 77, progress: Math.min(getCompletedCount(), 77), total: 77 }) },
 
     // === 🧠 头脑风暴 ===
@@ -281,7 +281,7 @@ export function createAchievements(
       check: () => ({ unlocked: weeklyPerfects >= 3 }) },
     { id: 'hidden-starve', name: '饿坏了', description: '让智子的饱食度降到 0', category: 'hidden', icon: '🤤', hidden: true,
       check: () => ({ unlocked: ownedPets.some(p => (p.hunger ?? 100) <= 0) }) },
-    { id: 'hidden-ai-csp', name: '勤学好问', description: '向 AI 提问 CSP-J 相关问题', category: 'hidden', icon: '🤔', hidden: true,
+    { id: 'hidden-ai-csp', name: '勤学好问', description: '旧版 AI 教练：提问过 CSP-J 相关问题', category: 'legacy', icon: '🤔', hidden: true,
       check: () => {
         try { return { unlocked: localStorage.getItem('csp_asked_cspj') === 'true' }; }
         catch { return { unlocked: false }; }

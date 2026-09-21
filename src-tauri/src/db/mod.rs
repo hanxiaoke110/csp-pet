@@ -3,7 +3,6 @@ use std::path::PathBuf;
 use std::sync::Mutex;
 
 pub mod migrations;
-pub mod models;
 
 pub struct Database {
     pub conn: Mutex<Connection>,
