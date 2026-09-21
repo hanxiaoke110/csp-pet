@@ -3,8 +3,8 @@
 // 保留文档里已有的视频、图片、提醒、系统要求等手工内容。
 //
 // 用法：
-//   node scripts/update-feishu-release-doc.mjs            # 更新文档并同步最新版安装包附件
-//   node scripts/update-feishu-release-doc.mjs --links-only # 只更新文字和下载链接
+//   node scripts/update-feishu-release-doc.mjs             # 更新文字和稳定下载链接
+//   node scripts/update-feishu-release-doc.mjs --sync-attachments # 同时同步最新版安装包附件
 //   node scripts/update-feishu-release-doc.mjs --dry-run  # 只打印将要执行的替换，不改文档
 //
 // 环境变量：
@@ -19,7 +19,8 @@ const GITEE_REPO = process.env.GITEE_REPO || 'hanliuliu110/csp-pet';
 const DOC_TOKEN = process.env.LARK_DOC_TOKEN || 'VJmgd3RB0oOzPfxV9MxcKzzyn1b';
 const CLI_AS = process.env.LARK_CLI_AS || 'bot';
 const DRY_RUN = process.argv.includes('--dry-run');
-const SYNC_ATTACHMENTS = !process.argv.includes('--links-only');
+// Bot 身份稳定负责文字和链接；大附件只在显式请求且已登录 user 身份时同步。
+const SYNC_ATTACHMENTS = process.argv.includes('--sync-attachments');
 
 function esc(text) {
   return String(text)

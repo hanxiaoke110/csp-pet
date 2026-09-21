@@ -31,6 +31,7 @@ node scripts/update-feishu-release-doc.mjs
 
 默认用 bot 身份；想用自己身份跑：`LARK_CLI_AS=user node scripts/update-feishu-release-doc.mjs`。
 加 `--dry-run` 只预览不写入。
+需要同步三个安装包附件时，使用 user 身份并显式添加 `--sync-attachments`。
 
 ## 3. 脚本行为（update-feishu-release-doc.mjs）
 

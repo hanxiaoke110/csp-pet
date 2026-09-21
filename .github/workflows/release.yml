@@ -323,5 +323,4 @@ jobs:
         run: echo "$LARK_APP_SECRET" | lark-cli config init --app-id "$LARK_APP_ID" --app-secret-stdin --brand feishu
       - name: 更新飞书版本更新文档
         if: env.LARK_APP_ID != '' && env.LARK_APP_SECRET != ''
-        # Bot 稳定更新版本文字和固定下载链接；大附件由已登录的用户身份在发版后同步。
-        run: node scripts/update-feishu-release-doc.mjs --as bot --links-only
+        run: node scripts/update-feishu-release-doc.mjs --as bot
