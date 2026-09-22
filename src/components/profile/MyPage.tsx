@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { BookHeart, Check, Coins, Eye, LockKeyhole, Pencil, ShieldCheck, Shirt, Sparkles, Star, Trophy, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { BookHeart, Check, Coins, Eye, LockKeyhole, Pencil, Route, ShieldCheck, Shirt, Sparkles, Star, Trophy, X } from 'lucide-react';
 import AchievementsPanel from '../achievements/AchievementsPanel';
+import StarPathPanel from './StarPathPanel';
 import { PROFILE_AVATARS, WARDROBE_BY_ID, WARDROBE_ITEMS } from '../../data/wardrobe';
 import { loadWardrobeCatalog } from '../../data/wardrobeCatalog';
 import { NICKNAME_CHANGE_COST, useProfileStore } from '../../stores/profileStore';
@@ -8,11 +9,11 @@ import { usePetStore } from '../../stores/petStore';
 import { useCollectorCardStore } from '../../stores/collectorCardStore';
 import type { WardrobeCatalog, WardrobeCategory, WardrobeItem } from '../../types/profile';
 import { ensureWardrobeAsset, ensureWardrobeInteractionAsset } from '../../utils/wardrobeAssetDownloader';
-import { learnedToday, localDateKey } from '../../utils/localDate';
+import { localDateKey } from '../../utils/localDate';
 import { isWardrobeConditionMet } from '../../utils/wardrobeUnlock';
 import './myPage.css';
 
-type PageTab = 'today' | 'journal' | 'honor' | 'wardrobe';
+type PageTab = 'journey' | 'journal' | 'honor' | 'wardrobe';
 
 const CATEGORY_LABELS: Record<WardrobeCategory, string> = {
   avatar: '头像', frame: '头像框', background: '背景', pendant: '挂件', effect: '特效', title: '称号',
@@ -274,7 +275,7 @@ export default function MyPage() {
   const journal = useProfileStore(s => s.journal);
   const setJournal = useProfileStore(s => s.setJournal);
   const ownedPets = usePetStore(s => s.ownedPets);
-  const [tab, setTab] = useState<PageTab>('today');
+  const [tab, setTab] = useState<PageTab>('journey');
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(nickname);
   const [toast, setToast] = useState('');
@@ -282,12 +283,6 @@ export default function MyPage() {
   const today = localDateKey();
   const claimedCount = readSet('csp_achievement_claimed').size;
   const unlockedCount = new Set([...readSet('csp_achievement_unlocked'), ...readSet('csp_achievement_claimed')]).size;
-  const todayTasks = useMemo(() => [
-    { text: '完成一次学习或练习', done: learnedToday() },
-    { text: '照顾一位灵犀智子', done: ownedPets.some(p => p.lastFedAt && localDateKey(new Date(p.lastFedAt)) === today) },
-    { text: '写下今天的一句话', done: Boolean(journal[today]?.trim()) },
-  ], [journal, ownedPets, today]);
-
   useEffect(() => { load(); }, [load]);
   // Restore remote wardrobe definitions before rendering equipped items from a backup.
   useEffect(() => { void loadWardrobeCatalog().then(() => setCatalogReady(value => value + 1)); }, []);
@@ -323,17 +318,13 @@ export default function MyPage() {
       </header>
 
       <nav className="my-tabs">
-        <button className={tab === 'today' ? 'active' : ''} onClick={() => setTab('today')}><Star />今日</button>
+        <button className={tab === 'journey' ? 'active' : ''} onClick={() => setTab('journey')}><Route />我的星途</button>
         <button className={tab === 'journal' ? 'active' : ''} onClick={() => setTab('journal')}><BookHeart />成长手账</button>
         <button className={tab === 'honor' ? 'active' : ''} onClick={() => setTab('honor')}><Trophy />荣誉</button>
         <button className={tab === 'wardrobe' ? 'active' : ''} onClick={() => setTab('wardrobe')}><Shirt />星相衣橱</button>
       </nav>
 
-      {tab === 'today' && <div className="today-grid">
-        <section className="today-card constellation-card"><span className="section-kicker">TODAY'S ORBIT</span><h2>今日星轨</h2>{todayTasks.map((task, index) => <div className={`today-task ${task.done ? 'done' : ''}`} key={task.text}><span>{task.done ? <Check /> : index + 1}</span>{task.text}</div>)}</section>
-        <section className="today-card summary-card"><span className="section-kicker">GROWTH SNAPSHOT</span><h2>成长小结</h2><p>你已经结识 <b>{ownedPets.length}</b> 位智子伙伴，点亮 <b>{unlockedCount}</b> 项成就。</p><button onClick={() => setTab('journal')}>写下今天的发现</button></section>
-        <section className="today-card wardrobe-entry"><Sparkles /><div><span className="section-kicker">ASTRAL CLOSET</span><h2>星相衣橱</h2><p>把喜欢的头像、星环与称号搭成独一无二的自己。</p></div><button onClick={() => setTab('wardrobe')}>去搭配</button></section>
-      </div>}
+      {tab === 'journey' && <StarPathPanel onToast={notify} />}
 
       {tab === 'journal' && <section className="journal-sheet"><div><span className="section-kicker">PRIVATE STAR LOG</span><h2>{today} · 今日手账</h2><p><ShieldCheck /> 日记内容只保存在这台电脑，不会上传到服务器、教师端或排行榜；创建备份时会随个人进度一起保存。</p></div><textarea value={journal[today] || ''} maxLength={1200} placeholder="今天学会了什么？遇到了什么有趣的事？" onChange={e => setJournal(today, e.target.value)} /><span className="journal-count">{(journal[today] || '').length}/1200 · 自动保存</span></section>}
       {tab === 'honor' && <div className="honor-wrap"><AchievementsPanel /></div>}

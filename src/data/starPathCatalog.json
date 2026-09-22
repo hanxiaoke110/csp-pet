@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-21T00:00:00.000Z",
+  "tasks": [
+    { "id": "quiz-correct-10", "title": "初见锋芒", "description": "累计答对 10 道题", "icon": "✦", "category": "learning", "metric": "quizCorrect", "target": 10, "reward": { "coins": 30, "exp": 20 } },
+    { "id": "quiz-correct-30", "title": "思维启航", "description": "累计答对 30 道题", "icon": "🌠", "category": "learning", "metric": "quizCorrect", "target": 30, "reward": { "coins": 60, "exp": 40 } },
+    { "id": "quiz-correct-60", "title": "星轨渐明", "description": "累计答对 60 道题", "icon": "🌟", "category": "learning", "metric": "quizCorrect", "target": 60, "reward": { "coins": 100, "exp": 70 } },
+    { "id": "quiz-correct-100", "title": "百题星光", "description": "累计答对 100 道题", "icon": "✨", "category": "learning", "metric": "quizCorrect", "target": 100, "reward": { "coins": 140, "exp": 100 } },
+    { "id": "quiz-correct-200", "title": "知识星河", "description": "累计答对 200 道题", "icon": "🌌", "category": "learning", "metric": "quizCorrect", "target": 200, "reward": { "coins": 220, "exp": 150 } },
+    { "id": "quiz-answered-50", "title": "稳步前行", "description": "累计完成 50 道练习", "icon": "🧭", "category": "learning", "metric": "quizAnswered", "target": 50, "reward": { "coins": 80, "exp": 60 } },
+    { "id": "challenge-five-3", "title": "小队长出发", "description": "累计完成 3 次五题挑战", "icon": "🎯", "category": "challenge", "metric": "weeklyChallenges", "target": 3, "reward": { "coins": 80, "exp": 60 } },
+    { "id": "challenge-super-1", "title": "越过雷鸣", "description": "完成 1 次超级挑战", "icon": "⚡", "category": "challenge", "metric": "superChallenges", "target": 1, "reward": { "coins": 120, "exp": 100 } },
+    { "id": "maze-seals-3", "title": "破雾之手", "description": "累计解开 3 道迷宫封印", "icon": "🗝️", "category": "exploration", "metric": "mazeSeals", "target": 3, "reward": { "coins": 80, "exp": 60 } },
+    { "id": "maze-clear-1", "title": "穿越迷雾", "description": "完成 1 张迷宫地图", "icon": "🏰", "category": "exploration", "metric": "mazeClears", "target": 1, "reward": { "coins": 100, "exp": 80 } },
+    { "id": "trial-stages-5", "title": "试炼新星", "description": "累计通过 5 个试炼关卡", "icon": "⚔️", "category": "trial", "metric": "trialStages", "target": 5, "reward": { "coins": 100, "exp": 80 } }
+  ]
+}

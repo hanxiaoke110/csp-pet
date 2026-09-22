@@ -11,6 +11,7 @@ import { petCopy } from '../components/pet/PetCopy';
 import { grantTickets } from '../utils/crypto';
 
 interface PetState {
+  loaded: boolean;
   activePetId: string | null;
   ownedPets: OwnedPet[];
   coins: number;
@@ -264,6 +265,7 @@ export function claimedCoinAchievementFloor(raw: string | null): number {
 }
 
 export const usePetStore = create<PetState>((set, get) => ({
+  loaded: false,
   activePetId: null,
   ownedPets: [],
   coins: 200,
@@ -1028,9 +1030,9 @@ export const usePetStore = create<PetState>((set, get) => ({
     },
 
   load: async () => {
-    const raw = await dualLoad('pet_data', 'csp_pet_data');
-    if (!raw) return false;
     try {
+      const raw = await dualLoad('pet_data', 'csp_pet_data');
+      if (!raw) return false;
       const data = JSON.parse(raw);
       if (Array.isArray(data.ownedPets)) {
         // Repair legacy fields while keeping each student's existing pet identity intact.
@@ -1149,7 +1151,13 @@ export const usePetStore = create<PetState>((set, get) => ({
         }
         return true;
       }
-    } catch { /* corrupted data — do not overwrite it with defaults */ }
-    return false;
+      return false;
+    } catch { /* corrupted data — do not overwrite it with defaults */
+      return false;
+    } finally {
+      // The empty initial list is not evidence that an existing student has no pet.
+      // Only show the adoption gate after the saved snapshot has been checked.
+      set({ loaded: true });
+    }
   },
 }));

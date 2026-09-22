@@ -46,7 +46,7 @@ function PetActionHandler() {
         }
         case 'switch-pet': {
           const petId = (e.payload as any).petId;
-          if (petId) usePetStore.getState().setActivePet(petId);
+          if (petId && usePetStore.getState().loaded) usePetStore.getState().setActivePet(petId);
           break;
         }
         case 'navigate': {
@@ -98,6 +98,10 @@ function PetActionHandler() {
 
 function doCheckinFromPet() {
   try {
+    if (!usePetStore.getState().loaded) {
+      emit('pet-bubble', { text: '正在恢复智子资料，请稍后再签到' }).catch(() => {});
+      return;
+    }
     const checkin = nextCheckin();
     if (checkin.alreadyChecked) {
       emit('pet-bubble', { text: petCopy.checkinAlready() }).catch(() => {});
@@ -121,11 +125,12 @@ function doCheckinFromPet() {
 
 // First-time welcome modal
 function WelcomeModal() {
+  const petLoaded = usePetStore(s => s.loaded);
   const hasPet = usePetStore(s => s.ownedPets.length > 0);
   const [show, setShow] = useState(true);
   const navigate = useNavigate();
 
-  if (hasPet || !show) return null;
+  if (!petLoaded || hasPet || !show) return null;
 
   return (
     <div style={{
@@ -169,7 +174,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.48';
+  const VER = '1.7.49';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -180,11 +185,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🧭 学习区精简为选择题、真题、OJ 与学习资料</div>
-          <div>📜 已完成的旧课程成就升级为永久“绝版荣誉”</div>
-          <div>✨ 课程关联装扮改用新挑战解锁，老玩家权益保留</div>
-          <div>🧹 移除课程与 AI 教练缓存，启动更轻、更稳定</div>
-          <div>💾 金币、智子、收藏、迷宫与备份数据全部兼容</div>
+          <div>🌠 “我的星途”上线：11 项永久累计任务，不用每日打卡</div>
+          <div>🎁 焕新礼：200 金币、100 经验与 2 份普通食物</div>
+          <div>🧩 旧的做题、迷宫和试炼进度会自动计入星途</div>
+          <div>🐾 修复旧用户启动时被误判为尚未领养的问题</div>
+          <div>💾 领奖记录进入本地备份，资料恢复期间不会提前结算</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
@@ -287,9 +292,10 @@ function App() {
         cleanupPetSync();
       };
     };
-    // 15s safety timeout: force loading to finish even if init hangs
+    // 15s warning for unexpectedly slow local restoration; the shell is
+    // already visible, and each page distinguishes pending data from no data.
     const safetyTimer = setTimeout(() => {
-      console.warn('[init] safety timeout — forcing load complete');
+      console.warn('[init] local data restoration is taking longer than 15 seconds');
     }, 15000);
     let cleanupListeners: (() => void) | undefined;
     let disposed = false;

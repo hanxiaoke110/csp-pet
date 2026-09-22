@@ -139,7 +139,33 @@ function questionSourceLabel(source: string): string {
   return '精选题库';
 }
 
+export function QuizPetGate({ loaded, onAdopt }: { loaded: boolean; onAdopt: () => void }) {
+  if (!loaded) {
+    return <div className="quiz-practice" role="status" style={{ textAlign: 'center', paddingTop: 60 }}>正在恢复智子资料…</div>;
+  }
+  return (
+    <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
+      <div style={{ fontSize: 56, marginBottom: 16 }}>🐾</div>
+      <h2>请先领养一只灵犀智子！</h2>
+      <p style={{ color: '#64748b', marginBottom: 20 }}>选择题的奖励需要宠物来接收，先去挑选你的学习伙伴吧。</p>
+      <button className="mode-btn" onClick={onAdopt}>🐾 去领养灵犀智子</button>
+    </div>
+  );
+}
+
 export default function QuizPractice() {
+  const petLoaded = usePetStore(s => s.loaded);
+  const hasPet = usePetStore(s => s.ownedPets.length > 0);
+  const navigate = useNavigate();
+
+  if (!petLoaded || !hasPet) return <QuizPetGate loaded={petLoaded} onAdopt={() => navigate('/pet')} />;
+
+  // Mount the quiz only after pet hydration. This is a separate component so
+  // the gate changing state cannot change the number of hooks in one component.
+  return <QuizPracticeWithPet />;
+}
+
+function QuizPracticeWithPet() {
   const [mode, setMode] = useState<Mode | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -177,21 +203,8 @@ export default function QuizPractice() {
   const quizStore = useQuizStore();
   const addCoins = usePetStore(s => s.addCoins);
   const addExp = usePetStore(s => s.addExp);
-  const hasPet = usePetStore(s => s.ownedPets.length > 0);
   const navigate = useNavigate();
   const classAccess = useClassAccess();
-
-  // Gate: must have a pet first
-  if (!hasPet) {
-    return (
-      <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>🐾</div>
-        <h2>请先领养一只灵犀智子！</h2>
-        <p style={{ color: '#64748b', marginBottom: 20 }}>选择题的奖励需要宠物来接收，先去挑选你的学习伙伴吧。</p>
-        <button className="mode-btn" onClick={() => navigate('/pet')}>🐾 去领养灵犀智子</button>
-      </div>
-    );
-  }
 
   // Load bank on mount
   useEffect(() => {

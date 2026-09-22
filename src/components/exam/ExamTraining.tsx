@@ -61,6 +61,7 @@ export default function ExamTraining() {
 
   const examStore = useQuizStore();
   const setExamGroup = useQuizStore(s => s.setExamGroup);
+  const petLoaded = usePetStore(s => s.loaded);
   const hasPet = usePetStore(s => s.ownedPets.length > 0);
   const navigate = useNavigate();
   // autoCheck=true：进入页面即自动校验班级码（6 小时本地缓存），未通过则显示门禁
@@ -115,6 +116,9 @@ export default function ExamTraining() {
   }
 
   // Gate: must have pet
+  if (!petLoaded) {
+    return <div className="quiz-practice" role="status" style={{ textAlign: 'center', paddingTop: 60 }}>正在恢复智子资料…</div>;
+  }
   if (!hasPet) {
     return (
       <div className="quiz-practice" style={{ textAlign: 'center', paddingTop: 60 }}>

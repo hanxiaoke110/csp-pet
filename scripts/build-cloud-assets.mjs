@@ -6,7 +6,7 @@ import sharp from 'sharp';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = resolve(root, '.cloudflare-static');
-const sources = ['collector-cards', 'wardrobe', 'profile', 'course-data'];
+const sources = ['collector-cards', 'wardrobe', 'profile', 'star-path', 'course-data'];
 const workshopApi = (process.env.WORKSHOP_STATIC_API || 'https://api.cspstudy.top').replace(/\/$/, '');
 const maxStaticAssetBytes = 25 * 1024 * 1024;
 
@@ -159,7 +159,7 @@ await writeFile(resolve(output, 'workshop', 'catalog.json'), `${JSON.stringify({
   items: publishedPets,
 }, null, 2)}\n`);
 
-for (const catalogPath of ['collector-cards/catalog.json', 'wardrobe/catalog.json']) {
+for (const catalogPath of ['collector-cards/catalog.json', 'wardrobe/catalog.json', 'star-path/catalog.json']) {
   JSON.parse(await readFile(resolve(output, catalogPath), 'utf8'));
 }
 for (const coursePath of ['course-data/question-bank-v2/manifest.json', 'course-data/knowledge-points.json', 'course-data/knowledge-lectures.json']) {
@@ -177,6 +177,9 @@ await writeFile(resolve(output, '_headers'), `
   Cache-Control: public, max-age=300, must-revalidate
 
 /profile/*
+  Cache-Control: public, max-age=300, must-revalidate
+
+/star-path/*
   Cache-Control: public, max-age=300, must-revalidate
 
 /workshop/*

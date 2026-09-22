@@ -31,6 +31,7 @@ const EXCLUDED_LS_KEYS = new Set([
   'csp_collector_card_cache_v1',
   'csp_wardrobe_catalog_cache_v1',
   'csp_wardrobe_asset_cache_v1',
+  'csp_star_path_catalog_cache_v1',
   'dungeon_reviewed_exam_bank_v1',
   'dungeon_reviewed_exam_bank_version',
   'dungeon_dungeons_v1',

@@ -20,6 +20,7 @@ import { BookOpen, Egg, Factory, Lightbulb, MonitorCog, PawPrint, ShoppingCart }
 
 export default function PetPanel() {
   const { ownedPets, activePetId, coins } = usePetStore();
+  const petLoaded = usePetStore(s => s.loaded);
   const selectStarter = usePetStore(s => s.selectStarter);
   const spendCoins = usePetStore(s => s.spendCoins);
   const renamePet = usePetStore(s => s.renamePet);
@@ -108,6 +109,9 @@ export default function PetPanel() {
   }, [displayPet?.petId, renameModal]);
 
   // --- Starter selection screen ---
+  if (!petLoaded) {
+    return <div className="pet-panel" role="status" style={{ textAlign: 'center', paddingTop: 60 }}>正在恢复智子资料…</div>;
+  }
   if (ownedPets.length === 0) {
     return (
       <div className="pet-panel">

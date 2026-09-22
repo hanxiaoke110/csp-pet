@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { claimedCoinAchievementFloor, currentWeekKey, getElementReforgeCost, getWeeklyPassiveCoinReward, migrateWeeklyPassiveClaimWeek, SEASON_TWO_ELEMENT_REFORGE_KEY, usePetStore } from './petStore';
 import { useHatchStore } from './hatchStore';
 import { getPetConfig, type OwnedPet } from '../types/pet';
+import * as persist from '../lib/persist';
 
 function makeLocalStorage() {
   const data = new Map<string, string>();
@@ -40,6 +41,7 @@ beforeEach(() => {
   vi.stubGlobal('window', { dispatchEvent: vi.fn() });
   useHatchStore.setState({ eggs: [] });
   usePetStore.setState({
+    loaded: false,
     ownedPets: [],
     activePetId: null,
     coins: 200,
@@ -60,6 +62,26 @@ beforeEach(() => {
     recycledPets: [],
     companionSlots: 1,
     desktopCompanionIds: [],
+  });
+});
+
+describe('旧用户启动恢复', () => {
+  it('存档读取完成前保持未加载状态，完成后恢复原有智子', async () => {
+    let finishRead!: (value: string) => void;
+    vi.spyOn(persist, 'dualLoad').mockImplementationOnce(() => new Promise(resolve => { finishRead = resolve; }));
+    const loading = usePetStore.getState().load();
+
+    expect(usePetStore.getState()).toMatchObject({ loaded: false, ownedPets: [] });
+    finishRead(JSON.stringify({ ownedPets: [makePet('old-student-pet')], coins: 1400 }));
+    expect(await loading).toBe(true);
+    expect(usePetStore.getState()).toMatchObject({ loaded: true, coins: 1400 });
+    expect(usePetStore.getState().ownedPets.map(pet => pet.petId)).toEqual(['old-student-pet']);
+  });
+
+  it('确实没有存档时也会结束恢复状态', async () => {
+    vi.spyOn(persist, 'dualLoad').mockResolvedValueOnce('');
+    expect(await usePetStore.getState().load()).toBe(false);
+    expect(usePetStore.getState()).toMatchObject({ loaded: true, ownedPets: [] });
   });
 });
 
