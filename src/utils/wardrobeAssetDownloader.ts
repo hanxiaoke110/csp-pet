@@ -81,3 +81,21 @@ export async function ensureWardrobeInteractionAsset(item: WardrobeItem, onProgr
     checksum: interaction.atlasChecksum,
   }, onProgress);
 }
+
+export async function ensureWardrobeVisualAssets(
+  item: WardrobeItem,
+  onProgress?: (label: string) => void,
+): Promise<Record<string, string>> {
+  const layers = item.visual?.layers.filter(layer => Boolean(layer.asset)) || [];
+  const resolved = await Promise.all(layers.map(async layer => {
+    const asset = await ensureWardrobeAsset({
+      ...item,
+      id: `${item.id}-layer-${layer.id}`,
+      asset: layer.asset,
+      assetBytes: layer.assetBytes,
+      checksum: layer.checksum,
+    }, onProgress);
+    return [layer.id, asset.url] as const;
+  }));
+  return Object.fromEntries(resolved);
+}

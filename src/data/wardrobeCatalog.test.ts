@@ -60,4 +60,35 @@ describe('wardrobe catalog', () => {
     expect(normalized.items[0].interaction?.atlas).toBe('https://cards.cspstudy.top/wardrobe/summer-atlas.webp');
     expect(isWardrobeCatalog({ version: 2, updatedAt: '', items: [{ ...item, interaction: { ...item.interaction, rows: 4 } }] })).toBe(false);
   });
+
+  it('accepts v2 visual primitives, resolves layer assets and clamps unsafe values', () => {
+    const item = {
+      ...remoteItem,
+      minRendererVersion: 2,
+      visual: {
+        rendererVersion: 2 as const,
+        safeZone: { x: 50, y: 42, width: 38, height: 44 },
+        layers: [{
+          id: 'star-dust', primitive: 'particle' as const, placement: 'front' as const,
+          asset: './items/star.webp', count: 999, opacity: 4, blur: 90, durationMs: 50,
+        }],
+      },
+    };
+    const catalog = { schemaVersion: 2 as const, rendererVersion: 2, version: 3, updatedAt: '', items: [item] };
+    expect(isWardrobeCatalog(catalog)).toBe(true);
+    const normalized = normalizeWardrobeCatalog(catalog, 'https://cards.cspstudy.top/wardrobe/v2/catalog.json');
+    expect(normalized.items[0].visual?.layers[0]).toMatchObject({ count: 48, opacity: 1, blur: 30, durationMs: 500 });
+    expect(normalized.items[0].visual?.layers[0].asset).toBe('https://cards.cspstudy.top/wardrobe/v2/items/star.webp');
+  });
+
+  it('rejects arbitrary visual primitives and malformed condition expressions', () => {
+    expect(isWardrobeCatalog({ version: 2, updatedAt: '', items: [{
+      ...remoteItem,
+      visual: { rendererVersion: 2, layers: [{ id: 'bad', primitive: 'javascript', placement: 'front' }] },
+    }] })).toBe(false);
+    expect(isWardrobeCatalog({ version: 2, updatedAt: '', items: [{
+      ...remoteItem,
+      acquisition: { type: 'condition', description: '测试', condition: { type: 'metric', metric: 'secret-key', operator: 'gte', value: 1 } },
+    }] })).toBe(false);
+  });
 });

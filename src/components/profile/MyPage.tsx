@@ -8,9 +8,10 @@ import { NICKNAME_CHANGE_COST, useProfileStore } from '../../stores/profileStore
 import { usePetStore } from '../../stores/petStore';
 import { useCollectorCardStore } from '../../stores/collectorCardStore';
 import type { WardrobeCatalog, WardrobeCategory, WardrobeItem } from '../../types/profile';
-import { ensureWardrobeAsset, ensureWardrobeInteractionAsset } from '../../utils/wardrobeAssetDownloader';
+import { ensureWardrobeAsset, ensureWardrobeInteractionAsset, ensureWardrobeVisualAssets } from '../../utils/wardrobeAssetDownloader';
 import { localDateKey } from '../../utils/localDate';
 import { isWardrobeConditionMet } from '../../utils/wardrobeUnlock';
+import WardrobeVisualLayers from './WardrobeVisualLayers';
 import './myPage.css';
 
 type PageTab = 'journey' | 'journal' | 'honor' | 'wardrobe';
@@ -37,9 +38,11 @@ function AvatarStage({ compact = false, previewItem }: { compact?: boolean; prev
   const background = selected('background');
   const pendant = selected('pendant');
   const effect = selected('effect');
+  const visualItems = [background, frame, pendant, effect, title].filter((item): item is WardrobeItem => Boolean(item));
   const nickname = useProfileStore(s => s.nickname);
   const [resolved, setResolved] = useState<Record<string, string>>({});
   const [direction, setDirection] = useState({ column: 2, row: 2 });
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [reacting, setReacting] = useState(false);
   const animationFrame = useRef<number | null>(null);
   const reactionTimer = useRef<number | null>(null);
@@ -50,46 +53,59 @@ function AvatarStage({ compact = false, previewItem }: { compact?: boolean; prev
     if (avatar?.interaction) {
       jobs.push(ensureWardrobeInteractionAsset(avatar).then(asset => [`${avatar.id}:interaction`, asset.url] as const));
     }
-    void Promise.all(jobs)
-      .then(entries => { if (active) setResolved(Object.fromEntries(entries)); })
+    const visualJobs = visualItems.map(async item => {
+      const assets = await ensureWardrobeVisualAssets(item);
+      return Object.entries(assets).map(([layerId, url]) => [`${item.id}:${layerId}`, url] as const);
+    });
+    void Promise.all([Promise.all(jobs), Promise.all(visualJobs)])
+      .then(([entries, visualEntries]) => { if (active) setResolved(Object.fromEntries([...entries, ...visualEntries.flat()])); })
       .catch(() => {});
     return () => {
       active = false;
       if (animationFrame.current != null) cancelAnimationFrame(animationFrame.current);
       if (reactionTimer.current != null) window.clearTimeout(reactionTimer.current);
     };
-  }, [avatar?.id, avatar?.version, avatar?.interaction?.atlas, compact, frame?.id, frame?.version, background?.id, background?.version, pendant?.id, pendant?.version]);
+  }, [avatar?.id, avatar?.version, avatar?.interaction?.atlas, compact, frame?.id, frame?.version, background?.id, background?.version, pendant?.id, pendant?.version, effect?.id, effect?.version, title?.id, title?.version]);
   const backgroundUrl = background ? resolved[background.id] || background.asset : undefined;
   const avatarUrl = avatar ? resolved[avatar.id] || avatar.asset : undefined;
   const interactionUrl = avatar ? resolved[`${avatar.id}:interaction`] : undefined;
   const frameUrl = frame ? resolved[frame.id] || frame.asset : undefined;
   const pendantUrl = pendant ? resolved[pendant.id] || pendant.asset : undefined;
   const updateDirection = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!interactionUrl || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const { clientX, clientY, currentTarget } = event;
     if (animationFrame.current != null) cancelAnimationFrame(animationFrame.current);
     animationFrame.current = requestAnimationFrame(() => {
       const rect = currentTarget.getBoundingClientRect();
-      const column = Math.max(0, Math.min(4, Math.floor(((clientX - rect.left) / rect.width) * 5)));
-      const row = Math.max(0, Math.min(4, Math.floor(((clientY - rect.top) / rect.height) * 5)));
+      const relativeX = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const relativeY = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+      setPointer({ x: relativeX * 2 - 1, y: relativeY * 2 - 1 });
+      if (!interactionUrl) return;
+      const column = Math.max(0, Math.min(4, Math.floor(relativeX * 5)));
+      const row = Math.max(0, Math.min(4, Math.floor(relativeY * 5)));
       setDirection({ column, row });
     });
   };
   const react = () => {
-    if (!interactionUrl || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (reactionTimer.current != null) window.clearTimeout(reactionTimer.current);
     setReacting(false);
     requestAnimationFrame(() => setReacting(true));
     reactionTimer.current = window.setTimeout(() => setReacting(false), 520);
   };
   return (
-    <div className={`profile-stage bg-${background?.preview || 'midnight'} ${compact ? 'compact' : ''} ${previewItem ? 'is-previewing' : ''}`} style={backgroundUrl ? { backgroundImage: `linear-gradient(rgba(3,15,33,.08),rgba(3,15,33,.22)),url(${backgroundUrl})` } : undefined}>
+    <div
+      className={`profile-stage bg-${background?.preview || 'midnight'} ${compact ? 'compact' : ''} ${previewItem ? 'is-previewing' : ''}`}
+      style={backgroundUrl ? { backgroundImage: `linear-gradient(rgba(3,15,33,.08),rgba(3,15,33,.22)),url(${backgroundUrl})` } : undefined}
+      onPointerMove={updateDirection}
+      onPointerLeave={() => { setDirection({ column: 2, row: 2 }); setPointer({ x: 0, y: 0 }); }}
+    >
       {previewItem && !compact && <div className="stage-preview-badge"><Eye /> 预览中 · 不会保存</div>}
+      <WardrobeVisualLayers items={visualItems} placement="background" resolved={resolved} pointer={pointer} reacting={reacting} />
+      <WardrobeVisualLayers items={visualItems} placement="behind-avatar" resolved={resolved} pointer={pointer} reacting={reacting} />
       <div className={`stage-effect ${effect?.preview || 'none'}`} aria-hidden="true"><i /><i /><i /><i /></div>
       <div
         className={`avatar-frame frame-${frame?.preview || 'plain'} ${interactionUrl ? 'is-interactive' : ''} ${reacting ? 'is-reacting' : ''}`}
-        onPointerMove={updateDirection}
-        onPointerLeave={() => setDirection({ column: 2, row: 2 })}
         onPointerDown={react}
         onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); react(); } }}
         role={interactionUrl ? 'button' : undefined}
@@ -110,9 +126,10 @@ function AvatarStage({ compact = false, previewItem }: { compact?: boolean; prev
         {frameUrl && <img className="avatar-frame-art" src={frameUrl} alt="" />}
         {pendantUrl && <img className="avatar-pendant-art" src={pendantUrl} alt="" />}
       </div>
+      <WardrobeVisualLayers items={visualItems} placement="front" resolved={resolved} pointer={pointer} reacting={reacting} />
       <div className="profile-stage-copy">
         <strong>{nickname}</strong>
-        <span className={`equipped-title rarity-${title?.rarity || 'common'}`}>{title?.name || '星途见习生'}</span>
+        <span className={`equipped-title rarity-${title?.rarity || 'common'} title-effect-${title?.visual?.titleEffect || 'none'}`}>{title?.name || '星途见习生'}</span>
       </div>
     </div>
   );
@@ -241,7 +258,7 @@ function WardrobePanel({ onToast }: { onToast: (text: string) => void }) {
     }
   }, [cardCount, catalog, grant]);
 
-  const items = catalog.items.filter(item => item.category === category);
+  const items = catalog.items.filter(item => item.category === category && (item.available !== false || ownedItemIds.includes(item.id)));
   return (
     <div className="wardrobe-layout">
       <aside className="wardrobe-stage-panel">
