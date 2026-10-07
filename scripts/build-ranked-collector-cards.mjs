@@ -7,6 +7,7 @@ import sharp from 'sharp';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const generated = '/Users/hanliuliu/.codex/generated_images/01a08691-8f5e-79b3-b8ea-b3336bc146d2';
 const output = resolve(root, 'cloud-assets-source', 'collector-cards');
+const draftOutput = resolve(root, 'cloud-assets-source', 'collector-card-drafts');
 const bundledCatalog = JSON.parse(await readFile(resolve(root, 'public', 'collector-cards', 'catalog.json'), 'utf8'));
 
 const cards = [
@@ -146,6 +147,7 @@ async function buildCard(card) {
 }
 
 await mkdir(output, { recursive: true });
+await mkdir(draftOutput, { recursive: true });
 const rendered = [];
 for (const card of cards) rendered.push(await buildCard(card));
 const founderCard = bundledCatalog.cards.find(card => card.id === 'astra-stargazer-001');
@@ -155,6 +157,6 @@ const catalog = {
   updatedAt: new Date().toISOString(),
   cards: remoteCards,
 };
-await writeFile(resolve(output, 'catalog.json'), `${JSON.stringify(catalog, null, 2)}\n`);
-console.log(`已生成 ${rendered.length} 张人气典藏卡，在线目录共 ${remoteCards.length} 张。`);
+await writeFile(resolve(draftOutput, 'catalog.json'), `${JSON.stringify(catalog, null, 2)}\n`);
+console.log(`已生成 ${rendered.length} 张人气典藏卡草稿，草稿目录共 ${remoteCards.length} 张。`);
 for (const card of rendered) console.log(`${card.number} ${card.name}: ${(card.assetBytes / 1024 / 1024).toFixed(2)} MiB`);
