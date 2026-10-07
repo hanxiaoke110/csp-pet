@@ -12,7 +12,9 @@ dist
 dist-ssr
 dist-dungeon
 .cloudflare-static
-cloud-assets-source/
+cloud-assets-source/*
+!cloud-assets-source/collector-cards/
+!cloud-assets-source/collector-cards/**
 /artifacts/
 /design/holo-card-demo-*/
 src-tauri/target

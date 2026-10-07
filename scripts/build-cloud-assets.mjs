@@ -18,6 +18,16 @@ for (const name of sources) {
   await rm(resolve(output, name, '.DS_Store'), { force: true });
 }
 
+// Online-only collector cards live outside public/ so adding a new card does
+// not increase the desktop installer. Overlay them after the bundled founder
+// cards have been copied into the Cloudflare staging directory.
+const onlineCollectorCards = resolve(root, 'cloud-assets-source', 'collector-cards');
+try {
+  await cp(onlineCollectorCards, resolve(output, 'collector-cards'), { recursive: true, force: true });
+} catch (error) {
+  if (error?.code !== 'ENOENT') throw error;
+}
+
 // The v1.7.48 desktop bundle no longer ships the retired course catalog. Keep
 // its cloud copy for one compatibility cycle so clients that have not upgraded
 // continue to work. A later maintenance deploy can opt in to final retirement.
