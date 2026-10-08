@@ -1,0 +1,1364 @@
+{
+  "schemaVersion": 2,
+  "rendererVersion": 2,
+  "version": 1,
+  "updatedAt": "2026-10-07T23:44:11.188Z",
+  "items": [
+    {
+      "id": "frame-canglong-leihuan",
+      "version": 1,
+      "category": "frame",
+      "name": "苍龙雷环",
+      "rarity": "legendary",
+      "acquisition": {
+        "type": "coin",
+        "price": 880
+      },
+      "asset": "./frames/canglong-leihuan.webp",
+      "thumbnail": "./thumbnails/frame-canglong-leihuan.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 20,
+          "width": 50,
+          "height": 50
+        },
+        "layers": [
+          {
+            "id": "edge-stars",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#82eaff",
+            "secondaryColor": "#fff1a6",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 9,
+            "size": 4,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "soft-sweep",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#ffffff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 78,
+            "height": 67,
+            "opacity": 0.2,
+            "durationMs": 5200,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-flare",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#7eeaff",
+            "secondaryColor": "#ffe483",
+            "x": 50,
+            "y": 44,
+            "width": 62,
+            "height": 62,
+            "opacity": 0.58
+          }
+        ]
+      },
+      "assetBytes": 191984,
+      "checksum": "8a2a2170f93a53a45357eb0ad70f0c5d64fe8599c4725c2d9a085fa6e29efb3c",
+      "thumbnailBytes": 22634,
+      "thumbnailChecksum": "4c61cf4e64fa6d72de575ada10fc491827e7a9e7d27b948f9b973da6652eecb0"
+    },
+    {
+      "id": "frame-xingqiong-shengmian",
+      "version": 1,
+      "category": "frame",
+      "name": "星穹圣冕",
+      "rarity": "mythic",
+      "acquisition": {
+        "type": "condition",
+        "description": "累计答对 300 道选择题",
+        "condition": {
+          "type": "metric",
+          "metric": "quizCorrect",
+          "operator": "gte",
+          "value": 300
+        }
+      },
+      "asset": "./frames/xingqiong-shengmian.webp",
+      "thumbnail": "./thumbnails/frame-xingqiong-shengmian.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 20,
+          "width": 50,
+          "height": 50
+        },
+        "layers": [
+          {
+            "id": "edge-stars",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#82eaff",
+            "secondaryColor": "#fff1a6",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 9,
+            "size": 4,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "soft-sweep",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#ffffff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 78,
+            "height": 67,
+            "opacity": 0.2,
+            "durationMs": 5200,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-flare",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#7eeaff",
+            "secondaryColor": "#ffe483",
+            "x": 50,
+            "y": 44,
+            "width": 62,
+            "height": 62,
+            "opacity": 0.58
+          }
+        ]
+      },
+      "assetBytes": 181078,
+      "checksum": "fca0fad285d75382b91bfa4838a4b537d3e80130112cd978e18c60d875c03cf2",
+      "thumbnailBytes": 19240,
+      "thumbnailChecksum": "6878e8e4ab39bbe5d553ef7f501f1e7a663224b462990d9e0dafaa14dc31af48"
+    },
+    {
+      "id": "frame-nihong-haike",
+      "version": 1,
+      "category": "frame",
+      "name": "霓虹骇客",
+      "rarity": "epic",
+      "acquisition": {
+        "type": "coin",
+        "price": 620
+      },
+      "asset": "./frames/nihong-haike.webp",
+      "thumbnail": "./thumbnails/frame-nihong-haike.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 20,
+          "width": 50,
+          "height": 50
+        },
+        "layers": [
+          {
+            "id": "edge-stars",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#82eaff",
+            "secondaryColor": "#fff1a6",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 9,
+            "size": 4,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "soft-sweep",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#ffffff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 78,
+            "height": 67,
+            "opacity": 0.2,
+            "durationMs": 5200,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-flare",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#7eeaff",
+            "secondaryColor": "#ffe483",
+            "x": 50,
+            "y": 44,
+            "width": 62,
+            "height": 62,
+            "opacity": 0.58
+          }
+        ]
+      },
+      "assetBytes": 147808,
+      "checksum": "378b4c19da3a2cd7a5bb63196c6304bc705b5acbed267ca82363cc8efff79b86",
+      "thumbnailBytes": 15950,
+      "thumbnailChecksum": "b46a22c09debfee775e32221f3890c2fefa30c6b1c1c35d207b357f84bd47cc2"
+    },
+    {
+      "id": "frame-yingtang-tuhuan",
+      "version": 1,
+      "category": "frame",
+      "name": "樱糖兔环",
+      "rarity": "rare",
+      "acquisition": {
+        "type": "coin",
+        "price": 420
+      },
+      "asset": "./frames/yingtang-tuhuan.webp",
+      "thumbnail": "./thumbnails/frame-yingtang-tuhuan.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 20,
+          "width": 50,
+          "height": 50
+        },
+        "layers": [
+          {
+            "id": "edge-stars",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#ff9fc8",
+            "secondaryColor": "#fff1a6",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 9,
+            "size": 4,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "soft-sweep",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#ffffff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 78,
+            "height": 67,
+            "opacity": 0.2,
+            "durationMs": 5200,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-flare",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#7eeaff",
+            "secondaryColor": "#ffe483",
+            "x": 50,
+            "y": 44,
+            "width": 62,
+            "height": 62,
+            "opacity": 0.58
+          }
+        ]
+      },
+      "assetBytes": 154260,
+      "checksum": "bba4032dab816118e1502cf3c574e96d0a8c345a137d2bbcb07465a7a282c1e8",
+      "thumbnailBytes": 16770,
+      "thumbnailChecksum": "5404766b87bcdbe9edbe0f2dca248f51151ea5e7d0324108c2298224a4e40ae4"
+    },
+    {
+      "id": "frame-yunduo-maozhua",
+      "version": 1,
+      "category": "frame",
+      "name": "云朵猫爪",
+      "rarity": "epic",
+      "acquisition": {
+        "type": "condition",
+        "description": "任意智子好感达到 100",
+        "condition": {
+          "type": "metric",
+          "metric": "highestPetAffection",
+          "operator": "gte",
+          "value": 100
+        }
+      },
+      "asset": "./frames/yunduo-maozhua.webp",
+      "thumbnail": "./thumbnails/frame-yunduo-maozhua.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 20,
+          "width": 50,
+          "height": 50
+        },
+        "layers": [
+          {
+            "id": "edge-stars",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#ffe37c",
+            "secondaryColor": "#fff1a6",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 9,
+            "size": 4,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "soft-sweep",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#ffffff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 78,
+            "height": 67,
+            "opacity": 0.2,
+            "durationMs": 5200,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-flare",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#7eeaff",
+            "secondaryColor": "#ffe483",
+            "x": 50,
+            "y": 44,
+            "width": 62,
+            "height": 62,
+            "opacity": 0.58
+          }
+        ]
+      },
+      "assetBytes": 101056,
+      "checksum": "7ad87801c0260948cfb6b018e94212a060d88edd3325653799e21a8094288238",
+      "thumbnailBytes": 11412,
+      "thumbnailChecksum": "8d33176c39c71c8caeb5c63afe81ad6824571f0e3131db9abb242661f4d6d912"
+    },
+    {
+      "id": "background-yinhe-wangzuo",
+      "version": 1,
+      "category": "background",
+      "name": "银河王座",
+      "rarity": "mythic",
+      "acquisition": {
+        "type": "condition",
+        "description": "永久收藏 5 张典藏卡",
+        "condition": {
+          "type": "metric",
+          "metric": "collectorCardCount",
+          "operator": "gte",
+          "value": 5
+        }
+      },
+      "asset": "./backgrounds/yinhe-wangzuo.webp",
+      "thumbnail": "./thumbnails/background-yinhe-wangzuo.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 23,
+          "y": 18,
+          "width": 54,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "ambient-dust",
+            "primitive": "particle",
+            "placement": "background",
+            "animation": "pulse",
+            "color": "#94eaff",
+            "secondaryColor": "#ffe8a1",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 11,
+            "size": 3,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "depth-glow",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#72ddff",
+            "x": 50,
+            "y": 42,
+            "width": 70,
+            "height": 58,
+            "opacity": 0.38,
+            "durationMs": 4200
+          }
+        ]
+      },
+      "assetBytes": 153678,
+      "checksum": "50d2db6f81a5e4f4097491daefc518c215c1b24c0322343d54b1ef77ab19f415",
+      "thumbnailBytes": 31740,
+      "thumbnailChecksum": "0ece918e1da97986d545eaf744e09ffb8eb18294be4e5da8abe7fd760d787a4d"
+    },
+    {
+      "id": "background-chiyan-shendian",
+      "version": 1,
+      "category": "background",
+      "name": "赤焰神殿",
+      "rarity": "legendary",
+      "acquisition": {
+        "type": "coin",
+        "price": 780
+      },
+      "asset": "./backgrounds/chiyan-shendian.webp",
+      "thumbnail": "./thumbnails/background-chiyan-shendian.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 23,
+          "y": 18,
+          "width": 54,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "ambient-dust",
+            "primitive": "particle",
+            "placement": "background",
+            "animation": "pulse",
+            "color": "#ff8b50",
+            "secondaryColor": "#ffe8a1",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 11,
+            "size": 3,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "depth-glow",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#ff592e",
+            "x": 50,
+            "y": 42,
+            "width": 70,
+            "height": 58,
+            "opacity": 0.38,
+            "durationMs": 4200
+          }
+        ]
+      },
+      "assetBytes": 136600,
+      "checksum": "ecea53e6b0a968b729933418367bfc863e4c6f62f72172b1b6bea598b9fd6806",
+      "thumbnailBytes": 29868,
+      "thumbnailChecksum": "be9b2447ea9f0c597397c281be7e08685e166bf6446e5420f736223337b33f45"
+    },
+    {
+      "id": "background-jiguang-bingjing",
+      "version": 1,
+      "category": "background",
+      "name": "极光冰境",
+      "rarity": "legendary",
+      "acquisition": {
+        "type": "coin",
+        "price": 780
+      },
+      "asset": "./backgrounds/jiguang-bingjing.webp",
+      "thumbnail": "./thumbnails/background-jiguang-bingjing.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 23,
+          "y": 18,
+          "width": 54,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "ambient-dust",
+            "primitive": "particle",
+            "placement": "background",
+            "animation": "pulse",
+            "color": "#94eaff",
+            "secondaryColor": "#ffe8a1",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 11,
+            "size": 3,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "depth-glow",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#72ddff",
+            "x": 50,
+            "y": 42,
+            "width": 70,
+            "height": 58,
+            "opacity": 0.38,
+            "durationMs": 4200
+          }
+        ]
+      },
+      "assetBytes": 151474,
+      "checksum": "d1854cfea91600e5d3c8dc45052ebc2980908dc3516902d4c8833974b3f6b558",
+      "thumbnailBytes": 32278,
+      "thumbnailChecksum": "057d1c291513374bb5917e2c9da6db5b17e5e66d49622efa9874641b20021f8d"
+    },
+    {
+      "id": "background-tianmeng-youleyuan",
+      "version": 1,
+      "category": "background",
+      "name": "甜梦游乐园",
+      "rarity": "rare",
+      "acquisition": {
+        "type": "coin",
+        "price": 460
+      },
+      "asset": "./backgrounds/tianmeng-youleyuan.webp",
+      "thumbnail": "./thumbnails/background-tianmeng-youleyuan.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 23,
+          "y": 18,
+          "width": 54,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "ambient-dust",
+            "primitive": "particle",
+            "placement": "background",
+            "animation": "pulse",
+            "color": "#ffb6e2",
+            "secondaryColor": "#ffe8a1",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 11,
+            "size": 3,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "depth-glow",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#72ddff",
+            "x": 50,
+            "y": 42,
+            "width": 70,
+            "height": 58,
+            "opacity": 0.38,
+            "durationMs": 4200
+          }
+        ]
+      },
+      "assetBytes": 110734,
+      "checksum": "7f6ddd2b37b733e08468542d6497d09aa0bbe124dce28e9e36e4f30b0cc40f03",
+      "thumbnailBytes": 22902,
+      "thumbnailChecksum": "9be9c26afdfcbdf4673a2cf00fbe851fc5c2c0f6be923844e2cd02a0734e0174"
+    },
+    {
+      "id": "pendant-fuyou-xingren",
+      "version": 1,
+      "category": "pendant",
+      "name": "浮游星刃",
+      "rarity": "epic",
+      "acquisition": {
+        "type": "coin",
+        "price": 520
+      },
+      "asset": "./pendants/fuyou-xingren.webp",
+      "thumbnail": "./thumbnails/pendant-fuyou-xingren.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 18,
+          "width": 50,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "pendant-orbit",
+            "primitive": "orbit",
+            "placement": "front",
+            "animation": "spin",
+            "color": "#72e7ff",
+            "secondaryColor": "#d9a1ff",
+            "x": 79,
+            "y": 32,
+            "width": 26,
+            "height": 26,
+            "opacity": 0.56,
+            "durationMs": 7200
+          },
+          {
+            "id": "pendant-sparks",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#7feaff",
+            "secondaryColor": "#ffffff",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 6,
+            "size": 4,
+            "avoidSafeZone": true
+          }
+        ]
+      },
+      "assetBytes": 87828,
+      "checksum": "72cdc30c8a8ddc91f1e0be8c3401d242e37f7ed7d19057a9c4d9ce2e4e915033",
+      "thumbnailBytes": 7478,
+      "thumbnailChecksum": "8e9889a1d7acd17b4afd94a3494855763d49e403737f0379d9da7e2d47db0ea9"
+    },
+    {
+      "id": "pendant-liangzi-mofang",
+      "version": 1,
+      "category": "pendant",
+      "name": "量子魔方",
+      "rarity": "legendary",
+      "acquisition": {
+        "type": "condition",
+        "description": "累计完成 10 张不同迷宫",
+        "condition": {
+          "type": "metric",
+          "metric": "mazeClearCount",
+          "operator": "gte",
+          "value": 10
+        }
+      },
+      "asset": "./pendants/liangzi-mofang.webp",
+      "thumbnail": "./thumbnails/pendant-liangzi-mofang.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 18,
+          "width": 50,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "pendant-orbit",
+            "primitive": "orbit",
+            "placement": "front",
+            "animation": "spin",
+            "color": "#72e7ff",
+            "secondaryColor": "#d9a1ff",
+            "x": 79,
+            "y": 32,
+            "width": 26,
+            "height": 26,
+            "opacity": 0.56,
+            "durationMs": 7200
+          },
+          {
+            "id": "pendant-sparks",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#7feaff",
+            "secondaryColor": "#ffffff",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 6,
+            "size": 4,
+            "avoidSafeZone": true
+          }
+        ]
+      },
+      "assetBytes": 155564,
+      "checksum": "d94c8bbae5c9717a089c2542afffb25637f11404a0fe71aa3db68191ce68dfd8",
+      "thumbnailBytes": 15020,
+      "thumbnailChecksum": "e44d5cab0bc0f2ffdfc94b1f210469944eeced6cf0e296e4584c0d3a28091b27"
+    },
+    {
+      "id": "pendant-naicha-jingling",
+      "version": 1,
+      "category": "pendant",
+      "name": "奶茶精灵",
+      "rarity": "rare",
+      "acquisition": {
+        "type": "coin",
+        "price": 360
+      },
+      "asset": "./pendants/naicha-jingling.webp",
+      "thumbnail": "./thumbnails/pendant-naicha-jingling.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 25,
+          "y": 18,
+          "width": 50,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "pendant-orbit",
+            "primitive": "orbit",
+            "placement": "front",
+            "animation": "spin",
+            "color": "#ffd785",
+            "secondaryColor": "#ff9fc8",
+            "x": 79,
+            "y": 32,
+            "width": 26,
+            "height": 26,
+            "opacity": 0.56,
+            "durationMs": 7200
+          },
+          {
+            "id": "pendant-sparks",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#ffd87b",
+            "secondaryColor": "#ffffff",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 6,
+            "size": 4,
+            "avoidSafeZone": true
+          }
+        ]
+      },
+      "assetBytes": 63484,
+      "checksum": "6c7a4d48dbe129bf3871416b23a992eb74d198e62ff5b90a391aea32e6cb87fa",
+      "thumbnailBytes": 9592,
+      "thumbnailChecksum": "302332052e49a4daacada3210dbf5086615bb50bb0de6f1a2386760a4db3525c"
+    },
+    {
+      "id": "effect-leiting-jiamian",
+      "version": 1,
+      "category": "effect",
+      "name": "雷霆加冕",
+      "rarity": "mythic",
+      "acquisition": {
+        "type": "condition",
+        "description": "八个副本各完成至少 1 张迷宫",
+        "condition": {
+          "type": "metric",
+          "metric": "dungeonMazeCoverage",
+          "operator": "gte",
+          "value": 8
+        }
+      },
+      "thumbnail": "./thumbnails/effect-leiting-jiamian.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 24,
+          "y": 18,
+          "width": 52,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "aura",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#65eaff",
+            "secondaryColor": "#ffe782",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 64,
+            "opacity": 0.3,
+            "durationMs": 3200
+          },
+          {
+            "id": "energy-ring",
+            "primitive": "orbit",
+            "placement": "behind-avatar",
+            "animation": "spin",
+            "color": "#65eaff",
+            "secondaryColor": "#ffe782",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 66,
+            "height": 66,
+            "opacity": 0.62,
+            "durationMs": 7600
+          },
+          {
+            "id": "energy-particles",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#65eaff",
+            "secondaryColor": "#ffe782",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 14,
+            "size": 5,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "edge-light",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#ffe782",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 82,
+            "height": 70,
+            "opacity": 0.22,
+            "durationMs": 4700,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-impact",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#65eaff",
+            "secondaryColor": "#ffe782",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 72,
+            "opacity": 0.72
+          }
+        ]
+      },
+      "thumbnailBytes": 11272,
+      "thumbnailChecksum": "7d5e45a33dd50bdac8fbb761d3cf22b4b0974683f5b2a2b8df7b48698fe3744d"
+    },
+    {
+      "id": "effect-xinghe-yueqian",
+      "version": 1,
+      "category": "effect",
+      "name": "星河跃迁",
+      "rarity": "legendary",
+      "acquisition": {
+        "type": "coin",
+        "price": 980
+      },
+      "thumbnail": "./thumbnails/effect-xinghe-yueqian.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 24,
+          "y": 18,
+          "width": 52,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "aura",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#8de9ff",
+            "secondaryColor": "#c59aff",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 64,
+            "opacity": 0.3,
+            "durationMs": 3200
+          },
+          {
+            "id": "energy-ring",
+            "primitive": "orbit",
+            "placement": "behind-avatar",
+            "animation": "spin",
+            "color": "#8de9ff",
+            "secondaryColor": "#c59aff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 66,
+            "height": 66,
+            "opacity": 0.62,
+            "durationMs": 7600
+          },
+          {
+            "id": "energy-particles",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#8de9ff",
+            "secondaryColor": "#c59aff",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 14,
+            "size": 5,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "edge-light",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#c59aff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 82,
+            "height": 70,
+            "opacity": 0.22,
+            "durationMs": 4700,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-impact",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#8de9ff",
+            "secondaryColor": "#c59aff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 72,
+            "opacity": 0.72
+          }
+        ]
+      },
+      "thumbnailBytes": 10444,
+      "thumbnailChecksum": "07fc2841e8be9b166cf4f3d60d02ac347fa14b16a57c3cb7839680f4e7d01f1f"
+    },
+    {
+      "id": "effect-lieyan-canyi",
+      "version": 1,
+      "category": "effect",
+      "name": "烈焰残翼",
+      "rarity": "legendary",
+      "acquisition": {
+        "type": "coin",
+        "price": 980
+      },
+      "thumbnail": "./thumbnails/effect-lieyan-canyi.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 24,
+          "y": 18,
+          "width": 52,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "aura",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#ff783f",
+            "secondaryColor": "#ffd36f",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 64,
+            "opacity": 0.38,
+            "durationMs": 3200
+          },
+          {
+            "id": "energy-ring",
+            "primitive": "orbit",
+            "placement": "behind-avatar",
+            "animation": "spin",
+            "color": "#ff783f",
+            "secondaryColor": "#ffd36f",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 66,
+            "height": 66,
+            "opacity": 0.62,
+            "durationMs": 7600
+          },
+          {
+            "id": "energy-particles",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#ff783f",
+            "secondaryColor": "#ffd36f",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 14,
+            "size": 5,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "edge-light",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#ffd36f",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 82,
+            "height": 70,
+            "opacity": 0.22,
+            "durationMs": 4700,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-impact",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#ff783f",
+            "secondaryColor": "#ffd36f",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 72,
+            "opacity": 0.72
+          }
+        ]
+      },
+      "thumbnailBytes": 11868,
+      "thumbnailChecksum": "2e1dd89420af62095ac8df609d42499c47f5ec7b18a968fe84b2568f03d026d4"
+    },
+    {
+      "id": "effect-bingjing-shiting",
+      "version": 1,
+      "category": "effect",
+      "name": "冰晶时停",
+      "rarity": "epic",
+      "acquisition": {
+        "type": "coin",
+        "price": 720
+      },
+      "thumbnail": "./thumbnails/effect-bingjing-shiting.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 24,
+          "y": 18,
+          "width": 52,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "aura",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#8cecff",
+            "secondaryColor": "#d7f8ff",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 64,
+            "opacity": 0.3,
+            "durationMs": 3200
+          },
+          {
+            "id": "energy-ring",
+            "primitive": "orbit",
+            "placement": "behind-avatar",
+            "animation": "spin",
+            "color": "#8cecff",
+            "secondaryColor": "#d7f8ff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 66,
+            "height": 66,
+            "opacity": 0.62,
+            "durationMs": 7600
+          },
+          {
+            "id": "energy-particles",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#8cecff",
+            "secondaryColor": "#d7f8ff",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 14,
+            "size": 5,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "edge-light",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#d7f8ff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 82,
+            "height": 70,
+            "opacity": 0.22,
+            "durationMs": 4700,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-impact",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#8cecff",
+            "secondaryColor": "#d7f8ff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 72,
+            "opacity": 0.72
+          }
+        ]
+      },
+      "thumbnailBytes": 9554,
+      "thumbnailChecksum": "c6595bafdffdc83852b5099f4cb53c869acfb6103791213dc03b971f32c50a5a"
+    },
+    {
+      "id": "effect-caihong-paopao",
+      "version": 1,
+      "category": "effect",
+      "name": "彩虹泡泡",
+      "rarity": "rare",
+      "acquisition": {
+        "type": "coin",
+        "price": 480
+      },
+      "thumbnail": "./thumbnails/effect-caihong-paopao.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "safeZone": {
+          "x": 24,
+          "y": 18,
+          "width": 52,
+          "height": 56
+        },
+        "layers": [
+          {
+            "id": "aura",
+            "primitive": "glow",
+            "placement": "behind-avatar",
+            "animation": "pulse",
+            "color": "#ff9bd8",
+            "secondaryColor": "#8cecff",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 64,
+            "opacity": 0.3,
+            "durationMs": 3200
+          },
+          {
+            "id": "energy-ring",
+            "primitive": "orbit",
+            "placement": "behind-avatar",
+            "animation": "spin",
+            "color": "#ff9bd8",
+            "secondaryColor": "#8cecff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 66,
+            "height": 66,
+            "opacity": 0.62,
+            "durationMs": 11000
+          },
+          {
+            "id": "energy-particles",
+            "primitive": "particle",
+            "placement": "front",
+            "animation": "pulse",
+            "color": "#ff9bd8",
+            "secondaryColor": "#8cecff",
+            "blendMode": "screen",
+            "opacity": 0.7,
+            "durationMs": 3600,
+            "count": 18,
+            "size": 9,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "edge-light",
+            "primitive": "light-sweep",
+            "placement": "front",
+            "animation": "sweep",
+            "color": "#8cecff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 82,
+            "height": 70,
+            "opacity": 0.22,
+            "durationMs": 4700,
+            "avoidSafeZone": true
+          },
+          {
+            "id": "tap-impact",
+            "primitive": "click-burst",
+            "placement": "front",
+            "animation": "burst",
+            "color": "#ff9bd8",
+            "secondaryColor": "#8cecff",
+            "blendMode": "screen",
+            "x": 50,
+            "y": 43,
+            "width": 72,
+            "height": 72,
+            "opacity": 0.72
+          }
+        ]
+      },
+      "thumbnailBytes": 9750,
+      "thumbnailChecksum": "6e3f096c0cb5c1243559158dc33c51651fb1c0facb863a1e30d2eb631a2d2a7b"
+    },
+    {
+      "id": "title-xingqiong-zhuzai",
+      "version": 1,
+      "category": "title",
+      "name": "星穹主宰",
+      "rarity": "mythic",
+      "acquisition": {
+        "type": "condition",
+        "description": "累计解锁 10 项成就",
+        "condition": {
+          "type": "metric",
+          "metric": "achievementCount",
+          "operator": "gte",
+          "value": 10
+        }
+      },
+      "thumbnail": "./thumbnails/title-xingqiong-zhuzai.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "layers": [],
+        "titleEffect": "gold-sweep"
+      },
+      "thumbnailBytes": 10134,
+      "thumbnailChecksum": "fba4e8eb09f87d868cd0233d23c0af76ac62c73901b89b2d3cd26f2bc11e4830"
+    },
+    {
+      "id": "title-pojie-xianqu",
+      "version": 1,
+      "category": "title",
+      "name": "破界先驱",
+      "rarity": "epic",
+      "acquisition": {
+        "type": "coin",
+        "price": 680
+      },
+      "thumbnail": "./thumbnails/title-pojie-xianqu.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "layers": [],
+        "titleEffect": "rift-glitch"
+      },
+      "thumbnailBytes": 10004,
+      "thumbnailChecksum": "8905ed9b93ce9b446b4eb85a47aa3e8de79e2f6b59c34c8791da1b361bcf3189"
+    },
+    {
+      "id": "title-xingyun-xiaofuxing",
+      "version": 1,
+      "category": "title",
+      "name": "幸运小福星",
+      "rarity": "rare",
+      "acquisition": {
+        "type": "coin",
+        "price": 380
+      },
+      "thumbnail": "./thumbnails/title-xingyun-xiaofuxing.webp",
+      "minRendererVersion": 2,
+      "available": true,
+      "visual": {
+        "rendererVersion": 2,
+        "layers": [],
+        "titleEffect": "lucky-stars"
+      },
+      "thumbnailBytes": 10514,
+      "thumbnailChecksum": "710437cee3dd2271472a9c94c5dda06c7b53ed4ec77696a7b2930c41d53b8985"
+    }
+  ]
+}

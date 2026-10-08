@@ -28,6 +28,15 @@ try {
   if (error?.code !== 'ENOENT') throw error;
 }
 
+// Wardrobe v2 is cloud-only. New catalog entries and art can be deployed here
+// without increasing the desktop installer or requiring a client release.
+const onlineWardrobe = resolve(root, 'cloud-assets-source', 'wardrobe');
+try {
+  await cp(onlineWardrobe, resolve(output, 'wardrobe'), { recursive: true, force: true });
+} catch (error) {
+  if (error?.code !== 'ENOENT') throw error;
+}
+
 // The v1.7.48 desktop bundle no longer ships the retired course catalog. Keep
 // its cloud copy for one compatibility cycle so clients that have not upgraded
 // continue to work. A later maintenance deploy can opt in to final retirement.
@@ -169,7 +178,7 @@ await writeFile(resolve(output, 'workshop', 'catalog.json'), `${JSON.stringify({
   items: publishedPets,
 }, null, 2)}\n`);
 
-for (const catalogPath of ['collector-cards/catalog.json', 'wardrobe/catalog.json', 'star-path/catalog.json']) {
+for (const catalogPath of ['collector-cards/catalog.json', 'wardrobe/catalog.json', 'wardrobe/v2/catalog.json', 'star-path/catalog.json']) {
   JSON.parse(await readFile(resolve(output, catalogPath), 'utf8'));
 }
 for (const coursePath of ['course-data/question-bank-v2/manifest.json', 'course-data/knowledge-points.json', 'course-data/knowledge-lectures.json']) {

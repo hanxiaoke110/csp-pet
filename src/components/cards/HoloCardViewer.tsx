@@ -21,14 +21,26 @@ export default function HoloCardViewer({ card, assets }: Props) {
   const elementLabel = ELEMENT_LABELS[card.element];
   const [flipped, setFlipped] = useState(false);
   const [auto, setAuto] = useState(false);
+  const [bursting, setBursting] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0, mx: 50, my: 50 });
   const dragging = useRef(false);
+  const burstTimer = useRef<number | null>(null);
 
   useEffect(() => {
     setFlipped(false);
     setAuto(false);
+    setBursting(false);
     setTilt({ x: 0, y: 0, mx: 50, my: 50 });
+    return () => { if (burstTimer.current != null) window.clearTimeout(burstTimer.current); };
   }, [card.id]);
+
+  const burst = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (burstTimer.current != null) window.clearTimeout(burstTimer.current);
+    setBursting(false);
+    requestAnimationFrame(() => setBursting(true));
+    burstTimer.current = window.setTimeout(() => setBursting(false), 680);
+  };
 
   const followPointer = (event: PointerEvent<HTMLDivElement>) => {
     if (auto || (event.pointerType !== 'mouse' && !dragging.current)) return;
@@ -57,6 +69,7 @@ export default function HoloCardViewer({ card, assets }: Props) {
         onPointerDown={event => {
           dragging.current = true;
           setAuto(false);
+          burst();
           event.currentTarget.setPointerCapture(event.pointerId);
           followPointer(event);
         }}
@@ -71,14 +84,20 @@ export default function HoloCardViewer({ card, assets }: Props) {
           }
         }}
       >
-        <div className={`holo-collector-card ${auto ? 'auto' : ''}`} style={style}>
+        <div className={`holo-collector-card element-${card.element} ${auto ? 'auto' : ''} ${bursting ? 'is-bursting' : ''}`} style={style}>
           <div className="collector-card-face collector-card-front">
             <img className="collector-layer collector-background" src={assets.background} alt="" draggable={false} />
-            {assets.subject && <img className="collector-layer collector-subject" src={assets.subject} alt={card.name} draggable={false} />}
+            {assets.subject
+              ? <img className="collector-layer collector-subject" src={assets.subject} alt={card.name} draggable={false} />
+              : <img className="collector-layer collector-subject collector-subject-pseudo" src={assets.background} alt={card.name} draggable={false} />}
             {assets.text && <img className="collector-layer collector-text" src={assets.text} alt="" draggable={false} />}
+            <span className="collector-depth-ring" />
+            <span className="collector-prism" />
             <span className="collector-foil" />
             <span className="collector-glare" />
             <span className="collector-sparkles" />
+            <span className="collector-motes" />
+            <span className="collector-impact" />
             <span className="collector-edge" />
           </div>
           <div className="collector-card-face collector-card-back">

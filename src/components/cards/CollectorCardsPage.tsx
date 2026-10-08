@@ -15,6 +15,8 @@ const ELEMENT_LABELS = { fire: '火', water: '水', wind: '风', earth: '地', l
 export default function CollectorCardsPage() {
   const navigate = useNavigate();
   const classAccess = useClassAccess(true);
+  const previewBypass = import.meta.env.DEV && new URLSearchParams(location.search).get('preview') === '1';
+  const hasCardAccess = classAccess.isAllowed || previewBypass;
   const [activeTab, setActiveTab] = useState<'collection' | 'workshop'>('collection');
   const [catalog, setCatalog] = useState<CollectorCardCatalog | null>(null);
   const [error, setError] = useState('');
@@ -35,11 +37,11 @@ export default function CollectorCardsPage() {
   }, [activeTab, catalog, ownedSet]);
 
   useEffect(() => {
-    if (!classAccess.isAllowed) return;
+    if (!hasCardAccess) return;
     loadCollectorCardCatalog().then(setCatalog).catch(reason => {
       setError(reason instanceof Error ? reason.message : '典藏卡清单暂时无法读取');
     });
-  }, [classAccess.isAllowed]);
+  }, [hasCardAccess]);
 
   useEffect(() => {
     if (!catalog) return;
@@ -79,7 +81,7 @@ export default function CollectorCardsPage() {
     }, 2300);
   };
 
-  if (!classAccess.isAllowed) {
+  if (!hasCardAccess) {
     if (classAccess.status === 'idle' || classAccess.status === 'checking') {
       return <div className="collector-page collector-loading"><Sparkles /><p>正在校验班级权限…</p></div>;
     }
@@ -144,7 +146,7 @@ export default function CollectorCardsPage() {
               <button
                 className="collector-tile-art"
                 type="button"
-                onClick={() => owned ? void openCard(card) : setMessage(`收入${card.name}后解锁完整全息卡面、自动赏卡与专属卡背`)}
+                onClick={() => (owned || previewBypass) ? void openCard(card) : setMessage(`收入${card.name}后解锁完整全息卡面、自动赏卡与专属卡背`)}
                 aria-label={owned ? `查看${card.name}典藏卡` : `了解${card.name}典藏卡`}
               >
                 <img src={card.assets.thumbnail} alt={card.name} />

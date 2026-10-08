@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { isWardrobeCatalog, normalizeWardrobeCatalog } from './wardrobeCatalog';
 import { PROFILE_AVATARS } from './wardrobe';
+import type { WardrobeItem } from '../types/profile';
+import publishedWardrobeV2 from '../../cloud-assets-source/wardrobe/v2/catalog.json';
 
 const remoteItem = {
   id: 'avatar-summer-comet',
@@ -90,5 +92,19 @@ describe('wardrobe catalog', () => {
       ...remoteItem,
       acquisition: { type: 'condition', description: '测试', condition: { type: 'metric', metric: 'secret-key', operator: 'gte', value: 1 } },
     }] })).toBe(false);
+  });
+
+  it('publishes the complete 20-item v2 catalog with valid local assets', () => {
+    const catalog = publishedWardrobeV2;
+    const items = catalog.items as unknown as WardrobeItem[];
+    expect(isWardrobeCatalog(catalog)).toBe(true);
+    expect(catalog).toMatchObject({ schemaVersion: 2, rendererVersion: 2, version: 1 });
+    expect(catalog.items).toHaveLength(20);
+    expect(items.filter(item => item.acquisition.type === 'coin')).toHaveLength(14);
+    expect(items.filter(item => item.acquisition.type === 'condition')).toHaveLength(6);
+    expect(Object.fromEntries(['frame', 'background', 'pendant', 'effect', 'title'].map(category => [category, items.filter(item => item.category === category).length])))
+      .toEqual({ frame: 5, background: 4, pendant: 3, effect: 5, title: 3 });
+    expect(catalog.items.every(item => item.thumbnail.endsWith('.webp'))).toBe(true);
+    expect(catalog.items.filter(item => item.asset).every(item => item.checksum?.length === 64 && Number(item.assetBytes) > 0)).toBe(true);
   });
 });
