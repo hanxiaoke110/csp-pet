@@ -13,6 +13,7 @@ import { getWeekKey, loadCheckin, nextCheckin } from '../../utils/checkin';
 import {
   Album, ClipboardList, Gift, Images, Laptop, Library, ListChecks,
   Medal, Megaphone, PawPrint, Settings, Swords, UserRound, Zap,
+  TimerReset,
 } from 'lucide-react';
 
 interface Props { children: ReactNode; }
@@ -130,6 +131,9 @@ export default function AppShell({ children }: Props) {
         </NavLink>
         <NavLink to="/resources" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           <Library /> <span>学习资料</span>
+        </NavLink>
+        <NavLink to="/focus" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          <TimerReset /> <span>专注学习</span>
         </NavLink>
 
         <div className="sidebar-section">成长</div>

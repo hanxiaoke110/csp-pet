@@ -16,6 +16,7 @@ import WindowSkinsPage from './components/skins/WindowSkinsPage';
 import AdminPage from './components/admin/AdminPage';
 import LearningResourcesPage from './components/resources/LearningResourcesPage';
 import AnnouncementPage from './components/announcements/AnnouncementPage';
+import FocusPage from './components/focus/FocusPage';
 import DungeonEmbed from '../src-dungeon/DungeonEmbed';
 import { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/utils/routeBridge';
 import { refreshQuestionBankV2 } from './question-bank/repository';
@@ -24,6 +25,7 @@ import { useHatchStore } from './stores/hatchStore';
 import { usePetStore } from './stores/petStore';
 import { useQuizStore } from './stores/quizStore';
 import { useCollectorCardStore } from './stores/collectorCardStore';
+import { useFocusStore } from './stores/focusStore';
 import { migrateLocalStorageToSqlite } from './lib/migration';
 import { loadProblemStatuses } from './lib/problemStatusCache';
 import { ensureDailyAutomaticBackup } from './lib/backup';
@@ -254,6 +256,7 @@ function App() {
           useHatchStore.getState().load(),
           useQuizStore.getState().load(),
           collectorCardsLoaded(),
+          useFocusStore.getState().load(),
         ]);
         petDataLoaded = loaded;
       } catch (e) { console.error('[init] store load failed:', e); }
@@ -353,6 +356,7 @@ function App() {
           <Route path="/exam" element={<ExamTraining />} />
           <Route path="/oj-training" element={<OJTraining />} />
           <Route path="/resources" element={<LearningResourcesPage />} />
+          <Route path="/focus" element={<FocusPage />} />
           <Route path="/announcements" element={<AnnouncementPage />} />
           <Route path="/window-skins" element={<WindowSkinsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
