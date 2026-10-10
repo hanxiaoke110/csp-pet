@@ -63,7 +63,12 @@ const SQLITE_BACKUP_KEYS = new Set([
   'problem_status',
   'collector_cards',
   'profile_data',
+  'focus_data',
 ]);
+
+export function shouldIncludeSqliteKey(key: string): boolean {
+  return SQLITE_BACKUP_KEYS.has(key);
+}
 
 /** 解析并校验备份文件；不通过时给出孩子能看懂的拒绝原因 */
 export function parseBackup(raw: string): { ok: true; data: BackupFile } | { ok: false; error: string } {
@@ -184,7 +189,7 @@ export async function buildBackup(): Promise<BackupFile> {
   let sqlite: Record<string, string> = {};
   try {
     const rows = await invoke<[string, string][]>('get_all_settings');
-    sqlite = Object.fromEntries(rows.filter(([key]) => SQLITE_BACKUP_KEYS.has(key)));
+    sqlite = Object.fromEntries(rows.filter(([key]) => shouldIncludeSqliteKey(key)));
   } catch { /* SQLite 不可用时只导出 localStorage */ }
 
   let appVersion = 'unknown';

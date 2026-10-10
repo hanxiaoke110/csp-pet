@@ -2,7 +2,7 @@ import { beforeEach, describe, it, expect, vi } from 'vitest';
 import {
   shouldIncludeKey, parseBackup, compareVersions, bytesToBase64, base64ToBytes,
   validateBackupState, summarizeBackup, applyBackup,
-  selectBackupsToRemove,
+  selectBackupsToRemove, shouldIncludeSqliteKey,
   type BackupFile,
 } from './backup';
 
@@ -45,6 +45,7 @@ describe('shouldIncludeKey', () => {
     expect(shouldIncludeKey('csp_dungeon_exploration_v1')).toBe(true);
     expect(shouldIncludeKey('csp_trial_equipment_v1')).toBe(true);
     expect(shouldIncludeKey('csp_star_path_progress_v1')).toBe(true);
+    expect(shouldIncludeKey('csp_focus_data')).toBe(true);
     expect(shouldIncludeKey('dungeon_pet_coin_rewards')).toBe(true);
     expect(shouldIncludeKey('dungeon_trial_inventory')).toBe(true);
   });
@@ -70,6 +71,31 @@ describe('shouldIncludeKey', () => {
   it('excludes unrelated keys', () => {
     expect(shouldIncludeKey('other_key')).toBe(false);
     expect(shouldIncludeKey('tauri')).toBe(false);
+  });
+});
+
+describe('focus backup data', () => {
+  it('includes the focus SQLite snapshot in backups', () => {
+    expect(shouldIncludeSqliteKey('focus_data')).toBe(true);
+    expect(shouldIncludeSqliteKey('collector_cards')).toBe(true);
+    expect(shouldIncludeSqliteKey('temporary_cache')).toBe(false);
+  });
+
+  it('does not let malformed focus data block core student restore', async () => {
+    const result = await applyBackup(makeBackup({
+      localStorage: {
+        csp_pet_data: '{"ownedPets":[],"coins":1888}',
+        csp_focus_data: '{broken focus data',
+      },
+      sqlite: {
+        pet_data: '{"ownedPets":[],"coins":1888}',
+        focus_data: '{also broken',
+      },
+      sprites: {},
+    }));
+    expect(localStorage.getItem('csp_pet_data')).toContain('1888');
+    expect(localStorage.getItem('csp_focus_data')).toBe('{broken focus data');
+    expect(result).toMatchObject({ lsCount: 2, sqliteCount: 2 });
   });
 });
 
