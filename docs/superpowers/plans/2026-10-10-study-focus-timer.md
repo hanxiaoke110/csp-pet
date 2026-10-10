@@ -4,7 +4,7 @@
 
 **Goal:** Add an optional, local-only study focus tool with a goal, flexible timer, one gentle reminder, neutral review, weekly statistics, and an always-on-top mini timer.
 
-**Architecture:** The main webview owns a single Zustand focus store persisted through the existing dual localStorage/SQLite layer. Timer values are derived from absolute timestamps so hidden-window throttling and restart do not drift. A predeclared Tauri `focus-mini` webview renders a read-only snapshot and sends idempotent commands back to the main store over Tauri events.
+**Architecture:** The main webview owns a single Zustand focus store persisted through the existing dual localStorage/SQLite layer. Timer values are derived from absolute timestamps so hidden-window throttling and restart do not drift. To preserve the project's Windows single-WebView2 stability fix, the mini timer renders inside the existing transparent pet window and sends idempotent commands back to the main store over Tauri events.
 
 **Tech Stack:** React 19, TypeScript, Zustand 5, Tauri 2, Vitest, existing SQLite/localStorage persistence and backup system.
 
@@ -23,17 +23,14 @@
 - Create `src/components/focus/FocusReview.tsx`: neutral completion review.
 - Create `src/components/focus/FocusStats.tsx`: today/week/recent local statistics.
 - Create `src/components/focus/focus.css`: focus page visual system and responsive layout.
-- Create `src/components/focus/FocusMiniWindow.tsx`: mini-window renderer and commands.
-- Create `src/focus-mini.tsx`: mini-window React entry point.
-- Create `focus-mini.html`: Vite/Tauri mini-window document.
-- Modify `vite.config.ts`: add the mini-window build entry.
+- Create `src/components/focus/FocusRuntime.tsx`: route-independent scheduler and cross-window synchronization.
+- Create `src/components/focus/FocusMiniStrip.tsx`: mini timer rendered in the existing pet window.
+- Create `src/components/focus/focusMini.css`: mini timer presentation.
+- Modify `src/components/pet/PetWindow.tsx`: render the strip and include it in pointer hit-testing.
 - Modify `src/App.tsx`: load the focus store and register `/focus`.
 - Modify `src/components/layout/AppShell.tsx`: add the `专注学习` navigation item.
 - Modify `src/lib/backup.ts`: include SQLite `focus_data` in backups.
 - Modify `src/lib/backup.test.ts`: prove focus data migrates and bad focus data cannot block core restore.
-- Modify `src-tauri/tauri.conf.json`: predeclare the hidden `focus-mini` window.
-- Modify `src-tauri/capabilities/default.json`: grant the existing safe window operations to `focus-mini`.
-- Modify `src-tauri/src/lib.rs`: hide instead of close and exclude the mini window from window-state restoration.
 
 ### Task 1: Timer domain and recovery math
 
@@ -270,16 +267,15 @@ git add src/components/focus src/App.tsx src/components/layout/AppShell.tsx
 git commit -m "feat: add optional study focus page"
 ```
 
-### Task 5: Tauri mini timer window and cross-window protocol
+### Task 5: Safe desktop mini timer and cross-window protocol
 
 **Files:**
-- Create: `focus-mini.html`
-- Create: `src/focus-mini.tsx`
-- Create: `src/components/focus/FocusMiniWindow.tsx`
-- Modify: `vite.config.ts`
-- Modify: `src-tauri/tauri.conf.json`
-- Modify: `src-tauri/capabilities/default.json`
-- Modify: `src-tauri/src/lib.rs`
+- Create: `src/components/focus/FocusRuntime.tsx`
+- Create: `src/components/focus/FocusMiniStrip.tsx`
+- Create: `src/components/focus/focusMini.css`
+- Modify: `src/components/pet/PetWindow.tsx`
+- Modify: `src/components/pet/PetCopy.ts`
+- Modify: `src/App.tsx`
 - Modify: `src/stores/focusStore.ts`
 
 - [ ] **Step 1: Define and test the event protocol**
@@ -296,28 +292,28 @@ type FocusMiniCommand =
 
 Commands with a stale session ID must do nothing. Repeating pause, resume or finish must be idempotent.
 
-- [ ] **Step 2: Add the Vite and Tauri window entries**
+- [ ] **Step 2: Reuse the existing transparent pet window**
 
-Add `focusMini: 'focus-mini.html'` to the Vite Rollup inputs. Predeclare `focus-mini` with `visible:false`, `width:420`, `height:64`, `resizable:false`, `decorations:false`, `alwaysOnTop:true`, `skipTaskbar:true`, `shadow:true`, and URL `/focus-mini.html`. Include the label in the capability window list.
+Render `FocusMiniStrip` inside `PetWindow`. Add its DOM bounds to the existing pointer-level hit test so the timer accepts clicks while the rest of the full-screen transparent window remains click-through. Do not create another WebView2 window.
 
 - [ ] **Step 3: Implement the mini UI and synchronization**
 
-The main store emits `focus-state-sync` after every state change and answers `focus-mini-ready`. The mini window derives its visible countdown from the received timestamps and emits `focus-mini-command`. It never writes focus persistence directly. Add `showFocusMiniWindow` and `hideFocusMiniWindow` helpers around `getWebviewWindowByLabel('focus-mini')`.
+`FocusRuntime` emits `focus-state-sync` after every state change and answers `focus-mini-ready`. The strip derives its visible countdown from the received timestamps and emits `focus-mini-command`. It never writes focus persistence directly. If the pet window was hidden, the runtime temporarily shows it and restores the previous visibility after the review is saved or discarded.
 
-- [ ] **Step 4: Make close hide the mini window**
+- [ ] **Step 4: Keep controls idempotent and preserve pet behaviour**
 
-In Rust, include `focus-mini` in the close-prevention branch and hide it without affecting the main window or pet window. Add `focus-mini` to the window-state plugin denylist so an old visible state cannot make it appear at startup.
+Pause, resume, finish, open and hide commands include the active session ID. Stale or repeated commands do nothing. Existing pet dragging, roaming, bubbles, monitor switching and click-through behaviour remain unchanged.
 
 - [ ] **Step 5: Run TypeScript and Rust checks**
 
 Run: `npm run build && cargo check --manifest-path src-tauri/Cargo.toml`
 
-Expected: both commands exit 0; `dist/focus-mini.html` exists.
+Expected: both commands exit 0; no new WebView2 entry is added.
 
 - [ ] **Step 6: Commit the mini timer**
 
 ```bash
-git add focus-mini.html src/focus-mini.tsx src/components/focus/FocusMiniWindow.tsx vite.config.ts src-tauri src/stores/focusStore.ts src/stores/focusStore.test.ts
+git add src/components/focus/FocusRuntime.tsx src/components/focus/FocusMiniStrip.tsx src/components/focus/focusMini.css src/components/pet/PetWindow.tsx src/components/pet/PetCopy.ts src/App.tsx src/stores/focusStore.ts src/stores/focusStore.test.ts
 git commit -m "feat: add desktop focus mini timer"
 ```
 
@@ -325,7 +321,7 @@ git commit -m "feat: add desktop focus mini timer"
 
 **Files:**
 - Modify: `src/components/focus/FocusPage.tsx`
-- Modify: `src/components/focus/FocusMiniWindow.tsx`
+- Modify: `src/components/focus/FocusMiniStrip.tsx`
 - Modify: `src/stores/focusStore.ts`
 - Modify: `src/stores/focusStore.test.ts`
 - Modify: `src/components/pet/PetCopy.ts`
@@ -355,7 +351,7 @@ Expected: PASS with one reminder and one saved review at most per session.
 - [ ] **Step 6: Commit reminders and completion**
 
 ```bash
-git add src/components/focus src/stores/focusStore.ts src/stores/focusStore.test.ts src/components/pet/PetCopy.ts
+git add src/components/focus src/stores/focusStore.ts src/stores/focusStore.test.ts src/components/pet/PetCopy.ts src/components/pet/PetWindow.tsx src/App.tsx
 git commit -m "feat: add gentle focus reminders and review"
 ```
 
@@ -405,7 +401,7 @@ Expected: no whitespace errors or unintended generated files; size increase is l
 - [ ] **Step 6: Commit final corrections**
 
 ```bash
-git add src/components/focus src/stores/focusStore.ts src/stores/focusStore.test.ts src/utils/focusTimer.ts src/utils/focusTimer.test.ts src/lib/backup.ts src/lib/backup.test.ts src/App.tsx src/components/layout/AppShell.tsx src/components/pet/PetCopy.ts focus-mini.html src/focus-mini.tsx vite.config.ts src-tauri
+git add src/components/focus src/stores/focusStore.ts src/stores/focusStore.test.ts src/utils/focusTimer.ts src/utils/focusTimer.test.ts src/lib/backup.ts src/lib/backup.test.ts src/App.tsx src/components/layout/AppShell.tsx src/components/pet/PetCopy.ts src/components/pet/PetWindow.tsx docs/superpowers
 git commit -m "test: verify study focus workflow"
 ```
 

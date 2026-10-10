@@ -119,6 +119,24 @@ describe('focusStore', () => {
     expect(useFocusStore.getState().records).toEqual([]);
     expect(useFocusStore.getState().settings.miniWindowEnabled).toBe(false);
   });
+
+  it('persists a one-shot reminder across reloads', async () => {
+    useFocusStore.getState().start('复习英语', 25, at('2026-10-10T10:00:00Z'));
+    expect(useFocusStore.getState().tick(at('2026-10-10T10:12:00Z'))).toBe('reminder');
+    expect(useFocusStore.getState().tick(at('2026-10-10T10:13:00Z'))).toBeNull();
+    resetFocus();
+    await useFocusStore.getState().load(at('2026-10-10T10:14:00Z'));
+    expect(useFocusStore.getState().activeSession?.reminderShown).toBe(true);
+    expect(useFocusStore.getState().tick(at('2026-10-10T10:15:00Z'))).toBeNull();
+  });
+
+  it('moves an elapsed session into review only once', () => {
+    useFocusStore.getState().start('阅读', 15, at('2026-10-10T10:00:00Z'));
+    expect(useFocusStore.getState().tick(at('2026-10-10T10:15:00Z'))).toBe('completed');
+    expect(useFocusStore.getState().tick(at('2026-10-10T10:16:00Z'))).toBeNull();
+    expect(useFocusStore.getState().activeSession?.status).toBe('review');
+    expect(useFocusStore.getState().records).toHaveLength(0);
+  });
 });
 
 describe('focus mini command reducer', () => {

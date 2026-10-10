@@ -25,6 +25,8 @@ export const petCopy = {
     15: `叮！智子升级到 ${title}，保底缩到 50 抽，欧气加载中！`,
   })[level] || `叮！智子升级到 ${title}。`,
   maxLevel: () => '满级达成！智子已经是传说中的学习搭子啦。',
+  focusReminder: () => '还在专注吗？慢慢来，完成这一小段就可以休息啦。',
+  focusComplete: () => '这一段结束啦！回到学习助手，记一下完成情况吧。',
   hunger: (level: 'low' | 'veryLow' | 'empty') => ({
     low: '肚子咕噜咕噜，路过背包时给我带点零食吧。',
     veryLow: '智子能量条有点见底，投喂一下就能满血复活！',

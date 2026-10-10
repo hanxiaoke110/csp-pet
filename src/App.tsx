@@ -17,6 +17,7 @@ import AdminPage from './components/admin/AdminPage';
 import LearningResourcesPage from './components/resources/LearningResourcesPage';
 import AnnouncementPage from './components/announcements/AnnouncementPage';
 import FocusPage from './components/focus/FocusPage';
+import FocusRuntime from './components/focus/FocusRuntime';
 import DungeonEmbed from '../src-dungeon/DungeonEmbed';
 import { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/utils/routeBridge';
 import { refreshQuestionBankV2 } from './question-bank/repository';
@@ -206,6 +207,7 @@ function AppLayout() {
   return (
     <>
       <PetActionHandler />
+      <FocusRuntime />
       <WelcomeModal />
       <ChangelogModal />
       <AppShell>

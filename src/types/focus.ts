@@ -58,6 +58,7 @@ export type FocusMiniCommand =
   | { type: 'pause'; sessionId: string }
   | { type: 'resume'; sessionId: string }
   | { type: 'finish'; sessionId: string }
+  | { type: 'open'; sessionId: string }
   | { type: 'hide'; sessionId: string };
 
 export interface FocusMiniSnapshot {

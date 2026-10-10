@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { emit } from '@tauri-apps/api/event';
 import { Leaf } from 'lucide-react';
 import { useFocusStore } from '../../stores/focusStore';
 import { deriveFocusTiming } from '../../utils/focusTimer';
@@ -8,8 +7,6 @@ import FocusSetup from './FocusSetup';
 import FocusStats from './FocusStats';
 import FocusTimer from './FocusTimer';
 import './focus.css';
-
-const REMINDER_TEXT = '还在专注吗？慢慢来，完成这一小段就可以休息啦。';
 
 export default function FocusPage() {
   const settings = useFocusStore(state => state.settings);
@@ -28,16 +25,7 @@ export default function FocusPage() {
 
   useEffect(() => {
     if (!activeSession || activeSession.status === 'review') return;
-    const reconcile = () => {
-      const now = Date.now();
-      setNowMs(now);
-      const result = useFocusStore.getState().tick(now);
-      if (result === 'reminder') {
-        setMessage(REMINDER_TEXT);
-        emit('pet-bubble', { text: REMINDER_TEXT }).catch(() => {});
-        window.setTimeout(() => setMessage(''), 5000);
-      }
-    };
+    const reconcile = () => setNowMs(Date.now());
     reconcile();
     const timer = window.setInterval(reconcile, 1000);
     return () => window.clearInterval(timer);

@@ -8,6 +8,9 @@ import { PetDialogueDirector } from './PetDialogueDirector';
 import type { OwnedPet } from '../../types/pet';
 import { safeListen } from '../../lib/tauriEvents';
 import { sqliteGet } from '../../lib/sqlite-storage';
+import FocusMiniStrip from '../focus/FocusMiniStrip';
+import { DEFAULT_FOCUS_SETTINGS } from '../../stores/focusStore';
+import type { FocusMiniSnapshot } from '../../types/focus';
 
 const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
   small: { canvas: 110, win: 122 },
@@ -80,6 +83,10 @@ export default function PetWindow() {
   const [stage, setStage] = useState<{ w: number; h: number } | null>(null);
   // 多于一块屏时，智子操作条和设置页提供「换屏」入口
   const [monitorCount, setMonitorCount] = useState(1);
+  const [focusSnapshot, setFocusSnapshot] = useState<FocusMiniSnapshot>({
+    session: null,
+    settings: { ...DEFAULT_FOCUS_SETTINGS },
+  });
 
   const size = SIZE_MAP[petSize] || SIZE_MAP.medium;
   const canvasSz = size.canvas;
@@ -90,6 +97,7 @@ export default function PetWindow() {
   // 统一按「逻辑点 × 主屏 scale」返回，命中换算要用它
   const mainScaleRef = useRef(1);
   const petRefs = useRef(new Map<number, HTMLDivElement>());
+  const focusMiniRef = useRef<HTMLDivElement | null>(null);
   const apiRefs = useRef(new Map<number, PetSpriteApi>());
   const petsRef = useRef<PetOnStage[]>([]);
   const positionsRef = useRef<Record<number, StagePos>>({});
@@ -291,7 +299,7 @@ export default function PetWindow() {
         const cx = isMac ? cursor.x / mainScale : cursor.x;
         const cy = isMac ? cursor.y / mainScale : cursor.y;
         const k = isMac ? 1 : s;
-        const over = petsRef.current.some(({ slot }) => {
+        const overPet = petsRef.current.some(({ slot }) => {
           const el = petRefs.current.get(slot);
           if (!el) return false;
           const rect = el.getBoundingClientRect();
@@ -300,8 +308,14 @@ export default function PetWindow() {
             && cy >= winOy + rect.top * k
             && cy <= winOy + rect.bottom * k;
         });
+        const focusRect = focusMiniRef.current?.getBoundingClientRect();
+        const overFocus = Boolean(focusRect
+          && cx >= winOx + focusRect.left * k
+          && cx <= winOx + focusRect.right * k
+          && cy >= winOy + focusRect.top * k
+          && cy <= winOy + focusRect.bottom * k);
         // 拖拽途中光标可能短暂移出精灵（窗口跟随有延迟），此时不能切穿透。
-        setDesiredIgnoring(!over && !dragRef.current);
+        setDesiredIgnoring(!overPet && !overFocus && !dragRef.current);
       } finally {
         sampling = false;
       }
@@ -353,11 +367,16 @@ export default function PetWindow() {
     listeners.push(safeListen('pet-bubble', (event: any) => {
       showBubbleRef.current?.(1, event.payload.text, Boolean(event.payload.urgent));
     }));
+    listeners.push(safeListen<FocusMiniSnapshot>('focus-state-sync', event => {
+      setFocusSnapshot(event.payload);
+    }));
     const syncTimer = window.setTimeout(() => emit('pet-request-sync', {}).catch(() => {}), 250);
+    const focusSyncTimer = window.setTimeout(() => emit('focus-mini-ready', {}).catch(() => {}), 300);
     return () => {
       cancelled = true;
       listeners.forEach(unlisten => unlisten());
       window.clearTimeout(syncTimer);
+      window.clearTimeout(focusSyncTimer);
     };
   }, []);
 
@@ -583,6 +602,7 @@ export default function PetWindow() {
 
   return (
     <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', WebkitAppRegion: 'no-drag' } as React.CSSProperties}>
+      <FocusMiniStrip ref={focusMiniRef} snapshot={focusSnapshot} />
       {pets.map(({ slot, pet }) => {
         const pos = positions[slot] || defaultPosFor(slot);
         const bubble = bubbles[slot];
