@@ -404,4 +404,3 @@ Expected: no whitespace errors or unintended generated files; size increase is l
 git add src/components/focus src/stores/focusStore.ts src/stores/focusStore.test.ts src/utils/focusTimer.ts src/utils/focusTimer.test.ts src/lib/backup.ts src/lib/backup.test.ts src/App.tsx src/components/layout/AppShell.tsx src/components/pet/PetCopy.ts src/components/pet/PetWindow.tsx docs/superpowers
 git commit -m "test: verify study focus workflow"
 ```
-
