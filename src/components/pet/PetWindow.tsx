@@ -11,6 +11,7 @@ import { sqliteGet } from '../../lib/sqlite-storage';
 import FocusMiniStrip from '../focus/FocusMiniStrip';
 import { DEFAULT_FOCUS_SETTINGS } from '../../stores/focusStore';
 import type { FocusMiniSnapshot } from '../../types/focus';
+import { bindPetDragging } from './petDragging';
 
 const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
   small: { canvas: 110, win: 122 },
@@ -107,7 +108,8 @@ export default function PetWindow() {
   const clampPosRef = useRef<(x: number, y: number) => { x: number; y: number }>((x, y) => ({ x, y }));
   const dialogue = useRef(new PetDialogueDirector());
   const autoShownRef = useRef(false);
-  const dragRef = useRef<{ slot: number; startCX: number; startCY: number; startX: number; startY: number; moved: boolean } | null>(null);
+  const dragRef = useRef<ReturnType<typeof bindPetDragging> | null>(null);
+  const keepInteractiveRef = useRef<(() => void) | null>(null);
   const lastDragEndAt = useRef(0);
   const lastClickTime = useRef<Record<number, number>>({});
   const clickCounts = useRef<Record<number, number>>({});
@@ -177,6 +179,7 @@ export default function PetWindow() {
     const win = getCurrentWindow();
     win.setIgnoreCursorEvents(true).catch(() => {});
     let disposed = false;
+
     (async () => {
       try {
         const monitors = await availableMonitors();
@@ -233,6 +236,7 @@ export default function PetWindow() {
     let ignoreTimer: ReturnType<typeof setTimeout> | null = null;
     let sampling = false;
     let disposed = false;
+    let scaleSampleAt = 0;
 
     const applyTransition = (target: boolean) => {
       if (disposed || transition || target !== desiredIgnoring || target === appliedIgnoring) return;
@@ -278,6 +282,7 @@ export default function PetWindow() {
       }
       reconcile();
     };
+    keepInteractiveRef.current = () => setDesiredIgnoring(false);
 
     const apply = async () => {
       if (sampling) return;
@@ -289,8 +294,11 @@ export default function PetWindow() {
       }
       try {
         // 顺带刷新缩放：运行途中系统 DPI 变更（插拔外接显示器等）时命中数学仍保持正确
-        const [cursor, scale] = await Promise.all([cursorPosition(), win.scaleFactor()]);
-        info.scale = Number(scale) || info.scale;
+        const cursor = await cursorPosition();
+        if (Date.now() - scaleSampleAt >= 1000) {
+          info.scale = Number(await win.scaleFactor()) || info.scale;
+          scaleSampleAt = Date.now();
+        }
         if (disposed) return;
         const s = info.scale;
         const mainScale = mainScaleRef.current || s;
@@ -315,14 +323,16 @@ export default function PetWindow() {
           && cy >= winOy + focusRect.top * k
           && cy <= winOy + focusRect.bottom * k);
         // 拖拽途中光标可能短暂移出精灵（窗口跟随有延迟），此时不能切穿透。
-        setDesiredIgnoring(!overPet && !overFocus && !dragRef.current);
+        setDesiredIgnoring(!overPet && !overFocus && !dragRef.current?.active);
       } finally {
         sampling = false;
       }
     };
-    const timer = window.setInterval(() => { apply().catch(() => {}); }, 150);
+    // Fast entry sampling, but retain delayed exit to avoid compositor thrashing.
+    const timer = window.setInterval(() => { apply().catch(() => {}); }, 50);
     return () => {
       disposed = true;
+      keepInteractiveRef.current = null;
       if (ignoreTimer !== null) clearTimeout(ignoreTimer);
       window.clearInterval(timer);
     };
@@ -447,40 +457,41 @@ export default function PetWindow() {
 
   // ── 拖拽：DOM 位移（窗口本身不动），超 5px 阈值才算拖拽，保留单击 ──
   useEffect(() => {
-    const onMouseMove = (event: MouseEvent) => {
-      const drag = dragRef.current;
-      if (!drag) return;
-      const dx = event.clientX - drag.startCX;
-      const dy = event.clientY - drag.startCY;
-      if (!drag.moved && Math.abs(dx) <= 5 && Math.abs(dy) <= 5) return;
-      drag.moved = true;
-      setDraggingSlot(prev => (prev === drag.slot ? prev : drag.slot));
-      roamPausedUntil.current[drag.slot] = Date.now() + 5 * 60_000;
-      const c = clampPos(drag.startX + dx, drag.startY + dy);
-      setPositions(prev => ({ ...prev, [drag.slot]: { ...c, animMs: 0 } }));
-    };
-    const onMouseUp = () => {
-      const drag = dragRef.current;
-      dragRef.current = null;
+    const controller = bindPetDragging(document, window, (slot, x, y) => {
+      setDraggingSlot(slot);
+      roamPausedUntil.current[slot] = Date.now() + 5 * 60_000;
+      const next = { ...positionsRef.current, [slot]: { ...clampPos(x, y), animMs: 0 } };
+      positionsRef.current = next;
+      setPositions(next);
+    }, (slot, moved) => {
       setDraggingSlot(null);
-      if (drag?.moved) {
+      if (moved) {
         lastDragEndAt.current = Date.now();
-        savePosition(drag.slot);
+        lastClickTime.current[slot] = 0;
+        savePosition(slot);
       }
-    };
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    });
+    dragRef.current = controller;
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      controller.dispose();
+      dragRef.current = null;
     };
   }, [clampPos, savePosition]);
 
-  const handleMouseDown = useCallback((slot: number) => (event: React.MouseEvent) => {
+  const handlePointerDown = useCallback((slot: number) => (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
-    const pos = positionsRef.current[slot];
-    if (!pos) return;
-    dragRef.current = { slot, startCX: event.clientX, startCY: event.clientY, startX: pos.x, startY: pos.y, moved: false };
+    if ((event.target as HTMLElement).closest('button')) return;
+    if (!positionsRef.current[slot]) return;
+    // Roaming uses CSS transitions: start from the visible position, not its destination.
+    const rect = event.currentTarget.getBoundingClientRect();
+    if (!dragRef.current?.start(event.nativeEvent, slot, rect.left, rect.top, event.currentTarget)) return;
+    event.preventDefault();
+    keepInteractiveRef.current?.();
+    roamPausedUntil.current[slot] = Date.now() + 5 * 60_000;
+    apiRefs.current.get(slot)?.trigger('idle');
+    const next = { ...positionsRef.current, [slot]: { x: rect.left, y: rect.top, animMs: 0 } };
+    positionsRef.current = next;
+    setPositions(next);
   }, []);
 
   // ── 气泡 / 操作条 ──
@@ -611,11 +622,14 @@ export default function PetWindow() {
             key={`${slot}-${pet.petId}`}
             ref={el => { if (el) petRefs.current.set(slot, el); else petRefs.current.delete(slot); }}
             className="pet-interact"
-            onMouseDown={handleMouseDown(slot)}
+            onPointerDown={handlePointerDown(slot)}
+            onDragStart={event => event.preventDefault()}
             onClick={handleClick(slot, pet)}
             style={{
               position: 'absolute', left: 0, top: 0,
               width: canvasSz, height: canvasSz,
+              touchAction: 'none', userSelect: 'none',
+              cursor: draggingSlot === slot ? 'grabbing' : 'grab',
               transform: `translate(${Math.round(pos.x)}px, ${Math.round(pos.y)}px)`,
               transition: pos.animMs ? `transform ${pos.animMs}ms cubic-bezier(0.33, 0, 0.67, 1)` : 'none',
               // 拖拽/漫游时提升为合成层，避免每次 mousemove 触发全屏透明窗口重绘（黑屏来源之一）
