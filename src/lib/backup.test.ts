@@ -70,6 +70,7 @@ describe('shouldIncludeKey', () => {
   });
 
   it('excludes unrelated keys', () => {
+    expect(shouldIncludeKey('csp_equipment_transaction')).toBe(false);
     expect(shouldIncludeKey('other_key')).toBe(false);
     expect(shouldIncludeKey('tauri')).toBe(false);
   });
@@ -241,6 +242,35 @@ describe('summarizeBackup', () => {
 });
 
 describe('applyBackup', () => {
+  it('本地存储写入失败不报告恢复成功，并回滚先前已写入的数据', async () => {
+    localStorage.setItem('csp_pet_data', '{"ownedPets":[],"coins":99}');
+    localStorage.setItem('csp_trial_equipment_v1', '{"schemaVersion":2,"ownedItems":[]}');
+    const previousPet = localStorage.getItem('csp_pet_data');
+    const setter = localStorage.setItem.bind(localStorage);
+    let failed = false;
+    vi.spyOn(localStorage, 'setItem').mockImplementation((key, value) => {
+      if (key === 'csp_trial_equipment_v1' && !failed) { failed = true; throw new Error('quota'); }
+      setter(key, value);
+    });
+    await expect(applyBackup(makeBackup({ localStorage: {
+      csp_pet_data: '{"ownedPets":[],"coins":1888}',
+      csp_trial_equipment_v1: '{"schemaVersion":2,"ownedItems":[{"id":"new"}]}',
+    }, sqlite: {}, sprites: {} }))).rejects.toThrow('恢复');
+    expect(localStorage.getItem('csp_pet_data')).toBe(previousPet);
+    expect(localStorage.getItem('csp_trial_equipment_v1')).toBe('{"schemaVersion":2,"ownedItems":[]}');
+  });
+  it('恢复备份不重放原电脑或旧备份里的未完成交易', async () => {
+    const journal = JSON.stringify({ version: 1, pet: JSON.stringify({ ownedPets: [], coins: 5 }), equipment: JSON.stringify({ schemaVersion: 2, ownedItems: [] }) });
+    localStorage.setItem('csp_equipment_transaction', journal);
+    await applyBackup(makeBackup({ localStorage: {
+      csp_pet_data: JSON.stringify({ ownedPets: [], coins: 1888 }),
+      csp_trial_equipment_v1: JSON.stringify({ schemaVersion: 2, ownedItems: [] }),
+      csp_equipment_transaction: journal,
+    }, sqlite: {}, sprites: {} }));
+    useTrialEquipmentStore.getState().load();
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!).coins).toBe(1888);
+    expect(localStorage.getItem('csp_equipment_transaction')).toBeNull();
+  });
   it('强化等级、实际成本、晶石、领取标记与装备位置随备份迁移', async () => {
     const equipment = {
       schemaVersion: 2,

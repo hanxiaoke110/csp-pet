@@ -1,6 +1,6 @@
 import { dualSave } from './persist';
 
-const JOURNAL_KEY = 'csp_equipment_transaction';
+export const JOURNAL_KEY = 'csp_equipment_transaction';
 export const EQUIPMENT_STORAGE_KEY = 'csp_trial_equipment_v1';
 
 /** Roll forward an interrupted local transaction before either wallet or equipment hydrates. */

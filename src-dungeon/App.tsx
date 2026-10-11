@@ -7,6 +7,7 @@ import { getStoredClassCode, getStoredHash } from './utils/api';
 import { readDesktopBinding } from './utils/autoRegister';
 import type { DungeonProgress } from './types/dungeon';
 import { CURRENT_DUNGEON_SEASON_ID } from './data/season';
+import { ensureTrialWalletReady } from './utils/walletReady';
 
 // Screen imports (will be created in later phases)
 import TitleScreen from './components/screens/TitleScreen';
@@ -58,6 +59,7 @@ export function AppContent() {
     async function init() {
       try {
         store.setLoading(true);
+        await ensureTrialWalletReady();
 
         // Restore player progress from localStorage
         const hasLocal = store.loadFromLocalStorage();

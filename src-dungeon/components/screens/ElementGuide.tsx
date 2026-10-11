@@ -13,7 +13,8 @@ export function ElementGuide({ onClose }: { onClose: () => void }) {
         <div className="element-chain">
           <p>🔴 火 → 🟢 风 → 🟫 地 → 🔵 水 → 🌟 光 → 🔴 火</p>
         </div>
-        <p className="element-guide-summary">克制时伤害为 1.25 倍，被克制时为 0.85 倍，其余组合不变。</p>
+        <p className="element-guide-summary">武器决定攻击属性：基础增伤5%，强化每阶增加5%；克制敌人时再乘120%。防具决定防御属性：克制敌人时减伤10%，强化每阶增加4%减伤。装备最多强化到+5；无克制不增加额外减伤，也不因被克制再乘旧的伤害倍率。</p>
+        <p className="element-guide-summary">伙伴属性仅触发以下特性，不再叠加第二套基础克制倍率。未装备武器或防具时，不享受对应装备加成。</p>
         <div className="element-trait-list">
           {traits.map(([icon, name, description]) => (
             <div className="element-trait-row" key={name}>
@@ -22,7 +23,7 @@ export function ElementGuide({ onClose }: { onClose: () => void }) {
             </div>
           ))}
         </div>
-        <p className="element-guide-tip">战斗顶部会提示克制关系；特性触发时会在智子旁显示效果。</p>
+        <p className="element-guide-tip">战斗顶部会提示武器攻击与防具防御关系；伙伴特性触发时会在智子旁显示效果。装备特殊效果的触发次数在下一场重置。</p>
         <button className="pixel-btn primary" onClick={onClose}>知道了</button>
       </div>
 
