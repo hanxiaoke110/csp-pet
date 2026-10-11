@@ -181,7 +181,13 @@ await writeFile(resolve(output, 'workshop', 'catalog.json'), `${JSON.stringify({
 for (const catalogPath of ['collector-cards/catalog.json', 'wardrobe/catalog.json', 'wardrobe/v2/catalog.json', 'star-path/catalog.json']) {
   JSON.parse(await readFile(resolve(output, catalogPath), 'utf8'));
 }
-for (const coursePath of ['course-data/question-bank-v2/manifest.json', 'course-data/knowledge-points.json', 'course-data/knowledge-lectures.json']) {
+for (const coursePath of [
+  'course-data/question-bank-v2/manifest.json',
+  'course-data/knowledge-points.json',
+  'course-data/knowledge-lectures.json',
+  'course-data/learning-catalog.json',
+  'course-data/learning-catalog.version.json',
+]) {
   JSON.parse(await readFile(resolve(output, coursePath), 'utf8'));
 }
 
