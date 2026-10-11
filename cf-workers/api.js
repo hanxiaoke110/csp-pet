@@ -284,8 +284,8 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-// v11: 新增免登录智子典藏卡投票、唯一选票、常量时间计数和每日统计快照。
-const SCHEMA_VERSION = 11;
+// v12: 许愿自删与服务端14天复投冷却；典藏投票规则保持不变。
+const SCHEMA_VERSION = 12;
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
@@ -339,8 +339,11 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE classes ADD COLUMN label TEXT DEFAULT ''`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN status TEXT DEFAULT 'active'`); } catch {}
   try { await db.exec(`ALTER TABLE classes ADD COLUMN teacher_name TEXT DEFAULT ''`); } catch {}
-  // Unique index for vote dedup (atomic INSERT race-condition fix)
-  try { await db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_votes_unique ON votes(wish_id, device_hash)`); } catch {}
+  // Fail closed if the cooldown migration cannot complete; never mark a partial migration current.
+  await db.exec(`CREATE TABLE IF NOT EXISTS wish_vote_cooldowns (wish_id INTEGER NOT NULL, device_hash TEXT NOT NULL, next_allowed_at TEXT NOT NULL, lease_token TEXT NOT NULL DEFAULT '', PRIMARY KEY(wish_id, device_hash))`);
+  await db.exec(`INSERT OR IGNORE INTO wish_vote_cooldowns(wish_id,device_hash,next_allowed_at) SELECT wish_id,device_hash,datetime(MAX(created_at),'+14 days') FROM votes GROUP BY wish_id,device_hash`);
+  await db.exec(`DROP INDEX IF EXISTS idx_votes_unique`);
+  try { await db.exec(`ALTER TABLE wishes ADD COLUMN deleted_at TEXT`); } catch {}
   // ── Dungeon tables ──
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_progress (device_hash TEXT NOT NULL, dungeon_id TEXT NOT NULL, status TEXT DEFAULT 'locked', completed_stages INTEGER DEFAULT 0, total_stages INTEGER DEFAULT 0, current_stage_id TEXT, boss_defeated INTEGER DEFAULT 0, best_score INTEGER DEFAULT 0, best_rating TEXT DEFAULT 'D', updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash, dungeon_id))`); } catch {}
@@ -1324,6 +1327,7 @@ export default {
 
         const sort = url.searchParams.get('sort') || 'hot';
         const classCode = url.searchParams.get('class_code') || '';
+        const requestingDevice = url.searchParams.get('device_hash') || '';
         const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
         const cursorRaw = url.searchParams.get('cursor') || '';
 
@@ -1365,18 +1369,19 @@ export default {
         let result;
         if (codes.length > 0) {
           const ph = codes.map(() => '?').join(',');
-          const sql = `SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE ${statusFilter} AND class_code IN (${ph}) ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
-          result = await db.prepare(sql).bind(...codes, ...params, limit + 1).all();
+          const sql = `SELECT id, content, display_name, votes, status, created_at, CASE WHEN device_hash=? THEN 1 ELSE 0 END AS is_mine, (SELECT next_allowed_at FROM wish_vote_cooldowns c WHERE c.wish_id=wishes.id AND c.device_hash=?) AS next_vote_at FROM wishes WHERE ${statusFilter} AND class_code IN (${ph}) ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(requestingDevice, requestingDevice, ...codes, ...params, limit + 1).all();
         } else if (classCode) {
           result = { results: [] };
         } else {
           // No class code — all wishes (backward compat)
-          const sql = `SELECT id, content, display_name, votes, status, created_at FROM wishes WHERE ${statusFilter} ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
-          result = await db.prepare(sql).bind(...params, limit + 1).all();
+          const sql = `SELECT id, content, display_name, votes, status, created_at, CASE WHEN device_hash=? THEN 1 ELSE 0 END AS is_mine, (SELECT next_allowed_at FROM wish_vote_cooldowns c WHERE c.wish_id=wishes.id AND c.device_hash=?) AS next_vote_at FROM wishes WHERE ${statusFilter} ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(requestingDevice, requestingDevice, ...params, limit + 1).all();
         }
 
         const hasMore = result.results.length > limit;
         const items = hasMore ? result.results.slice(0, limit) : result.results;
+        for (const item of items) item.is_mine = Boolean(item.is_mine);
 
         // Build next cursor
         let nextCursor = null;
@@ -1399,7 +1404,7 @@ export default {
 
       if (path === '/api/wishes/my-stats' && request.method === 'GET') {
         const device_hash = url.searchParams.get('device_hash') || '';
-        const count = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status IN ('active','archived') AND created_at >= datetime('now','start of month')").bind(device_hash).first();
+        const count = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND created_at >= datetime('now','start of month')").bind(device_hash).first();
         const activeNow = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status='active'").bind(device_hash).first();
         return new Response(JSON.stringify({ monthlySubmitted: count ? count.c : 0, monthlyLimit: MONTHLY_SUBMIT_LIMIT, activeWishes: activeNow ? activeNow.c : 0, activeLimit: ACTIVE_WISH_LIMIT }), { headers: cors });
       }
@@ -1431,7 +1436,7 @@ export default {
         const recent24 = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND created_at > datetime('now','-1 day')").bind(device_hash).first();
         if (recent24 && recent24.c >= 3) return new Response(JSON.stringify({ error: '24小时内最多提交3条' }), { status: 429, headers: cors });
 
-        const monthly = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND status IN ('active','archived') AND created_at >= datetime('now','start of month')").bind(device_hash).first();
+        const monthly = await db.prepare("SELECT COUNT(*) as c FROM wishes WHERE device_hash=? AND created_at >= datetime('now','start of month')").bind(device_hash).first();
         if (monthly && monthly.c >= MONTHLY_SUBMIT_LIMIT) return new Response(JSON.stringify({ error: `本月已提交${MONTHLY_SUBMIT_LIMIT}条，下个月再来吧` }), { status: 429, headers: cors });
 
         // Active wish cap — freed when teacher deletes or completes a wish
@@ -1449,11 +1454,24 @@ export default {
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
+      if (/^\/api\/wishes\/\d+$/.test(path) && request.method === 'DELETE') {
+        const id = Number(path.split('/').pop());
+        const { device_hash, class_code } = await request.json();
+        if (!Number.isSafeInteger(id) || id < 1 || typeof device_hash !== 'string' || !device_hash || device_hash.length > 128 || typeof class_code !== 'string' || !class_code) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
+        const cls = await db.prepare("SELECT teacher_id FROM classes WHERE class_code=? AND status='active'").bind(class_code).first();
+        const member = await db.prepare("SELECT status FROM class_students WHERE class_code=? AND device_hash=? AND status='active'").bind(class_code, device_hash).first();
+        if (!cls || !member) return new Response(JSON.stringify({ error: '无权操作此愿望' }), { status: 403, headers: cors });
+        const owned = await db.prepare("SELECT w.id, w.status FROM wishes w JOIN classes c ON w.class_code=c.class_code WHERE w.id=? AND w.device_hash=? AND c.teacher_id=? AND c.status='active'").bind(id, device_hash, cls.teacher_id).first();
+        if (!owned) return new Response(JSON.stringify({ error: '只能删除自己的愿望' }), { status: 403, headers: cors });
+        if (owned.status !== 'deleted') await db.prepare("UPDATE wishes SET status='deleted', deleted_at=datetime('now') WHERE id=? AND device_hash=?").bind(id, device_hash).run();
+        return new Response(JSON.stringify({ success: true }), { headers: cors });
+      }
+
       if (path === '/api/vote' && request.method === 'POST') {
         const body = await request.json();
         const { wish_id, device_hash, class_code } = body;
 
-        if (!wish_id || !device_hash) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
+        if (!Number.isSafeInteger(wish_id) || wish_id < 1 || typeof device_hash !== 'string' || !device_hash || device_hash.length > 128) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
         if (!class_code) return new Response(JSON.stringify({ error: '请先在设置中绑定班级码' }), { status: 400, headers: cors });
 
         // Rate limit
@@ -1472,18 +1490,17 @@ export default {
         const wishTeacher = await db.prepare("SELECT teacher_id FROM classes WHERE class_code=? AND status='active'").bind(wishCls.class_code).first();
         if (!wishTeacher || wishTeacher.teacher_id !== clsVote.teacher_id) return new Response(JSON.stringify({ error: '无法跨老师投票' }), { status: 403, headers: cors });
 
-        // Atomic insert to prevent race-condition duplicate votes
-        try {
-          await db.prepare('INSERT INTO votes (wish_id, device_hash, class_code) VALUES (?,?,?)').bind(wish_id, device_hash, class_code).run();
-          // Defer UPDATE to prevent wish-level write-lock contention under load
-          ctx.waitUntil((async () => {
-            try { await db.prepare('UPDATE wishes SET votes=votes+1 WHERE id=?').bind(wish_id).run(); } catch {}
-          })());
-        } catch (e) {
-          if (e.message && e.message.includes('UNIQUE')) return new Response(JSON.stringify({ error: '你已经投过票了' }), { status: 400, headers: cors });
-          throw e;
-        }
-        return new Response(JSON.stringify({ success: true }), { headers: cors });
+        // D1 batch is transactional: acquire a unique lease, record history, and update total together.
+        const leaseToken = crypto.randomUUID();
+        const result = await db.batch([
+          db.prepare("INSERT INTO wish_vote_cooldowns(wish_id,device_hash,next_allowed_at,lease_token) VALUES(?,?,datetime('now','+14 days'),?) ON CONFLICT(wish_id,device_hash) DO UPDATE SET next_allowed_at=datetime('now','+14 days'),lease_token=excluded.lease_token WHERE wish_vote_cooldowns.next_allowed_at<=datetime('now')").bind(wish_id, device_hash, leaseToken),
+          db.prepare('INSERT INTO votes(wish_id,device_hash,class_code) SELECT ?,?,? FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=? AND lease_token=?').bind(wish_id, device_hash, class_code, wish_id, device_hash, leaseToken),
+          db.prepare("UPDATE wishes SET votes=votes+1 WHERE id=? AND EXISTS(SELECT 1 FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=? AND lease_token=?)").bind(wish_id, wish_id, device_hash, leaseToken),
+        ]);
+        const cooldown = await db.prepare('SELECT next_allowed_at FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=?').bind(wish_id, device_hash).first();
+        const next_vote_at = cooldown?.next_allowed_at ? cooldown.next_allowed_at.replace(' ', 'T') + 'Z' : null;
+        if (!result[0].meta?.changes) return new Response(JSON.stringify({ error: '同一愿望需满14天后可再次投票', next_vote_at }), { status: 409, headers: cors });
+        return new Response(JSON.stringify({ success: true, next_vote_at }), { headers: cors });
       }
 
       // ═══ ADMIN API ═══

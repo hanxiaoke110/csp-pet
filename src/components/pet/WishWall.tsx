@@ -4,12 +4,14 @@ import { getDeviceId, getTicketCount, useTicket } from '../../utils/crypto';
 import { usePetStore } from '../../stores/petStore';
 import { useQuizStore } from '../../stores/quizStore';
 import ModalPortal from '../ModalPortal';
+import { formatVoteCooldown, interpretVoteResponse } from './wishWallLogic';
 
 const API = 'https://api.cspstudy.top';
 
 interface Wish {
   id: number; content: string; display_name: string;
   votes: number; created_at: string; status?: string;
+  is_mine?: boolean; next_vote_at?: string | null;
 }
 
 export default function WishWall() {
@@ -23,6 +25,9 @@ export default function WishWall() {
   const [msg, setMsg] = useState('');
   const [tickets, setTickets] = useState(0);
   const [votingId, setVotingId] = useState<number | null>(null);
+  const votingRef = useRef(false);
+  const [deleteTarget, setDeleteTarget] = useState<Wish | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [monthlySubmitted, setMonthlySubmitted] = useState(0);
   const [activeWishes, setActiveWishes] = useState(0);
   const activeLimit = 3;
@@ -59,7 +64,7 @@ export default function WishWall() {
     try {
       const classCode = localStorage.getItem('csp_class_code') || '';
       if (!classCode) { setWishes([]); setLoading(false); return; }
-      let url = `${API}/api/wishes?sort=${view}&limit=50&class_code=${encodeURIComponent(classCode)}`;
+      let url = `${API}/api/wishes?sort=${view}&limit=50&class_code=${encodeURIComponent(classCode)}&device_hash=${encodeURIComponent(getDeviceId())}`;
       if (cursor) url += `&cursor=${encodeURIComponent(cursor)}`;
       const resp = await fetch(url);
       const data = await resp.json();
@@ -153,9 +158,11 @@ export default function WishWall() {
   };
 
   const handleVote = async (wishId: number) => {
+    if (votingRef.current) return;
     const classCode = localStorage.getItem('csp_class_code') || '';
     if (!classCode) { setMsg('请先在设置中绑定班级码'); return; }
     if (getTicketCount() <= 0) { setMsg('🎫 许愿票不足，前往商城购买'); return; }
+    votingRef.current = true;
     setVotingId(wishId);
     try {
       const resp = await fetch(`${API}/api/vote`, {
@@ -163,12 +170,16 @@ export default function WishWall() {
         body: JSON.stringify({ wish_id: wishId, device_hash: getDeviceId(), class_code: classCode }),
       });
       const data = await resp.json();
-      if (data.error) {
+      const result = interpretVoteResponse(resp.status, data);
+      if (!result.spendTicket) {
+        if (data.next_vote_at) setWishes(items => items.map(w => w.id === wishId ? { ...w, next_vote_at: data.next_vote_at } : w));
+        if (data.error) {
         if (data.error.includes('班级已关闭') || data.error.includes('移出班级')) {
           localStorage.removeItem('csp_class_code');
           localStorage.removeItem('csp_class_info');
         }
-        setMsg(data.error);
+        }
+        setMsg(result.message);
       } else {
         useTicket(); setTickets(getTicketCount());
         cacheRef.current.time = 0; // invalidate cache
@@ -176,8 +187,31 @@ export default function WishWall() {
         setMsg('✅ 投票成功！');
       }
     } catch { setMsg('网络错误'); }
+    votingRef.current = false;
     setVotingId(null);
     setTimeout(() => setMsg(''), 3000);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+    try {
+      const resp = await fetch(`${API}/api/wishes/${deleteTarget.id}`, {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ device_hash: getDeviceId(), class_code: localStorage.getItem('csp_class_code') || '' }),
+      });
+      const data = await resp.json();
+      if (!resp.ok || data.success !== true) { setMsg(data.error || '删除失败，请重试'); return; }
+      setWishes(items => items.filter(w => w.id !== deleteTarget.id));
+      setDeleteTarget(null);
+      cacheRef.current = { hot: null, new: null, time: 0 };
+      const stats = await fetch(`${API}/api/wishes/my-stats?device_hash=${encodeURIComponent(getDeviceId())}`).then(r => r.json());
+      setActiveWishes(stats.activeWishes || 0);
+      setMonthlySubmitted(stats.monthlySubmitted || 0);
+      setMsg('✅ 愿望已删除');
+      void loadWishes();
+    } catch { setMsg('网络错误，请重试'); }
+    finally { setDeleting(false); }
   };
 
   const timeAgo = (d: string) => {
@@ -224,7 +258,7 @@ export default function WishWall() {
             <div style={{ textAlign: 'left', fontSize: 12, color: '#64748b', lineHeight: 2, maxWidth: 340, margin: '0 auto' }}>
               <div>📝 Lv.6+ 智子 + 完成本周练习才能提交许愿</div>
               <div>🎫 许愿票在商城购买（100g/张，250g/3张）</div>
-              <div>🗳️ 每条许愿每人只能投 1 票</div>
+              <div>🗳️ 同一愿望每 14 天可再投 1 票</div>
               <div>📝 每人最多同时 3 条活跃许愿，老师实现/删除后恢复</div>
               <div>📅 每人每月最多提交 3 条许愿</div>
               <div>🔄 每月自动清理低票许愿</div>
@@ -271,7 +305,8 @@ export default function WishWall() {
             {[
               { icon: '📝', title: '提交门槛', desc: '需要 Lv.6+ 灵犀智子 + 完成本周练习。每人最多同时有 3 条活跃许愿，老师实现或删除后恢复次数。每月最多提交 3 条。' },
               { icon: '🎫', title: '许愿票', desc: '在商城购买：100g/张，打包 250g/3张。每周限购 3 张，没用完可以累积。' },
-              { icon: '🗳️', title: '投票规则', desc: '每条许愿你只能投 1 票。投票后许愿票会消耗，不可撤销。' },
+              { icon: '🗳️', title: '投票规则', desc: '同一愿望每 14 天可再投 1 票。投票成功才消耗许愿票，不可撤销。' },
+              { icon: '🗑️', title: '删除愿望', desc: '可以删除自己发布的愿望。删除释放展示名额，但不返还许愿票，也不重置本月提交次数。' },
               { icon: '🔄', title: '月度更新', desc: '每月 1 号自动清理低票许愿（0 票优先淘汰，7 天内新愿望受保护），让榜单保持新鲜。' },
               { icon: '👀', title: '隐私保护', desc: '昵称所有人可见。真实姓名和手机号加密存储，仅老师可见，用于联系获奖同学。' },
               { icon: '📋', title: '内容规范', desc: '许愿内容需 2-60 字。禁止不当言论，系统自动审核，违规内容将被老师删除。' },
@@ -317,7 +352,7 @@ export default function WishWall() {
                 borderRadius: 12, padding: '12px 14px', marginBottom: 6,
               }}>
                 <div style={{ fontSize: 22, marginBottom: 6 }}>{rs.emoji}</div>
-                <WishContent w={w} timeAgo={timeAgo} votingId={votingId} handleVote={handleVote} />
+                <WishContent w={w} timeAgo={timeAgo} votingId={votingId} handleVote={handleVote} handleDelete={setDeleteTarget} />
               </div>
             );
           })}
@@ -330,7 +365,7 @@ export default function WishWall() {
           background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12,
           padding: '12px 14px', marginBottom: 6, transition: 'all .15s',
         }}>
-          <WishContent w={w} timeAgo={timeAgo} votingId={votingId} handleVote={handleVote} />
+          <WishContent w={w} timeAgo={timeAgo} votingId={votingId} handleVote={handleVote} handleDelete={setDeleteTarget} />
         </div>
       ))}
 
@@ -399,6 +434,19 @@ export default function WishWall() {
           </div>
         </div>
       ))}
+
+      {deleteTarget && <ModalPortal>
+        <div className="gacha-overlay" onClick={() => { if (!deleting) setDeleteTarget(null); }}>
+          <div className="buy-confirm-modal" onClick={e => e.stopPropagation()}>
+            <div className="buy-confirm-header">删除我的愿望</div>
+            <div className="buy-confirm-body"><p>{deleteTarget.content}</p><p>删除后许愿票不会返还，也不会重置本月提交次数。</p></div>
+            <div className="buy-confirm-actions">
+              <button className="mode-btn mode-btn-back" disabled={deleting} onClick={() => setDeleteTarget(null)}>取消</button>
+              <button className="mode-btn" disabled={deleting} onClick={handleDelete}>{deleting ? '删除中…' : '确认删除'}</button>
+            </div>
+          </div>
+        </div>
+      </ModalPortal>}
 
       {/* ── Submit Modal ── */}
       {showForm && (
@@ -495,10 +543,13 @@ export default function WishWall() {
 }
 
 // ── Reusable Wish Card Content ──
-function WishContent({ w, timeAgo, votingId, handleVote }: {
+export function WishContent({ w, timeAgo, votingId, handleVote, handleDelete }: {
   w: Wish; timeAgo: (d: string) => string; votingId: number | null;
   handleVote: (id: number) => void;
+  handleDelete: (wish: Wish) => void;
 }) {
+  const cooldown = formatVoteCooldown(w.next_vote_at);
+  const disabled = votingId !== null || !!cooldown || w.status === 'completed';
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', wordBreak: 'break-all', marginBottom: 6 }}>
@@ -509,7 +560,7 @@ function WishContent({ w, timeAgo, votingId, handleVote }: {
         <span style={{ fontSize: 11, color: '#94a3b8' }}>
           来自 <span style={{ color: '#64748b' }}>{w.display_name || '匿名'}</span> · {timeAgo(w.created_at)}
         </span>
-        <button onClick={() => handleVote(w.id)} disabled={votingId === w.id} style={{
+        <button onClick={() => handleVote(w.id)} disabled={disabled} style={{
           padding: '6px 16px', fontSize: 12, fontWeight: 700, borderRadius: 16,
           border: '1px solid #FF8C00', cursor: votingId === w.id ? 'not-allowed' : 'pointer',
           background: votingId === w.id ? '#fff7ed' : 'linear-gradient(135deg, #FF8C00, #F96D00)',
@@ -518,9 +569,10 @@ function WishContent({ w, timeAgo, votingId, handleVote }: {
           transition: 'all .15s', whiteSpace: 'nowrap',
           display: 'flex', alignItems: 'center', gap: 4,
         }}>
-          🔥 投票 <span style={{ fontSize: 11, opacity: 0.9 }}>({w.votes})</span>
+          {cooldown || '🔥 投票'} <span style={{ fontSize: 11, opacity: 0.9 }}>({w.votes})</span>
         </button>
       </div>
+      {w.is_mine && <button onClick={() => handleDelete(w)} style={{ border: 'none', background: 'transparent', color: '#64748b', fontSize: 12, marginTop: 8, cursor: 'pointer' }}>删除我的愿望</button>}
     </div>
   );
 }
