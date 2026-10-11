@@ -25,6 +25,7 @@ import { getTrustedQuestionImage, isUsableChoiceQuestion, pickStagePlanQuestions
 import { formatChoiceOption } from '../../utils/questionDisplay';
 import { formatCppCode } from '../../utils/codeFormat';
 import { findArtifactPreviewTarget } from '../../utils/trialEquipmentEffects';
+import { findRecoverySeal } from '../../utils/explorationRecovery';
 
 const EVENT_ICONS: Record<ExplorationEvent['type'], string> = {
   seal: '/dungeon-exploration/items/knowledge-seal.webp',
@@ -156,11 +157,13 @@ interface EventModalProps {
   onChooseRoute: (choice: ExplorationRouteChoice) => void;
   onClose: () => void;
   onFinish: () => void;
+  onGuideToSeal?: () => void;
+  onRecover?: () => void;
   clueTarget?: ExplorationEvent;
   clueTopic?: string;
 }
 
-export function EventModal({ config, event, question, sealsSolved, onResolve, onChooseRoute, onClose, onFinish, clueTarget, clueTopic }: EventModalProps) {
+export function EventModal({ config, event, question, sealsSolved, onResolve, onChooseRoute, onClose, onFinish, onGuideToSeal, onRecover, clueTarget, clueTopic }: EventModalProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const correct = selected === question?.correctIndex;
@@ -235,9 +238,10 @@ export function EventModal({ config, event, question, sealsSolved, onResolve, on
             <p className="explore-event-copy">
               {exitReady ? '三道知识封印均已解除。现在离开将结算本次发现的金币、经验与装备。' : `还需完成 ${3 - sealsSolved} 道知识封印。沿未探索的通路继续寻找。`}
             </p>
-            <button className={`explore-action ${exitReady ? 'primary' : ''}`} onClick={exitReady ? onFinish : onClose}>
-              {exitReady ? '完成探索并结算' : '继续寻找封印'}
+            <button className="explore-action primary" onClick={exitReady ? onFinish : (onGuideToSeal || onClose)}>
+              {exitReady ? '完成探索并结算' : '标记最近的未完成封印'}
             </button>
+            {!exitReady && onRecover && <button className="explore-action" onClick={onRecover}>返回最近安全通路</button>}
           </>
         )}
       </section>
@@ -617,6 +621,27 @@ export default function ExplorationScreen() {
     setNotice('已暂时离开事件；走开后再次返回仍可继续');
   };
 
+  const handleGuideToSeal = () => {
+    const progress = useExplorationStore.getState().current;
+    if (!progress) return;
+    const target = findRecoverySeal(map, progress.position, new Set(progress.resolvedEventIds));
+    handleCloseEvent();
+    if (target) {
+      useExplorationStore.getState().previewEvent(target.id);
+      setGuideFocusId(target.id);
+      setNotice('已标记未完成封印，沿通路返回；走不动可选择安全返回');
+    } else setNotice('未找到可达封印，请使用安全返回');
+  };
+
+  const handleRecover = () => {
+    walkTokenRef.current += 1;
+    setAutoWalking(false);
+    if (useExplorationStore.getState().recoverToSafePath(map)) {
+      setActiveEvent(null);
+      setNotice('已返回安全通路，题目、金币与探索进度均保留');
+    } else setNotice('暂时无法返回，请关闭事件后重试');
+  };
+
   const handleUseItem = (ownedItemId: string, definitionId: string) => {
     if (definitionId !== 'cleansing-talisman') {
       setNotice('这个道具会在符合条件时自动生效');
@@ -792,7 +817,7 @@ export default function ExplorationScreen() {
           </aside>
         </div>
       )}
-      {activeEvent && <EventModal config={activeConfig} event={activeEvent} question={currentQuestion} sealsSolved={current.sealsSolved} onResolve={handleResolve} onChooseRoute={handleChooseRoute} onClose={handleCloseEvent} onFinish={finishExploration} clueTarget={clueTarget} clueTopic={clueTopic} />}
+      {activeEvent && <EventModal config={activeConfig} event={activeEvent} question={currentQuestion} sealsSolved={current.sealsSolved} onResolve={handleResolve} onChooseRoute={handleChooseRoute} onClose={handleCloseEvent} onFinish={finishExploration} onGuideToSeal={handleGuideToSeal} onRecover={handleRecover} clueTarget={clueTarget} clueTopic={clueTopic} />}
     </main>
   );
 }

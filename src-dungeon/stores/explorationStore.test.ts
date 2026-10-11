@@ -23,6 +23,23 @@ beforeEach(() => {
 });
 
 describe('迷雾探索存档与结算', () => {
+  it('脱困保留题目、金币、封印与计步，且重载后仍在安全位置', () => {
+    const map = generateFirstExplorationMap();
+    const store = useExplorationStore.getState();
+    store.reset(map, ['q1', 'q2', 'q3']);
+    store.resolveEvent('seal-1', { sealsSolved: 1, pendingCoins: 14 });
+    store.move(map, map.exit);
+    const before = useExplorationStore.getState().current!;
+    expect(store.recoverToSafePath(map)).toBe(true);
+    const after = useExplorationStore.getState().current!;
+    expect(after.position).not.toEqual(map.exit);
+    expect(after.steps).toBe(before.steps);
+    expect(after.pendingCoins).toBe(14);
+    expect(after.questionIds).toEqual(before.questionIds);
+    expect(after.resolvedEventIds).toEqual(before.resolvedEventIds);
+    store.load(map, ['new']);
+    expect(useExplorationStore.getState().current).toEqual(after);
+  });
   it('同一事件和同一次结算都不能重复领取', () => {
     const map = generateFirstExplorationMap();
     const store = useExplorationStore.getState();

@@ -37,6 +37,17 @@ const baseQuestion: Question = {
 };
 
 describe('迷宫知识封印题目素材', () => {
+  it('出口未完成时提供标记与安全返回，完成后仅结算', () => {
+    for (let count = 0; count <= 3; count++) {
+      const html = renderToStaticMarkup(<EventModal
+        config={EXPLORATION_STAGE_CONFIGS[0]}
+        event={{ id: 'exit', type: 'exit', position: { x: 1, y: 1 } }}
+        sealsSolved={count} {...handlers} onGuideToSeal={vi.fn()} onRecover={vi.fn()}
+      />);
+      expect(html.includes('返回最近安全通路')).toBe(count < 3);
+      expect(html.includes('完成探索并结算')).toBe(count === 3);
+    }
+  });
   it('显示题库已有的结构化代码', () => {
     const html = renderQuestion({ ...baseQuestion, code: 'int x=1;\ncout<<x;' });
     expect(html).toContain('explore-question-code');

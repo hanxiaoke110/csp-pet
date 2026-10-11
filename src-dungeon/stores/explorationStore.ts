@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { ExplorationMapDefinition, ExplorationProgress, ExplorationRouteChoice, GridPoint } from '../types/exploration';
-import { computeVisible, pointKey } from '../utils/explorationLogic';
+import { computeVisible, getExplorationRegion, getUnlockedExplorationRegion, pointKey } from '../utils/explorationLogic';
+import { findNearestSafeCell } from '../utils/explorationRecovery';
 
 const STORAGE_KEY = 'csp_dungeon_exploration_v1';
 
@@ -13,6 +14,7 @@ interface ExplorationState {
   current: ExplorationProgress | null;
   load: (map: ExplorationMapDefinition, questionIds: string[]) => void;
   move: (map: ExplorationMapDefinition, position: GridPoint) => void;
+  recoverToSafePath: (map: ExplorationMapDefinition) => boolean;
   resolveEvent: (eventId: string, update?: Partial<Pick<ExplorationProgress, 'sealsSolved' | 'sealsWrong' | 'pendingCoins' | 'pendingExp' | 'activeDebuffs'>>) => void;
   dismissEvent: (eventId: string) => void;
   previewEvent: (eventId: string) => void;
@@ -89,6 +91,12 @@ export const useExplorationStore = create<ExplorationState>((set, get) => ({
   load: (map, questionIds) => {
     const saved = readProgress(map.id);
     const current = saved || freshProgress(map, questionIds);
+    if (map.tiles[current.position.y]?.[current.position.x] !== 0
+      || getExplorationRegion(map, current.position) > getUnlockedExplorationRegion(map, new Set(current.resolvedEventIds))) {
+      current.position = findNearestSafeCell(map, current.position, new Set(current.resolvedEventIds)) || map.start;
+      current.revealed = [...new Set([...current.revealed, ...computeVisible(map, current.position)])].sort();
+      current.dismissedEventId = undefined;
+    }
     set({ current });
     persist(current);
   },
@@ -100,6 +108,17 @@ export const useExplorationStore = create<ExplorationState>((set, get) => ({
     const next = { ...current, position, steps: current.steps + 1, revealed: [...revealed].sort(), dismissedEventId: undefined };
     set({ current: next });
     persist(next);
+  },
+  recoverToSafePath: (map) => {
+    const current = get().current;
+    if (!current || current.mapId !== map.id || current.completed || current.settled) return false;
+    const position = findNearestSafeCell(map, current.position, new Set(current.resolvedEventIds));
+    if (!position) return false;
+    const revealed = [...new Set([...current.revealed, ...computeVisible(map, position)])].sort();
+    const next = { ...current, position, revealed, dismissedEventId: undefined };
+    set({ current: next });
+    persist(next);
+    return true;
   },
   resolveEvent: (eventId, update = {}) => {
     const current = get().current;
