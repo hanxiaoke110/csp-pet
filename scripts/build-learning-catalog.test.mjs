@@ -1,5 +1,4 @@
-import assert from 'node:assert/strict';
-import test from 'node:test';
+import { expect, test } from 'vitest';
 import { buildLearningCatalog } from './build-learning-catalog.mjs';
 
 const cardIndex = {
@@ -29,13 +28,13 @@ test('migrates legacy URLs and marks lessons without documents as coming soon', 
     catalogVersion: 4,
   });
 
-  assert.equal(catalog.catalogVersion, 4);
-  assert.equal(catalog.lessons.length, 3);
-  assert.equal(catalog.lessons[0].feishuUrl, cardIndex.lessons[0].feishuUrl);
-  assert.equal(catalog.lessons[1].feishuUrl, cardIndex.lessons[1].feishuUrl);
-  assert.equal(catalog.lessons[2].status, 'coming_soon');
-  assert.equal(catalog.lessons[2].feishuUrl, '');
-  assert.equal(catalog.lessons[2].description, '整数数据的存储与运算。');
+  expect(catalog.catalogVersion).toBe(4);
+  expect(catalog.lessons).toHaveLength(3);
+  expect(catalog.lessons[0].feishuUrl).toBe(cardIndex.lessons[0].feishuUrl);
+  expect(catalog.lessons[1].feishuUrl).toBe(cardIndex.lessons[1].feishuUrl);
+  expect(catalog.lessons[2].status).toBe('coming_soon');
+  expect(catalog.lessons[2].feishuUrl).toBe('');
+  expect(catalog.lessons[2].description).toBe('整数数据的存储与运算。');
 });
 
 test('preserves published metadata when rebuilding the catalog', () => {
@@ -59,10 +58,10 @@ test('preserves published metadata when rebuilding the catalog', () => {
     previousCatalog,
     now: new Date('2026-10-11T08:00:00+08:00'),
   });
-  assert.equal(catalog.catalogVersion, 5);
-  assert.equal(catalog.lessons[0].feishuUrl, previousCatalog.lessons[0].feishuUrl);
-  assert.equal(catalog.lessons[0].requiresClassCode, true);
-  assert.deepEqual(catalog.lessons[0].tags, ['新标签']);
+  expect(catalog.catalogVersion).toBe(5);
+  expect(catalog.lessons[0].feishuUrl).toBe(previousCatalog.lessons[0].feishuUrl);
+  expect(catalog.lessons[0].requiresClassCode).toBe(true);
+  expect(catalog.lessons[0].tags).toEqual(['新标签']);
 });
 
 test('rejects duplicate lesson numbers', () => {
@@ -72,5 +71,5 @@ test('rejects duplicate lesson numbers', () => {
       { id: 'lesson-1', order: 1, title: 'P1-B' },
     ] }],
   };
-  assert.throws(() => buildLearningCatalog({ cardIndex, lessonsData: invalid, now: new Date(), catalogVersion: 1 }), /课号重复/);
+  expect(() => buildLearningCatalog({ cardIndex, lessonsData: invalid, now: new Date(), catalogVersion: 1 })).toThrow(/课号重复/);
 });
