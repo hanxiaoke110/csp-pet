@@ -1,0 +1,1019 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 1,
+  "updatedAt": "2026-10-11T03:21:24.116Z",
+  "navigationUrl": "https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg",
+  "lessons": [
+    {
+      "id": "lesson-material-p001",
+      "lessonNo": 1,
+      "title": "基础框架",
+      "stage": "C1",
+      "description": "P1 基础框架配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/PDtpdjcijoyjbDxPVDscY93onMh",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p002",
+      "lessonNo": 2,
+      "title": "cin 输入",
+      "stage": "C1",
+      "description": "P2 cin 输入配套讲义与知识卡。",
+      "tags": [
+        "cin输入",
+        "cout输出"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/NCCRdOReJoKXm5xDOYHcFQBGnxd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p003",
+      "lessonNo": 3,
+      "title": "数据类型（整型）",
+      "stage": "C1",
+      "description": "P3 数据类型（整型）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/YbB2dG1jboYZmOxU0NPci7ofnEh",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p004",
+      "lessonNo": 4,
+      "title": "数据类型（浮点型）",
+      "stage": "C1",
+      "description": "P4 数据类型（浮点型）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/XoAjde0cPoPj0AxIUL2cbbzin3d",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p005",
+      "lessonNo": 5,
+      "title": "数据类型（字符型）",
+      "stage": "C1",
+      "description": "P5 数据类型（字符型）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/PdwNdiOQPok6BzxAj9AcsNG1nYc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p006",
+      "lessonNo": 6,
+      "title": "类型转换",
+      "stage": "C1",
+      "description": "P6 类型转换配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/TeqkdyaGvo37RUxqUoxci5wBnxh",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p007",
+      "lessonNo": 7,
+      "title": "综合运用",
+      "stage": "C1",
+      "description": "P7 综合运用配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/KLSbdriQHob9FXxXgsvcrc6fnbc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p008",
+      "lessonNo": 8,
+      "title": "关系运算符与分支结构",
+      "stage": "C1",
+      "description": "P8 关系运算符与分支结构配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Ymzndk2b6oYPKWxHMr4chPOJneb",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p009",
+      "lessonNo": 9,
+      "title": "逻辑运算符",
+      "stage": "C1",
+      "description": "P9 逻辑运算符配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OSoHdH9rfolLsixvHMxcNtXZnkO",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p010",
+      "lessonNo": 10,
+      "title": "多分支结构",
+      "stage": "C1",
+      "description": "P10 多分支结构配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/KV9Ad2HkooVZuYx1rhIcZszlnhc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p011",
+      "lessonNo": 11,
+      "title": "switch 语句",
+      "stage": "C1",
+      "description": "P11 switch 语句配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/BycmdgtDLoopLHx5zYbcOaXdnEe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p012",
+      "lessonNo": 12,
+      "title": "综合运用一",
+      "stage": "C1",
+      "description": "P12 综合运用一配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/B4qOd65rFoB43kxfKBtcJvk5nIh",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p013",
+      "lessonNo": 13,
+      "title": "常用数学函数",
+      "stage": "C1",
+      "description": "P13 常用数学函数配套讲义与知识卡。",
+      "tags": [
+        "abs()",
+        "sqrt()"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/UnLpdUwLOo5FikxcP7EcKoVZnED",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p014",
+      "lessonNo": 14,
+      "title": "for 循环（一）",
+      "stage": "C1",
+      "description": "P14 for 循环（一）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Latddv7xJoxqqaxlf8HcJ9rFn7d",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p015",
+      "lessonNo": 15,
+      "title": "for 循环（二）",
+      "stage": "C1",
+      "description": "P15 for 循环（二）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/A6I1de0QpoCIygx2nu2cyDcinqe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p016",
+      "lessonNo": 16,
+      "title": "while 循环",
+      "stage": "C1",
+      "description": "P16 while 循环配套讲义与知识卡。",
+      "tags": [
+        "while循环",
+        "数位分离",
+        "累加求和",
+        "打擂台"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/YeeZd62XWoG5XTx0P22cmUORnhd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p017",
+      "lessonNo": 17,
+      "title": "单层循环应用",
+      "stage": "C1",
+      "description": "P17 单层循环应用配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OCXcdvHopoSc4hx2WZFc0Hslnjc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p018",
+      "lessonNo": 18,
+      "title": "循环嵌套（一）",
+      "stage": "C1",
+      "description": "P18 循环嵌套（一）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/I0CZdX7ICoxeY4xpcfRcITnWnpg",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p019",
+      "lessonNo": 19,
+      "title": "循环嵌套（二）",
+      "stage": "C1",
+      "description": "P19 循环嵌套（二）配套讲义与知识卡。",
+      "tags": [
+        "循环嵌套"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/IN3Ddh437oLonOxo9rOc3RqPnoe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p020",
+      "lessonNo": 20,
+      "title": "循环综合应用（一）",
+      "stage": "C1",
+      "description": "P20 循环综合应用（一）配套讲义与知识卡。",
+      "tags": [
+        "while循环",
+        "双重循环",
+        "两重循环",
+        "质数判断",
+        "判断质数"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/N1HodDqGbo8LAEx8NmvcvEnPnxe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p021",
+      "lessonNo": 21,
+      "title": "循环综合应用（二）",
+      "stage": "C1",
+      "description": "P21 循环综合应用（二）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/RVTOdrCa8oh2bYxWAaKcGEdvn8k",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p022",
+      "lessonNo": 22,
+      "title": "一维数组初识（一）",
+      "stage": "C1",
+      "description": "P22 一维数组初识（一）配套讲义与知识卡。",
+      "tags": [
+        "一维数组访问",
+        "一维数组输入和输出",
+        "一维数组的遍历",
+        "一维数组",
+        "for循环遍历"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/VAeLdMzJGoMIpTxDoiKcf9qxnKe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p023",
+      "lessonNo": 23,
+      "title": "一维数组遍历",
+      "stage": "C1",
+      "description": "P23 一维数组遍历配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/QcRkd0FqQo9OeUxXh1McEM2Vnae",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p024",
+      "lessonNo": 24,
+      "title": "标记数组",
+      "stage": "C1",
+      "description": "P24 标记数组配套讲义与知识卡。",
+      "tags": [
+        "一维数组",
+        "标记数组",
+        "一维数组的遍历"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Dr1ndqnT8ov6UVxJtgncozt7nrs",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p025",
+      "lessonNo": 25,
+      "title": "桶数组",
+      "stage": "C1",
+      "description": "P25 桶数组配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Mmb5dIlAPory4bxALDVcenaGnCP",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p026",
+      "lessonNo": 26,
+      "title": "字符数组",
+      "stage": "C2",
+      "description": "P26 字符数组配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Vw1qdSHhtoWVgvxR63Zc95fXneg",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p027",
+      "lessonNo": 27,
+      "title": "字符数组常用函数",
+      "stage": "C2",
+      "description": "P27 字符数组常用函数配套讲义与知识卡。",
+      "tags": [
+        "字符数组拼接",
+        "字符数组函数",
+        "桶",
+        "字符数组",
+        "桶的标记"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/LcGmdU64Oo5y9OxQ7xHczFtxnOe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p028",
+      "lessonNo": 28,
+      "title": "string 字符串",
+      "stage": "C2",
+      "description": "P28 string 字符串配套讲义与知识卡。",
+      "tags": [
+        "字符串"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/IVamd6TOdoJZ7HxUCzFcNkein0g",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p029",
+      "lessonNo": 29,
+      "title": "字符串综合应用",
+      "stage": "C2",
+      "description": "P29 字符串综合应用配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/GVYndkPjvoaQR9xEVmTcriqGnSc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p030",
+      "lessonNo": 30,
+      "title": "凯撒加密",
+      "stage": "C2",
+      "description": "P30 凯撒加密配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/CB2pdzxGXoDapQx0o7Vc4pHPnUf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p031",
+      "lessonNo": 31,
+      "title": "函数初识（一）",
+      "stage": "C2",
+      "description": "P31 函数初识（一）配套讲义与知识卡。",
+      "tags": [
+        "函数"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/WngRdXjTyoQ27IxoCdHchUb8nmg",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p032",
+      "lessonNo": 32,
+      "title": "函数初识（二）·值传递",
+      "stage": "C2",
+      "description": "P32 函数初识（二）·值传递配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/MrbidyQuLoPf2yxFUTUcTu6qnuf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p033",
+      "lessonNo": 33,
+      "title": "自定义函数",
+      "stage": "C2",
+      "description": "P33 自定义函数配套讲义与知识卡。",
+      "tags": [
+        "函数"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/KaHnd9YRgooGeHxp9HgcPsgPnGx",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p034",
+      "lessonNo": 34,
+      "title": "函数综合应用",
+      "stage": "C2",
+      "description": "P34 函数综合应用配套讲义与知识卡。",
+      "tags": [
+        "函数"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OLnxdFM8aoUXC1xxyxucvj9AnYd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p035",
+      "lessonNo": 35,
+      "title": "位权",
+      "stage": "C2",
+      "description": "P35 位权配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/PuQkdDaUxoK9M8xRv76cpJW9njf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p036",
+      "lessonNo": 36,
+      "title": "进制转换（一）",
+      "stage": "C2",
+      "description": "P36 进制转换（一）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/R8erd5xCzoozGkxBCL9cgV5QnHd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p037",
+      "lessonNo": 37,
+      "title": "进制转换（二）",
+      "stage": "C2",
+      "description": "P37 进制转换（二）配套讲义与知识卡。",
+      "tags": [
+        "十进制转二进制",
+        "进制转换",
+        "十进制转其它进制",
+        "十六进制",
+        "二进制"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/DfdDdBLpTowtDYx68icchlaCnzc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p038",
+      "lessonNo": 38,
+      "title": "补码",
+      "stage": "C2",
+      "description": "P38 补码配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Q489d5GQwoVkGVxhVHqc0xBqnne",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p039",
+      "lessonNo": 39,
+      "title": "位运算（异或）",
+      "stage": "C2",
+      "description": "P39 位运算（异或）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/R4G6dimuvoEoHNxZnjMczUu6npf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p040",
+      "lessonNo": 40,
+      "title": "进制与编码综合",
+      "stage": "C2",
+      "description": "P40 进制与编码综合配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/MLGQdSE6kohI1txlhrdcSWAhntf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p041",
+      "lessonNo": 41,
+      "title": "二维数组初识",
+      "stage": "C2",
+      "description": "P41 二维数组初识配套讲义与知识卡。",
+      "tags": [
+        "二维数组"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/CCztdovH4oFIucxiWPHcpb9nnUe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p042",
+      "lessonNo": 42,
+      "title": "二维数组遍历",
+      "stage": "C2",
+      "description": "P42 二维数组遍历配套讲义与知识卡。",
+      "tags": [
+        "二维数组"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/SPQxd6CAtojK9bxKYkVcDNn3n4c",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p043",
+      "lessonNo": 43,
+      "title": "二维数组应用",
+      "stage": "C2",
+      "description": "P43 二维数组应用配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Sz7Jdrx2MouVTTxTd51cAiTHnfe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p044",
+      "lessonNo": 44,
+      "title": "认识排序（选择）",
+      "stage": "C2",
+      "description": "P44 认识排序（选择）配套讲义与知识卡。",
+      "tags": [
+        "sort()",
+        "贪心思维"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/X4K8drryjo02CexI09sc2y6AnSc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p045",
+      "lessonNo": 45,
+      "title": "sort 应用",
+      "stage": "C2",
+      "description": "P45 sort 应用配套讲义与知识卡。",
+      "tags": [
+        "排序",
+        "sort",
+        "贪心算法"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Rrd2dst3mofyvsxUIfVcT41snec",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p046",
+      "lessonNo": 46,
+      "title": "结构体初识",
+      "stage": "C2",
+      "description": "P46 结构体初识配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/QcmIdB3asorlRcxf1PMcYSb3nYc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p047",
+      "lessonNo": 47,
+      "title": "结构体排序",
+      "stage": "C2",
+      "description": "P47 结构体排序配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/TGUZdNLH6oN109xoeWFc41JPnIb",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p048",
+      "lessonNo": 48,
+      "title": "结构体应用",
+      "stage": "C2",
+      "description": "P48 结构体应用配套讲义与知识卡。",
+      "tags": [
+        "结构体"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/EEbhdjzzkoCJCyxOafGcuZNgnTf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p049",
+      "lessonNo": 49,
+      "title": "递推算法（一）",
+      "stage": "C2",
+      "description": "P49 递推算法（一）配套讲义与知识卡。",
+      "tags": [
+        "递推算法"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/U8Uid72Yao61FzxbfM7c0hpenVe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p050",
+      "lessonNo": 50,
+      "title": "递推算法（二）",
+      "stage": "C2",
+      "description": "P50 递推算法（二）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/MAsAddaCSopngwxcrVMcuWC6nYf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p051",
+      "lessonNo": 51,
+      "title": "枚举算法",
+      "stage": "C3",
+      "description": "P51 枚举算法配套讲义与知识卡。",
+      "tags": [
+        "枚举算法"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/QkLCdiCxzoSX0pxzVfUcHOsPnxd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p052",
+      "lessonNo": 52,
+      "title": "枚举应用",
+      "stage": "C3",
+      "description": "P52 枚举应用配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Qf6hdsMq2oUi65xfqoLc5Jpzned",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p053",
+      "lessonNo": 53,
+      "title": "枚举算法的优化",
+      "stage": "C3",
+      "description": "P53 枚举算法的优化配套讲义与知识卡。",
+      "tags": [
+        "枚举算法"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/D4IcdSDwdoTyVzxRIQucnPX3njf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p054",
+      "lessonNo": 54,
+      "title": "模拟算法（一）",
+      "stage": "C3",
+      "description": "P54 模拟算法（一）配套讲义与知识卡。",
+      "tags": [
+        "模拟算法"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/XPhAdX6Svo7u4QxClFNcWdV1nif",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p055",
+      "lessonNo": 55,
+      "title": "模拟算法（二）",
+      "stage": "C3",
+      "description": "P55 模拟算法（二）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/T61Nd0s3hogaoGxeH49cu8NvnVc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p056",
+      "lessonNo": 56,
+      "title": "前缀和",
+      "stage": "C3",
+      "description": "P56 前缀和配套讲义与知识卡。",
+      "tags": [
+        "前缀和"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/BtDddDg4potoi3xXqcMcHVoVnKf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p057",
+      "lessonNo": 57,
+      "title": "差分",
+      "stage": "C3",
+      "description": "P57 差分配套讲义与知识卡。",
+      "tags": [
+        "一维差分"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/A3aXdiBn5oalfuxyLEGc9K87n4d",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p058",
+      "lessonNo": 58,
+      "title": "贪心算法（一）",
+      "stage": "C3",
+      "description": "P58 贪心算法（一）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/ANw4dpoKDoG94UxYp9XcnlfNncg",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p059",
+      "lessonNo": 59,
+      "title": "贪心算法（二）",
+      "stage": "C3",
+      "description": "P59 贪心算法（二）配套讲义与知识卡。",
+      "tags": [
+        "贪心算法"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Iex9djrBooBkJtxxxczchKHlnse",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p060",
+      "lessonNo": 60,
+      "title": "贪心算法（三）·邻项交换",
+      "stage": "C3",
+      "description": "P60 贪心算法（三）·邻项交换配套讲义与知识卡。",
+      "tags": [
+        "贪心算法"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/YxIydNRSmoYYtUx9W9dcgUJOnMd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p061",
+      "lessonNo": 61,
+      "title": "初等排序（选择/冒泡/插入）",
+      "stage": "C3",
+      "description": "P61 初等排序（选择/冒泡/插入）配套讲义与知识卡。",
+      "tags": [
+        "冒泡排序",
+        "结构体"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/HfkKdm1OgoaQ3Zx9RNgcDzY2n0g",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p062",
+      "lessonNo": 62,
+      "title": "计数排序",
+      "stage": "C3",
+      "description": "P62 计数排序配套讲义与知识卡。",
+      "tags": [
+        "模拟算法",
+        "排序算法",
+        "计数排序"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/HB76d6vR7o79aCxgrUwcY47TnKg",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p063",
+      "lessonNo": 63,
+      "title": "最大公因数·辗转相除",
+      "stage": "C3",
+      "description": "P63 最大公因数·辗转相除配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Binwd1RAVoixUoxWMrrczaahnSc",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p064",
+      "lessonNo": 64,
+      "title": "算术基本定理·质因数分解",
+      "stage": "C3",
+      "description": "P64 算术基本定理·质因数分解配套讲义与知识卡。",
+      "tags": [
+        "初等数论"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/AzzcdcJJCoA4InxsuovcKEx4nLd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p065",
+      "lessonNo": 65,
+      "title": "埃氏筛法",
+      "stage": "C3",
+      "description": "P65 埃氏筛法配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Ov6Ed8YDBoxiK9xV34JcX1S7nNe",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p066",
+      "lessonNo": 66,
+      "title": "二分查找（一）",
+      "stage": "C3",
+      "description": "P66 二分查找（一）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/AKXXdCYBfokhqLxCFB8cXSZgnpd",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p067",
+      "lessonNo": 67,
+      "title": "二分查找（二）",
+      "stage": "C3",
+      "description": "P67 二分查找（二）配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/I5FxdmbLqo1VSgxbIlkcTnGeneg",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p068",
+      "lessonNo": 68,
+      "title": "动态数组与队列",
+      "stage": "C3",
+      "description": "P68 动态数组与队列配套讲义与知识卡。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/XesTdaXZEoCjJMxREb9cnwEAn0d",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p069",
+      "lessonNo": 69,
+      "title": "栈",
+      "stage": "C3",
+      "description": "掌握栈的先进后出特性及 STL stack，并用栈解决括号匹配与表达式求值。",
+      "tags": [],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/O6r9ddpbeoR9ArxU9zpcBGqpndf",
+      "status": "ready",
+      "requiresClassCode": false,
+      "updatedAt": "2026-07-15"
+    },
+    {
+      "id": "lesson-material-p070",
+      "lessonNo": 70,
+      "title": "递归算法（一）",
+      "stage": "C3",
+      "description": "理解递归的递进与回归过程，掌握递归关系、递归函数与递归出口。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    },
+    {
+      "id": "lesson-material-p071",
+      "lessonNo": 71,
+      "title": "递归算法（二）",
+      "stage": "C3",
+      "description": "通过爬楼梯、拼接数字和数的分解，练习多分支递归与搜索。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    },
+    {
+      "id": "lesson-material-p072",
+      "lessonNo": 72,
+      "title": "综合练习（一）",
+      "stage": "C4",
+      "description": "综合运用枚举、贪心、栈和数学知识解决复合练习。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    },
+    {
+      "id": "lesson-material-p073",
+      "lessonNo": 73,
+      "title": "综合练习（二）",
+      "stage": "C4",
+      "description": "巩固汉诺塔递归、快速幂与大数取模等典型问题。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    },
+    {
+      "id": "lesson-material-p074",
+      "lessonNo": 74,
+      "title": "真题演练（一）",
+      "stage": "C4",
+      "description": "通过拼数、导弹拦截和公路真题，训练排序、二分与贪心思维。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    },
+    {
+      "id": "lesson-material-p075",
+      "lessonNo": 75,
+      "title": "真题演练（二）",
+      "stage": "C4",
+      "description": "通过公交换乘和幂次方真题，巩固模拟、结构体、递归与二进制拆分。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    },
+    {
+      "id": "lesson-material-p076",
+      "lessonNo": 76,
+      "title": "树（一）",
+      "stage": "C4",
+      "description": "理解树和二叉树的基本概念，掌握父结点存储及前中后序遍历。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    },
+    {
+      "id": "lesson-material-p077",
+      "lessonNo": 77,
+      "title": "特殊二叉树与优先队列",
+      "stage": "C4",
+      "description": "理解完全二叉树与堆，掌握 priority_queue 及合并果子的贪心策略。",
+      "tags": [],
+      "feishuUrl": "",
+      "status": "coming_soon",
+      "requiresClassCode": false,
+      "updatedAt": "2026-10-11"
+    }
+  ]
+}
