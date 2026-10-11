@@ -200,6 +200,10 @@ export interface DailyTasks {
 
 // ── 战斗状态 ──
 export interface BattleState {
+  battleId?: string;
+  equipmentDamageAdded?: number;
+  equipmentDamagePrevented?: number;
+  equipmentTriggers?: Record<string, number>;
   dungeonId: string;
   stageId: string;
   questions: Question[];

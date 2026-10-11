@@ -103,7 +103,7 @@ function HelpModal({ config, onClose, onOpenGuide }: { config: ExplorationStageC
           <div><strong>三区</strong><span>依次穿过{config.regionNames.join('、')}；每一区都有一道必做封印。</span></div>
           <div><strong>玉简</strong><span>找到天机玉简会标记最近一道未解封印，并提前提示其考查知识点。</span></div>
           <div><strong>岔路</strong><span>稳妥路线直接获得少量金币；试炼路线缩小视野，到下一道封印答对可得更多奖励。</span></div>
-          <div><strong>奖励</strong><span>地图内奖励先暂存，到达出口后一次性结算，不会重复发放。试炼金币每日最多到账 30、每周最多到账 150；达到上限不会扣除已有金币。</span></div>
+          <div><strong>奖励</strong><span>地图内奖励先暂存，到达出口后一次性结算，不会重复发放。金币不设每日、每周上限；晶石每张地图只领取一次，用于装备强化，不可出售。</span></div>
           <div><strong>装备</strong><span>装备标明生效范围。武器、护甲和法器的首件收获会自动装备，可在右侧背包切换。</span></div>
           <div><strong>道具</strong><span>在背包中点击“使用”。没有适用状态时按钮会禁用，不会误消耗。</span></div>
           <div><strong>品级来源</strong><span>每关掉落与品级均为固定配置，没有抽卡、概率或暗池。本关固定掉落：{RARITY_LABELS[equipment.rarity]}「{equipment.name}」。</span></div>
@@ -657,6 +657,11 @@ export default function ExplorationScreen() {
 
   const finishExploration = () => {
     if (!current || current.sealsSolved < 3) return;
+    const equipment = useTrialEquipmentStore.getState();
+    if (!equipment.materialClaims.includes(map.id) && !equipment.claimExplorationMaterials(map.id, activeConfig.materialRewards)) {
+      setNotice('探索晶石保存失败，请稍后再试；当前探索进度保留。');
+      return;
+    }
     if (!current.settled) {
       const exp = current.pendingExp + activeConfig.rewards.clearExp;
       const coinResult = useDungeonStore.getState().grantPetCoins(current.pendingCoins + activeConfig.rewards.clearCoins);
@@ -691,6 +696,7 @@ export default function ExplorationScreen() {
           <div className="explore-modal-kicker">{activeConfig.dungeonName} · {activeConfig.stageName}</div>
           <h1>迷雾探索完成</h1>
           <p>你穿过{activeConfig.regionNames.join('、')}，解除了三道知识封印，本关探索记录已保存。</p>
+          {useTrialEquipmentStore.getState().materialClaims.includes(map.id) && <p>探索晶石：{activeConfig.materialRewards.map(reward => `${({ earth: '地', fire: '火', wind: '风', water: '水', light: '光' } as Record<string, string>)[reward.materialId.split('-')[0]]}晶石 +${reward.amount}`).join('、')} · 每张迷宫仅领取一次，仅用于升级，不可出售。</p>}
           <div className="explore-summary-grid"><div><strong>{current.steps}</strong><span>探索步数</span></div><div><strong>{3 - current.sealsWrong}/3</strong><span>封印答对</span></div><div><strong>+{grantedCoins}</strong><span>金币到账</span></div><div><strong>+{grantedExp}</strong><span>试炼 EXP</span></div></div>
           <p className={`explore-settlement-note ${limitedCoins > 0 ? 'is-limited' : ''}`}>
             {limitedCoins > 0

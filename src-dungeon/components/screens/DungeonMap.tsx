@@ -73,13 +73,13 @@ export default function DungeonMap() {
           <span className="status-value gold-text">{coins}</span>
         </div>
         <div className="reward-pass">
-          <div className="reward-pass-status" title="本周仍可获得完整结算奖励的挑战次数">
-            <span>🎟️ 本周奖励</span>
+          <div className="reward-pass-status" title="本周经验与段位奖励次数；通关金币不限次数">
+            <span>🎟️ 本周经验奖励</span>
             <strong>{rewardChallengesRemaining}/{weeklyChallenges.limit}</strong>
           </div>
           <button
             className="pixel-btn reward-pass-buy"
-            title="消耗 120 个通用金币，增加 1 次本周有奖挑战资格"
+            title="消耗 120 个通用金币，增加 1 次本周经验与段位奖励资格，金币不限次数"
             onClick={() => setBuyConfirmOpen(true)}
           >
             +1 次 · 120 金币
@@ -248,13 +248,13 @@ export default function DungeonMap() {
       {buyConfirmOpen && (
         <DungeonConfirmModal
           title="增加挑战资格"
-          message="消耗 120 个通用金币，增加 1 次本周有奖挑战资格？"
+          message="消耗 120 个通用金币，增加 1 次本周经验与段位奖励资格？通关金币本来就不限次数，无需购买资格。"
           confirmLabel="确认"
           cancelLabel="取消"
           onCancel={() => setBuyConfirmOpen(false)}
           onConfirm={() => {
             const ok = buyRewardChallenge();
-            setNotice(ok ? '已增加 1 次本周有奖挑战资格。' : '通用金币不足，需要 120 金币。');
+            setNotice(ok ? '已增加 1 次本周经验与段位奖励资格。' : '通用金币不足，需要 120 金币。');
             setBuyConfirmOpen(false);
           }}
         />

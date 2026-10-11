@@ -37,6 +37,11 @@ try {
   if (error?.code !== 'ENOENT') throw error;
 }
 
+await cp(resolve(root, 'cloud-assets-source', 'equipment'), resolve(output, 'equipment'), { recursive: true });
+for (const folder of ['weapons', 'armor']) {
+  await cp(resolve(root, 'public', 'dungeon-exploration', folder), resolve(output, 'dungeon-exploration', folder), { recursive: true });
+}
+
 // The v1.7.48 desktop bundle no longer ships the retired course catalog. Keep
 // its cloud copy for one compatibility cycle so clients that have not upgraded
 // continue to work. A later maintenance deploy can opt in to final retirement.
@@ -199,6 +204,12 @@ await writeFile(resolve(output, '_headers'), `
   Cache-Control: public, max-age=300, must-revalidate
 
 /wardrobe/*
+  Cache-Control: public, max-age=300, must-revalidate
+
+/equipment/*
+  Cache-Control: public, max-age=300, must-revalidate
+
+/dungeon-exploration/*
   Cache-Control: public, max-age=300, must-revalidate
 
 /profile/*

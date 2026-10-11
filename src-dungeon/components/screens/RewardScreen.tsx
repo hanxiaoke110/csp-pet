@@ -123,18 +123,19 @@ export default function RewardScreen() {
               </div>
             </div>
             <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '-8px', marginBottom: '12px' }}>
-              本局计算金币 {goldEarned}，按奖励上限实际到账 · 今日还可获得 {battle.petCoinsDailyRemaining ?? 30}，本周还可获得 {battle.petCoinsWeeklyRemaining ?? 150}
+              本局金币 {goldEarned} · 评级奖励＋首通/Boss加成 · 金币不限每日及每周次数
             </div>
             {battle.rewardsEligible === false && (
               <div style={{ fontSize: '11px', color: '#fbbf24', marginBottom: '12px', fontWeight: 700 }}>
-                本周有奖次数已用完：本局仅记录评级，不发放 EXP 和金币
+                本周经验奖励次数已用完：本局正常获得评级金币，继续记录最好评级
               </div>
             )}
-            {battle.rewardsEligible !== false && petCoinsEarned === 0 && battle.petCoinsDailyRemaining === 0 && (
-              <div style={{ fontSize: '11px', color: '#fbbf24', marginBottom: '12px', fontWeight: 700 }}>
-                今日试炼金币已达 30 上限，本局仍正常获得试炼 EXP
-              </div>
-            )}
+            {battle.equipmentTriggers && <details className="pixel-card" style={{ marginBottom: 12 }}>
+              <summary>本场装备效果</summary>
+              <p>武器额外伤害：{battle.equipmentDamageAdded || 0} · 护甲防止伤害：{battle.equipmentDamagePrevented || 0}</p>
+              <p>{Object.entries(battle.equipmentTriggers).map(([name, count]) => `${name} ${count}次`).join(' · ')}</p>
+              <small>额外伤害已扣除Boss单次伤害上限与溢出伤害；护甲减伤在护盾前结算。所有触发次数下一场重置。</small>
+            </details>}
             {battle.rewardsEligible !== false && petExpEarned === 0 && battle.petExpDailyRemaining === 0 && (
               <div style={{ fontSize: '11px', color: '#60a5fa', marginBottom: '12px', fontWeight: 700 }}>
                 今日智子成长 EXP 已达 120 上限

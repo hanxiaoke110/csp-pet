@@ -30,8 +30,7 @@ function todayStr(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-const PET_COIN_DAILY_LIMIT = 30;
-const PET_COIN_WEEKLY_LIMIT = 150;
+export const RATING_COIN_REWARD = { D: 40, C: 45, B: 50, A: 60, S: 75, SS: 90 } as const;
 const TRIAL_PET_EXP_DAILY_LIMIT = 120;
 const FIRST_SS_PLAYER_EXP_BONUS = 15;
 const FIRST_SS_PET_EXP_BONUS = 10;
@@ -158,7 +157,7 @@ interface DungeonState {
   getWeakPointsAboveThreshold: (threshold: number) => string[];
   // 流派被动每日上限：未达上限则计数+1 并返回 true（允许触发被动），达上限返回 false（只发基础奖励）
   bumpSchoolPassiveDaily: () => boolean;
-  grantPetCoins: (amount: number) => { granted: number; dailyRemaining: number; weeklyRemaining: number };
+  grantPetCoins: (amount: number) => { granted: number; dailyRemaining: null; weeklyRemaining: null };
   buyTrialItem: (itemId: 'hint-ticket' | 'healing-potion' | 'title-data-scout' | 'frame-crystal') => boolean;
   consumeTrialItem: (itemId: 'hint-ticket' | 'healing-potion') => boolean;
   equipTrialCosmetic: (itemId: 'title-data-scout' | 'frame-crystal') => void;
@@ -381,9 +380,15 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
 
   finalizeBattle: (dungeonId, isBoss) => {
     const { battle } = get();
-    if (!battle) return null;
+    if (!battle || !battle.isFinished || battle.dungeonId !== dungeonId || battle.isBoss !== isBoss) return null;
+    const battleId = battle.battleId || `legacy:${dungeonId}:${battle.stageId}:${battle.startTime}`;
+    if (usePetStore.getState().trialCoinSettlements.includes(battleId)) {
+      set({ battle: null });
+      return null;
+    }
     // 保留结算前快照供 RewardScreen 展示
     const snapshot = { ...battle };
+    snapshot.battleId = battleId;
     const progressBeforeBattle = get().dungeonProgress.find(p => p.dungeonId === dungeonId);
     let earnedRewardsThisBattle = false;
     const stageIndex = Math.max(0, Number((battle.stageId.match(/stage-0(\d)$/) || [])[1] || 1) - 1);
@@ -398,6 +403,17 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
           ? stageIndex >= currentProgress.completedStages
           : !get()._firstClears[clearKey];
       const mult = isFirstClear ? FIRST_CLEAR_MULTIPLIER : 1;
+      const answered = battle.correctCount + battle.wrongCount;
+      if (!Number.isSafeInteger(answered) || answered <= 0 || battle.correctCount < 0 || battle.wrongCount < 0) return null;
+      const ratingCoins = RATING_COIN_REWARD[battle.rating as keyof typeof RATING_COIN_REWARD];
+      if (!ratingCoins) return null;
+      const coinBonus = (isBoss ? BOSS_CLEAR_GOLD : 0) + (isFirstClear ? (isBoss ? BOSS_CLEAR_GOLD : STAGE_CLEAR_GOLD) : 0);
+      const coinReward = applySchoolClearPassive(get().player.school, { exp: 0, gold: ratingCoins + coinBonus }).gold;
+      if (!usePetStore.getState().grantTrialCoins(battleId, coinReward)) return null;
+      snapshot.goldEarned = coinReward;
+      snapshot.petCoinsEarned = coinReward;
+      snapshot.petCoinsDailyRemaining = undefined;
+      snapshot.petCoinsWeeklyRemaining = undefined;
       // 周次数只限制重复刷取；从未通关的具体关卡始终有首通奖励。
       const earnsRewards = get().currentBattleEarnsRewards || isFirstClear;
       earnedRewardsThisBattle = earnsRewards;
@@ -406,30 +422,20 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
         ? FIRST_SS_PLAYER_EXP_BONUS
         : 0;
       let clearExp = 0;
-      let clearGold = 0;
       if (isBoss) {
         clearExp = earnsRewards ? BOSS_CLEAR_EXP * mult : 0;
-        clearGold = earnsRewards ? BOSS_CLEAR_GOLD * mult : 0;
       } else {
         clearExp = earnsRewards ? STAGE_CLEAR_EXP * mult : 0;
-        clearGold = earnsRewards ? STAGE_CLEAR_GOLD * mult : 0;
       }
-      const schoolReward = applySchoolClearPassive(get().player.school, { exp: clearExp, gold: clearGold });
+      const schoolReward = applySchoolClearPassive(get().player.school, { exp: clearExp, gold: 0 });
       clearExp = schoolReward.exp + ratingExpBonus;
-      clearGold = schoolReward.gold;
       if (clearExp > 0) get().addExp(clearExp);
       snapshot.expEarned += clearExp;
-      snapshot.goldEarned += clearGold;
       snapshot.ratingExpBonus = ratingExpBonus;
       if (isFirstClear) {
         set((s) => ({ _firstClears: { ...s._firstClears, [clearKey]: true } }));
       }
-      // All trial gold now settles into the desktop pet wallet. The shared ledger
-      // caps actual grants, so repeated battles cannot inflate the main economy.
-      const petCoinReward = get().grantPetCoins(earnsRewards ? snapshot.goldEarned : 0);
-      snapshot.petCoinsEarned = petCoinReward.granted;
-      snapshot.petCoinsDailyRemaining = petCoinReward.dailyRemaining;
-      snapshot.petCoinsWeeklyRemaining = petCoinReward.weeklyRemaining;
+      // Coins settle once by battle receipt, independently of weekly EXP attempts.
 
       // Trial reputation remains independent, while successful clears also feed the
       // desktop pet's shared experience pool. A daily cap keeps repeated farming fair.
@@ -675,7 +681,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     const current = get().petCoinRewards;
     const dailyGranted = current.dailyDate === today ? current.dailyGranted : 0;
     const weeklyGranted = current.weekStart === weekStart ? current.weeklyGranted : 0;
-    const granted = Math.max(0, Math.min(amount, PET_COIN_DAILY_LIMIT - dailyGranted, PET_COIN_WEEKLY_LIMIT - weeklyGranted));
+    const granted = Number.isSafeInteger(amount) && amount > 0 && Number.isSafeInteger(usePetStore.getState().coins + amount) ? amount : 0;
     const next = {
       dailyDate: today,
       dailyGranted: dailyGranted + granted,
@@ -686,8 +692,8 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
     if (granted > 0) usePetStore.getState().addCoins(granted);
     return {
       granted,
-      dailyRemaining: PET_COIN_DAILY_LIMIT - next.dailyGranted,
-      weeklyRemaining: PET_COIN_WEEKLY_LIMIT - next.weeklyGranted,
+      dailyRemaining: null,
+      weeklyRemaining: null,
     };
   },
 

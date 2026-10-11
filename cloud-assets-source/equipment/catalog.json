@@ -1,0 +1,590 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "xuanwu-hammer-common",
+      "name": "玄岩重锤",
+      "category": "weapon",
+      "rarity": "common",
+      "element": "earth",
+      "icon": "/dungeon-exploration/weapons/xuanwu-hammer-common.webp",
+      "description": "答对题目后获得相当于最大生命 5% 的护盾。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 100,
+      "attack": 1,
+      "combatEffects": {
+        "correctShieldRatio": 0.05,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "xuanwu-hammer-rare",
+      "name": "碧脉玄岩锤",
+      "category": "weapon",
+      "rarity": "rare",
+      "element": "earth",
+      "icon": "/dungeon-exploration/weapons/xuanwu-hammer-rare.webp",
+      "description": "答对题目后获得相当于最大生命 8% 的护盾。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 220,
+      "attack": 2,
+      "combatEffects": {
+        "correctShieldRatio": 0.08,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "xuanwu-hammer-epic",
+      "name": "玄甲镇岳锤",
+      "category": "weapon",
+      "rarity": "epic",
+      "element": "earth",
+      "icon": "/dungeon-exploration/weapons/xuanwu-hammer-epic.webp",
+      "description": "答对后获得 10% 护盾，并使本次攻击伤害提高 10%。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 380,
+      "attack": 4,
+      "combatEffects": {
+        "correctShieldRatio": 0.1,
+        "correctShieldLimit": 2,
+        "nextAttackBoost": 0.1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "xuanwu-hammer-legendary",
+      "name": "天衡·玄武光锤",
+      "category": "weapon",
+      "rarity": "legendary",
+      "element": "earth",
+      "icon": "/dungeon-exploration/weapons/xuanwu-hammer-legendary.webp",
+      "description": "玄武灵脉凝成的光武。连续答对 3 题时触发镇岳冲击，本次攻击伤害提高 35%。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 950,
+      "attack": 6,
+      "combatEffects": {
+        "comboThreeBoost": 0.35,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "jade-spear-common",
+      "name": "青竹短枪",
+      "category": "weapon",
+      "rarity": "common",
+      "element": "wind",
+      "icon": "/dungeon-exploration/weapons/jade-spear-common.webp",
+      "description": "答对题目时，本次攻击伤害提高 4%。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 100,
+      "attack": 1,
+      "combatEffects": {
+        "nextAttackBoost": 0.04,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "jade-spear-rare",
+      "name": "流风碧玉枪",
+      "category": "weapon",
+      "rarity": "rare",
+      "element": "wind",
+      "icon": "/dungeon-exploration/weapons/jade-spear-rare.webp",
+      "description": "答对题目时，本次攻击伤害提高 8%。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 220,
+      "attack": 2,
+      "combatEffects": {
+        "nextAttackBoost": 0.08,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "jade-spear-epic",
+      "name": "穿云逐影枪",
+      "category": "weapon",
+      "rarity": "epic",
+      "element": "wind",
+      "icon": "/dungeon-exploration/weapons/jade-spear-epic.webp",
+      "description": "连续答对 3 题时触发穿云追击，本次攻击伤害提高 22%。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 380,
+      "attack": 4,
+      "combatEffects": {
+        "comboThreeBoost": 0.22,
+        "comboThreeLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "jade-spear-legendary",
+      "name": "天穹·青鸾光枪",
+      "category": "weapon",
+      "rarity": "legendary",
+      "element": "wind",
+      "icon": "/dungeon-exploration/weapons/jade-spear-legendary.webp",
+      "description": "青鸾风息凝成的光武。连续答对 3 题时触发穿云追击，本次攻击伤害提高 45%。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 950,
+      "attack": 6,
+      "combatEffects": {
+        "comboThreeBoost": 0.45,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "xuanwu-armor-rare",
+      "name": "碧水玄甲",
+      "category": "armor",
+      "rarity": "rare",
+      "element": "water",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-rare.webp",
+      "description": "进入战斗时获得 8% 护盾；首次伤及生命的攻击伤害降低 10%。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 220,
+      "defense": 1,
+      "combatEffects": {
+        "initialShieldRatio": 0.08,
+        "firstHpHitReduction": 0.1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "xuanwu-armor-epic",
+      "name": "镇海玄鳞铠",
+      "category": "armor",
+      "rarity": "epic",
+      "element": "water",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-epic.webp",
+      "description": "进入战斗时获得 10% 护盾；护盾未破时，水与地属性伤害提高 8%。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 380,
+      "defense": 3,
+      "combatEffects": {
+        "initialShieldRatio": 0.1,
+        "shieldedElementBoost": 0.08
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "xuanwu-armor-legendary",
+      "name": "不动·玄武圣铠",
+      "category": "armor",
+      "rarity": "legendary",
+      "element": "earth",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-legendary.webp",
+      "description": "开场获得 12% 护盾；生命首次低于 40% 时恢复 6% 生命和 12% 护盾。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 950,
+      "defense": 5,
+      "combatEffects": {
+        "initialShieldRatio": 0.12,
+        "lowHpShieldRatio": 0.12,
+        "lowHpHealRatio": 0.06
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "earth-armor-rare",
+      "name": "磐岩护袍",
+      "category": "armor",
+      "rarity": "rare",
+      "element": "earth",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-rare.webp",
+      "description": "开场获得8%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 220,
+      "defense": 1,
+      "combatEffects": {
+        "initialShieldRatio": 0.08
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "earth-armor-epic",
+      "name": "镇岳战甲",
+      "category": "armor",
+      "rarity": "epic",
+      "element": "earth",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-epic.webp",
+      "description": "开场获得10%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 380,
+      "defense": 3,
+      "combatEffects": {
+        "initialShieldRatio": 0.1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "fire-weapon-common",
+      "name": "赤焰短刃",
+      "category": "weapon",
+      "rarity": "common",
+      "element": "fire",
+      "icon": "/dungeon-exploration/weapons/jade-spear-common.webp",
+      "description": "答对时本次额外增伤4%，每场2次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 100,
+      "attack": 1,
+      "combatEffects": {
+        "nextAttackBoost": 0.04,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "fire-weapon-rare",
+      "name": "熔火双刃",
+      "category": "weapon",
+      "rarity": "rare",
+      "element": "fire",
+      "icon": "/dungeon-exploration/weapons/jade-spear-rare.webp",
+      "description": "答对时本次额外增伤8%，每场2次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 220,
+      "attack": 2,
+      "combatEffects": {
+        "nextAttackBoost": 0.08,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "fire-weapon-epic",
+      "name": "烬羽战镰",
+      "category": "weapon",
+      "rarity": "epic",
+      "element": "fire",
+      "icon": "/dungeon-exploration/weapons/jade-spear-epic.webp",
+      "description": "连续答对3题，本次额外增伤20%，每场1次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 380,
+      "attack": 4,
+      "combatEffects": {
+        "comboThreeBoost": 0.2,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "fire-weapon-legendary",
+      "name": "焚天·金乌日轮",
+      "category": "weapon",
+      "rarity": "legendary",
+      "element": "fire",
+      "icon": "/dungeon-exploration/weapons/jade-spear-legendary.webp",
+      "description": "连续答对3题，本次额外增伤35%，每场1次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 950,
+      "attack": 6,
+      "combatEffects": {
+        "comboThreeBoost": 0.35,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "fire-armor-rare",
+      "name": "烛火羽衣",
+      "category": "armor",
+      "rarity": "rare",
+      "element": "fire",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-rare.webp",
+      "description": "开场获得8%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 220,
+      "defense": 1,
+      "combatEffects": {
+        "initialShieldRatio": 0.08
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "fire-armor-epic",
+      "name": "赤霄战袍",
+      "category": "armor",
+      "rarity": "epic",
+      "element": "fire",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-epic.webp",
+      "description": "开场获得10%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 380,
+      "defense": 3,
+      "combatEffects": {
+        "initialShieldRatio": 0.1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "fire-armor-legendary",
+      "name": "不灭·金乌圣衣",
+      "category": "armor",
+      "rarity": "legendary",
+      "element": "fire",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-legendary.webp",
+      "description": "开场获得12%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 950,
+      "defense": 5,
+      "combatEffects": {
+        "initialShieldRatio": 0.12
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "wind-armor-rare",
+      "name": "轻岚披风",
+      "category": "armor",
+      "rarity": "rare",
+      "element": "wind",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-rare.webp",
+      "description": "开场获得8%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 220,
+      "defense": 1,
+      "combatEffects": {
+        "initialShieldRatio": 0.08
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "wind-armor-epic",
+      "name": "逐影风衣",
+      "category": "armor",
+      "rarity": "epic",
+      "element": "wind",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-epic.webp",
+      "description": "开场获得10%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 380,
+      "defense": 3,
+      "combatEffects": {
+        "initialShieldRatio": 0.1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "wind-armor-legendary",
+      "name": "九霄·青鸾羽铠",
+      "category": "armor",
+      "rarity": "legendary",
+      "element": "wind",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-legendary.webp",
+      "description": "开场获得12%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 950,
+      "defense": 5,
+      "combatEffects": {
+        "initialShieldRatio": 0.12
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "water-weapon-common",
+      "name": "涟漪法杖",
+      "category": "weapon",
+      "rarity": "common",
+      "element": "water",
+      "icon": "/dungeon-exploration/weapons/jade-spear-common.webp",
+      "description": "答对时本次额外增伤4%，每场2次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 100,
+      "attack": 1,
+      "combatEffects": {
+        "nextAttackBoost": 0.04,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "water-weapon-rare",
+      "name": "寒潮长弓",
+      "category": "weapon",
+      "rarity": "rare",
+      "element": "water",
+      "icon": "/dungeon-exploration/weapons/jade-spear-rare.webp",
+      "description": "答对时本次额外增伤8%，每场2次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 220,
+      "attack": 2,
+      "combatEffects": {
+        "nextAttackBoost": 0.08,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "water-weapon-epic",
+      "name": "霜华战戟",
+      "category": "weapon",
+      "rarity": "epic",
+      "element": "water",
+      "icon": "/dungeon-exploration/weapons/jade-spear-epic.webp",
+      "description": "连续答对3题，本次额外增伤20%，每场1次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 380,
+      "attack": 4,
+      "combatEffects": {
+        "comboThreeBoost": 0.2,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "water-weapon-legendary",
+      "name": "沧海·玄鲸月刃",
+      "category": "weapon",
+      "rarity": "legendary",
+      "element": "water",
+      "icon": "/dungeon-exploration/weapons/jade-spear-legendary.webp",
+      "description": "连续答对3题，本次额外增伤35%，每场1次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 950,
+      "attack": 6,
+      "combatEffects": {
+        "comboThreeBoost": 0.35,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "water-armor-legendary",
+      "name": "深蓝·沧澜圣甲",
+      "category": "armor",
+      "rarity": "legendary",
+      "element": "water",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-legendary.webp",
+      "description": "开场获得12%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 950,
+      "defense": 5,
+      "combatEffects": {
+        "initialShieldRatio": 0.12
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "light-weapon-common",
+      "name": "星砂权杖",
+      "category": "weapon",
+      "rarity": "common",
+      "element": "light",
+      "icon": "/dungeon-exploration/weapons/jade-spear-common.webp",
+      "description": "答对时本次额外增伤4%，每场2次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 100,
+      "attack": 1,
+      "combatEffects": {
+        "nextAttackBoost": 0.04,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "light-weapon-rare",
+      "name": "晨光细剑",
+      "category": "weapon",
+      "rarity": "rare",
+      "element": "light",
+      "icon": "/dungeon-exploration/weapons/jade-spear-rare.webp",
+      "description": "答对时本次额外增伤8%，每场2次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 220,
+      "attack": 2,
+      "combatEffects": {
+        "nextAttackBoost": 0.08,
+        "correctShieldLimit": 2
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "light-weapon-epic",
+      "name": "曜星战环",
+      "category": "weapon",
+      "rarity": "epic",
+      "element": "light",
+      "icon": "/dungeon-exploration/weapons/jade-spear-epic.webp",
+      "description": "连续答对3题，本次额外增伤20%，每场1次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 380,
+      "attack": 4,
+      "combatEffects": {
+        "comboThreeBoost": 0.2,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "light-weapon-legendary",
+      "name": "破晓·天穹圣弩",
+      "category": "weapon",
+      "rarity": "legendary",
+      "element": "light",
+      "icon": "/dungeon-exploration/weapons/jade-spear-legendary.webp",
+      "description": "连续答对3题，本次额外增伤35%，每场1次。",
+      "scope": "试炼场战斗生效；特殊效果下一场重置。",
+      "price": 950,
+      "attack": 6,
+      "combatEffects": {
+        "comboThreeBoost": 0.35,
+        "comboThreeLimit": 1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "light-armor-rare",
+      "name": "晨星斗篷",
+      "category": "armor",
+      "rarity": "rare",
+      "element": "light",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-rare.webp",
+      "description": "开场获得8%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 220,
+      "defense": 1,
+      "combatEffects": {
+        "initialShieldRatio": 0.08
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "light-armor-epic",
+      "name": "辉耀礼装",
+      "category": "armor",
+      "rarity": "epic",
+      "element": "light",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-epic.webp",
+      "description": "开场获得10%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 380,
+      "defense": 3,
+      "combatEffects": {
+        "initialShieldRatio": 0.1
+      },
+      "shopAvailable": true
+    },
+    {
+      "id": "light-armor-legendary",
+      "name": "永昼·星河圣衣",
+      "category": "armor",
+      "rarity": "legendary",
+      "element": "light",
+      "icon": "/dungeon-exploration/armor/xuanwu-armor-legendary.webp",
+      "description": "开场获得12%最大生命护盾，每场1次。",
+      "scope": "试炼场战斗生效；开场效果下一场重置。",
+      "price": 950,
+      "defense": 5,
+      "combatEffects": {
+        "initialShieldRatio": 0.12
+      },
+      "shopAvailable": true
+    }
+  ]
+}

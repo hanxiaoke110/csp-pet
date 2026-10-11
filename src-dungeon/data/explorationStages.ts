@@ -1,5 +1,6 @@
 import dungeons from './dungeons.json';
 import { TRIAL_EQUIPMENT } from './explorationItems';
+import { EQUIPMENT_ELEMENTS } from './equipmentCatalog';
 
 export interface ExplorationStageRewards {
   sealCorrectExp: number;
@@ -25,6 +26,7 @@ export interface ExplorationStageConfig {
   width: number;
   height: number;
   equipmentId: string;
+  materialRewards: Array<{ materialId: string; amount: number }>;
   rewards: ExplorationStageRewards;
 }
 
@@ -64,6 +66,7 @@ export const EXPLORATION_STAGE_CONFIGS: ExplorationStageConfig[] = dungeons.flat
       width: size.width,
       height: size.height,
       equipmentId: chapter.drops[stageIndex],
+      materialRewards: [{ materialId: `${EQUIPMENT_ELEMENTS[stageIndex]}-crystal`, amount: 16 + dungeonIndex * 2 }],
       rewards: {
         sealCorrectExp: 4 + Math.floor(depth / 12),
         sealWrongExp: 2,

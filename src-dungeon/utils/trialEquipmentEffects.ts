@@ -1,3 +1,5 @@
+import { TRIAL_EQUIPMENT } from '../data/explorationItems';
+
 export interface TrialCombatProfile {
   initialShieldRatio: number;
   correctShieldRatio: number;
@@ -24,29 +26,11 @@ const EMPTY_PROFILE: TrialCombatProfile = {
   lowHpHealRatio: 0,
 };
 
-const WEAPON_EFFECTS: Record<string, Partial<TrialCombatProfile>> = {
-  'xuanwu-hammer-common': { correctShieldRatio: 0.05, correctShieldLimit: 2 },
-  'xuanwu-hammer-rare': { correctShieldRatio: 0.08, correctShieldLimit: 2 },
-  'xuanwu-hammer-epic': { correctShieldRatio: 0.1, correctShieldLimit: 2, nextAttackBoost: 0.1 },
-  'xuanwu-hammer-legendary': { comboThreeBoost: 0.35, comboThreeLimit: 1 },
-  'jade-spear-common': { nextAttackBoost: 0.04, correctShieldLimit: 2 },
-  'jade-spear-rare': { nextAttackBoost: 0.08, correctShieldLimit: 2 },
-  'jade-spear-epic': { comboThreeBoost: 0.22, comboThreeLimit: 2 },
-  'jade-spear-legendary': { comboThreeBoost: 0.45, comboThreeLimit: 1 },
-};
-
-const ARMOR_EFFECTS: Record<string, Partial<TrialCombatProfile>> = {
-  'xuanwu-armor-common': { initialShieldRatio: 0.05 },
-  'xuanwu-armor-rare': { initialShieldRatio: 0.08, firstHpHitReduction: 0.1 },
-  'xuanwu-armor-epic': { initialShieldRatio: 0.1, shieldedElementBoost: 0.08 },
-  'xuanwu-armor-legendary': { initialShieldRatio: 0.12, lowHpShieldRatio: 0.12, lowHpHealRatio: 0.06 },
-};
-
 export function getTrialCombatProfile(weaponId?: string, armorId?: string): TrialCombatProfile {
   return {
     ...EMPTY_PROFILE,
-    ...(weaponId ? WEAPON_EFFECTS[weaponId] : undefined),
-    ...(armorId ? ARMOR_EFFECTS[armorId] : undefined),
+    ...(weaponId && TRIAL_EQUIPMENT[weaponId]?.category === 'weapon' ? TRIAL_EQUIPMENT[weaponId].combatEffects : undefined),
+    ...(armorId && TRIAL_EQUIPMENT[armorId]?.category === 'armor' ? TRIAL_EQUIPMENT[armorId].combatEffects : undefined),
   };
 }
 

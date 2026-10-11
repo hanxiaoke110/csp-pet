@@ -172,7 +172,7 @@ describe('迷雾探索存档与结算', () => {
     });
   });
 
-  it('旧背包中的坏数据会被清理，之后仍能正常领取事件装备', () => {
+  it('清理坏记录但保留未加载的在线装备，且不能把未知装备装上', () => {
     values.set('csp_trial_equipment_v1', JSON.stringify({
       ownedItems: [
         null,
@@ -187,7 +187,7 @@ describe('迷雾探索存档与结算', () => {
 
     useTrialEquipmentStore.getState().load();
     expect(useTrialEquipmentStore.getState()).toMatchObject({
-      ownedItems: [{ id: 'old-hammer', definitionId: 'xuanwu-hammer-common', quantity: 1 }],
+      ownedItems: [{ id: 'missing-definition', definitionId: 'removed-item', quantity: 1 }, { id: 'old-hammer', definitionId: 'xuanwu-hammer-common', quantity: 1 }],
       equippedWeaponId: null,
       equippedArmorId: null,
       equippedArtifactId: null,

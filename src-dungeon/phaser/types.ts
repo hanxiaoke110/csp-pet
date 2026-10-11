@@ -43,6 +43,8 @@ export interface BattleInitData {
     weaponId?: string;
     armorId?: string;
     artifactId?: string;
+    weaponLevel?: number;
+    armorLevel?: number;
   };
 }
 
@@ -52,6 +54,9 @@ export interface SkillSelectResult {
 }
 
 export interface BattleEndResult {
+  equipmentDamageAdded?: number;
+  equipmentDamagePrevented?: number;
+  equipmentTriggers?: Record<string, number>;
   isWon: boolean;
   expEarned: number;
   goldEarned: number;

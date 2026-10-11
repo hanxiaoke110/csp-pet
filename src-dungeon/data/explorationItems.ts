@@ -1,8 +1,9 @@
 import type { TrialEquipmentDefinition } from '../types/exploration';
+import { buildEquipmentCatalog } from './equipmentCatalog';
 
 const item = (input: TrialEquipmentDefinition) => input;
 
-export const TRIAL_EQUIPMENT: Record<string, TrialEquipmentDefinition> = {
+export const LEGACY_TRIAL_EQUIPMENT: Record<string, TrialEquipmentDefinition> = {
   'xuanwu-hammer-common': item({
     id: 'xuanwu-hammer-common',
     name: '玄岩重锤',
@@ -99,6 +100,9 @@ export const TRIAL_EQUIPMENT: Record<string, TrialEquipmentDefinition> = {
     description: '让已探索道路的轮廓更加清晰。', scope: '普通迷宫生效；每周排名迷宫不增加视野。',
   }),
 };
+
+export const BUNDLED_EQUIPMENT = buildEquipmentCatalog(LEGACY_TRIAL_EQUIPMENT);
+export const TRIAL_EQUIPMENT: Record<string, TrialEquipmentDefinition> = { ...BUNDLED_EQUIPMENT };
 
 export const RARITY_LABELS = {
   common: '普通',

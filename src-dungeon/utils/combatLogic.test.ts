@@ -51,10 +51,10 @@ describe('伤害计算', () => {
     expect(resolveEnemyIntent({ type: 'heavy', power: 61 }, enemy, player, 0).damageTaken).toBe(36);
   });
 
-  it('元素克制在扣防后生效', () => {
+  it('伙伴元素不再影响扣防后的基础伤害', () => {
     const enemy = makePet('fire', 41, 27, 8);
     const player = makePet('wind', 37, 25, 10);
-    expect(resolveEnemyIntent({ type: 'attack', power: 41 }, enemy, player, 0).damageTaken).toBe(20);
+    expect(resolveEnemyIntent({ type: 'attack', power: 41 }, enemy, player, 0).damageTaken).toBe(16);
   });
 
   it('护盾可以完全或部分吸收伤害', () => {

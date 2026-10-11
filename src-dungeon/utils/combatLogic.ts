@@ -44,9 +44,9 @@ export function calculateDamage(
   comboCount: number = 0
 ): number {
   const raw = attacker.attack * skillMultiplier - defender.defense;
-  const elementMultiplier = getElementMultiplier(attacker.element, defender.element);
   const comboMultiplier = 1 + Math.min(comboCount * 0.1, 0.5);
-  const damage = Math.max(1, Math.floor(raw * elementMultiplier * answerQuality * comboMultiplier));
+  // Elements belong to equipment damage now; the companion element only drives traits.
+  const damage = Math.max(1, Math.floor(raw * answerQuality * comboMultiplier));
   return damage;
 }
 
@@ -131,19 +131,19 @@ export function generateEnemyIntent(
  */
 export function resolveEnemyIntent(
   intent: EnemyIntent,
-  enemy: CombatPet,
+  _enemy: CombatPet,
   player: CombatPet,
-  shield: number
+  shield: number,
+  equipmentMultiplier: number = 1
 ): { damageTaken: number; remainingShield: number; blocked: boolean } {
   if (intent.type === 'defend') {
     return { damageTaken: 0, remainingShield: shield, blocked: false };
   }
 
   // 敌方伤害先扣除玩家防御力（与 calculateDamage 公式一致：attack - defense），
-  // 再乘元素克制。修复前直接用 intent.power 跳过防御，导致后期副本被一击秒杀。
+  // 防具克制减伤先于护盾；伙伴元素不再叠加第二次克制。
   const rawDamage = Math.max(1, intent.power - player.defense);
-  const elementMultiplier = getElementMultiplier(enemy.element, player.element);
-  const damageBeforeShield = Math.max(1, Math.floor(rawDamage * elementMultiplier));
+  const damageBeforeShield = Math.max(1, Math.floor(rawDamage * equipmentMultiplier + 1e-9));
 
   if (shield >= damageBeforeShield) {
     return {

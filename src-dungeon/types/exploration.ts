@@ -1,5 +1,20 @@
 export type ExplorationEventType = 'seal' | 'clue' | 'route' | 'treasure' | 'equipment' | 'merchant' | 'trap' | 'exit';
 export type EquipmentRarity = 'common' | 'rare' | 'epic' | 'legendary';
+export type EquipmentElement = 'earth' | 'fire' | 'wind' | 'water' | 'light';
+export type AcquisitionSource = 'legacy' | 'shop' | 'exploration' | 'reward';
+
+export interface EquipmentCombatEffects {
+  initialShieldRatio: number;
+  correctShieldRatio: number;
+  correctShieldLimit: number;
+  nextAttackBoost: number;
+  firstHpHitReduction: number;
+  shieldedElementBoost: number;
+  comboThreeBoost: number;
+  comboThreeLimit: number;
+  lowHpShieldRatio: number;
+  lowHpHealRatio: number;
+}
 export type ExplorationRegionId = 1 | 2 | 3;
 export type ExplorationRouteChoice = 'safe' | 'challenge';
 
@@ -59,6 +74,11 @@ export interface TrialEquipmentDefinition {
   icon: string;
   description: string;
   scope: string;
+  price?: number;
+  attack?: number;
+  defense?: number;
+  combatEffects?: Partial<EquipmentCombatEffects>;
+  shopAvailable?: boolean;
 }
 
 export interface OwnedTrialItem {
@@ -66,4 +86,8 @@ export interface OwnedTrialItem {
   definitionId: string;
   acquiredAt: number;
   quantity: number;
+  upgradeLevel?: number;
+  purchasePrice?: number;
+  investedCoins?: number;
+  acquisitionSource?: AcquisitionSource;
 }

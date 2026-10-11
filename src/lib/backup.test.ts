@@ -5,6 +5,7 @@ import {
   selectBackupsToRemove, shouldIncludeSqliteKey,
   type BackupFile,
 } from './backup';
+import { useTrialEquipmentStore } from '../../src-dungeon/stores/trialEquipmentStore';
 
 function makeLocalStorage() {
   const data = new Map<string, string>();
@@ -240,6 +241,23 @@ describe('summarizeBackup', () => {
 });
 
 describe('applyBackup', () => {
+  it('强化等级、实际成本、晶石、领取标记与装备位置随备份迁移', async () => {
+    const equipment = {
+      schemaVersion: 2,
+      ownedItems: [{ id: 'weapon', definitionId: 'fire-weapon-legendary', quantity: 1, upgradeLevel: 3, purchasePrice: 950, investedCoins: 315, acquisitionSource: 'shop' },
+        { id: 'armor', definitionId: 'xuanwu-armor-epic', quantity: 1 }, { id: 'artifact', definitionId: 'compass-rare', quantity: 1 }],
+      equippedWeaponId: 'weapon', equippedArmorId: 'armor', equippedArtifactId: 'artifact',
+      materials: { 'fire-crystal': 12 }, materialClaims: ['map-1'], soulFragments: 6,
+    };
+    const result = await applyBackup(makeBackup({ localStorage: {
+      csp_pet_data: JSON.stringify({ ownedPets: [], coins: 1888, trialCoinSettlements: ['battle-1'] }),
+      csp_trial_equipment_v1: JSON.stringify(equipment),
+    }, sqlite: {}, sprites: {} }));
+    expect(result.lsCount).toBe(2);
+    useTrialEquipmentStore.getState().load();
+    expect(JSON.parse(localStorage.getItem('csp_trial_equipment_v1')!)).toMatchObject({ ...equipment, ownedItems: expect.arrayContaining([expect.objectContaining(equipment.ownedItems[0])]) });
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!).trialCoinSettlements).toEqual(['battle-1']);
+  });
   it('repairs conflicting course progress in both persistence copies', async () => {
     const result = await applyBackup(makeBackup({
       localStorage: {

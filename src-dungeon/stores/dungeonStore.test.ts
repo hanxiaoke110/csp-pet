@@ -57,6 +57,7 @@ function makeProgress(overrides: Partial<DungeonProgress> = {}): DungeonProgress
 
 function makeBattle(overrides: Partial<BattleState> = {}): BattleState {
   return {
+    battleId: crypto.randomUUID(),
     dungeonId: 'dungeon-01',
     stageId: 'dungeon-01-stage-01',
     questions: [],
@@ -115,10 +116,57 @@ beforeEach(() => {
     trialInventory: { hintTickets: 0, healingPotions: 0, ownedCosmetics: [], equippedTitle: null, equippedAvatarFrame: null },
     _firstClears: {},
   });
-  usePetStore.setState({ coins: 0 });
+  usePetStore.setState({ coins: 0, trialCoinSettlements: [] });
 });
 
 describe('智子试炼场核心结算', () => {
+  it.each([['D', 40], ['C', 45], ['B', 50], ['A', 60], ['S', 75], ['SS', 90]])('重打%s评级保底%s金币，周经验次数不限制金币', (rating, minimum) => {
+    useDungeonStore.setState({ battle: makeBattle({ rating: String(rating) }), currentBattleEarnsRewards: false,
+      dungeonProgress: [makeProgress({ completedStages: 1 })] });
+    const result = useDungeonStore.getState().finalizeBattle('dungeon-01', false);
+    expect(result?.petCoinsEarned).toBeGreaterThanOrEqual(Number(minimum));
+    expect(result?.expEarned).toBe(0);
+    expect(result?.rewardsEligible).toBe(false);
+  });
+
+  it('同一结算重复回调及重新加载后的重复回调不能再次发金币', async () => {
+    const battle = makeBattle({ rating: 'SS' });
+    useDungeonStore.setState({ battle, dungeonProgress: [makeProgress()] });
+    expect(useDungeonStore.getState().finalizeBattle('dungeon-01', false)?.petCoinsEarned).toBeGreaterThan(0);
+    const coins = usePetStore.getState().coins;
+    expect(useDungeonStore.getState().finalizeBattle('dungeon-01', false)).toBeNull();
+    usePetStore.setState({ trialCoinSettlements: [] });
+    await usePetStore.getState().load();
+    useDungeonStore.setState({ battle });
+    expect(useDungeonStore.getState().finalizeBattle('dungeon-01', false)).toBeNull();
+    expect(usePetStore.getState().coins).toBe(coins);
+  });
+
+  it('未作答、未结束、失败和非法金额不发保底金币', () => {
+    for (const changes of [{ correctCount: 0, wrongCount: 0 }, { isFinished: false }, { isWon: false }]) {
+      useDungeonStore.setState({ battle: makeBattle(changes) });
+      useDungeonStore.getState().finalizeBattle('dungeon-01', false);
+      expect(usePetStore.getState().coins).toBe(0);
+    }
+    for (const amount of [-1, Infinity, NaN, .5]) expect(useDungeonStore.getState().grantPetCoins(amount).granted).toBe(0);
+  });
+
+  it('钱包写入失败保留待结算战斗，重试成功后才发一次金币', () => {
+    useDungeonStore.setState({ battle: makeBattle({ rating: 'S' }), dungeonProgress: [makeProgress({ completedStages: 1 })] });
+    const original = localStorage.setItem.bind(localStorage);
+    let writes = 0;
+    const mock = vi.spyOn(localStorage, 'setItem').mockImplementation((key, value) => {
+      if (key === 'csp_pet_data' && ++writes === 2) throw new Error('disk full');
+      original(key, value);
+    });
+    expect(useDungeonStore.getState().finalizeBattle('dungeon-01', false)).toBeNull();
+    expect(usePetStore.getState().coins).toBe(0);
+    expect(usePetStore.getState().trialCoinSettlements).toHaveLength(0);
+    expect(useDungeonStore.getState().battle).not.toBeNull();
+    mock.mockRestore();
+    expect(useDungeonStore.getState().finalizeBattle('dungeon-01', false)?.petCoinsEarned).toBeGreaterThanOrEqual(75);
+    expect(usePetStore.getState().trialCoinSettlements).toHaveLength(1);
+  });
   it('全部 23 个成就在达成条件后都能触发，且不会重复发放', () => {
     const perfectProgress = Array.from({ length: 8 }, (_, index) => makeProgress({
       dungeonId: `dungeon-${String(index + 1).padStart(2, '0')}`,
@@ -264,7 +312,7 @@ describe('智子试炼场核心结算', () => {
     expect(state.lastBattleResult?.petCoinsEarned).toBeGreaterThan(0);
   });
 
-  it('重打已通关关卡不发奖励不推进进度，但能提升最好评级', () => {
+  it('经验次数用完仍获得评级金币，不推进已通关进度但能提升评级', () => {
     useDungeonStore.setState({
       player: makePlayer({ exp: 40, gold: 90 }),
       battle: makeBattle({ rating: 'S', correctCount: 5 }),
@@ -282,7 +330,7 @@ describe('智子试炼场核心结算', () => {
     expect(state.dungeonProgress[0].bestScore).toBe(5);
     expect(state.dungeonProgress[0].bestRating).toBe('S');
     expect(state.lastBattleResult?.expEarned).toBe(0);
-    expect(state.lastBattleResult?.goldEarned).toBe(0);
+    expect(state.lastBattleResult?.goldEarned).toBeGreaterThanOrEqual(75);
     expect(state.lastBattleResult?.rewardsEligible).toBe(false);
   });
 
@@ -354,14 +402,14 @@ describe('智子试炼场核心结算', () => {
     expect(state.weeklyChallenges.limit).toBe(before.limit + 1);
   });
 
-  it('桌宠金币奖励受每日上限限制', () => {
+  it('桌宠金币奖励不再受每日上限限制', () => {
     const first = useDungeonStore.getState().grantPetCoins(25);
     const second = useDungeonStore.getState().grantPetCoins(25);
 
     expect(first.granted).toBe(25);
-    expect(second.granted).toBe(5);
-    expect(second.dailyRemaining).toBe(0);
-    expect(useDungeonStore.getState().petCoinRewards.dailyGranted).toBe(30);
+    expect(second.granted).toBe(25);
+    expect(second.dailyRemaining).toBeNull();
+    expect(useDungeonStore.getState().petCoinRewards.dailyGranted).toBe(50);
   });
 
   it('通用金币可以购买并消耗提示券', () => {

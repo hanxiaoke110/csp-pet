@@ -22,6 +22,8 @@ import { loadWebPet } from '../../utils/webPet';
 import { formatCppCode } from '../../utils/codeFormat';
 import { isWorkshopPet, loadWorkshopThumbUrl } from '../../utils/petPreview';
 import { getEquippedDefinitionId } from '../../utils/trialEquipmentEffects';
+import { TRIAL_EQUIPMENT } from '../../data/explorationItems';
+import { loadEquipmentCatalog } from '../../services/equipmentCatalogService';
 import FableCard from '../shared/FableCard';
 import KnowledgePointHelp from '../../../src/components/shared/KnowledgePointHelp';
 import fables from '../../data/fables.json';
@@ -282,6 +284,8 @@ export default function BattleScreen() {
   const [activeFable, setActiveFable] = useState<typeof fables[0] | null>(null);
   const [hintRevealed, setHintRevealed] = useState(false);
   const [battleNotice, setBattleNotice] = useState<string | null>(null);
+  const [settlementPending, setSettlementPending] = useState(false);
+  const battleIdRef = useRef('');
   const [noticeSkillId, setNoticeSkillId] = useState<string | null>(null);
   const challengeConsumedRef = useRef(false);
 
@@ -349,7 +353,7 @@ export default function BattleScreen() {
       // A replay can consume a normal or purchased reward attempt. Otherwise the
       // paid "+1 reward attempt" becomes unusable after a student clears a stage.
       const earnsRewards = s.canEarnRewards();
-      useDungeonStore.setState({ currentBattleEarnsRewards: earnsRewards });
+      useDungeonStore.setState({ currentBattleEarnsRewards: earnsRewards, lastBattleResult: null });
 
       // 工坊宠物：异步加载 AppData 的 thumb 缩略图作为 preview（普通宠物用 public preview）
       let playerCfg = playerConfig;
@@ -364,8 +368,16 @@ export default function BattleScreen() {
 
       // 装备存档是独立模块；进入战斗前同步装载并把稳定的定义 ID 交给 Phaser。
       // 这样切换装备后下一场立即生效，也不会把一次性的战斗状态写回背包。
+      await loadEquipmentCatalog();
+      if (cancelled) return;
       useTrialEquipmentStore.getState().load();
       const equipmentState = useTrialEquipmentStore.getState();
+      const weapon = equipmentState.ownedItems.find(item => item.id === equipmentState.equippedWeaponId);
+      const armor = equipmentState.ownedItems.find(item => item.id === equipmentState.equippedArmorId);
+      playerCfg = { ...playerCfg,
+        attack: playerCfg.attack + (weapon ? TRIAL_EQUIPMENT[weapon.definitionId]?.attack || 0 : 0),
+        defense: playerCfg.defense + (armor ? TRIAL_EQUIPMENT[armor.definitionId]?.defense || 0 : 0),
+      };
 
       const initData: BattleInitData = {
         dungeonId,
@@ -379,6 +391,8 @@ export default function BattleScreen() {
         dungeonBgImage: dungeon?.bgImage,
         dungeonName: dungeon?.name || '潜龙秘境',
         trialLoadout: {
+          weaponLevel: weapon?.upgradeLevel || 0,
+          armorLevel: armor?.upgradeLevel || 0,
           weaponId: getEquippedDefinitionId(equipmentState.ownedItems, equipmentState.equippedWeaponId),
           armorId: getEquippedDefinitionId(equipmentState.ownedItems, equipmentState.equippedArmorId),
           artifactId: getEquippedDefinitionId(equipmentState.ownedItems, equipmentState.equippedArtifactId),
@@ -394,6 +408,7 @@ export default function BattleScreen() {
         usedSkillIds: [],
         startTime: Date.now(),
       };
+      battleIdRef.current = crypto.randomUUID();
 
       const game = createBattleGame(containerRef.current!, initData, (event, data) => {
         handlePhaserEvent(event, data);
@@ -599,6 +614,10 @@ export default function BattleScreen() {
     useDungeonStore.setState({
       view: isBoss ? 'boss' : 'battle',
       battle: {
+        battleId: battleIdRef.current,
+        equipmentDamageAdded: result.equipmentDamageAdded,
+        equipmentDamagePrevented: result.equipmentDamagePrevented,
+        equipmentTriggers: result.equipmentTriggers,
         dungeonId: dungeonId!,
         stageId: stageId || 'boss',
         questions: [],
@@ -629,7 +648,12 @@ export default function BattleScreen() {
       },
     });
 
-    store.finalizeBattle(dungeonId!, isBoss);
+    const settled = store.finalizeBattle(dungeonId!, isBoss);
+    if (!settled) {
+      setSettlementPending(true);
+      setBattleNotice('结算暂未保存，尚未重复发放奖励。请重试结算；不要清除应用数据。');
+      return;
+    }
     navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
     store.setView('reward');
   }, [dungeonId, stageId, isBoss, playerConfig, enemyConfig, store, navigate]);
@@ -648,6 +672,13 @@ export default function BattleScreen() {
       {battleNotice && (
         <div style={{ position: 'fixed', top: 84, left: '50%', transform: 'translateX(-50%)', zIndex: 1002, padding: '10px 16px', background: '#3b1d1d', border: '1px solid #ef4444', color: '#fecaca', fontSize: 13 }}>
           {battleNotice}
+          {settlementPending && <button className="pixel-btn" onClick={() => {
+            const settled = useDungeonStore.getState().finalizeBattle(dungeonId!, isBoss);
+            if (!settled) { setBattleNotice('结算仍未保存，请检查本机可用空间后重试。'); return; }
+            setSettlementPending(false);
+            navigate(isBoss ? `/reward/${dungeonId}` : `/reward/${dungeonId}?stage=${stageId}`);
+            useDungeonStore.getState().setView('reward');
+          }}>重试结算</button>}
           {noticeSkillId && (
             <button onClick={() => void retryFailedSkill()} style={{ marginLeft: 12, border: 0, background: '#ef4444', color: '#fff', cursor: 'pointer', padding: '3px 10px', borderRadius: 4 }}>重试</button>
           )}

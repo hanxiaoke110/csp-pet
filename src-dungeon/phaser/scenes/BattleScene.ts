@@ -26,6 +26,7 @@ import { SKILLS } from '../../data/skills';
 import type { SkillDefinition } from '../../data/skills';
 import { TRIAL_EQUIPMENT } from '../../data/explorationItems';
 import { getTrialCombatProfile, type TrialCombatProfile } from '../../utils/trialEquipmentEffects';
+import { applyWeaponDamage, armorDamageMultiplier, type CombatEquipment } from '../../utils/equipmentCombat';
 
 
 const MAX_ENERGY = 5;
@@ -74,6 +75,10 @@ export class BattleScene extends Phaser.Scene {
   private comboBoostTriggers = 0;
   private firstHpReductionUsed = false;
   private lowHpRecoveryUsed = false;
+  private weapon?: CombatEquipment;
+  private armor?: CombatEquipment;
+  private equipmentDamageAdded = 0;
+  private equipmentDamagePrevented = 0;
 
   constructor() {
     super({ key: 'BattleScene' });
@@ -90,6 +95,12 @@ export class BattleScene extends Phaser.Scene {
     this.comboBoostTriggers = 0;
     this.firstHpReductionUsed = false;
     this.lowHpRecoveryUsed = false;
+    const weapon = TRIAL_EQUIPMENT[data.initData.trialLoadout?.weaponId || ''];
+    const armor = TRIAL_EQUIPMENT[data.initData.trialLoadout?.armorId || ''];
+    this.weapon = weapon?.category === 'weapon' && weapon.element ? { element: weapon.element, level: data.initData.trialLoadout?.weaponLevel || 0 } : undefined;
+    this.armor = armor?.category === 'armor' && armor.element ? { element: armor.element, level: data.initData.trialLoadout?.armorLevel || 0 } : undefined;
+    this.equipmentDamageAdded = 0;
+    this.equipmentDamagePrevented = 0;
     const initialShield = Math.max(0, Math.floor(data.initData.playerPet.maxHp * this.equipmentProfile.initialShieldRatio));
 
     // 初始化战斗快照
@@ -372,7 +383,7 @@ export class BattleScene extends Phaser.Scene {
 
         this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {
           this.playSkillEffect(skill, () => {
-            this.applyDamageToEnemy(damage, isCorrect ? 'normal' : 'miss');
+            this.applyEquippedDamageToEnemy(damage, isCorrect ? 'normal' : 'miss');
             this.enemyPet.playHitAnimation();
 
             if (isCorrect) {
@@ -400,7 +411,7 @@ export class BattleScene extends Phaser.Scene {
 
         this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {
           this.playSkillEffect(skill, () => {
-            this.applyDamageToEnemy(damage, isCorrect ? (isCrit ? 'crit' : 'normal') : 'miss');
+            this.applyEquippedDamageToEnemy(damage, isCorrect ? (isCrit ? 'crit' : 'normal') : 'miss');
             this.enemyPet.playHitAnimation();
             this.finishPlayerTurn();
           });
@@ -430,14 +441,12 @@ export class BattleScene extends Phaser.Scene {
 
   private createElementRelationLabel(): void {
     const { width } = this.scale;
-    const playerElement = this.getElementInfo(this.initData.playerPet.element);
     const enemyElement = this.getElementInfo(this.initData.enemyPet.element);
-    const relation = getElementRelation(this.initData.playerPet.element, this.initData.enemyPet.element);
-    const relationText = relation === 'advantage' ? '克制' : relation === 'disadvantage' ? '被克制' : '势均力敌';
-    const color = relation === 'advantage' ? '#6ee7b7' : relation === 'disadvantage' ? '#fca5a5' : '#cbd5e1';
-    this.add.text(width / 2, 94, `${playerElement.icon}${playerElement.name}  ${relationText}  ${enemyElement.icon}${enemyElement.name}`, {
+    const attack = this.weapon ? `${this.getElementInfo(this.weapon.element).name}武器${getElementRelation(this.weapon.element, this.initData.enemyPet.element) === 'advantage' ? '克制 +20%' : '普通攻击'}` : '未装备武器';
+    const defense = this.armor ? `${this.getElementInfo(this.armor.element).name}防具${armorDamageMultiplier(this.armor, this.initData.enemyPet.element) < 1 ? '克制减伤' : '普通防御'}` : '未装备防具';
+    this.add.text(width / 2, 94, `${attack} · ${defense} · 敌人${enemyElement.icon}${enemyElement.name}`, {
       fontSize: '13px',
-      color,
+      color: '#6ee7b7',
       fontStyle: 'bold',
       stroke: '#000000',
       strokeThickness: 3,
@@ -665,8 +674,12 @@ export class BattleScene extends Phaser.Scene {
         intent,
         this.toCombatPet(this.initData.enemyPet, this.state.enemyHp),
         this.toCombatPet(this.initData.playerPet, this.state.playerHp),
-        this.state.shield
+        this.state.shield,
+        armorDamageMultiplier(this.armor, this.initData.enemyPet.element)
       );
+      const incoming = Math.max(1, intent.power - this.initData.playerPet.defense);
+      const reduced = Math.max(1, Math.floor(incoming * armorDamageMultiplier(this.armor, this.initData.enemyPet.element) + 1e-9));
+      this.equipmentDamagePrevented += incoming - reduced;
 
       this.state.shield = remainingShield;
       this.updateEquipmentStatus();
@@ -677,7 +690,9 @@ export class BattleScene extends Phaser.Scene {
       } else {
         let finalDamage = damageTaken;
         if (!this.firstHpReductionUsed && this.equipmentProfile.firstHpHitReduction > 0 && finalDamage > 0) {
+          const before = finalDamage;
           finalDamage = Math.max(1, Math.floor(finalDamage * (1 - this.equipmentProfile.firstHpHitReduction)));
+          this.equipmentDamagePrevented += before - finalDamage;
           this.firstHpReductionUsed = true;
           this.updateEquipmentStatus();
           this.showTraitText(`护甲减伤 ${Math.round(this.equipmentProfile.firstHpHitReduction * 100)}%`, '#93c5fd');
@@ -701,6 +716,13 @@ export class BattleScene extends Phaser.Scene {
     this.state.enemyHp = Math.max(0, this.state.enemyHp - cappedDamage);
     this.enemyHpBar.updateHp(this.state.enemyHp);
     this.showDamageText(this.enemyPet.x, this.enemyPet.y - 80, `-${cappedDamage}`, type);
+  }
+
+  private applyEquippedDamageToEnemy(base: number, type: 'normal' | 'crit' | 'miss'): void {
+    const damage = applyWeaponDamage(base, this.weapon, this.initData.enemyPet.element);
+    this.equipmentDamageAdded += Math.max(0,
+      Math.min(this.state.enemyHp, this.capPlayerDamage(damage)) - Math.min(this.state.enemyHp, this.capPlayerDamage(base)));
+    this.applyDamageToEnemy(damage, type);
   }
 
   private capPlayerDamage(damage: number): number {
@@ -754,6 +776,9 @@ export class BattleScene extends Phaser.Scene {
 
     this.time.delayedCall(1200, () => {
       this.onEvent('battleEnd', {
+        equipmentDamageAdded: this.equipmentDamageAdded,
+        equipmentDamagePrevented: this.equipmentDamagePrevented,
+        equipmentTriggers: { '答对护盾': this.correctShieldTriggers, '答对增伤': this.attackBoostTriggers, '三连追击': this.comboBoostTriggers, '首次护甲减伤': Number(this.firstHpReductionUsed), '低血恢复': Number(this.lowHpRecoveryUsed) },
         isWon,
         expEarned: 0, // 由 React 根据战斗表现计算
         goldEarned: 0,

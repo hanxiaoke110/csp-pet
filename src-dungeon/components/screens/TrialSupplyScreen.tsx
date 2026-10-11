@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { usePetStore } from '../../../src/stores/petStore';
 import DungeonConfirmModal from '../shared/DungeonConfirmModal';
+import EquipmentWorkshop from './EquipmentWorkshop';
 
 const ITEMS = [
   { id: 'hint-ticket' as const, icon: '💡', name: '知识提示券', cost: 18, description: '战斗答题前查看一次解题方向。' },
@@ -73,6 +74,7 @@ export default function TrialSupplyScreen() {
             );
           })}
         </div>
+        <EquipmentWorkshop />
         {notice && (
           <div style={{ textAlign: 'center', margin: '16px auto 0', maxWidth: 320, padding: '8px 12px', background: 'rgba(0,0,0,0.55)', border: '1px solid var(--gold-dark)', color: 'var(--gold)', fontSize: '12px', borderRadius: 6 }}>
             {notice}

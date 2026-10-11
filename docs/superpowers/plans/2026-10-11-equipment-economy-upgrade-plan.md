@@ -12,6 +12,25 @@
 
 ## File Structure
 
+## Execution progress — 2026-10-11
+
+- [x] 20 five-element weapons and 15 buyable armors; old common armor retained as a compatibility item (36 total weapon/armor definitions).
+- [x] Schema v2 ownership, saved purchase/upgrade cost, exploration crystals, and v1/backup migration.
+- [x] Buy/upgrade/dismantle transactions with rollback and interrupted-transaction recovery; only real coin expenditure refunds 80%, no material refund.
+- [x] Weapon +5%/+5% per level, advantage ×120%; countering armor -10%/-4% per level, before shields. Flat rarity attack/defense and legacy special effects connected to Phaser.
+- [x] Battle UUIDs and wallet-side atomic coin/receipt snapshot; ratings D40/C45/B50/A60/S75/SS90 plus first-clear/Boss bonuses. Weekly EXP/rank attempt limits remain independent of uncapped coins.
+- [x] All 40 mazes have deterministic crystal rewards with per-map claim receipts. Existing completed maps are not retroactively replayed or reset.
+- [x] Equipment shop/inventory, five-element filters, click-accessible detail/compare/upgrade/refund explanations, confirmations, load-before-spend guard and settlement retry UI.
+- [x] Trusted static catalog loader, effect whitelist/bounds, bundled/offline fallback, five-minute request coalescing, actual-client-rule build validator and 35-entry source catalog.
+- [x] Unit, legacy, transaction failure, backup and SSR UI tests; actual localhost browser filtering/purchase/equip smoke check.
+- [ ] Bespoke art for the new weapon/armor silhouettes: current new definitions temporarily reuse existing icons. This is functional staging, not final release art.
+- [ ] New collector-card batch remains in its separate plan; no new cards published in this batch.
+- [ ] Production API/static deployment, full native battle smoke check and Windows old-user upgrade smoke test remain pending. No desktop release performed.
+
+Implementation adjustments: existing combat already has tested named effect primitives, so the catalog uses a bounded whitelist of those primitives rather than a second effect engine. Transactions use the existing `csp_trial_equipment_v1` key with `schemaVersion: 2`, plus a recoverable journal; old IDs are not deleted. Old test expectations for permanent coin caps and removal of unknown online ownership records were intentionally revised. The catalog generator is initial-seed only; subsequent online price/effect edits should not be overwritten by rerunning it.
+
+### Planned files
+
 - Modify `src-dungeon/types/exploration.ts`: catalog, ownership, materials, acquisition, and effect types.
 - Create `src-dungeon/data/equipmentCatalog.ts`: bundled 20-weapon/15-armor definitions.
 - Create `src-dungeon/data/equipmentCatalog.test.ts`: cardinality, IDs, price, elements, and effect validation.

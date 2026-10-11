@@ -14,6 +14,7 @@ dist-ssr
 dist-dungeon
 .cloudflare-static
 cloud-assets-source/*
+!cloud-assets-source/equipment/
 !cloud-assets-source/collector-cards/
 !cloud-assets-source/collector-cards/**
 !cloud-assets-source/wardrobe/

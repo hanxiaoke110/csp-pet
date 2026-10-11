@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
+import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
 import type { OwnedPet, PetElement, PetTier, RecycledPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS, TIER_PRICES } from '../types/pet';
 import type { ShopItem } from '../types/pet';
@@ -16,6 +17,8 @@ interface PetState {
   ownedPets: OwnedPet[];
   coins: number;
   maxCoinBalance: number;
+  trialCoinSettlements: string[];
+  grantTrialCoins: (battleId: string, amount: number) => boolean;
   foods: Record<string, number>;
   expPool: number;
   weeklyPassiveClaimWeek: string;
@@ -270,6 +273,24 @@ export const usePetStore = create<PetState>((set, get) => ({
   ownedPets: [],
   coins: 200,
   maxCoinBalance: 200,
+  trialCoinSettlements: [],
+  grantTrialCoins: (battleId, amount) => {
+    const state = get();
+    if (!battleId || state.trialCoinSettlements.includes(battleId) || !Number.isSafeInteger(amount) || amount <= 0 || !Number.isSafeInteger(state.coins + amount)) return false;
+    const receipts = [...state.trialCoinSettlements, battleId].slice(-256);
+    // Coins and settlement receipt share one atomic localStorage snapshot.
+    state.save();
+    try {
+      const saved = JSON.parse(localStorage.getItem('csp_pet_data') || 'null');
+      if (!saved || !Array.isArray(saved.ownedPets)) return false;
+      const coins = state.coins + amount;
+      const next = JSON.stringify({ ...saved, coins, maxCoinBalance: Math.max(state.maxCoinBalance, coins), trialCoinSettlements: receipts, savedAt: new Date().toISOString() });
+      localStorage.setItem('csp_pet_data', next);
+      set({ coins, trialCoinSettlements: receipts });
+      get().save();
+      return true;
+    } catch { return false; }
+  },
   foods: { basic: 3 },
   pendingExp: 0,
   pendingCoins: 0,
@@ -968,13 +989,14 @@ export const usePetStore = create<PetState>((set, get) => ({
   checkCollectionRewards: () => {},
 
   save: () => {
+    const trialCoinSettlements = get().trialCoinSettlements;
     const { ownedPets, activePetId, coins, maxCoinBalance: storedMaxCoinBalance, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
     const maxCoinBalance = Math.max(
       Number.isFinite(storedMaxCoinBalance) ? storedMaxCoinBalance : 0,
       coins,
     );
     if (maxCoinBalance !== storedMaxCoinBalance) set({ maxCoinBalance });
-    const data = { savedAt: new Date().toISOString(), ownedPets, activePetId, coins, maxCoinBalance, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
+    const data = { savedAt: new Date().toISOString(), trialCoinSettlements, ownedPets, activePetId, coins, maxCoinBalance, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds };
     dualSave('pet_data', 'csp_pet_data', JSON.stringify(data));
     emit('pet-data-sync', data).catch(() => {});
     // save() 只管数据同步，不管窗口显隐
@@ -983,10 +1005,12 @@ export const usePetStore = create<PetState>((set, get) => ({
 
   load: async () => {
     try {
+      recoverEquipmentTransaction();
       const raw = await dualLoad('pet_data', 'csp_pet_data');
       if (!raw) return false;
       const data = JSON.parse(raw);
       if (Array.isArray(data.ownedPets)) {
+        set({ trialCoinSettlements: Array.isArray(data.trialCoinSettlements) ? data.trialCoinSettlements.filter((id: unknown) => typeof id === 'string').slice(-256) : [] });
         // Repair legacy fields while keeping each student's existing pet identity intact.
         const migrated = data.ownedPets.map((p: any) => {
           const config = getPetConfig(p.speciesId);
