@@ -29,3 +29,27 @@ export interface LearningResourcesData {
   updated?: string;
   resources: LearningResource[];
 }
+
+export type LearningCatalogStage = 'C1' | 'C2' | 'C3' | 'C4';
+export type LearningCatalogStatus = 'ready' | 'coming_soon' | 'hidden';
+
+export interface LearningCatalogLesson {
+  id: string;
+  lessonNo: number;
+  title: string;
+  stage: LearningCatalogStage;
+  description: string;
+  tags: string[];
+  feishuUrl: string;
+  status: LearningCatalogStatus;
+  requiresClassCode: boolean;
+  updatedAt: string;
+}
+
+export interface LearningCatalogData {
+  schemaVersion: 1;
+  catalogVersion: number;
+  updatedAt: string;
+  navigationUrl?: string;
+  lessons: LearningCatalogLesson[];
+}
