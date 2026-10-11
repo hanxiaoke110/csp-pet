@@ -10,6 +10,20 @@
 
 ---
 
+## Execution progress — 2026-10-11
+
+- [x] Training camp runtime disabled, legacy resource balances preserved, daily completion keys migrated to weekly keys.
+- [x] Training camp controls and guide copy removed.
+- [x] Wish self-deletion and monthly quota preservation implemented.
+- [x] Server-side 14-day vote cooldown implemented with atomic D1 batch; migration and rollback tested with real SQLite.
+- [x] Wish Wall delete confirmation, cooldown label, explicit-success ticket consumption, and duplicate-click guard implemented.
+- [x] Maze recovery paths tested across all 40 maps with 0/1/2/3 resolved seals.
+- [x] Exit guidance and safe relocation implemented; invalid or locked-region legacy positions repaired on load.
+- [x] Complete Vitest suite, TypeScript check, desktop frontend build and dungeon build passed.
+- [ ] Production API deployment and Windows installer smoke test pending the coordinated release.
+
+Implementation corrections to the original examples: this repository stores pets via `dualLoad`/`dualSave`, not `pet-storage`; the actual availability method is `canDoSuperChallenge`; the equipment store's existing test lives in `explorationStore.test.ts`. Tests use the actual interfaces. Wish API tests are `.mjs` so Node's built-in SQLite can validate real SQL without adding a dependency. The maze store exposes validated `recoverToSafePath(map)` rather than arbitrary relocation coordinates.
+
 ## File Structure
 
 - Modify `src/stores/petStore.ts`: permanently disable camp activation, multipliers, and food claims while preserving old backup parsing.

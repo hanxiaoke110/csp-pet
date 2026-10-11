@@ -1,5 +1,5 @@
 import { DatabaseSync } from 'node:sqlite';
-import { beforeEach, afterEach, describe, expect, it } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import worker from './api.js';
 
 let sql;
@@ -58,6 +58,30 @@ async function request(path, method = 'GET', body) {
 const vote = () => request('/api/vote', 'POST', { wish_id: 7, device_hash: 'voter', class_code: 'CLASS1' });
 
 describe('许愿所有权与14天冷却', () => {
+  it('旧永久投票锁迁移为冷却，保留历史与排行榜票数', async () => {
+    sql.exec(`DROP TABLE wish_vote_cooldowns;
+      UPDATE meta SET value='11' WHERE key='schema_version';
+      CREATE UNIQUE INDEX idx_votes_unique ON votes(wish_id,device_hash);
+      INSERT INTO votes(wish_id,device_hash,class_code) VALUES(7,'voter','CLASS1');
+      UPDATE wishes SET votes=1 WHERE id=7;`);
+    vi.resetModules();
+    const fresh = (await import('./api.js')).default;
+    const response = await fresh.fetch(new Request('https://api.cspstudy.top/api/vote', {
+      method: 'POST', body: JSON.stringify({ wish_id: 7, device_hash: 'voter', class_code: 'CLASS1' }),
+    }), { DB: db }, { waitUntil() {} });
+    expect(response.status).toBe(409);
+    expect(sql.prepare("SELECT value FROM meta WHERE key='schema_version'").get().value).toBe('12');
+    expect(sql.prepare("SELECT name FROM sqlite_master WHERE name='idx_votes_unique'").get()).toBeUndefined();
+    expect(sql.prepare('SELECT votes FROM wishes WHERE id=7').get().votes).toBe(1);
+    expect(sql.prepare('SELECT COUNT(*) n FROM votes').get().n).toBe(1);
+  });
+
+  it('记录投票失败时整个事务回滚，不占用14天冷却', async () => {
+    sql.exec("CREATE TRIGGER reject_vote BEFORE INSERT ON votes BEGIN SELECT RAISE(ABORT,'test write failure'); END;");
+    expect((await vote()).status).toBe(500);
+    expect(sql.prepare('SELECT COUNT(*) n FROM wish_vote_cooldowns').get().n).toBe(0);
+    expect(sql.prepare('SELECT votes FROM wishes WHERE id=7').get().votes).toBe(0);
+  });
   it('并发请求仅有一次成功，历史与票数同步', async () => {
     const responses = await Promise.all([vote(), vote()]);
     expect(responses.map(r => r.status).sort()).toEqual([200, 409]);
