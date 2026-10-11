@@ -19,6 +19,7 @@ interface LoadVersionedJsonOptions<T> {
   versionTimeoutMs?: number;
   dataTimeoutMs?: number;
   updateJitterMs?: number;
+  onUpdated?: (data: T) => void;
 }
 
 function parseVersion(value: string | null): number {
@@ -70,6 +71,7 @@ function refreshCachedInBackground<T>(
     versionKey: string;
     version: number;
     validate: (data: unknown) => data is T;
+    onUpdated?: (data: T) => void;
   }
 ): void {
   void (async () => {
@@ -79,6 +81,7 @@ function refreshCachedInBackground<T>(
       if (options.validate(remoteData)) {
         writeCached(options.cacheKey, remoteData);
         localStorage.setItem(options.versionKey, String(options.version));
+        options.onUpdated?.(remoteData);
       }
     } catch {
       /* keep the existing cached/bundled data */
@@ -108,6 +111,7 @@ export async function loadVersionedRemoteJson<T>(options: LoadVersionedJsonOptio
     versionTimeoutMs = 8000,
     dataTimeoutMs = 15000,
     updateJitterMs = 120000,
+    onUpdated,
   } = options;
 
   let data = readCached(cacheKey, validate);
@@ -135,6 +139,7 @@ export async function loadVersionedRemoteJson<T>(options: LoadVersionedJsonOptio
           versionKey,
           version: remoteVersion.version,
           validate,
+          onUpdated,
         });
       }
       break;

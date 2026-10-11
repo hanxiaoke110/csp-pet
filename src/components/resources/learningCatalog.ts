@@ -1,3 +1,4 @@
+import { loadVersionedRemoteJson } from '../../utils/versionedRemoteJson';
 import type {
   LearningCatalogData,
   LearningCatalogLesson,
@@ -97,5 +98,17 @@ export function groupCatalogLessons(lessons: LearningCatalogLesson[]): LearningC
     label: CATALOG_STAGE_LABELS[stage],
     lessons: visible.filter(item => item.stage === stage).sort((a, b) => a.lessonNo - b.lessonNo),
   }));
+}
+
+export function loadLearningCatalog(onUpdated?: (data: LearningCatalogData) => void): Promise<LearningCatalogData> {
+  return loadVersionedRemoteJson<LearningCatalogData>({
+    cacheKey: 'csp_learning_catalog_cache_v1',
+    versionKey: 'csp_learning_catalog_version_v1',
+    versionFile: 'learning-catalog.version.json',
+    dataFile: 'learning-catalog.json',
+    bundledUrl: '/course-data/learning-catalog.json',
+    validate: validateLearningCatalog,
+    onUpdated,
+  });
 }
 
