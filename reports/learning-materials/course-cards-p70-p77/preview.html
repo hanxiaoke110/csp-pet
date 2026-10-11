@@ -1,0 +1,581 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P70–P77 课堂资料草稿</title><style>
+  :root{font-family:system-ui,-apple-system,"PingFang SC",sans-serif;color:#233347;background:#f2f5f9}*{box-sizing:border-box}body{margin:0}header{padding:32px 24px;background:#143044;color:#fff}header div{max-width:900px;margin:auto}header p{color:#c6dce8}nav{max-width:948px;margin:24px auto;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap}nav a{background:#fff;border:1px solid #cbd8e4;padding:8px 14px;border-radius:10px;text-decoration:none;color:#175777}main{max-width:948px;margin:auto;padding:0 24px 48px}article{padding:32px;margin:0 0 24px;background:#fff;border:1px solid #dce4ec;border-radius:16px;scroll-margin-top:16px}h1{font-size:28px}h2{font-size:20px;margin-top:32px;border-top:1px solid #e5ebf0;padding-top:20px}h3{font-size:17px;color:#175777}p,li{line-height:1.85}li{margin:6px 0}pre{background:#142b3b;color:#e5f3f8;border-radius:12px;padding:20px;overflow:auto;font-size:14px;line-height:1.65}code{font-family:ui-monospace,monospace}p code,li code{background:#edf4f8;padding:2px 5px;border-radius:4px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:10px;border:1px solid #dce4ec;text-align:left;line-height:1.65}th{background:#eaf3f7}.table-scroll{overflow:auto}a{color:#126488}@media(max-width:600px){main{padding:0 12px 24px}article{padding:18px}h1{font-size:24px}}@media print{header,nav{display:none}body{background:white}article{break-before:page;border:0}pre{white-space:pre-wrap;color:black;background:#eee}h2,h3{break-after:avoid}}
+  </style><header><div><h1>课堂资料 · P70–P77</h1><p>本地草稿预览 · 8 课 · 16 段完整代码 · 63 项运行检查通过 · 尚未发布到飞书或在线目录</p></div></header><nav aria-label="课次导航"><a href="#p70">P70</a><a href="#p71">P71</a><a href="#p72">P72</a><a href="#p73">P73</a><a href="#p74">P74</a><a href="#p75">P75</a><a href="#p76">P76</a><a href="#p77">P77</a></nav><main><article id="p70"><h1>P70｜递归算法（一）</h1>
+<p>阶段：C3 · 进阶。先会函数参数、返回值和条件判断，再读这张卡。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>给递归函数一句清楚的定义，例如 sum(n) 表示 1 到 n 的和。</li><li>找出口、写规模变小的调用、接住返回值。</li><li>分清递进时执行的语句和回归时执行的语句。</li></ul>
+<h2>二、核心知识卡</h2>
+<p>递归不是“重复写同一段代码”，而是把当前问题交给一个规模更小的同类问题。每次调用都有自己的参数；外层调用会等待内层完成。</p>
+<p>三问检查：最小情况直接得到什么答案？每次调用是否更接近出口？内层返回后，外层还要做什么？有出口不等于一定能终止，调用过程必须能到达出口。</p>
+<h3>递进与回归：以 sum(3) 为例</h3>
+<div class="table-scroll"><table>
+<tr><th>时刻</th><th>当前任务</th><th>发生什么</th></tr>
+<tr><td>递进</td><td>sum(3)</td><td>等 sum(2)，再加 3</td></tr>
+<tr><td>递进</td><td>sum(2)</td><td>等 sum(1)，再加 2</td></tr>
+<tr><td>出口</td><td>sum(1)</td><td>返回 1</td></tr>
+<tr><td>回归</td><td>sum(2)</td><td>得到 1 + 2 = 3</td></tr>
+<tr><td>回归</td><td>sum(3)</td><td>得到 3 + 3 = 6</td></tr>
+</table></div>
+<p>调用前输出 n，会按 3、2、1 输出；先调用再输出 n，会按 1、2、3 输出。输出位置决定顺序，不是递归“随机执行”。</p>
+<h2>三、完整例题与代码</h2>
+<h3>18206｜递归求累加和</h3>
+<p>输入正整数 n（1 ≤ n ≤ 100），输出 1 到 n 的和。输入 5，输出 15。</p>
+<p>关系式 sum(n) = sum(n − 1) + n；出口 sum(1) = 1。下面用 sum(0) = 0 写成等价版本，合法输入结果相同；这是正确出口，不会造成结果偏差。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+using namespace std;
+int sum(int n) {
+    if (n == 0) return 0;
+    return sum(n - 1) + n;
+}
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    cout &lt;&lt; sum(n) &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>每层只做一次加法，时间 O(n)、递归栈空间 O(n)。本题数据小；很大的 n 不适合这样层层递归。</p>
+<h3>18207｜最大公约数</h3>
+<p>输入两个正整数 a、b，输出最大公约数。输入 8 12，输出 4。过程是 (8,12) → (12,8) → (8,4) → (4,0)。最后返回 4。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+using namespace std;
+int gcdRec(int a, int b) {
+    if (b == 0) return a;
+    return gcdRec(b, a % b);
+}
+int main() {
+    int a, b;
+    cin &gt;&gt; a &gt;&gt; b;
+    cout &lt;&lt; gcdRec(a, b) &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>先判断 b 是否为 0，才能计算 a % b。这个版本也能处理 b = 0。复杂度 O(log(max(a,b)))。</p>
+<h2>四、易错点</h2>
+<ul><li>只调用 sum(n − 1)，却没把它的返回值用于结果。</li><li>参数始终不变，无法接近出口；有出口也会无限调用。</li><li>阶乘用 int 存储会溢出；long long 也不是无限大，20! 可容纳，21! 已超出常用 64 位有符号范围。</li><li>把调用次数多与递归层数深混为一谈：时间和栈空间是两个问题。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. sum(4) 的调用顺序和返回值分别是什么？</p>
+<p>2. 让递归倒计时从 3 输出到 1，应把输出放在调用前还是调用后？</p>
+<p>3. gcdRec(12,8) 的最终出口参数是什么？</p>
+<p>答案：1. 调用 4→3→2→1→0，逐层返回 0、1、3、6、10。2. 调用前。3. (4,0)。</p>
+<h2>六、配套练习</h2>
+<p>在课堂题板按题号查找：18205 倒计时 → 18206 累加和 → 18207 GCD。巩固：18213 阶乘、18217 数位和、18238 十进制转二进制。题目由老师布置；本卡不猜测题板链接。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article><article id="p71"><h1>P71｜递归算法（二）</h1>
+<p>阶段：C3 · 进阶。先复习 P70 的递归含义、出口和返回值。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>用“最后一步”把方案计数拆成互不重叠的情况。</li><li>识别重复计算，用记忆化保存状态答案。</li><li>枚举分解时约定非递减顺序，避免把换序当新方案。</li></ul>
+<h2>二、核心知识卡</h2>
+<p>楼梯每步走 1 或 2 级。f(n) 表示到达第 n 级的方案数。最后一步来自 n−1 或 n−2，这两种情况不重叠，因此 f(n)=f(n−1)+f(n−2)。</p>
+<div class="table-scroll"><table>
+<tr><th>n</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+<tr><td>f(n)</td><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td></tr>
+</table></div>
+<p>普通递归里 f(5) 调 f(4)、f(3)，f(4) 又调 f(3)、f(2)：同一个 f(3) 被算了两遍。记忆化像答案本：第一次计算并记下，以后直接读取。</p>
+<h2>三、完整例题与代码</h2>
+<h3>18350｜再爬一次（升级版）</h3>
+<p>输入 n（1 ≤ n ≤ 50），输出走法数。输入 3，输出 3；输入 50，输出 20365011074，需要 long long。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+using namespace std;
+long long memo[51] = {};
+long long ways(int n) {
+    if (n == 1) return 1;
+    if (n == 2) return 2;
+    if (memo[n] != 0) return memo[n];
+    memo[n] = ways(n - 1) + ways(n - 2);
+    return memo[n];
+}
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    cout &lt;&lt; ways(n) &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>本题所有合法状态答案都大于 0，所以 0 可以表示“未计算”。若别的题答案可能为 0，应另用 visited 数组或不会与答案冲突的标记。记忆化后时间、数组和递归栈均为 O(n)。</p>
+<h3>18352｜数的分解</h3>
+<p>把正整数 n 写成若干个大于 1 的整数的乘积，因数按非递减顺序排列；单独的 n 本身也算一种。这里以 2 ≤ n ≤ 1000 为演示范围。输入 12，输出 4：12、2×6、3×4、2×2×3。</p>
+<p>f(low,rest) 表示剩余乘积 rest、下一因数至少为 low 时的方案数。初始的 1 种方案是“直接选 rest”；继续拆时只枚举 low ≤ d ≤ rest/d 且 d 整除 rest。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+using namespace std;
+long long countWays(int low, int rest) {
+    long long ans = 1;
+    for (int d = low; d &lt;= rest / d; ++d) {
+        if (rest % d == 0) ans += countWays(d, rest / d);
+    }
+    return ans;
+}
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    cout &lt;&lt; countWays(2, n) &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>递归后 low=d，后续因数不能比 d 小，因此 2×6 与 6×2 不会重复统计。本例是搜索枚举，不承诺像爬楼梯那样 O(n)；范围扩大后应重新评估时间。</p>
+<h2>四、易错点</h2>
+<ul><li>f(n−1)+f(n−2) 适用于每步 1 或 2 级；增加 3 级步长后关系式和出口都要改。</li><li>n=50 的结果超过 int；只改数组类型却不改函数返回类型仍会溢出。</li><li>分解时忘记最小因数限制，会重复计算排列。</li><li>记忆化键必须覆盖所有影响结果的参数；f(low,rest) 不能只按 rest 缓存。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. f(4) 有几种走法？2. f(3) 已缓存，下一次调用还会递归算子问题吗？3. 8 有哪些乘积分解？</p>
+<p>答案：1. 5。2. 不会，直接返回缓存。3. 8、2×4、2×2×2，共 3 种。</p>
+<h2>六、配套练习</h2>
+<p>课堂题号：18344 普通爬楼梯、18350 记忆化、18351 拼接数字、18352 数的分解。巩固：18373 一次走 1/2/3 级，19568 恰好 k 个因数。后两题要求不同，不直接套本卡代码。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article><article id="p72"><h1>P72｜综合练习（一）</h1>
+<p>阶段：C4 · 提高。先复习枚举、队列、二分和栈。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>把“连续的一段”识别为窗口，把“范围内有多少”识别为二分计数。</li><li>用栈模拟只有一端可进出的轨道。</li><li>根据数据范围选方法，不把所有题都做成双重循环。</li></ul>
+<h2>二、核心知识卡</h2>
+<div class="table-scroll"><table>
+<tr><th>题目线索</th><th>常用方法</th><th>必须检查</th></tr>
+<tr><td>连续区间、元素都为正、区间和有上限</td><td>滑动窗口</td><td>收缩能否让和下降</td></tr>
+<tr><td>配对费用落在 [l,r]</td><td>排序＋二分</td><td>重复值、端点、计数类型</td></tr>
+<tr><td>固定进站序列、只能从轨道顶端出去</td><td>栈模拟</td><td>取 top 前必须非空</td></tr>
+</table></div>
+<h3>窗口走一遍</h3>
+<p>旅行团天数为 3、1、1、1、2、1，假期 5 天。右端走到第四个景点时和为 6，去掉左端的 3，得到 1、1、1；加入第五个景点 2 后，窗口和为 5、长度为 4。这是样例答案。</p>
+<h2>三、完整例题与代码</h2>
+<h3>18803｜旅行团</h3>
+<p>按固定顺序游览，可任选起点，不能跳过中间景点。求总天数不超过 t 的最长连续段。1 ≤ n ≤ 100000，1 ≤ a_i ≤ 2000，1 ≤ t ≤ 10^8。</p>
+<p>输入：第一行 n t，第二行 n 个天数。样例输入 <code>6 5</code> 和 <code>3 1 1 1 2 1</code>，输出 4。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int main() {
+    int n;
+    long long t;
+    cin &gt;&gt; n &gt;&gt; t;
+    vector&lt;int&gt; a(n);
+    for (int &amp;x : a) cin &gt;&gt; x;
+    int left = 0, ans = 0;
+    long long sum = 0;
+    for (int right = 0; right &lt; n; ++right) {
+        sum += a[right];
+        while (sum &gt; t) sum -= a[left++];
+        ans = max(ans, right - left + 1);
+    }
+    cout &lt;&lt; ans &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>每个元素进入、离开窗口最多一次，时间 O(n)，本实现数组空间 O(n)。若单个景点大于 t，窗口会变空，答案仍正确。若允许负天数，不能直接套这个算法。</p>
+<h3>18804｜干饭人：二分边界</h3>
+<p>午餐价 a 固定时，晚餐价 b 必须位于 [l−a,r−a]。先排序晚餐数组，再用 upper_bound(r−a) − lower_bound(l−a) 得到数量，包含两端且保留重复价格对应的不同组合。</p>
+<p>完整输入为 n m l r，之后分别输入 n 个午餐价、m 个晚餐价。样例：<code>4 3 6 13</code>，午餐 <code>5 3 12 6</code>，晚餐 <code>9 2 3</code>，输出 6。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int main() {
+    int n, m;
+    long long l, r;
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; l &gt;&gt; r;
+    vector&lt;long long&gt; a(n), b(m);
+    for (auto &amp;x : a) cin &gt;&gt; x;
+    for (auto &amp;x : b) cin &gt;&gt; x;
+    sort(b.begin(), b.end());
+    long long ans = 0;
+    for (long long x : a) {
+        ans += upper_bound(b.begin(), b.end(), r - x)
+             - lower_bound(b.begin(), b.end(), l - x);
+    }
+    cout &lt;&lt; ans &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>时间 O(m log m + n log m)，空间 O(n+m)。最多有 n×m 个组合，n、m 都为 100000 时达 10^10，必须用 long long 存答案。</p>
+<h2>四、易错点</h2>
+<ul><li>窗口超限要用 while 收缩，不能只删一个元素。</li><li>古老车站的初始序列不一定是 1、2、3，必须按输入顺序入栈。</li><li>检查栈顶要写 <code>!st.empty() &amp;&amp; st.top() == target</code>，不访问空栈。</li><li>不用答案 int 处理大规模组合计数。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. 天数全是 6，t=5，答案是多少？2. 晚餐 [2,2,3] 中 [2,2] 有几个元素？3. 窗口和超限一次，是否只收缩一次就够？</p>
+<p>答案：1. 0。2. 2。3. 不一定，要收缩到合法。</p>
+<h2>六、配套练习</h2>
+<p>题板：18803 旅行团、18804 干饭人、18809 古老车站。课后：19461 连续正整数和、19527 验证栈序列。先写状态含义，再写循环。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article><article id="p73"><h1>P73｜综合练习（二）</h1>
+<p>阶段：C4 · 提高。先复习递归、整除、取模与整数范围。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>用递归描述汉诺塔的三步，而不是试图记住所有移动。</li><li>用平方分解指数，以快速幂替代逐次相乘。</li><li>分清“移动次数少”和“输出移动过程仍然很长”。</li></ul>
+<h2>二、核心知识卡</h2>
+<h3>汉诺塔：从 A 经 B 移到 C</h3>
+<p>1. 把上面 n−1 个盘从 A 经 C 移到 B。</p>
+<p>2. 把第 n 个大盘从 A 移到 C。</p>
+<p>3. 把 B 上 n−1 个盘经 A 移到 C。</p>
+<p>T(n)=2T(n−1)+1，T(1)=1，所以 T(n)=2^n−1。输出完整过程时本身就有 2^n−1 行，不能因为用了递归就说时间 O(n)。</p>
+<div class="table-scroll"><table>
+<tr><th>指数 b</th><th>计算拆分</th></tr>
+<tr><td>偶数 2k</td><td>a^b=(a^k)^2</td></tr>
+<tr><td>奇数 2k+1</td><td>a^b=(a^k)^2×a</td></tr>
+</table></div>
+<p>每次 b 减半，快速幂循环次数 O(log b)。取模可在每次乘法后做，但乘法在取模前仍可能溢出，必须选合适类型。</p>
+<h2>三、完整例题与代码</h2>
+<h3>19736｜幂的最后四位</h3>
+<p>输入 a b，1 ≤ a ≤ 100000，1 ≤ b ≤ 10^9。输出 a^b 模 10000 的整数余数；本课堂题的样例 2 9 输出 512，不强制补成 0512。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    long long a, b;
+    cin &gt;&gt; a &gt;&gt; b;
+    a %= 10000;
+    long long ans = 1;
+    while (b &gt; 0) {
+        if (b % 2 == 1) ans = ans * a % 10000;
+        a = a * a % 10000;
+        b /= 2;
+    }
+    cout &lt;&lt; ans &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>由于每个乘数已在 [0,9999]，long long 乘法安全。不要用浮点 pow 后再取模，较大指数会丢精度或溢出。样例 12 5 输出 8832。</p>
+<h3>19734｜汉诺塔过程</h3>
+<p>输入 n（1 ≤ n ≤ 10），输出最少移动过程。n=2 时：1 从 A 到 B；2 从 A 到 C；1 从 B 到 C，各占一行。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+using namespace std;
+void hanoi(int n, char from, char mid, char to) {
+    if (n == 1) {
+        cout &lt;&lt; &quot;1 从 &quot; &lt;&lt; from &lt;&lt; &quot; 到 &quot; &lt;&lt; to &lt;&lt; '\n';
+        return;
+    }
+    hanoi(n - 1, from, to, mid);
+    cout &lt;&lt; n &lt;&lt; &quot; 从 &quot; &lt;&lt; from &lt;&lt; &quot; 到 &quot; &lt;&lt; to &lt;&lt; '\n';
+    hanoi(n - 1, mid, from, to);
+}
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    hanoi(n, 'A', 'B', 'C');
+    return 0;
+}</code></pre>
+<p>时间 O(2^n)，递归栈 O(n)。参数名始终表示当前子任务中的出发柱、辅助柱、目标柱，不是永远指固定的 A、B、C。</p>
+<h2>四、易错点</h2>
+<ul><li>汉诺塔第二次递归参数照抄第一次，导致方向错。</li><li>快速幂每次把原始 a 再乘进去，忘记平方后的 a 已表示当前权值。</li><li><code>%10000</code> 写在 int 溢出之后，无法修复此前的溢出。</li><li>忘记 a^0=1；上面程序也支持 b=0，可用作边界自测。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. 3 个盘最少几次？2. b=13 的二进制 1101 代表选择哪些指数权值？3. 本题 2^9 输出是否补零？</p>
+<p>答案：1. 7。2. 8、4、1，即 13=8+4+1。3. 不补零，输出 512。</p>
+<h2>六、配套练习</h2>
+<p>18361 汉诺塔移动次数、19734 汉诺塔、19736 幂的最后四位。进阶：19739 快速幂模板、19740 阶乘之和；不同模数要重新检查乘法范围。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article><article id="p74"><h1>P74｜真题演练（一）</h1>
+<p>阶段：C4 · 提高。本卡按课堂题板的改编题意讲解；不要把改编后的输入、输出当成原比赛题目的完整格式。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>从字符串中抽取数字，保持字符串答案，避免超长整数溢出。</li><li>把贪心选择说清楚：选哪个、为什么不妨碍后续。</li><li>二分必须建立在有序状态上，不能对未排序数组直接查找。</li></ul>
+<h2>二、核心知识卡</h2>
+<div class="table-scroll"><table>
+<tr><th>题型</th><th>核心选择</th><th>保存的状态</th></tr>
+<tr><td>拼数</td><td>较大的数字放在高位</td><td>各数字出现次数</td></tr>
+<tr><td>导弹拦截系统数</td><td>选可拦截且末高度最小的系统</td><td>有序的各系统末高度</td></tr>
+<tr><td>公路加油</td><td>已到达站点中的最低油价</td><td>最低价、剩余可行驶距离</td></tr>
+</table></div>
+<h3>导弹拦截：389、207、158、300、155、159</h3>
+<div class="table-scroll"><table>
+<tr><th>新高度</th><th>有序末高度（处理后）</th><th>解释</th></tr>
+<tr><td>389</td><td>389</td><td>开新系统</td></tr>
+<tr><td>207</td><td>207</td><td>接入已有系统</td></tr>
+<tr><td>158</td><td>158</td><td>接入已有系统</td></tr>
+<tr><td>300</td><td>158、300</td><td>158 无法接更高的导弹，开新系统</td></tr>
+<tr><td>155</td><td>155、300</td><td>接到第一个末高度 ≥155 的系统</td></tr>
+<tr><td>159</td><td>155、159</td><td>接到第一个末高度 ≥159 的系统</td></tr>
+</table></div>
+<p>最终要 2 套系统。相等高度也能接，所以查找使用 lower_bound，不是 upper_bound。</p>
+<h2>三、完整例题与代码</h2>
+<h3>19960｜拼数</h3>
+<p>输入一个仅含小写字母和数字的字符串，长度 ≤10^6，保证至少一个非零数字。每个数字字符最多使用一次，任意重排，求最大的正整数。</p>
+<p>输入 <code>290es1q0</code>，输出 <code>92100</code>。按 9 到 0 输出各数字，不能转成 int 再输出，也不能丢掉尾部的 0。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+int main() {
+    string s;
+    cin &gt;&gt; s;
+    int cnt[10] = {};
+    for (char c : s) {
+        if (c &gt;= '0' &amp;&amp; c &lt;= '9') ++cnt[c - '0'];
+    }
+    for (int d = 9; d &gt;= 0; --d) {
+        for (int k = 0; k &lt; cnt[d]; ++k) cout &lt;&lt; d;
+    }
+    cout &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>交换论证：若高位数字比后面的数字小，交换后数更大；因此最大排列为非递增排列。时间 O(|s|)，输入字符串空间 O(|s|)，计数额外空间 O(1)。</p>
+<h3>19961｜导弹拦截：最少系统数</h3>
+<p>课堂输入为 n，随后 n 个高度（n ≤100000）；只输出拦截全部导弹需要的最少系统数。本卡代码不是“输出最长可拦截序列”的另一问。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    vector&lt;int&gt; tail;
+    for (int i = 0; i &lt; n; ++i) {
+        int h;
+        cin &gt;&gt; h;
+        auto it = lower_bound(tail.begin(), tail.end(), h);
+        if (it == tail.end()) tail.push_back(h);
+        else *it = h;
+    }
+    cout &lt;&lt; tail.size() &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>选可用末高度中最小的一个，能把更高的系统留给以后。替换 first ≥h 的位置不会破坏有序性。时间 O(n log n)，空间 O(n)。</p>
+<h2>四、易错点</h2>
+<ul><li>拼数用整数保存，长度很大时溢出；应直接输出字符或计数。</li><li>拦截题混淆非递增和严格递减；相等高度允许接入。</li><li>公路题只卖整数升，加油量需向上取整；不能把每段各自向上取整后忽略余油。</li><li>本卡的公路策略依赖油箱无限大；有限容量题不能直接套用。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. 输入 <code>a100b9</code> 最大数是什么？2. 高度 5、5、5 需要几套系统？3. 高度 1、2、3 呢？</p>
+<p>答案：1. 9100。2. 1。3. 3。</p>
+<h2>六、配套练习</h2>
+<p>19960 拼数、19961 导弹拦截、19962 公路。拓展：20554 最接近的数。做题前先核对老师题板上的实际输入、输出和数据范围。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article><article id="p75"><h1>P75｜真题演练（二）</h1>
+<p>阶段：C4 · 提高。本卡按课堂题板改编格式练习；先复习结构体、模拟、二进制和递归。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>把规则转成状态：面额、获得时间、是否使用。</li><li>严格按“最早的可用票”选择，不能选最大面额或直接取第一张票。</li><li>用二进制分解整数，并递归格式化指数。</li></ul>
+<h2>二、核心知识卡</h2>
+<p>公交优惠票同时满足：未使用、时间差 ≤45 分钟、票面额 ≥公交票价。多个符合时取获得最早的那张。</p>
+<div class="table-scroll"><table>
+<tr><th>记录</th><th>处理</th><th>累计费用</th></tr>
+<tr><td>地铁 5 元，时刻 1</td><td>支付 5，记一张票</td><td>5</td></tr>
+<tr><td>地铁 20 元，时刻 16</td><td>支付 20，记一张票</td><td>25</td></tr>
+<tr><td>地铁 7 元，时刻 23</td><td>支付 7，记一张票</td><td>32</td></tr>
+<tr><td>公交 18 元，时刻 31</td><td>消耗时刻 16 的票</td><td>32</td></tr>
+<tr><td>公交 4 元，时刻 38</td><td>消耗时刻 1 的票</td><td>32</td></tr>
+<tr><td>公交 7 元，时刻 68</td><td>时间差恰为 45，消耗时刻 23 的票</td><td>32</td></tr>
+</table></div>
+<p>优惠票仅用于公交，坐地铁仍需支付；用过的票不能再次使用。</p>
+<h2>三、完整例题与代码</h2>
+<h3>18895｜公交换乘</h3>
+<p>输入 n，之后每行 op price time；op=0 是地铁，op=1 是公交。保证记录时间严格递增且每分钟最多一条。输出总费用。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+struct Ticket { int price, time; bool used; };
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    vector&lt;Ticket&gt; tickets;
+    int first = 0;
+    long long cost = 0;
+    for (int i = 0; i &lt; n; ++i) {
+        int op, price, time;
+        cin &gt;&gt; op &gt;&gt; price &gt;&gt; time;
+        while (first &lt; static_cast&lt;int&gt;(tickets.size())
+               &amp;&amp; time - tickets[first].time &gt; 45) ++first;
+        if (op == 0) {
+            cost += price;
+            tickets.push_back({price, time, false});
+        } else {
+            bool found = false;
+            for (int j = first; j &lt; static_cast&lt;int&gt;(tickets.size()); ++j) {
+                if (!tickets[j].used &amp;&amp; tickets[j].price &gt;= price) {
+                    tickets[j].used = true;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) cost += price;
+        }
+    }
+    cout &lt;&lt; cost &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>时间差 &gt;45 才过期；恰好 45 可用。严格递增的整数分钟保证每次公交前有效时间段中最多有 45 张地铁票，所以扫描时间 O(45n)，存票空间 O(n)。若允许同一分钟多条记录，这个时间界限不再成立，要重新选算法。</p>
+<h3>19098｜幂次方</h3>
+<p>输入 1 ≤ n ≤20000，输出题目约定的 0、2 表示法：2^0 写成 <code>2(0)</code>，2^1 写成 <code>2</code>，其他指数递归表示，无空格。</p>
+<p>137=2^7+2^3+2^0。7=2^2+2+2^0，因此输出 <code>2(2(2)+2+2(0))+2(2+2(0))+2(0)</code>。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+using namespace std;
+void show(int n) {
+    bool first = true;
+    for (int k = 14; k &gt;= 0; --k) {
+        if ((n &amp; (1 &lt;&lt; k)) == 0) continue;
+        if (!first) cout &lt;&lt; '+';
+        first = false;
+        if (k == 0) cout &lt;&lt; &quot;2(0)&quot;;
+        else if (k == 1) cout &lt;&lt; '2';
+        else {
+            cout &lt;&lt; &quot;2(&quot;;
+            show(k);
+            cout &lt;&lt; ')';
+        }
+    }
+}
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    show(n);
+    cout &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>20000 小于 2^15，所以扫描位 14 到 0 足够。递归处理的是指数 k，规模迅速减小；时间取决于生成的表达式和各调用扫描位数，不能把它说成只调用一次 O(log n)。</p>
+<h2>四、易错点</h2>
+<ul><li>公交按 <code>&lt;45</code> 判断，误排除时间差等于 45 的票。</li><li>看到最早票面额不足就停止；应该继续找后面的可用票。</li><li>过期票与使用过的票是两个状态，不能混用。</li><li>幂次方的 2^1 输出成 2(1)，不符合本题约定；加号不能放首尾。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. 时刻 1 的票在时刻 46 能否使用？2. 票价恰好相等能否用？3. 10 的表达式是什么？</p>
+<p>答案：1. 能，差 45。2. 能。3. <code>2(2+2(0))+2</code>。</p>
+<h2>六、配套练习</h2>
+<p>18895 公交换乘、19098 幂次方。巩固：20588 珠心算测验、20590 开灯、20592 统计单词数。先列出每条规则，再做边界样例。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article><article id="p76"><h1>P76｜树（一）</h1>
+<p>阶段：C4 · 提高。先复习数组、函数、递归和队列。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>分清根、父亲、孩子、兄弟、叶子和子树。</li><li>本课堂约定根的深度为 1，树深度是结点深度的最大值。</li><li>二叉树最多有两个孩子；“最多两个”不等于“必须两个”。</li></ul>
+<h2>二、核心知识卡</h2>
+<pre aria-label="text代码或示意"><code>        1
+       / \
+      2   3
+     / \
+    4   5</code></pre>
+<p>根为 1；2 的父亲为 1；4、5 是兄弟；叶子为 3、4、5。结点 4 深度为 3，本图树深度为 3。另一些题定义根深度为 0，做题时必须看题意。</p>
+<div class="table-scroll"><table>
+<tr><th>遍历</th><th>访问顺序</th><th>上图结果</th></tr>
+<tr><td>前序</td><td>根、左、右</td><td>1 2 4 5 3</td></tr>
+<tr><td>中序</td><td>左、根、右</td><td>4 2 5 1 3</td></tr>
+<tr><td>后序</td><td>左、右、根</td><td>4 5 2 3 1</td></tr>
+</table></div>
+<p>“根”不是只指整棵树的 1，而是每次递归处理的当前子树根。</p>
+<h2>三、完整例题与代码</h2>
+<h3>21256｜找树根和深度</h3>
+<p>输入 n，随后 n−1 行 x y 表示 y 是 x 的孩子，保证为合法有根树，编号 1 到 n，n ≤10000。输出两行：根编号、深度。n=1 时根为 1，深度为 1。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    vector&lt;vector&lt;int&gt;&gt; children(n + 1);
+    vector&lt;int&gt; parent(n + 1, 0), depth(n + 1, 0);
+    for (int i = 1; i &lt; n; ++i) {
+        int x, y;
+        cin &gt;&gt; x &gt;&gt; y;
+        children[x].push_back(y);
+        parent[y] = x;
+    }
+    int root = 1;
+    while (parent[root] != 0) ++root;
+    queue&lt;int&gt; q;
+    q.push(root);
+    depth[root] = 1;
+    int answer = 1;
+    while (!q.empty()) {
+        int x = q.front(); q.pop();
+        for (int y : children[x]) {
+            depth[y] = depth[x] + 1;
+            answer = max(answer, depth[y]);
+            q.push(y);
+        }
+    }
+    cout &lt;&lt; root &lt;&lt; '\n' &lt;&lt; answer &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>每条边处理一次，时间、空间均为 O(n)。这里用队列按层访问，避免从每个结点重复沿父亲链计算导致链状树 O(n²)，也避免很深的递归栈。</p>
+<h3>21258｜中序遍历</h3>
+<p>输入 n，随后 n 行 x l r 表示 x 的左右孩子，0 表示缺少孩子。保证合法二叉树，结点编号为 1 到 n，1 ≤ n ≤1000；根不一定是 1，输入行也不一定按编号顺序。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+vector&lt;int&gt; leftChild, rightChild;
+bool first = true;
+void inorder(int x) {
+    if (x == 0) return;
+    inorder(leftChild[x]);
+    if (!first) cout &lt;&lt; ' ';
+    first = false;
+    cout &lt;&lt; x;
+    inorder(rightChild[x]);
+}
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    leftChild.assign(n + 1, 0);
+    rightChild.assign(n + 1, 0);
+    vector&lt;int&gt; parent(n + 1, 0);
+    for (int i = 0; i &lt; n; ++i) {
+        int x, l, r;
+        cin &gt;&gt; x &gt;&gt; l &gt;&gt; r;
+        leftChild[x] = l; rightChild[x] = r;
+        if (l) parent[l] = x;
+        if (r) parent[r] = x;
+    }
+    int root = 1;
+    while (parent[root] != 0) ++root;
+    inorder(root);
+    cout &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>每个结点访问一次，时间 O(n)，数组 O(n)，递归栈 O(h)，h 为树高。若题目允许极深的树，可用显式栈改写遍历。</p>
+<h2>四、易错点</h2>
+<ul><li>默认第一个输入结点就是根。正确做法是找没有父亲的结点。</li><li>0 是空孩子标记，不是实际结点；递归必须先判断 0。</li><li>中序遍历只是访问顺序，不保证结果有序；只有二叉搜索树在相应键值规则下才有此性质。</li><li>求子树人数时必须计入自己：size(x)=1+size(left)+size(right)。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. 上图 2 的子树有几人？2. 只有根的一棵树，按本课约定深度为多少？3. 中序访问 2 前要先访问谁？</p>
+<p>答案：1. 3。2. 1。3. 左子树中的 4。</p>
+<h2>六、配套练习</h2>
+<p>21256 找树根和深度、21257 兄弟姐妹、21258 中序遍历、21259 二叉族。巩固：21260 找树根和孩子、21261 找叶子结点；再挑战 21264 FBI 树。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article><article id="p77"><h1>P77｜特殊二叉树与优先队列</h1>
+<p>阶段：C4 · 提高。先复习 P76 的树、贪心和 STL 容器。</p>
+<h2>一、本课要掌握什么</h2>
+<ul><li>完全二叉树：除最后一层外都填满，最后一层从左到右连续排列。</li><li>堆：有完全二叉树的形状，还满足父子之间的大小关系。</li><li>priority_queue：快速取得最高优先级元素，而不是按到达顺序排队。</li></ul>
+<h2>二、核心知识卡</h2>
+<div class="table-scroll"><table>
+<tr><th>容器</th><th>谁先出来</th><th>本课场景</th></tr>
+<tr><td>queue</td><td>最先加入的</td><td>普通排队</td></tr>
+<tr><td>默认 priority_queue</td><td>当前最大值</td><td>按紧急值分诊</td></tr>
+<tr><td>小根 priority_queue</td><td>当前最小值</td><td>合并最轻的两堆</td></tr>
+</table></div>
+<p>堆顶最值不代表整个堆已经排序。大根堆保证父结点 ≥孩子，小根堆保证父结点 ≤孩子；与二叉搜索树“左小右大”不同。</p>
+<h3>合并过程：1、2、9</h3>
+<div class="table-scroll"><table>
+<tr><th>轮次</th><th>选择两堆</th><th>新堆</th><th>累计体力</th></tr>
+<tr><td>1</td><td>1、2</td><td>3</td><td>3</td></tr>
+<tr><td>2</td><td>3、9</td><td>12</td><td>15</td></tr>
+</table></div>
+<p>若先合 2、9，体力为 11+12=23。较小权值先合并，让较重的果堆被重复计费的次数尽量少。这对应哈夫曼构造的贪心选择，不是任意“挑两个”都最优。</p>
+<h2>三、完整例题与代码</h2>
+<h3>急诊分诊（课堂自编题）</h3>
+<p>输入操作数 m，之后每行 <code>1 x</code> 加入紧急值 x，或 <code>2</code> 输出并移除当前最大紧急值。题目保证执行 2 时非空。样例：加入 3、加入 8、就诊、加入 5、就诊、就诊，分别输出 8、5、3。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;queue&gt;
+using namespace std;
+int main() {
+    int m;
+    cin &gt;&gt; m;
+    priority_queue&lt;int&gt; q;
+    for (int i = 0; i &lt; m; ++i) {
+        int op;
+        cin &gt;&gt; op;
+        if (op == 1) {
+            int x; cin &gt;&gt; x;
+            q.push(x);
+        } else {
+            cout &lt;&lt; q.top() &lt;&lt; '\n';
+            q.pop();
+        }
+    }
+    return 0;
+}</code></pre>
+<p>push、pop 为 O(log m)，top 为 O(1)。相同紧急值都保留；本题只输出值，不保证同值病人的先后，若需要先到先服务应额外记录到达序号。</p>
+<h3>合并果子（课堂题）</h3>
+<p>输入 n，随后 n 个正整数表示果堆重量。每次合并两堆花费它们重量之和，求全部合为一堆的最少体力。n ≤10000，总重量 ≤2×10^8。输入 <code>3</code> 和 <code>1 2 9</code>，输出 15。</p>
+<pre aria-label="cpp代码或示意"><code>#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;functional&gt;
+using namespace std;
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    priority_queue&lt;long long, vector&lt;long long&gt;, greater&lt;long long&gt;&gt; q;
+    for (int i = 0; i &lt; n; ++i) {
+        long long x; cin &gt;&gt; x;
+        q.push(x);
+    }
+    long long ans = 0;
+    while (q.size() &gt; 1) {
+        long long a = q.top(); q.pop();
+        long long b = q.top(); q.pop();
+        ans += a + b;
+        q.push(a + b);
+    }
+    cout &lt;&lt; ans &lt;&lt; '\n';
+    return 0;
+}</code></pre>
+<p>新堆必须放回继续参与选择。总共 n−1 次合并，时间 O(n log n)，空间 O(n)。只有一堆时不需要合并，答案为 0。</p>
+<h2>四、易错点</h2>
+<ul><li>忘记 greater，用大根堆合并最大两堆，无法得到最小体力。</li><li>pop 不返回元素；先取 top，再 pop，且不能对空堆这样做。</li><li>只加最终总重量，忘记每轮合并都消耗体力。</li><li>权值总和与累计合并费用不同，累计值可能更大，使用 long long。</li><li>带权路径长度 WPL 是所有叶子的“权值×从根到该叶子的边数”之和。合并费用等于对应哈夫曼树的 WPL。只有一个叶子时经过 0 条边，WPL 和合并费用均为 0；不要混淆边数路径长与上一课“根深度为 1”。</li></ul>
+<h2>五、先做再看：课后自测</h2>
+<p>1. 仅一堆重 7，答案是多少？2. 四堆都重 1，最少体力是多少？3. 默认 priority_queue 的 top 是最小值吗？</p>
+<p>答案：1. 0。2. 2+2+4=8。3. 不是，是最大值。</p>
+<h2>六、配套练习</h2>
+<p>本课前两题在本地课程中使用内部标识，不伪造外部题号或跳转链接。按标题找“急诊分诊”“合并果子”“哈夫曼树的构造”。题板已编号的进阶题：22216 平均分配、22217 巧夺大奖、22219 直播获奖、22218 武器强化。</p>
+<p><a href="https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg">返回学习导航</a></p></article></main></html>

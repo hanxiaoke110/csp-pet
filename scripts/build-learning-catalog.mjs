@@ -38,7 +38,9 @@ export function buildLearningCatalog({
   previousCatalog,
   now = new Date(),
   catalogVersion,
+  reservedThrough = 0,
 }) {
+  if (!Number.isInteger(reservedThrough) || reservedThrough < 0 || reservedThrough > 500) throw new Error('reservedThrough 必须为 0–500 的整数');
   const cardsByNo = new Map((cardIndex?.lessons || []).map(item => [Number(item.lessonNo), item]));
   const previousByNo = new Map((previousCatalog?.lessons || []).map(item => [Number(item.lessonNo), item]));
   const day = now.toISOString().slice(0, 10);
@@ -58,11 +60,11 @@ export function buildLearningCatalog({
     if (ids.has(id)) throw new Error(`资料 ID 重复：${id}`);
     ids.add(id);
 
-    const title = card?.title || stripLessonPrefix(rawLesson.title, lessonNo);
+    const title = previous?.title || card?.title || stripLessonPrefix(rawLesson.title, lessonNo);
     const feishuUrl = previous?.feishuUrl || card?.feishuUrl || '';
     const isReady = Boolean(feishuUrl);
     const knowledgeTags = Array.isArray(rawLesson.knowledgePoints)
-      ? rawLesson.knowledgePoints.filter(item => typeof item === 'string' && item.trim()).slice(0, 8)
+      ? rawLesson.knowledgePoints.map(item => typeof item === 'string' ? item : item?.name).filter(item => typeof item === 'string' && item.trim()).slice(0, 8)
       : [];
 
     return {
@@ -78,7 +80,33 @@ export function buildLearningCatalog({
       requiresClassCode: previous?.requiresClassCode ?? false,
       updatedAt: previous?.updatedAt || (isReady ? cardIndex?.updated || day : day),
     };
-  }).sort((a, b) => a.lessonNo - b.lessonNo);
+  });
+
+  // Online-only courses must survive a rebuild even if lessons.json has not caught up.
+  const extraNumbers = new Set([...cardsByNo.keys(), ...previousByNo.keys()]);
+  for (let n = 1; n <= reservedThrough; n++) extraNumbers.add(n);
+  for (const lessonNo of extraNumbers) {
+    if (numbers.has(lessonNo)) continue;
+    if (!Number.isInteger(lessonNo) || lessonNo <= 0) throw new Error(`无法识别扩展课号：${lessonNo}`);
+    const previous = previousByNo.get(lessonNo);
+    const card = cardsByNo.get(lessonNo);
+    const id = previous?.id || `lesson-material-p${String(lessonNo).padStart(3, '0')}`;
+    if (ids.has(id)) throw new Error(`资料 ID 重复：${id}`);
+    ids.add(id);
+    numbers.add(lessonNo);
+    const feishuUrl = previous?.feishuUrl || card?.feishuUrl || '';
+    lessons.push({
+      id, lessonNo,
+      title: previous?.title || card?.title || '待补充',
+      stage: normalizeStage(previous?.stage || card?.stage || 'C4'),
+      description: previous?.description || (card ? `P${lessonNo} 配套讲义与知识卡。` : '预留课次，课程主题与阶段待确定。'),
+      tags: previous?.tags || [], feishuUrl,
+      status: previous?.status || (feishuUrl ? 'ready' : 'hidden'),
+      requiresClassCode: previous?.requiresClassCode ?? false,
+      updatedAt: previous?.updatedAt || day,
+    });
+  }
+  lessons.sort((a, b) => a.lessonNo - b.lessonNo);
 
   return {
     schemaVersion: 1,
@@ -104,6 +132,7 @@ function runCli() {
     lessonsData: readJson(path.join(courseDir, 'lessons.json')),
     previousCatalog,
     catalogVersion: previousVersion || previousCatalog?.catalogVersion || 1,
+    reservedThrough: readJson(path.join(courseDir, 'learning-catalog.slots.json')).reservedThrough,
     now: new Date(),
   });
 
@@ -113,7 +142,8 @@ function runCli() {
     published: catalog.updatedAt.slice(0, 10),
   }, null, 2)}\n`);
   const ready = catalog.lessons.filter(item => item.status === 'ready').length;
-  console.log(`学习资料目录已生成：${catalog.lessons.length} 课，${ready} 课已就绪，${catalog.lessons.length - ready} 课制作中。`);
+  const pending = catalog.lessons.filter(item => item.status === 'coming_soon').length;
+  console.log(`学习资料目录已生成：${catalog.lessons.length} 个课次，${ready} 课已就绪，${pending} 课制作中，${catalog.lessons.length - ready - pending} 个隐藏记录。`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) runCli();

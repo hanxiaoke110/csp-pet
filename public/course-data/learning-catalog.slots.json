@@ -1,0 +1,5 @@
+{
+  "reservedThrough": 100,
+  "reservedStatus": "hidden",
+  "note": "P78–P100 仅预留稳定课号和资料 ID，不代表已制作课程。未确定阶段的预留项暂存 C4，默认隐藏；补齐真实标题、阶段、内容和飞书链接后方可设为 ready。"
+}

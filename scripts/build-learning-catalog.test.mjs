@@ -73,3 +73,24 @@ test('rejects duplicate lesson numbers', () => {
   };
   expect(() => buildLearningCatalog({ cardIndex, lessonsData: invalid, now: new Date(), catalogVersion: 1 })).toThrow(/课号重复/);
 });
+
+test('reserves stable slots through P100 without fake links or student-visible empty rows', () => {
+  const catalog = buildLearningCatalog({ cardIndex, lessonsData, reservedThrough: 100 });
+  expect(catalog.lessons).toHaveLength(100);
+  const last = catalog.lessons.at(-1);
+  expect(last).toMatchObject({ id: 'lesson-material-p100', lessonNo: 100, title: '待补充', status: 'hidden', feishuUrl: '' });
+  expect(catalog.lessons.filter(x => x.status === 'ready')).toHaveLength(2);
+});
+
+test('preserves an online-only P100 title, stage, access and publication metadata', () => {
+  const previousCatalog = { lessons: [{ id: 'lesson-material-p100', lessonNo: 100, title: '新课程', stage: 'C3', description: '真实内容', tags: ['递归'], feishuUrl: 'https://school.feishu.cn/docx/p100', status: 'ready', requiresClassCode: true, updatedAt: '2026-10-11' }] };
+  const catalog = buildLearningCatalog({ cardIndex, lessonsData, previousCatalog, reservedThrough: 100 });
+  expect(catalog.lessons.at(-1)).toEqual(previousCatalog.lessons[0]);
+  const rebuilt = buildLearningCatalog({ cardIndex, lessonsData, previousCatalog: catalog, reservedThrough: 100 });
+  expect(rebuilt.lessons.at(-1)).toEqual(previousCatalog.lessons[0]);
+});
+
+test('accepts a new card index entry without modifying bundled lessons', () => {
+  const catalog = buildLearningCatalog({ cardIndex: { lessons: [...cardIndex.lessons, { lessonNo: 78, title: '在线新课', stage: 'C4', feishuUrl: 'https://school.feishu.cn/docx/p78' }] }, lessonsData });
+  expect(catalog.lessons.at(-1)).toMatchObject({ lessonNo: 78, title: '在线新课', status: 'ready' });
+});

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import bundledCatalog from '../../../public/course-data/learning-catalog.json';
 import {
   filterCatalogLessons,
   groupCatalogLessons,
@@ -30,6 +31,15 @@ const catalog = (lessons: LearningCatalogLesson[]): LearningCatalogData => ({
 });
 
 describe('learning catalog validation', () => {
+  it('accepts the bundled 100 slots without exposing unfinished reserved slots', () => {
+    const bundled = bundledCatalog as LearningCatalogData;
+    expect(validateLearningCatalog(bundled)).toBe(true);
+    expect(bundled.lessons).toHaveLength(100);
+    expect(bundled.lessons.map(item => item.lessonNo)).toEqual(Array.from({ length: 100 }, (_, index) => index + 1));
+    expect(visibleCatalogLessons(bundled.lessons)).toHaveLength(77);
+    expect(bundled.lessons.filter(item => item.lessonNo >= 78).every(item => item.status === 'hidden' && item.feishuUrl === '')).toBe(true);
+  });
+
   it('accepts ready and coming-soon Feishu lessons', () => {
     expect(validateLearningCatalog(catalog([
       lesson(),
