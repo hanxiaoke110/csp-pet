@@ -23,7 +23,7 @@
 - [x] Equipment shop/inventory, five-element filters, click-accessible detail/compare/upgrade/refund explanations, confirmations, load-before-spend guard and settlement retry UI.
 - [x] Trusted static catalog loader, effect whitelist/bounds, bundled/offline fallback, five-minute request coalescing, actual-client-rule build validator and 35-entry source catalog.
 - [x] Unit, legacy, transaction failure, backup and SSR UI tests; actual localhost browser filtering/purchase/equip smoke check.
-- [ ] Bespoke art for the new weapon/armor silhouettes: current new definitions temporarily reuse existing icons. This is functional staging, not final release art.
+- [x] Bespoke art: 12 new weapon and 12 new armor icons generated independently, inspected and compressed to transparent 256px WebP (620.1 KiB total); all 35 shop items now have distinct icons, with legacy assets untouched. Build validator checks alpha, dimensions, size and duplicate hashes.
 - [ ] New collector-card batch remains in its separate plan; no new cards published in this batch.
 - [ ] Production API/static deployment, full native battle smoke check and Windows old-user upgrade smoke test remain pending. No desktop release performed.
 

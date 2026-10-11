@@ -50,7 +50,7 @@ export function buildEquipmentCatalog(legacy: Record<string, TrialEquipmentDefin
         : { nextAttackBoost: index === 1 ? .08 : .04, correctShieldLimit: 2 };
       result[id] = {
         id, name: WEAPON_NAMES[element][index], category: 'weapon', rarity, element,
-        icon: legacy[id]?.icon || `/dungeon-exploration/weapons/jade-spear-${rarity}.webp`,
+        icon: legacy[id]?.icon || `/dungeon-exploration/weapons/${id}.webp`,
         description: legacy[id]?.description || (index >= 2 ? `连续答对3题，本次额外增伤${index === 3 ? 35 : 20}%，每场1次。` : `答对时本次额外增伤${index === 1 ? 8 : 4}%，每场2次。`),
         scope: '试炼场战斗生效；特殊效果下一场重置。',
         price: PRICES[index], attack: [1, 2, 4, 6][index],
@@ -62,7 +62,7 @@ export function buildEquipmentCatalog(legacy: Record<string, TrialEquipmentDefin
         : element === 'earth' && rarity === 'legendary' ? 'xuanwu-armor-legendary' : `${element}-armor-${rarity}`;
       result[id] = {
         id, name: ARMOR_NAMES[element][index], category: 'armor', rarity, element,
-        icon: legacy[id]?.icon || `/dungeon-exploration/armor/xuanwu-armor-${rarity}.webp`,
+        icon: legacy[id]?.icon || `/dungeon-exploration/armor/${id}.webp`,
         description: legacy[id]?.description || `开场获得${[8, 10, 12][index]}%最大生命护盾，每场1次。`,
         scope: '试炼场战斗生效；开场效果下一场重置。',
         price: PRICES[index + 1], defense: [1, 3, 5][index],
