@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+        with: { node-version: '22' }
       - run: npm ci
       - name: Run release gates
         run: |
@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+        with: { node-version: '22' }
       - run: npm ci
       - run: npx tauri build --target aarch64-apple-darwin
       - uses: actions/upload-artifact@v4
@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+        with: { node-version: '22' }
       - run: npm ci
       - run: rustup target add x86_64-apple-darwin
       - run: npx tauri build --target x86_64-apple-darwin
@@ -70,7 +70,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+        with: { node-version: '22' }
       - run: npm ci
       - run: npx tauri build --target x86_64-pc-windows-msvc
       - uses: actions/upload-artifact@v4
@@ -316,7 +316,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+        with: { node-version: '22' }
       - run: npm install -g @larksuite/cli
       - name: 配置飞书 bot 身份
         if: env.LARK_APP_ID != '' && env.LARK_APP_SECRET != ''
