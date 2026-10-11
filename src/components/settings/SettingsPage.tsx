@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { getVersion } from '@tauri-apps/api/app';
 import { appDataDir, join } from '@tauri-apps/api/path';
 import { openPath } from '@tauri-apps/plugin-opener';
-import { usePetStore } from '../../stores/petStore';
 import { getDeviceId } from '../../utils/crypto';
 import { clearClassAccessCache, markClassAccessChecked } from '../access/ClassAccessGate';
 import ConfirmModal from '../pet/ConfirmModal';
@@ -58,67 +57,12 @@ export default function SettingsPage() {
       </div>
 
       <div className="settings-section">
-        <h3>🏕️ 集训模式</h3>
-        <p className="settings-desc">输入教师提供的激活码，开启 12 天集训模式：所有奖励 ×1.5，每日额外 3 份食物，超级挑战每日可完成 1 次</p>
-        <TrainingCampSection />
-      </div>
-
-      <div className="settings-section">
         <h3>💾 数据备份</h3>
         <p className="settings-desc">自动保护智子、金币和学习进度，不再弹出 Windows 文件选择窗口</p>
         <BackupSection />
       </div>
 
       <UpdateChecker />
-    </div>
-  );
-}
-
-function TrainingCampSection() {
-  const [code, setCode] = useState('');
-  const [msg, setMsg] = useState('');
-  const campActive = usePetStore(s => s.trainingCampActive);
-  const campEnd = usePetStore(s => s.trainingCampEndDate);
-  const activate = usePetStore(s => s.activateTrainingCamp);
-  const claimFoods = usePetStore(s => s.claimTrainingCampFoods);
-
-  const handleActivate = () => {
-    if (!code.trim()) { setMsg('请输入激活码'); return; }
-    if (activate(code.trim())) {
-      setMsg('✅ 集训模式已开启！12 天内所有奖励 ×1.5，超级挑战每日 1 次');
-      setCode('');
-    } else {
-      setMsg('❌ 激活码错误');
-    }
-  };
-
-  const handleClaim = () => {
-    if (claimFoods()) setMsg('🍞 已领取今日 3 份普通食物！');
-    else setMsg('今日已领取过，明天再来吧~');
-  };
-
-  const daysLeft = campEnd ? Math.max(0, Math.ceil((new Date(campEnd).getTime() - Date.now()) / 86400000)) : 0;
-
-  return (
-    <div style={{ marginTop: 8 }}>
-      {campActive ? (
-        <div className="settings-status-card">
-          <strong>🏕️ 集训进行中</strong> · 剩余 <strong>{daysLeft}</strong> 天
-          <br /><span style={{ fontSize: 12, opacity: 0.85 }}>所有奖励 ×1.5 · 每日可领 3 份食物 · 超级挑战每日 1 次</span>
-          <div style={{ marginTop: 8 }}>
-            <button className="settings-btn settings-btn-secondary" onClick={handleClaim} style={{ padding: '5px 12px', fontSize: 12 }}>🍞 领取今日食物</button>
-          </div>
-          {msg && <div style={{ marginTop: 6, fontSize: 12, fontWeight: 600 }}>{msg}</div>}
-        </div>
-      ) : (
-        <div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input className="settings-input" value={code} onChange={e => setCode(e.target.value)} placeholder="输入教师激活码" style={{ width: 200 }} />
-            <button className="settings-btn" onClick={handleActivate}>激活集训</button>
-          </div>
-          {msg && <div style={{ marginTop: 6, fontSize: 12, color: msg.startsWith('✅') ? '#16a34a' : '#dc2626' }}>{msg}</div>}
-        </div>
-      )}
     </div>
   );
 }

@@ -109,23 +109,18 @@ function getWeekKeyStr(): string {
   return `${d.getFullYear()}-W${weekNum}`;
 }
 
-function getDateKeyStr(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function isTrainingCampActiveNow(): boolean {
-  try {
-    const petState = usePetStore.getState();
-    if (!petState.trainingCampActive || !petState.trainingCampEndDate) return false;
-    const today = getDateKeyStr();
-    return today <= petState.trainingCampEndDate;
-  } catch {
-    return false;
-  }
+// Camp saves used a daily date; preserve that completion in the matching week.
+export function normalizeSuperChallengeKey(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== value) return '';
+  const weekNum = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 1).getTime()) / 604800000);
+  return `${date.getFullYear()}-W${weekNum}`;
 }
 
 export function getSuperChallengeKey(): string {
-  return isTrainingCampActiveNow() ? getDateKeyStr() : getWeekKeyStr();
+  return getWeekKeyStr();
 }
 
 function isLastWeekOfMonth(): boolean {
@@ -262,14 +257,11 @@ export const useQuizStore = create<QuizState>((set, get) => {
     },
 
     canDoSuperChallenge: () => {
-      return get().lastSuperDate !== getSuperChallengeKey();
+      return normalizeSuperChallengeKey(get().lastSuperDate) !== getSuperChallengeKey();
     },
 
     superDaysLeft: () => {
       const s = get();
-      if (isTrainingCampActiveNow()) {
-        return s.lastSuperDate === getDateKeyStr() ? 1 : 0;
-      }
       if (s.lastSuperDate === getWeekKeyStr()) return 0;
       if (!s.lastSuperDate) return 0;
       // Calculate days until next week
@@ -362,7 +354,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
           lastReviewDate: data.lastReviewDate || '',
           lastReviewCorrect: data.lastReviewCorrect || 0,
           lastReviewTotal: data.lastReviewTotal || 0,
-          lastSuperDate: data.lastSuperDate || '',
+          lastSuperDate: normalizeSuperChallengeKey(data.lastSuperDate),
           superCompletions: data.superCompletions || 0,
           superBestScore: data.superBestScore || 0,
           superBestTotal: data.superBestTotal || 0,

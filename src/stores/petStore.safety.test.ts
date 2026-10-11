@@ -66,6 +66,30 @@ beforeEach(() => {
 });
 
 describe('旧用户启动恢复', () => {
+  it('恢复旧集训存档时关闭增益并保留已有资源', async () => {
+    vi.spyOn(persist, 'dualLoad').mockResolvedValueOnce(JSON.stringify({
+      ownedPets: [makePet('legacy-camp')], coins: 1400,
+      foods: { basic: 8 }, gachaRewardMigrationDone: true,
+      trainingCampActive: true, trainingCampEndDate: '2099-12-31',
+      trainingCampFoodsClaimed: [],
+    }));
+    expect(await usePetStore.getState().load()).toBe(true);
+    const state = usePetStore.getState();
+    expect(state.trainingCampActive).toBe(false);
+    expect(state.coins).toBe(1400);
+    expect(state.foods.basic).toBe(8);
+    expect(state.getRewardMultiplier()).toBe(1);
+    expect(state.claimTrainingCampFoods()).toBe(false);
+    expect(state.activateTrainingCamp('CAMP-20991231-AAAA-AAAA')).toBe(false);
+  });
+
+  it('旧调用和内存中的集训标记不能发额外资源', () => {
+    usePetStore.setState({ trainingCampActive: true, trainingCampEndDate: '2099-12-31' });
+    const before = usePetStore.getState().foods.basic;
+    expect(usePetStore.getState().getRewardMultiplier()).toBe(1);
+    expect(usePetStore.getState().claimTrainingCampFoods()).toBe(false);
+    expect(usePetStore.getState().foods.basic).toBe(before);
+  });
   it('存档读取完成前保持未加载状态，完成后恢复原有智子', async () => {
     let finishRead!: (value: string) => void;
     vi.spyOn(persist, 'dualLoad').mockImplementationOnce(() => new Promise(resolve => { finishRead = resolve; }));

@@ -823,58 +823,10 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   // ─── Training camp ───
-  activateTrainingCamp: (password: string) => {
-    // CAMP-{date}-{check}-{rand} format — rand is part of the hash
-    const match = password.match(/^CAMP-(\d{8})-([A-Z0-9]{4})-([A-Z0-9]{4})$/);
-    if (match) {
-      const [, date, check, rand] = match;
-      // Validate hash — rand is now included, changing any char invalidates the code
-      const SECRET = 'csp-camp-2025';
-      const s = `${date}-${rand}-${SECRET}`;
-      let h = 0;
-      for (let i = 0; i < s.length; i++) {
-        h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-      }
-      const chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-      let expected = '';
-      let v = Math.abs(h);
-      for (let i = 0; i < 4; i++) {
-        expected = chars[v % chars.length] + expected;
-        v = Math.floor(v / chars.length);
-      }
-      if (expected !== check) return false;
-      const end = new Date(Date.now() + 12 * 86400000).toISOString().slice(0, 10);
-      set({ trainingCampActive: true, trainingCampEndDate: end, trainingCampFoodsClaimed: [] });
-      get().save();
-      return true;
-    }
-    return false;
-  },
-
-  getRewardMultiplier: () => {
-    const { trainingCampActive, trainingCampEndDate } = get();
-    if (!trainingCampActive) return 1.0;
-    const today = new Date().toISOString().slice(0, 10);
-    if (today <= trainingCampEndDate) return 1.5;
-    // Camp expired
-    set({ trainingCampActive: false });
-    get().save();
-    return 1.0;
-  },
-
-  claimTrainingCampFoods: () => {
-    const { trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed } = get();
-    if (!trainingCampActive) return false;
-    const today = new Date().toISOString().slice(0, 10);
-    if (today > trainingCampEndDate) return false;
-    if (trainingCampFoodsClaimed.includes(today)) return false;
-    set(s => ({
-      foods: { ...s.foods, basic: (s.foods.basic || 0) + 3 },
-      trainingCampFoodsClaimed: [...s.trainingCampFoodsClaimed, today],
-    }));
-    get().save();
-    return true;
-  },
+  // Keep old callers/backup fields compatible; camp codes no longer grant resources.
+  activateTrainingCamp: () => false,
+  getRewardMultiplier: () => 1,
+  claimTrainingCampFoods: () => false,
 
   // ─── Experience pool ───
   allocateExpFromPool: (petId: string, amount: number) => {
@@ -1124,9 +1076,9 @@ export const usePetStore = create<PetState>((set, get) => ({
           gachaDailyPulls: data.gachaDailyPulls || 0,
           gachaDate: data.gachaDate || '',
           gachaPity: data.gachaPity || 0,
-          trainingCampActive: data.trainingCampActive || false,
-          trainingCampEndDate: data.trainingCampEndDate || '',
-          trainingCampFoodsClaimed: data.trainingCampFoodsClaimed || [],
+          trainingCampActive: false,
+          trainingCampEndDate: '',
+          trainingCampFoodsClaimed: [],
           lastActiveAt: data.lastActiveAt || new Date().toISOString(),
           dailyHungerConsumed: data.dailyHungerConsumed || 0,
           hungerDate: data.hungerDate || '',

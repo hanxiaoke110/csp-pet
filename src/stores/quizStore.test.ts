@@ -43,7 +43,7 @@ describe('超级挑战次数限制', () => {
     expect(useQuizStore.getState().canDoSuperChallenge()).toBe(false);
   });
 
-  it('集训模式按天限制', () => {
+  it('旧集训状态不能将超级挑战改成每日领取', () => {
     usePetStore.setState({
       trainingCampActive: true,
       trainingCampEndDate: '2026-07-31',
@@ -53,10 +53,19 @@ describe('超级挑战次数限制', () => {
     expect(quiz.canDoSuperChallenge()).toBe(true);
 
     quiz.completeSuperChallenge(5);
-    expect(useQuizStore.getState().lastSuperDate).toBe('2026-07-20');
+    expect(useQuizStore.getState().lastSuperDate).toMatch(/-W\d+$/);
     expect(useQuizStore.getState().canDoSuperChallenge()).toBe(false);
 
     vi.setSystemTime(new Date('2026-07-21T08:00:00.000Z'));
+    expect(useQuizStore.getState().canDoSuperChallenge()).toBe(false);
+  });
+
+  it('保留旧集训按日记录的本周完成状态', () => {
+    useQuizStore.setState({ lastSuperDate: '2026-07-20' });
+    expect(useQuizStore.getState().canDoSuperChallenge()).toBe(false);
+    vi.setSystemTime(new Date('2026-07-21T08:00:00.000Z'));
+    expect(useQuizStore.getState().canDoSuperChallenge()).toBe(false);
+    vi.setSystemTime(new Date('2026-07-28T08:00:00.000Z'));
     expect(useQuizStore.getState().canDoSuperChallenge()).toBe(true);
   });
 });

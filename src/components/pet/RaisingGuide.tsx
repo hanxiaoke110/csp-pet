@@ -5,7 +5,6 @@ export default function RaisingGuide() {
   const activePet = usePetStore(s => s.ownedPets.find(p => p.petId === s.activePetId));
   const expPool = usePetStore(s => s.expPool);
   const coins = usePetStore(s => s.coins);
-  const campActive = usePetStore(s => s.trainingCampActive);
 
   const ms = activePet ? getLevelMilestone(activePet.level) : getLevelMilestone(1);
 
@@ -20,10 +19,6 @@ export default function RaisingGuide() {
         <div style={{ flex: 1, minWidth: 110, background: '#1e293b', borderRadius: 10, padding: '8px 12px', textAlign: 'center' }}>
           <div style={{ fontSize: 18, fontWeight: 700, color: '#818cf8' }}>📦 {expPool}exp</div>
           <div style={{ fontSize: 11, color: '#94a3b8' }}>经验池</div>
-        </div>
-        <div style={{ flex: 1, minWidth: 110, background: '#1e293b', borderRadius: 10, padding: '8px 12px', textAlign: 'center' }}>
-          <div style={{ fontSize: 18, fontWeight: 700, color: campActive ? '#34d399' : '#94a3b8' }}>{campActive ? '🏕️ 1.5x' : '—'}</div>
-          <div style={{ fontSize: 11, color: '#94a3b8' }}>集训状态</div>
         </div>
       </div>
 
@@ -133,12 +128,6 @@ export default function RaisingGuide() {
         <p>在「神秘代码」入口输入老师发放的兑换码。</p>
         <p>补偿码 <strong>CMP-</strong>：每码全局只能兑换一次，金币直接到账，经验存入经验池。</p>
         <p>优秀码 <strong>EXC-</strong>：仅当天有效、每设备限兑一次，金币与经验直接到账。</p>
-      </Section>
-
-      <Section title="🏕️ 集训模式" icon="🏕️">
-        <p>教师发放激活码 → 在<strong>设置页</strong>输入 → 12 天内所有奖励 <strong>×1.5</strong>。</p>
-        <p>集训期间每日可领取 3 份普通食物。</p>
-        <p>适合暑期集训、考前冲刺等密集学习场景。</p>
       </Section>
 
       <Section title="📅 签到" icon="📅">
