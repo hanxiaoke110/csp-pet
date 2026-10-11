@@ -177,7 +177,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.49';
+  const VER = '1.7.50';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -188,11 +188,12 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🌠 “我的星途”上线：11 项永久累计任务，不用每日打卡</div>
-          <div>🎁 焕新礼：200 金币、100 经验与 2 份普通食物</div>
-          <div>🧩 旧的做题、迷宫和试炼进度会自动计入星途</div>
-          <div>🐾 修复旧用户启动时被误判为尚未领养的问题</div>
-          <div>💾 领奖记录进入本地备份，资料恢复期间不会提前结算</div>
+          <div>📚 课堂资料按阶段展示，后续课程资料可在线补充</div>
+          <div>⏳ 新增自愿使用的专注学习工具与迷你计时条</div>
+          <div>✨ 典藏卡光影升级，星相衣橱新增 20 件在线装扮</div>
+          <div>⚔️ 新增多属性装备、金币强化与分解，试炼金币不设周上限</div>
+          <div>🗺️ 修复迷宫出口卡住，关闭集训码增益入口</div>
+          <div>🐾 加强智子拖动、旧钱包载入和备份恢复保护</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
