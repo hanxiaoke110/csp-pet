@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 2,
-  "updatedAt": "2026-10-11T10:27:17.859Z",
+  "catalogVersion": 3,
+  "updatedAt": "2026-10-12T10:47:22.137Z",
   "navigationUrl": "https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg",
   "lessons": [
     {
@@ -926,10 +926,10 @@
       "stage": "C3",
       "description": "理解递归的递进与回归过程，掌握递归关系、递归函数与递归出口。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p071",
@@ -938,10 +938,10 @@
       "stage": "C3",
       "description": "通过爬楼梯、拼接数字和数的分解，练习多分支递归与搜索。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p072",
@@ -950,10 +950,10 @@
       "stage": "C4",
       "description": "综合运用枚举、贪心、栈和数学知识解决复合练习。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/SnrFdDsuZoQBWKxlqK4cemW4nrd",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p073",
@@ -962,10 +962,10 @@
       "stage": "C4",
       "description": "巩固汉诺塔递归、快速幂与大数取模等典型问题。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/AG7gdnKLkoRQfWxS2RucYGz4nBe",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p074",
@@ -974,10 +974,10 @@
       "stage": "C4",
       "description": "通过拼数、导弹拦截和公路真题，训练排序、二分与贪心思维。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/RYBpdpflzoX6aVxrjf5ce0E9nZe",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p075",
@@ -986,10 +986,10 @@
       "stage": "C4",
       "description": "通过公交换乘和幂次方真题，巩固模拟、结构体、递归与二进制拆分。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OEEldRD84o3Ugnxm25KcN9dSnIg",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p076",
@@ -998,10 +998,10 @@
       "stage": "C4",
       "description": "理解树和二叉树的基本概念，掌握父结点存储及前中后序遍历。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Ha4ydXrtSoyAxPxPciicsa0Jnve",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p077",
@@ -1010,10 +1010,10 @@
       "stage": "C4",
       "description": "理解完全二叉树与堆，掌握 priority_queue 及合并果子的贪心策略。",
       "tags": [],
-      "feishuUrl": "",
-      "status": "coming_soon",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/EDGLdzQVloxwB5x5vzkcwvqHn8f",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-12"
     },
     {
       "id": "lesson-material-p078",

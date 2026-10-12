@@ -1,8 +1,8 @@
 {
-  "version": 1,
-  "updated": "2026-07-15",
+  "version": 2,
+  "updated": "2026-10-12",
   "source": "教学资料/卡片合集",
-  "totalLessons": 69,
+  "totalLessons": 77,
   "note": "客户端只保存课程目录和飞书链接；完整卡片原图与正文全部放在飞书文档中，避免安装包超过 Gitee 100MB 限制。",
   "lessons": [
     {
@@ -1451,6 +1451,174 @@
         "reviewCombo": {
           "title": "P69 复习结合卡",
           "use": "复习巩固：故事记忆和知识要点合在一起。"
+        }
+      }
+    },
+    {
+      "lessonNo": 70,
+      "title": "递归算法（一）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+      "documentId": "R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+      "cards": {
+        "preclassFable": {
+          "title": "P70 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P70 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P70 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 71,
+      "title": "递归算法（二）",
+      "stage": "C3 进阶阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+      "documentId": "Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+      "cards": {
+        "preclassFable": {
+          "title": "P71 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P71 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P71 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 72,
+      "title": "综合练习（一）",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/SnrFdDsuZoQBWKxlqK4cemW4nrd",
+      "documentId": "SnrFdDsuZoQBWKxlqK4cemW4nrd",
+      "cards": {
+        "preclassFable": {
+          "title": "P72 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P72 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P72 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 73,
+      "title": "综合练习（二）",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/AG7gdnKLkoRQfWxS2RucYGz4nBe",
+      "documentId": "AG7gdnKLkoRQfWxS2RucYGz4nBe",
+      "cards": {
+        "preclassFable": {
+          "title": "P73 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P73 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P73 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 74,
+      "title": "真题演练（一）",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/RYBpdpflzoX6aVxrjf5ce0E9nZe",
+      "documentId": "RYBpdpflzoX6aVxrjf5ce0E9nZe",
+      "cards": {
+        "preclassFable": {
+          "title": "P74 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P74 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P74 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 75,
+      "title": "真题演练（二）",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/OEEldRD84o3Ugnxm25KcN9dSnIg",
+      "documentId": "OEEldRD84o3Ugnxm25KcN9dSnIg",
+      "cards": {
+        "preclassFable": {
+          "title": "P75 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P75 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P75 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 76,
+      "title": "树（一）",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Ha4ydXrtSoyAxPxPciicsa0Jnve",
+      "documentId": "Ha4ydXrtSoyAxPxPciicsa0Jnve",
+      "cards": {
+        "preclassFable": {
+          "title": "P76 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P76 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P76 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 77,
+      "title": "特殊二叉树与优先队列",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/EDGLdzQVloxwB5x5vzkcwvqHn8f",
+      "documentId": "EDGLdzQVloxwB5x5vzkcwvqHn8f",
+      "cards": {
+        "preclassFable": {
+          "title": "P77 课前故事卡",
+          "use": "课前导入：先用故事建立直觉。"
+        },
+        "knowledgeSummary": {
+          "title": "P77 知识总览卡",
+          "use": "课后梳理：概念、规则与易错点。"
+        },
+        "reviewCombo": {
+          "title": "P77 复习结合卡",
+          "use": "自测并核对答案，再回到完整讲义。"
         }
       }
     }

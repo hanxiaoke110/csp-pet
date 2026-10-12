@@ -1,0 +1,472 @@
+{
+  "state": "published",
+  "catalogVersion": 3,
+  "deployedVersionId": "802fd956-d569-48f6-9b7e-10de2875bcd4",
+  "publishedDate": "2026-10-12",
+  "lessons": [
+    {
+      "lessonNo": 70,
+      "title": "P70｜递归算法（一）",
+      "file": "P70-递归算法（一）.md",
+      "documentId": "R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcnsQdtR0eBbFHUslbFlA9GTf",
+          "document_id": "R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+          "file_token": "NTQ6bPIODoP4sdxNhdLcYlYXn5d",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcnf3yJPPF5ReCsqSlGEg41Ne",
+          "document_id": "R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+          "file_token": "HDeZbefPUoOgxbxG1pOcXmIknYe",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnG1jRiQiQRyoI4NA4i2g2Uf",
+          "document_id": "R65Ldns0FoEOyFxmyfmc4Jd1nGe",
+          "file_token": "IhWNbMlzyo6FplxQliLcviVan1d",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "f6a8ceaf39caefdce6c1f5e594c7abd23c55e7cbf32a93e64b7fac13687383f4",
+      "verifiedAt": "2026-10-12T10:44:39.867Z"
+    },
+    {
+      "lessonNo": 71,
+      "title": "P71｜递归算法（二）",
+      "file": "P71-递归算法（二）.md",
+      "documentId": "Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcnL764t9eYAWbaz9X46AWBTe",
+          "document_id": "Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+          "file_token": "IzV3bXTikojKfPxfmrOcw7uvnOf",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcnOhNKo0GiQo7GpFvzqYGFxH",
+          "document_id": "Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+          "file_token": "NpVpb0u0ZoX7Vox4gs1cLPCRnue",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnD7egbaRXsmL1E5AHNC2teh",
+          "document_id": "Z2uNdfqCxoSfsHxOouqcHlfmnqb",
+          "file_token": "C39tbnAkvoEi9hxkwxzcB3jsnng",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "ff5006b94212c832acbf64889c316155df3403dd720c688d39bed88acac44443",
+      "verifiedAt": "2026-10-12T10:44:50.228Z"
+    },
+    {
+      "lessonNo": 72,
+      "title": "P72｜综合练习（一）",
+      "file": "P72-综合练习（一）.md",
+      "documentId": "SnrFdDsuZoQBWKxlqK4cemW4nrd",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/SnrFdDsuZoQBWKxlqK4cemW4nrd",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcn8zbJZh27AzMW7XYcRdmK9d",
+          "document_id": "SnrFdDsuZoQBWKxlqK4cemW4nrd",
+          "file_token": "VmK9bOFydoAFVrxnhZlcwXMrn8g",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcnZPHZGz3kq53gQCPtEIUNqc",
+          "document_id": "SnrFdDsuZoQBWKxlqK4cemW4nrd",
+          "file_token": "MEz0bQNgzoFlKFxgoegc7LNNnbg",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnshBm3y68qRTrtsSc2psllh",
+          "document_id": "SnrFdDsuZoQBWKxlqK4cemW4nrd",
+          "file_token": "TsqSbi7E7oFgTpxxzHncFdA1nid",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "tenant_readable",
+        "lock_switch": false,
+        "security_entity": "anyone_can_view",
+        "share_entity": "anyone"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_edit",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "d31901b31adfd89a2a313a135ad0afe2722defaad2a9932d06baa4745084ca31",
+      "verifiedAt": "2026-10-12T10:45:02.689Z"
+    },
+    {
+      "lessonNo": 73,
+      "title": "P73｜综合练习（二）",
+      "file": "P73-综合练习（二）.md",
+      "documentId": "AG7gdnKLkoRQfWxS2RucYGz4nBe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/AG7gdnKLkoRQfWxS2RucYGz4nBe",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcn2UQiLsdycabzFsehm7zRUb",
+          "document_id": "AG7gdnKLkoRQfWxS2RucYGz4nBe",
+          "file_token": "XJqzbBgxiocMkfxasQVcKwwGn1c",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcn0Wpa1iN2emPxLYbbZk9nof",
+          "document_id": "AG7gdnKLkoRQfWxS2RucYGz4nBe",
+          "file_token": "G4DCb5CtFo9lnnxQfshcjHbFn6f",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnQoSiBkiHCT8nu1gDJwF6Eb",
+          "document_id": "AG7gdnKLkoRQfWxS2RucYGz4nBe",
+          "file_token": "EpfLbu8mWobpaqxFicqcGYGRnQb",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "tenant_readable",
+        "lock_switch": false,
+        "security_entity": "anyone_can_view",
+        "share_entity": "anyone"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_edit",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "136f2b6cc7fc87d46c51bd9e6f350362475d0643c4b1c055cd5e3d841903dac9",
+      "verifiedAt": "2026-10-12T10:45:15.474Z"
+    },
+    {
+      "lessonNo": 74,
+      "title": "P74｜真题演练（一）",
+      "file": "P74-真题演练（一）.md",
+      "documentId": "RYBpdpflzoX6aVxrjf5ce0E9nZe",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/RYBpdpflzoX6aVxrjf5ce0E9nZe",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcnmcocbDVZkASURQxngC1rFb",
+          "document_id": "RYBpdpflzoX6aVxrjf5ce0E9nZe",
+          "file_token": "XDdpbu55DoRkboxlBR6cjpiqnLb",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcnVQRVJDH8IjmIikxKZhS1Xc",
+          "document_id": "RYBpdpflzoX6aVxrjf5ce0E9nZe",
+          "file_token": "DQZfb8KEtoagqFxoQyEcFg2lnAm",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnJkDJ1i8IuGM19Gkg6TByAd",
+          "document_id": "RYBpdpflzoX6aVxrjf5ce0E9nZe",
+          "file_token": "ULSobh0AOoqbH6x1nW9c4Sbpnod",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "tenant_readable",
+        "lock_switch": false,
+        "security_entity": "anyone_can_view",
+        "share_entity": "anyone"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_edit",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "24aeb55bcf3f4f5d66fcf4d582eed98569caee1ed5e0375f02e5f7c8ce357b12",
+      "verifiedAt": "2026-10-12T10:45:27.534Z"
+    },
+    {
+      "lessonNo": 75,
+      "title": "P75｜真题演练（二）",
+      "file": "P75-真题演练（二）.md",
+      "documentId": "OEEldRD84o3Ugnxm25KcN9dSnIg",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/OEEldRD84o3Ugnxm25KcN9dSnIg",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcn9IkznsiV9Wi9A7Ztd3raVe",
+          "document_id": "OEEldRD84o3Ugnxm25KcN9dSnIg",
+          "file_token": "Z21Rb5FEpoIV68xYvIfcBf4xnkd",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcnOIJjXMIOuPN0xjRTV9VvYc",
+          "document_id": "OEEldRD84o3Ugnxm25KcN9dSnIg",
+          "file_token": "L9ZGbI6qio7zKixpkLkc9O9XnCe",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnFZ2hBt4scoWEonM8pDCMUh",
+          "document_id": "OEEldRD84o3Ugnxm25KcN9dSnIg",
+          "file_token": "P2RVbUcUKokviZx6ab7c0xP3npf",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "tenant_readable",
+        "lock_switch": false,
+        "security_entity": "anyone_can_view",
+        "share_entity": "anyone"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_edit",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "140aea5616dfaa2baa4d49cf2c4efc529340296cf0b1a13492bb54d6d111d6be",
+      "verifiedAt": "2026-10-12T10:45:39.542Z"
+    },
+    {
+      "lessonNo": 76,
+      "title": "P76｜树（一）",
+      "file": "P76-树（一）.md",
+      "documentId": "Ha4ydXrtSoyAxPxPciicsa0Jnve",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/Ha4ydXrtSoyAxPxPciicsa0Jnve",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcnCvpYEXCwIyRcyOfJjxImXf",
+          "document_id": "Ha4ydXrtSoyAxPxPciicsa0Jnve",
+          "file_token": "VbsWbOcQFokKt8xStP9c4VQwnyg",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcnrmRX6HxubkF1NOHsvoynsg",
+          "document_id": "Ha4ydXrtSoyAxPxPciicsa0Jnve",
+          "file_token": "R1uebjWOnououIxjcqDcR1yHnBd",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnHAKI3HKYodpA5MsR1iisi0",
+          "document_id": "Ha4ydXrtSoyAxPxPciicsa0Jnve",
+          "file_token": "WeJLbbOqEoxnjnx5Gh5cnfqVnec",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "tenant_readable",
+        "lock_switch": false,
+        "security_entity": "anyone_can_view",
+        "share_entity": "anyone"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_edit",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "996070a3586fa724c3e055fac552da155485edd2f5d121319add3ad6caaa9220",
+      "verifiedAt": "2026-10-12T10:45:51.752Z"
+    },
+    {
+      "lessonNo": 77,
+      "title": "P77｜特殊二叉树与优先队列",
+      "file": "P77-特殊二叉树与优先队列.md",
+      "documentId": "EDGLdzQVloxwB5x5vzkcwvqHn8f",
+      "url": "https://scncdgmg7m6w.feishu.cn/docx/EDGLdzQVloxwB5x5vzkcwvqHn8f",
+      "images": [
+        {
+          "kind": "story",
+          "block_id": "doxcnPh1r90GQs5el7fVO0T19og",
+          "document_id": "EDGLdzQVloxwB5x5vzkcwvqHn8f",
+          "file_token": "A6iHbJEfjocjWNx02qFcPX9FnXf",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "overview",
+          "block_id": "doxcnPZGfrcdUMiHFhlIggagjaf",
+          "document_id": "EDGLdzQVloxwB5x5vzkcwvqHn8f",
+          "file_token": "AiFSbHYGeob8xyxRN8sc4i2knCf",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        },
+        {
+          "kind": "review",
+          "block_id": "doxcnO4kQPLDjCPiBdurFeQA0af",
+          "document_id": "EDGLdzQVloxwB5x5vzkcwvqHn8f",
+          "file_token": "Kom0ba8XioetC4xEIW2coVW6ncd",
+          "height": 1125,
+          "type": "image",
+          "width": 900
+        }
+      ],
+      "bodyWritten": true,
+      "permissionBefore": {
+        "comment_entity": "anyone_can_view",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "tenant_readable",
+        "lock_switch": false,
+        "security_entity": "anyone_can_view",
+        "share_entity": "anyone"
+      },
+      "permission": {
+        "comment_entity": "anyone_can_edit",
+        "external_access": true,
+        "invite_external": true,
+        "link_share_entity": "anyone_readable",
+        "lock_switch": false,
+        "security_entity": "only_full_access",
+        "share_entity": "only_full_access"
+      },
+      "verified": true,
+      "sha256": "adb4fbb74ef322377b29c6e272bdf367dd173d1bba3467a761b4f02c2d5b3e23",
+      "verifiedAt": "2026-10-12T10:46:04.205Z"
+    }
+  ]
+}

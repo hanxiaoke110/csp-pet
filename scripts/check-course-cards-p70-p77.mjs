@@ -7,6 +7,8 @@ import { createHash } from 'node:crypto';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dir = path.join(root, 'reports/learning-materials/course-cards-p70-p77');
+const publishedPath = path.join(dir, 'published.json');
+const published = fs.existsSync(publishedPath) ? JSON.parse(fs.readFileSync(publishedPath, 'utf8')) : null;
 const files = fs.readdirSync(dir).filter(x => /^P7[0-7]-.*\.md$/.test(x)).sort();
 if (files.length !== 8) throw new Error('必须有 P70–P77 八张草稿');
 const cases = {
@@ -109,15 +111,19 @@ try {
         if (!passed) throw new Error(`P${no} 程序 ${p + 1} 样例失败：${JSON.stringify(results.at(-1))}`);
       }
     }
-    cards.push({ lessonNo: no, file, title: md.split('\n')[0].slice(2), status: 'local_draft', sha256: createHash('sha256').update(md).digest('hex'), html: render(md) });
+    const sha256 = createHash('sha256').update(md).digest('hex');
+    const online = published?.state === 'published' && published.lessons.some(c => c.lessonNo === no && c.verified && c.sha256 === sha256);
+    cards.push({ lessonNo: no, file, title: md.split('\n')[0].slice(2), status: online ? 'published' : 'local_draft', sha256, html: render(md) });
   }
-  const index = { schemaVersion: 1, state: 'local_drafts_not_published', cards: cards.map(({ html, ...card }) => card), programs: 16, cases: results.length, results };
+  const allPublished = cards.every(c => c.status === 'published');
+  const statusText = allPublished ? '已上线飞书及在线目录（依据发布回读记录）' : '本地草稿，尚未全部发布';
+  const index = { schemaVersion: 1, state: allPublished ? 'published_verified' : 'local_drafts_not_published', cards: cards.map(({ html, ...card }) => card), programs: 16, cases: results.length, results };
   fs.writeFileSync(path.join(dir, 'validation.json'), JSON.stringify(index, null, 2) + '\n');
   const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P70–P77 课堂资料草稿</title><style>
   :root{font-family:system-ui,-apple-system,"PingFang SC",sans-serif;color:#233347;background:#f2f5f9}*{box-sizing:border-box}body{margin:0}header{padding:32px 24px;background:#143044;color:#fff}header div{max-width:900px;margin:auto}header p{color:#c6dce8}nav{max-width:948px;margin:24px auto;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap}nav a{background:#fff;border:1px solid #cbd8e4;padding:8px 14px;border-radius:10px;text-decoration:none;color:#175777}main{max-width:948px;margin:auto;padding:0 24px 48px}article{padding:32px;margin:0 0 24px;background:#fff;border:1px solid #dce4ec;border-radius:16px;scroll-margin-top:16px}h1{font-size:28px}h2{font-size:20px;margin-top:32px;border-top:1px solid #e5ebf0;padding-top:20px}h3{font-size:17px;color:#175777}p,li{line-height:1.85}li{margin:6px 0}pre{background:#142b3b;color:#e5f3f8;border-radius:12px;padding:20px;overflow:auto;font-size:14px;line-height:1.65}code{font-family:ui-monospace,monospace}p code,li code{background:#edf4f8;padding:2px 5px;border-radius:4px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:10px;border:1px solid #dce4ec;text-align:left;line-height:1.65}th{background:#eaf3f7}.table-scroll{overflow:auto}a{color:#126488}@media(max-width:600px){main{padding:0 12px 24px}article{padding:18px}h1{font-size:24px}}@media print{header,nav{display:none}body{background:white}article{break-before:page;border:0}pre{white-space:pre-wrap;color:black;background:#eee}h2,h3{break-after:avoid}}
-  </style><header><div><h1>课堂资料 · P70–P77</h1><p>本地草稿预览 · 8 课 · 16 段完整代码 · ${results.length} 项运行检查通过 · 尚未发布到飞书或在线目录</p></div></header><nav aria-label="课次导航">${cards.map(c => `<a href="#p${c.lessonNo}">P${c.lessonNo}</a>`).join('')}</nav><main>${cards.map(c => `<article id="p${c.lessonNo}">${c.html}</article>`).join('')}</main></html>`;
+  </style><header><div><h1>课堂资料 · P70–P77</h1><p>${statusText} · 8 课 · 16 段完整代码 · ${results.length} 项运行检查通过</p></div></header><nav aria-label="课次导航">${cards.map(c => `<a href="#p${c.lessonNo}">P${c.lessonNo}</a>`).join('')}</nav><main>${cards.map(c => `<article id="p${c.lessonNo}">${c.html}</article>`).join('')}</main></html>`;
   fs.writeFileSync(path.join(dir, 'preview.html'), html);
-  console.log(`8 张草稿结构检查通过，16 段 C++ 编译成功，${results.length} 项样例与边界用例全部通过。已生成本地预览及 validation.json，未调用任何在线 API。`);
+  console.log(`8 课结构检查通过，16 段 C++ 编译成功，${results.length} 项样例与边界用例全部通过。${statusText}。本次验证未调用在线 API。`);
 } finally {
   fs.rmSync(temp, { recursive: true, force: true });
 }

@@ -1,61 +1,61 @@
 {
   "schemaVersion": 1,
-  "state": "local_drafts_not_published",
+  "state": "published_verified",
   "cards": [
     {
       "lessonNo": 70,
       "file": "P70-递归算法（一）.md",
       "title": "P70｜递归算法（一）",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "f6a8ceaf39caefdce6c1f5e594c7abd23c55e7cbf32a93e64b7fac13687383f4"
     },
     {
       "lessonNo": 71,
       "file": "P71-递归算法（二）.md",
       "title": "P71｜递归算法（二）",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "ff5006b94212c832acbf64889c316155df3403dd720c688d39bed88acac44443"
     },
     {
       "lessonNo": 72,
       "file": "P72-综合练习（一）.md",
       "title": "P72｜综合练习（一）",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "d31901b31adfd89a2a313a135ad0afe2722defaad2a9932d06baa4745084ca31"
     },
     {
       "lessonNo": 73,
       "file": "P73-综合练习（二）.md",
       "title": "P73｜综合练习（二）",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "136f2b6cc7fc87d46c51bd9e6f350362475d0643c4b1c055cd5e3d841903dac9"
     },
     {
       "lessonNo": 74,
       "file": "P74-真题演练（一）.md",
       "title": "P74｜真题演练（一）",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "24aeb55bcf3f4f5d66fcf4d582eed98569caee1ed5e0375f02e5f7c8ce357b12"
     },
     {
       "lessonNo": 75,
       "file": "P75-真题演练（二）.md",
       "title": "P75｜真题演练（二）",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "140aea5616dfaa2baa4d49cf2c4efc529340296cf0b1a13492bb54d6d111d6be"
     },
     {
       "lessonNo": 76,
       "file": "P76-树（一）.md",
       "title": "P76｜树（一）",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "996070a3586fa724c3e055fac552da155485edd2f5d121319add3ad6caaa9220"
     },
     {
       "lessonNo": 77,
       "file": "P77-特殊二叉树与优先队列.md",
       "title": "P77｜特殊二叉树与优先队列",
-      "status": "local_draft",
+      "status": "published",
       "sha256": "adb4fbb74ef322377b29c6e272bdf367dd173d1bba3467a761b4f02c2d5b3e23"
     }
   ],
