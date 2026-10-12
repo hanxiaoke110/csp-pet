@@ -1,0 +1,91 @@
+name: Resume Release Signing
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Successful Build & Release run containing the three installer artifacts
+        required: true
+        type: string
+      version:
+        description: Release version without the v prefix
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-aarch64
+          path: dist/macos-aarch64
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-x86_64
+          path: dist/macos-x86_64
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-x86_64
+          path: dist/windows-x86_64
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Validate and sign release packages
+        env:
+          PRIVKEY: ${{ secrets.TAURI_UPDATER_PRIVKEY }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          package() { find "dist/$1" \( -name '*.dmg' -o -name '*.exe' \) -type f | head -1; }
+          rename_package() {
+            local source="$1" target="$2"
+            test -n "$source" && test -f "$source"
+            mv "$source" "$target"
+          }
+          rename_package "$(package macos-aarch64)" "dist/CSP_${VERSION}_aarch64.dmg"
+          rename_package "$(package macos-x86_64)" "dist/CSP_${VERSION}_x64.dmg"
+          rename_package "$(package windows-x86_64)" "dist/CSP_${VERSION}_x64-setup.exe"
+
+          for package_path in dist/CSP_*; do
+            bytes=$(stat -c%s "$package_path")
+            test "$bytes" -gt 0 && test "$bytes" -lt 100000000
+          done
+
+          sign() {
+            npx @tauri-apps/cli signer sign --private-key "$PRIVKEY" --password '' "$1" 2>/dev/null \
+              | grep '^dW50' | head -1
+          }
+          sig_arm=$(sign "dist/CSP_${VERSION}_aarch64.dmg")
+          sig_intel=$(sign "dist/CSP_${VERSION}_x64.dmg")
+          sig_win=$(sign "dist/CSP_${VERSION}_x64-setup.exe")
+          for signature in "$sig_arm" "$sig_intel" "$sig_win"; do
+            printf '%s' "$signature" | grep -Eq '^dW50[A-Za-z0-9+/=]+$'
+          done
+          jq -n \
+            --arg version "$VERSION" \
+            --arg arm "$sig_arm" \
+            --arg intel "$sig_intel" \
+            --arg win "$sig_win" \
+            '{version:$version,signatures:{"darwin-aarch64":$arm,"darwin-x86_64":$intel,"windows-x86_64":$win}}' \
+            > dist/signatures.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-signatures-${{ inputs.version }}
+          path: dist/signatures.json
+          if-no-files-found: error
+          retention-days: 3
