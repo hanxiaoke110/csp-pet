@@ -130,17 +130,21 @@ export function buildCanonicalBank({
   const originalPracticeRaw = readJson(originalPracticePath);
   const advancedGespPath = path.join(root, 'scripts/question-bank/data/gesp-advanced-choice.json');
   const advancedGespRaw = readJson(advancedGespPath);
+  const autumnPath = path.join(root, 'scripts/question-bank/data/autumn-2026.json');
+  const autumnRaw = fs.existsSync(autumnPath) ? readJson(autumnPath) : { questions: [] };
   const localSourcesRevision = Number.parseInt(
     createHash('sha256')
       .update(fs.readFileSync(recoveryPath))
       .update(fs.readFileSync(originalPracticePath))
       .update(advancedGespRaw.sourceDigest)
+      .update(JSON.stringify(autumnRaw.questions))
       .digest('hex').slice(0, 6),
     16,
   );
   const contentRevision = reviewedExport.revision * 100_000_000 + localSourcesRevision;
 
   const groups = [
+    { priority: 130, origin: 'reviewed_autumn_2026', questions: autumnRaw.questions },
     { priority: 120, origin: 'official_source_recovery', questions: recoveryRaw.questions },
     { priority: 110, origin: 'reviewed_gesp_learning_h5', questions: advancedGespRaw.questions.map(normalizeLegacyQuestion) },
     { priority: 100, origin: 'reviewed_cloud', questions: Object.values(reviewedExport.questions).map(normalizeLegacyQuestion) },

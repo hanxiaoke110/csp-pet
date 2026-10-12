@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-10-12T15:39:29.913Z",
+  "revision": 50013743514,
+  "endpoints": [
+    {
+      "base": "https://cards.cspstudy.top/course-data/question-bank-v2",
+      "files": 7,
+      "addedRecords": 159,
+      "hashesVerified": true
+    },
+    {
+      "base": "https://api.cspstudy.top/api/question-bank/v2",
+      "files": 7,
+      "addedRecords": 159,
+      "hashesVerified": true
+    }
+  ]
+}

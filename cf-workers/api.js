@@ -7,10 +7,10 @@ const ACTIVE_WISH_LIMIT = 3;  // max active wishes per student — freed when te
 const CLEANUP_PROTECT_DAYS = 7;
 const CLEANUP_MIN_KEEP = 20;
 const QUESTION_BANK_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
-const QUESTION_BANK_V2_BASE = `${QUESTION_BANK_BASE}/question-bank-v2`;
+const QUESTION_BANK_V2_BASE = 'https://cards.cspstudy.top/course-data/question-bank-v2';
 const QUESTION_BANK_V2_FILES = new Set([
   'daily-gesp.json', 'super-cspj.json', 'exam-questions.json',
-  'exam-manifests.json', 'dungeon-mixed.json', 'verification-summary.json',
+  'exam-manifests.json', 'dungeon-mixed.json', 'topic-practice.json', 'verification-summary.json',
 ]);
 const QUESTION_BANK_PERMISSION = 'question_bank_review';
 const COLLECTOR_VOTE_META_KEY = 'collector_vote_config';
@@ -864,7 +864,7 @@ export default {
       const upstream = await fetch(`${QUESTION_BANK_V2_BASE}/manifest.json`, { cf: { cacheTtl: 300, cacheEverything: true } });
       return new Response(upstream.body, {
         status: upstream.status,
-        headers: { ...cors, 'Cache-Control': 'public, max-age=300' },
+        headers: { ...cors, 'Cache-Control': 'no-store' },
       });
     }
     const questionBankV2Match = path.match(/^\/api\/question-bank\/v2\/([^/]+)$/);
@@ -883,7 +883,8 @@ export default {
       const upstream = await fetch(`${QUESTION_BANK_V2_BASE}/${fileName}`, { cf: { cacheTtl: 86400, cacheEverything: true } });
       return new Response(upstream.body, {
         status: upstream.status,
-        headers: { ...cors, 'Cache-Control': 'public, max-age=86400, immutable' },
+        // The upstream hash path is immutable; the public logical alias is not.
+        headers: { ...cors, 'Cache-Control': 'no-store' },
       });
     }
 

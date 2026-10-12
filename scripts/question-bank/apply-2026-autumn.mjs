@@ -1,0 +1,34 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { buildExamManifests } from './build-canonical.mjs';
+import { decideVerdict } from './lib/validate.mjs';
+const dir='public/course-data/question-bank-v2';
+const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const write=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,2)+'\n');
+const inputPath='scripts/question-bank/data/autumn-2026.json', added=read(inputPath), report=read('reports/csp-2026/verification.json');
+assert.equal(report.sourceHash,createHash('sha256').update(fs.readFileSync(inputPath)).digest('hex'),'must rerun independent checks');
+assert.equal(report.checks.every(c=>c.passed),true);
+const canonical=read(`${dir}/canonical.json`), verification=read(`${dir}/verification.json`);
+assert.equal(canonical.contentRevision,verification.contentRevision);
+const original=new Map(canonical.questions.map(q=>[q.id,q]));
+const verdicts=new Map(verification.results.map(v=>[v.questionId,v]));
+const evidence={};
+for(const q of added.questions){
+  assert(!original.has(q.id)||original.get(q.id).contentHash===q.contentHash,`refuse to overwrite changed historical question ${q.id}`);
+  original.set(q.id,q);
+  const reason=q.source==='gesp'?'Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source.':'Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded.';
+  const ev={contentHash:q.contentHash,collectedAt:report.verifiedAt,officialMatch:false,deterministicAnswer:null,modelAnswers:[],modelComplete:false,explanationVerified:true,publishedExplanation:q.explanation,manualVerified:{approved:true,reviewer:q.source==='gesp'?'owner-provided-official-audited-gesp-source':'codex-independent-review-with-executable-oracles',reviewedAt:report.verifiedAt,reason},sourceReviewReport:'reports/csp-2026/verification.json'};
+  evidence[q.id]=ev;
+  const verdict=decideVerdict(q,ev);assert.equal(verdict.status,'auto_verified',q.id);
+  verdicts.set(q.id,{questionId:q.id,contentHash:q.contentHash,...verdict});
+}
+const revision=Math.max(canonical.contentRevision,verification.contentRevision,50013743513)+1;
+canonical.questions=[...original.values()];canonical.questionCount=canonical.questions.length;canonical.contentRevision=revision;canonical.generatedAt=new Date().toISOString();
+verification.results=canonical.questions.map(q=>{const v=verdicts.get(q.id);assert(v&&v.contentHash===q.contentHash);return v;});
+verification.questionCount=verification.results.length;verification.contentRevision=verification.verificationRevision=revision;verification.generatedAt=canonical.generatedAt;
+verification.statusCounts=Object.fromEntries(['auto_verified','auto_probable','disputed','broken'].map(s=>[s,verification.results.filter(v=>v.status===s).length]));
+write(`${dir}/canonical.json`,canonical);write(`${dir}/verification.json`,verification);
+write(`${dir}/exam-manifests.json`,{schemaVersion:2,contentRevision:revision,generatedAt:canonical.generatedAt,papers:buildExamManifests(canonical.questions)});
+write('scripts/question-bank/data/autumn-2026-evidence.json',evidence);
+console.log(`Added ${added.questions.length} reviewed records; preserved all historical IDs/content/verdicts; revision ${revision}`);

@@ -1,0 +1,1767 @@
+{
+  "sourceHash": "aea66d132eeb78bb80d043f35e2e4cefa4492462ca0e025f031db96a27c1ca1d",
+  "verifiedAt": "2026-10-12T15:31:13.704Z",
+  "compiled": 9,
+  "executions": 410,
+  "checks": [
+    {
+      "name": "J2 base conversion",
+      "passed": true
+    },
+    {
+      "name": "J3 integer division",
+      "passed": true
+    },
+    {
+      "name": "J4 forbidden stack order",
+      "passed": true
+    },
+    {
+      "name": "J5 leaf count",
+      "passed": true
+    },
+    {
+      "name": "J6 multiples sum",
+      "passed": true
+    },
+    {
+      "name": "J7 stairs DP",
+      "passed": true
+    },
+    {
+      "name": "J8 ordered BFS grid",
+      "passed": true
+    },
+    {
+      "name": "J9 gcd count",
+      "passed": true
+    },
+    {
+      "name": "J10 coin DP",
+      "passed": true
+    },
+    {
+      "name": "J12 comparison depth",
+      "passed": true
+    },
+    {
+      "name": "J13 prefix difference",
+      "passed": true
+    },
+    {
+      "name": "J14 median distance",
+      "passed": true
+    },
+    {
+      "name": "J15 handshake",
+      "passed": true
+    },
+    {
+      "name": "S1 popcount",
+      "passed": true
+    },
+    {
+      "name": "S2 Huffman",
+      "passed": true
+    },
+    {
+      "name": "S3 digit enumeration",
+      "passed": true
+    },
+    {
+      "name": "S4 exactly two fixed letters",
+      "passed": true
+    },
+    {
+      "name": "S5 modular exponent",
+      "passed": true
+    },
+    {
+      "name": "S6 interval DP",
+      "passed": true
+    },
+    {
+      "name": "S7 Fenwick visits",
+      "passed": true
+    },
+    {
+      "name": "S8 topo enumeration",
+      "passed": true
+    },
+    {
+      "name": "S12 Catalan",
+      "passed": true
+    },
+    {
+      "name": "S13 borders",
+      "passed": true
+    },
+    {
+      "name": "S15 fast exponent",
+      "passed": true
+    },
+    {
+      "name": "J22 carry and leading zero",
+      "passed": true
+    },
+    {
+      "name": "J25 addition sample",
+      "passed": true
+    },
+    {
+      "name": "J addition random 0",
+      "passed": true
+    },
+    {
+      "name": "J addition random 1",
+      "passed": true
+    },
+    {
+      "name": "J addition random 2",
+      "passed": true
+    },
+    {
+      "name": "J addition random 3",
+      "passed": true
+    },
+    {
+      "name": "J addition random 4",
+      "passed": true
+    },
+    {
+      "name": "J addition random 5",
+      "passed": true
+    },
+    {
+      "name": "J addition random 6",
+      "passed": true
+    },
+    {
+      "name": "J addition random 7",
+      "passed": true
+    },
+    {
+      "name": "J addition random 8",
+      "passed": true
+    },
+    {
+      "name": "J addition random 9",
+      "passed": true
+    },
+    {
+      "name": "J addition random 10",
+      "passed": true
+    },
+    {
+      "name": "J addition random 11",
+      "passed": true
+    },
+    {
+      "name": "J addition random 12",
+      "passed": true
+    },
+    {
+      "name": "J addition random 13",
+      "passed": true
+    },
+    {
+      "name": "J addition random 14",
+      "passed": true
+    },
+    {
+      "name": "J addition random 15",
+      "passed": true
+    },
+    {
+      "name": "J addition random 16",
+      "passed": true
+    },
+    {
+      "name": "J addition random 17",
+      "passed": true
+    },
+    {
+      "name": "J addition random 18",
+      "passed": true
+    },
+    {
+      "name": "J addition random 19",
+      "passed": true
+    },
+    {
+      "name": "J addition random 20",
+      "passed": true
+    },
+    {
+      "name": "J addition random 21",
+      "passed": true
+    },
+    {
+      "name": "J addition random 22",
+      "passed": true
+    },
+    {
+      "name": "J addition random 23",
+      "passed": true
+    },
+    {
+      "name": "J addition random 24",
+      "passed": true
+    },
+    {
+      "name": "J addition random 25",
+      "passed": true
+    },
+    {
+      "name": "J addition random 26",
+      "passed": true
+    },
+    {
+      "name": "J addition random 27",
+      "passed": true
+    },
+    {
+      "name": "J addition random 28",
+      "passed": true
+    },
+    {
+      "name": "J addition random 29",
+      "passed": true
+    },
+    {
+      "name": "J addition random 30",
+      "passed": true
+    },
+    {
+      "name": "J addition random 31",
+      "passed": true
+    },
+    {
+      "name": "J addition random 32",
+      "passed": true
+    },
+    {
+      "name": "J addition random 33",
+      "passed": true
+    },
+    {
+      "name": "J addition random 34",
+      "passed": true
+    },
+    {
+      "name": "J addition random 35",
+      "passed": true
+    },
+    {
+      "name": "J addition random 36",
+      "passed": true
+    },
+    {
+      "name": "J addition random 37",
+      "passed": true
+    },
+    {
+      "name": "J addition random 38",
+      "passed": true
+    },
+    {
+      "name": "J addition random 39",
+      "passed": true
+    },
+    {
+      "name": "J addition random 40",
+      "passed": true
+    },
+    {
+      "name": "J addition random 41",
+      "passed": true
+    },
+    {
+      "name": "J addition random 42",
+      "passed": true
+    },
+    {
+      "name": "J addition random 43",
+      "passed": true
+    },
+    {
+      "name": "J addition random 44",
+      "passed": true
+    },
+    {
+      "name": "J addition random 45",
+      "passed": true
+    },
+    {
+      "name": "J addition random 46",
+      "passed": true
+    },
+    {
+      "name": "J addition random 47",
+      "passed": true
+    },
+    {
+      "name": "J addition random 48",
+      "passed": true
+    },
+    {
+      "name": "J addition random 49",
+      "passed": true
+    },
+    {
+      "name": "J28 DFS count",
+      "passed": true
+    },
+    {
+      "name": "J31 DFS third",
+      "passed": true
+    },
+    {
+      "name": "J33 DFS count",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 0",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 1",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 2",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 3",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 4",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 5",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 6",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 7",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 8",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 9",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 10",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 11",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 12",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 13",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 14",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 15",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 16",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 17",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 18",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 19",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 20",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 21",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 22",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 23",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 24",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 25",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 26",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 27",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 28",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 29",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 30",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 31",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 32",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 33",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 34",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 35",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 36",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 37",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 38",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 39",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 40",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 41",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 42",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 43",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 44",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 45",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 46",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 47",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 48",
+      "passed": true
+    },
+    {
+      "name": "J base conversion random 49",
+      "passed": true
+    },
+    {
+      "name": "J partition random 0",
+      "passed": true
+    },
+    {
+      "name": "J partition random 1",
+      "passed": true
+    },
+    {
+      "name": "J partition random 2",
+      "passed": true
+    },
+    {
+      "name": "J partition random 3",
+      "passed": true
+    },
+    {
+      "name": "J partition random 4",
+      "passed": true
+    },
+    {
+      "name": "J partition random 5",
+      "passed": true
+    },
+    {
+      "name": "J partition random 6",
+      "passed": true
+    },
+    {
+      "name": "J partition random 7",
+      "passed": true
+    },
+    {
+      "name": "J partition random 8",
+      "passed": true
+    },
+    {
+      "name": "J partition random 9",
+      "passed": true
+    },
+    {
+      "name": "J partition random 10",
+      "passed": true
+    },
+    {
+      "name": "J partition random 11",
+      "passed": true
+    },
+    {
+      "name": "J partition random 12",
+      "passed": true
+    },
+    {
+      "name": "J partition random 13",
+      "passed": true
+    },
+    {
+      "name": "J partition random 14",
+      "passed": true
+    },
+    {
+      "name": "J partition random 15",
+      "passed": true
+    },
+    {
+      "name": "J partition random 16",
+      "passed": true
+    },
+    {
+      "name": "J partition random 17",
+      "passed": true
+    },
+    {
+      "name": "J partition random 18",
+      "passed": true
+    },
+    {
+      "name": "J partition random 19",
+      "passed": true
+    },
+    {
+      "name": "J partition random 20",
+      "passed": true
+    },
+    {
+      "name": "J partition random 21",
+      "passed": true
+    },
+    {
+      "name": "J partition random 22",
+      "passed": true
+    },
+    {
+      "name": "J partition random 23",
+      "passed": true
+    },
+    {
+      "name": "J partition random 24",
+      "passed": true
+    },
+    {
+      "name": "J partition random 25",
+      "passed": true
+    },
+    {
+      "name": "J partition random 26",
+      "passed": true
+    },
+    {
+      "name": "J partition random 27",
+      "passed": true
+    },
+    {
+      "name": "J partition random 28",
+      "passed": true
+    },
+    {
+      "name": "J partition random 29",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 0",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 1",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 2",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 3",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 4",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 5",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 6",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 7",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 8",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 9",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 10",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 11",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 12",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 13",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 14",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 15",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 16",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 17",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 18",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 19",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 20",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 21",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 22",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 23",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 24",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 25",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 26",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 27",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 28",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 29",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 30",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 31",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 32",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 33",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 34",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 35",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 36",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 37",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 38",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 39",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 40",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 41",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 42",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 43",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 44",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 45",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 46",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 47",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 48",
+      "passed": true
+    },
+    {
+      "name": "S CRC random 49",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 0",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 1",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 2",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 3",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 4",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 5",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 6",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 7",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 8",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 9",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 10",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 11",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 12",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 13",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 14",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 15",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 16",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 17",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 18",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 19",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 20",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 21",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 22",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 23",
+      "passed": true
+    },
+    {
+      "name": "S range gcd random 24",
+      "passed": true
+    },
+    {
+      "name": "S33 chain combinatorics n9",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 0",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 1",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 2",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 3",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 4",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 5",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 6",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 7",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 8",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 9",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 10",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 11",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 12",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 13",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 14",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 15",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 16",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 17",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 18",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 19",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 20",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 21",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 22",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 23",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 24",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 25",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 26",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 27",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 28",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 29",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 30",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 31",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 32",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 33",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 34",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 35",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 36",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 37",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 38",
+      "passed": true
+    },
+    {
+      "name": "S diameter random 39",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 0",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 1",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 2",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 3",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 4",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 5",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 6",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 7",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 8",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 9",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 10",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 11",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 12",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 13",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 14",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 15",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 16",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 17",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 18",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 19",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 20",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 21",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 22",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 23",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 24",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 25",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 26",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 27",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 28",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 29",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 30",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 31",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 32",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 33",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 34",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 35",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 36",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 37",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 38",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 39",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 40",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 41",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 42",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 43",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 44",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 45",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 46",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 47",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 48",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 49",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 50",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 51",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 52",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 53",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 54",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 55",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 56",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 57",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 58",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 59",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 60",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 61",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 62",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 63",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 64",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 65",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 66",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 67",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 68",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 69",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 70",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 71",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 72",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 73",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 74",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 75",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 76",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 77",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 78",
+      "passed": true
+    },
+    {
+      "name": "S signed walk random 79",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 0",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 1",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 2",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 3",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 4",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 5",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 6",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 7",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 8",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 9",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 10",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 11",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 12",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 13",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 14",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 15",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 16",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 17",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 18",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 19",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 20",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 21",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 22",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 23",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 24",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 25",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 26",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 27",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 28",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 29",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 30",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 31",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 32",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 33",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 34",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 35",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 36",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 37",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 38",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 39",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 40",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 41",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 42",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 43",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 44",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 45",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 46",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 47",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 48",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 49",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 50",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 51",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 52",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 53",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 54",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 55",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 56",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 57",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 58",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 59",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 60",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 61",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 62",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 63",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 64",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 65",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 66",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 67",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 68",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 69",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 70",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 71",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 72",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 73",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 74",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 75",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 76",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 77",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 78",
+      "passed": true
+    },
+    {
+      "name": "S standard answer brute 79",
+      "passed": true
+    }
+  ],
+  "quarantined": [
+    {
+      "id": "csp-j-2026-r01",
+      "numbers": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "reason": "Luogu explicitly labels obscured ++y as tentative OCR recovery"
+    }
+  ],
+  "notes": [
+    "CSP answers independently derived in import metadata; executable checks validate selected program completions against separate oracles.",
+    "J16–21 remain unpublished because the original OCR is explicitly tentative.",
+    "GESP reused project-owner provided source with its official PDF audit; online/local equality checked for every exam and image."
+  ]
+}

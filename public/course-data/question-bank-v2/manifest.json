@@ -1,49 +1,49 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50013743513,
-  "verificationRevision": 50013743513,
+  "contentRevision": 50013743514,
+  "verificationRevision": 50013743514,
   "channelRulesRevision": 5,
-  "generatedAt": "2026-09-09T04:29:02.497Z",
+  "generatedAt": "2026-10-12T15:32:26.374Z",
   "files": {
     "daily-gesp.json": {
-      "path": "daily-gesp.df3065cf84af.json",
-      "sha256": "df3065cf84af4eb1981dc10bd8e23108b1f30edf8a280f4f744b8f62055f0c2c",
-      "bytes": 1981305,
-      "count": 1365
+      "path": "daily-gesp.c538959e7b92.json",
+      "sha256": "c538959e7b928829ce7a5c4ec69bb1273f16d04f0d0910a6d5e0e66e57f07edf",
+      "bytes": 2150946,
+      "count": 1485
     },
     "super-cspj.json": {
-      "path": "super-cspj.6f0135498c48.json",
-      "sha256": "6f0135498c48b16c184e89e1d3e423bf7a8f7092e15dae1320f4e21534f7a9dc",
+      "path": "super-cspj.d80d12ea8289.json",
+      "sha256": "d80d12ea828932badf49fb40a230a3516561744f5d6a46a74b05aecdd0447b49",
       "bytes": 23337,
       "count": 5
     },
     "exam-questions.json": {
-      "path": "exam-questions.30e459d79092.json",
-      "sha256": "30e459d7909206967d9d1830f96bb81d4adc009d5f090d381be14b47ee9c966b",
-      "bytes": 473477,
-      "count": 226
+      "path": "exam-questions.f731b267e0f2.json",
+      "sha256": "f731b267e0f23b1d38d9c9aab9a6f93124e6535c2bad7207312a9664426fca2d",
+      "bytes": 553451,
+      "count": 265
     },
     "exam-manifests.json": {
-      "path": "exam-manifests.7a053086da4f.json",
-      "sha256": "7a053086da4fa6ee7e79f0565649202b21d94331291a1883d92976286c1f563a",
-      "bytes": 7342,
-      "count": 12
+      "path": "exam-manifests.0a69ae65045a.json",
+      "sha256": "0a69ae65045aa5e69beabb97672fb010af6bfcd87f19203d48a5f71124f80527",
+      "bytes": 8566,
+      "count": 14
     },
     "dungeon-mixed.json": {
-      "path": "dungeon-mixed.b12ba3be91b9.json",
-      "sha256": "b12ba3be91b9dac358e3bda02d66cac2f342cdfb6a4bb75453c1c18203a91efe",
-      "bytes": 1104266,
-      "count": 790
+      "path": "dungeon-mixed.8a22b67822d6.json",
+      "sha256": "8a22b67822d6958ced483496e4d98d77fbb0c915ce6f3eabea8be9e895fd047f",
+      "bytes": 1226996,
+      "count": 869
     },
     "topic-practice.json": {
-      "path": "topic-practice.b5ff0370e8a5.json",
-      "sha256": "b5ff0370e8a519d2de04196d3b0a569ecf901907c5fe0dbe76182b9441066795",
+      "path": "topic-practice.fc3df45d3b3d.json",
+      "sha256": "fc3df45d3b3d8d31da6e6884602d1c38650c8e3c61799bf7f0bb3ea2e624de92",
       "bytes": 1268608,
       "count": 958
     },
     "verification-summary.json": {
-      "path": "verification-summary.4e8ddea37ff0.json",
-      "sha256": "4e8ddea37ff011c9a7e0abfc6cd2d75612f93f95efe2f5d32f6fb4d36f1d2d02",
+      "path": "verification-summary.dae16fce7058.json",
+      "sha256": "dae16fce705844fa3f1f6f2790cfe450a999749873e9c8a3aba2e683cb4ccaff",
       "bytes": 509,
       "count": 1
     }

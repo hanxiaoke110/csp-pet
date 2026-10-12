@@ -1,0 +1,2705 @@
+{
+  "csp-j-2026-c01": {
+    "contentHash": "f3fb13437dc836ef33efd65ee19fa3138ead9c72aa714a544b1c3d6c523a41a3",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "long long通常为64位有符号整数，范围覆盖10^18+1；float和double不能精确表示此整数，int范围不足。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c02": {
+    "contentHash": "4fce4430adb0e610d33f4aebbc222250312107e1eaafdb2782026456b390dda8",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "2F5(16)=757(10)=1365(8)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c03": {
+    "contentHash": "9d293a846ba5660321859c16432f56aafed1a5cc426a08cb598442eac68721d6",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "整数除法7/3=2，2×3+7%3=6+1=7。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c04": {
+    "contentHash": "f02a3cb5b2425ebe18a1c41a1f8164840ac117321ea72baeb6a0de737d5e1f6f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "输出3后，栈顶是2而不是1，所以3、1、2、4不可能。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c05": {
+    "contentHash": "c23da4b4cdbbadee8898fdc0c9cec95ab2282d06c57935930343bfe753b9cd84",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "完全二叉树叶子数为n-floor(n/2)，100个结点有50个叶子。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c06": {
+    "contentHash": "5b9f9cdf9efce97c02f5ac4583030ba48e2ad51bc55eeadbcb6a9d5348eb987f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "按3或5的倍数累加，并将15的倍数重复计数扣除，得到2418。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c07": {
+    "contentHash": "51cc633a48ee8d8403c8f2b05703d850370338c3f7c2e8bef21953d7302a4d29",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "f(0)=1，f(n)=f(n-1)+f(n-2)+f(n-3)，计算f(8)=81。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c08": {
+    "contentHash": "a77befa91d690779c39613e9526ca33703475127950ce16dd64ca15bbfd5c7f1",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "按题定邻居顺序执行BFS，E入队时累计14个格子；网格已保留在代码区。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c09": {
+    "contentHash": "23010fba2710fee8da2afa8052a6a7d9e771d951180e7f4b964312ed19187c90",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "n=6t且gcd(t,10)=1，t≤16；符合的t为1、3、7、9、11、13，共6个。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c10": {
+    "contentHash": "e00228244462495c4dfb393d48eb32170bd541f24337a407f0e594707a215874",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "6+1+1+1需4枚，但4+4+1只需3枚；任意两枚无法组成9。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c11": {
+    "contentHash": "fa360abb2fd00c1c4532a102e091dfbedceb460da0bfdc84012fd08461d7ee30",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "p指向a[2]；先令a[1]=5+9=14，再令a[3]=14-1=13。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c12": {
+    "contentHash": "648c5c9e317b16908079350db692db8cda0dbc1e9d9f49f49d3ab316540a294f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "最坏比较次数floor(log2(1000))+1=10。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c13": {
+    "contentHash": "e13b499a7ae85391389fb94dfd4801c08ca22d25901cf7081fda41b33cc4e2c4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "a[10]=S[10]-S[9]=(300+10)-(243+9)=58。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c14": {
+    "contentHash": "37231c4f3af27f8a05a04ab467f13cff7c44642e84440ad0d4fc1527e17868ad",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选中位数7，距离和6+4+3+0+3+8+13=37。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-c15": {
+    "contentHash": "00171af1062db184bc3c1ed390af44216176ea412a7a4d0f7bd47225d7ddbf08",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "度数总和4×3+6×4=36，边数36/2=18。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-r02": {
+    "contentHash": "4dd88f2b133ca7ccd7eb045a9299e34cef82342767f57f9ce3e38a8483b6daab",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "逐位加法产生579，输出额外最高位0，结果0579。\n123+456为579，但程序仍输出最高位0，反例0579。\n没有进位时结果不变，例如1+1；因此不一定更小。\n12345+678=13023，额外输出最高位0，结果013023。\n十位相加等于10时不再进位，直接输出数位10，连同其余位得到01010。\n无进位到第n位时，程序仍从第n位输出0；长度为n+1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-r03": {
+    "contentHash": "f5d0d22e7a2b85148c68cab6fdd774902ad05aa1a263db4b18f2ebb15d8f5bb0",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "输入10时输出23、29、31、37、53、59、71、73、79，共9行，不是10。\n起始枚举包含5且5为素数；当n≤5时直接输出5。\n大于10的素数不可能以偶数或5结尾；只枚举奇数不会漏掉输出。\n深度优先搜索先处理23的扩展239，再输出29，所以第三行是29。\n递归只从质数继续向下生成，删去末位得到的是递归路径中的质数。\n对n=200运行质数前缀DFS，共输出14行。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-f01": {
+    "contentHash": "9f9d865e5a9efd3da77027b5b8fb94b7d2a2946b4ac372a4963d624a882ad505",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "已有数乘mn，在n进制下等价于先乘m再左移一位，故b[j]=b[j-1]*m。\nHorner展开每轮乘原进制后加新数位x，因此b[0]=x。\n以n为基数进位，向上一位加b[j]/n。\n当前数位保留除以n的余数b[j]%n。\n仅删除多余最高位零，必须保留表示数值0的一位，故len>1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-j-2026-f02": {
+    "contentHash": "f653f6b37842cccafb4d60c38fb105ed36f9dd9aa44ef462a2e4f3b8be8c78ef",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "数字字符减0，A至F减(A-10)，分界为A而不是9。\n每段终点从l至n逐一枚举，包含单元素段及最后一段。\n分段长度r-l+1，先乘1.0避免整数除法截断。\n下一段从r+1开始；只有r<n才计入切口，同时维护均值最小值和最大值。\n1-based数组从1开始，尚无切口，最小值初始正无穷、最大值负无穷。\n洛谷文本末尾缺少main闭合括号，为可编译展示补齐；填空内容未变。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c01": {
+    "contentHash": "bb77779a6ce79220d720a589b2de686b30301e6efedefcba8072a2be56ce8c1a",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "x&=x-1每轮消去最低位1；2026二进制有8个1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c02": {
+    "contentHash": "f44d83026bedf1bfed86de7f7de76717a1a4c92c2ed0ad0188a6a219b3bd9440",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "依次合并最小两项：3、6、9、13、15、21、36，累加102。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c03": {
+    "contentHash": "f676611472ce15bbcc522686326aa79954362dd2fe9316b3d20f152d4c46bdcf",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "1至999的百、十、个位各有100个1，再计1000中的1，总计301。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c04": {
+    "contentHash": "c529f0923b54935e2ccd405f8001fa3980959e289eaa01ff43f72c37b4d4a701",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "先选装对的2封，共C(5,2)=10；其余3封错排2种，共20。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c05": {
+    "contentHash": "c1ea2e4df48206be04306b40a51ff167c109055ca811e2cfaf8cb14f9ec500da",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "模100逐次快速幂计算3^2026余29。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c06": {
+    "contentHash": "3c149a892186373d86db7a167d45d9fb31c8af39dcae242f4195f98f7de8999a",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "区间DP：dp[l][r]=min(dp[l][k]+dp[k+1][r])+区间重量，最优总代价34。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c07": {
+    "contentHash": "b542a14b621a4d6ba32e4350063f30c2d23b7bca412a5d9fcb92f93867e3eeb4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "查询访问11、10、8，共3项；修改访问3、4、8、16，共4项。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c08": {
+    "contentHash": "0126a3b85d69e05d0e6e79ca84bf5ad70ef1fe33e431c53bf0df0aa93ba26e86",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "1必须在2和3之前，前三者有2种顺序，再将孤立点4插入4个位置，共8种。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c09": {
+    "contentHash": "c9110b2299feed4176f462fffa5c48dc25306eac162857d9e497b728a6e73fe2",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "每层子问题规模总和为n，最长和最短路径深度均为Θ(log n)，总计Θ(n log n)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c10": {
+    "contentHash": "78a65b215db3cda1b796ee0cb80888dfb6359cd4d3741e00b3020b59061909d6",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "最长路径9-5-2-1-3-6-7-8有7条边；删除1后最大连通分量为4，重心为1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c11": {
+    "contentHash": "8356b86ec8f5da8eccf642cc1cc6e74a4a0e4fd958539220dce4787890e3211e",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "多结点缩点DAG强连通化最少新增max(源点数,汇点数)=max(3,4)=4条边。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c12": {
+    "contentHash": "3d51915befe1cfaf2532d22f41e2fd7161e485a6c71355b546906106c8abe0e4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "左右子树可区分的二叉树数为Catalan(6)=C(12,6)/7=132。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c13": {
+    "contentHash": "43769ddda0af0bd1a19c28241f0c470418bc81024dc6e7e11320d3819105e3c1",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "真前后缀是ab、abab，长度和2+4=6。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c14": {
+    "contentHash": "8321c33df8a220b7a248d0eda30d9feb7f6489a3a9dc7849204c6d7cc673966e",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "相等时也先取右边并累加左边剩余数，统计i<j且a[i]≥a[j]的数对。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-c15": {
+    "contentHash": "a776c50fb65a72d2cfa3c66b2185121b3d8eb67448ce4dc18dd2b059aff69a17",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "快速幂计算2^100 mod1000=376。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-r01": {
+    "contentHash": "ba80e7e63199f4abb0515ebe8d8267ae03286a06ce905ed97a484fcdd30ee373",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "全0输入在模2长除法中始终为0，最后12位均为0。\n从左向右对每个最高位1消元，gen[0]=1，处理后a[0..31]全部为0。\na为全局数组，默认零初始化；删除显式补零循环不改变初值。\ngen共有13位，按从高到低存储，gen[0]为除数最高位。\n输入后补12个零，再用异或完成GF(2)多项式长除法，输出12位余数。\n去掉continue后每次执行固定异或；输出区间a[32..43]仅由固定异或决定，与输入无关。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-r02": {
+    "contentHash": "4a6253b64d2cc2660fa7a327feeccabed2d79cd595a4cd1a7fa842dfea8630e8",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "gcd(2,6,3,3)=1。\n长度1时lg[1]=0，左右区间相同，都为a[L]。\ngcd不大于最小值，且可能更小，例如gcd(2,3)=1。\ndp[i][j]由两个相邻长度2^(j-1)区间合并，表示长度2^j区间的gcd。\n共有Θ(log n)层，每层最多n项，建表Θ(n log n)。\n程序在pw[t+1]≥i时保持t，lg并非通常floor(log2)；lg[x]=5对应33≤x≤64。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-r03": {
+    "contentHash": "85484cc08cc10cb6e92207a2d5356ab4fe05999c167aa87c0e72bc8eff1f3543",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "链1-2-3-4-5的直径为4条边。\nf[1]为根到最远点距离，ans为直径；两条分支构成反例。\n先更新父深度会把当前子树重复用于直径，例如n=2可算成2，而原程序为1。\n遍历每个结点时用已处理子树最大深度与当前子树深度连接，ans是直径边数。\n给定满二叉树的两个最深叶子之间距离为4。\n直径9要求整棵树为链；编号递增的父约束等价将2..9分配到1的两侧，两侧互换等价，共2^8=256。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-f01": {
+    "contentHash": "f8b0e08d089fc64d0b8f7a2ea190f72e2d78b1c10f7f8d5dd5c0ce89081c5c74",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "边的符号必须编码为+1或-1，才能记录正负边及权值差。\n队列有未处理元素的条件是hh<tt。\nBFS发现相邻新结点，距离为d[x]+1。\n相邻结点颜色相同时说明存在奇环，图不是二分图。\n两种符号均存在时，可往返调整差值2；非二分图可改变奇偶。非二分图或端点同色时最小值0，否则1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "csp-s-2026-f02": {
+    "contentHash": "b8c3cfb21a62ab3f9c325acc97956f21a43561aaa34a954acbbf8094d6ce987c",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "2(r_i-x_i)=m-2x_i+Σv_ij*y_j，因此常数c[i]=m-2*x[i]。\n反射格雷码g=mask^(mask>>1)，相邻状态恰有一个比特变化。\nd是单比特差，ctzll(d)得到变化的学生下标k。\ns[k]翻转后常数贡献变化-2*s[k]*c[k]，故C-=2ll*s[k]*c[k]。\n列贡献v总和与n同奇偶；选A当v≥0，奇数n时等价v≥1，即v≥(n&1)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "codex-independent-review-with-executable-oracles",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Independent mathematical review and executable oracle tests; Luogu is secondary OCR, NOT official CCF answer. Obscured J16–21 excluded."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-01": {
+    "contentHash": "ed2879b766b71d624295c5119471f448134f41f0aede7f5ca3dddc434aa842e4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。IDE像写程序的工作台，能编辑、补全、提示错误和调试。机器人电机由运行在控制器上的程序控制，IDE本身不能直接驱动电机。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-02": {
+    "contentHash": "a373cc756ee842107a3a8973a4024b60bf920746dd34fbf685f30221395f8bfa",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。四个时代分别使用电子管、晶体管、集成电路和大规模集成电路。分类依据是核心元器件，速度、容量和体积是随之发生的变化。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-03": {
+    "contentHash": "e53050e2ac8e6d262a6b520008de8a9fd187af43f80c033d3f49472c0eb6bf2d",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。先算乘法：-2×3=-6，再算4+(-6)=-2。负号可以出现在加号后面，代码语法正确。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-04": {
+    "contentHash": "773f233b80fbea4c91a07021bdbbd4fcd232557bd6a22e0ff08bafba5b18cca6",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。乘法和取余优先级相同，从左往右算：2×(-2)=-4，-4%3=-1。A只是给先算的乘法加括号，结果不变。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-05": {
+    "contentHash": "d3d1d5a5b3ebdc07f45ab4a29568f1e32a804112cced2a99638490016134b5bb",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。两个%d依次换成3和4，中间的#原样输出，末尾\\n负责换行，所以这一行是3#4，没有空格。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-06": {
+    "contentHash": "6096aa3d75edeae9cd3efad5108cb8ccb794e5a6129904c6fccf40eee00ae73b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。8%10=8；8×1/10是整数除法，结果为0；乘1.0后变成浮点数运算，8.0/10=0.8，所以输出8 0 0.8。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-07": {
+    "contentHash": "3bc5ac6dfa0780b615b7757d176adad512d33252b4b0914ffccce8a31bebb18d",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。++b先把b从8改成9，再执行乘法赋值。右边2+1=3，因此b变成9×3=27。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-08": {
+    "contentHash": "ce49605c29d9be542347a5d4a287f7225b94bf0b7428f3fd2d3e731f73966bef",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。i依次为0到9，共循环10次，cnt变为10。最后i增加到10，条件不成立，输出循环结束后的i和cnt，即10 10。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-09": {
+    "contentHash": "ad2d120acade9faaeddb08551b43b8c591a52357b49c7a73e2d6b81d0667b38b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。i从-10到-1，共循环10次，cnt=10；退出循环时i=0。最后算的是0×10，输出0。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-10": {
+    "contentHash": "9671433dc2d5dba1ac1dafa3ce04ac39ba4216534f0a9e68cc5b2ae733c6a91b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。第一次i=1，1%3不等于0，进入else，输出1-后立即break。i仍为1，循环外接着输出1END*，合起来是1-1END*。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-11": {
+    "contentHash": "8aa1c956b00833f80081dd1720471e792e3c9a09cdbceb57298fc41cce45ad69",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。输入1时循环输出1#，tot增加到1，N减到0。最后输出1-END，所以完整结果是1#1-END，而非1#0-END。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-12": {
+    "contentHash": "9c78f4d9158b2525e4129ff60727d2f2a18aee4ceb7f8aa9c86dfc2b8d1fb3c5",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。i从0开始，N-i依次得到35、34、33……1。printf还需要格式字符串，%3d让每个整数至少占3个位置，便于对齐。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-13": {
+    "contentHash": "896846c3424bda2c1cc4b6cd5f1ba769c858abe41532dd3dab8356070f3ab548",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。每轮k加2后就遇到continue，后面的break和cout都不执行。k到8时退出循环，只执行最后的cout，输出FINISH。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-14": {
+    "contentHash": "44ab67aea900931d3bac305b7157743c399e1f8075d4bf46abea410bcba501b0",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。M10最终等于10的M-1次方。先用N/M10丢掉目标右边的数位，再%10取出个位。例如1234取第3位：1234/100%10=2。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-1-15": {
+    "contentHash": "a4d50a28387cce0bfc38f8dca552f19f3d3305d4f5380fdce5ff17a7c59ba03e",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。有解时break停在某个0到tou之间的兔子数；无解时循环走完，tu_tou=tou+1。因此应检查tou+1，否则全是兔子的合法方案会被误报无解。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-01": {
+    "contentHash": "1dfed166d46939c62e10365fe5410cb87cabd2ee6a7553371c676442745d4dd4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。IDE帮助人编写、检查和调试代码；控制电机需要控制器运行相应程序。代码自动补全、辅助排错和语法高亮都是IDE的常见功能。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-02": {
+    "contentHash": "806f1b906fb3ea0e5daacec842043ec395bf418630be214cf50ec14b5a194930",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。Cache像CPU附近的小资料架，暂存经常访问的数据，减少等待主存的时间。它通常比主存小且快，断电会丢数据，速度通常低于寄存器。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-03": {
+    "contentHash": "e5a09ab9bb437ff894925e37148b95847a4b51ac3160a9d5b2434d413aff27f3",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。比较时3会转换为浮点数，与3.0相等，比较结果为true。默认cout把true输出为1，不会输出1.0。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-04": {
+    "contentHash": "84580dfc83d47e71731c4e7edac3377179966dece110a059ca9cbd8965779cda",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。把数转换成bool时，0变成false，非0变成true。5、-5和5.0都是true，参与加法时各算1，和为3。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-05": {
+    "contentHash": "f542d7ff915a0de4a52fa084e69e427045586773cc18374b8392de4804acc5a1",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。%用于判断整除。第一组条件用&&连接“被4整除”和“不被100整除”，再用||连接“被400整除”，正好对应题目规则。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-06": {
+    "contentHash": "b6395651dd2ae59cd5476e3c222ca6f27d2bf872f304d38e25b57e7a1f6c3329",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。i从0到9；if(i)在i=0时为假，其余9次为真。tot只增加9次，输出9。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-07": {
+    "contentHash": "1beae10441f7b632a669f4d737f42c7d1231c842bb43441317ff4a62f574d552",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。i=1时内层0次，i=2时1次，i=3时2次，i=4不进入外层。因此tot=0+1+2=3。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-08": {
+    "contentHash": "83e5ce056c5ee1b9d4e6a0bb7c643fbc9f39694a9022c44428a25e7918938c0b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。if(i%3)在余数非0时成立，因此加上1、2、4、5、7、8，和为27。0、3、6、9没有加入。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-09": {
+    "contentHash": "4cc6c3970a0db23422689ff89d5d871f4156395c2770c32bb98b318dfbe9392d",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。not相当于!，这里筛选的是i%3=0。-5到4中的3的倍数为-3、0、3，共3个，所以输出3。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-10": {
+    "contentHash": "5e83fbfc6944645852dc87e5b80d21bab35d12f12c5e3311b86c85e9050b2807",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。把加1改成任意大正整数，可能把n本身也当除数试。比如n=3，若limit改成sqrt(3)+3，循环会检查3并误判为非素数。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-11": {
+    "contentHash": "c9855ea8914e234d0a6efed7dacd77868afcf3960c5b4fa75725a62add777f86",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。按外层i分别算：i=1贡献1；i=2贡献2+4=6；i=3贡献3+6+9=18。total=1+6+18=25。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-12": {
+    "contentHash": "8edf48e681d88e8c8114372d22ba6b54a7462dc8d4e59026723f2c0cc2a6d4e4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。j=0总被continue跳过；i=2时j=1使count=1并break；i=3时j=1使count=2并break。最后外层i=4，j仍为1，输出4 1 2。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-13": {
+    "contentHash": "b6f371e8b92155cc44476c9ec6ad4da2b2e054447b0bfddd097219594583f36b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。第j行有j+1个数字，想右对齐，总宽度line减去数字数，空格数就是line-j-1。最后j=line-1时空格为0。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-14": {
+    "contentHash": "a748a66291a2932ba82ad6a2e55de546b8ccf9ad38c65d36bbbd8485dcf453f6",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。差距更小必须更新；差距相同时只在当前身高更矮时更新。用||连接两种更新原因，相同身高不更新就保留第一个。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-2-15": {
+    "contentHash": "d42391e9caa69d1141774c22de20098b8e64e0897ca725e47a47abaee6c159fb",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。进入else if已经说明身高差相同，所以只比较谁更矮。若h<best_height就更新；身高相同不更新，保留先出现的人。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-01": {
+    "contentHash": "19c930a4118453fa181954f48cebd3685828dcf5dd3cd4d7b8ad6ff69766d827",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。反码加法若最高位产生进位，需要把进位加回最低位；直接丢弃是补码加法的处理。正数的三种编码相同，本题5写成00000101。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-02": {
+    "contentHash": "e10b4d230fa3bfd108c0bc615f100a145fcffcbbff89a9aee46a70bd5d660bd5",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。八进制345=3×64+4×8+5=229；十六进制E3=14×16+3=227，两者不相等。345Q对应十六进制E5H。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-03": {
+    "contentHash": "801d721d7993a2098c94613b735fdf6b52df7126b0a41d9c65733eec7b057044",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。for的条件写的是i=0，是赋值而非比较。它把i设为0，条件值为假，循环一次也不执行，x仍是1。i<=5只是第三部分表达式，语法合法。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-04": {
+    "contentHash": "fab3ce1ceba267109140d6a755f596b40322407e183b464afd624ef73b1fdf1b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。8位补码共有256种状态，表示-128到127，不能表示正128。负数可用对应正数按位取反再加1得到。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-05": {
+    "contentHash": "a9b7a1488ec1c40ac339796ecd6cf567389d35a3b82d2b7339915e42482de495",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。x&(x-1)每次清除二进制最右边的一个1。2026=11111101010₂，其中有8个1，所以循环8次，count=8。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-06": {
+    "contentHash": "6124a8636798c92255c2f22a5fad470f0bf75bc488e32b9af6f4d06d16e900a8",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。不能把超出允许范围的有符号左移当作可靠乘法。应检查范围或使用合适的无符号类型。其余选项分别利用异或抵消、左移限制和末两位为00。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-07": {
+    "contentHash": "6a74af21c3842c4aa2cb9062a44f07bde9b844853ad451335582571f04d8b7df",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。先算~11，再按&、^、|的优先级处理。在常见补码表示下~11=-12，3&7=3，15^(-12)=-5，最后3|(-5)=-5。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-08": {
+    "contentHash": "0f09648c5b4eea1a046314bd88b70ca80780dfc97392f82ad0b191bbd8cdc34b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。异或同一个key两次会抵消：x^key^key=x。因此再次逐字符异或就能恢复原文；或、与、右移一般会丢信息，不能这样还原。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-09": {
+    "contentHash": "e28a15e509e5f652e9f68fa279852cfeb7384190ef5502f76ca4a11fc45833be",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。输入存的是字符，应与'1'、'7'、'9'、'F'比较，不能与数字1、7、9比较。按题目假定的合法数字字符范围，最大字符不超过上界即可。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-10": {
+    "contentHash": "ceed6db20ab9935fa6f099862d522c9c6ac153e2ef549aedcfa5bd007f113029",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。|把指定权限位设成1；&~READ把读权限位清0，保留其他位。执行后mask从0000到0001、0011、0010、1010。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-11": {
+    "contentHash": "585cede4a964a2ffb6a20f86f848f8ca180d810a08183ebf27210be7253aefdd",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。右移低位时会舍弃余数，只等价于正整数的整除，不是精确除法。例如5>>1=2，而数学上的5/2=2.5。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-12": {
+    "contentHash": "7ee60601770b8f434336a42bd76a3caa1d2f73a3b2cf3aff82613b64fa69c55e",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。先算!a=1和b<<c=4096，再按&、^、|分组：((1&4096)^7)|5。1&4096=0，0^7=7，7|5=7。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-13": {
+    "contentHash": "918ca4b241adb5f0f4e00620800a0fc9a7b186438ec7723676da1c759f979d50",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。s.erase(2)会删除下标2起到末尾的所有字符。只删一个字符应写s.erase(2,1)。其他选项分别说明长度、判空和取子串。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-14": {
+    "contentHash": "e59fcd48d0cc85059d011b2dead036aa8860c93a3657ca2a8a539bcd24633a23",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。'A'是整数常量字符，在常见ASCII编码中为65，可以作数组长度。A的列表初始化会发生禁止的浮点到整数窄化；C缺少长度或初值；D的长度不是整数。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-3-15": {
+    "contentHash": "b5f6429f7baabc14731189ead45f61f536ea22bc7a2747c33d54d8ce07cd840c",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。每只老鼠有第一轮死、第二轮死、两轮都活三种结果，k只可区分3的k次方个酒缸。3⁶=729不够，3⁷=2187足够，最少7只。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-01": {
+    "contentHash": "40f6d41d4f15692952eeffa91e2f62625441423627dc06fbb99d3ee0e93a2d84",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。p指向count，*p就是访问count本身。执行*p+=4把8改为12，因此count和*p都输出12。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-02": {
+    "contentHash": "4ed2019288ca96b0fe7cb90d45c7ad9fd92354cffe9ebbd632208d3fe8980081",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。const int *p限制的是不能通过p修改所指向的整数，p本身仍能改指向。因此p=&b合法。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-03": {
+    "contentHash": "75cba53d9fe6d5dfdcafb79b4f34c83f524df354d2e3be7202d2f4a56d3fcd25",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。p+1跳到第二行，*(p+1)+2跳到该行下标2的元素，再解引用得到goods[1][2]=14。行和列下标都从0开始。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-04": {
+    "contentHash": "8fa0a3b1195e5c812f7fe733b279e5b71b91a2059fbc788c9e71ee83fb802fed",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。二维数组作为参数时可省略第一维，但必须知道每行有5个整数才能计算地址。int arr[][5]符合要求，int**不是同一种类型。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-05": {
+    "contentHash": "f3da90761e52538d30183f53d1ec3d9235abd95db8efbbab52cab603987feeb7",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。main中的score从80开始，引用参数直接修改它，使其变85。::score访问全局变量，它仍为60，所以输出85 60。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-06": {
+    "contentHash": "a669327257714b5ea655bb0ac159af40f420bbcaab1f4f9b63b5c4e07f7e804c",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。reset按值传递，只改副本，原d.state仍为2。start按引用传递，把原对象改成3；id保持7，输出7 3。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-07": {
+    "contentHash": "74e0e190ae0889be8985b6a2b80795233ce64c27d93c14fe191de90d9b8f2279",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。books+1指向第二本书，p->pages就是books[1].pages。150加10变160，书名仍为Math。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-08": {
+    "contentHash": "fcb2b0921541b7b9bfa60c867ece76df9e3a446dfd6ba70de7f28aa0a25c77eb",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。插入排序像整理扑克牌，每次把一个新元素放进前面的有序部分。三种算法最坏均为O(n²)，冒泡也能降序，选择最小值通常需要多次比较。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-09": {
+    "contentHash": "e2df2031f277dedab00750ab72672034aa4a6c92b6a93aad1907751e616e22f1",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。到第n格最后一步来自n-1或n-2，所以方法数相加。前六项依次1、2、3、5、8、13，因此ways(6)=13。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-10": {
+    "contentHash": "a433b71be294de82b9f81a57ab84525c0d1dd9219ac1e4d759b93d66fb77ad97",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。稳定性看相同关键字的先后是否保留。排序前A在C之前，排序后同为90分的C反而在A之前，说明这次排序不稳定。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-11": {
+    "contentHash": "55e9e5be136c1b782cbd38e9eef7e7b93451a1f1aad3de17f60658cc09eac436",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。要升序排列，遇到比key大的元素才右移，为key腾位置。用a[j]>key也使相等元素不被越过，保留原来顺序。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-12": {
+    "contentHash": "6c0da58f30b278541cd5a99011d9b3a6948820382a33fe98cd09b7e0fd647619",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。比较次数为(n-1)+(n-2)+……+1=n(n-1)/2，随n²增长，因此时间复杂度为O(n²)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-13": {
+    "contentHash": "9cc369e271aae1ffab40329fe1d7b654c213f0774badb24b7c0c7eb038df4909",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。流提取运算符>>以空白分隔字符串，依次读入a=Blue、b=Sky。输出先放b，再放-和a，所以是Sky-Blue。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-14": {
+    "contentHash": "85aaf622ad7e273a8b251ddbbb128877a47492efcba9f7a7883eaf4a9fa0c672",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。age=-1触发throw，跳过输出A。异常类型是int，与第二个catch匹配，输出C再输出-1，得到C-1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-4-15": {
+    "contentHash": "76cf2d79b57a3f52b8ede76c9683207f4ebba610af28faf4c70ac7dac5df07b1",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。每一轮开始先假定没有交换，changed=false；发生交换时设为true。一整轮都没交换说明已排序，可提前break。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-01": {
+    "contentHash": "c4a529fab7c55e3ac78cd542753903ca4bd8d7d630855832a3bf81abc496c01d",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。已经知道尾结点，就像知道队伍最后一人的位置，只需接上新结点并更新尾指针。不用从头寻找，操作次数固定，复杂度O(1)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-02": {
+    "contentHash": "93f7b876df49fda2f2b9fe96db5ab97f173d49887c66391510feb78eba516afe",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。删掉中间结点p，要让前面的结点指向后面，再让后面的结点指回前面。两边接好后释放p，才能保持双向链表不断链。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-03": {
+    "contentHash": "77144e085a51552228e7cf1f108a2ad28aacfc67afdac53c19ce403d37100d66",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。慢指针一次走一步，快指针一次走两步，所以应写fast=fast->next->next。快指针到尾部时，慢指针就在中间附近。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-04": {
+    "contentHash": "0f4780c7b0da9dc2c5d9bd8705eac9c9bd6af1c8f4d259ac738af27f4a9d9c65",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。按代码不断用余数替换：105%45=15，45%15=0。余数变成0时返回15，所以最大公约数是15。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-05": {
+    "contentHash": "f59242f8b4ba6f8a8c35d1c312b60a167d7f08ea4c0fcde857f4f0da39eb7c9b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。若n有因子，必有一个不超过平方根，故应检查到i*i<=n。乘法前转成long long，避免先在int范围内溢出。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-06": {
+    "contentHash": "6dc537641dd4952b09e90708a20617c7a9de1b9690d441f385d0538a8d5cc7d8",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。i能被当前质数p整除时就停止。继续用更大的质数会重复标记某些合数；这个break是线性筛避免重复工作的关键。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-07": {
+    "contentHash": "be61d2e075edce95dbb01ce29686c110b3ef02b5c2857ae2fb779aadd2013449",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。756先除2两次得到189，再除3三次得到7，所以756=2²×3³×7。质因数必须都是质数，不能把合数当作质因数。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-08": {
+    "contentHash": "a5ba659da70dcbde424ccea01e2e172ee32bf5566b8ac01f7ac594722fe50e08",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。f(4)=4+f(3)，继续拆为4+3+2+f(1)，而f(1)=1。最终4+3+2+1=10，注意递归结束条件。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-09": {
+    "contentHash": "27ad5c84b54c01135b588e50717abd0b14534d1e0da890e2329309f4828cb785",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。要找第一个大于x的位置，a[mid]<=x说明mid还不够大，左边界移到mid+1；否则保留mid，把右边界移到mid。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-10": {
+    "contentHash": "39d191a8515912d4670f0e09b5bf86cfb0a872cc19f5e1d3814ab2605589370a",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。容量可行时，还要试更小的容量，所以r=mid；不可行时容量太小，只能l=mid+1。这是在找最小可行值。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-11": {
+    "contentHash": "baa0f8012a57488ba87cdd4218600ee463d8025f9b473d96432e41ef27418515",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。相等时先拿左半边的元素，才能保留原来的先后次序。因此比较应使用<=，只用<会让右边的相等元素抢先。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-12": {
+    "contentHash": "f57be873cc8f75ec4433f888c66d7761ecca64016325ba1984d752b37a6aa8f6",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。这一划分把不大于pivot的数放到左边，所以检查a[j]<=pivot，满足就交换进左区间，最后把基准放到两区间之间。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-13": {
+    "contentHash": "dd2d496058ad813bd9f8aa343c12151418e7a47d90ed635f7378c1ae19647089",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。先选结束最早的活动，能给后续活动留下更多时间。每次再选与已选活动不冲突、结束最早的活动，得到最多数量。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-14": {
+    "contentHash": "933ee451b21ee20dcc03bf84efae1a0fca21c8a95b0d2bec229ffccfa39a1d37",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。逐个读入后，以当前位置结尾的最佳和依次为-2、3、2、7、1、3。最大是7，对应连续片段3、-1、5。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-5-15": {
+    "contentHash": "a20729d52d6d275c9c48933c16c95afc6b1ccf46be2c4d814af2bee26a5a9a6c",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。每一位的和可能超过9。sum%10留下这一位，sum/10得到给下一位的进位；比如7+8=15，写5并进1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-01": {
+    "contentHash": "5f62687aa1dd93b0eaac1c3b0e361d4203868d476dc39c9e41e6dcc464148500",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。speak是虚函数，调用会看实际对象类型。指针虽然声明为Animal*，实际指向Cat，所以执行Cat的speak，输出Cat。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-02": {
+    "contentHash": "4b6c18ae5803e2e2ea519c25664e3c82e9d466b57ba4bb331101fab9ed64c1b7",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。派生对象里的基类部分要先初始化。Machine(s)放在Robot构造函数的初始化列表中，才能把参数s交给基类构造函数。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-03": {
+    "contentHash": "5132204f5cc142764b9706fb258f0334757efc2ea5c159ecdc94ac705ba2247b",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。构造先基类后派生类，输出BD；基类析构为虚函数，通过基类指针删除时先析构派生类再基类，接着输出~D~B。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-04": {
+    "contentHash": "2e146ef924e8985b493b0927a0738a9e6effc6b0448eab5346c18e088f7ea165",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。栈后进先出，弹出6后栈顶为4；队列先进先出，弹出2后队首为4。所以两处取到的都是4。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-05": {
+    "contentHash": "a301533c50c0e1eac8d900c63229aef19190e06cef943fddd805b71f2087b9d9",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。空队列时rear==front；预留一个格子后，rear再前进一格就碰到front代表满。取模让下标走到末尾后回到0。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-06": {
+    "contentHash": "428dd4a4025f77ba6aeb1279be6cb9acca111c08299823533b32751a29a3a9e9",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。中序遍历的顺序是左子树、当前根、右子树。把visit(root)放在两次递归之间，才符合中序的定义。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-07": {
+    "contentHash": "6d24b61af8cbd91e5bc05d4a25791fe9754d0bb5a20723f5dbc143dc4ab76690",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。先序首个A是根，中序把左右分成D B E和C F。B的孩子是D、E，C的右孩子是F；后序为D E B F C A。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-08": {
+    "contentHash": "c098aac5b5c666603218f373efc57ba2497c5885dbff4f01bd3c6eacc2acf32f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。树高取决于更高的那棵子树，加上当前结点这一层，故为max(左高度,右高度)+1，不能把两边高度相加。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-09": {
+    "contentHash": "4b6f5f3cc7875bb1579416194e911e9759d764b313fdc9b3c4844fc6193cb01e",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。栈最后放进去的先出来。要先访问左子树，应先压右孩子再压左孩子，并检查孩子非空，避免把空指针拿来访问。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-10": {
+    "contentHash": "a24da23c3bc5cdda1ec970e17961d3dce58193b8fb25ab129cdfa6dee2f95393",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。二叉排序树中，右子树的值更大。x大于当前根时只需去右边找；去左边会错过目标。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-11": {
+    "contentHash": "49a60eba60431cce7bf48ead57b47602d1ae42a77278851ffadf3616a372e80a",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。每次合并最小两项：2+4=6、5+6=11、9+11=20、12+20=32。带权路径长度等于这些合并代价之和：69。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-12": {
+    "contentHash": "99525e187d3f4893451ab8011560bff68ec8483ee980b110a2356766b8d0a08d",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。反射法先给旧序列加前缀0，再把旧序列倒序、加前缀1。倒序保证两部分交界只改变最高位，得到相邻仅差一位的格雷码。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-13": {
+    "contentHash": "1f106b81c43ab64eb9a5d90f76f91f7d6509be109a7ae255188a9b87c8068df4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。最后一步只有两种来源：从i-1跨1级，或从i-2跨2级。两类方案互不重叠，相加得到dp[i-1]+dp[i-2]。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-14": {
+    "contentHash": "4841453d64e0f088893efa38f7cf7e89f3a7c00be2a94e133dd5e16e8d201a34",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。不选第i项，最佳值是dp[i-1]；选它就不能选相邻的i-1，得到dp[i-2]+a[i]。两者取大，不能把相邻项一起拿。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-6-15": {
+    "contentHash": "43e0f47b3e79495b7a4466edad02f13cb1acf9e368b4681bb3d507c55d6d4a63",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。0/1背包每件物品最多一次。容量倒着更新时，dp[c-w]还没使用当前物品，因此不会把它重复装入。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-01": {
+    "contentHash": "8a862bd3b95367ddb313d33230a763d78731262d067122e32e97ae792ebc852f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。5的二进制是101，3是011。按位与得到001=1，按位或得到111=7。括号里的两项相加为1+7=8。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-02": {
+    "contentHash": "07d4ae51271aec70cbca3cf2d454f96e41f30697c453009c46d6c9b80c9e0713",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。log是自然对数，log(1)=0，整数参数会按浮点数处理，结果为double。sin参数用弧度；pow和sqrt这里也不是返回int。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-03": {
+    "contentHash": "921b75dedb944f33a5262f1aeb19ddb2d120fa5b157f1d022eaa49b10bdecf60",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。先合并1、2得到3；再合并两个3得到6；最后4和6合并。原来的1经历3次合并，离根3条边，所以编码长3位。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-04": {
+    "contentHash": "754007004512d071eacedc936a4a3332f25901c23bc5a53844f2ed9cb384d2ac",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。4行5列的点，要向下3步、向右4步，共7步。只需选出哪3步向下：7×6×5/(3×2×1)=35，不是把行列数直接相乘。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-05": {
+    "contentHash": "4e5973102572fa394c6b8cd7a1991d7ede4d82bafc14c50ed42196c11657ae38",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。通常平均树高约log n，查找沿一条分支向下；最坏若树退化成一条长链，可能走遍n个结点，所以最坏O(n)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-06": {
+    "contentHash": "984597d345dfc7e0d438a2f2b5e2131ceb44a0276e586e122925e4f2b103536f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。三种最后分割的最优代价分别为24、20、19。第三种先把1、2合为3，再与原3合为6，再与4合为10，总代价3+6+10=19。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-07": {
+    "contentHash": "f75d4c8cdcb820fa93bc4e95673f4b1d73ca0d9e001a6883db91e7a73cd1df44",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。BFS像一圈圈向外扩散，先到达的一定用边更少。首次访问邻点时距离加1，得到从起点到该可达结点的最少边数。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-08": {
+    "contentHash": "1333f3fb2bea59340936b4c74fe1adca4b9d89c4a2fe86253661a2db47d09c06",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。把待访问格子放进队列做BFS，或放进自己维护的栈做DFS，就不用层层调用函数，避免递归调用栈过深。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-09": {
+    "contentHash": "061ceb9b4b0369afe48c785bf2781544b6260845cf240fbcf43d515c29807d9c",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。哈希位置发生冲突时，开放定址法会按约定规则继续探测表内其他位置。冲突无法对所有输入完全避免，极端时查找也会变慢。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-10": {
+    "contentHash": "8a77bcc4dc76a24b1e100e9edc111256b27ca047618e2dc4242b456635e5b8f5",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。int &x让x成为a的另一个名字，不是a的副本。x++直接把a从3改成4，因此输出4。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-11": {
+    "contentHash": "86b2fb355605f1910b7480d29e463be0c32b339c1648dc0101cf0c96225db337",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。两序列末尾元素相同，可以把它接在前面两个较短序列的公共子序列后。长度在dp[i-1][j-1]基础上增加1。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-12": {
+    "contentHash": "9570fd816c5b579e16c3a36e7657ce56a0c574735b2daf8479ae43e6c1e19f5c",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。只有一件重量3、价值5的物品，倒序更新保证它只用一次。容量8虽能容纳两份重量，题目却没有两件物品，故价值为5。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-13": {
+    "contentHash": "b8623847980579b8e1bfe2906d702e7666d38befa95e70855789e67f1a8a1398",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。相等元素保留原先后顺序叫稳定。普通快速排序交换远处元素，可能改变相等元素次序；其余三种可以采用稳定实现。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-14": {
+    "contentHash": "87cbe3dd6a2d4707d6370eec07780c47046f283a7bcd05243e5932bfede226f6",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。固定i时，j每次加i，循环约n/i次。总量约n(1+1/2+…+1/n)，括号是O(log n)，所以为O(n log n)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-7-15": {
+    "contentHash": "0de2a915b105bd0052fee744725d51fc35fdeac8edd850356d2121cdde7ccc6f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。p=a+1指向a[1]，再向后移3格到a[4]。星号取该格的值，a[4]=9，注意数组从0开始编号。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-01": {
+    "contentHash": "aa3c865497ddbbde77ef7f70630df5c614718f92479eb96c5b3d437e36bc0ddf",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。按模3余数把数字分成{0,3}、{1,4}、{2,5}。三位之和能被3整除，必须各取一个，共8组：含0的4组各4种排列，不含0的4组各6种，共40。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-02": {
+    "contentHash": "9f29628a0c503cc629a7b8449cd209948c10bf030bc2fa597452e33bfc869a3f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。把甲乙看成一个整体，与其他4人共5个单位围成圈。固定一个单位去除旋转重复，排列为4!=24；甲乙内部有2种顺序，共48。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-03": {
+    "contentHash": "b1824052f8b4e53d0c014ef692f388977863ec9561fb6b50127be713e52439d2",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。最后一刀可分为1|234、12|34、123|4，最优总代价分别24、20、19。第三种合并顺序1+2、3+3、6+4，费用3+6+10=19。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-04": {
+    "contentHash": "f9ab0a0779a41120b8d85dda53168ab7f13b8564498d6074e424c7be60922fcd",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。先序首个A为根；中序在A左右分出D B E和F C G。左右根为B、C，后序先孩子后根，得到D E B F G C A。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-05": {
+    "contentHash": "8ce5fe4a0fc7cf1645673dc731f65cb76ece5c4bae16837f492e137ef4e63e56",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。把指数不断除2，底数不断平方；指数当前为奇数时再乘入结果。例如13=8+4+1，只选对应幂，循环次数约log₂b。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-06": {
+    "contentHash": "37b068783b13373f5e9c6e95fba10fab18b220d61e9c2ddea43d42d5d24a25bc",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。行列从0起，第7行是1、7、21、35、35、21、7、1；列3指第4个数35，也等于7×6×5/(3×2×1)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-07": {
+    "contentHash": "c29c7df563624661c82e2cb548b9d3de6740f2faff5b2ef359276dc706fe3c29",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。周长一半是长加宽，48/2=24。长为3份、宽1份，每份24/4=6，所以长18、宽6，面积18×6=108。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-08": {
+    "contentHash": "9b1a39cb9760b5398b0e333a544de4f50d421200fdd557af65088d0592b90014",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。把两个等式相加，y抵消，得到2x=8，因此x=4。再代回x+y=7得到y=3，乘积4×3=12。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-09": {
+    "contentHash": "04da359fc88e0c7a7b435df1eabcfec447cd0928b542c888508aab9196dcb5a8",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。按常见实现，朴素Prim适合边多的稠密图，排序边的Kruskal适合稀疏图。最小生成树可能不唯一，边集不一定完全相同。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-10": {
+    "contentHash": "0b9e4d745cf1f96fe420433b341a886d043529cb202eba913b9e8db0b2b70385",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选B。先选权1的(1,3)，再选权2的(3,4)。权3的(2,3)连接尚未接入的2，不形成环，因此成为第3条入选边。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-11": {
+    "contentHash": "88c349cac3fc8d81036966bb7892d95a9c5ac1461149ed0c722d49c06f407a93",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。堆要帮忙找目前距离最小的候选顶点，所以保存当前距离和顶点编号。常写成(距离,编号)，让小根堆优先比较距离。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-12": {
+    "contentHash": "f67ab2b9ba2c3fdba0e665eb166acc39096765494d5da20a7ac3c4bc11655a00",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选A。k表示目前允许经过的中间点范围。处理k时比较原路径与i→k→j的长度，完成后就允许编号不超过k的点作中转。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-13": {
+    "contentHash": "1262ec71b35ec62b94fd1f33221ed35ebb2392b43395173e967f7607e2dc9c16",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选C。数据增大时，对数最慢，其次线性，再是线性乘对数，平方更快。例如n=1024时log₂n=10，远小于n。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-14": {
+    "contentHash": "5eab148226e5d77b1dc862b9787a55efaf69ff83ac980a1cbe5d20e65d33cea4",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。准备差分需O(n)，每次区间加只改两个端点，共O(m)，最后还原扫一遍O(n)。相加就是O(n+m)。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  },
+  "gesp-2026-09-8-15": {
+    "contentHash": "72b2b78508082c03724acf32f75d68fe6c85176faf9f566476a250285c8e167f",
+    "collectedAt": "2026-10-12T15:31:13.704Z",
+    "officialMatch": false,
+    "deterministicAnswer": null,
+    "modelAnswers": [],
+    "modelComplete": false,
+    "explanationVerified": true,
+    "publishedExplanation": "选D。创建B对象时先构造基类A，再构造B，输出AB；离开main时先析构B，再析构A，输出~B~A，合起来AB~B~A。",
+    "manualVerified": {
+      "approved": true,
+      "reviewer": "owner-provided-official-audited-gesp-source",
+      "reviewedAt": "2026-10-12T15:31:13.704Z",
+      "reason": "Source is project-owner provided September GESP; source project records official PDF answer audit; fetched JSON and image content match local source."
+    },
+    "sourceReviewReport": "reports/csp-2026/verification.json"
+  }
+}

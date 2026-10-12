@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "contentRevision": 50013743513,
-  "generatedAt": "2026-09-09T04:29:02.007Z",
+  "contentRevision": 50013743514,
+  "generatedAt": "2026-10-12T15:32:26.248Z",
   "papers": [
     {
       "id": "2019-J",
@@ -325,6 +325,59 @@
         "csp-s-2024-r03",
         "csp-s-2024-f01",
         "csp-s-2024-f02"
+      ]
+    },
+    {
+      "id": "2026-J",
+      "year": 2026,
+      "group": "J",
+      "questionIds": [
+        "csp-j-2026-c01",
+        "csp-j-2026-c02",
+        "csp-j-2026-c03",
+        "csp-j-2026-c04",
+        "csp-j-2026-c05",
+        "csp-j-2026-c06",
+        "csp-j-2026-c07",
+        "csp-j-2026-c08",
+        "csp-j-2026-c09",
+        "csp-j-2026-c10",
+        "csp-j-2026-c11",
+        "csp-j-2026-c12",
+        "csp-j-2026-c13",
+        "csp-j-2026-c14",
+        "csp-j-2026-c15",
+        "csp-j-2026-r02",
+        "csp-j-2026-r03",
+        "csp-j-2026-f01",
+        "csp-j-2026-f02"
+      ]
+    },
+    {
+      "id": "2026-S",
+      "year": 2026,
+      "group": "S",
+      "questionIds": [
+        "csp-s-2026-c01",
+        "csp-s-2026-c02",
+        "csp-s-2026-c03",
+        "csp-s-2026-c04",
+        "csp-s-2026-c05",
+        "csp-s-2026-c06",
+        "csp-s-2026-c07",
+        "csp-s-2026-c08",
+        "csp-s-2026-c09",
+        "csp-s-2026-c10",
+        "csp-s-2026-c11",
+        "csp-s-2026-c12",
+        "csp-s-2026-c13",
+        "csp-s-2026-c14",
+        "csp-s-2026-c15",
+        "csp-s-2026-r01",
+        "csp-s-2026-r02",
+        "csp-s-2026-r03",
+        "csp-s-2026-f01",
+        "csp-s-2026-f02"
       ]
     }
   ]

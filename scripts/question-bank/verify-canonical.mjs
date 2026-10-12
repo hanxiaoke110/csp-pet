@@ -17,6 +17,8 @@ export function verifyCanonicalBank({
 } = {}) {
   const canonical = readJson(canonicalPath);
   const evidence = fs.existsSync(evidencePath) ? readJson(evidencePath) : {};
+  const autumnEvidencePath = path.join(root, 'scripts/question-bank/data/autumn-2026-evidence.json');
+  if (fs.existsSync(autumnEvidencePath)) Object.assign(evidence, readJson(autumnEvidencePath));
   const results = canonical.questions.map(question => {
     const cached = evidence[question.id];
     const currentEvidence = cached?.contentHash === question.contentHash
