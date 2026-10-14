@@ -265,3 +265,10 @@
 - **绝不**: productName 用英文 → App 显示名会变，学生困惑
 - **绝不**: 相信 CI 的 Gitee 上传一定全部成功 → 发版后必须检查 assets 数量
 - **绝不**: 用没有 `workflow` scope 的 GitHub token push workflow 文件
+
+## 2026-10-14 — v1.7.51 发布收尾
+
+- 原生确认防复发：`npm run check:desktop-dialogs` 使用 AST 扫描 src/src-dungeon，测试文件不属于运行时；主程序及试炼场 build 已接入门禁。新增模块必须使用应用内确认弹窗。
+- 飞书 CLI 当前支持 `docs +media-insert --selection-with-ellipsis`，附件直接放到对应下载文字之后，不再统一追加到文末。
+- 安装包附件是 figure 卡片容器包裹 source；更换旧附件时删除匹配旧文件名的 figure wrapper，而不是只删内部 source 留空卡片。三份新附件全部成功并回读后才删除旧卡片，保留视频。
+- 本机备用上传令牌失效时，使用 Git credential helper 已有授权；不打印或在脚本中保存令牌。上传停滞按既定流程取消并补传，发布升级指针前验证线上包哈希与签名。

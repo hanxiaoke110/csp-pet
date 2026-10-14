@@ -1,0 +1,35 @@
+{
+  "version": "1.7.51",
+  "verifiedAt": "2026-10-14T10:22:12.022Z",
+  "checks": [
+    {
+      "platform": "darwin-aarch64",
+      "bytes": 98113647,
+      "sha256": "b39c5bf6af987dffec2f1dddf07b8e9ef5542bcfee1842523f01c86f0f64e05a",
+      "signatureVerified": true,
+      "remoteHashVerified": true,
+      "filename": "CSP_1.7.51_aarch64.dmg",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.51/CSP_1.7.51_aarch64.dmg"
+    },
+    {
+      "platform": "darwin-x86_64",
+      "bytes": 99273691,
+      "sha256": "b2adc0a5fbedf7396e5a47b8af3673b5dc40d7ead412af00a27d4c609435f04d",
+      "signatureVerified": true,
+      "remoteHashVerified": true,
+      "filename": "CSP_1.7.51_x64.dmg",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.51/CSP_1.7.51_x64.dmg"
+    },
+    {
+      "platform": "windows-x86_64",
+      "bytes": 93894097,
+      "sha256": "604f8fac6490d2f8a6e7b12421f66ad4cbe46398664b99b2b8fc5269107bbe6b",
+      "signatureVerified": true,
+      "remoteHashVerified": true,
+      "filename": "CSP_1.7.51_x64-setup.exe",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.51/CSP_1.7.51_x64-setup.exe"
+    }
+  ],
+  "ciRunId": 38546283514,
+  "windowsInstallationSmokeTest": false
+}
