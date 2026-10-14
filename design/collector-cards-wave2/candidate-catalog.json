@@ -1,0 +1,519 @@
+{
+  "version": 5,
+  "updatedAt": "2026-10-14T12:24:44.190Z",
+  "cards": [
+    {
+      "id": "astra-stargazer-001",
+      "version": 1,
+      "number": "001",
+      "name": "阿斯特拉",
+      "title": "星辉守望",
+      "element": "light",
+      "rarity": "legendary",
+      "price": 688,
+      "description": "守望星图与智慧之光的初代典藏卡。",
+      "quote": "愿求知的星光，永远照亮下一段旅程。",
+      "featured": true,
+      "assetBytes": 684282,
+      "assets": {
+        "thumbnail": "./astra-stargazer-001/thumbnail.webp",
+        "background": "./astra-stargazer-001/front.webp"
+      },
+      "checksums": {
+        "thumbnail": "0d0005cccce004115108018d7e383344088489d84270a6a83c9c66fd8c052857",
+        "background": "d6fabb977002e57a889b9ab1ba8090551a50d72fca02c0a71f802316a13614f7"
+      }
+    },
+    {
+      "id": "miaocuijiao-wind-003",
+      "version": 2,
+      "number": "003",
+      "name": "妙脆角猫猫",
+      "title": "风驰妙境",
+      "element": "wind",
+      "rarity": "legendary",
+      "price": 888,
+      "description": "月下风庭与金色星屑交织的人气冠军典藏。",
+      "quote": "圆滚滚的身影，也能乘风抵达星辰。",
+      "featured": true,
+      "assetBytes": 869484,
+      "assets": {
+        "thumbnail": "./miaocuijiao-wind-003/thumbnail.webp",
+        "background": "./miaocuijiao-wind-003/background.webp",
+        "text": "./miaocuijiao-wind-003/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "86f1f8c02fb6c8fbcae0118da13cc4bc2cf0e4007eadc25cd10a7a00c7e8164f",
+        "background": "0f950fc56fc26403a086f9acd2ad2b3a77ead642eccb2d195cac2d27de676ca2",
+        "text": "66f24cfd6cfdfec17ed52bded885bdf003ba36ed8b12234535fc3541a5608e99"
+      }
+    },
+    {
+      "id": "hina-violet-wing-004",
+      "version": 2,
+      "number": "004",
+      "name": "空崎日奈",
+      "title": "紫翼静裁",
+      "element": "wind",
+      "rarity": "legendary",
+      "price": 888,
+      "description": "月夜学园与紫翼锋芒凝成的静默统御典藏。",
+      "quote": "真正的强大，不需要喧哗。",
+      "featured": true,
+      "assetBytes": 844894,
+      "assets": {
+        "thumbnail": "./hina-violet-wing-004/thumbnail.webp",
+        "background": "./hina-violet-wing-004/background.webp",
+        "text": "./hina-violet-wing-004/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "39b2fc7af8e76d5716fcc743854fb9f24e2ced28ad260460ea4bbd9c1e555e7d",
+        "background": "7e5c4dedf822ee1ca8edc868464a1699e9b6f05d5a53c5d835f449fd339624d5",
+        "text": "1bd26eea91aaafa327687991b73831546bd1bc41769304b98fd6be63d76e5c9a"
+      }
+    },
+    {
+      "id": "furina-water-stage-002",
+      "version": 1,
+      "number": "002",
+      "name": "芙宁娜",
+      "title": "万众瞩目的谢幕",
+      "element": "water",
+      "rarity": "legendary",
+      "price": 888,
+      "description": "珍珠水幕与鎏金舞台交织的首期全息典藏。",
+      "quote": "让每一滴水，都为勇气鼓掌。",
+      "featured": true,
+      "assetBytes": 6239526,
+      "assets": {
+        "thumbnail": "./furina-water-stage-002/thumbnail.webp",
+        "background": "./furina-water-stage-002/background.png",
+        "subject": "./furina-water-stage-002/subject.png",
+        "text": "./furina-water-stage-002/text.png"
+      },
+      "checksums": {
+        "thumbnail": "926e8498c8d2e4ecaf39af9e408e1d9892335aee7ce978cb733fd1268d9db55c",
+        "background": "c0fae0af3063c39df22034abffddb734f659ad86fe476fe5839e36e3aef1548f",
+        "subject": "83e72c324ce28c70409f99baff5c7ad9a9d7395c8bfa5e22edcd646a6b518c35",
+        "text": "d5e98658ae3310446b8647715e3261f7931f01eb0debbd66490bb72a42fdc99d"
+      }
+    },
+    {
+      "id": "shiroko-moon-route-005",
+      "version": 2,
+      "number": "005",
+      "name": "砂狼白子",
+      "title": "月下疾行",
+      "element": "water",
+      "rarity": "legendary",
+      "price": 788,
+      "description": "蓝色轨迹穿越月下沙海的冷静疾行典藏。",
+      "quote": "越过风沙，答案就在下一段路。",
+      "featured": true,
+      "assetBytes": 840740,
+      "assets": {
+        "thumbnail": "./shiroko-moon-route-005/thumbnail.webp",
+        "background": "./shiroko-moon-route-005/background.webp",
+        "text": "./shiroko-moon-route-005/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "3a98a67d22e7a5eaf6399834dfe9ed3648ec232cf03747ab0c211f008cb90ba6",
+        "background": "432293ecb74536bd01c45d41b5512e6611d2bb9c2af5d5af8c921f4700071ea0",
+        "text": "7cec27696432e3a546ffed16fa3de1904d770773397c03a466ec5f3709f1a78d"
+      }
+    },
+    {
+      "id": "wakamo-foxfire-006",
+      "version": 2,
+      "number": "006",
+      "name": "若藻",
+      "title": "绯樱狐火",
+      "element": "fire",
+      "rarity": "legendary",
+      "price": 788,
+      "description": "绯色鸟居、夜樱与狐火汇聚的炽心典藏。",
+      "quote": "炽热心愿，会照亮漫长夜色。",
+      "featured": true,
+      "assetBytes": 865224,
+      "assets": {
+        "thumbnail": "./wakamo-foxfire-006/thumbnail.webp",
+        "background": "./wakamo-foxfire-006/background.webp",
+        "text": "./wakamo-foxfire-006/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "caf89e366f13719eefeb4fb1355e06ac33cd7e9fc9473d4b0fff0e076b155816",
+        "background": "079839418579df3b8c8acf99ee283b6953dca7b82bc51d6dc5b2eed297537057",
+        "text": "86592d8f0414364840cfc5d0094e9533ce7eeedbebd89137195363435a674e18"
+      }
+    },
+    {
+      "id": "teacher-han-star-guide-007",
+      "version": 2,
+      "number": "007",
+      "name": "韩老师",
+      "title": "星引良师",
+      "element": "earth",
+      "rarity": "legendary",
+      "price": 788,
+      "description": "星象仪与知识殿堂共同点亮的引路典藏。",
+      "quote": "把难题拆开，星光就有了方向。",
+      "featured": true,
+      "assetBytes": 857302,
+      "assets": {
+        "thumbnail": "./teacher-han-star-guide-007/thumbnail.webp",
+        "background": "./teacher-han-star-guide-007/background.webp",
+        "text": "./teacher-han-star-guide-007/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "bb3d8b93d97b47276e6eacc478d43a69e6c9bb104749fd395c430efe4e1ce2ea",
+        "background": "2bf51ab739d163178b37f718a94c3a5cf4e5ad40c0525d08997e44d163cdc674",
+        "text": "4744258dc5165d55ac54d1924fc46713616a2ba25eaac9ca16bc79ca43397ac7"
+      }
+    },
+    {
+      "id": "snakeblade-obsidian-008",
+      "version": 2,
+      "number": "008",
+      "name": "蛇刃",
+      "title": "玄岩蛇刃",
+      "element": "earth",
+      "rarity": "legendary",
+      "price": 688,
+      "description": "黑曜古殿与碧色锋芒交错的蓄势典藏。",
+      "quote": "沉默蓄势，只在关键一刻出鞘。",
+      "featured": true,
+      "assetBytes": 856382,
+      "assets": {
+        "thumbnail": "./snakeblade-obsidian-008/thumbnail.webp",
+        "background": "./snakeblade-obsidian-008/background.webp",
+        "text": "./snakeblade-obsidian-008/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "07c48eab416828a0d3b80b572d8871b3cefdc865c79d1d40e639cbea2b13136d",
+        "background": "5a3bd3854e7f5c475c6650c026c1c272de1a9a9de8e87174c99c2920a6a51e83",
+        "text": "e0fc6ea82b477d1751568ff1d21a835e62228db43cf5af56f8f976b8bb28566d"
+      }
+    },
+    {
+      "id": "dream-cloud-maker-009",
+      "version": 2,
+      "number": "009",
+      "name": "Dream",
+      "title": "云端造梦",
+      "element": "wind",
+      "rarity": "legendary",
+      "price": 588,
+      "description": "浮空阶梯与彩云星屑构筑的想象典藏。",
+      "quote": "想象力起风时，世界没有边界。",
+      "featured": true,
+      "assetBytes": 784442,
+      "assets": {
+        "thumbnail": "./dream-cloud-maker-009/thumbnail.webp",
+        "background": "./dream-cloud-maker-009/background.webp",
+        "text": "./dream-cloud-maker-009/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "5527114b30c8e57d3fe1611a58e05940e5767fd7318cfb674c5999defdb9c053",
+        "background": "b0639f6b3af504b733a738ca4ad084ef008346023c4cc3195eccf8ef76d4f3d5",
+        "text": "906d13fc2330a8079e197241bed09dfef82a3edda0bbdefb22f200cad4993d18"
+      }
+    },
+    {
+      "id": "pig-god-lucky-flame-010",
+      "version": 2,
+      "number": "010",
+      "name": "猪神",
+      "title": "福焰天成",
+      "element": "fire",
+      "rarity": "legendary",
+      "price": 588,
+      "description": "天宫庆典与幸运福焰相拥的欢乐典藏。",
+      "quote": "带着好运和热情，把每场挑战点亮。",
+      "featured": true,
+      "assetBytes": 864762,
+      "assets": {
+        "thumbnail": "./pig-god-lucky-flame-010/thumbnail.webp",
+        "background": "./pig-god-lucky-flame-010/background.webp",
+        "text": "./pig-god-lucky-flame-010/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "edf3a55febb4ca92f802d3da19ed6fcac56afd610bf1a09b73373c85df6736fb",
+        "background": "eb38bda8f0af9300b63a74ac6e04fdb618420e09682277c665c34291591eedee",
+        "text": "3489ff572c45168ae6d9368e28d8519796feefd5c6cfa99c1b7f117d4c748497"
+      }
+    },
+    {
+      "id": "luoxiaohei-ink-wind-011",
+      "version": 2,
+      "number": "011",
+      "name": "罗小黑（兽形）",
+      "title": "墨影逐风",
+      "element": "wind",
+      "rarity": "legendary",
+      "price": 588,
+      "description": "竹海、月色与城市灵光相遇的自在典藏。",
+      "quote": "自由的心，能穿过城市与森林。",
+      "featured": true,
+      "assetBytes": 842860,
+      "assets": {
+        "thumbnail": "./luoxiaohei-ink-wind-011/thumbnail.webp",
+        "background": "./luoxiaohei-ink-wind-011/background.webp",
+        "text": "./luoxiaohei-ink-wind-011/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "df8029cd1b29dc3d9cad5bbc184ddbfbae66fcf137f292fbcc4a72756a064c54",
+        "background": "64c847ec71e28ee993b82ae51a73617f6aa81dbebe17adbcf18af92dbb56611f",
+        "text": "0668e230d042ebd1e5cad8dd91370cc76d5e6d8293b0849e916c0c863ef459a7"
+      }
+    },
+    {
+      "id": "simo-silent-snow-012",
+      "version": 2,
+      "number": "012",
+      "name": "西蒙海耶",
+      "title": "雪境无声",
+      "element": "earth",
+      "rarity": "legendary",
+      "price": 588,
+      "description": "北境雪林与静默守望凝结的坚毅典藏。",
+      "quote": "耐心守望，直到最准确的时刻。",
+      "featured": true,
+      "assetBytes": 872130,
+      "assets": {
+        "thumbnail": "./simo-silent-snow-012/thumbnail.webp",
+        "background": "./simo-silent-snow-012/background.webp",
+        "text": "./simo-silent-snow-012/text.webp"
+      },
+      "checksums": {
+        "thumbnail": "256274cae3f81bf4b6078552953273e34411423fc076b0e0a639466f5d123ede",
+        "background": "04141b29ad79b2e27ac228c1ba246e36d72fc64477e8cf0023a7808b3ab3d57a",
+        "text": "cd1904e9e90b6d773adf924527f5b953ac8f14042424a6b29e5b35c47ed472b4"
+      }
+    },
+    {
+      "id": "lehun-ember-cloud-013",
+      "version": 1,
+      "number": "013",
+      "name": "乐魂",
+      "title": "炽云乐游",
+      "element": "fire",
+      "price": 888,
+      "description": "珍珠云海与琥珀星火，托起轻盈自在的乐魂。",
+      "quote": "轻轻飘，也能飘向很远的星光。",
+      "rarity": "legendary",
+      "assetBytes": 709924,
+      "assets": {
+        "background": "./lehun-ember-cloud-013/background.webp",
+        "subject": "./lehun-ember-cloud-013/subject.webp",
+        "text": "./lehun-ember-cloud-013/text.webp",
+        "thumbnail": "./lehun-ember-cloud-013/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "4c0485b39872d17420475768f58c9fc3381ebb2f2dbdf4c8677c392eb55a32e1",
+        "subject": "bccecfa689286c70a65753cb1cc3badec2a43b849bea94591e645b4c07aa8fc1",
+        "text": "2016ac7ea9e253d4f890f04d89c31fac3600ed7fb8bdd16d2e704d6fd29a82ca",
+        "thumbnail": "0a710d88478e03d471c7873b9d076c18bd0191cc43e3ebcf5da290eb49d07f99"
+      }
+    },
+    {
+      "id": "monthcat-moon-break-014",
+      "version": 1,
+      "number": "014",
+      "name": "月薪猫",
+      "title": "月色摸鱼",
+      "element": "wind",
+      "price": 888,
+      "description": "月下云台、薄荷微风与一只自在的小猫。",
+      "quote": "认真生活，也别忘了给自己一点轻松。",
+      "rarity": "legendary",
+      "assetBytes": 878090,
+      "assets": {
+        "background": "./monthcat-moon-break-014/background.webp",
+        "subject": "./monthcat-moon-break-014/subject.webp",
+        "text": "./monthcat-moon-break-014/text.webp",
+        "thumbnail": "./monthcat-moon-break-014/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "a286a654a0e764b6459cc366b0bdb21c5476d9da2997da3cd17531226c5f5718",
+        "subject": "55d9ef1fe502e03d60065597b0ff33eacdc0a55110de9fbb909019cc9bc249af",
+        "text": "a40c07e3a3e3d0fd6625a01c7b1c13e28655bc569dcbfe93708e1ce341df4691",
+        "thumbnail": "e3875adf19006f26e9be985647a55c63086d566cdb36c12c148b8b9091d1b24c"
+      }
+    },
+    {
+      "id": "linedog-star-hug-015",
+      "version": 1,
+      "number": "015",
+      "name": "线条小狗",
+      "title": "星光抱抱",
+      "element": "light",
+      "price": 788,
+      "description": "奶油云朵与细碎星光，收藏一个暖暖的抱抱。",
+      "quote": "今天已经很棒啦，抱抱再出发。",
+      "rarity": "legendary",
+      "assetBytes": 747578,
+      "assets": {
+        "background": "./linedog-star-hug-015/background.webp",
+        "subject": "./linedog-star-hug-015/subject.webp",
+        "text": "./linedog-star-hug-015/text.webp",
+        "thumbnail": "./linedog-star-hug-015/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "39c85fd33a7755141dcbd41f174b0f8ad20880920afca7f649d1f6c9d36ff05b",
+        "subject": "bf869ececad92a665979e2f0fd28d8749929795c21516eafac63bff645f76ca3",
+        "text": "84ab7b8f9a25e4d4697f7d4a59584a1ff1d45178680cc3ceae332230e99693ae",
+        "thumbnail": "46a76213292139f2c90df99cca9b3ddc5c9ac8f816cac74c8b79b813f70f8962"
+      }
+    },
+    {
+      "id": "zhangqiling-jade-rain-016",
+      "version": 1,
+      "number": "016",
+      "name": "张起灵（Q）",
+      "title": "玄门听雨",
+      "element": "water",
+      "price": 788,
+      "description": "青铜玄门、山间细雨与安静坚定的守望。",
+      "quote": "不必急着回答，路会慢慢清晰。",
+      "rarity": "legendary",
+      "assetBytes": 905438,
+      "assets": {
+        "background": "./zhangqiling-jade-rain-016/background.webp",
+        "subject": "./zhangqiling-jade-rain-016/subject.webp",
+        "text": "./zhangqiling-jade-rain-016/text.webp",
+        "thumbnail": "./zhangqiling-jade-rain-016/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "8c2c0d45c61ffaf788b21faa6ef8f35344e1b42305fb2c84eef2a62d58ec3b1d",
+        "subject": "f6091734e39ecef15065e09b2f8c0db43a6dcc651ad3a847c8ce059651e3107e",
+        "text": "03aa7a7893c9c3cfde676835a426b016b02cb899eec3bfc1a7fd553f6063363c",
+        "thumbnail": "88ec21f4bd8074076242de12ef8566fb6a7dc0a838f4d65d40ffaa342be0697a"
+      }
+    },
+    {
+      "id": "redwolf-obsidian-eye-017",
+      "version": 1,
+      "number": "017",
+      "name": "夺舍红狼",
+      "title": "玄岩赤瞳",
+      "element": "earth",
+      "price": 788,
+      "description": "黑曜金甲与赤色辉光，凝成沉着强大的锋芒。",
+      "quote": "把锋芒藏好，让实力替你发光。",
+      "rarity": "legendary",
+      "assetBytes": 809774,
+      "assets": {
+        "background": "./redwolf-obsidian-eye-017/background.webp",
+        "subject": "./redwolf-obsidian-eye-017/subject.webp",
+        "text": "./redwolf-obsidian-eye-017/text.webp",
+        "thumbnail": "./redwolf-obsidian-eye-017/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "77654b4ad0a93f1ad1bdc62348326dc2e0752a6dca280f9d1c74123c0dd09dc7",
+        "subject": "9fb7f924480da15f71535e3b23f50d6697dd3cc731e65d5015f0ccd7ab75e1cf",
+        "text": "5ea9fd081983a8d8bac67a2d240b49cd22c269e57d48dc50c54e7cebd2552b39",
+        "thumbnail": "b91d2b29fcb1d5f6169632b9617f33158cea65251241ea9f45b8dbd127444812"
+      }
+    },
+    {
+      "id": "weichong-amber-patrol-018",
+      "version": 1,
+      "number": "018",
+      "name": "威虫",
+      "title": "琥珀巡航",
+      "element": "fire",
+      "price": 688,
+      "description": "琥珀机库与湛蓝微光，为小小巡航员点亮航线。",
+      "quote": "每一次起飞，都从小小的勇气开始。",
+      "rarity": "legendary",
+      "assetBytes": 880342,
+      "assets": {
+        "background": "./weichong-amber-patrol-018/background.webp",
+        "subject": "./weichong-amber-patrol-018/subject.webp",
+        "text": "./weichong-amber-patrol-018/text.webp",
+        "thumbnail": "./weichong-amber-patrol-018/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "2406be46d375a8844eea0c2101566410bc1601c312a1a933145f02ffa61502a6",
+        "subject": "8234761e4ff2ea1ebe2b6ce4f22edff4fc322d4ad52185e0a758af92d2d129b7",
+        "text": "cd02a01ed92c6a26332185bd9abf2813e113dc8630be31bdf2502f90464e8a13",
+        "thumbnail": "afde2e58e092b01c6b755e17968b510ed2ba811719a9c8146596c089a6ac67ca"
+      }
+    },
+    {
+      "id": "pippi-tianlu-cloud-019",
+      "version": 1,
+      "number": "019",
+      "name": "皮皮",
+      "title": "天禄踏云",
+      "element": "water",
+      "price": 688,
+      "description": "青蓝流云与鎏金瑞纹，陪皮皮踏上新的旅程。",
+      "quote": "就算忘了来路，也能走出新的故事。",
+      "rarity": "legendary",
+      "assetBytes": 973390,
+      "assets": {
+        "background": "./pippi-tianlu-cloud-019/background.webp",
+        "subject": "./pippi-tianlu-cloud-019/subject.webp",
+        "text": "./pippi-tianlu-cloud-019/text.webp",
+        "thumbnail": "./pippi-tianlu-cloud-019/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "4a4b8bfc67c742e1b0e9a9e4ca8bff13e7d7302e57a05d3a712af98ccec89f03",
+        "subject": "9d290f5931647ca0c7f24cb8cc0a9c16a574a3368904cd671c8291c1fd3c986c",
+        "text": "d01d022f8fefb5b948b13e94f70d2bd01ae09732913deaa63c057a54088b1dd6",
+        "thumbnail": "de18541fc4ed294c30483967b6ff8d48b9cacb93bcee7f526c423af43d808147"
+      }
+    },
+    {
+      "id": "electric-pea-prism-020",
+      "version": 1,
+      "number": "020",
+      "name": "电能豌豆射手",
+      "title": "棱光蓄能",
+      "element": "light",
+      "price": 688,
+      "description": "翡翠叶台与棱镜电光，让小小能量闪闪发亮。",
+      "quote": "把能量攒好，下一次就会更耀眼。",
+      "rarity": "legendary",
+      "assetBytes": 1009268,
+      "assets": {
+        "background": "./electric-pea-prism-020/background.webp",
+        "subject": "./electric-pea-prism-020/subject.webp",
+        "text": "./electric-pea-prism-020/text.webp",
+        "thumbnail": "./electric-pea-prism-020/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "84db18dbbd0b65dbdc82ea1ca0126576c387e9c8a5b81f0c7f3ab7b2f624a3e2",
+        "subject": "824596755bdb9553b62c5620c848d9d2ac46decf38a3d03985a6844b767f375c",
+        "text": "6ac9ca03718085493a403430c8432dbcf308931818a02847dca08b19362c6865",
+        "thumbnail": "8b1642cb90dca2f4387f7949b863b822a62c5a902404272ce643e2d95adaf26f"
+      }
+    },
+    {
+      "id": "silverwolf-pixel-rift-021",
+      "version": 1,
+      "number": "021",
+      "name": "银狼",
+      "title": "像素破界",
+      "element": "water",
+      "price": 688,
+      "description": "蓝紫像素与银色星网，收藏一场轻巧的破界冒险。",
+      "quote": "换个思路，下一关也许就通了。",
+      "rarity": "legendary",
+      "assetBytes": 1009434,
+      "assets": {
+        "background": "./silverwolf-pixel-rift-021/background.webp",
+        "subject": "./silverwolf-pixel-rift-021/subject.webp",
+        "text": "./silverwolf-pixel-rift-021/text.webp",
+        "thumbnail": "./silverwolf-pixel-rift-021/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "094bb0d21982371413f278dea579d5bcd0384fd62c7022f8bdeff15a818f16c9",
+        "subject": "2b318b691a3cbd6fcc7cdadabb49a731fc3ef01313f35e45d846655a35f54a66",
+        "text": "c9720f38df2d86bf18b1e7465b06ab39960dceeac94c459740cfc59337637684",
+        "thumbnail": "cb1aeecadbee12f9685805a0184436832cf6706d5ecd23699d932eec1bd038cb"
+      }
+    }
+  ]
+}
