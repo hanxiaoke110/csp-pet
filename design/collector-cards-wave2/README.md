@@ -30,5 +30,5 @@
 
 ## 上线边界
 
-没有改写 `cloud-assets-source/collector-cards/catalog.json`、`public/collector-cards` 或旧卡资产，尤其芙宁娜原始分层保持不变。
+`cloud-assets-source/collector-cards/catalog.json` 仅追加新卡并提升目录版本；没有改写 `public/collector-cards` 或旧卡资产，尤其芙宁娜原始分层保持不变。
 本次已将九个新目录复制到在线静态资产源，与上线前 12 张目录合并后发布，未改动旧卡素材。后续上传前仍必须重新对照线上目录，避免覆盖此后新增卡片。现有桌宠引擎支持这些分层字段，上传素材和目录即可，不需要桌面发版。
