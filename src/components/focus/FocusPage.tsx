@@ -6,6 +6,7 @@ import FocusReview from './FocusReview';
 import FocusSetup from './FocusSetup';
 import FocusStats from './FocusStats';
 import FocusTimer from './FocusTimer';
+import ConfirmModal from '../pet/ConfirmModal';
 import './focus.css';
 
 export default function FocusPage() {
@@ -17,6 +18,7 @@ export default function FocusPage() {
   const storageWarning = useFocusStore(state => state.storageWarning);
   const [nowMs, setNowMs] = useState(Date.now());
   const [message, setMessage] = useState('');
+  const [finishTargetId, setFinishTargetId] = useState<string | null>(null);
 
   const timing = useMemo(
     () => activeSession ? deriveFocusTiming(activeSession, nowMs) : null,
@@ -38,8 +40,7 @@ export default function FocusPage() {
   };
 
   const finish = () => {
-    if (!window.confirm('要提前结束这次专注吗？已经专注的时间仍可以保存。')) return;
-    useFocusStore.getState().requestFinish();
+    if (activeSession && activeSession.status !== 'review') setFinishTargetId(activeSession.id);
   };
 
   return (
@@ -84,6 +85,23 @@ export default function FocusPage() {
       )}
 
       <FocusStats records={records} archivedDaily={archivedDaily} onClear={() => useFocusStore.getState().clearHistory()} />
+      {finishTargetId && activeSession?.id === finishTargetId && activeSession.status !== 'review' && (
+        <ConfirmModal
+          icon="🍃"
+          title="提前结束专注"
+          desc="要提前结束这次专注吗？已经专注的时间仍可以保存。"
+          confirmText="结束并复盘"
+          onCancel={() => setFinishTargetId(null)}
+          onConfirm={() => {
+            // A timer/mini-bar may have finished this session while the modal was open.
+            const current = useFocusStore.getState().activeSession;
+            if (current?.id === finishTargetId && current.status !== 'review') {
+              useFocusStore.getState().requestFinish();
+            }
+            setFinishTargetId(null);
+          }}
+        />
+      )}
     </div>
   );
 }

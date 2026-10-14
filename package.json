@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "dev:dungeon": "vite --open index-dungeon.html",
-    "build": "tsc && vite build && node scripts/prune-dist-question-bank.mjs dist",
-    "build:dungeon": "vite build --config vite.config.dungeon.ts && cp dist-dungeon/index-dungeon.html dist-dungeon/index.html && node scripts/prune-dist-question-bank.mjs dist-dungeon",
+    "build": "npm run check:desktop-dialogs && tsc && vite build && node scripts/prune-dist-question-bank.mjs dist",
+    "build:dungeon": "npm run check:desktop-dialogs && vite build --config vite.config.dungeon.ts && cp dist-dungeon/index-dungeon.html dist-dungeon/index.html && node scripts/prune-dist-question-bank.mjs dist-dungeon",
+    "check:desktop-dialogs": "node scripts/check-desktop-dialogs.mjs",
     "preview": "vite preview",
     "vote:catalog": "node scripts/build-vote-catalog.mjs",
     "vote:dev": "vite vote-app --host 127.0.0.1",
@@ -74,9 +75,11 @@
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.2",
     "@types/dompurify": "^3.0.5",
+    "@types/jsdom": "^21.1.7",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
+    "jsdom": "^26.1.0",
     "sharp": "^0.35.4",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
