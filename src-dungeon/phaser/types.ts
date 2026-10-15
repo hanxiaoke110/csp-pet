@@ -20,6 +20,7 @@ export interface PhaserPetConfig {
   previewUrl: string;
   textureKey: string;
   portraitArt?: boolean;
+  textureStyle?: 'painted' | 'pixel';
 }
 
 export interface PhaserSkillCard {

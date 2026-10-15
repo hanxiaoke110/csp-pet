@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BattleScene } from './scenes/BattleScene';
 import type { BattleInitData, SkillSelectResult } from './types';
+import { battleResolution } from '../utils/battleVisuals';
 
 export type BattleEventCallback = (event: string, data: unknown) => void;
 
@@ -24,12 +25,13 @@ export function createBattleGame(
   initData: BattleInitData,
   onEvent: BattleEventCallback
 ): BattlePhaserGame {
+  const bounds = container.getBoundingClientRect();
+  let resolution = battleResolution(bounds.width, bounds.height, window.devicePixelRatio);
   const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.CANVAS, // 强制 Canvas: Tauri WebView 中 WebGL 易崩溃
-    // 维持 16:9 并提高基础画布像素，避免大窗口把 960px 画面直接拉糊。
-    // Canvas 约增加 1.6MB 像素内存，远低于加载额外动画资源的开销。
-    width: 1280,
-    height: 720,
+    // Keep 16:9; the largest backing canvas is 3840 × 2160 (~32 MiB RGBA).
+    width: 1280 * resolution,
+    height: 720 * resolution,
     antialias: true,
     parent: container,
     transparent: true,
@@ -46,6 +48,18 @@ export function createBattleGame(
   };
 
   const game = new Phaser.Game(config);
+  // Phaser 3 Canvas has no renderer resolution option. Scale the backing stage,
+  // then use the scene camera to retain logical 1280 × 720 world/input coordinates.
+  const resize = () => {
+    const rect = container.getBoundingClientRect();
+    const next = battleResolution(rect.width, rect.height, window.devicePixelRatio);
+    if (next === resolution) return;
+    resolution = next;
+    game.scale.setGameSize(1280 * resolution, 720 * resolution);
+  };
+  const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : undefined;
+  observer?.observe(container);
+  window.addEventListener('resize', resize);
 
   // 游戏就绪后动态添加场景并启动（传初始数据给 init），走 Phaser 标准 init→preload→create 生命周期
   // 注意：重新进入战斗时 DOM 已 ready，Phaser 可能同步 boot，ready 事件在监听前已触发 → 用 isBooted 兜底
@@ -87,6 +101,8 @@ export function createBattleGame(
       if (game.scene.isPaused('BattleScene')) game.scene.resume('BattleScene');
     },
     destroy: () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', resize);
       game.destroy(true);
     },
   };

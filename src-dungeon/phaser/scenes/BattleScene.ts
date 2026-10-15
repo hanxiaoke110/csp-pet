@@ -27,6 +27,7 @@ import type { SkillDefinition } from '../../data/skills';
 import { TRIAL_EQUIPMENT } from '../../data/explorationItems';
 import { getTrialCombatProfile, type TrialCombatProfile } from '../../utils/trialEquipmentEffects';
 import { applyWeaponDamage, armorDamageMultiplier, type CombatEquipment } from '../../utils/equipmentCombat';
+import { playElementAttack } from '../effects/ElementAttackEffect';
 
 
 const MAX_ENERGY = 5;
@@ -129,8 +130,23 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create(): void {
+    const resizeCamera = () => {
+      const resolution = this.scale.width / 1280;
+      this.cameras.main.setViewport(0, 0, this.scale.width, this.scale.height).setZoom(resolution).centerOn(640, 360);
+    };
+    resizeCamera();
+    this.scale.on(Phaser.Scale.Events.RESIZE, resizeCamera);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.scale.off(Phaser.Scale.Events.RESIZE, resizeCamera));
     // preload 完成后自动调用，构建场景并开始第一回合
     this.buildScene();
+    // Text uses its own Canvas texture; render it sharply before camera scaling.
+    const sharpen = (objects: Phaser.GameObjects.GameObject[]) => {
+      for (const object of objects) {
+        if (object instanceof Phaser.GameObjects.Text) object.setResolution(3);
+        else if (object instanceof Phaser.GameObjects.Container) sharpen(object.list);
+      }
+    };
+    sharpen(this.children.list);
     this.startPlayerTurn();
   }
 
@@ -138,7 +154,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.sceneBuilt) return;
     this.sceneBuilt = true;
 
-    const { width, height } = this.scale;
+    const width = 1280, height = 720;
 
     // 背景：渐变或图片
     this.createBackground();
@@ -167,16 +183,16 @@ export class BattleScene extends Phaser.Scene {
     this.enemyPet = new PetSprite(this, 220, 180, this.initData.enemyPet);
 
     // 敌方血条
-    this.enemyHpBar = new HealthBar(this, 220, 265, 180, 18, this.initData.enemyPet.maxHp, this.initData.enemyPet.currentHp, 0xff4444);
+    this.enemyHpBar = new HealthBar(this, 220, 330, 180, 18, this.initData.enemyPet.maxHp, this.initData.enemyPet.currentHp, 0xff4444);
 
     // 敌方意图气泡
-    this.intentBubble = new IntentBubble(this, 220, 90);
+    this.intentBubble = new IntentBubble(this, 220, 52);
 
     // 我方宠物（右侧）
     this.playerPet = new PetSprite(this, width - 220, 200, this.initData.playerPet);
 
     // 我方血条
-    this.playerHpBar = new HealthBar(this, width - 220, 285, 180, 18, this.initData.playerPet.maxHp, this.initData.playerPet.currentHp, 0x00ff41);
+    this.playerHpBar = new HealthBar(this, width - 220, 350, 180, 18, this.initData.playerPet.maxHp, this.initData.playerPet.currentHp, 0x00ff41);
 
     this.createEquipmentLabel();
     if (this.state.shield > 0) this.showTraitText(`护甲生效：+${this.state.shield} 护盾`, '#7dd3fc');
@@ -193,7 +209,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private createBackground(): void {
-    const { width, height } = this.scale;
+    const width = 1280, height = 720;
     const color = this.initData.dungeonColor || '#1a1a2e';
 
     // 先用纯色渐变背景，后续可替换为图片
@@ -224,7 +240,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private createEnergyOrbs(): void {
-    const { width } = this.scale;
+    const width = 1280;
     const startX = width - 220 - 60;
     const y = 315;
 
@@ -381,17 +397,15 @@ export class BattleScene extends Phaser.Scene {
           this.state.combo
         ));
 
-        this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {
-          this.playSkillEffect(skill, () => {
-            this.applyEquippedDamageToEnemy(damage, isCorrect ? 'normal' : 'miss');
-            this.enemyPet.playHitAnimation();
+        this.playSkillEffect(skill, () => {
+          this.applyEquippedDamageToEnemy(damage, isCorrect ? 'normal' : 'miss');
+          this.enemyPet.playHitAnimation();
 
-            if (isCorrect) {
-              this.state.burnStacks.push({ damage: 3, turnsRemaining: 2, sourceSkillId: skill.id });
-            }
+          if (isCorrect) {
+            this.state.burnStacks.push({ damage: 3, turnsRemaining: 2, sourceSkillId: skill.id });
+          }
 
-            this.finishPlayerTurn();
-          });
+          this.finishPlayerTurn();
         });
         break;
       }
@@ -409,12 +423,10 @@ export class BattleScene extends Phaser.Scene {
           this.state.combo
         ));
 
-        this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {
-          this.playSkillEffect(skill, () => {
-            this.applyEquippedDamageToEnemy(damage, isCorrect ? (isCrit ? 'crit' : 'normal') : 'miss');
-            this.enemyPet.playHitAnimation();
-            this.finishPlayerTurn();
-          });
+        this.playSkillEffect(skill, () => {
+          this.applyEquippedDamageToEnemy(damage, isCorrect ? (isCrit ? 'crit' : 'normal') : 'miss');
+          this.enemyPet.playHitAnimation();
+          this.finishPlayerTurn();
         });
         break;
       }
@@ -440,7 +452,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private createElementRelationLabel(): void {
-    const { width } = this.scale;
+    const width = 1280;
     const enemyElement = this.getElementInfo(this.initData.enemyPet.element);
     const attack = this.weapon ? `${this.getElementInfo(this.weapon.element).name}武器${getElementRelation(this.weapon.element, this.initData.enemyPet.element) === 'advantage' ? '克制 +20%' : '普通攻击'}` : '未装备武器';
     const defense = this.armor ? `${this.getElementInfo(this.armor.element).name}防具${armorDamageMultiplier(this.armor, this.initData.enemyPet.element) < 1 ? '克制减伤' : '普通防御'}` : '未装备防具';
@@ -455,7 +467,7 @@ export class BattleScene extends Phaser.Scene {
 
   private createEquipmentLabel(): void {
     if (!this.initData.trialLoadout?.weaponId && !this.initData.trialLoadout?.armorId && !this.initData.trialLoadout?.artifactId) return;
-    this.equipmentStatusText = this.add.text(this.scale.width / 2, 116, '', {
+    this.equipmentStatusText = this.add.text(640, 116, '', {
       fontSize: '10px', color: '#f8d477', align: 'center', lineSpacing: 3, stroke: '#000000', strokeThickness: 3,
     }).setOrigin(0.5, 0).setDepth(10);
     this.updateEquipmentStatus();
@@ -563,74 +575,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private playSkillEffect(skill: SkillDefinition, onImpact: () => void): void {
-    const reduceMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    const duration = reduceMotion ? 80 : 280;
-    const graphics = this.add.graphics().setDepth(25);
-
-    if (skill.id === 'skill-2') {
-      graphics.fillStyle(0xff7a18, 1);
-      graphics.fillCircle(0, 0, 14);
-      graphics.lineStyle(4, 0xffd166, 0.9);
-      graphics.strokeCircle(0, 0, 18);
-      graphics.setPosition(this.playerPet.x - 40, this.playerPet.y - 10);
-      this.tweens.add({
-        targets: graphics,
-        x: this.enemyPet.x,
-        y: this.enemyPet.y,
-        scale: 1.35,
-        duration,
-        ease: 'Quad.easeIn',
-        onComplete: () => { graphics.destroy(); onImpact(); },
-      });
-      return;
-    }
-
-    if (skill.id === 'skill-3') {
-      graphics.lineStyle(8, 0x38bdf8, 0.9);
-      graphics.strokeCircle(0, 0, 72);
-      graphics.lineStyle(3, 0xffffff, 0.75);
-      graphics.strokeCircle(0, 0, 58);
-      graphics.setPosition(this.playerPet.x, this.playerPet.y);
-      this.tweens.add({
-        targets: graphics,
-        scale: 1.2,
-        alpha: 0.2,
-        duration,
-        onComplete: () => { graphics.destroy(); onImpact(); },
-      });
-      return;
-    }
-
-    if (skill.id === 'skill-4') {
-      graphics.lineStyle(7, 0xa855f7, 0.95);
-      graphics.strokeCircle(0, 0, 24);
-      graphics.lineStyle(4, 0xf0abfc, 0.8);
-      graphics.strokeCircle(0, 0, 48);
-      graphics.strokeCircle(0, 0, 76);
-      graphics.setPosition(this.enemyPet.x, this.enemyPet.y);
-      graphics.setScale(0.35);
-      this.tweens.add({
-        targets: graphics,
-        scale: 1.35,
-        angle: 120,
-        alpha: 0,
-        duration: reduceMotion ? 100 : 360,
-        ease: 'Cubic.easeOut',
-        onComplete: () => { graphics.destroy(); onImpact(); },
-      });
-      return;
-    }
-
-    graphics.lineStyle(8, 0x67e8f9, 0.95);
-    graphics.lineBetween(this.playerPet.x - 35, this.playerPet.y, this.enemyPet.x + 35, this.enemyPet.y);
-    graphics.lineStyle(2, 0xffffff, 1);
-    graphics.lineBetween(this.playerPet.x - 35, this.playerPet.y, this.enemyPet.x + 35, this.enemyPet.y);
-    this.tweens.add({
-      targets: graphics,
-      alpha: 0,
-      duration: reduceMotion ? 60 : 180,
-      onComplete: () => { graphics.destroy(); onImpact(); },
-    });
+    const shield = skill.effectType === 'shield';
+    playElementAttack(this, this.initData.playerPet.element, this.playerPet, shield ? this.playerPet : this.enemyPet, onImpact, shield);
   }
 
   private getElementInfo(element: string): { icon: string; name: string } {
@@ -669,7 +615,7 @@ export class BattleScene extends Phaser.Scene {
     }
 
     // 攻击
-    this.enemyPet.playAttackAnimation(this.playerPet.x, this.playerPet.y, () => {
+    playElementAttack(this, this.initData.enemyPet.element, this.enemyPet, this.playerPet, () => {
       const { damageTaken, remainingShield, blocked } = resolveEnemyIntent(
         intent,
         this.toCombatPet(this.initData.enemyPet, this.state.enemyHp),
@@ -747,8 +693,6 @@ export class BattleScene extends Phaser.Scene {
       this.showTraitText(`玄武圣铠：恢复生命并获得 ${shield} 护盾`, '#fde68a');
     }
 
-    // 屏幕震动
-    this.cameras.main.shake(150, 0.01);
   }
 
   public healPlayer(amount: number): void {
