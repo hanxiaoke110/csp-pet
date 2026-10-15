@@ -6,6 +6,7 @@ export const API = 'https://api.cspstudy.top';
 export const CATALOG = 'https://cards.cspstudy.top/workshop/catalog.json';
 const MAX_BYTES = 25 * 1024 * 1024;
 const MAX_PIXELS = 62_000_000;
+const HEADERS = '/*\n  Access-Control-Allow-Origin: *\n  X-Content-Type-Options: nosniff\n\n/workshop/catalog.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/pets/*\n  Cache-Control: public, max-age=31536000, immutable\n';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const fail = message => { throw new Error(message); };
 const integer = (n, min, max) => Number.isSafeInteger(n) && n >= min && n <= max;
@@ -41,7 +42,9 @@ export function normalizeSourceRecord(record) {
   for (const count of Object.values(meta.anims)) {
     if (Array.isArray(count) ? count.length !== 2 || !integer(count[0], 0, 8191) || !integer(count[1], 1, meta.maxFrames ?? 8192) : !integer(count, 1, meta.maxFrames ?? 8192)) fail('Invalid animation frame count');
   }
-  for (const key of ['animOrder', 'animsOrder']) if (meta[key] !== undefined && (!Array.isArray(meta[key]) || !meta[key].length || meta[key].some(name => typeof name !== 'string' || !Object.hasOwn(meta.anims, name)))) fail('Invalid animation order');
+  // Repository generators list every sheet row even when some frame counts
+  // are omitted; the client safely supplies defaults for those sparse entries.
+  for (const key of ['animOrder', 'animsOrder']) if (meta[key] !== undefined && (!Array.isArray(meta[key]) || !meta[key].length || meta[key].some(name => typeof name !== 'string' || !name.trim()))) fail('Invalid animation order');
   if (meta.durations !== undefined && (!object(meta.durations) || Object.values(meta.durations).some(n => !integer(n, 1, 3_600_000)))) fail('Invalid animation duration');
   const result = { id: record.id, element: record.element, tier: record.tier || 'common', price, pet_json: stable(meta), spritesheet_url: imageKey(record.spritesheet_url), thumbnail_url: imageKey(record.thumbnail_url || record.spritesheet_url) };
   for (const field of ['name', 'style', 'description', 'teacher_name']) {
@@ -160,6 +163,7 @@ export async function buildPublication({ fetchFn = fetch, outputRoot = '.worksho
   if (sourceFingerprint(await fetchSource(fetchFn)) !== fingerprint) fail('Workshop source changed during build; retry publication');
   const manifest = { version: 2, updatedAt: new Date().toISOString(), sourceFingerprint: fingerprint, count: items.length, items };
   await mkdir(directory, { recursive: true });
+  await writeFile(resolve(outputRoot, '_headers'), HEADERS);
   await writeFile(resolve(directory, 'catalog.json.tmp'), `${JSON.stringify(manifest, null, 2)}\n`);
   await rename(resolve(directory, 'catalog.json.tmp'), resolve(directory, 'catalog.json'));
   return manifest;

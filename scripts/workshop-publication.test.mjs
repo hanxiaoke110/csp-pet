@@ -42,6 +42,7 @@ describe('workshop snapshot publication', () => {
     const bytes = await readFile(join(outputRoot, 'workshop', item.thumbnail_static_url));
     expect(await sharp(bytes).metadata()).toMatchObject({ format: 'webp', width: 240, height: 260 });
     expect(JSON.parse(await readFile(join(outputRoot, 'workshop/catalog.json'), 'utf8'))).toEqual(manifest);
+    expect(await readFile(join(outputRoot, '_headers'), 'utf8')).toBe('/*\n  Access-Control-Allow-Origin: *\n  X-Content-Type-Options: nosniff\n\n/workshop/catalog.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/pets/*\n  Cache-Control: public, max-age=31536000, immutable\n');
   });
   it('fingerprints edits/create/delete, ignores timestamps, ordering and JSON formatting', () => {
     const base = pet();
@@ -146,6 +147,13 @@ describe('workshop snapshot publication', () => {
     expect(() => validateGeometry(partialOrder, 1536, 1456)).not.toThrow();
     expect(() => validateGeometry({ ...base, anims: { idle: 2, review: 2 } }, 4, 27)).not.toThrow();
     expect(() => validateGeometry({ ...legacy, anims: { idle: [0, 9] } }, 1536, 1456)).toThrow(/column/);
+  });
+  it('accepts the repository generators full animation order with sparse frame counts', async () => {
+    const meta = { frameWidth: 2, frameHeight: 3, maxFrames: 2, anims: { idle: 2 }, animOrder: ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhappy'] };
+    const records = [pet({ pet_json: JSON.stringify(meta) })];
+    const image = await sharp({ create: { width: 4, height: 21, channels: 4, background: '#000000' } }).png().toBuffer();
+    expect((await build(records, { fetchFn: api(records, image) })).manifest.count).toBe(1);
+    expect(() => publicationFingerprint(pet({ pet_json: JSON.stringify({ ...meta, animsOrder: ['', 3] }) }))).toThrow(/order/);
   });
   it('forces a daily image refresh even when the cheap metadata check matches', async () => {
     const outputRoot = await mkdtemp(join(tmpdir(), 'workshop-cli-')); roots.push(outputRoot);
