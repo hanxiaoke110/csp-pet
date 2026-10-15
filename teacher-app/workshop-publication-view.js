@@ -30,7 +30,8 @@
     for (const count of Object.values(meta.anims)) {
       if (Array.isArray(count) ? count.length !== 2 || !integer(count[0], 0, 8191) || !integer(count[1], 1, meta.maxFrames ?? 8192) : !integer(count, 1, meta.maxFrames ?? 8192)) throw Error('动画帧数无效');
     }
-    for (const key of ['animOrder', 'animsOrder']) if (meta[key] !== undefined && (!Array.isArray(meta[key]) || !meta[key].length || meta[key].some(name => typeof name !== 'string' || !Object.hasOwn(meta.anims, name)))) throw Error('动画顺序无效');
+    // Sheet row names may include animations whose frame count uses client defaults.
+    for (const key of ['animOrder', 'animsOrder']) if (meta[key] !== undefined && (!Array.isArray(meta[key]) || !meta[key].length || meta[key].some(name => typeof name !== 'string' || !name.trim()))) throw Error('动画顺序无效');
     if (meta.durations !== undefined && (!object(meta.durations) || Object.values(meta.durations).some(n => !integer(n, 1, 3600000)))) throw Error('动画时长无效');
     const result = { id: record.id, element: record.element, tier: record.tier || 'common', price, pet_json: JSON.stringify(canonical(meta)), spritesheet_url: imageKey(record.spritesheet_url), thumbnail_url: imageKey(record.thumbnail_url || record.spritesheet_url) };
     for (const key of ['name', 'style', 'description', 'teacher_name']) {

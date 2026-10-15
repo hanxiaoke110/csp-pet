@@ -27,6 +27,20 @@ test('matches API and relative image URLs to raw KV keys and rejects foreign URL
   for (const value of ['https://evil.test/api/workshop/image?key=x', 'javascript:alert(1)', '/api/workshop/image?key=x&key=y', 'https://api.cspstudy.top/api/workshop/image?key=x#fragment']) assert.throws(() => view.imageKey(value));
 });
 
+test('sparse animation order entries match publisher normalization, while invalid names fail', () => {
+  for (const key of ['animOrder', 'animsOrder']) {
+    const metadata = { ...JSON.parse(pet().pet_json), [key]:['idle', 'walk', 'sleep'] };
+    const record = pet({ pet_json:JSON.stringify(metadata) });
+    assert.deepEqual(plain(view.normalizeRecord(record)), normalizeSourceRecord(record));
+    assert.equal(view.status(record, view.readCatalog(catalog([record])), false), '已上架');
+    for (const order of [[], ['idle', ''], ['idle', ' '], ['idle', null], 'idle']) {
+      const invalid = pet({ pet_json:JSON.stringify({ ...metadata, [key]:order }) });
+      assert.throws(() => view.normalizeRecord(invalid));
+      assert.throws(() => normalizeSourceRecord(invalid));
+    }
+  }
+});
+
 test('new, edited, and removed records remain pending; check errors never show published', () => {
   const published = view.readCatalog(catalog([pet()]));
   assert.equal(view.status(pet(), published, false), '已上架');
