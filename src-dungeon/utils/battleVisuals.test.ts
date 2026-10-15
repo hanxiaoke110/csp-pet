@@ -1,7 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
-import { BATTLE_LAYOUT, battleResolution, createImpactLifecycle, effectiveVisualMode } from './battleVisuals';
+import { BATTLE_LAYOUT, battleResolution, createImpactLifecycle, effectiveVisualMode, readBattleVisualMode, writeBattleVisualMode } from './battleVisuals';
 
 describe('battle visuals', () => {
+  it('honors an explicit stored full preference after a session selected simple', () => {
+    const storage = new Map<string, string>();
+    vi.stubGlobal('localStorage', { getItem: (key: string) => storage.get(key) ?? null, setItem: (key: string, value: string) => { storage.set(key, value); } });
+    try {
+      writeBattleVisualMode('simple');
+      storage.set('csp_battle_visual_mode_v1', 'full');
+      expect(readBattleVisualMode()).toBe('full');
+    } finally { writeBattleVisualMode('full'); vi.unstubAllGlobals(); }
+  });
   it('keeps player name, health, energy and cards vertically separated', () => {
     const layout = BATTLE_LAYOUT;
     const nameBottom = layout.playerY + layout.nameOffsetY + 24;

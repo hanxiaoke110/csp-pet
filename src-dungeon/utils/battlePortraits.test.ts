@@ -1,8 +1,36 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createBattlePortraitLoader, createPortraitWebCache, parsePortraitCatalog, type PortraitIO } from './battlePortraits';
+import { createBattlePortraitLoader, createPortraitNativeCache, createPortraitWebCache, parsePortraitCatalog, type PortraitIO } from './battlePortraits';
 
 const portrait = { speciesId: 'capi', url: 'https://cards.cspstudy.top/battle-portraits/capi.webp', bytes: 100, sha256: 'a'.repeat(64), width: 1024, height: 1024, style: 'painted' };
 describe('trusted battle portraits', () => {
+  it('bounds native cache, replaces superseded hashes and checks size before reading', async () => {
+    const files = new Map<string, { size: number; bytes: Uint8Array }>();
+    const read = vi.fn(async (key: string) => files.get(key)!.bytes);
+    const cache = createPortraitNativeCache({
+      stat: async key => ({ size: files.get(key)!.size, modified: 0 }), read,
+      write: async (key, bytes) => { files.set(key, { size: bytes.length, bytes }); },
+      list: async () => [...files.keys()], remove: async key => { files.delete(key); },
+    });
+    const key = (species: string, hash: string) => `${species}-${hash.repeat(64)}.img`;
+    await cache.write(key('capi', 'a'), new Uint8Array([1]));
+    const release = cache.retain(key('capi', 'a'));
+    await cache.write(key('capi', 'b'), new Uint8Array([2]));
+    expect(files.has(key('capi', 'a'))).toBe(true);
+    release();
+    await cache.write(key('capi', 'c'), new Uint8Array([3]));
+    expect([...files.keys()]).toEqual([key('capi', 'c')]);
+    for (let i = 0; i < 20; i++) await cache.write(key(`pet-${i}`, 'a'), new Uint8Array([i]));
+    expect(files.size).toBeLessThanOrEqual(16);
+    files.set(key('huge', 'a'), { size: 4194305, bytes: new Uint8Array() });
+    read.mockClear();
+    expect(await cache.read(key('huge', 'a'))).toBeNull();
+    expect(read).not.toHaveBeenCalled();
+    // Size metadata lets this test verify the total budget without allocating 64 MiB.
+    for (const file of files.values()) file.size = 4194304;
+    await cache.write('catalog.json', new Uint8Array(200));
+    expect([...files.values()].reduce((sum, file) => sum + file.size, 0)).toBeLessThanOrEqual(64 * 1024 * 1024);
+    expect([...files.keys()].filter(item => item.endsWith('.img'))).toHaveLength(15);
+  });
   it('persists binary browser cache across instances and bounds poisoned responses and entry count', async () => {
     const entries = new Map<string, Response>();
     const cache = {

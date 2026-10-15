@@ -40,6 +40,7 @@ export interface PortraitIO {
   createUrl: (bytes: Uint8Array) => string;
   revokeUrl: (url: string) => void;
   now: () => number;
+  retain?: (key: string) => () => void;
 }
 
 async function readBounded(response: Response, cap: number): Promise<Uint8Array> {
@@ -138,8 +139,9 @@ export function createBattlePortraitLoader(io: PortraitIO) {
           }
           if (expired) return null;
           const url = io.createUrl(bytes);
+          const releaseCache = io.retain?.(key);
           let released = false;
-          return { url, style: entry.style, release: () => { if (!released) { released = true; io.revokeUrl(url); } } };
+          return { url, style: entry.style, release: () => { if (!released) { released = true; io.revokeUrl(url); releaseCache?.(); } } };
         } catch { return null; }
       })();
       const timeout = new Promise<null>(resolve => { timer = setTimeout(() => { expired = true; controller.abort(); resolve(null); }, waitMs); });
@@ -150,6 +152,129 @@ export function createBattlePortraitLoader(io: PortraitIO) {
 }
 
 function isDesktop(): boolean { return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window; }
+interface PortraitCacheFS {
+  stat(key: string): Promise<{ size: number; modified?: number; isFile?: boolean }>;
+  read(key: string): Promise<Uint8Array>;
+  write(key: string, bytes: Uint8Array): Promise<void>;
+  list(): Promise<string[]>;
+  remove(key: string): Promise<void>;
+}
+
+/** Only files owned by this cache are eligible for eviction. Active blob leases
+ * pin their source until scene destruction; replaced hashes retire on release. */
+export function createPortraitNativeCache(fs: PortraitCacheFS) {
+  const active = new Map<string, number>();
+  const latest = new Map<string, string>();
+  const touched = new Map<string, number>();
+  let sequence = 0;
+  let queue = Promise.resolve();
+  const species = (key: string) => key.match(/^([a-zA-Z0-9_-]{1,100})-[a-f0-9]{64}\.img$/)?.[1];
+  const owned = (key: string) => key === 'catalog.json' || Boolean(species(key));
+  const cap = (key: string) => key === 'catalog.json' ? 256 * 1024 : MAX_BYTES;
+  const enqueue = (work: () => Promise<void>) => {
+    const task = queue.then(work);
+    queue = task.catch(() => {});
+    return task;
+  };
+  async function prune(protect?: string) {
+    const files: { key: string; size: number; modified: number }[] = [];
+    for (const key of await fs.list()) {
+      if (!owned(key)) continue;
+      try {
+        const info = await fs.stat(key);
+        if (info.isFile === false) continue;
+        if (!Number.isSafeInteger(info.size) || info.size <= 0 || info.size > cap(key)) { await fs.remove(key); continue; }
+        files.push({ key, size: info.size, modified: info.modified || 0 });
+      } catch { /* A concurrent missing file is already pruned. */ }
+    }
+    const protectedKey = (key: string) => key === protect || Boolean(active.get(key));
+    // Older app sessions can leave several hashes of one species on disk.
+    // Recover their newest version from filesystem timestamps before pruning.
+    for (const file of files) {
+      const id = species(file.key);
+      if (!id) continue;
+      const previous = files.find(item => item.key === latest.get(id));
+      if (!previous || (!touched.has(previous.key) && file.modified > previous.modified)) latest.set(id, file.key);
+    }
+    const remove = async (file: typeof files[number]) => {
+      await fs.remove(file.key);
+      files.splice(files.indexOf(file), 1); touched.delete(file.key);
+    };
+    for (const file of [...files]) {
+      const id = species(file.key);
+      if (id && latest.has(id) && latest.get(id) !== file.key && !protectedKey(file.key)) await remove(file);
+    }
+    const candidates = files.filter(file => file.key !== 'catalog.json' && !protectedKey(file.key)).sort((a, b) =>
+      (touched.get(a.key) || 0) - (touched.get(b.key) || 0) || a.modified - b.modified);
+    while (files.filter(file => species(file.key)).length > 16 || files.reduce((sum, file) => sum + file.size, 0) > 64 * 1024 * 1024) {
+      const oldest = candidates.shift();
+      if (!oldest) throw new Error('Active portrait cache exceeds budget');
+      await remove(oldest);
+    }
+  }
+  return {
+    async read(key: string): Promise<Uint8Array | null> {
+      if (!owned(key)) return null;
+      try {
+        const info = await fs.stat(key);
+        if (info.isFile === false || !Number.isSafeInteger(info.size) || info.size <= 0 || info.size > cap(key)) return null;
+        const bytes = await fs.read(key);
+        if (bytes.length !== info.size || bytes.length > cap(key)) return null;
+        touched.set(key, ++sequence);
+        return bytes;
+      } catch { return null; }
+    },
+    write(key: string, bytes: Uint8Array): Promise<void> {
+      if (!owned(key) || !bytes.length || bytes.length > cap(key)) return Promise.resolve();
+      return enqueue(async () => {
+        await fs.write(key, bytes); touched.set(key, ++sequence);
+        const id = species(key); if (id) latest.set(id, key);
+        try { await prune(key); }
+        catch (error) {
+          // If every older entry is pinned, leave the verified bytes in the
+          // caller's memory and discard this new disk entry to preserve the cap.
+          if (!active.get(key)) await fs.remove(key).catch(() => {});
+          throw error;
+        }
+      });
+    },
+    retain(key: string): () => void {
+      active.set(key, (active.get(key) || 0) + 1);
+      let released = false;
+      return () => {
+        if (released) return; released = true;
+        const remaining = (active.get(key) || 1) - 1;
+        if (remaining) active.set(key, remaining); else active.delete(key);
+        void enqueue(() => prune()).catch(() => {});
+      };
+    },
+  };
+}
+
+const nativeCache = createPortraitNativeCache({
+  stat: async key => {
+    const fs = await import('@tauri-apps/plugin-fs');
+    const info = await fs.stat(`battle-portraits/${key}`, { baseDir: fs.BaseDirectory.AppData });
+    return { size: info.size, modified: info.mtime?.getTime(), isFile: info.isFile };
+  },
+  read: async key => {
+    const fs = await import('@tauri-apps/plugin-fs');
+    return fs.readFile(`battle-portraits/${key}`, { baseDir: fs.BaseDirectory.AppData });
+  },
+  write: async (key, bytes) => {
+    const fs = await import('@tauri-apps/plugin-fs');
+    await fs.mkdir('battle-portraits', { baseDir: fs.BaseDirectory.AppData, recursive: true });
+    await fs.writeFile(`battle-portraits/${key}`, bytes, { baseDir: fs.BaseDirectory.AppData });
+  },
+  list: async () => {
+    const fs = await import('@tauri-apps/plugin-fs');
+    return (await fs.readDir('battle-portraits', { baseDir: fs.BaseDirectory.AppData })).filter(entry => entry.isFile).map(entry => entry.name);
+  },
+  remove: async key => {
+    const fs = await import('@tauri-apps/plugin-fs');
+    await fs.remove(`battle-portraits/${key}`, { baseDir: fs.BaseDirectory.AppData });
+  },
+});
 /** Binary CacheStorage survives browser reloads. It contains at most 16 portraits
  * plus one catalog (~64 MiB), and every cache hit is verified again by the loader. */
 export function createPortraitWebCache(storage?: Pick<CacheStorage, 'open'>) {
@@ -199,14 +324,13 @@ const defaultLoader = createBattlePortraitLoader({
   },
   read: async key => {
     if (!isDesktop()) return webCache.read(key);
-    try { const fs = await import('@tauri-apps/plugin-fs'); return await fs.readFile(`battle-portraits/${key}`, { baseDir: fs.BaseDirectory.AppData }); } catch { return null; }
+    return nativeCache.read(key);
   },
   write: async (key, bytes) => {
     if (!isDesktop()) return webCache.write(key, bytes);
-    const fs = await import('@tauri-apps/plugin-fs');
-    await fs.mkdir('battle-portraits', { baseDir: fs.BaseDirectory.AppData, recursive: true });
-    await fs.writeFile(`battle-portraits/${key}`, bytes, { baseDir: fs.BaseDirectory.AppData });
+    return nativeCache.write(key, bytes);
   },
+  retain: key => isDesktop() ? nativeCache.retain(key) : () => {},
   dimensions: async bytes => {
     const blob = new Blob([new Uint8Array(bytes)]);
     if (typeof createImageBitmap === 'function') {

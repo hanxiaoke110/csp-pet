@@ -16,7 +16,10 @@ export function effectiveVisualMode(preference: BattleVisualMode, reducedMotion:
 }
 
 export function readBattleVisualMode(): BattleVisualMode {
-  try { return localStorage.getItem(BATTLE_VISUAL_MODE_KEY) === 'simple' ? 'simple' : memoryPreference; }
+  try {
+    const stored = localStorage.getItem(BATTLE_VISUAL_MODE_KEY);
+    return stored === 'simple' || stored === 'full' ? stored : memoryPreference;
+  }
   catch { return memoryPreference; }
 }
 
