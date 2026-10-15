@@ -13,6 +13,7 @@ dist
 dist-ssr
 dist-dungeon
 .cloudflare-static
+.workshop-static
 cloud-assets-source/*
 !cloud-assets-source/equipment/
 !cloud-assets-source/collector-cards/

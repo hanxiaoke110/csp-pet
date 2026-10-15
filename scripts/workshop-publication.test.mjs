@@ -1,0 +1,167 @@
+import { afterEach, describe, expect, it } from 'vitest';
+import sharp from 'sharp';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { buildPublication, fetchSource, imageKey, publicationFingerprint, sourceFingerprint, validateGeometry, verifyPublication } from './workshop-publication.mjs';
+
+const roots = [];
+afterEach(async () => { await Promise.all(roots.splice(0).map(p => rm(p, { recursive: true, force: true }))); });
+const pet = (changes = {}) => ({ id: 'ws-ABC123', name: '小龙', element: 'fire', tier: 'common', price: 200, teacher_name: '王老师', spritesheet_url: 'sheet:abc', thumbnail_url: 'thumb:abc', pet_json: JSON.stringify({ frameWidth: 2, frameHeight: 3, maxFrames: 2, anims: { idle: 2 }, animOrder: ['idle'] }), ...changes });
+const sheet = () => sharp({ create: { width: 4, height: 3, channels: 4, background: '#ff0000' } }).png().toBuffer();
+const json = value => new Response(JSON.stringify(value), { headers: { 'content-type': 'application/json' } });
+function api(records, bytes, { pages, published, after } = {}) {
+  let reads = 0;
+  const calls = [];
+  const fn = async url => {
+    calls.push(String(url));
+    const u = new URL(url);
+    if (u.pathname === '/api/workshop/pets') {
+      reads++;
+      return json(pages ? pages[u.searchParams.get('cursor') || 'first'] : { items: after && reads > 1 ? after : records, hasMore: false, nextCursor: null });
+    }
+    if (u.pathname.endsWith('/catalog.json')) return published ? json(published) : new Response('', { status: 404 });
+    return new Response(bytes);
+  };
+  fn.calls = calls;
+  return fn;
+}
+async function build(records = [pet()], options = {}) {
+  const outputRoot = await mkdtemp(join(tmpdir(), 'workshop-publish-')); roots.push(outputRoot);
+  return { outputRoot, manifest: await buildPublication({ outputRoot, fetchFn: api(records, await sheet()), ...options }) };
+}
+
+describe('workshop snapshot publication', () => {
+  it('builds compatible hashed assets and a real first-frame thumbnail', async () => {
+    const { outputRoot, manifest } = await build();
+    expect(manifest).toMatchObject({ version: 2, count: 1, sourceFingerprint: sourceFingerprint([pet()]) });
+    const item = manifest.items[0];
+    expect(item.publicationFingerprint).toBe(publicationFingerprint(pet()));
+    expect(item.spritesheet_static_url).toMatch(/^\.\/pets\/ws-ABC123\/[a-f0-9]{64}\.png$/);
+    const bytes = await readFile(join(outputRoot, 'workshop', item.thumbnail_static_url));
+    expect(await sharp(bytes).metadata()).toMatchObject({ format: 'webp', width: 240, height: 260 });
+    expect(JSON.parse(await readFile(join(outputRoot, 'workshop/catalog.json'), 'utf8'))).toEqual(manifest);
+    expect(await readFile(join(outputRoot, '_headers'), 'utf8')).toBe('/*\n  Access-Control-Allow-Origin: *\n  X-Content-Type-Options: nosniff\n\n/workshop/catalog.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/pets/*\n  Cache-Control: public, max-age=31536000, immutable\n');
+  });
+  it('fingerprints edits/create/delete, ignores timestamps, ordering and JSON formatting', () => {
+    const base = pet();
+    expect(sourceFingerprint([base])).toBe(sourceFingerprint([pet({ created_at: 'tomorrow', updatedAt: 'now', pet_json: JSON.stringify(JSON.parse(base.pet_json), null, 2) })]));
+    for (const changes of [{ name: '新龙' }, { price: 300 }, { thumbnail_url: 'other' }, { description: '新描述' }, { pet_json: base.pet_json.replace('"maxFrames":2', '"maxFrames":3') }]) expect(publicationFingerprint(pet(changes))).not.toBe(publicationFingerprint(base));
+    expect(sourceFingerprint([base])).not.toBe(sourceFingerprint([]));
+    expect(sourceFingerprint([base, pet({ id: 'ws-DEF456' })])).toBe(sourceFingerprint([pet({ id: 'ws-DEF456' }), base]));
+  });
+  it('replaces catalog membership across create, edit and delete snapshots', async () => {
+    const { outputRoot, manifest } = await build();
+    const created = [pet(), pet({ id: 'ws-DEF456', name: '第二只' })];
+    const second = await buildPublication({ outputRoot, fetchFn: api(created, await sheet()), published: manifest });
+    expect(second.count).toBe(2);
+    const edited = [pet({ id: 'ws-DEF456', name: '已修改' })];
+    const third = await buildPublication({ outputRoot, fetchFn: api(edited, await sheet()), published: second });
+    expect(third.items.map(item => item.name)).toEqual(['已修改']);
+    expect(third.sourceFingerprint).not.toBe(second.sourceFingerprint);
+    const empty = await buildPublication({ outputRoot, fetchFn: api([], await sheet()), published: third });
+    expect(empty.items).toEqual([]);
+  });
+  it('follows pages and rejects repeated cursors, duplicate IDs and incomplete pages', async () => {
+    const pages = { first: { items: [pet()], hasMore: true, nextCursor: 'two' }, two: { items: [pet({ id: 'ws-DEF456' })], hasMore: false } };
+    expect(await fetchSource(api([], null, { pages }))).toHaveLength(2);
+    await expect(fetchSource(api([], null, { pages: { ...pages, two: pages.first } }))).rejects.toThrow(/duplicate|cursor/i);
+    await expect(fetchSource(api([], null, { pages: { first: { items: [], hasMore: true } } }))).rejects.toThrow(/cursor/);
+    await expect(fetchSource(api([], null, { pages: { first: {} } }))).rejects.toThrow(/page/);
+    await expect(fetchSource(api([], null, { pages: { first: { items: [], hasMore: true, nextCursor: 'loop' }, loop: { items: [], hasMore: true, nextCursor: 'loop' } } }))).rejects.toThrow(/cursor/);
+  });
+  it('accepts native and exact trusted endpoint keys, rejects unsafe URLs', () => {
+    expect(imageKey('/api/workshop/image?key=sheet%3Aabc')).toBe('sheet:abc');
+    expect(imageKey('https://api.cspstudy.top/api/workshop/image?key=sheet%3Aabc')).toBe('sheet:abc');
+    for (const key of ['https://evil.test/image', '//evil.test/a', '/other/path', 'http://api.cspstudy.top/api/workshop/image?key=x', 'https://api.cspstudy.top/api/workshop/image?key=x&url=http://evil', 'https://user@api.cspstudy.top/api/workshop/image?key=x']) expect(() => imageKey(key)).toThrow();
+  });
+  it('rejects invalid metadata, image corruption, oversize and frame geometry', async () => {
+    for (const changes of [{ id: '../bad' }, { element: 'dark' }, { tier: 'bad' }, { price: -1 }, { price: false }, { pet_json: '{}' }, { pet_json: '{broken' }]) await expect(build([pet(changes)])).rejects.toThrow();
+    await expect(build([pet()], { fetchFn: api([pet()], Buffer.from('bad')) })).rejects.toThrow();
+    await expect(build([pet()], { fetchFn: api([pet()], Buffer.alloc(25 * 1024 * 1024 + 1)) })).rejects.toThrow(/size|large/i);
+    const tooWide = await sharp({ create: { width: 8193, height: 1, channels: 4, background: '#000000' } }).png().toBuffer();
+    await expect(build([pet()], { fetchFn: api([pet()], tooWide) })).rejects.toThrow(/dimensions/);
+    await expect(build([pet({ pet_json: JSON.stringify({ frameWidth: 2, frameHeight: 3, maxFrames: 2, anims: { idle: 3 } }) })])).rejects.toThrow(/frame/);
+    await expect(build([pet({ pet_json: JSON.stringify({ frameWidth: 20, frameHeight: 3, maxFrames: 1, anims: { idle: 1 } }) })])).rejects.toThrow(/frame/i);
+  });
+  it('allows empty snapshots, protects large deletions and detects concurrent edits', async () => {
+    expect((await build([])).manifest.count).toBe(0);
+    const published = { count: 30, items: [] };
+    await expect(build([], { published })).rejects.toThrow(/delet/i);
+    expect((await build([], { published, allowLargeDelete: true })).manifest.count).toBe(0);
+    const outputRoot = await mkdtemp(join(tmpdir(), 'workshop-race-')); roots.push(outputRoot);
+    await expect(buildPublication({ outputRoot, fetchFn: api([pet()], await sheet(), { after: [pet({ name: 'changed' })] }) })).rejects.toThrow(/changed/i);
+    await expect(readFile(join(outputRoot, 'workshop/catalog.json'))).rejects.toThrow();
+  });
+  it('keeps the previous catalog intact when a replacement image fails validation', async () => {
+    const { outputRoot, manifest } = await build();
+    await expect(buildPublication({ outputRoot, fetchFn: api([pet({ name: 'changed' })], Buffer.from('invalid')) })).rejects.toThrow();
+    expect(JSON.parse(await readFile(join(outputRoot, 'workshop/catalog.json'), 'utf8'))).toEqual(manifest);
+  });
+  it('verifies deployed source and every image hash; builds do not trust a poisoned static cache', async () => {
+    const { outputRoot, manifest } = await build();
+    const online = async url => {
+      const u = new URL(url);
+      return u.pathname.endsWith('catalog.json') ? json(manifest) : new Response(await readFile(join(outputRoot, u.pathname)));
+    };
+    await expect(verifyPublication({ fetchFn: online, manifest })).resolves.toBeUndefined();
+    await expect(verifyPublication({ fetchFn: async url => String(url).endsWith('catalog.json') ? json(manifest) : new Response('poison'), manifest })).rejects.toThrow(/hash/);
+    const sourceFetch = api([pet()], await sheet(), { published: manifest });
+    let attemptedCache = false;
+    const poisonedFetch = url => {
+      if (String(url).includes('cards.cspstudy.top/workshop/pets/')) { attemptedCache = true; return new Response('poison'); }
+      return sourceFetch(url);
+    };
+    expect((await build([pet()], { fetchFn: poisonedFetch, published: manifest })).manifest.sourceFingerprint).toBe(manifest.sourceFingerprint);
+    expect(sourceFetch.calls.some(u => u.includes('/api/workshop/image'))).toBe(true);
+    expect(attemptedCache).toBe(false);
+  });
+  it('always rechecks authoritative bytes and detects same-key image overwrites', async () => {
+    const { manifest } = await build();
+    const changedImage = await sharp({ create: { width: 4, height: 3, channels: 4, background: '#0000ff' } }).png().toBuffer();
+    const sourceFetch = api([pet()], changedImage);
+    const oldImage = await sheet();
+    const replacement = await build([pet()], { fetchFn: url => String(url).includes('cards.cspstudy.top/workshop/pets/') ? new Response(oldImage) : sourceFetch(url), published: manifest });
+    expect(sourceFetch.calls.some(u => u.includes('/api/workshop/image'))).toBe(true);
+    expect(replacement.manifest.sourceFingerprint).toBe(manifest.sourceFingerprint);
+    expect(replacement.manifest.items[0].spritesheet_sha256).not.toBe(manifest.items[0].spritesheet_sha256);
+    await expect(verifyPublication({ manifest, fetchFn: async () => json({ ...manifest, sourceFingerprint: 'stale' }) })).rejects.toThrow(/manifest/);
+    const editFetch = api([pet({ name: '改名' })], await sheet());
+    await build([pet({ name: '改名' })], { fetchFn: editFetch, published: manifest });
+    expect(editFetch.calls.some(u => u.includes('/api/workshop/image'))).toBe(true);
+  });
+  it('validates real column/row bounds for modern, default and legacy animation metadata', () => {
+    const base = { frameWidth: 2, frameHeight: 3, maxFrames: 2, anims: { idle: 2 } };
+    expect(() => validateGeometry(base, 4, 3)).not.toThrow();
+    expect(() => validateGeometry({ ...base, maxFrames: 3 }, 4, 3)).toThrow(/column/);
+    expect(() => validateGeometry({ ...base, anims: { idle: [1, 2] } }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, walk: 2 }, animOrder: ['idle', 'walk'] }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, walk: 2 }, animsOrder: ['idle', 'walk'] }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, walk: 2 } }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 3 } }, 4, 3)).toThrow(/column/);
+    const legacy = { frameWidth: 192, frameHeight: 208, anims: { idle: [0, 5] }, animsOrder: ['idle'] };
+    expect(() => publicationFingerprint(pet({ pet_json: JSON.stringify(legacy) }))).not.toThrow();
+    expect(() => validateGeometry(legacy, 1536, 1456)).not.toThrow();
+    const partialOrder = { ...legacy, anims: { idle: 6, walk: 6, sleep: 4, celebrate: 4, think: 6, eat: 6, unhappy: 6 } };
+    expect(() => validateGeometry(partialOrder, 1536, 1456)).not.toThrow();
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, review: 2 } }, 4, 27)).not.toThrow();
+    expect(() => validateGeometry({ ...legacy, anims: { idle: [0, 9] } }, 1536, 1456)).toThrow(/column/);
+  });
+  it('accepts the repository generators full animation order with sparse frame counts', async () => {
+    const meta = { frameWidth: 2, frameHeight: 3, maxFrames: 2, anims: { idle: 2 }, animOrder: ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhappy'] };
+    const records = [pet({ pet_json: JSON.stringify(meta) })];
+    const image = await sharp({ create: { width: 4, height: 21, channels: 4, background: '#000000' } }).png().toBuffer();
+    expect((await build(records, { fetchFn: api(records, image) })).manifest.count).toBe(1);
+    expect(() => publicationFingerprint(pet({ pet_json: JSON.stringify({ ...meta, animsOrder: ['', 3] }) }))).toThrow(/order/);
+  });
+  it('forces a daily image refresh even when the cheap metadata check matches', async () => {
+    const outputRoot = await mkdtemp(join(tmpdir(), 'workshop-cli-')); roots.push(outputRoot);
+    const script = `globalThis.fetch=async url=>new Response(JSON.stringify(String(url).includes('/api/workshop/pets')?{items:[],hasMore:false}:{version:2,count:0,items:[],sourceFingerprint:${JSON.stringify(sourceFingerprint([]))}}));`;
+    const preload = `data:text/javascript,${encodeURIComponent(script)}`;
+    const run = flags => execFileSync(process.execPath, ['--import', preload, 'scripts/build-workshop-static.mjs', '--check', ...flags], { encoding: 'utf8', env: { ...process.env, GITHUB_OUTPUT: join(outputRoot, 'outputs') } });
+    expect(run([])).toContain('changed=false');
+    expect(run(['--refresh-images'])).toContain('changed=true');
+    expect(await readFile(join(outputRoot, 'outputs'), 'utf8')).toContain('changed=true\n');
+  });
+});

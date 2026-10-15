@@ -71,6 +71,7 @@ h3{font-size:15px;margin-bottom:8px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="./workshop-publication-view.js"></script>
 <script>
 const API = location.hostname === 'localhost' || location.hostname === '127.0.0.1'
   ? (new URLSearchParams(location.search).get('api') || 'https://api.cspstudy.top')
@@ -291,8 +292,25 @@ function Dashboard() {
     if (Array.isArray(d)) setWishes(d); setLoading(false); render();
   }
   async function loadWorkshopPets() {
-    const d = await api('/api/workshop/pets');
-    if (Array.isArray(d)) { setWorkshopPets(d); }
+    const records = [], ids = new Set(), cursors = new Set();
+    let cursor = '';
+    try {
+      for (let page = 0; page < 100; page++) {
+        const params = new URLSearchParams({ limit:'100', paginated:'1' });
+        if (cursor) params.set('cursor', cursor);
+        const d = await api('/api/workshop/pets?' + params);
+        if (!d || d.error || !Array.isArray(d.items) || d.items.length > 100 || typeof d.hasMore !== 'boolean') throw Error(d && d.error || '精灵列表分页格式无效');
+        for (const record of d.items) {
+          if (!record || typeof record.id !== 'string' || !record.id || ids.has(record.id)) throw Error('精灵列表包含无效或重复记录');
+          ids.add(record.id); records.push(record);
+        }
+        if (!d.hasMore) { setWorkshopPets(records); return; }
+        cursor = d.nextCursor;
+        if (typeof cursor !== 'string' || !cursor || cursor.length > 2048 || /[\x00-\x1f]/.test(cursor) || cursors.has(cursor)) throw Error('精灵列表分页游标无效');
+        cursors.add(cursor);
+      }
+      throw Error('精灵列表分页超出限制');
+    } catch (err) { toast('精灵列表加载失败：' + err.message, 'error'); }
   }
 
   // ── Actions ──
@@ -1474,18 +1492,19 @@ function ImportPanel({ onCreated }) {
     try {
       // data URL → Blob，用 FormData 上传（避开 JSON base64 + Worker atob 重 CPU，且省 33% 体积）
       async function dataUrlToBlob(d) { return await (await fetch(d)).blob(); }
+      const uploadId = globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function' ? globalThis.crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2) + '-' + Math.random().toString(36).slice(2);
       const ssForm = new FormData();
-      ssForm.append('file', await dataUrlToBlob(resultUrl), (name.trim()||"pet") + "-spritesheet.png");
+      ssForm.append('file', await dataUrlToBlob(resultUrl), uploadId + "-spritesheet.png");
       const ssResp = await api("/api/workshop/upload", { method:"POST", body: ssForm, timeout: 60000 });
       if (ssResp.error) { toast("上传失败: "+ssResp.error,"error"); setSubmitting(false); return; }
       const thumbForm = new FormData();
-      thumbForm.append('file', await dataUrlToBlob(thumbUrl || resultUrl), (name.trim()||"pet") + "-thumb.png");
+      thumbForm.append('file', await dataUrlToBlob(thumbUrl || resultUrl), uploadId + "-thumb.png");
       const thumbResp = await api("/api/workshop/upload", { method:"POST", body: thumbForm, timeout: 60000 });
       if (thumbResp.error) { toast("缩略图上传失败: "+thumbResp.error,"error"); setSubmitting(false); return; }
       const tierData = TIERS.find(function(t){ return t.key===tier; });
       const d = await api("/api/workshop/pets", { method:"POST", body:JSON.stringify({ name: name.trim(), element: element, style: style, description: desc.trim(), tier: tierData.key, price: tierData.price, spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData), creator_name: creatorName || '' }) });
       if (d.error) { toast(d.error,"error"); setSubmitting(false); return; }
-      toast("✅ 精灵已保存！");
+      toast("✅ 已上传，等待自动同步上架（约 5 分钟）");
       onCreated();
       render();
     } catch(err) { toast("保存失败: "+err.message,"error"); }
@@ -1561,12 +1580,52 @@ function MyPetsPanel({ pets, onRefresh }) {
   const [editCreator, setEditCreator] = React.useState('');
   const [editElement, setEditElement] = React.useState('fire');
   const [editTier, setEditTier] = React.useState('common');
+  const [catalog, setCatalog] = React.useState(null);
+  const [checkFailed, setCheckFailed] = React.useState(false);
+  const [checking, setChecking] = React.useState(false);
+  const [checkRun, setCheckRun] = React.useState(0);
+  const [pollExpired, setPollExpired] = React.useState(false);
+  const [deletedIds, setDeletedIds] = React.useState([]);
+  const sourceSignature = JSON.stringify(pets);
+  const deletedSignature = JSON.stringify(deletedIds);
+
+  React.useEffect(() => {
+    let stopped = false, timer, controller;
+    const deadline = Date.now() + 10 * 60 * 1000;
+    setPollExpired(false);
+    async function check() {
+      if (stopped) return;
+      if (Date.now() >= deadline) { setPollExpired(true); return; }
+      setChecking(true);
+      controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), Math.min(15000, deadline - Date.now()));
+      let retry = 0;
+      try {
+        const response = await fetch(WorkshopPublication.CATALOG, { cache:'no-store', signal:controller.signal });
+        if (!response.ok) throw Error('目录请求失败');
+        const next = WorkshopPublication.readCatalog(await response.json());
+        if (stopped) return;
+        setCatalog(next); setCheckFailed(false);
+        if (pets.some(p => WorkshopPublication.status(p, next, false) !== '已上架') || deletedIds.some(id => next.records.has(id))) retry = 30000;
+      } catch (err) {
+        if (stopped) return;
+        setCheckFailed(true); retry = 60000;
+      } finally { clearTimeout(timeout); if (!stopped) setChecking(false); }
+      if (!stopped && retry) {
+        if (Date.now() + retry < deadline) timer = setTimeout(check, retry);
+        else setPollExpired(true);
+      }
+    }
+    check();
+    return () => { stopped = true; clearTimeout(timer); if (controller) controller.abort(); };
+  }, [sourceSignature, deletedSignature, checkRun]);
 
   const deletePet = async (id) => {
     if (!confirm('确定要删除这只精灵吗？')) return;
     const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method: 'DELETE' });
     if (resp.error) { toast(resp.error, 'error'); return; }
-    toast('已删除');
+    setDeletedIds(ids => ids.includes(id) ? ids : ids.concat(id));
+    toast('已删除，等待自动同步下架（约 5 分钟）');
     onRefresh();
   };
 
@@ -1575,10 +1634,16 @@ function MyPetsPanel({ pets, onRefresh }) {
   const saveEdit = async (id) => {
     const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method:'PUT', body:JSON.stringify({ name:editName.trim(), teacher_name:editCreator.trim(), element:editElement, tier:editTier }) });
     if (resp.error) { toast(resp.error,'error'); return; }
-    toast('✅ 已更新'); setEditingId(null); onRefresh();
+    toast('✅ 已保存修改，等待自动同步（约 5 分钟）'); setEditingId(null); onRefresh();
   };
 
   return React.createElement('div', null,
+    React.createElement('div', { className:'card', style:{ fontSize:13 } },
+      React.createElement('div', null, '学生端静态目录最后更新：', catalog ? new Date(catalog.updatedAt).toLocaleString('zh-CN') : '尚未获取'),
+      React.createElement('div', { style:{ marginTop:8, color:checkFailed?'#dc2626':'#64748b' } }, checkFailed ? '检查失败，请稍后重试。' : '每约 5 分钟自动同步；上架状态以静态目录内容核对。', pollExpired ? ' 本轮自动检查已结束，可手动检查。' : ''),
+      React.createElement('button', { className:'btn btn-outline', style:{ marginTop:8 }, disabled:checking, onClick:()=>setCheckRun(n=>n+1) }, checking ? '检查中…' : '手动检查上架状态'),
+      deletedIds.some(id => !catalog || catalog.records.has(id)) && React.createElement('div', { style:{ marginTop:8, color:'#b45309' } }, checkFailed ? '删除同步检查失败，请重试。' : '有精灵等待同步下架，学生端静态目录更新后将移除。'),
+    ),
     pets.length === 0 ? React.createElement('div', { className:'card', style:{ textAlign:'center', padding:40, color:'#94a3b8' } }, '还没有精灵，去「📦 精灵工坊」导入吧') :
     pets.map(p => editingId === p.id ? React.createElement('div', { key:p.id, className:'card', style:{ border:'2px solid #FF8C00' } },
       React.createElement('div', { className:'form-group' },
@@ -1610,6 +1675,7 @@ function MyPetsPanel({ pets, onRefresh }) {
       React.createElement(PetThumb, { pet: p }),
       React.createElement('div', { style:{ flex:1 } },
         React.createElement('div', { style:{ fontWeight:700 } }, (ELEM_LABEL[p.element]||''), ' ', p.name),
+        React.createElement('div', { style:{ fontSize:12, color:checkFailed?'#dc2626':WorkshopPublication.status(p, catalog, false)==='已上架'?'#15803d':'#b45309' } }, WorkshopPublication.status(p, catalog, checkFailed)),
         React.createElement('div', { style:{ fontSize:12, color:'#94a3b8' } }, '发布者: ', (p.teacher_name||'?'), ' · ', p.tier, ' · 🪙', p.price, 'g'),
       ),
       React.createElement('button', { className:'btn btn-outline', style:{ fontSize:12, marginRight:6 }, onClick:()=>startEdit(p) }, '✏️'),
