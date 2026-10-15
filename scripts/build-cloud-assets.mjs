@@ -37,6 +37,14 @@ try {
   if (error?.code !== 'ENOENT') throw error;
 }
 
+// Battle portraits are downloadable only. They must never enter public/ or
+// desktop installation bundles; old clients simply ignore this directory.
+try {
+  await cp(resolve(root, 'cloud-assets-source', 'battle-portraits'), resolve(output, 'battle-portraits'), { recursive: true, force: true });
+} catch (error) {
+  if (error?.code !== 'ENOENT') throw error;
+}
+
 await cp(resolve(root, 'cloud-assets-source', 'equipment'), resolve(output, 'equipment'), { recursive: true });
 for (const folder of ['weapons', 'armor']) {
   await cp(resolve(root, 'public', 'dungeon-exploration', folder), resolve(output, 'dungeon-exploration', folder), { recursive: true });
@@ -201,6 +209,9 @@ await writeFile(resolve(output, '_headers'), `
   Access-Control-Allow-Origin: *
 
 /collector-cards/*
+  Cache-Control: public, max-age=300, must-revalidate
+
+/battle-portraits/*
   Cache-Control: public, max-age=300, must-revalidate
 
 /wardrobe/*
