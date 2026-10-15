@@ -1,0 +1,75 @@
+name: Publish workshop catalog
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+    - cron: '17 19 * * *'
+  workflow_dispatch:
+    inputs:
+      refresh_images:
+        description: Re-read source images even when metadata is unchanged
+        type: boolean
+        default: false
+      allow_large_delete:
+        description: Allow a verified deletion of more than half the catalog
+        type: boolean
+        default: false
+  push:
+    branches: [master]
+    paths:
+      - scripts/workshop-publication.mjs
+      - scripts/build-workshop-static.mjs
+      - scripts/workshop-publication.test.mjs
+      - scripts/workshop-publication-view.test.mjs
+      - teacher-app/workshop-publication-view.js
+      - teacher-app/index.html
+      - deploy/wrangler.workshop.toml
+      - .github/workflows/workshop-publication.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workshop-static-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compare source and published catalog
+        id: catalog
+        env:
+          REFRESH_IMAGES: ${{ inputs.refresh_images || github.event.schedule == '17 19 * * *' }}
+        run: |
+          args=()
+          if [ "$REFRESH_IMAGES" = "true" ]; then args+=(--refresh-images); fi
+          node scripts/build-workshop-static.mjs --check "${args[@]}"
+      - name: Install publisher dependencies
+        if: steps.catalog.outputs.changed == 'true'
+        run: npm ci --ignore-scripts
+      - name: Test publisher
+        if: steps.catalog.outputs.changed == 'true'
+        run: npx vitest run scripts/workshop-publication.test.mjs scripts/workshop-publication-view.test.mjs
+      - name: Build complete workshop snapshot
+        if: steps.catalog.outputs.changed == 'true'
+        env:
+          ALLOW_LARGE_DELETE: ${{ inputs.allow_large_delete }}
+        run: |
+          args=()
+          if [ "$ALLOW_LARGE_DELETE" = "true" ]; then args+=(--allow-large-delete); fi
+          node scripts/build-workshop-static.mjs --build "${args[@]}"
+      - name: Deploy only workshop assets
+        if: steps.catalog.outputs.changed == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: '908f0def3e8015ca7a20de49a99cf334'
+        run: npx --yes wrangler@4.151.0 deploy --config deploy/wrangler.workshop.toml
+      - name: Verify catalog and all published asset hashes
+        if: steps.catalog.outputs.changed == 'true'
+        run: node scripts/build-workshop-static.mjs --verify
