@@ -56,7 +56,7 @@ async function readBounded(response: Response, cap: number): Promise<Uint8Array>
       if (size > cap) throw new Error('Portrait response too large');
       chunks.push(value);
     }
-  } finally { await reader.cancel().catch(() => {}); }
+  } finally { void reader.cancel().catch(() => {}); }
   const bytes = new Uint8Array(size);
   let offset = 0;
   for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
@@ -150,7 +150,42 @@ export function createBattlePortraitLoader(io: PortraitIO) {
 }
 
 function isDesktop(): boolean { return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window; }
-const webCache = new Map<string, Uint8Array>();
+/** Binary CacheStorage survives browser reloads. It contains at most 16 portraits
+ * plus one catalog (~64 MiB), and every cache hit is verified again by the loader. */
+export function createPortraitWebCache(storage?: Pick<CacheStorage, 'open'>) {
+  const memory = new Map<string, Uint8Array>();
+  const cacheUrl = (key: string) => `https://cards.cspstudy.top/battle-portrait-cache-v1/${key}`;
+  const limit = (key: string) => key === 'catalog.json' ? 256 * 1024 : MAX_BYTES;
+  async function open() {
+    try { return storage ? await storage.open('csp-battle-portraits-v1') : null; }
+    catch { return null; }
+  }
+  return {
+    async read(key: string): Promise<Uint8Array | null> {
+      const cache = await open();
+      if (!cache) return memory.get(key) || null;
+      try {
+        const response = await cache.match(cacheUrl(key));
+        return response ? await readBounded(response, limit(key)) : null;
+      } catch { await cache.delete(cacheUrl(key)).catch(() => {}); return null; }
+    },
+    async write(key: string, bytes: Uint8Array): Promise<void> {
+      if (!bytes.length || bytes.length > limit(key)) return;
+      const cache = await open();
+      if (!cache) {
+        memory.delete(key); memory.set(key, bytes);
+        const portraits = [...memory.keys()].filter(item => item !== 'catalog.json');
+        for (const item of portraits.slice(0, Math.max(0, portraits.length - 16))) memory.delete(item);
+        return;
+      }
+      await cache.delete(cacheUrl(key));
+      await cache.put(cacheUrl(key), new Response(new Uint8Array(bytes)));
+      const portraits = (await cache.keys()).filter(request => !request.url.endsWith('/catalog.json'));
+      for (const request of portraits.slice(0, Math.max(0, portraits.length - 16))) await cache.delete(request);
+    },
+  };
+}
+const webCache = createPortraitWebCache(typeof caches !== 'undefined' ? caches : undefined);
 const defaultLoader = createBattlePortraitLoader({
   fetch: async (url, init) => {
     if (import.meta.env.DEV && !isDesktop()) {
@@ -163,11 +198,11 @@ const defaultLoader = createBattlePortraitLoader({
     return isDesktop() ? (await import('@tauri-apps/plugin-http')).fetch(url, { ...init, connectTimeout: 1200 }) : fetch(url, init);
   },
   read: async key => {
-    if (!isDesktop()) return webCache.get(key) || null;
+    if (!isDesktop()) return webCache.read(key);
     try { const fs = await import('@tauri-apps/plugin-fs'); return await fs.readFile(`battle-portraits/${key}`, { baseDir: fs.BaseDirectory.AppData }); } catch { return null; }
   },
   write: async (key, bytes) => {
-    if (!isDesktop()) { webCache.set(key, bytes); return; }
+    if (!isDesktop()) return webCache.write(key, bytes);
     const fs = await import('@tauri-apps/plugin-fs');
     await fs.mkdir('battle-portraits', { baseDir: fs.BaseDirectory.AppData, recursive: true });
     await fs.writeFile(`battle-portraits/${key}`, bytes, { baseDir: fs.BaseDirectory.AppData });

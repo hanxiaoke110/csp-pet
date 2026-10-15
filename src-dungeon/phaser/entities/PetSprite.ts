@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import type { PhaserPetConfig } from '../types';
-import { effectiveVisualMode, readBattleVisualMode } from '../../utils/battleVisuals';
+import { BATTLE_LAYOUT, effectiveVisualMode, readBattleVisualMode } from '../../utils/battleVisuals';
 
 export class PetSprite extends Phaser.GameObjects.Container {
   private sprite: Phaser.GameObjects.Image;
@@ -63,7 +63,7 @@ export class PetSprite extends Phaser.GameObjects.Container {
     this.add(this.levelText);
 
     // 名字
-    this.nameText = scene.add.text(0, 118, config.displayName, {
+    this.nameText = scene.add.text(0, BATTLE_LAYOUT.nameOffsetY, config.displayName, {
       fontSize: '14px',
       color: '#ffffff',
       fontStyle: 'bold',

@@ -1,8 +1,25 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createBattlePortraitLoader, parsePortraitCatalog, type PortraitIO } from './battlePortraits';
+import { createBattlePortraitLoader, createPortraitWebCache, parsePortraitCatalog, type PortraitIO } from './battlePortraits';
 
 const portrait = { speciesId: 'capi', url: 'https://cards.cspstudy.top/battle-portraits/capi.webp', bytes: 100, sha256: 'a'.repeat(64), width: 1024, height: 1024, style: 'painted' };
 describe('trusted battle portraits', () => {
+  it('persists binary browser cache across instances and bounds poisoned responses and entry count', async () => {
+    const entries = new Map<string, Response>();
+    const cache = {
+      match: async (key: string) => entries.get(key)?.clone(),
+      put: async (key: string, value: Response) => { entries.set(key, value); },
+      keys: async () => [...entries.keys()].map(key => new Request(key)),
+      delete: async (key: Request | string) => entries.delete(typeof key === 'string' ? key : key.url),
+    } as unknown as Cache;
+    const storage = { open: async () => cache };
+    const first = createPortraitWebCache(storage);
+    await first.write('catalog.json', new Uint8Array([1, 2, 3]));
+    expect(await createPortraitWebCache(storage).read('catalog.json')).toEqual(new Uint8Array([1, 2, 3]));
+    for (let i = 0; i < 20; i++) await first.write(`pet-${i}-${'a'.repeat(64)}.img`, new Uint8Array([i]));
+    expect(entries.size).toBeLessThanOrEqual(17);
+    entries.set('https://cards.cspstudy.top/battle-portrait-cache-v1/catalog.json', new Response(new Uint8Array(256 * 1024 + 1)));
+    expect(await first.read('catalog.json')).toBeNull();
+  });
   it('accepts the versioned species catalog and rejects unsafe or oversized entries', () => {
     expect(parsePortraitCatalog({ version: 1, portraits: [portrait] }).portraits[0].speciesId).toBe('capi');
     for (const bad of [{ url: 'https://evil.test/a.webp' }, { bytes: 4194305 }, { width: 4096 }, { height: 2048 }, { sha256: 'bad' }]) {
@@ -30,6 +47,12 @@ describe('trusted battle portraits', () => {
     expect((await loader.load('capi'))?.url).toBe('blob:owned');
     expect(io.fetch).toHaveBeenCalledTimes(2);
     expect(await loader.load('other-pet')).toBeNull();
+    const onlineFetch = io.fetch;
+    io.fetch = async () => { throw new Error('offline'); };
+    expect((await createBattlePortraitLoader(io).load('capi'))?.url).toBe('blob:owned');
+    cache.set(`capi-${portrait.sha256}.img`, new Uint8Array(100));
+    expect(await createBattlePortraitLoader(io).load('capi')).toBeNull();
+    io.fetch = onlineFetch;
     cache.clear();
     io.digest = async () => 'b'.repeat(64);
     expect(await loader.load('capi')).toBeNull();

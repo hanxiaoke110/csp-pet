@@ -1,7 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
-import { battleResolution, createImpactLifecycle, effectiveVisualMode } from './battleVisuals';
+import { BATTLE_LAYOUT, battleResolution, createImpactLifecycle, effectiveVisualMode } from './battleVisuals';
 
 describe('battle visuals', () => {
+  it('keeps player name, health, energy and cards vertically separated', () => {
+    const layout = BATTLE_LAYOUT;
+    const nameBottom = layout.playerY + layout.nameOffsetY + 24;
+    expect(nameBottom).toBeLessThan(layout.playerHpY - 9);
+    expect(layout.playerHpY + 9).toBeLessThan(layout.energyY - 20);
+    expect(layout.energyY + 20).toBeLessThan(layout.cardsY - 90);
+  });
   it('keeps the logical stage sharp within a 3840 × 2160 backing budget', () => {
     expect(battleResolution(1920, 1080, 2)).toBe(3);
     expect(battleResolution(640, 360, 2)).toBe(1);

@@ -1,5 +1,8 @@
 export type BattleVisualMode = 'full' | 'simple';
 export const BATTLE_VISUAL_MODE_KEY = 'csp_battle_visual_mode_v1';
+export const BATTLE_LAYOUT = {
+  playerY: 200, nameOffsetY: 118, playerHpY: 360, energyY: 400, cardsY: 650,
+} as const;
 let memoryPreference: BattleVisualMode = 'full';
 
 /** Logical coordinates remain 1280 × 720; cap the backing store at 8.3 MP. */

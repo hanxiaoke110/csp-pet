@@ -28,6 +28,7 @@ import { TRIAL_EQUIPMENT } from '../../data/explorationItems';
 import { getTrialCombatProfile, type TrialCombatProfile } from '../../utils/trialEquipmentEffects';
 import { applyWeaponDamage, armorDamageMultiplier, type CombatEquipment } from '../../utils/equipmentCombat';
 import { playElementAttack } from '../effects/ElementAttackEffect';
+import { BATTLE_LAYOUT } from '../../utils/battleVisuals';
 
 
 const MAX_ENERGY = 5;
@@ -154,7 +155,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.sceneBuilt) return;
     this.sceneBuilt = true;
 
-    const width = 1280, height = 720;
+    const width = 1280;
 
     // 背景：渐变或图片
     this.createBackground();
@@ -183,16 +184,16 @@ export class BattleScene extends Phaser.Scene {
     this.enemyPet = new PetSprite(this, 220, 180, this.initData.enemyPet);
 
     // 敌方血条
-    this.enemyHpBar = new HealthBar(this, 220, 330, 180, 18, this.initData.enemyPet.maxHp, this.initData.enemyPet.currentHp, 0xff4444);
+    this.enemyHpBar = new HealthBar(this, 220, 340, 180, 18, this.initData.enemyPet.maxHp, this.initData.enemyPet.currentHp, 0xff4444);
 
     // 敌方意图气泡
     this.intentBubble = new IntentBubble(this, 220, 52);
 
     // 我方宠物（右侧）
-    this.playerPet = new PetSprite(this, width - 220, 200, this.initData.playerPet);
+    this.playerPet = new PetSprite(this, width - 220, BATTLE_LAYOUT.playerY, this.initData.playerPet);
 
     // 我方血条
-    this.playerHpBar = new HealthBar(this, width - 220, 350, 180, 18, this.initData.playerPet.maxHp, this.initData.playerPet.currentHp, 0x00ff41);
+    this.playerHpBar = new HealthBar(this, width - 220, BATTLE_LAYOUT.playerHpY, 180, 18, this.initData.playerPet.maxHp, this.initData.playerPet.currentHp, 0x00ff41);
 
     this.createEquipmentLabel();
     if (this.state.shield > 0) this.showTraitText(`护甲生效：+${this.state.shield} 护盾`, '#7dd3fc');
@@ -204,7 +205,7 @@ export class BattleScene extends Phaser.Scene {
     this.comboCounter = new ComboCounter(this, width - 80, 80);
 
     // 卡牌手牌
-    this.cardHand = new CardHand(this, width / 2, height - 70, (skillId) => this.onSkillSelected(skillId));
+    this.cardHand = new CardHand(this, width / 2, BATTLE_LAYOUT.cardsY, (skillId) => this.onSkillSelected(skillId));
     this.cardHand.setSkills(SKILLS, this.state.skillUsages);
   }
 
@@ -242,7 +243,7 @@ export class BattleScene extends Phaser.Scene {
   private createEnergyOrbs(): void {
     const width = 1280;
     const startX = width - 220 - 60;
-    const y = 315;
+    const y = BATTLE_LAYOUT.energyY;
 
     for (let i = 0; i < MAX_ENERGY; i++) {
       const orb = new EnergyOrb(this, startX + i * 28, y, 10);
