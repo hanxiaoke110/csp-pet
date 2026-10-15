@@ -1,0 +1,11 @@
+name = "csp-workshop-assets"
+compatibility_date = "2026-09-01"
+workers_dev = false
+preview_urls = false
+
+[assets]
+directory = "../.workshop-static"
+
+[[routes]]
+pattern = "cards.cspstudy.top/workshop/*"
+zone_name = "cspstudy.top"
