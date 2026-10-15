@@ -1,0 +1,24 @@
+# Workshop Automatic Publication Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans task-by-task.
+
+**Goal:** Automatically publish teacher workshop edits to static assets while existing desktop clients keep the same URL, and recover the seven missing characters.
+
+**Architecture:** A separate static-only Worker owns `cards.cspstudy.top/workshop/*`; the original card/wardrobe/course Worker remains untouched. A GitHub Actions publisher checks the authoritative public paginated API, fingerprints source metadata, validates and uploads a complete workshop snapshot, and verifies it after deployment. The teacher UI compares its own records to the published snapshot for queued/published/failed state. Scheduled checks retry and coalesce edits; no per-student D1 calls and no desktop release. Existing uploaded image KV remains the source, no R2 migration.
+
+**Tech Stack:** Node22, Sharp, Vitest, Cloudflare Workers Static Assets, GitHub Actions, existing teacher React HTML app.
+
+User approved the above automatic publication direction on2026-10-15. Do not include unrelated uncommitted partner ascension changes in publication commits.
+
+## Tasks
+
+- [ ] Add isolated publisher builder and behavior tests. CLI fetches every page, validates IDs/metadata/image signatures/dimensions/hash/size, reuses unchanged verified published images, writes `.workshop-static/workshop/catalog.json` and hashed asset paths only after all validation passes. Source fingerprint ignores timestamps but includes all user-visible/editable metadata and image source identifiers. Unsafe paths/URLs, duplicated IDs, malformed JSON, missing image, oversize data, incomplete pagination and unexpected deletion threshold must fail before publishing.
+- [ ] Add `deploy/wrangler.workshop.toml`: name `csp-workshop-assets`, only static assets `.workshop-static`, exact route `cards.cspstudy.top/workshop/*`, zone `cspstudy.top`, no worker-first runtime. Verify unchanged non-workshop catalogs before and after initial routing. No desktop builds.
+- [ ] Add standalone `workshop-publication.yml` triggered manually, scheduled every5minutes and on publisher-path pushes. Use one concurrency group, no canceled in-progress deployment. Fetch/check fingerprint before installing Sharp or deployment dependencies; unchanged snapshots do not deploy. Missing publish credentials fail visibly. Keep last successful static release on any failure. Credentials scoped and stored only in GitHub Actions secrets; never copy local OAuth refresh tokens into CI. Initial sync can use existing local Wrangler OAuth while permanent credentials await login.
+- [ ] Teacher status helper compares server-authoritative record signatures to static published signatures and reports queued or published only from actual snapshot evidence; unavailable publication source reports sync-check failure, not success. Poll only while teacher is on its workshop management panel, bounded cadence/backoff and AbortController cleanup; show last-successful timestamp and refresh action. Upload success text distinguishes saved from published; edit/delete messages mention synchronization. Teacher list should paginate all records (current default30 must not hide older pets).
+- [ ] Integration tests include create/edit/delete snapshots, empty legitimate workshop, reused image hash invalidation, concurrent edits during build (detect by final metadata refetch; retry rather than publish stale), and published version/hash verification. Native image keys and `/api/workshop/image?key=` formats both work. Keep existing installed-client `spritesheet_static_url` and `thumbnail_static_url`, `pet_json`, tier/price/element fields compatible.
+- [ ] Publish only the61-current-role workshop snapshot and teacher website after tests. Read back all image hashes and metadata, test original static client pagination reaches new characters, verify 21collector cards and wardrobe/equipment/course metadata unchanged. GitHub workflow must run successfully with persistent credentials before automatic synchronization is declared complete. No test character upload or deletion in production without separate authorization; exercise mutation paths using fixtures.
+
+## Credentials / availability
+
+Current GitHub repository is public and has no Cloudflare deploy secret. Local Wrangler OAuth can deploy interactively but must not be stored as long-lived production CI credentials. Cloudflare browser login is expired; user was asked asynchronously to sign in. If permanent credentials remain unavailable, preserve completed code/tests and report automatic publication as not enabled, rather than pretending scheduled jobs work.
