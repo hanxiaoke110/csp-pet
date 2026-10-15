@@ -3,7 +3,8 @@ import sharp from 'sharp';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildPublication, fetchSource, imageKey, publicationFingerprint, sourceFingerprint, verifyPublication } from './workshop-publication.mjs';
+import { execFileSync } from 'node:child_process';
+import { buildPublication, fetchSource, imageKey, publicationFingerprint, sourceFingerprint, validateGeometry, verifyPublication } from './workshop-publication.mjs';
 
 const roots = [];
 afterEach(async () => { await Promise.all(roots.splice(0).map(p => rm(p, { recursive: true, force: true }))); });
@@ -97,7 +98,7 @@ describe('workshop snapshot publication', () => {
     await expect(buildPublication({ outputRoot, fetchFn: api([pet({ name: 'changed' })], Buffer.from('invalid')) })).rejects.toThrow();
     expect(JSON.parse(await readFile(join(outputRoot, 'workshop/catalog.json'), 'utf8'))).toEqual(manifest);
   });
-  it('verifies deployed source and every image hash; poisoned cache falls back to source', async () => {
+  it('verifies deployed source and every image hash; builds do not trust a poisoned static cache', async () => {
     const { outputRoot, manifest } = await build();
     const online = async url => {
       const u = new URL(url);
@@ -106,18 +107,53 @@ describe('workshop snapshot publication', () => {
     await expect(verifyPublication({ fetchFn: online, manifest })).resolves.toBeUndefined();
     await expect(verifyPublication({ fetchFn: async url => String(url).endsWith('catalog.json') ? json(manifest) : new Response('poison'), manifest })).rejects.toThrow(/hash/);
     const sourceFetch = api([pet()], await sheet(), { published: manifest });
-    const poisonedFetch = url => String(url).includes('cards.cspstudy.top/workshop/pets/') ? new Response('poison') : sourceFetch(url);
+    let attemptedCache = false;
+    const poisonedFetch = url => {
+      if (String(url).includes('cards.cspstudy.top/workshop/pets/')) { attemptedCache = true; return new Response('poison'); }
+      return sourceFetch(url);
+    };
     expect((await build([pet()], { fetchFn: poisonedFetch, published: manifest })).manifest.sourceFingerprint).toBe(manifest.sourceFingerprint);
     expect(sourceFetch.calls.some(u => u.includes('/api/workshop/image'))).toBe(true);
+    expect(attemptedCache).toBe(false);
   });
-  it('reuses unchanged verified sheet bytes and rejects a stale deployed manifest', async () => {
+  it('always rechecks authoritative bytes and detects same-key image overwrites', async () => {
     const { manifest } = await build();
-    const sourceFetch = api([pet()], await sheet());
-    await build([pet()], { fetchFn: sourceFetch, published: manifest });
-    expect(sourceFetch.calls.some(u => u.includes('/api/workshop/image'))).toBe(false);
+    const changedImage = await sharp({ create: { width: 4, height: 3, channels: 4, background: '#0000ff' } }).png().toBuffer();
+    const sourceFetch = api([pet()], changedImage);
+    const oldImage = await sheet();
+    const replacement = await build([pet()], { fetchFn: url => String(url).includes('cards.cspstudy.top/workshop/pets/') ? new Response(oldImage) : sourceFetch(url), published: manifest });
+    expect(sourceFetch.calls.some(u => u.includes('/api/workshop/image'))).toBe(true);
+    expect(replacement.manifest.sourceFingerprint).toBe(manifest.sourceFingerprint);
+    expect(replacement.manifest.items[0].spritesheet_sha256).not.toBe(manifest.items[0].spritesheet_sha256);
     await expect(verifyPublication({ manifest, fetchFn: async () => json({ ...manifest, sourceFingerprint: 'stale' }) })).rejects.toThrow(/manifest/);
     const editFetch = api([pet({ name: '改名' })], await sheet());
     await build([pet({ name: '改名' })], { fetchFn: editFetch, published: manifest });
     expect(editFetch.calls.some(u => u.includes('/api/workshop/image'))).toBe(true);
+  });
+  it('validates real column/row bounds for modern, default and legacy animation metadata', () => {
+    const base = { frameWidth: 2, frameHeight: 3, maxFrames: 2, anims: { idle: 2 } };
+    expect(() => validateGeometry(base, 4, 3)).not.toThrow();
+    expect(() => validateGeometry({ ...base, maxFrames: 3 }, 4, 3)).toThrow(/column/);
+    expect(() => validateGeometry({ ...base, anims: { idle: [1, 2] } }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, walk: 2 }, animOrder: ['idle', 'walk'] }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, walk: 2 }, animsOrder: ['idle', 'walk'] }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, walk: 2 } }, 4, 3)).toThrow(/row/);
+    expect(() => validateGeometry({ ...base, anims: { idle: 3 } }, 4, 3)).toThrow(/column/);
+    const legacy = { frameWidth: 192, frameHeight: 208, anims: { idle: [0, 5] }, animsOrder: ['idle'] };
+    expect(() => publicationFingerprint(pet({ pet_json: JSON.stringify(legacy) }))).not.toThrow();
+    expect(() => validateGeometry(legacy, 1536, 1456)).not.toThrow();
+    const partialOrder = { ...legacy, anims: { idle: 6, walk: 6, sleep: 4, celebrate: 4, think: 6, eat: 6, unhappy: 6 } };
+    expect(() => validateGeometry(partialOrder, 1536, 1456)).not.toThrow();
+    expect(() => validateGeometry({ ...base, anims: { idle: 2, review: 2 } }, 4, 27)).not.toThrow();
+    expect(() => validateGeometry({ ...legacy, anims: { idle: [0, 9] } }, 1536, 1456)).toThrow(/column/);
+  });
+  it('forces a daily image refresh even when the cheap metadata check matches', async () => {
+    const outputRoot = await mkdtemp(join(tmpdir(), 'workshop-cli-')); roots.push(outputRoot);
+    const script = `globalThis.fetch=async url=>new Response(JSON.stringify(String(url).includes('/api/workshop/pets')?{items:[],hasMore:false}:{version:2,count:0,items:[],sourceFingerprint:${JSON.stringify(sourceFingerprint([]))}}));`;
+    const preload = `data:text/javascript,${encodeURIComponent(script)}`;
+    const run = flags => execFileSync(process.execPath, ['--import', preload, 'scripts/build-workshop-static.mjs', '--check', ...flags], { encoding: 'utf8', env: { ...process.env, GITHUB_OUTPUT: join(outputRoot, 'outputs') } });
+    expect(run([])).toContain('changed=false');
+    expect(run(['--refresh-images'])).toContain('changed=true');
+    expect(await readFile(join(outputRoot, 'outputs'), 'utf8')).toContain('changed=true\n');
   });
 });

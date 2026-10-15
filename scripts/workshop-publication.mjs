@@ -37,9 +37,9 @@ export function normalizeSourceRecord(record) {
   if (!integer(price, 0, Number.MAX_SAFE_INTEGER)) fail('Invalid workshop price');
   let meta;
   try { meta = JSON.parse(record.pet_json); } catch { fail('Invalid pet_json'); }
-  if (!object(meta) || !integer(meta.frameWidth, 1, 8192) || !integer(meta.frameHeight, 1, 8192) || !integer(meta.maxFrames, 1, 8192) || !object(meta.anims) || !Object.keys(meta.anims).length) fail('Invalid frame metadata');
+  if (!object(meta) || !integer(meta.frameWidth, 1, 8192) || !integer(meta.frameHeight, 1, 8192) || (meta.maxFrames !== undefined && !integer(meta.maxFrames, 1, 8192)) || !object(meta.anims) || !Object.keys(meta.anims).length) fail('Invalid frame metadata');
   for (const count of Object.values(meta.anims)) {
-    if (Array.isArray(count) ? count.length !== 2 || !integer(count[0], 0, 8191) || !integer(count[1], 1, meta.maxFrames) : !integer(count, 1, meta.maxFrames)) fail('Invalid animation frame count');
+    if (Array.isArray(count) ? count.length !== 2 || !integer(count[0], 0, 8191) || !integer(count[1], 1, meta.maxFrames ?? 8192) : !integer(count, 1, meta.maxFrames ?? 8192)) fail('Invalid animation frame count');
   }
   for (const key of ['animOrder', 'animsOrder']) if (meta[key] !== undefined && (!Array.isArray(meta[key]) || !meta[key].length || meta[key].some(name => typeof name !== 'string' || !Object.hasOwn(meta.anims, name)))) fail('Invalid animation order');
   if (meta.durations !== undefined && (!object(meta.durations) || Object.values(meta.durations).some(n => !integer(n, 1, 3_600_000)))) fail('Invalid animation duration');
@@ -111,14 +111,24 @@ function assetUrl(item, field) {
   if (typeof path !== 'string' || !new RegExp(`^\\./pets/${item.id}/[a-f0-9]{64}\\.(png|webp)$`).test(path)) fail('Invalid published asset path');
   return new URL(path, CATALOG).href;
 }
-async function spriteBytes(fetchFn, record, old) {
-  if (old?.publicationFingerprint === publicationFingerprint(record)) {
-    try {
-      const cached = await bytes(fetchFn, assetUrl(old, 'spritesheet_static_url'));
-      if (hash(cached) === old.spritesheet_sha256) return cached;
-    } catch { /* A bad or missing cache must fall back to the authoritative image. */ }
+export function validateGeometry(meta, width, height) {
+  const columns = Math.floor(width / meta.frameWidth), rows = Math.floor(height / meta.frameHeight);
+  if (columns < 1 || rows < 1) fail('Frame exceeds actual image geometry');
+  if (meta.maxFrames !== undefined && meta.maxFrames > columns) fail('maxFrames exceeds actual image columns');
+  // Match the client conventions: explicit order, historic misspelling, then
+  // standard seven/nine-row names. Legacy [row, count] carries its own row.
+  const declared = meta.animOrder || meta.animsOrder || [];
+  const defaults = rows === 9
+    ? ['idle', 'running-right', 'running-left', 'waving', 'jumping', 'failed', 'waiting', 'running', 'review']
+    : ['idle', 'walk', 'sleep', 'celebrate', 'think', 'eat', 'unhappy'];
+  for (const [name, value] of Object.entries(meta.anims)) {
+    const count = Array.isArray(value) ? value[1] : value;
+    let row = Array.isArray(value) ? value[0] : declared.indexOf(name);
+    if (row < 0) row = defaults.indexOf(name);
+    if (row < 0) row = Object.keys(meta.anims).indexOf(name);
+    if (row >= rows) fail(`Animation ${name} exceeds actual image rows`);
+    if (count > columns) fail(`Animation ${name} exceeds actual image columns`);
   }
-  return bytes(fetchFn, `${API}/api/workshop/image?key=${encodeURIComponent(record.spritesheet_url)}`);
 }
 
 export async function buildPublication({ fetchFn = fetch, outputRoot = '.workshop-static', allowLargeDelete = false, published } = {}) {
@@ -129,11 +139,13 @@ export async function buildPublication({ fetchFn = fetch, outputRoot = '.worksho
   const { default: sharp } = await import('sharp');
   const directory = resolve(outputRoot, 'workshop'), items = [];
   for (const record of records) {
-    const sprite = await spriteBytes(fetchFn, record, published?.items.find(item => item.id === record.id));
+    // KV keys from historical uploads may be mutable: metadata/cache hashes
+    // cannot prove that source bytes still match, so every build reads source.
+    const sprite = await bytes(fetchFn, `${API}/api/workshop/image?key=${encodeURIComponent(record.spritesheet_url)}`);
     const image = sharp(sprite, { limitInputPixels: MAX_PIXELS, failOn: 'warning' });
     const metadata = await image.metadata(), meta = JSON.parse(record.pet_json);
     if (!['png', 'webp'].includes(metadata.format) || !integer(metadata.width, 1, 8192) || !integer(metadata.height, 1, 8192) || metadata.width * metadata.height > MAX_PIXELS || (metadata.pages || 1) !== 1) fail('Invalid image format/dimensions');
-    if (meta.frameWidth > metadata.width || meta.frameHeight > metadata.height) fail('Frame exceeds actual image geometry');
+    validateGeometry(meta, metadata.width, metadata.height);
     // Decode the complete sheet too: metadata alone does not detect truncated PNG data.
     await image.clone().raw().toBuffer();
     const thumbnail = await image.extract({ left: 0, top: 0, width: meta.frameWidth, height: meta.frameHeight }).resize(240, 260, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).webp({ quality: 82, alphaQuality: 90 }).toBuffer();
