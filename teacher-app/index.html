@@ -1504,7 +1504,7 @@ function ImportPanel({ onCreated }) {
       const tierData = TIERS.find(function(t){ return t.key===tier; });
       const d = await api("/api/workshop/pets", { method:"POST", body:JSON.stringify({ name: name.trim(), element: element, style: style, description: desc.trim(), tier: tierData.key, price: tierData.price, spritesheet_url: ssResp.key, thumbnail_url: thumbResp.key, pet_json: JSON.stringify(petJsonData), creator_name: creatorName || '' }) });
       if (d.error) { toast(d.error,"error"); setSubmitting(false); return; }
-      toast("✅ 已上传，等待自动同步上架（约 5 分钟）");
+      toast("✅ 已上传，等待自动同步上架；可在「我的精灵」检查状态");
       onCreated();
       render();
     } catch(err) { toast("保存失败: "+err.message,"error"); }
@@ -1625,7 +1625,7 @@ function MyPetsPanel({ pets, onRefresh }) {
     const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method: 'DELETE' });
     if (resp.error) { toast(resp.error, 'error'); return; }
     setDeletedIds(ids => ids.includes(id) ? ids : ids.concat(id));
-    toast('已删除，等待自动同步下架（约 5 分钟）');
+    toast('已删除，等待自动同步下架');
     onRefresh();
   };
 
@@ -1634,13 +1634,13 @@ function MyPetsPanel({ pets, onRefresh }) {
   const saveEdit = async (id) => {
     const resp = await api('/api/workshop/pets/' + encodeURIComponent(id), { method:'PUT', body:JSON.stringify({ name:editName.trim(), teacher_name:editCreator.trim(), element:editElement, tier:editTier }) });
     if (resp.error) { toast(resp.error,'error'); return; }
-    toast('✅ 已保存修改，等待自动同步（约 5 分钟）'); setEditingId(null); onRefresh();
+    toast('✅ 已保存修改，等待自动同步'); setEditingId(null); onRefresh();
   };
 
   return React.createElement('div', null,
     React.createElement('div', { className:'card', style:{ fontSize:13 } },
       React.createElement('div', null, '学生端静态目录最后更新：', catalog ? new Date(catalog.updatedAt).toLocaleString('zh-CN') : '尚未获取'),
-      React.createElement('div', { style:{ marginTop:8, color:checkFailed?'#dc2626':'#64748b' } }, checkFailed ? '检查失败，请稍后重试。' : '每约 5 分钟自动同步；上架状态以静态目录内容核对。', pollExpired ? ' 本轮自动检查已结束，可手动检查。' : ''),
+      React.createElement('div', { style:{ marginTop:8, color:checkFailed?'#dc2626':'#64748b' } }, checkFailed ? '检查失败，请稍后重试。' : '定时自动同步；平台排队可能延迟，上架状态以静态目录核对。', pollExpired ? ' 本轮自动检查已结束，可手动检查。' : ''),
       React.createElement('button', { className:'btn btn-outline', style:{ marginTop:8 }, disabled:checking, onClick:()=>setCheckRun(n=>n+1) }, checking ? '检查中…' : '手动检查上架状态'),
       deletedIds.some(id => !catalog || catalog.records.has(id)) && React.createElement('div', { style:{ marginTop:8, color:'#b45309' } }, checkFailed ? '删除同步检查失败，请重试。' : '有精灵等待同步下架，学生端静态目录更新后将移除。'),
     ),

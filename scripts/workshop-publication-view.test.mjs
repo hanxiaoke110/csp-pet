@@ -111,3 +111,12 @@ test('teacher list commits all pages together and rejects cursor loops or failed
     if (scenario === 'complete') assert.equal(committed[0].length, 2);
   }
 });
+
+test('publication messaging explains scheduler delays without promising a five-minute delivery', () => {
+  const html = readFileSync(new URL('../teacher-app/index.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(html, /约\s*5\s*分钟/);
+  assert.match(html, /平台排队可能延迟/);
+  assert.match(html, /已上传，等待自动同步上架；可在「我的精灵」检查状态/);
+  assert.match(html, /已删除，等待自动同步下架/);
+  assert.match(html, /已保存修改，等待自动同步/);
+});

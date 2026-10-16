@@ -2,6 +2,8 @@
 
 教师端保存后，GitHub Actions 每 5 分钟检查一次公开工坊数据。只有完整目录变化才安装依赖、构建、校验、发布；GitHub 调度可能延迟，因此不是五分钟内上架的承诺。教师端「我的精灵」根据实际静态目录显示上架状态，可手动检查。
 
+2026-10-16 实测定时任务存在数小时调度间隔，因此本方案保证无人值守的定时同步流程，不保证实时上架。教师端「检查」只核对现有目录，不会触发发布；需立即发布时由维护者手动运行 Actions。不要把排队说成上传失败。
+
 - 发布工作流：`.github/workflows/workshop-publication.yml`。
 - 单独 Worker：`csp-workshop-assets`，仅接管 `cards.cspstudy.top/workshop/*`。
 - 不重发桌面安装包，不覆盖典藏卡、衣橱、装备或课堂资料目录。
@@ -11,6 +13,7 @@
 - 少于原目录一半且减少超过 10 个角色会阻止发布；确认批量删除属实后，手动运行时才勾选 `allow_large_delete`。
 - 手动运行 `refresh_images` 可立即重新读取所有源图片；不需要更改桌面版本。
 - 发布凭据为 GitHub Actions 加密 secret `CLOUDFLARE_API_TOKEN`，不在仓库、桌面包或教师网页中。
+- 教师网站的正式 Pages 分支为 `main`（不是 GitHub 的 `master`）；部署时使用 `wrangler pages deploy teacher-app --project-name teacher-csp --branch main`，并回读正式域名脚本的 JavaScript Content-Type。其他分支仅为预览，不会更新正式域名。
 - GitHub 定时任务存在平台排队和长期无活动停用限制，需保留工作流失败通知并定期检查 Actions。上线验证使用手动任务，不向生产工坊添加测试角色。
 
 本地校验：
