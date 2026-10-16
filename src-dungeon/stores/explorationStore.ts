@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { ExplorationMapDefinition, ExplorationProgress, ExplorationRouteChoice, GridPoint } from '../types/exploration';
 import { computeVisible, getExplorationRegion, getUnlockedExplorationRegion, pointKey } from '../utils/explorationLogic';
 import { findNearestSafeCell } from '../utils/explorationRecovery';
+import { usePartnerGrowthStore } from '../../src/stores/partnerGrowthStore';
 
 const STORAGE_KEY = 'csp_dungeon_exploration_v1';
 
@@ -89,6 +90,7 @@ function freshProgress(map: ExplorationMapDefinition, questionIds: string[]): Ex
 export const useExplorationStore = create<ExplorationState>((set, get) => ({
   current: null,
   load: (map, questionIds) => {
+    void usePartnerGrowthStore.getState().load();
     const saved = readProgress(map.id);
     const current = saved || freshProgress(map, questionIds);
     if (map.tiles[current.position.y]?.[current.position.x] !== 0
@@ -167,6 +169,7 @@ export const useExplorationStore = create<ExplorationState>((set, get) => ({
     const next = { ...current, completed: true };
     set({ current: next });
     persist(next);
+    void usePartnerGrowthStore.getState().completeMaze(current.mapId);
   },
   markSettled: (coins, exp) => {
     const current = get().current;

@@ -1,5 +1,7 @@
 import { usePetStore, FOODS, currentWeekKey, getElementReforgeCost, getLevelMilestone, getWeeklyPassiveCoinReward, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
-import { getPetTier, type OwnedPet, type PetElement } from '../../types/pet';
+import { type OwnedPet, type PetElement } from '../../types/pet';
+import { ascensionRefund, resolvePartnerQuality } from '../../utils/partnerQuality';
+import PartnerAscensionPanel from './PartnerAscensionPanel';
 import { useQuizStore } from '../../stores/quizStore';
 import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { invoke } from '@tauri-apps/api/core';
@@ -148,9 +150,9 @@ export default function PetStatus({
 
       <div className="pet-collection">
         {[
-          { label: '👑 传说', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'legendary') },
-          { label: '✨ 稀有', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'rare') },
-          { label: '⭐ 普通', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'common') },
+          { label: '👑 传说', pets: ownedPets.filter(p => resolvePartnerQuality(p) === 'legendary') },
+          { label: '✨ 稀有', pets: ownedPets.filter(p => resolvePartnerQuality(p) === 'rare') },
+          { label: '⭐ 普通', pets: ownedPets.filter(p => resolvePartnerQuality(p) === 'common') },
         ].filter(g => g.pets.length > 0).map(g => {
           const isOpen = openGroups.has(g.label);
           return (
@@ -462,7 +464,7 @@ export default function PetStatus({
               <strong>🗑 智子回收站</strong>
               {recycledPets.map(record => (
                 <div key={record.pet.petId} style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 7, flexWrap: 'wrap' }}>
-                  <span>{record.pet.petName} · 可返还 {record.returnedExp} EXP、{record.returnedCoins} 金币</span>
+                  <span>{record.pet.petName} · 可返还 {record.returnedExp} EXP、{record.returnedCoins + ascensionRefund(record.pet)} 金币</span>
                   <button onClick={() => { restoreRecycledPet(record.pet.petId); showToast('已恢复智子'); }}>恢复</button>
                   <button onClick={() => setDismantleTarget(record.pet.petId)}>永久拆解</button>
                 </div>
@@ -470,6 +472,7 @@ export default function PetStatus({
             </div>
           )}
 
+          <PartnerAscensionPanel pet={displayPet} />
           {activePet && (() => {
             const ms = getLevelMilestone(activePet.level);
             return (

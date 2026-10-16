@@ -140,14 +140,8 @@ export class BattleScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.scale.off(Phaser.Scale.Events.RESIZE, resizeCamera));
     // preload 完成后自动调用，构建场景并开始第一回合
     this.buildScene();
-    // Text uses its own Canvas texture; render it sharply before camera scaling.
-    const sharpen = (objects: Phaser.GameObjects.GameObject[]) => {
-      for (const object of objects) {
-        if (object instanceof Phaser.GameObjects.Text) object.setResolution(3);
-        else if (object instanceof Phaser.GameObjects.Container) sharpen(object.list);
-      }
-    };
-    sharpen(this.children.list);
+    // Canvas TextCanvasRenderer uses raw frame dimensions. Keep text resolution 1;
+    // the game canvas/camera already handles display scaling and pixel density.
     this.startPlayerTurn();
   }
 

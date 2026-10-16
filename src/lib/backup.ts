@@ -10,6 +10,8 @@ import { sqliteSet } from './sqlite-storage';
 import { countCompletedProblems, mergeProblemStatusSnapshots } from './problemStatusMerge';
 import { localDateKey } from '../utils/localDate';
 import { JOURNAL_KEY, recoverEquipmentTransaction } from './equipmentTransactions';
+import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction } from './partnerTransactions';
+import { migrateLegacyGrowth, PARTNER_GROWTH_KEY, validateGrowthSnapshot } from '../utils/partnerGrowth';
 
 const FORMAT = 'csp-pet-backup';
 const BACKUP_VERSION = 1;
@@ -23,6 +25,7 @@ let backupWriteQueue: Promise<void> = Promise.resolve();
 // 可从服务器重新下载的内容，不打包进备份（减小文件体积）
 const EXCLUDED_LS_KEYS = new Set([
   JOURNAL_KEY,
+  PARTNER_JOURNAL_KEY,
   'csp_quiz_bank',
   'csp_quiz_bank_version',
   'csp_reviewed_quiz_bank_version',
@@ -61,6 +64,7 @@ export function shouldIncludeKey(key: string): boolean {
 
 const SQLITE_BACKUP_KEYS = new Set([
   'pet_data',
+  'partner_growth',
   'hatch_eggs',
   'quiz_state',
   'problem_status',
@@ -134,6 +138,12 @@ function isValidPetSnapshot(raw: string | undefined): boolean {
 
 /** 导出前确认智子与金币至少在一套持久化存储中完整可读。 */
 export function validateBackupState(backup: BackupFile): string | null {
+  for (const raw of [backup.localStorage?.[PARTNER_GROWTH_KEY], backup.sqlite?.partner_growth]) {
+    if (raw) {
+      try { if (!validateGrowthSnapshot(JSON.parse(raw))) return '星砂备份资料异常，无法恢复'; }
+      catch { return '星砂备份资料异常，无法恢复'; }
+    }
+  }
   if (
     isValidPetSnapshot(backup.localStorage.csp_pet_data)
     || isValidPetSnapshot(backup.sqlite?.pet_data)
@@ -183,6 +193,7 @@ function reconcileBackupProgress(backup: BackupFile): BackupFile {
 export async function buildBackup(): Promise<BackupFile> {
   // Export only a consistent committed wallet/equipment pair, never a replayable journal.
   recoverEquipmentTransaction();
+  recoverPartnerTransaction();
   const ls: Record<string, string> = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -345,44 +356,42 @@ export interface ApplyResult {
  * 调用方必须先完成快照；成功后应尽快刷新页面，避免内存中的旧状态覆盖写入。
  */
 export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
+  recoverEquipmentTransaction();
+  recoverPartnerTransaction();
   const validationError = validateBackupState(data);
   if (validationError) throw new Error(validationError);
   const reconciled = reconcileBackupProgress(data);
   if (!isValidPetSnapshot(reconciled.localStorage.csp_pet_data) && isValidPetSnapshot(reconciled.sqlite?.pet_data)) {
     reconciled.localStorage.csp_pet_data = reconciled.sqlite.pet_data;
   }
-  const entries = Object.entries(reconciled.localStorage).filter(([key]) => key !== JOURNAL_KEY);
-  const previous = new Map([...entries.map(([key]) => key), JOURNAL_KEY].map(key => [key, localStorage.getItem(key)]));
+  const originalLsCount = Object.keys(reconciled.localStorage).filter(key => key !== JOURNAL_KEY && key !== PARTNER_JOURNAL_KEY).length;
+  // Restore a consistent growth/wallet pair even when the source only had SQLite.
+  const growth = reconciled.localStorage[PARTNER_GROWTH_KEY] || reconciled.sqlite?.partner_growth;
+  const restoredAt = new Date().toISOString();
+  const restoredGrowth = JSON.stringify({ ...(growth ? JSON.parse(growth) : migrateLegacyGrowth(
+    reconciled.localStorage.csp_quiz_state || reconciled.sqlite?.quiz_state || null,
+    reconciled.localStorage.dungeon_player || null, reconciled.localStorage.csp_dungeon_exploration_v1 || null)), savedAt: restoredAt });
+  reconciled.localStorage[PARTNER_GROWTH_KEY] = restoredGrowth;
+  reconciled.sqlite.partner_growth = restoredGrowth;
+  const restoredPet = JSON.stringify({ ...JSON.parse(reconciled.localStorage.csp_pet_data), savedAt: restoredAt });
+  reconciled.localStorage.csp_pet_data = restoredPet;
+  // Matching stamps prevent an old SQLite wallet or growth ledger from winning hydration.
+  if (reconciled.sqlite.pet_data) reconciled.sqlite.pet_data = restoredPet;
+  const entries = Object.entries(reconciled.localStorage).filter(([key]) => key !== JOURNAL_KEY && key !== PARTNER_JOURNAL_KEY);
   let localPetSnapshotWritten = false;
-  try {
-    for (const [key, value] of entries) {
-      localStorage.setItem(key, value);
-      if (localStorage.getItem(key) !== value) throw new Error('snapshot write not confirmed');
-      if (key === 'csp_pet_data' && localStorage.getItem(key) === value) {
-        localPetSnapshotWritten = true;
-      }
-    }
+  if (commitLocalSnapshots(Object.fromEntries(entries))) {
+    localPetSnapshotWritten = true;
     // Never replay a transaction from the previous session over the restored profile.
     localStorage.removeItem(JOURNAL_KEY);
-  } catch {
-    let rolledBack = true;
-    for (const [key, value] of previous) {
-      try {
-        if (value === null) localStorage.removeItem(key);
-        else localStorage.setItem(key, value);
-      } catch { rolledBack = false; }
-    }
-    throw new Error(rolledBack
-      ? '备份恢复失败，本地存储无法完整写入，已回滚；请检查磁盘空间后重试。'
-      : '备份恢复未完成，请保留原备份文件，检查磁盘空间后重新恢复。');
-  }
+    localStorage.removeItem(PARTNER_JOURNAL_KEY);
+  } else throw new Error('备份恢复失败，本地存储无法完整写入；请检查磁盘空间后重试。');
 
   let sqliteCount = 0;
   let sqlitePetSnapshotWritten = false;
   for (const [key, value] of Object.entries(reconciled.sqlite || {})) {
     try {
       await sqliteSet(key, value);
-      sqliteCount++;
+      if (key !== 'partner_growth' || Boolean(growth)) sqliteCount++;
       if (key === 'pet_data') sqlitePetSnapshotWritten = true;
     } catch { /* 记录并继续 */ }
   }
@@ -406,5 +415,5 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
     }
   }
 
-  return { lsCount: entries.length, sqliteCount, spriteCount };
+  return { lsCount: originalLsCount, sqliteCount, spriteCount };
 }

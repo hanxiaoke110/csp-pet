@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuizStore } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
+import { usePartnerGrowthStore } from '../../stores/partnerGrowthStore';
 import { emit } from '@tauri-apps/api/event';
 import { petCopy } from '../pet/PetCopy';
 import { renderCodeText } from '../../utils/markdown';
@@ -45,6 +46,7 @@ interface QuizQuestion {
   blanks?: { label?: string; position: number; options: string[]; correctIndex: number; explanation?: string }[];
   answers?: number[];
   reviewErrorId?: string;
+  canonicalQuestionId?: string;
   reviewParentQuestion?: string;
   reviewPartLabel?: string;
   topicId?: string;
@@ -371,7 +373,7 @@ function QuizPracticeWithPet() {
     const knowledgePoint = mode === 'topic' ? activeTopicName : q.knowledgePoint;
 
     if (selected === q.correctIndex) {
-      quizStore.recordAnswer(true);
+      quizStore.recordAnswer(true, q.canonicalQuestionId || q.id);
       // 自由练习连续答对 -> 记录 max 到 localStorage（学霸时刻成就）
       if (mode === 'free') {
         freeStreakRef.current += 1;
@@ -939,6 +941,7 @@ function QuizPracticeWithPet() {
       }
       setResults({ correct, total: subCount, done: true });
       quizStore.completeSuperChallenge(correct, subCount);
+      if (correct > 0) void usePartnerGrowthStore.getState().recordCorrect(q.id);
       // Add wrong sub-questions to error pool for monthly review
       for (let i = 0; i < subCount; i++) {
         const expected = subItems[i].correctIndex;

@@ -52,6 +52,10 @@ export interface OwnedPet {
   renderType: RenderType;
   modelPath: string;
   tier?: string;
+  /** Ascension belongs to this instance, never the species catalogue. */
+  quality?: PetTier;
+  ascensionHistory?: import('./partnerGrowth').AscensionReceipt[];
+  originalAcquisitionCost?: number;
   level: number;
   exp: number;
   expToNext: number;

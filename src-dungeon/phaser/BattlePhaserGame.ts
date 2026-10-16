@@ -26,6 +26,8 @@ export function createBattleGame(
   onEvent: BattleEventCallback
 ): BattlePhaserGame {
   const bounds = container.getBoundingClientRect();
+  let displayWidth = bounds.width;
+  let displayHeight = bounds.height;
   let resolution = battleResolution(bounds.width, bounds.height, window.devicePixelRatio);
   const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.CANVAS, // 强制 Canvas: Tauri WebView 中 WebGL 易崩溃
@@ -53,7 +55,14 @@ export function createBattleGame(
   const resize = () => {
     const rect = container.getBoundingClientRect();
     const next = battleResolution(rect.width, rect.height, window.devicePixelRatio);
-    if (next === resolution) return;
+    const displayChanged = rect.width !== displayWidth || rect.height !== displayHeight;
+    displayWidth = rect.width;
+    displayHeight = rect.height;
+    if (next === resolution) {
+      // FIT must recompute CSS dimensions even when the bounded backing size is unchanged.
+      if (displayChanged) game.scale.refresh();
+      return;
+    }
     resolution = next;
     game.scale.setGameSize(1280 * resolution, 720 * resolution);
   };

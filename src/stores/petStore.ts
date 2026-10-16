@@ -2,10 +2,12 @@ import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
+import { commitLocalSnapshots, recoverPartnerTransaction } from '../lib/partnerTransactions';
+import { ascensionRefund, resolvePartnerQuality } from '../utils/partnerQuality';
 import type { OwnedPet, PetElement, PetTier, RecycledPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS, TIER_PRICES } from '../types/pet';
 import type { ShopItem } from '../types/pet';
-import { calculateStats } from '../../src-dungeon/utils/combatLogic';
+import { applyPartnerQualityBonus, calculateStats } from '../../src-dungeon/utils/combatLogic';
 import { validatePetName } from '../utils/validateName';
 import { useHatchStore } from './hatchStore';
 import { petCopy } from '../components/pet/PetCopy';
@@ -203,7 +205,8 @@ function cumulativePetExp(pet: OwnedPet): number {
 // 估算老数据的获取成本：早期记录的 acquisitionCost 为 0，
 // 导致回收站金币返还恒为 0。优先取商城标价；其余按稀有度定价
 // （与商城 TIER_PRICES 一致：普通 150 / 稀有 260 / 传说 500）。
-function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acquisitionCost?: number }): number {
+function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acquisitionCost?: number; originalAcquisitionCost?: number }): number {
+  if (Number.isSafeInteger(pet.originalAcquisitionCost) && pet.originalAcquisitionCost! >= 0) return pet.originalAcquisitionCost!;
   if (pet.acquisitionCost) return pet.acquisitionCost;
   if (pet.speciesId && STARTER_PETS.some(s => s.speciesId === pet.speciesId)) return 0;
   const shopItem = pet.speciesId
@@ -218,10 +221,10 @@ function elementLabel(element: PetElement): string {
   return ({ earth: '地', fire: '火', wind: '风', water: '水', light: '光' } as const)[element];
 }
 
-function calculatePetBattleStats(speciesId: string, level: number, currentHp?: number) {
+function calculatePetBattleStats(speciesId: string, level: number, currentHp?: number, quality?: PetTier) {
   const base = PET_BASE_STATS[speciesId] || PET_BASE_STATS.default;
   const tier = getPetTier(speciesId);
-  const stats = calculateStats(base, TIER_MULTIPLIERS[tier], level);
+  const stats = applyPartnerQualityBonus(calculateStats(base, TIER_MULTIPLIERS[tier], level), quality || tier);
   const { level: _level, ...baseStats } = stats;
   return {
     ...baseStats,
@@ -457,7 +460,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           exp,
           expToNext,
           level,
-          battle: calculatePetBattleStats(p.speciesId, level, p.battle?.currentHp),
+          battle: calculatePetBattleStats(p.speciesId, level, p.battle?.currentHp, resolvePartnerQuality(p)),
           mood: Math.min(100, p.mood + 3),
           updatedAt: new Date().toISOString(),
         };
@@ -667,13 +670,23 @@ export const usePetStore = create<PetState>((set, get) => ({
   dismantleRecycledPet: (petId) => {
     const record = get().recycledPets.find(item => item.pet.petId === petId);
     if (!record) return { ok: false, exp: 0, coins: 0 };
-    set(s => ({
-      recycledPets: s.recycledPets.filter(item => item.pet.petId !== petId),
-      expPool: s.expPool + record.returnedExp,
-      coins: s.coins + record.returnedCoins,
-    }));
-    get().save();
-    return { ok: true, exp: record.returnedExp, coins: record.returnedCoins };
+    const refund = record.returnedCoins + ascensionRefund(record.pet);
+    const state = get();
+    const changes = { recycledPets: state.recycledPets.filter(item => item.pet.petId !== petId),
+      expPool: state.expPool + record.returnedExp, coins: state.coins + refund };
+    if (!Number.isSafeInteger(changes.coins) || changes.coins < 0 || !Number.isSafeInteger(changes.expPool)) return { ok: false, exp: 0, coins: 0 };
+    try {
+      recoverPartnerTransaction();
+      const raw = localStorage.getItem('csp_pet_data');
+      if (!raw) return { ok: false, exp: 0, coins: 0 };
+      const saved = JSON.parse(raw);
+      if (saved.coins !== state.coins || !saved.recycledPets?.some((r: RecycledPet) => r.pet.petId === petId)) return { ok: false, exp: 0, coins: 0 };
+      const snapshot = { ...saved, ...changes, savedAt: new Date().toISOString() };
+      if (!commitLocalSnapshots({ csp_pet_data: JSON.stringify(snapshot) }, { csp_pet_data: 'pet_data' })) return { ok: false, exp: 0, coins: 0 };
+      set(changes);
+      emit('pet-data-sync', snapshot).catch(() => {});
+      return { ok: true, exp: record.returnedExp, coins: refund };
+    } catch { return { ok: false, exp: 0, coins: 0 }; }
   },
 
   // Gacha: 150g/抽，混合奖池（食物/许愿票/精灵/改名卡）
@@ -880,7 +893,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           exp,
           expToNext,
           level,
-          battle: calculatePetBattleStats(p.speciesId, level),
+          battle: calculatePetBattleStats(p.speciesId, level, undefined, resolvePartnerQuality(p)),
           updatedAt: new Date().toISOString(),
         };
       }),
@@ -969,7 +982,7 @@ export const usePetStore = create<PetState>((set, get) => ({
               level: newLevel,
               exp: 0,
               expToNext: newExpToNext,
-              battle: calculatePetBattleStats(p.speciesId, newLevel),
+              battle: calculatePetBattleStats(p.speciesId, newLevel, undefined, resolvePartnerQuality(p)),
               updatedAt: new Date().toISOString(),
             }
           : p
@@ -981,7 +994,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   ensureBattleStats: (pet: OwnedPet): OwnedPet => {
     return {
       ...pet,
-      battle: calculatePetBattleStats(pet.speciesId, pet.level, pet.battle?.currentHp),
+      battle: calculatePetBattleStats(pet.speciesId, pet.level, pet.battle?.currentHp, resolvePartnerQuality(pet)),
     };
   },
 
@@ -1005,6 +1018,7 @@ export const usePetStore = create<PetState>((set, get) => ({
 
   load: async () => {
     try {
+      recoverPartnerTransaction();
       recoverEquipmentTransaction();
       const raw = await dualLoad('pet_data', 'csp_pet_data');
       if (!raw) return false;

@@ -5,7 +5,10 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import { useTrialEquipmentStore } from '../../stores/trialEquipmentStore';
 import { SKILLS, getSkillById, type SkillDefinition } from '../../data/skills';
 import { getTrustedQuestionImage, pickStagePlanQuestions, loadQuestionBank } from '../../utils/questionLoader';
-import { calculateStats, calculateTrialPlayerStats } from '../../utils/combatLogic';
+import { calculateStats } from '../../utils/combatLogic';
+import { partnerTrialStats } from '../../../src/utils/partnerQuality';
+import { usePartnerGrowthStore } from '../../../src/stores/partnerGrowthStore';
+import { recoverPartnerTransaction } from '../../../src/lib/partnerTransactions';
 import {
   applySchoolAnswerPassive,
   calculateAnswerReward,
@@ -34,10 +37,8 @@ import './BattleScreen.css';
 // ─── Helpers ───
 
 function loadActivePetFromStorage(): OwnedPet {
-  const webPet = loadWebPet();
-  if (webPet) return webPet;
-
   try {
+    recoverPartnerTransaction();
     const raw = localStorage.getItem('csp_pet_data');
     if (raw) {
       const data = JSON.parse(raw);
@@ -48,6 +49,9 @@ function loadActivePetFromStorage(): OwnedPet {
       }
     }
   } catch { /* ignore */ }
+
+  const webPet = loadWebPet();
+  if (webPet) return webPet;
 
   return {
     petId: 'fallback',
@@ -151,25 +155,13 @@ function BattleImage({ src, className }: { src: string; className?: string }) {
 
 function makePlayerPetConfig(): PhaserPetConfig {
   const raw = loadActivePetFromStorage();
-  const base = PET_BASE_STATS[raw.speciesId] || PET_BASE_STATS.default;
 
   // 使用潜龙闭关的玩家等级（而非宠物系统等级）计算战斗属性。
   // 宠物等级来自喂养系统，增长极慢（1-3 级），与副本敌人等级（1-10 级）完全不匹配。
   // 后期副本敌人属性指数膨胀，玩家会被一击秒杀且打不动敌人。
   const dungeonLevel = useDungeonStore.getState().player.playerLevel || 1;
 
-  // 随潜龙等级提升战斗品质：LV1-2 普通(1.0) → LV3-4 稀有(1.3) → LV5+ 传说(1.6)
-  let combatTier: PetTier;
-  if (dungeonLevel >= 5) combatTier = 'legendary';
-  else if (dungeonLevel >= 3) combatTier = 'rare';
-  else combatTier = 'common';
-
-  const stats = calculateTrialPlayerStats(
-    base,
-    TIER_MULTIPLIERS[combatTier],
-    dungeonLevel,
-    raw.level || 1,
-  );
+  const stats = partnerTrialStats(raw, dungeonLevel);
 
   return {
     petId: raw.petId,
@@ -554,6 +546,7 @@ export default function BattleScreen() {
     const correctIndex = currentQuestion.correctIndex ?? 0;
     const correct = optionIndex === correctIndex;
     setIsCorrect(correct);
+    if (correct) void usePartnerGrowthStore.getState().recordCorrect(currentQuestion.id);
 
     const earnsRewards = store.currentBattleEarnsRewards;
     // 记录答题与奖励：重打只用于冲评级，不累计总答题/连击/经验/金币/段位，避免刷榜。
