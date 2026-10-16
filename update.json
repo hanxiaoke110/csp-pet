@@ -1,19 +1,19 @@
 {
-  "version": "1.7.51",
-  "notes": "⏳ 修复专注学习“提前结束”报错：确认后才进入复盘，点取消可以继续；已专注的时间保留\n📝 预制 2026 CSP-J 37 小题、CSP-S 43 小题，以及 2026 年 9 月 GESP 1–8 级 120 道选择题，离线也能练习；源码遮挡的题目暂不开放\n📚 同步 P70–P77 课堂资料链接，按阶段查找，后续资料继续在线补充\n🔄 完善题库在线更新，新增内容仍可在线获取\n💾 原有智子、金币、学习进度和备份继续保留，无需重新领养或重建存档",
-  "pub_date": "2026-10-14T10:19:50.049Z",
+  "version": "1.7.52",
+  "notes": "⚔️ 试炼对战更清晰！新增五属性攻击特效，可在完整与简化动效间切换；首批高清立绘在线下载，未覆盖的伙伴保留自己的原图\n🌟 老伙伴也能变强：普通→稀有→传说！满足等级、好感、金币和星砂条件后，升品 100% 成功，不抽卡、不消耗其他伙伴，原有等级与昵称保留\n💫 星砂靠积累：不同题目首次答对、不同迷宫首次完成都能推进获取，兼容历史记录，不要求每天打卡\n✨ 六件智子配饰上线：免费星环、棱镜星图、环游星群、暖灯夜航，以及两种移动尾迹！收藏后记得装备，桌面和试炼里都能看到；永久解锁，每位伙伴自由搭配，纯外观不加属性\n🏭 工坊接入自动静态同步，老师上传后会排队发布，客户端保留刷新与缓存兜底；同步可能有延迟\n💾 加强跨窗口购买、升品和备份保护，原有金币、伙伴、题目与迷宫进度保留。配饰和升品记录一并纳入备份，建议更新前先做一次安全备份",
+  "pub_date": "2026-10-16T15:41:31.255Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3hLYUFHM0R2aFdIa1dzNnVCTitoY1lQcXV4MUpBaHpnMWxkRWt1bE1rRS85dTNOTi9INlZVNFhaRVBBWFNLamRjcXpkeUNwUGFhaWdZRXRkOUNsNlFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTcyOTI2CWZpbGU6Q1NQXzEuNy41MV9hYXJjaDY0LmRtZwpPTmVackh6ZVIzblhackJUTHRuc01NZ3dQbFZDZXZ2ekEyYzU1aXRwMEg3RlVYOHphd01hSi9QT0NtNmFwckQ5MzhwNDVuSE1wanEyNUMyUFB5aXhBQT09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.51/CSP_1.7.51_aarch64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzd1SU5Cb2I2UGVaQWhKZys0bWMvc010a3YrQ1ZTc1NDdVVLV0oya2ZuRUtXSm5iYVAvZlRTamY5ZitqY0twTVhCM0cyeEhYVHRlWWcrWk53T0xDbGdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMTY0ODUwCWZpbGU6Q1NQXzEuNy41Ml9hYXJjaDY0LmRtZwpZNDB6TWpUckxaYzg4SlNEaXJDME1LSU0vSE9XWlVXSjZmYUxESndRMklseXI0TGlKS2lIbmFTVnNzdFBHK1FIMFFDc1kzMy84TjhYRGszSWN3TFNDQT09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.52/CSP_1.7.52_aarch64.dmg"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzBjcWI1VHFyMk5PWlJaSjM1NUw4NzhWOFVpTTNtV2ROdSt6ekhvK3hydElJRHZGZklnOEtDL0Q0UUVnL1h0OGpVaUJhKzJWbW43MzRDcDdmOXBsM3djPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTcyNjM5CWZpbGU6Q1NQXzEuNy41MV94NjQuZG1nClZKMkNQYkQ4RVNCMDl6dG1zQ1F4dFBXZWxqZU5kVU1YcE56cXgwcGZuVmtIb2YrSjJWZ2VBMWtKNXVvZjI5TnpWT0FMSEQ3Tmk1a2FWbWkwekFFRERBPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.51/CSP_1.7.51_x64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3o3WU00c1NPeEVCUDdKZ0FWYlI1OW9PM2JodmVPVVBzbkQzc05WaDI0ak5WQzZBbFV2bWZqTFB0SUJRYWVld01qOWFxSkpDbHVtMS94SGdoNU9iUHdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMTY0Njg4CWZpbGU6Q1NQXzEuNy41Ml94NjQuZG1nCm51SjUzLzJFc0ZJblNPUlJRMFN6KzRTZDhOUUVhWHRDWU5vek5OQVk5NHQ0YkZ1Q2NTZFloSlF1WWVCZDRhcGx0THJwb0N4U3QrL0V5aGNEM3lrYUNBPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.52/CSP_1.7.52_x64.dmg"
     },
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzlFT0xoYVZCc3RpMWZzS3JpVzk0aGxaMlE3eWkwUlJacWxzREdOQkJneFdpb2UxcGR1RExEV1lmNW81bkNML0NrdU9VQ2lZZklMSEZuM2xZNkV5d2cwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTczMTM2CWZpbGU6Q1NQXzEuNy41MV94NjQtc2V0dXAuZXhlCmErWFNtN1B3d1o2VElQT2RxMU1LZ2FZNjlINndnWmY2K3FYcDRHM2FkaVBPSmFKcGRVYzNpTlF1cDMxU0t4ZmlKckJBc3JQeENXMzZYa2kwZlZTdUNnPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.51/CSP_1.7.51_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3lsZlBmL3NKSFpreGxoV2Q1KzZKck40WmxiT290SWhZSDBsWE1MN3JZWGVBbWhUdndaZXlSa2tGQkJJbUQ2OTZUQnJyVUFhSnkraittVlkwbkV3QkFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMTY0OTY1CWZpbGU6Q1NQXzEuNy41Ml94NjQtc2V0dXAuZXhlCkRsWEtGekt1TEtrY2Q3cWR1Y1NYa0kwSmdVQ3ZMbDhpQ3BYOG1kMTdQemd1MFFSY3NtOThFRFZ1cHluU0JQQk50SXlQd0RycjlCR1FhY29pZS9pM0FBPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.52/CSP_1.7.52_x64-setup.exe"
     }
   }
 }
