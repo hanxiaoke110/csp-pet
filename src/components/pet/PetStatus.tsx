@@ -1,11 +1,15 @@
 import { usePetStore, FOODS, currentWeekKey, getElementReforgeCost, getLevelMilestone, getWeeklyPassiveCoinReward, formatPetDisplayName, getLevelBadgeColor } from '../../stores/petStore';
-import { getPetTier, type OwnedPet, type PetElement } from '../../types/pet';
+import { type OwnedPet, type PetElement } from '../../types/pet';
+import { ascensionRefund, resolvePartnerQuality } from '../../utils/partnerQuality';
+import PartnerAscensionPanel from './PartnerAscensionPanel';
 import { useQuizStore } from '../../stores/quizStore';
 import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { invoke } from '@tauri-apps/api/core';
 import PetSprite from './PetSprite';
+import PartnerAccessoryLayers from './PartnerAccessoryLayers';
+import PartnerAccessoryPanel from './PartnerAccessoryPanel';
 import ModalPortal from '../ModalPortal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import React from 'react';
 import ConfirmModal from './ConfirmModal';
 import { repairWorkshopSprite } from '../../utils/workshopSpriteRepair';
@@ -93,8 +97,12 @@ export default function PetStatus({
   switchTarget, setSwitchTarget, renameCards, setRenameInput, setRenameModal, showToast,
 }: Props) {
   const [pendingElement, setPendingElement] = useState<PetElement | null>(null);
+  const [showAccessories, setShowAccessories] = useState(false);
+  const [accessorySleeping, setAccessorySleeping] = useState(false);
   const [recycleTarget, setRecycleTarget] = useState<string | null>(null);
   const [dismantleTarget, setDismantleTarget] = useState<string | null>(null);
+  const [recoveryBusy, setRecoveryBusy] = useState(false);
+  const recoveryLocked = useRef(false);
   const { ownedPets, activePetId, coins, foods, pendingExp, pendingCoins, expPool } = usePetStore();
   const claimPendingRewards = usePetStore(s => s.claimPendingRewards);
   const weeklyTaskDone = useQuizStore(s => s.weeklyTaskDone);
@@ -132,7 +140,8 @@ export default function PetStatus({
 
       {displayPet && (
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12, position: 'relative' }}>
-          <PetSprite key={displayPet.modelPath} renderType={displayPet.renderType} modelPath={displayPet.modelPath} />
+          <div style={{ position: 'relative', width: 140, height: 140 }}><PetSprite key={displayPet.modelPath} renderType={displayPet.renderType} modelPath={displayPet.modelPath} onAnimationChange={animation => setAccessorySleeping(animation === 'sleep')} />
+          <PartnerAccessoryLayers petId={displayPet.petId} sleeping={accessorySleeping} /></div>
           {displayPet.level >= 1 && (
             <div style={{
               position: 'absolute', top: 0, right: 0,
@@ -146,11 +155,12 @@ export default function PetStatus({
         </div>
       )}
 
+      {displayPet && <><button className="pet-action-button" onClick={() => setShowAccessories(v => !v)}>{showAccessories ? '收起配饰' : '智子配饰'}</button>{showAccessories && <PartnerAccessoryPanel petId={displayPet.petId} onToast={showToast} />}</>}
       <div className="pet-collection">
         {[
-          { label: '👑 传说', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'legendary') },
-          { label: '✨ 稀有', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'rare') },
-          { label: '⭐ 普通', pets: ownedPets.filter(p => (p.tier || getPetTier(p.speciesId)) === 'common') },
+          { label: '👑 传说', pets: ownedPets.filter(p => resolvePartnerQuality(p) === 'legendary') },
+          { label: '✨ 稀有', pets: ownedPets.filter(p => resolvePartnerQuality(p) === 'rare') },
+          { label: '⭐ 普通', pets: ownedPets.filter(p => resolvePartnerQuality(p) === 'common') },
         ].filter(g => g.pets.length > 0).map(g => {
           const isOpen = openGroups.has(g.label);
           return (
@@ -462,14 +472,20 @@ export default function PetStatus({
               <strong>🗑 智子回收站</strong>
               {recycledPets.map(record => (
                 <div key={record.pet.petId} style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 7, flexWrap: 'wrap' }}>
-                  <span>{record.pet.petName} · 可返还 {record.returnedExp} EXP、{record.returnedCoins} 金币</span>
-                  <button onClick={() => { restoreRecycledPet(record.pet.petId); showToast('已恢复智子'); }}>恢复</button>
-                  <button onClick={() => setDismantleTarget(record.pet.petId)}>永久拆解</button>
+                  <span>{record.pet.petName} · 可返还 {record.returnedExp} EXP、{record.returnedCoins + ascensionRefund(record.pet)} 金币</span>
+                  <button disabled={recoveryBusy} onClick={async () => {
+                    if (recoveryLocked.current) return;
+                    recoveryLocked.current = true; setRecoveryBusy(true);
+                    try { const ok = await restoreRecycledPet(record.pet.petId); showToast(ok ? '已恢复智子' : '恢复失败，请刷新资料后重试'); }
+                    finally { recoveryLocked.current = false; setRecoveryBusy(false); }
+                  }}>{recoveryBusy ? '正在保存…' : '恢复'}</button>
+                  <button disabled={recoveryBusy} onClick={() => setDismantleTarget(record.pet.petId)}>永久拆解</button>
                 </div>
               ))}
             </div>
           )}
 
+          <PartnerAscensionPanel pet={displayPet} />
           {activePet && (() => {
             const ms = getLevelMilestone(activePet.level);
             return (
@@ -500,12 +516,16 @@ export default function PetStatus({
             <ConfirmModal
               icon="⚠️" title="永久拆解"
               desc="确认永久拆解？资源将返还到经验池和金币钱包，无法撤销。"
-              confirmText="永久拆解" danger
-              onCancel={() => setDismantleTarget(null)}
-              onConfirm={() => {
-                const result = dismantleRecycledPet(dismantleTarget);
-                showToast(result.ok ? `已返还 ${result.exp} EXP、${result.coins} 金币` : '拆解失败');
-                setDismantleTarget(null);
+              confirmText={recoveryBusy ? '正在保存…' : '永久拆解'} danger
+              onCancel={() => { if (!recoveryLocked.current) setDismantleTarget(null); }}
+              onConfirm={async () => {
+                if (recoveryLocked.current) return;
+                recoveryLocked.current = true; setRecoveryBusy(true);
+                try {
+                  const result = await dismantleRecycledPet(dismantleTarget);
+                  showToast(result.ok ? `已返还 ${result.exp} EXP、${result.coins} 金币` : '拆解失败，请刷新资料后重试');
+                  setDismantleTarget(null);
+                } finally { recoveryLocked.current = false; setRecoveryBusy(false); }
               }}
             />
           )}

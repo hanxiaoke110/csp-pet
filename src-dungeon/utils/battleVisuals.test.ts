@@ -1,0 +1,37 @@
+import { describe, expect, it, vi } from 'vitest';
+import { BATTLE_LAYOUT, battleResolution, createImpactLifecycle, effectiveVisualMode, readBattleVisualMode, writeBattleVisualMode } from './battleVisuals';
+
+describe('battle visuals', () => {
+  it('honors an explicit stored full preference after a session selected simple', () => {
+    const storage = new Map<string, string>();
+    vi.stubGlobal('localStorage', { getItem: (key: string) => storage.get(key) ?? null, setItem: (key: string, value: string) => { storage.set(key, value); } });
+    try {
+      writeBattleVisualMode('simple');
+      storage.set('csp_battle_visual_mode_v1', 'full');
+      expect(readBattleVisualMode()).toBe('full');
+    } finally { writeBattleVisualMode('full'); vi.unstubAllGlobals(); }
+  });
+  it('keeps player name, health, energy and cards vertically separated', () => {
+    const layout = BATTLE_LAYOUT;
+    const nameBottom = layout.playerY + layout.nameOffsetY + 24;
+    expect(nameBottom).toBeLessThan(layout.playerHpY - 9);
+    expect(layout.playerHpY + 9).toBeLessThan(layout.energyY - 20);
+    expect(layout.energyY + 20).toBeLessThan(layout.cardsY - 90);
+  });
+  it('keeps the logical stage sharp within a 3840 × 2160 backing budget', () => {
+    expect(battleResolution(1920, 1080, 2)).toBe(3);
+    expect(battleResolution(640, 360, 2)).toBe(1);
+    expect(battleResolution(1280, 720, 1.5)).toBe(1.5);
+    expect(battleResolution(9000, 8000, 8)).toBe(3);
+  });
+  it('settles an impact once and drops cancelled effects without damage', () => {
+    const impact = vi.fn();
+    const effect = createImpactLifecycle(impact);
+    effect.impact(); effect.impact(); effect.cancel();
+    expect(impact).toHaveBeenCalledTimes(1);
+    const interrupted = createImpactLifecycle(impact);
+    interrupted.cancel(); interrupted.impact();
+    expect(impact).toHaveBeenCalledTimes(1);
+    expect(effectiveVisualMode('full', true)).toBe('simple');
+  });
+});

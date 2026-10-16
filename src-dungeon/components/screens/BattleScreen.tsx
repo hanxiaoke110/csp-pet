@@ -5,7 +5,12 @@ import { useDungeonStore } from '../../stores/dungeonStore';
 import { useTrialEquipmentStore } from '../../stores/trialEquipmentStore';
 import { SKILLS, getSkillById, type SkillDefinition } from '../../data/skills';
 import { getTrustedQuestionImage, pickStagePlanQuestions, loadQuestionBank } from '../../utils/questionLoader';
-import { calculateStats, calculateTrialPlayerStats } from '../../utils/combatLogic';
+import { calculateStats } from '../../utils/combatLogic';
+import { partnerTrialStats } from '../../../src/utils/partnerQuality';
+import { usePartnerGrowthStore } from '../../../src/stores/partnerGrowthStore';
+import { usePartnerAccessoryStore } from '../../../src/stores/partnerAccessoryStore';
+import { equippedPartnerAccessories } from '../../../src/data/partnerAccessories';
+import { recoverPartnerState } from '../../../src/lib/partnerTransactions';
 import {
   applySchoolAnswerPassive,
   calculateAnswerReward,
@@ -14,6 +19,8 @@ import {
   rollCritical,
 } from '../../utils/gameLogic';
 import { createBattleGame, type BattlePhaserGame } from '../../phaser/BattlePhaserGame';
+import { loadBattlePortrait } from '../../utils/battlePortraits';
+import { readBattleVisualMode, writeBattleVisualMode } from '../../utils/battleVisuals';
 import type { BattleInitData, PhaserPetConfig, BattleEndResult } from '../../phaser/types';
 import type { Question, DungeonDefinition, DungeonStage } from '../../types/dungeon';
 import type { OwnedPet, PetElement, PetTier } from '../../../src/types/pet';
@@ -32,9 +39,6 @@ import './BattleScreen.css';
 // ─── Helpers ───
 
 function loadActivePetFromStorage(): OwnedPet {
-  const webPet = loadWebPet();
-  if (webPet) return webPet;
-
   try {
     const raw = localStorage.getItem('csp_pet_data');
     if (raw) {
@@ -46,6 +50,9 @@ function loadActivePetFromStorage(): OwnedPet {
       }
     }
   } catch { /* ignore */ }
+
+  const webPet = loadWebPet();
+  if (webPet) return webPet;
 
   return {
     petId: 'fallback',
@@ -149,25 +156,13 @@ function BattleImage({ src, className }: { src: string; className?: string }) {
 
 function makePlayerPetConfig(): PhaserPetConfig {
   const raw = loadActivePetFromStorage();
-  const base = PET_BASE_STATS[raw.speciesId] || PET_BASE_STATS.default;
 
   // 使用潜龙闭关的玩家等级（而非宠物系统等级）计算战斗属性。
   // 宠物等级来自喂养系统，增长极慢（1-3 级），与副本敌人等级（1-10 级）完全不匹配。
   // 后期副本敌人属性指数膨胀，玩家会被一击秒杀且打不动敌人。
   const dungeonLevel = useDungeonStore.getState().player.playerLevel || 1;
 
-  // 随潜龙等级提升战斗品质：LV1-2 普通(1.0) → LV3-4 稀有(1.3) → LV5+ 传说(1.6)
-  let combatTier: PetTier;
-  if (dungeonLevel >= 5) combatTier = 'legendary';
-  else if (dungeonLevel >= 3) combatTier = 'rare';
-  else combatTier = 'common';
-
-  const stats = calculateTrialPlayerStats(
-    base,
-    TIER_MULTIPLIERS[combatTier],
-    dungeonLevel,
-    raw.level || 1,
-  );
+  const stats = partnerTrialStats(raw, dungeonLevel);
 
   return {
     petId: raw.petId,
@@ -257,6 +252,18 @@ function scaleBossForPlayer(enemy: PhaserPetConfig, player: PhaserPetConfig | un
 // ─── Main component ───
 
 export default function BattleScreen() {
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    let active = true;
+    void recoverPartnerState().then(() => { if (active) setReady(true); }).catch(reason => { if (active) setError(reason instanceof Error ? reason.message : '伙伴资料恢复失败'); });
+    return () => { active = false; };
+  }, []);
+  if (!ready) return <div role="status">{error || '正在恢复伙伴资料…'}</div>;
+  return <RecoveredBattleScreen />;
+}
+
+function RecoveredBattleScreen() {
   const { dungeonId, stageId } = useParams<{ dungeonId: string; stageId: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -276,6 +283,7 @@ export default function BattleScreen() {
 
   // 题目弹窗状态
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [visualMode, setVisualMode] = useState(readBattleVisualMode);
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -345,6 +353,9 @@ export default function BattleScreen() {
     if (gameRef.current) return;
 
     let cancelled = false;
+    const ownedUrls: (() => void)[] = [];
+    let sceneOwnsUrls = false;
+    const releaseUrls = () => { ownedUrls.splice(0).forEach(release => release()); };
 
     (async () => {
       const s = useDungeonStore.getState();
@@ -355,14 +366,29 @@ export default function BattleScreen() {
       const earnsRewards = s.canEarnRewards();
       useDungeonStore.setState({ currentBattleEarnsRewards: earnsRewards, lastBattleResult: null });
 
-      // 工坊宠物：异步加载 AppData 的 thumb 缩略图作为 preview（普通宠物用 public preview）
-      let playerCfg = playerConfig;
-      if (isWorkshopPet(playerCfg.speciesId)) {
-        const thumbUrl = await loadWorkshopThumbUrl(playerCfg.speciesId);
-        if (thumbUrl) {
-          playerCfg = { ...playerCfg, previewUrl: thumbUrl, textureKey: 'playerPetThumb' };
+      const resolvePortrait = async (config: PhaserPetConfig): Promise<PhaserPetConfig> => {
+        // Dedicated Boss artwork always takes precedence over the species catalog.
+        if (config.portraitArt) return config;
+        const portrait = await loadBattlePortrait(config.speciesId);
+        if (portrait) {
+          if (cancelled) { portrait.release(); return config; }
+          ownedUrls.push(portrait.release);
+          return { ...config, previewUrl: portrait.url, textureKey: `${config.textureKey}-portrait`, portraitArt: true, textureStyle: portrait.style };
         }
-      }
+        if (isWorkshopPet(config.speciesId)) {
+          const thumbUrl = await loadWorkshopThumbUrl(config.speciesId);
+          if (thumbUrl) {
+            if (cancelled) { URL.revokeObjectURL(thumbUrl); return config; }
+            ownedUrls.push(() => URL.revokeObjectURL(thumbUrl));
+            return { ...config, previewUrl: thumbUrl, textureKey: `${config.textureKey}-thumb`, textureStyle: 'pixel' };
+          }
+        }
+        return config;
+      };
+      let [playerCfg, enemyCfg] = await Promise.all([resolvePortrait(playerConfig), resolvePortrait(enemyConfig)]);
+      await usePartnerAccessoryStore.getState().load();
+      const accessoryState = usePartnerAccessoryStore.getState();
+      playerCfg = { ...playerCfg, accessories: equippedPartnerAccessories(accessoryState.catalog, accessoryState.snapshot, playerCfg.petId) };
 
       if (cancelled) return;
 
@@ -384,7 +410,7 @@ export default function BattleScreen() {
         stageId: stageId || 'boss',
         isBoss,
         playerPet: playerCfg,
-        enemyPet: enemyConfig,
+        enemyPet: enemyCfg,
         initialEnergy: 2,
         maxEnergy: 5,
         dungeonColor: dungeon?.color || '#1a1a2e',
@@ -413,6 +439,10 @@ export default function BattleScreen() {
       const game = createBattleGame(containerRef.current!, initData, (event, data) => {
         handlePhaserEvent(event, data);
       });
+      sceneOwnsUrls = true;
+      // Phaser destroys asynchronously on its next frame. Keep image URLs alive
+      // until its scene and textures have actually been destroyed.
+      game.game.events.once('destroy', releaseUrls);
 
       if (cancelled) {
         game.destroy();
@@ -427,6 +457,7 @@ export default function BattleScreen() {
         gameRef.current.destroy();
         gameRef.current = null;
       }
+      if (!sceneOwnsUrls) releaseUrls();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dungeonId, stageId, isBoss, isReplay, enemyConfig, dungeon, playerConfig]);
@@ -531,6 +562,7 @@ export default function BattleScreen() {
     const correctIndex = currentQuestion.correctIndex ?? 0;
     const correct = optionIndex === correctIndex;
     setIsCorrect(correct);
+    if (correct) void usePartnerGrowthStore.getState().recordCorrect(currentQuestion.id);
 
     const earnsRewards = store.currentBattleEarnsRewards;
     // 记录答题与奖励：重打只用于冲评级，不累计总答题/连击/经验/金币/段位，避免刷榜。
@@ -669,6 +701,15 @@ export default function BattleScreen() {
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0a' }}>
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+      <button
+        aria-label="切换战斗特效"
+        onClick={() => {
+          const next = visualMode === 'full' ? 'simple' : 'full';
+          setVisualMode(next);
+          writeBattleVisualMode(next);
+        }}
+        style={{ position: 'absolute', right: 16, bottom: 16, zIndex: 30, color: '#d4e8ff', background: '#172438', border: '1px solid #597188', borderRadius: 8, padding: '8px 12px', cursor: 'pointer' }}
+      >特效：{visualMode === 'full' ? '完整' : '简化'}</button>
       {battleNotice && (
         <div style={{ position: 'fixed', top: 84, left: '50%', transform: 'translateX(-50%)', zIndex: 1002, padding: '10px 16px', background: '#3b1d1d', border: '1px solid #ef4444', color: '#fecaca', fontSize: 13 }}>
           {battleNotice}

@@ -64,21 +64,27 @@ export function calculateStats(
   };
 }
 
+export function applyPartnerQualityBonus<T extends { maxHp: number; attack: number; defense: number }>(stats: T, quality: 'common' | 'rare' | 'legendary'): T {
+  const bonus = quality === 'legendary' ? 1.06 : quality === 'rare' ? 1.03 : 1;
+  return { ...stats, maxHp: Math.floor(stats.maxHp * bonus), attack: Math.floor(stats.attack * bonus), defense: Math.floor(stats.defense * bonus) };
+}
+
 export function calculateTrialPlayerStats(
   base: { maxHp: number; attack: number; defense: number; speed: number },
   tierMultiplier: number,
   dungeonLevel: number,
   petLevel: number,
+  quality: 'common' | 'rare' | 'legendary' = 'common',
 ): Omit<CombatPet, 'currentHp' | 'element'> {
   const stats = calculateStats(base, tierMultiplier, dungeonLevel);
   const petGrowth = Math.max(0, Math.min(19, petLevel - 1));
-  return {
+  return applyPartnerQualityBonus({
     ...stats,
     maxHp: stats.maxHp + petGrowth * 2,
     attack: stats.attack + petGrowth,
     defense: stats.defense + Math.ceil(petGrowth / 2),
     speed: stats.speed + Math.floor(petGrowth / 3),
-  };
+  }, quality);
 }
 
 export function determineFirstAttacker(player: CombatPet, enemy: CombatPet): 'player' | 'enemy' {

@@ -19,6 +19,7 @@ export interface ReviewableQuestion {
   subQuestions?: ReviewQuestionItem[];
   blanks?: ReviewQuestionItem[];
   reviewErrorId?: string;
+  canonicalQuestionId?: string;
   reviewParentQuestion?: string;
   reviewPartLabel?: string;
 }
@@ -98,6 +99,7 @@ export function buildMonthlyReviewQuestions<T extends ReviewableQuestion>(
         correctIndex: Number(prepared.correctIndex),
         explanation: prepared.explanation || question.explanation,
         reviewErrorId: hasParentError ? question.id : id,
+        canonicalQuestionId: question.id,
         reviewParentQuestion: question.question,
         reviewPartLabel: `${question.type === 'fillBlank' ? '程序填空' : '程序阅读'} · 第 ${index + 1} 小问`,
       } as T);

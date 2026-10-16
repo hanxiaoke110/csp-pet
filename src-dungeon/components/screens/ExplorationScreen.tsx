@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Backpack, CircleHelp, Footprints, Gem, MapPinned, ScrollText, Shield, ShieldCheck, Swords, X } from 'lucide-react';
 import { useDungeonStore } from '../../stores/dungeonStore';
+import { usePartnerGrowthStore } from '../../../src/stores/partnerGrowthStore';
 import { useExplorationStore } from '../../stores/explorationStore';
 import { useTrialEquipmentStore } from '../../stores/trialEquipmentStore';
 import { EQUIPMENT_CATEGORY_LABELS, TRIAL_EQUIPMENT, RARITY_LABELS, getEquipmentResetDescription } from '../../data/explorationItems';
@@ -558,6 +559,7 @@ export default function ExplorationScreen() {
       const question = currentQuestion;
       if (question) {
         const isCorrect = correct === true;
+        if (isCorrect) void usePartnerGrowthStore.getState().recordCorrect(question.id);
         useDungeonStore.getState().recordAnswer(isCorrect);
         if (!isCorrect) {
           useDungeonStore.getState().addWeakPoint(question.knowledgePoint || '计算机基础');

@@ -2,10 +2,12 @@ import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
+import { commitLocalSnapshots, recoverPartnerTransaction, withPartnerReadLock, withPartnerTransactionLock } from '../lib/partnerTransactions';
+import { ascensionRefund, resolvePartnerQuality } from '../utils/partnerQuality';
 import type { OwnedPet, PetElement, PetTier, RecycledPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS, TIER_PRICES } from '../types/pet';
 import type { ShopItem } from '../types/pet';
-import { calculateStats } from '../../src-dungeon/utils/combatLogic';
+import { applyPartnerQualityBonus, calculateStats } from '../../src-dungeon/utils/combatLogic';
 import { validatePetName } from '../utils/validateName';
 import { useHatchStore } from './hatchStore';
 import { petCopy } from '../components/pet/PetCopy';
@@ -39,8 +41,8 @@ interface PetState {
   renamePet: (petId: string, newName: string) => string;
   reforgeElement: (petId: string, element: PetElement) => { ok: boolean; cost: number; message?: string };
   recyclePet: (petId: string) => { ok: boolean; message?: string };
-  restoreRecycledPet: (petId: string) => boolean;
-  dismantleRecycledPet: (petId: string) => { ok: boolean; exp: number; coins: number };
+  restoreRecycledPet: (petId: string) => Promise<boolean>;
+  dismantleRecycledPet: (petId: string) => Promise<{ ok: boolean; exp: number; coins: number }>;
 
   // Gacha
   gachaDailyPulls: number;
@@ -203,7 +205,8 @@ function cumulativePetExp(pet: OwnedPet): number {
 // 估算老数据的获取成本：早期记录的 acquisitionCost 为 0，
 // 导致回收站金币返还恒为 0。优先取商城标价；其余按稀有度定价
 // （与商城 TIER_PRICES 一致：普通 150 / 稀有 260 / 传说 500）。
-function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acquisitionCost?: number }): number {
+export function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acquisitionCost?: number; originalAcquisitionCost?: number }): number {
+  if (Number.isSafeInteger(pet.originalAcquisitionCost) && pet.originalAcquisitionCost! >= 0) return pet.originalAcquisitionCost!;
   if (pet.acquisitionCost) return pet.acquisitionCost;
   if (pet.speciesId && STARTER_PETS.some(s => s.speciesId === pet.speciesId)) return 0;
   const shopItem = pet.speciesId
@@ -214,14 +217,23 @@ function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acqui
   return TIER_PRICES[tier] ?? TIER_PRICES.common;
 }
 
+function sameRecycledSnapshot(saved: RecycledPet[], current: RecycledPet[]): boolean {
+  // load() repairs old zero acquisition refunds in memory; compare the same
+  // representation so that legacy receipts remain usable without a prior save.
+  const migrated = saved.map(record => record.returnedCoins ? record : {
+    ...record, returnedCoins: Math.floor(estimateAcquisitionCost(record.pet) * 0.5),
+  });
+  return JSON.stringify(migrated) === JSON.stringify(current);
+}
+
 function elementLabel(element: PetElement): string {
   return ({ earth: '地', fire: '火', wind: '风', water: '水', light: '光' } as const)[element];
 }
 
-function calculatePetBattleStats(speciesId: string, level: number, currentHp?: number) {
+function calculatePetBattleStats(speciesId: string, level: number, currentHp?: number, quality?: PetTier) {
   const base = PET_BASE_STATS[speciesId] || PET_BASE_STATS.default;
   const tier = getPetTier(speciesId);
-  const stats = calculateStats(base, TIER_MULTIPLIERS[tier], level);
+  const stats = applyPartnerQualityBonus(calculateStats(base, TIER_MULTIPLIERS[tier], level), quality || tier);
   const { level: _level, ...baseStats } = stats;
   return {
     ...baseStats,
@@ -457,7 +469,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           exp,
           expToNext,
           level,
-          battle: calculatePetBattleStats(p.speciesId, level, p.battle?.currentHp),
+          battle: calculatePetBattleStats(p.speciesId, level, p.battle?.currentHp, resolvePartnerQuality(p)),
           mood: Math.min(100, p.mood + 3),
           updatedAt: new Date().toISOString(),
         };
@@ -642,7 +654,7 @@ export const usePetStore = create<PetState>((set, get) => ({
     if (!pet) return { ok: false, message: '没有找到这只智子' };
     if (get().ownedPets.length <= 1) return { ok: false, message: '至少保留一只智子陪伴你' };
     const returnedExp = Math.floor(cumulativePetExp(pet) * 0.6);
-    const returnedCoins = Math.floor((pet.acquisitionCost || 0) * 0.5);
+    const returnedCoins = Math.floor(estimateAcquisitionCost(pet) * 0.5);
     set(s => ({
       ownedPets: s.ownedPets.filter(p => p.petId !== petId),
       activePetId: s.activePetId === petId ? s.ownedPets.find(p => p.petId !== petId)?.petId || null : s.activePetId,
@@ -653,27 +665,53 @@ export const usePetStore = create<PetState>((set, get) => ({
     return { ok: true };
   },
 
-  restoreRecycledPet: (petId) => {
-    const record = get().recycledPets.find(item => item.pet.petId === petId);
-    if (!record || get().ownedPets.some(p => p.petId === petId)) return false;
-    set(s => ({
-      ownedPets: [...s.ownedPets, record.pet],
-      recycledPets: s.recycledPets.filter(item => item.pet.petId !== petId),
-    }));
-    get().save();
-    return true;
+  restoreRecycledPet: async (petId) => {
+    try {
+      return await withPartnerTransactionLock(() => {
+      recoverPartnerTransaction(); recoverEquipmentTransaction();
+      const state = get();
+      const saved = JSON.parse(localStorage.getItem('csp_pet_data') || 'null');
+      if (!saved || !Array.isArray(saved.ownedPets) || !Array.isArray(saved.recycledPets)
+        || !sameRecycledSnapshot(saved.recycledPets, state.recycledPets)
+        || saved.coins !== state.coins || (saved.expPool ?? 0) !== state.expPool
+        || saved.ownedPets.some((p: OwnedPet) => p.petId === petId)) return false;
+      const record = saved.recycledPets.find((item: RecycledPet) => item.pet.petId === petId);
+      if (!record) return false;
+      const changes = { ownedPets: [...saved.ownedPets, record.pet], recycledPets: saved.recycledPets.filter((item: RecycledPet) => item.pet.petId !== petId) };
+      const snapshot = { ...saved, ...changes, savedAt: new Date().toISOString() };
+      if (!commitLocalSnapshots({ csp_pet_data: JSON.stringify(snapshot) }, { csp_pet_data: 'pet_data' })) return false;
+      set(changes);
+      emit('pet-data-sync', snapshot).catch(() => {});
+      return true;
+      });
+    } catch { return false; }
   },
 
-  dismantleRecycledPet: (petId) => {
+  dismantleRecycledPet: async (petId) => {
     const record = get().recycledPets.find(item => item.pet.petId === petId);
     if (!record) return { ok: false, exp: 0, coins: 0 };
-    set(s => ({
-      recycledPets: s.recycledPets.filter(item => item.pet.petId !== petId),
-      expPool: s.expPool + record.returnedExp,
-      coins: s.coins + record.returnedCoins,
-    }));
-    get().save();
-    return { ok: true, exp: record.returnedExp, coins: record.returnedCoins };
+    const refund = record.returnedCoins + ascensionRefund(record.pet);
+    const state = get();
+    const changes = { recycledPets: state.recycledPets.filter(item => item.pet.petId !== petId),
+      expPool: state.expPool + record.returnedExp, coins: state.coins + refund };
+    if (!Number.isSafeInteger(changes.coins) || changes.coins < 0 || !Number.isSafeInteger(changes.expPool)) return { ok: false, exp: 0, coins: 0 };
+    try {
+      return await withPartnerTransactionLock(() => {
+      recoverPartnerTransaction(); recoverEquipmentTransaction();
+      const raw = localStorage.getItem('csp_pet_data');
+      if (!raw) return { ok: false, exp: 0, coins: 0 };
+      const saved = JSON.parse(raw);
+      if (saved.coins !== state.coins || (saved.expPool ?? 0) !== state.expPool
+        || !Array.isArray(saved.recycledPets) || !sameRecycledSnapshot(saved.recycledPets, state.recycledPets)
+        || saved.ownedPets?.some((p: OwnedPet) => p.petId === petId)
+        || !saved.recycledPets?.some((r: RecycledPet) => r.pet.petId === petId)) return { ok: false, exp: 0, coins: 0 };
+      const snapshot = { ...saved, ...changes, savedAt: new Date().toISOString() };
+      if (!commitLocalSnapshots({ csp_pet_data: JSON.stringify(snapshot) }, { csp_pet_data: 'pet_data' })) return { ok: false, exp: 0, coins: 0 };
+      set(changes);
+      emit('pet-data-sync', snapshot).catch(() => {});
+      return { ok: true, exp: record.returnedExp, coins: refund };
+      });
+    } catch { return { ok: false, exp: 0, coins: 0 }; }
   },
 
   // Gacha: 150g/抽，混合奖池（食物/许愿票/精灵/改名卡）
@@ -880,7 +918,7 @@ export const usePetStore = create<PetState>((set, get) => ({
           exp,
           expToNext,
           level,
-          battle: calculatePetBattleStats(p.speciesId, level),
+          battle: calculatePetBattleStats(p.speciesId, level, undefined, resolvePartnerQuality(p)),
           updatedAt: new Date().toISOString(),
         };
       }),
@@ -969,7 +1007,7 @@ export const usePetStore = create<PetState>((set, get) => ({
               level: newLevel,
               exp: 0,
               expToNext: newExpToNext,
-              battle: calculatePetBattleStats(p.speciesId, newLevel),
+              battle: calculatePetBattleStats(p.speciesId, newLevel, undefined, resolvePartnerQuality(p)),
               updatedAt: new Date().toISOString(),
             }
           : p
@@ -981,7 +1019,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   ensureBattleStats: (pet: OwnedPet): OwnedPet => {
     return {
       ...pet,
-      battle: calculatePetBattleStats(pet.speciesId, pet.level, pet.battle?.currentHp),
+      battle: calculatePetBattleStats(pet.speciesId, pet.level, pet.battle?.currentHp, resolvePartnerQuality(pet)),
     };
   },
 
@@ -1004,8 +1042,12 @@ export const usePetStore = create<PetState>((set, get) => ({
     },
 
   load: async () => {
+    let recoveryComplete = false;
     try {
+      return await withPartnerReadLock(async () => {
+      recoverPartnerTransaction();
       recoverEquipmentTransaction();
+      recoveryComplete = true;
       const raw = await dualLoad('pet_data', 'csp_pet_data');
       if (!raw) return false;
       const data = JSON.parse(raw);
@@ -1128,12 +1170,13 @@ export const usePetStore = create<PetState>((set, get) => ({
         return true;
       }
       return false;
+      });
     } catch { /* corrupted data — do not overwrite it with defaults */
       return false;
     } finally {
       // The empty initial list is not evidence that an existing student has no pet.
       // Only show the adoption gate after the saved snapshot has been checked.
-      set({ loaded: true });
+      set({ loaded: recoveryComplete });
     }
   },
 }));

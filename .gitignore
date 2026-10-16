@@ -14,7 +14,13 @@ dist-ssr
 dist-dungeon
 .cloudflare-static
 .workshop-static
+design/collector-cards-wave2/raw/
+design/battle-portraits/raw/
 cloud-assets-source/*
+!cloud-assets-source/partner-accessories/
+!cloud-assets-source/partner-accessories/**
+!cloud-assets-source/battle-portraits/
+!cloud-assets-source/battle-portraits/**
 !cloud-assets-source/equipment/
 !cloud-assets-source/collector-cards/
 !cloud-assets-source/collector-cards/**

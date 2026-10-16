@@ -1,0 +1,204 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-15T10:15:56.845Z",
+  "portraits": [
+    {
+      "speciesId": "capi",
+      "url": "https://cards.cspstudy.top/battle-portraits/capi.webp",
+      "bytes": 136544,
+      "sha256": "9679f03345024e4028e5d895c63fd2ebd82057a240adef1f2838fc3ae0a89a5b",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "boba",
+      "url": "https://cards.cspstudy.top/battle-portraits/boba.webp",
+      "bytes": 161428,
+      "sha256": "7eff2bac70120d3ce48a1bb9ae66279826e3f0c3584971108877228b704d6583",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "bubu-2",
+      "url": "https://cards.cspstudy.top/battle-portraits/bubu-2.webp",
+      "bytes": 104496,
+      "sha256": "55a83afb3e4b0d3f39a8f90258e14df3a5ec74bf24bee343dadf9c63f763cd11",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "miga",
+      "url": "https://cards.cspstudy.top/battle-portraits/miga.webp",
+      "bytes": 243344,
+      "sha256": "4b50638c7de314b9574c25e2c1b76ceb891c1889675ba70a5861634a55000acf",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-1M9LNG6LWF",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-1M9LNG6LWF.webp",
+      "bytes": 134488,
+      "sha256": "24fb976f6e5e1183f3fd8532a6a28b237846283553879fe015f9ba5ced93f855",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-1M9LNG6LWF",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-1M9LNG6LWF.webp",
+      "bytes": 134488,
+      "sha256": "24fb976f6e5e1183f3fd8532a6a28b237846283553879fe015f9ba5ced93f855",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-274GF78ERC",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-274GF78ERC.webp",
+      "bytes": 209132,
+      "sha256": "f800f91dbde1984077611edce2b562dab4e62a25f527f1270d9a681b8fe71471",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-274GF78ERC",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-274GF78ERC.webp",
+      "bytes": 209132,
+      "sha256": "f800f91dbde1984077611edce2b562dab4e62a25f527f1270d9a681b8fe71471",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-0NSVRY6785",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-0NSVRY6785.webp",
+      "bytes": 198620,
+      "sha256": "b6c357ece7a5d3c82d1eb0b3c967dd2ce4ce89a9e2749d288aa2f5314e899c0c",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-0NSVRY6785",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-0NSVRY6785.webp",
+      "bytes": 198620,
+      "sha256": "b6c357ece7a5d3c82d1eb0b3c967dd2ce4ce89a9e2749d288aa2f5314e899c0c",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-PGVD3C1RPF",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-PGVD3C1RPF.webp",
+      "bytes": 138872,
+      "sha256": "c29369051d98794ca845bd05f8075dee11540728de31bceb866702a09d1b075c",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-PGVD3C1RPF",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-PGVD3C1RPF.webp",
+      "bytes": 138872,
+      "sha256": "c29369051d98794ca845bd05f8075dee11540728de31bceb866702a09d1b075c",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-81X0N622N9",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-81X0N622N9.webp",
+      "bytes": 228638,
+      "sha256": "b34e974703a049b80d4f13fee54b32957d3eec38b23899daebf98e6157c64ccd",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-81X0N622N9",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-81X0N622N9.webp",
+      "bytes": 228638,
+      "sha256": "b34e974703a049b80d4f13fee54b32957d3eec38b23899daebf98e6157c64ccd",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-24TAC93GSU",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-24TAC93GSU.webp",
+      "bytes": 193296,
+      "sha256": "9c960f31da45335e4e5347e1a545e24b280f18951821bc611524cd5f40354533",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-24TAC93GSU",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-24TAC93GSU.webp",
+      "bytes": 193296,
+      "sha256": "9c960f31da45335e4e5347e1a545e24b280f18951821bc611524cd5f40354533",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-DRG4AZ8BZY",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-DRG4AZ8BZY.webp",
+      "bytes": 201828,
+      "sha256": "1a4283a93f2c990b2fdbd7f241392c53ead3de039cbd763cb64be271ade09948",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-DRG4AZ8BZY",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-DRG4AZ8BZY.webp",
+      "bytes": 201828,
+      "sha256": "1a4283a93f2c990b2fdbd7f241392c53ead3de039cbd763cb64be271ade09948",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-WY6LY0K99L",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-WY6LY0K99L.webp",
+      "bytes": 159932,
+      "sha256": "41c20f711c27b5a52526c3a17490331f76c4502c60e71a1af666416d2b092ce1",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-WY6LY0K99L",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-WY6LY0K99L.webp",
+      "bytes": 159932,
+      "sha256": "41c20f711c27b5a52526c3a17490331f76c4502c60e71a1af666416d2b092ce1",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "workshop-ws-GQ4VZ6H8FX",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-GQ4VZ6H8FX.webp",
+      "bytes": 206384,
+      "sha256": "9e577dc64d1ff0abdf18152fe00eec2fe46b2f8c481addea119248e4049d3d83",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    },
+    {
+      "speciesId": "ws-GQ4VZ6H8FX",
+      "url": "https://cards.cspstudy.top/battle-portraits/workshop-ws-GQ4VZ6H8FX.webp",
+      "bytes": 206384,
+      "sha256": "9e577dc64d1ff0abdf18152fe00eec2fe46b2f8c481addea119248e4049d3d83",
+      "width": 1024,
+      "height": 1024,
+      "style": "painted"
+    }
+  ]
+}

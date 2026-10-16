@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { dualSave, dualLoad } from '../lib/persist';
 import { usePetStore } from './petStore';
 import { markLearningActivity } from '../utils/localDate';
+import { usePartnerGrowthStore } from './partnerGrowthStore';
 
 export interface ErrorRecord {
   questionId: string;
@@ -70,7 +71,7 @@ export interface QuizState {
   canDoWeeklyTask: () => boolean;
   canDoExtraChallenge: () => boolean;
   canDoMonthlyReview: () => { allowed: boolean; reason: string };
-  recordAnswer: (correct: boolean) => void;
+  recordAnswer: (correct: boolean, canonicalQuestionId?: string) => void;
   errorCount: () => number;
   // Free practice daily reward cap
   canRewardFreePractice: () => boolean;
@@ -302,7 +303,8 @@ export const useQuizStore = create<QuizState>((set, get) => {
       return { allowed: false, reason: `完成 2 次每周挑战或等到月末最后一周可开启（当前已完成 ${s.weeklyCompletions} 次）` };
     },
 
-    recordAnswer: (correct: boolean) => {
+    recordAnswer: (correct: boolean, canonicalQuestionId?: string) => {
+      if (correct && canonicalQuestionId) void usePartnerGrowthStore.getState().recordCorrect(canonicalQuestionId);
       markLearningActivity();
       set(s => ({
         totalPractice: (s.totalPractice || 0) + 1,
@@ -338,6 +340,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
     },
 
     load: async () => {
+      await usePartnerGrowthStore.getState().load();
       // Helper to parse and hydrate from raw JSON
       const hydrate = (raw: string | null) => {
         if (!raw) return;
@@ -447,7 +450,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
       set(state => ({
         examDailyCompleted: [...state.examDailyCompleted, { id: questionId, type }],
       }));
-      s.recordAnswer(true);
+      s.recordAnswer(true, questionId);
       // 每 2 题 tick hunger (第2,4,6...次提交时)
       const newLen = get().examDailyCompleted.length;
       if (newLen > 0 && newLen % 2 === 0) {

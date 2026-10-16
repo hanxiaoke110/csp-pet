@@ -11,10 +11,12 @@ export function dualSave(sqliteKey: string, lsKey: string, json: string): void {
 
 /** Dual-read load: localStorage first, SQLite fallback. Also picks the newer copy. */
 export async function dualLoad(sqliteKey: string, lsKey: string): Promise<string> {
-  const ls = safeLsGet(lsKey, '');
   // Fallback: SQLite
   let sql = '';
   try { sql = (await sqliteGet(sqliteKey)) || ''; } catch {}
+  // Another window may commit while SQLite is pending. Compare its latest local
+  // authority, never the wallet or dedupe ledger captured before the await.
+  const ls = safeLsGet(lsKey, '');
 
   // Both empty — nothing to load
   if (!ls && !sql) return '';

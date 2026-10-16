@@ -1,0 +1,26 @@
+{
+  "mode": "built-in image_gen",
+  "promptTemplate": "stylized-concept; identity-reference repaint, not pixel upscale; transparent whole character1024x1024, 80%canvas, clean cel shading, preserve species/colors/props, no frame/text/extra equipment",
+  "portraits": [
+    {
+      "speciesId": "capi",
+      "prompt": "A calm tan capybara with small round ears, long rounded rectangular muzzle, black tiny eyes, sitting behind its open silver laptop with dark stylized leaf-shaped mark. Preserve laptop and relaxed expression.",
+      "generatedFile": "/Users/hanliuliu/.codex/generated_images/01a08691-8f5e-79b3-b8ea-b3336bc146d2/exec-74b038a1-1e05-4fc5-96d4-d1f08ffbc822.png"
+    },
+    {
+      "speciesId": "boba",
+      "prompt": "A cheerful brown otter with cream muzzle and belly, small rounded ears, holding a cup of amber milk tea with dark tapioca pearls and drinking through a straw. Preserve paws holding the cup and big fluffy tail.",
+      "generatedFile": "/Users/hanliuliu/.codex/generated_images/01a08691-8f5e-79b3-b8ea-b3336bc146d2/exec-0b485be1-c9e2-46e2-adc3-5115c7c15e56.png"
+    },
+    {
+      "speciesId": "bubu-2",
+      "prompt": "A tiny round caramel brown bear with big round head, small rounded ears, tiny black eyes and mouth, bright golden yellow circular cheeks, simple chubby standing body and two small arms. No clothing or weapons.",
+      "generatedFile": "/Users/hanliuliu/.codex/generated_images/01a08691-8f5e-79b3-b8ea-b3336bc146d2/exec-42b90493-af73-4179-9b6c-b43f9c9add44.png"
+    },
+    {
+      "speciesId": "miga",
+      "prompt": "A sweet orange and cream-white tabby kitten with large glossy brown eyes, pink ears/nose, white muzzle/chest/front paws, soft striped orange fur and curled striped tail. Sitting in the same original gentle pose.",
+      "generatedFile": "/Users/hanliuliu/.codex/generated_images/01a08691-8f5e-79b3-b8ea-b3336bc146d2/exec-62030e9e-2d54-4310-8aab-dd2ebbfde8ee.png"
+    }
+  ]
+}

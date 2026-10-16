@@ -12,6 +12,21 @@ import FocusMiniStrip from '../focus/FocusMiniStrip';
 import { DEFAULT_FOCUS_SETTINGS } from '../../stores/focusStore';
 import type { FocusMiniSnapshot } from '../../types/focus';
 import { bindPetDragging } from './petDragging';
+import PartnerAccessoryLayers from './PartnerAccessoryLayers';
+
+function DesktopAccessories({ petId, position, sleeping }: { petId: string; position: StagePos; sleeping: boolean }) {
+  const previous = useRef(position);
+  const [moving, setMoving] = useState(false);
+  useEffect(() => {
+    const moved = previous.current.x !== position.x || previous.current.y !== position.y;
+    previous.current = position;
+    if (!moved) return;
+    setMoving(true);
+    const timer = window.setTimeout(() => setMoving(false), Math.max(160, position.animMs));
+    return () => window.clearTimeout(timer);
+  }, [position.x, position.y, position.animMs]);
+  return <PartnerAccessoryLayers petId={petId} moving={moving} sleeping={sleeping} />;
+}
 
 const SIZE_MAP: Record<string, { canvas: number; win: number }> = {
   small: { canvas: 110, win: 122 },
@@ -100,6 +115,7 @@ export default function PetWindow() {
   const petRefs = useRef(new Map<number, HTMLDivElement>());
   const focusMiniRef = useRef<HTMLDivElement | null>(null);
   const apiRefs = useRef(new Map<number, PetSpriteApi>());
+  const [petAnimations, setPetAnimations] = useState<Record<number, PetAnimState>>({});
   const petsRef = useRef<PetOnStage[]>([]);
   const positionsRef = useRef<Record<number, StagePos>>({});
   const bubbleTimers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
@@ -660,10 +676,12 @@ export default function PetWindow() {
               renderType={pet.renderType}
               modelPath={pet.modelPath}
               canvasSize={canvasSz}
+              onAnimationChange={animation => setPetAnimations(previous => previous[slot] === animation ? previous : { ...previous, [slot]: animation })}
               onReady={showStage}
               exposeGlobals={slot === 1}
               apiRef={api => { if (api) apiRefs.current.set(slot, api); else apiRefs.current.delete(slot); }}
             />
+            <DesktopAccessories petId={pet.petId} position={pos} sleeping={petAnimations[slot] === 'sleep'} />
 
             {slot === 1 && showActions && (
               <div style={{

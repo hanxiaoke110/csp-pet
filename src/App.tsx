@@ -177,7 +177,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.51';
+  const VER = '1.7.52';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -188,9 +188,10 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>⏳ 修复专注学习提前结束报错，确认后才结束，取消继续计时</div>
-          <div>📝 预制 2026 CSP-J/S 已验证题目及 9 月 GESP 1–8 级选择题</div>
-          <div>📚 同步 P70–P77 课堂资料链接，保留后续在线更新</div>
+          <div>⚔️ 试炼展示更清晰，新增五属性攻击特效与简化动效设置</div>
+          <div>🌟 智子可以升品：满足等级、好感和材料条件后，100% 成功</div>
+          <div>✨ 六件智子配饰：光环、环绕和尾迹，桌面与试炼同步展示</div>
+          <div>🏭 工坊接入自动静态发布，教师端可查看同步状态</div>
           <div>💾 保留原有智子、金币、学习进度与备份</div>
         </div>
         <button onClick={dismiss} style={{

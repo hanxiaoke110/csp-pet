@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import type { PhaserPetConfig } from '../types';
+import { BATTLE_LAYOUT, effectiveVisualMode, readBattleVisualMode } from '../../utils/battleVisuals';
+import { PartnerCosmetics } from './PartnerCosmetics';
 
 export class PetSprite extends Phaser.GameObjects.Container {
   private sprite: Phaser.GameObjects.Image;
@@ -34,24 +36,26 @@ export class PetSprite extends Phaser.GameObjects.Container {
       }
     }
     this.sprite = scene.add.image(0, 0, textureExists ? config.textureKey : 'petFallback');
+    this.sprite.texture.setFilter(config.textureStyle === 'pixel' || !config.portraitArt ? Phaser.Textures.FilterMode.NEAREST : Phaser.Textures.FilterMode.LINEAR);
     const source = this.sprite.texture.getSourceImage() as { width?: number; height?: number };
     const sourceWidth = source.width || 160;
     const sourceHeight = source.height || 160;
-    const maxWidth = config.portraitArt ? 180 : 160;
-    const maxHeight = config.portraitArt ? 180 : 160;
+    const maxWidth = config.portraitArt ? 220 : 180;
+    const maxHeight = config.portraitArt ? 220 : 180;
     const scale = Math.min(maxWidth / sourceWidth, maxHeight / sourceHeight);
     this.sprite.setDisplaySize(Math.round(sourceWidth * scale), Math.round(sourceHeight * scale));
     this.sprite.setOrigin(0.5, 0.5);
     this.add(this.sprite);
+    if (config.isPlayer && config.accessories?.length) new PartnerCosmetics(scene, this, config.accessories);
 
     // 元素徽章
-    this.elementBadge = scene.add.text(-60, -70, this.getElementEmoji(config.element), {
+    this.elementBadge = scene.add.text(-92, -100, this.getElementEmoji(config.element), {
       fontSize: '24px',
     });
     this.add(this.elementBadge);
 
     // 等级
-    this.levelText = scene.add.text(50, -70, `Lv.${config.level}`, {
+    this.levelText = scene.add.text(64, -100, `Lv.${config.level}`, {
       fontSize: '14px',
       color: '#ffffff',
       fontStyle: 'bold',
@@ -61,7 +65,7 @@ export class PetSprite extends Phaser.GameObjects.Container {
     this.add(this.levelText);
 
     // 名字
-    this.nameText = scene.add.text(0, 95, config.displayName, {
+    this.nameText = scene.add.text(0, BATTLE_LAYOUT.nameOffsetY, config.displayName, {
       fontSize: '14px',
       color: '#ffffff',
       fontStyle: 'bold',
@@ -79,6 +83,8 @@ export class PetSprite extends Phaser.GameObjects.Container {
   }
 
   playAttackAnimation(targetX: number, targetY: number, onComplete: () => void): void {
+    const reduced = typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+    if (effectiveVisualMode(readBattleVisualMode(), reduced) === 'simple') { onComplete(); return; }
     this.scene.tweens.killTweensOf(this);
     this.resetToHome();
     const midX = (this.homeX + targetX) / 2;
@@ -103,6 +109,8 @@ export class PetSprite extends Phaser.GameObjects.Container {
   playHitAnimation(): void {
     this.scene.tweens.killTweensOf(this);
     this.resetToHome();
+    const reduced = typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+    if (effectiveVisualMode(readBattleVisualMode(), reduced) === 'simple') return;
     this.scene.tweens.add({
       targets: this,
       x: this.homeX + (this.sprite.flipX ? -12 : 12),
@@ -132,6 +140,8 @@ export class PetSprite extends Phaser.GameObjects.Container {
   playCelebrateAnimation(): void {
     this.scene.tweens.killTweensOf(this);
     this.resetToHome();
+    const reduced = typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+    if (effectiveVisualMode(readBattleVisualMode(), reduced) === 'simple') return;
     this.scene.tweens.add({
       targets: this,
       y: this.homeY - 20,
