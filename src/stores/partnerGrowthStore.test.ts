@@ -27,6 +27,45 @@ describe('star sand and ascension', () => {
     await Promise.resolve();
     expect(usePartnerGrowthStore.getState().snapshot?.firstCorrectIds).toEqual(['csp-j-2023-c08']);
   });
+  it('preserves same-balance training and newly acquired pets from another window during ascension', async () => {
+    localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
+    await usePartnerGrowthStore.getState().load();
+    const trained = { ...pet, level: 12, affection: 95 };
+    localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [trained, { ...pet, petId: 'new' }], coins: 600 }));
+    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(true);
+    const saved = JSON.parse(localStorage.getItem('csp_pet_data')!);
+    expect(saved.ownedPets[0]).toMatchObject({ level: 12, affection: 95, quality: 'rare' });
+    expect(saved.ownedPets.map((p: OwnedPet) => p.petId)).toEqual(['one', 'new']);
+  });
+  it('rejects a stale recycled inventory after another window restores a pet without changing coins', () => {
+    const record = (id: string) => ({ pet: { ...pet, petId: id }, returnedExp: 10, returnedCoins: 20, recycledAt: '2026-01-01T00:00:00.000Z' });
+    const a = record('A'); const b = record('B');
+    usePetStore.setState({ recycledPets: [a, b], ownedPets: [pet], coins: 600, expPool: 0 });
+    const durable = { ownedPets: [pet, b.pet], recycledPets: [a], coins: 600, expPool: 0 };
+    localStorage.setItem('csp_pet_data', JSON.stringify(durable));
+    expect(usePetStore.getState().dismantleRecycledPet('A').ok).toBe(false);
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!)).toEqual(durable);
+    expect(usePetStore.getState().restoreRecycledPet('A')).toBe(false);
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!)).toEqual(durable);
+  });
+  it('allows a legacy recycled receipt whose acquisition refund was hydrated from its native source cost', async () => {
+    const legacy = { pet: { ...pet, petId: 'legacy', speciesId: 'peach', acquisitionCost: 0 }, returnedExp: 10, returnedCoins: 0, recycledAt: '2026-01-01T00:00:00.000Z' };
+    localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [pet], recycledPets: [legacy], coins: 600, expPool: 0, gachaRewardMigrationDone: true }));
+    await usePetStore.getState().load();
+    expect(usePetStore.getState().recycledPets[0].returnedCoins).toBe(75);
+    expect(usePetStore.getState().restoreRecycledPet('legacy')).toBe(true);
+  });
+  it('freezes the hydrated native acquisition refund when upgrading an old zero-cost shop pet', async () => {
+    const legacy = { ...pet, speciesId: 'peach' };
+    localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [legacy, { ...pet, petId: 'two' }], coins: 600, gachaRewardMigrationDone: true }));
+    localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
+    await usePetStore.getState().load();
+    await usePartnerGrowthStore.getState().load();
+    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(true);
+    expect(usePetStore.getState().ownedPets[0].originalAcquisitionCost).toBe(150);
+    usePetStore.getState().recyclePet('one');
+    expect(usePetStore.getState().recycledPets[0].returnedCoins).toBe(75);
+  });
   it('refreshes a ledger committed by another window before recording', async () => {
     await usePartnerGrowthStore.getState().load();
     const latest = { ...usePartnerGrowthStore.getState().snapshot!, starSand: 8, firstCorrectIds: ['elsewhere'] };

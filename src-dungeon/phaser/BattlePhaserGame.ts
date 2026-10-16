@@ -58,6 +58,9 @@ export function createBattleGame(
     const displayChanged = rect.width !== displayWidth || rect.height !== displayHeight;
     displayWidth = rect.width;
     displayHeight = rect.height;
+    // refresh() updates the fit using cached parentSize; explicitly refresh that
+    // cache first when ResizeObserver sees a new container rectangle.
+    if (displayChanged) game.scale.getParentBounds();
     if (next === resolution) {
       // FIT must recompute CSS dimensions even when the bounded backing size is unchanged.
       if (displayChanged) game.scale.refresh();

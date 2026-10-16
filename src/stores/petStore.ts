@@ -205,7 +205,7 @@ function cumulativePetExp(pet: OwnedPet): number {
 // 估算老数据的获取成本：早期记录的 acquisitionCost 为 0，
 // 导致回收站金币返还恒为 0。优先取商城标价；其余按稀有度定价
 // （与商城 TIER_PRICES 一致：普通 150 / 稀有 260 / 传说 500）。
-function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acquisitionCost?: number; originalAcquisitionCost?: number }): number {
+export function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acquisitionCost?: number; originalAcquisitionCost?: number }): number {
   if (Number.isSafeInteger(pet.originalAcquisitionCost) && pet.originalAcquisitionCost! >= 0) return pet.originalAcquisitionCost!;
   if (pet.acquisitionCost) return pet.acquisitionCost;
   if (pet.speciesId && STARTER_PETS.some(s => s.speciesId === pet.speciesId)) return 0;
@@ -215,6 +215,15 @@ function estimateAcquisitionCost(pet: { speciesId?: string; tier?: string; acqui
   if (shopItem) return shopItem.price;
   const tier = (pet.tier as PetTier | undefined) || (pet.speciesId ? getPetTier(pet.speciesId) : 'common');
   return TIER_PRICES[tier] ?? TIER_PRICES.common;
+}
+
+function sameRecycledSnapshot(saved: RecycledPet[], current: RecycledPet[]): boolean {
+  // load() repairs old zero acquisition refunds in memory; compare the same
+  // representation so that legacy receipts remain usable without a prior save.
+  const migrated = saved.map(record => record.returnedCoins ? record : {
+    ...record, returnedCoins: Math.floor(estimateAcquisitionCost(record.pet) * 0.5),
+  });
+  return JSON.stringify(migrated) === JSON.stringify(current);
 }
 
 function elementLabel(element: PetElement): string {
@@ -645,7 +654,7 @@ export const usePetStore = create<PetState>((set, get) => ({
     if (!pet) return { ok: false, message: '没有找到这只智子' };
     if (get().ownedPets.length <= 1) return { ok: false, message: '至少保留一只智子陪伴你' };
     const returnedExp = Math.floor(cumulativePetExp(pet) * 0.6);
-    const returnedCoins = Math.floor((pet.acquisitionCost || 0) * 0.5);
+    const returnedCoins = Math.floor(estimateAcquisitionCost(pet) * 0.5);
     set(s => ({
       ownedPets: s.ownedPets.filter(p => p.petId !== petId),
       activePetId: s.activePetId === petId ? s.ownedPets.find(p => p.petId !== petId)?.petId || null : s.activePetId,
@@ -657,14 +666,23 @@ export const usePetStore = create<PetState>((set, get) => ({
   },
 
   restoreRecycledPet: (petId) => {
-    const record = get().recycledPets.find(item => item.pet.petId === petId);
-    if (!record || get().ownedPets.some(p => p.petId === petId)) return false;
-    set(s => ({
-      ownedPets: [...s.ownedPets, record.pet],
-      recycledPets: s.recycledPets.filter(item => item.pet.petId !== petId),
-    }));
-    get().save();
-    return true;
+    try {
+      recoverPartnerTransaction(); recoverEquipmentTransaction();
+      const state = get();
+      const saved = JSON.parse(localStorage.getItem('csp_pet_data') || 'null');
+      if (!saved || !Array.isArray(saved.ownedPets) || !Array.isArray(saved.recycledPets)
+        || !sameRecycledSnapshot(saved.recycledPets, state.recycledPets)
+        || saved.coins !== state.coins || (saved.expPool ?? 0) !== state.expPool
+        || saved.ownedPets.some((p: OwnedPet) => p.petId === petId)) return false;
+      const record = saved.recycledPets.find((item: RecycledPet) => item.pet.petId === petId);
+      if (!record) return false;
+      const changes = { ownedPets: [...saved.ownedPets, record.pet], recycledPets: saved.recycledPets.filter((item: RecycledPet) => item.pet.petId !== petId) };
+      const snapshot = { ...saved, ...changes, savedAt: new Date().toISOString() };
+      if (!commitLocalSnapshots({ csp_pet_data: JSON.stringify(snapshot) }, { csp_pet_data: 'pet_data' })) return false;
+      set(changes);
+      emit('pet-data-sync', snapshot).catch(() => {});
+      return true;
+    } catch { return false; }
   },
 
   dismantleRecycledPet: (petId) => {
@@ -676,11 +694,14 @@ export const usePetStore = create<PetState>((set, get) => ({
       expPool: state.expPool + record.returnedExp, coins: state.coins + refund };
     if (!Number.isSafeInteger(changes.coins) || changes.coins < 0 || !Number.isSafeInteger(changes.expPool)) return { ok: false, exp: 0, coins: 0 };
     try {
-      recoverPartnerTransaction();
+      recoverPartnerTransaction(); recoverEquipmentTransaction();
       const raw = localStorage.getItem('csp_pet_data');
       if (!raw) return { ok: false, exp: 0, coins: 0 };
       const saved = JSON.parse(raw);
-      if (saved.coins !== state.coins || !saved.recycledPets?.some((r: RecycledPet) => r.pet.petId === petId)) return { ok: false, exp: 0, coins: 0 };
+      if (saved.coins !== state.coins || (saved.expPool ?? 0) !== state.expPool
+        || !Array.isArray(saved.recycledPets) || !sameRecycledSnapshot(saved.recycledPets, state.recycledPets)
+        || saved.ownedPets?.some((p: OwnedPet) => p.petId === petId)
+        || !saved.recycledPets?.some((r: RecycledPet) => r.pet.petId === petId)) return { ok: false, exp: 0, coins: 0 };
       const snapshot = { ...saved, ...changes, savedAt: new Date().toISOString() };
       if (!commitLocalSnapshots({ csp_pet_data: JSON.stringify(snapshot) }, { csp_pet_data: 'pet_data' })) return { ok: false, exp: 0, coins: 0 };
       set(changes);

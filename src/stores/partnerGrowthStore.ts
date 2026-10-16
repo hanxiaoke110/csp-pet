@@ -4,7 +4,7 @@ import { dualLoad } from '../lib/persist';
 import { commitLocalSnapshots, recoverPartnerTransaction } from '../lib/partnerTransactions';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
 import { ascensionOffer, ascensionRefund, resolvePartnerQuality } from '../utils/partnerQuality';
-import { usePetStore } from './petStore';
+import { estimateAcquisitionCost, usePetStore } from './petStore';
 import type { PartnerGrowthSnapshot } from '../types/partnerGrowth';
 import type { PetTier } from '../types/pet';
 import { canonicalGrowthQuestionId, PARTNER_GROWTH_KEY, PARTNER_GROWTH_SQLITE_KEY, validGrowthInteger as validInteger, validGrowthId, validateGrowthSnapshot, parseGrowthJson as parse, migrateLegacyGrowth } from '../utils/partnerGrowth';
@@ -94,7 +94,10 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
     try {
       recoverPartnerTransaction(); recoverEquipmentTransaction();
       const state = usePetStore.getState();
-      const pet = state.ownedPets.find(item => item.petId === petId);
+      const raw = parse(localStorage.getItem('csp_pet_data'));
+      // Only durable pets participate: another window may train, acquire or recycle
+      // without changing its wallet or the quality shown by this window.
+      const pet = Array.isArray(raw?.ownedPets) ? raw.ownedPets.find((item: any) => item.petId === petId) : undefined;
       const growth = get().snapshot;
       if (!pet || !growth || resolvePartnerQuality(pet) !== expectedQuality) return failure('伙伴品质已变化，请重新查看');
       const offer = ascensionOffer(expectedQuality);
@@ -103,16 +106,14 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
       if (pet.ascensionHistory !== undefined && (!Array.isArray(pet.ascensionHistory)
         || pet.ascensionHistory.length > 1 || (pet.ascensionHistory.length > 0 && ascensionRefund(pet) === 0))) return failure('伙伴升华记录异常，请保留备份后重试');
       if (!validInteger(state.coins) || state.coins < offer.coins || growth.starSand < offer.sand) return failure('金币或星砂不足');
-      const raw = parse(localStorage.getItem('csp_pet_data'));
       const durableGrowth = parse(localStorage.getItem(PARTNER_GROWTH_KEY));
-      const durablePet = raw?.ownedPets?.find((item: any) => item.petId === petId);
-      if (!durablePet || raw.coins !== state.coins || resolvePartnerQuality(durablePet) !== expectedQuality
+      if (raw.coins !== state.coins
         || JSON.stringify(durableGrowth) !== JSON.stringify(growth)) return failure('资料已更新，请重新打开伙伴面板');
       const at = new Date().toISOString();
       const upgraded = state.ensureBattleStats({ ...pet, quality: offer.target,
-        originalAcquisitionCost: validInteger(pet.originalAcquisitionCost) ? pet.originalAcquisitionCost : validInteger(pet.acquisitionCost) ? pet.acquisitionCost : 0,
+        originalAcquisitionCost: estimateAcquisitionCost(pet),
         ascensionHistory: [...(pet.ascensionHistory || []), { from: expectedQuality, to: offer.target, coins: offer.coins, sand: offer.sand, at }], updatedAt: at });
-      const ownedPets = state.ownedPets.map(item => item.petId === petId ? upgraded : item);
+      const ownedPets = raw.ownedPets.map((item: any) => item.petId === petId ? upgraded : item);
       const snapshot = { ...growth, starSand: growth.starSand - offer.sand, savedAt: at };
       const nextPet = { ...raw, ownedPets, coins: state.coins - offer.coins, savedAt: at };
       if (!commitLocalSnapshots({ csp_pet_data: JSON.stringify(nextPet), [PARTNER_GROWTH_KEY]: JSON.stringify(snapshot) },
