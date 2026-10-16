@@ -31,7 +31,7 @@ with sync_playwright() as p:
     card("彗星航迹").get_by_role("button", name="试穿", exact=True).click()
     page.get_by_role("button", name="模拟移动 · 试穿尾迹", exact=True).click()
     page.wait_for_function("document.querySelector('.partner-fitting .partner-accessory-trail')!==null")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(3200)  # 1.8s movement plus bounded residual trail fade.
     assert page.locator(".partner-fitting .partner-accessory-trail").count() == 0
     assert page.evaluate("JSON.parse(localStorage.getItem('csp_pet_data')).coins") == 1760
     card("彗星航迹").get_by_role("button", name="收藏 · 300", exact=True).click()

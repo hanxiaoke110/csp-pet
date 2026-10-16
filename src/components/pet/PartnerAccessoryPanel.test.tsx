@@ -12,12 +12,15 @@ vi.mock('../../lib/tauriEvents', () => ({ safeListen: () => () => {} }));
 let root: Root;
 let host: HTMLDivElement;
 let preferenceChanged: (() => void) | undefined;
+let preferenceListeners = new Set<() => void>();
 let reduced = false;
 beforeEach(() => {
   vi.useFakeTimers();
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
   reduced = false;
-  vi.stubGlobal('matchMedia', () => ({ get matches() { return reduced; }, addEventListener: (_: string, callback: () => void) => { preferenceChanged = callback; }, removeEventListener: vi.fn() }));
+  preferenceListeners = new Set();
+  preferenceChanged = () => preferenceListeners.forEach(callback => callback());
+  vi.stubGlobal('matchMedia', () => ({ get matches() { return reduced; }, addEventListener: (_: string, callback: () => void) => preferenceListeners.add(callback), removeEventListener: (_: string, callback: () => void) => preferenceListeners.delete(callback) }));
   vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
   usePetStore.setState({ ownedPets: [{ petId: 'one', petName: '卡皮', modelPath: '/pet-sprites/2d/capi.json' } as OwnedPet], activePetId: 'one', coins: 1000 });
   usePartnerAccessoryStore.setState({ loaded: true, busy: false, error: '', snapshot: defaultAccessorySnapshot(), catalog: structuredClone(BUILTIN_ACCESSORY_CATALOG), load: vi.fn().mockResolvedValue(undefined) });
@@ -41,7 +44,7 @@ it('only shows a trail during the explicit timed movement preview and never writ
 it('cancels the preview on selection changes, reduced motion, and unmount', () => {
   act(() => root.render(<PartnerAccessoryPanel />)); click('[aria-label="预览彗星航迹"]'); click('.partner-preview-movement');
   click('[aria-label="预览像素跃迁"]'); expect(host.querySelector('.partner-preview-actor.moving')).toBe(null);
-  expect(vi.getTimerCount()).toBe(0);
+  expect(vi.getTimerCount()).toBe(1); // One bounded animation loop, no movement timer.
   click('.partner-preview-movement');
   act(() => { reduced = true; preferenceChanged?.(); });
   expect(host.querySelector('.partner-accessory-trail')).toBe(null);

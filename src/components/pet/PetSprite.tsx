@@ -343,7 +343,7 @@ export default function PetSprite({
   const stripCols = sheet?.cols || 8;
 
   return (
-    <div ref={containerRef} style={{ width: sz, height: sz, borderRadius: 12, position: 'relative' }}>
+    <div ref={containerRef} style={{ width: sz, height: sz, borderRadius: 12, position: 'relative', zIndex: 1 }}>
       {/* 外层裁剪窗口固定一帧宽，内层整张精灵图用 transform 平移逐帧播放 */}
       <div style={{ width: renderWidth, height: sz, marginLeft: Math.round((sz - renderWidth) / 2), overflow: 'hidden' }}>
         <div ref={spriteDivRef} style={{

@@ -75,12 +75,13 @@ with sync_playwright() as p:
       const items=BUILTIN_ACCESSORY_CATALOG.items.filter(i=>['halo-prism','orbit-stars','trail-comet'].includes(i.id));
       const effect=new PartnerCosmetics(s,s.playerPet,items);
       const wait=ms=>new Promise(r=>setTimeout(r,ms));
-      await wait(100);const resting=effect.commandBuffer.length;
+      const commands=()=>effect.commandBuffer.length+effect.rear.commandBuffer.length;
+      await wait(100);const resting=commands();
       s.tweens.add({targets:s.playerPet,x:s.playerPet.x-80,duration:350});
-      await wait(150);const moving=effect.commandBuffer.length;
+      await wait(150);const moving=commands();
       b.pause();const pausedBuffer=JSON.stringify(effect.commandBuffer);
       await wait(150);const frozen=JSON.stringify(effect.commandBuffer)===pausedBuffer;
-      b.resume();await wait(400);const stopped=effect.commandBuffer.length;
+      b.resume();await wait(1600);const stopped=commands();
       effect.destroy();const cleaned=!effect.scene;
       return {resting,moving,stopped,frozen,cleaned};
     }""")

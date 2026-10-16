@@ -27,7 +27,8 @@ export function validateAccessoryCatalog(value: unknown): value is PartnerAccess
       && i.visual && typeof i.visual.primitive === 'string' && i.visual.primitive.length <= 40
       && /^#[\da-f]{6}$/i.test(i.visual.color) && /^#[\da-f]{6}$/i.test(i.visual.accent)
       && integer(i.visual.count, 1, 8) && integer(i.visual.durationMs, 300, 20000)
-      && Object.keys(i.visual).every(k => ['primitive', 'color', 'accent', 'count', 'durationMs'].includes(k))));
+      && (i.visual.size === undefined || typeof i.visual.size === 'number' && Number.isFinite(i.visual.size) && i.visual.size >= .6 && i.visual.size <= 1.4)
+      && Object.keys(i.visual).every(k => ['primitive', 'color', 'accent', 'count', 'durationMs', 'size'].includes(k))));
 }
 export function defaultAccessorySnapshot(): PartnerAccessorySnapshot {
   return { version: 1, ownedIds: ['halo-clear'], equippedByPet: {}, savedAt: new Date().toISOString() };

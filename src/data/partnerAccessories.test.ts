@@ -10,8 +10,13 @@ describe('partner accessory catalog boundary', () => {
   it.each([{ price: -1 }, { price: NaN }, { price: '240' }, { minRendererVersion: 0 }, { name: 'x'.repeat(41) }])('rejects unsafe metadata %j', edit => {
     const c = structuredClone(BUILTIN_ACCESSORY_CATALOG); Object.assign(c.items[0], edit); expect(validateAccessoryCatalog(c)).toBe(false);
   });
-  it.each([{ count: 9 }, { count: -1 }, { durationMs: 299 }, { durationMs: 20001 }, { color: 'url(https://bad)' }, { svg: '<svg onload=alert(1) />' }])('rejects unbounded or executable visuals %j', edit => {
+  it.each([{ count: 9 }, { count: -1 }, { durationMs: 299 }, { durationMs: 20001 }, { color: 'url(https://bad)' }, { size: 0 }, { size: 1.5 }, { size: NaN }, { svg: '<svg onload=alert(1) />' }])('rejects unbounded or executable visuals %j', edit => {
     const c = structuredClone(BUILTIN_ACCESSORY_CATALOG); Object.assign(c.items[0].visual, edit); expect(validateAccessoryCatalog(c)).toBe(false);
+  });
+  it('accepts bounded optional online size without changing old catalogs', () => {
+    const c = structuredClone(BUILTIN_ACCESSORY_CATALOG); c.items[2].visual.size = 1.2;
+    expect(validateAccessoryCatalog(c)).toBe(true);
+    expect(validateAccessoryCatalog(BUILTIN_ACCESSORY_CATALOG)).toBe(true);
   });
   it('retains future metadata but never renders unsupported items', () => {
     const c = structuredClone(BUILTIN_ACCESSORY_CATALOG); c.items[0].minRendererVersion = 2; expect(validateAccessoryCatalog(c)).toBe(true); expect(supportedAccessory(c.items[0])).toBe(false);
