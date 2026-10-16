@@ -17,7 +17,7 @@ async function restart(){
   const element=(document.querySelector('#element') as HTMLSelectElement).value as PetElement;
   const portrait=await loadBattlePortrait(speciesId);
   if(current!==revision){portrait?.release();return;}
-  const actor={petId:'preview',displayName:speciesId,speciesId,element,level:10,maxHp:2000,currentHp:2000,attack:20,defense:5,speed:10,isPlayer:true,previewUrl:portrait?.url||`/pet-sprites/previews/${speciesId}.png`,textureKey:'previewPlayer',textureStyle:portrait?.style||'pixel'};
+  const actor={petId:'preview',displayName:speciesId,speciesId,element,level:10,maxHp:2000,currentHp:2000,attack:20,defense:5,speed:10,isPlayer:true,previewUrl:portrait?.url||`/pet-sprites/previews/${speciesId}.png`,textureKey:'previewPlayer',portraitArt:Boolean(portrait),textureStyle:portrait?.style||'pixel'};
   battle=createBattleGame(container,{dungeonId:'preview',stageId:'preview',isBoss:false,playerPet:actor,enemyPet:{...actor,petId:'previewEnemy',displayName:'练习伙伴',isPlayer:false,element:'water',textureKey:'previewEnemy'},initialEnergy:5,maxEnergy:5,dungeonColor:'#59c8ef',dungeonName:'本地验收'},(event,data)=>{
     if(event==='skillSelected'){
       status.textContent=`模拟答对：${(data as {skillId:string}).skillId}`;
