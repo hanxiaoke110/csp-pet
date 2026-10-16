@@ -12,6 +12,7 @@ import { ensureWardrobeAsset, ensureWardrobeInteractionAsset, ensureWardrobeVisu
 import { localDateKey } from '../../utils/localDate';
 import { isWardrobeConditionMet } from '../../utils/wardrobeUnlock';
 import WardrobeVisualLayers from './WardrobeVisualLayers';
+import PartnerAccessoryPanel from '../pet/PartnerAccessoryPanel';
 import './myPage.css';
 
 type PageTab = 'journey' | 'journal' | 'honor' | 'wardrobe';
@@ -236,7 +237,7 @@ function WardrobeCard({ item, owned, equipped, previewing, cardCount, onToast, o
 }
 
 function WardrobePanel({ onToast }: { onToast: (text: string) => void }) {
-  const [category, setCategory] = useState<WardrobeCategory>('avatar');
+  const [category, setCategory] = useState<WardrobeCategory | 'partner-accessories'>('avatar');
   const [previewItem, setPreviewItem] = useState<WardrobeItem | null>(null);
   const ownedItemIds = useProfileStore(s => s.ownedItemIds);
   const equipped = useProfileStore(s => s.equipped);
@@ -259,6 +260,7 @@ function WardrobePanel({ onToast }: { onToast: (text: string) => void }) {
   }, [cardCount, catalog, grant]);
 
   const items = catalog.items.filter(item => item.category === category && (item.available !== false || ownedItemIds.includes(item.id)));
+  if (category === 'partner-accessories') return <div><div className="wardrobe-tabs"><button onClick={() => setCategory('avatar')}>返回个人装扮</button><button className="active">智子配饰</button></div><PartnerAccessoryPanel onToast={onToast} /></div>;
   return (
     <div className="wardrobe-layout">
       <aside className="wardrobe-stage-panel">
@@ -269,6 +271,7 @@ function WardrobePanel({ onToast }: { onToast: (text: string) => void }) {
       </aside>
       <section className="wardrobe-catalog">
         <div className="wardrobe-tabs">
+          <button onClick={() => setCategory('partner-accessories')}>智子配饰</button>
           {(Object.keys(CATEGORY_LABELS) as WardrobeCategory[]).map(key => (
             <button key={key} className={category === key ? 'active' : ''} onClick={() => { setCategory(key); setPreviewItem(null); }}>{CATEGORY_LABELS[key]}</button>
           ))}

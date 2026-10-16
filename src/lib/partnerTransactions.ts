@@ -1,5 +1,6 @@
 import { dualSave } from './persist';
 import { PARTNER_GROWTH_KEY, validateGrowthSnapshot, validGrowthId, validGrowthInteger } from '../utils/partnerGrowth';
+import { PARTNER_ACCESSORY_KEY, validateAccessorySnapshot } from '../data/partnerAccessories';
 
 export const PARTNER_JOURNAL_KEY = 'csp_partner_transaction_v1';
 export const PARTNER_TRANSACTION_LOCK = 'csp-partner-transactions-v1';
@@ -31,10 +32,11 @@ function validMirrors(mirrors: unknown, after: Snapshots): mirrors is Record<str
 
 function validCommittedSnapshots(snapshots: Snapshots) {
   return Object.entries(snapshots).every(([key, raw]) => {
-    if (raw === null || (key !== 'csp_pet_data' && key !== PARTNER_GROWTH_KEY)) return true;
+    if (raw === null || (key !== 'csp_pet_data' && key !== PARTNER_GROWTH_KEY && key !== PARTNER_ACCESSORY_KEY)) return true;
     try {
       const data = JSON.parse(raw);
       if (key === PARTNER_GROWTH_KEY) return validateGrowthSnapshot(data);
+      if (key === PARTNER_ACCESSORY_KEY) return validateAccessorySnapshot(data);
       return Array.isArray(data?.ownedPets) && data.ownedPets.length <= 10_000 && validGrowthInteger(data.coins)
         && data.ownedPets.every((pet: any) => pet && validGrowthId(pet.petId) && validGrowthId(pet.speciesId))
         && new Set(data.ownedPets.map((pet: any) => pet.petId)).size === data.ownedPets.length;

@@ -21,6 +21,7 @@ export interface PhaserPetConfig {
   textureKey: string;
   portraitArt?: boolean;
   textureStyle?: 'painted' | 'pixel';
+  accessories?: import('../../src/types/partnerAccessory').PartnerAccessory[];
 }
 
 export interface PhaserSkillCard {

@@ -173,12 +173,13 @@ async function loadCachedSprite(petId: string): Promise<{ data: SpriteData; blob
 
 export default function PetSprite({
   renderType: _renderType, modelPath, canvasSize,
-  onReady, apiRef, exposeGlobals = true,
+  onReady, apiRef, exposeGlobals = true, onAnimationChange,
 }: {
   renderType?: string; modelPath?: string; canvasSize?: number;
   onReady?: () => void;
   apiRef?: (api: PetSpriteApi | null) => void;
   exposeGlobals?: boolean;
+  onAnimationChange?: (animation: PetAnimState) => void;
 }) {
   const sz = canvasSize || CANVAS_SIZE;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -188,6 +189,8 @@ export default function PetSprite({
   const smRef = useRef(createStateMachine());
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [currentAnim, setCurrentAnim] = useState<PetAnimState>('idle');
+  const animationCallback = useRef(onAnimationChange);
+  animationCallback.current = onAnimationChange;
   const [resolvedSpriteUrl, setResolvedSpriteUrl] = useState<string>('');
   const mountCountRef = useRef(0);
   const [, setMetaVersion] = useState(0);
@@ -287,6 +290,7 @@ export default function PetSprite({
       if (anim !== currentAnimRef.current) {
         currentAnimRef.current = anim;
         setCurrentAnim(anim);
+        animationCallback.current?.(anim);
       }
     }, 250);
 

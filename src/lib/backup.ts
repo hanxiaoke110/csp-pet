@@ -12,6 +12,7 @@ import { localDateKey } from '../utils/localDate';
 import { JOURNAL_KEY, recoverEquipmentTransaction } from './equipmentTransactions';
 import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction, withPartnerReadLock } from './partnerTransactions';
 import { migrateLegacyGrowth, PARTNER_GROWTH_KEY, validateGrowthSnapshot } from '../utils/partnerGrowth';
+import { defaultAccessorySnapshot, PARTNER_ACCESSORY_KEY, validateAccessorySnapshot } from '../data/partnerAccessories';
 
 const FORMAT = 'csp-pet-backup';
 const BACKUP_VERSION = 1;
@@ -39,6 +40,7 @@ const EXCLUDED_LS_KEYS = new Set([
   'csp_wardrobe_asset_cache_v1',
   'csp_star_path_catalog_cache_v1',
   'csp_equipment_catalog_cache_v1',
+  'csp_partner_accessory_catalog_cache_v1',
   'dungeon_reviewed_exam_bank_v1',
   'dungeon_reviewed_exam_bank_version',
   'dungeon_dungeons_v1',
@@ -65,6 +67,7 @@ export function shouldIncludeKey(key: string): boolean {
 const SQLITE_BACKUP_KEYS = new Set([
   'pet_data',
   'partner_growth',
+  'partner_accessories',
   'hatch_eggs',
   'quiz_state',
   'problem_status',
@@ -138,6 +141,9 @@ function isValidPetSnapshot(raw: string | undefined): boolean {
 
 /** 导出前确认智子与金币至少在一套持久化存储中完整可读。 */
 export function validateBackupState(backup: BackupFile): string | null {
+  for (const raw of [backup.localStorage?.[PARTNER_ACCESSORY_KEY], backup.sqlite?.partner_accessories]) {
+    if (raw) { try { if (!validateAccessorySnapshot(JSON.parse(raw))) return '配饰备份资料异常，无法恢复'; } catch { return '配饰备份资料异常，无法恢复'; } }
+  }
   for (const raw of [backup.localStorage?.[PARTNER_GROWTH_KEY], backup.sqlite?.partner_growth]) {
     if (raw) {
       try { if (!validateGrowthSnapshot(JSON.parse(raw))) return '星砂备份资料异常，无法恢复'; }
@@ -376,6 +382,10 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
     reconciled.localStorage.dungeon_player || null, reconciled.localStorage.csp_dungeon_exploration_v1 || null)), savedAt: restoredAt });
   reconciled.localStorage[PARTNER_GROWTH_KEY] = restoredGrowth;
   reconciled.sqlite.partner_growth = restoredGrowth;
+  const accessory = reconciled.localStorage[PARTNER_ACCESSORY_KEY] || reconciled.sqlite?.partner_accessories;
+  const restoredAccessory = JSON.stringify({ ...(accessory ? JSON.parse(accessory) : defaultAccessorySnapshot()), savedAt: restoredAt });
+  reconciled.localStorage[PARTNER_ACCESSORY_KEY] = restoredAccessory;
+  reconciled.sqlite.partner_accessories = restoredAccessory;
   const restoredPet = JSON.stringify({ ...JSON.parse(reconciled.localStorage.csp_pet_data), savedAt: restoredAt });
   reconciled.localStorage.csp_pet_data = restoredPet;
   // Matching stamps prevent an old SQLite wallet or growth ledger from winning hydration.
@@ -394,7 +404,7 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
   for (const [key, value] of Object.entries(reconciled.sqlite || {})) {
     try {
       await sqliteSet(key, value);
-      if (key !== 'partner_growth' || Boolean(growth)) sqliteCount++;
+      if ((key !== 'partner_growth' || Boolean(growth)) && (key !== 'partner_accessories' || Boolean(accessory))) sqliteCount++;
       if (key === 'pet_data') sqlitePetSnapshotWritten = true;
     } catch { /* 记录并继续 */ }
   }

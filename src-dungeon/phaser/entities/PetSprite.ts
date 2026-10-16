@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import type { PhaserPetConfig } from '../types';
 import { BATTLE_LAYOUT, effectiveVisualMode, readBattleVisualMode } from '../../utils/battleVisuals';
+import { PartnerCosmetics } from './PartnerCosmetics';
 
 export class PetSprite extends Phaser.GameObjects.Container {
   private sprite: Phaser.GameObjects.Image;
@@ -45,6 +46,7 @@ export class PetSprite extends Phaser.GameObjects.Container {
     this.sprite.setDisplaySize(Math.round(sourceWidth * scale), Math.round(sourceHeight * scale));
     this.sprite.setOrigin(0.5, 0.5);
     this.add(this.sprite);
+    if (config.isPlayer && config.accessories?.length) new PartnerCosmetics(scene, this, config.accessories);
 
     // 元素徽章
     this.elementBadge = scene.add.text(-92, -100, this.getElementEmoji(config.element), {
@@ -81,6 +83,8 @@ export class PetSprite extends Phaser.GameObjects.Container {
   }
 
   playAttackAnimation(targetX: number, targetY: number, onComplete: () => void): void {
+    const reduced = typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+    if (effectiveVisualMode(readBattleVisualMode(), reduced) === 'simple') { onComplete(); return; }
     this.scene.tweens.killTweensOf(this);
     this.resetToHome();
     const midX = (this.homeX + targetX) / 2;

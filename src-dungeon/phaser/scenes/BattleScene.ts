@@ -571,6 +571,7 @@ export class BattleScene extends Phaser.Scene {
 
   private playSkillEffect(skill: SkillDefinition, onImpact: () => void): void {
     const shield = skill.effectType === 'shield';
+    if (!shield) this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {});
     playElementAttack(this, this.initData.playerPet.element, this.playerPet, shield ? this.playerPet : this.enemyPet, onImpact, shield);
   }
 

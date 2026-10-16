@@ -8,6 +8,8 @@ import { getTrustedQuestionImage, pickStagePlanQuestions, loadQuestionBank } fro
 import { calculateStats } from '../../utils/combatLogic';
 import { partnerTrialStats } from '../../../src/utils/partnerQuality';
 import { usePartnerGrowthStore } from '../../../src/stores/partnerGrowthStore';
+import { usePartnerAccessoryStore } from '../../../src/stores/partnerAccessoryStore';
+import { supportedAccessory } from '../../../src/data/partnerAccessories';
 import { recoverPartnerState } from '../../../src/lib/partnerTransactions';
 import {
   applySchoolAnswerPassive,
@@ -384,6 +386,10 @@ function RecoveredBattleScreen() {
         return config;
       };
       let [playerCfg, enemyCfg] = await Promise.all([resolvePortrait(playerConfig), resolvePortrait(enemyConfig)]);
+      await usePartnerAccessoryStore.getState().load();
+      const accessoryState = usePartnerAccessoryStore.getState();
+      const accessoryIds = Object.values(accessoryState.snapshot.equippedByPet[playerCfg.petId] || {});
+      playerCfg = { ...playerCfg, accessories: accessoryState.catalog.items.filter(item => accessoryIds.includes(item.id) && accessoryState.snapshot.ownedIds.includes(item.id) && supportedAccessory(item)) };
 
       if (cancelled) return;
 

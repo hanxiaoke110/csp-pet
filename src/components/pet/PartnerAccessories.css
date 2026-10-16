@@ -1,0 +1,303 @@
+.partner-accessory-layers,
+.partner-accessory-layers * {
+  pointer-events: none !important;
+}
+.partner-accessory-layers {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 3;
+  contain: paint;
+}
+.partner-accessory-layers svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.partner-accessory-halo,
+.partner-accessory-orbit,
+.partner-accessory-trail {
+  position: absolute;
+  inset: 0;
+  color: var(--accessory-color);
+  filter: drop-shadow(0 0 4px var(--accessory-color));
+}
+.partner-accessory-halo > span {
+  position: absolute;
+  left: 16%;
+  top: 73%;
+  width: 68%;
+  height: 24%;
+  animation: partner-halo var(--accessory-duration) ease-in-out infinite;
+}
+.partner-accessory-orbit > span {
+  position: absolute;
+  width: 18%;
+  height: 18%;
+  animation: partner-bob var(--accessory-duration) ease-in-out infinite;
+  animation-delay: calc(var(--accessory-index) * -1s);
+}
+.partner-accessory-trail > span {
+  position: absolute;
+  left: calc(4% + var(--accessory-index) * 8%);
+  top: calc(65% + var(--accessory-index) * 3%);
+  width: 14%;
+  height: 14%;
+  opacity: calc(1 - var(--accessory-index) * 0.11);
+  animation: partner-trail var(--accessory-duration) ease-out infinite;
+}
+.partner-accessory-layers.sleeping .partner-accessory-orbit {
+  display: none;
+}
+.partner-accessory-layers.sleeping * {
+  animation: none !important;
+  filter: none;
+}
+.partner-atelier {
+  --pa-ink: #183c50;
+  --pa-cyan: #70e6e8;
+  --pa-gold: #efc877;
+  color: var(--pa-ink);
+  width: 100%;
+  font-family: inherit;
+}
+.partner-atelier header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid #b8cdd3;
+}
+.partner-atelier h3 {
+  font-size: 24px;
+  margin: 8px 0;
+  font-weight: 850;
+  letter-spacing: -0.5px;
+}
+.partner-atelier header p {
+  font-size: 12px;
+  color: #627a89;
+  margin: 0;
+}
+.partner-atelier small {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+}
+.partner-atelier header > strong {
+  align-self: center;
+  white-space: nowrap;
+  font-size: 22px;
+  color: #8d641f;
+}
+.partner-atelier header > strong small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+.partner-atelier-body {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 20px;
+  padding-top: 20px;
+}
+.partner-fitting {
+  padding: 14px;
+  border-radius: 18px;
+  background: #e9f1ed;
+}
+.partner-fitting label {
+  font-size: 11px;
+  color: #5b747d;
+}
+.partner-fitting select {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  background: #fff;
+  border: 1px solid #b4c7c5;
+  border-radius: 8px;
+  color: #183c50;
+}
+.partner-fitting-stage {
+  height: 235px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 50% 70%, #5ac3bd33, transparent 60%);
+}
+.partner-fitting-stage > .partner-accessory-layers {
+  inset: 25px 0 10px;
+}
+.partner-coordinate {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  font-size: 8px;
+  letter-spacing: 1.2px;
+  color: #587e85;
+}
+.partner-stage-axis {
+  position: absolute;
+  bottom: 24px;
+  width: 180px;
+  border-bottom: 1px solid #7db6ac;
+}
+.partner-preview-caption {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 5px;
+}
+.partner-preview-caption span {
+  font-size: 10px;
+  color: #67827f;
+}
+.partner-loadout {
+  margin-top: 20px;
+  border-top: 1px solid #becfc7;
+}
+.partner-loadout > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #cddbd5;
+}
+.partner-loadout b {
+  flex: 1;
+}
+.partner-atelier button {
+  font: inherit;
+  cursor: pointer;
+}
+.partner-loadout button {
+  border: 0;
+  background: transparent;
+  color: #6a7e78;
+  font-size: 10px;
+}
+.partner-atelier button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.partner-accessory-catalog {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.partner-accessory-card {
+  border: 1px solid #c9d9da;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+.partner-accessory-card.selected {
+  border-color: #27777c;
+  box-shadow: 0 0 0 1px #27777c;
+}
+.partner-accessory-art {
+  width: 100%;
+  height: 105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 0;
+  background: radial-gradient(ellipse at center, #234f61, #102937);
+}
+.partner-accessory-art svg {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 7px currentColor);
+}
+.partner-accessory-art > span {
+  position: absolute;
+  bottom: 6px;
+  left: 10px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #a3c8d1;
+}
+.partner-accessory-copy {
+  padding: 12px;
+}
+.partner-accessory-copy > small {
+  font-size: 9px;
+  color: #7d642d;
+  letter-spacing: 0.3px;
+}
+.partner-accessory-copy h4 {
+  margin: 5px 0;
+  font-size: 15px;
+}
+.partner-accessory-copy p {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #69808a;
+  min-height: 32px;
+  margin: 0 0 10px;
+}
+.partner-accessory-copy > div {
+  display: flex;
+  gap: 6px;
+}
+.partner-accessory-copy button {
+  font-size: 10px;
+  border: 1px solid #b7cbca;
+  background: #f1f6f3;
+  color: #345c62;
+  border-radius: 7px;
+  padding: 6px 8px;
+}
+.partner-accessory-copy button:last-child {
+  flex: 1;
+  background: #204f58;
+  color: #fff;
+  border-color: #204f58;
+}
+.partner-accessory-message {
+  font-size: 11px;
+  color: #6a7f88;
+  padding: 8px 0;
+}
+@keyframes partner-halo {
+  50% {
+    transform: translateY(-5px) scaleX(0.94);
+  }
+}
+@keyframes partner-bob {
+  50% {
+    transform: translateY(-12px) rotate(18deg);
+  }
+}
+@keyframes partner-trail {
+  from {
+    transform: translate(12px, -3px) scale(1);
+  }
+  to {
+    transform: translate(-15px, 7px) scale(0.3);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .partner-accessory-layers * {
+    animation: none !important;
+  }
+  .partner-accessory-trail {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  .partner-atelier-body {
+    grid-template-columns: 1fr;
+  }
+  .partner-fitting-stage {
+    height: 210px;
+  }
+  .partner-atelier h3 {
+    font-size: 20px;
+  }
+}

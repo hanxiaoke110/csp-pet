@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "minRendererVersion": 1,
+  "items": [
+    { "id": "halo-clear", "name": "澄明星环", "description": "一圈清透星光，送给每一位同行者。", "slot": "halo", "price": 0, "minRendererVersion": 1, "visual": { "primitive": "ring", "color": "#64e8ff", "accent": "#ffffff", "count": 1, "durationMs": 6000 } },
+    { "id": "halo-prism", "name": "棱镜星图", "description": "折射青金光芒的精密星轨。", "slot": "halo", "price": 240, "minRendererVersion": 1, "visual": { "primitive": "prism", "color": "#6aeaff", "accent": "#ffd477", "count": 3, "durationMs": 8000 } },
+    { "id": "orbit-stars", "name": "环游星群", "description": "三颗小星星，有自己的公转计划。", "slot": "orbit", "price": 120, "minRendererVersion": 1, "visual": { "primitive": "star", "color": "#ffe3a0", "accent": "#7defff", "count": 3, "durationMs": 7000 } },
+    { "id": "orbit-lantern", "name": "暖灯夜航", "description": "两盏圆滚滚的灯，照亮下一站。", "slot": "orbit", "price": 180, "minRendererVersion": 1, "visual": { "primitive": "lantern", "color": "#ffb98e", "accent": "#fff0b0", "count": 2, "durationMs": 9000 } },
+    { "id": "trail-comet", "name": "彗星航迹", "description": "迈出脚步，留下青金色的流星。", "slot": "trail", "price": 300, "minRendererVersion": 1, "visual": { "primitive": "comet", "color": "#6aeaff", "accent": "#ffd477", "count": 5, "durationMs": 900 } },
+    { "id": "trail-pixel", "name": "像素跃迁", "description": "每次出发，点亮几枚像素坐标。", "slot": "trail", "price": 360, "minRendererVersion": 1, "visual": { "primitive": "pixel", "color": "#74f6e0", "accent": "#e0ff91", "count": 6, "durationMs": 700 } }
+  ]
+}

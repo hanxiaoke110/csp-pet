@@ -31,6 +31,8 @@ try {
 // Wardrobe v2 is cloud-only. New catalog entries and art can be deployed here
 // without increasing the desktop installer or requiring a client release.
 const onlineWardrobe = resolve(root, 'cloud-assets-source', 'wardrobe');
+// Isolated metadata-only cosmetics; no new installer assets.
+await cp(resolve(root, 'cloud-assets-source', 'partner-accessories'), resolve(output, 'partner-accessories'), { recursive: true });
 try {
   await cp(onlineWardrobe, resolve(output, 'wardrobe'), { recursive: true, force: true });
 } catch (error) {

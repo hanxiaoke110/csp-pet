@@ -6,6 +6,8 @@ import { useQuizStore } from '../../stores/quizStore';
 import { readFile, readTextFile, writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { invoke } from '@tauri-apps/api/core';
 import PetSprite from './PetSprite';
+import PartnerAccessoryLayers from './PartnerAccessoryLayers';
+import PartnerAccessoryPanel from './PartnerAccessoryPanel';
 import ModalPortal from '../ModalPortal';
 import { useState, useEffect, useRef } from 'react';
 import React from 'react';
@@ -95,6 +97,8 @@ export default function PetStatus({
   switchTarget, setSwitchTarget, renameCards, setRenameInput, setRenameModal, showToast,
 }: Props) {
   const [pendingElement, setPendingElement] = useState<PetElement | null>(null);
+  const [showAccessories, setShowAccessories] = useState(false);
+  const [accessorySleeping, setAccessorySleeping] = useState(false);
   const [recycleTarget, setRecycleTarget] = useState<string | null>(null);
   const [dismantleTarget, setDismantleTarget] = useState<string | null>(null);
   const [recoveryBusy, setRecoveryBusy] = useState(false);
@@ -136,7 +140,8 @@ export default function PetStatus({
 
       {displayPet && (
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12, position: 'relative' }}>
-          <PetSprite key={displayPet.modelPath} renderType={displayPet.renderType} modelPath={displayPet.modelPath} />
+          <div style={{ position: 'relative', width: 140, height: 140 }}><PetSprite key={displayPet.modelPath} renderType={displayPet.renderType} modelPath={displayPet.modelPath} onAnimationChange={animation => setAccessorySleeping(animation === 'sleep')} />
+          <PartnerAccessoryLayers petId={displayPet.petId} sleeping={accessorySleeping} /></div>
           {displayPet.level >= 1 && (
             <div style={{
               position: 'absolute', top: 0, right: 0,
@@ -150,6 +155,7 @@ export default function PetStatus({
         </div>
       )}
 
+      {displayPet && <><button className="pet-action-button" onClick={() => setShowAccessories(v => !v)}>{showAccessories ? '收起配饰' : '智子配饰'}</button>{showAccessories && <PartnerAccessoryPanel petId={displayPet.petId} onToast={showToast} />}</>}
       <div className="pet-collection">
         {[
           { label: '👑 传说', pets: ownedPets.filter(p => resolvePartnerQuality(p) === 'legendary') },
