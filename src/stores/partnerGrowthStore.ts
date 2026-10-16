@@ -46,7 +46,9 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
       try {
         recoverPartnerTransaction();
         recoverEquipmentTransaction();
-        const raw = await dualLoad(PARTNER_GROWTH_SQLITE_KEY, PARTNER_GROWTH_KEY);
+        const selected = await dualLoad(PARTNER_GROWTH_SQLITE_KEY, PARTNER_GROWTH_KEY);
+        // A new local commit may arrive between the read and this continuation.
+        const raw = localStorage.getItem(PARTNER_GROWTH_KEY) || selected;
         if (raw) {
           const snapshot = parse(raw);
           if (!validateGrowthSnapshot(snapshot)) throw new Error('星砂存档异常，请保留备份后重试');

@@ -3,6 +3,7 @@ import { usePartnerGrowthStore, validateGrowthSnapshot } from './partnerGrowthSt
 import { PARTNER_JOURNAL_KEY, recoverPartnerTransaction } from '../lib/partnerTransactions';
 import { usePetStore } from './petStore';
 import { useQuizStore } from './quizStore';
+import * as persist from '../lib/persist';
 import type { OwnedPet } from '../types/pet';
 vi.mock('@tauri-apps/api/event', () => ({ emit: vi.fn().mockResolvedValue(undefined) }));
 vi.mock('../lib/sqlite-storage', () => ({ sqliteGet: vi.fn().mockResolvedValue(''), sqliteSetFireAndForget: vi.fn() }));
@@ -72,6 +73,22 @@ describe('star sand and ascension', () => {
     localStorage.setItem('csp_partner_growth_v1', JSON.stringify(latest));
     await usePartnerGrowthStore.getState().recordCorrect('here');
     expect(usePartnerGrowthStore.getState().snapshot).toMatchObject({ starSand: 8, firstCorrectIds: ['elsewhere', 'here'] });
+  });
+  it('keeps a concurrently committed ledger when a pending hydration returns an older selection', async () => {
+    localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
+    await usePartnerGrowthStore.getState().load();
+    const old = localStorage.getItem('csp_partner_growth_v1')!;
+    usePartnerGrowthStore.setState({ loaded: false, snapshot: null });
+    let finish!: (value: string) => void;
+    const spy = vi.spyOn(persist, 'dualLoad').mockImplementationOnce(() => new Promise(resolve => { finish = resolve; }));
+    const loading = usePartnerGrowthStore.getState().load();
+    const committed = { ...JSON.parse(old), starSand: 5, firstCorrectIds: ['new-correct'], savedAt: new Date().toISOString() };
+    localStorage.setItem('csp_partner_growth_v1', JSON.stringify(committed));
+    localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [{ ...pet, quality: 'rare' }], coins: 500 }));
+    finish(old); await loading; spy.mockRestore();
+    expect(usePartnerGrowthStore.getState().snapshot).toEqual(committed);
+    expect(JSON.parse(localStorage.getItem('csp_partner_growth_v1')!)).toEqual(committed);
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!)).toMatchObject({ coins: 500, ownedPets: [{ quality: 'rare' }] });
   });
   it('applies only the small quality bonus to pet battle stats, keeping speed unchanged', () => {
     const before = usePetStore.getState().ensureBattleStats(pet).battle!;
