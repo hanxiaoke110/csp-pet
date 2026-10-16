@@ -67,10 +67,29 @@ with sync_playwright() as p:
     page.evaluate(f"window.__simpleCount=0;{SCENE}.playSkillEffect({SCENE}.state.skillUsages[0].skill,()=>window.__simpleCount++)")
     page.wait_for_timeout(400)
     assert page.evaluate("window.__simpleCount") == 1
+    cosmetic = page.evaluate("""async()=>{
+      const b=window.__partnerBattlePreview,s=b.game.scene.getScene('BattleScene');
+      const {BUILTIN_ACCESSORY_CATALOG}=await import('/src/data/partnerAccessories.ts');
+      const {PartnerCosmetics}=await import('/src-dungeon/phaser/entities/PartnerCosmetics.ts');
+      localStorage.setItem('csp_battle_visual_mode_v1','full');
+      const items=BUILTIN_ACCESSORY_CATALOG.items.filter(i=>['halo-prism','orbit-stars','trail-comet'].includes(i.id));
+      const effect=new PartnerCosmetics(s,s.playerPet,items);
+      const wait=ms=>new Promise(r=>setTimeout(r,ms));
+      await wait(100);const resting=effect.commandBuffer.length;
+      s.tweens.add({targets:s.playerPet,x:s.playerPet.x-80,duration:350});
+      await wait(150);const moving=effect.commandBuffer.length;
+      b.pause();const pausedBuffer=JSON.stringify(effect.commandBuffer);
+      await wait(150);const frozen=JSON.stringify(effect.commandBuffer)===pausedBuffer;
+      b.resume();await wait(400);const stopped=effect.commandBuffer.length;
+      effect.destroy();const cleaned=!effect.scene;
+      return {resting,moving,stopped,frozen,cleaned};
+    }""")
+    assert cosmetic["resting"] > 0 and cosmetic["moving"] > cosmetic["resting"], cosmetic
+    assert cosmetic["stopped"] == cosmetic["resting"] and cosmetic["frozen"] and cosmetic["cleaned"], cosmetic
     page.evaluate(f"window.__exitCount=0;{SCENE}.playSkillEffect({SCENE}.state.skillUsages[0].skill,()=>window.__exitCount++);window.__partnerBattlePreview.destroy()")
     page.wait_for_timeout(500)
     assert page.evaluate("window.__exitCount") == 0
     assert not errors, errors
-    print(json.dumps({"scales": results, "effects": effects, "simpleImpact": 1, "exitImpact": 0, "errors": errors}, ensure_ascii=False))
+    print(json.dumps({"scales": results, "effects": effects, "cosmetics": cosmetic, "simpleImpact": 1, "exitImpact": 0, "errors": errors}, ensure_ascii=False))
     context.close()
     browser.close()
