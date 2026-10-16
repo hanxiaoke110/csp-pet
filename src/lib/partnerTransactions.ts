@@ -2,6 +2,25 @@ import { dualSave } from './persist';
 import { PARTNER_GROWTH_KEY, validateGrowthSnapshot, validGrowthId, validGrowthInteger } from '../utils/partnerGrowth';
 
 export const PARTNER_JOURNAL_KEY = 'csp_partner_transaction_v1';
+export const PARTNER_TRANSACTION_LOCK = 'csp-partner-transactions-v1';
+/** All application commits and recovery share the browser's cross-window mutex.
+ * Never nest this wrapper. Synchronous journal helpers are its locked core.
+ */
+export async function withPartnerTransactionLock<T>(action: () => T | Promise<T>): Promise<T> {
+  if (typeof navigator === 'undefined' || !navigator.locks?.request) throw new Error('当前运行环境暂不支持安全交易，请更新系统或应用后重试。原有数据不受影响。');
+  return navigator.locks.request(PARTNER_TRANSACTION_LOCK, { mode: 'exclusive' }, action);
+}
+/** Old read-only saves can open without Web Locks; pending recovery cannot. */
+export async function recoverPartnerState(): Promise<void> {
+  await withPartnerReadLock(() => recoverPartnerTransaction());
+}
+export async function withPartnerReadLock<T>(action: () => T | Promise<T>): Promise<T> {
+  if (typeof navigator === 'undefined' || !navigator.locks?.request) {
+    if (localStorage.getItem(PARTNER_JOURNAL_KEY)) throw new Error('成长资料需要安全恢复，请更新运行环境后重试；请勿清空数据。');
+    return action();
+  }
+  return withPartnerTransactionLock(action);
+}
 type Snapshots = Record<string, string | null>;
 interface Journal { version: 1; phase: 'commit' | 'rollback'; before: Snapshots; after: Snapshots; mirrors: Record<string, string> }
 function validMirrors(mirrors: unknown, after: Snapshots): mirrors is Record<string, string> {

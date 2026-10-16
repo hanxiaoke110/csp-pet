@@ -10,7 +10,7 @@ import { sqliteSet } from './sqlite-storage';
 import { countCompletedProblems, mergeProblemStatusSnapshots } from './problemStatusMerge';
 import { localDateKey } from '../utils/localDate';
 import { JOURNAL_KEY, recoverEquipmentTransaction } from './equipmentTransactions';
-import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction } from './partnerTransactions';
+import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction, withPartnerReadLock } from './partnerTransactions';
 import { migrateLegacyGrowth, PARTNER_GROWTH_KEY, validateGrowthSnapshot } from '../utils/partnerGrowth';
 
 const FORMAT = 'csp-pet-backup';
@@ -191,6 +191,7 @@ function reconcileBackupProgress(backup: BackupFile): BackupFile {
 
 /** 收集当前全部可迁移数据，组装成备份对象 */
 export async function buildBackup(): Promise<BackupFile> {
+  return withPartnerReadLock(async () => {
   // Export only a consistent committed wallet/equipment pair, never a replayable journal.
   recoverEquipmentTransaction();
   recoverPartnerTransaction();
@@ -220,6 +221,7 @@ export async function buildBackup(): Promise<BackupFile> {
     sqlite,
     // 保留字段用于兼容旧备份导入；新备份不再复制可重新获取的图片缓存。
     sprites: {},
+  });
   });
 }
 
@@ -356,6 +358,7 @@ export interface ApplyResult {
  * 调用方必须先完成快照；成功后应尽快刷新页面，避免内存中的旧状态覆盖写入。
  */
 export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
+  return withPartnerReadLock(async () => {
   recoverEquipmentTransaction();
   recoverPartnerTransaction();
   const validationError = validateBackupState(data);
@@ -416,4 +419,5 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
   }
 
   return { lsCount: originalLsCount, sqliteCount, spriteCount };
+  });
 }

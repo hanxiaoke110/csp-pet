@@ -6,6 +6,7 @@ import {
   type BackupFile,
 } from './backup';
 import { useTrialEquipmentStore } from '../../src-dungeon/stores/trialEquipmentStore';
+import { createTestLockManager } from '../testSupport/webLocks';
 
 function makeLocalStorage() {
   const data = new Map<string, string>();
@@ -19,6 +20,7 @@ function makeLocalStorage() {
 }
 
 beforeEach(() => {
+  vi.stubGlobal('navigator', { locks: createTestLockManager() });
   vi.stubGlobal('localStorage', makeLocalStorage());
   vi.stubGlobal('window', {});
 });
@@ -77,6 +79,12 @@ describe('shouldIncludeKey', () => {
 });
 
 describe('focus backup data', () => {
+  it('restores an old student backup without Web Locks when no recovery is pending', async () => {
+    vi.stubGlobal('navigator', {});
+    const result = await applyBackup(makeBackup({ localStorage: { csp_pet_data: '{"ownedPets":[],"coins":1888}' }, sqlite: {}, sprites: {} }));
+    expect(result.lsCount).toBe(1);
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!).coins).toBe(1888);
+  });
   it('includes the focus SQLite snapshot in backups', () => {
     expect(shouldIncludeSqliteKey('focus_data')).toBe(true);
     expect(shouldIncludeSqliteKey('collector_cards')).toBe(true);

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualLoad } from '../lib/persist';
-import { commitLocalSnapshots, recoverPartnerTransaction } from '../lib/partnerTransactions';
+import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction, withPartnerReadLock, withPartnerTransactionLock } from '../lib/partnerTransactions';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
 import { ascensionOffer, ascensionRefund, resolvePartnerQuality } from '../utils/partnerQuality';
 import { estimateAcquisitionCost, usePetStore } from './petStore';
@@ -24,7 +24,7 @@ interface PartnerGrowthState {
   refresh: () => boolean;
   recordCorrect: (canonicalQuestionId: string) => Promise<boolean>;
   completeMaze: (mapId: string) => Promise<boolean>;
-  ascend: (petId: string, expectedQuality: PetTier) => Result;
+  ascend: (petId: string, expectedQuality: PetTier) => Promise<Result>;
 }
 let loading: Promise<void> | null = null;
 let transacting = false;
@@ -32,7 +32,7 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
   loaded: false, snapshot: null, error: '',
   refresh: () => {
     try {
-      recoverPartnerTransaction();
+      if (localStorage.getItem(PARTNER_JOURNAL_KEY)) return false;
       const snapshot = parse(localStorage.getItem(PARTNER_GROWTH_KEY));
       if (!validateGrowthSnapshot(snapshot)) return false;
       set({ loaded: true, snapshot, error: '' });
@@ -44,6 +44,7 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
     if (loading) return loading;
     loading = (async () => {
       try {
+        await withPartnerReadLock(async () => {
         recoverPartnerTransaction();
         recoverEquipmentTransaction();
         const selected = await dualLoad(PARTNER_GROWTH_SQLITE_KEY, PARTNER_GROWTH_KEY);
@@ -58,9 +59,11 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
           return;
         }
         const quizRaw = await dualLoad('quiz_state', 'csp_quiz_state');
+        if (typeof navigator === 'undefined' || !navigator.locks?.request) throw new Error('当前运行环境暂不支持安全交易，请更新系统或应用后重试。原有数据不受影响。');
         const snapshot = migrateLegacyGrowth(quizRaw, localStorage.getItem('dungeon_player'), localStorage.getItem('csp_dungeon_exploration_v1'));
         if (!persist(snapshot)) throw new Error('星砂资料未能保存，请检查存储空间');
         set({ loaded: true, snapshot, error: '' });
+        });
       } catch (error) { set({ error: error instanceof Error ? error.message : '星砂资料恢复失败' }); }
     })();
     try { await loading; } finally { loading = null; }
@@ -69,6 +72,8 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
     if (!validGrowthId(canonicalQuestionId)) return false;
     canonicalQuestionId = canonicalGrowthQuestionId(canonicalQuestionId);
     await get().load();
+    try { return await withPartnerTransactionLock(() => {
+    recoverPartnerTransaction();
     if (!get().refresh()) return false;
     const s = get().snapshot;
     if (!get().loaded || !s || s.firstCorrectIds.includes(canonicalQuestionId) || s.firstCorrectIds.length >= 200_000) return false;
@@ -77,10 +82,13 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
     if (!persist(snapshot)) { set({ error: '星砂资料未能保存，请重试' }); return false; }
     set({ snapshot, error: '' });
     return true;
+    }); } catch (error) { set({ error: error instanceof Error ? error.message : '星砂资料保存失败' }); return false; }
   },
   completeMaze: async (mapId) => {
     if (!validGrowthId(mapId)) return false;
     await get().load();
+    try { return await withPartnerTransactionLock(() => {
+    recoverPartnerTransaction();
     if (!get().refresh()) return false;
     const s = get().snapshot;
     if (!get().loaded || !s || s.claimedMapIds.includes(mapId) || s.claimedMapIds.length >= 200_000) return false;
@@ -88,12 +96,14 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
     if (!persist(snapshot)) { set({ error: '星砂资料未能保存，请重试' }); return false; }
     set({ snapshot, error: '' });
     return true;
+    }); } catch (error) { set({ error: error instanceof Error ? error.message : '星砂资料保存失败' }); return false; }
   },
-  ascend: (petId, expectedQuality) => {
+  ascend: async (petId, expectedQuality) => {
     const failure = (message: string): Result => ({ ok: false, message });
     if (transacting || !get().loaded || !usePetStore.getState().loaded) return failure('正在恢复伙伴资料，请稍后再试');
     transacting = true;
     try {
+      return await withPartnerTransactionLock(() => {
       recoverPartnerTransaction(); recoverEquipmentTransaction();
       const state = usePetStore.getState();
       const raw = parse(localStorage.getItem('csp_pet_data'));
@@ -125,7 +135,8 @@ export const usePartnerGrowthStore = create<PartnerGrowthState>((set, get) => ({
       emit('pet-data-sync', nextPet).catch(() => {});
       emit('partner-growth-sync', snapshot).catch(() => {});
       return { ok: true, message: '升华成功！伙伴已获得新的品质' };
-    } catch { return failure('升华保存失败，请重试'); }
+      });
+    } catch (error) { return failure(error instanceof Error ? error.message : '升华保存失败，请重试'); }
     finally { transacting = false; }
   },
 }));

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
-import { commitLocalSnapshots, recoverPartnerTransaction } from '../lib/partnerTransactions';
+import { commitLocalSnapshots, recoverPartnerTransaction, withPartnerReadLock, withPartnerTransactionLock } from '../lib/partnerTransactions';
 import { ascensionRefund, resolvePartnerQuality } from '../utils/partnerQuality';
 import type { OwnedPet, PetElement, PetTier, RecycledPet } from '../types/pet';
 import { STARTER_PETS, getPetConfig, getPetTier, ALL_SHOP_ITEMS, PET_TIERS, PET_BASE_STATS, TIER_MULTIPLIERS, TIER_PRICES } from '../types/pet';
@@ -41,8 +41,8 @@ interface PetState {
   renamePet: (petId: string, newName: string) => string;
   reforgeElement: (petId: string, element: PetElement) => { ok: boolean; cost: number; message?: string };
   recyclePet: (petId: string) => { ok: boolean; message?: string };
-  restoreRecycledPet: (petId: string) => boolean;
-  dismantleRecycledPet: (petId: string) => { ok: boolean; exp: number; coins: number };
+  restoreRecycledPet: (petId: string) => Promise<boolean>;
+  dismantleRecycledPet: (petId: string) => Promise<{ ok: boolean; exp: number; coins: number }>;
 
   // Gacha
   gachaDailyPulls: number;
@@ -665,8 +665,9 @@ export const usePetStore = create<PetState>((set, get) => ({
     return { ok: true };
   },
 
-  restoreRecycledPet: (petId) => {
+  restoreRecycledPet: async (petId) => {
     try {
+      return await withPartnerTransactionLock(() => {
       recoverPartnerTransaction(); recoverEquipmentTransaction();
       const state = get();
       const saved = JSON.parse(localStorage.getItem('csp_pet_data') || 'null');
@@ -682,10 +683,11 @@ export const usePetStore = create<PetState>((set, get) => ({
       set(changes);
       emit('pet-data-sync', snapshot).catch(() => {});
       return true;
+      });
     } catch { return false; }
   },
 
-  dismantleRecycledPet: (petId) => {
+  dismantleRecycledPet: async (petId) => {
     const record = get().recycledPets.find(item => item.pet.petId === petId);
     if (!record) return { ok: false, exp: 0, coins: 0 };
     const refund = record.returnedCoins + ascensionRefund(record.pet);
@@ -694,6 +696,7 @@ export const usePetStore = create<PetState>((set, get) => ({
       expPool: state.expPool + record.returnedExp, coins: state.coins + refund };
     if (!Number.isSafeInteger(changes.coins) || changes.coins < 0 || !Number.isSafeInteger(changes.expPool)) return { ok: false, exp: 0, coins: 0 };
     try {
+      return await withPartnerTransactionLock(() => {
       recoverPartnerTransaction(); recoverEquipmentTransaction();
       const raw = localStorage.getItem('csp_pet_data');
       if (!raw) return { ok: false, exp: 0, coins: 0 };
@@ -707,6 +710,7 @@ export const usePetStore = create<PetState>((set, get) => ({
       set(changes);
       emit('pet-data-sync', snapshot).catch(() => {});
       return { ok: true, exp: record.returnedExp, coins: refund };
+      });
     } catch { return { ok: false, exp: 0, coins: 0 }; }
   },
 
@@ -1038,9 +1042,12 @@ export const usePetStore = create<PetState>((set, get) => ({
     },
 
   load: async () => {
+    let recoveryComplete = false;
     try {
+      return await withPartnerReadLock(async () => {
       recoverPartnerTransaction();
       recoverEquipmentTransaction();
+      recoveryComplete = true;
       const raw = await dualLoad('pet_data', 'csp_pet_data');
       if (!raw) return false;
       const data = JSON.parse(raw);
@@ -1163,12 +1170,13 @@ export const usePetStore = create<PetState>((set, get) => ({
         return true;
       }
       return false;
+      });
     } catch { /* corrupted data — do not overwrite it with defaults */
       return false;
     } finally {
       // The empty initial list is not evidence that an existing student has no pet.
       // Only show the adoption gate after the saved snapshot has been checked.
-      set({ loaded: true });
+      set({ loaded: recoveryComplete });
     }
   },
 }));

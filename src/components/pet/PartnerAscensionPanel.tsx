@@ -21,9 +21,10 @@ export default function PartnerAscensionPanel({ pet }: { pet: OwnedPet }) {
     const refresh = () => { usePartnerGrowthStore.getState().refresh(); void usePetStore.getState().load(); };
     const stopGrowth = safeListen('partner-growth-sync', () => { usePartnerGrowthStore.getState().refresh(); });
     const stopPet = safeListen('pet-data-sync', () => { void usePetStore.getState().load(); });
-    window.addEventListener('storage', refresh);
+    const storage = (event: StorageEvent) => { if (event.key === 'csp_pet_data' || event.key === 'csp_partner_growth_v1') refresh(); };
+    window.addEventListener('storage', storage);
     window.addEventListener('focus', refresh);
-    return () => { stopGrowth(); stopPet(); window.removeEventListener('storage', refresh); window.removeEventListener('focus', refresh); };
+    return () => { stopGrowth(); stopPet(); window.removeEventListener('storage', storage); window.removeEventListener('focus', refresh); };
   }, []);
   useEffect(() => { setConfirmation(null); setMessage(''); }, [pet.petId]);
   if (!petLoaded || !loaded) return <section className="partner-ascension" aria-label="伙伴升华"><p role="status">{error || '正在恢复升华资料…'}</p>{error && <button className="mode-btn" onClick={() => void load()}>重试</button>}</section>;
@@ -48,11 +49,11 @@ export default function PartnerAscensionPanel({ pet }: { pet: OwnedPet }) {
     <p style={{ fontSize: 11, color: '#64748b', lineHeight: 1.6 }}>每首次答对 20 道不同题目获得 1 星砂；每张迷宫首次完成获得 1 星砂。星砂独立于装备晶石。拆解时返还实际升华金币的 80%，星砂不返还。</p>
     {(message || error) && <p role="status" style={{ fontSize: 12 }}>{message || error}</p>}
     {confirmation && offer && <ConfirmModal icon="✨" title={`升华「${pet.petName}」`} price={offer.coins} coins={coins}
-      desc={`消耗 ${offer.sand} 星砂，升华为${QUALITY_LABELS[offer.target]}。\n金币余额 ${coins} → ${coins - offer.coins}；星砂余额 ${sand} → ${sand - offer.sand}。\n成功率 100%，伙伴等级与亲密度保留。`} confirmText="确认升华"
-      onCancel={() => { if (!locked.current) setConfirmation(null); }} onConfirm={() => {
+      desc={`消耗 ${offer.sand} 星砂，升华为${QUALITY_LABELS[offer.target]}。\n金币余额 ${coins} → ${coins - offer.coins}；星砂余额 ${sand} → ${sand - offer.sand}。\n成功率 100%，伙伴等级与亲密度保留。`} confirmText={busy ? '正在升华…' : '确认升华'}
+      onCancel={() => { if (!locked.current) setConfirmation(null); }} onConfirm={async () => {
         if (locked.current || confirmation.petId !== pet.petId) return;
         locked.current = true; setBusy(true);
-        try { const result = ascend(confirmation.petId, confirmation.quality); setMessage(result.message); setConfirmation(null); }
+        try { const result = await ascend(confirmation.petId, confirmation.quality); setMessage(result.message); setConfirmation(null); }
         finally { locked.current = false; setBusy(false); }
       }} />}
   </section>;

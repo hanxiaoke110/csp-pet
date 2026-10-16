@@ -4,11 +4,13 @@ import { PARTNER_JOURNAL_KEY, recoverPartnerTransaction } from '../lib/partnerTr
 import { usePetStore } from './petStore';
 import { useQuizStore } from './quizStore';
 import * as persist from '../lib/persist';
+import { createTestLockManager } from '../testSupport/webLocks';
 import type { OwnedPet } from '../types/pet';
 vi.mock('@tauri-apps/api/event', () => ({ emit: vi.fn().mockResolvedValue(undefined) }));
 vi.mock('../lib/sqlite-storage', () => ({ sqliteGet: vi.fn().mockResolvedValue(''), sqliteSetFireAndForget: vi.fn() }));
 const pet = { petId: 'one', speciesId: 'capi', petName: '卡皮', level: 10, exp: 0, expToNext: 100, affection: 80, tier: 'common', acquisitionCost: 0 } as OwnedPet;
 beforeEach(() => {
+  vi.stubGlobal('navigator', { locks: createTestLockManager() });
   const data = new Map<string, string>();
   vi.stubGlobal('localStorage', { getItem: (key: string) => data.get(key) ?? null, setItem: (key: string, value: string) => { data.set(key, value); }, removeItem: (key: string) => { data.delete(key); } });
   usePartnerGrowthStore.setState({ loaded: false, snapshot: null, error: '' });
@@ -16,6 +18,36 @@ beforeEach(() => {
   localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [pet, { ...pet, petId: 'two' }], activePetId: 'one', coins: 600 }));
 });
 describe('star sand and ascension', () => {
+  it('fails closed without Web Locks and preserves the existing partner and growth snapshots', async () => {
+    localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
+    await usePartnerGrowthStore.getState().load();
+    const beforePet = localStorage.getItem('csp_pet_data');
+    const beforeGrowth = localStorage.getItem('csp_partner_growth_v1');
+    vi.stubGlobal('navigator', {});
+    expect(await usePartnerGrowthStore.getState().ascend('one', 'common')).toMatchObject({ ok: false, message: expect.stringContaining('安全交易') });
+    expect(localStorage.getItem('csp_pet_data')).toBe(beforePet);
+    expect(localStorage.getItem('csp_partner_growth_v1')).toBe(beforeGrowth);
+  });
+  it('refresh never recovers a live journal or resets an invalid ledger', async () => {
+    await usePartnerGrowthStore.getState().load();
+    const snapshot = usePartnerGrowthStore.getState().snapshot;
+    localStorage.setItem(PARTNER_JOURNAL_KEY, 'live journal');
+    expect(usePartnerGrowthStore.getState().refresh()).toBe(false);
+    expect(localStorage.getItem(PARTNER_JOURNAL_KEY)).toBe('live journal');
+    localStorage.removeItem(PARTNER_JOURNAL_KEY);
+    localStorage.setItem('csp_partner_growth_v1', '{broken');
+    expect(usePartnerGrowthStore.getState().refresh()).toBe(false);
+    expect(usePartnerGrowthStore.getState().snapshot).toEqual(snapshot);
+  });
+  it('does not expose an empty adoption state when pending recovery cannot acquire a lock', async () => {
+    vi.stubGlobal('navigator', {});
+    usePetStore.setState({ loaded: false, ownedPets: [] });
+    const before = localStorage.getItem('csp_pet_data');
+    localStorage.setItem(PARTNER_JOURNAL_KEY, 'pending recovery');
+    expect(await usePetStore.getState().load()).toBe(false);
+    expect(usePetStore.getState().loaded).toBe(false);
+    expect(localStorage.getItem('csp_pet_data')).toBe(before);
+  });
   it('deduplicates legacy choice IDs and canonical bank IDs', async () => {
     await usePartnerGrowthStore.getState().recordCorrect('csp-J-2023-008');
     await usePartnerGrowthStore.getState().recordCorrect('csp-j-2023-c08');
@@ -26,6 +58,7 @@ describe('star sand and ascension', () => {
     useQuizStore.getState().recordAnswer(false, 'wrong');
     useQuizStore.getState().recordAnswer(true, 'csp-j-2023-008');
     await Promise.resolve();
+    await navigator.locks.request('csp-partner-transactions-v1', { mode: 'exclusive' }, () => {});
     expect(usePartnerGrowthStore.getState().snapshot?.firstCorrectIds).toEqual(['csp-j-2023-c08']);
   });
   it('preserves same-balance training and newly acquired pets from another window during ascension', async () => {
@@ -33,20 +66,20 @@ describe('star sand and ascension', () => {
     await usePartnerGrowthStore.getState().load();
     const trained = { ...pet, level: 12, affection: 95 };
     localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [trained, { ...pet, petId: 'new' }], coins: 600 }));
-    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(true);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'common')).ok).toBe(true);
     const saved = JSON.parse(localStorage.getItem('csp_pet_data')!);
     expect(saved.ownedPets[0]).toMatchObject({ level: 12, affection: 95, quality: 'rare' });
     expect(saved.ownedPets.map((p: OwnedPet) => p.petId)).toEqual(['one', 'new']);
   });
-  it('rejects a stale recycled inventory after another window restores a pet without changing coins', () => {
+  it('rejects a stale recycled inventory after another window restores a pet without changing coins', async () => {
     const record = (id: string) => ({ pet: { ...pet, petId: id }, returnedExp: 10, returnedCoins: 20, recycledAt: '2026-01-01T00:00:00.000Z' });
     const a = record('A'); const b = record('B');
     usePetStore.setState({ recycledPets: [a, b], ownedPets: [pet], coins: 600, expPool: 0 });
     const durable = { ownedPets: [pet, b.pet], recycledPets: [a], coins: 600, expPool: 0 };
     localStorage.setItem('csp_pet_data', JSON.stringify(durable));
-    expect(usePetStore.getState().dismantleRecycledPet('A').ok).toBe(false);
+    expect((await usePetStore.getState().dismantleRecycledPet('A')).ok).toBe(false);
     expect(JSON.parse(localStorage.getItem('csp_pet_data')!)).toEqual(durable);
-    expect(usePetStore.getState().restoreRecycledPet('A')).toBe(false);
+    expect(await usePetStore.getState().restoreRecycledPet('A')).toBe(false);
     expect(JSON.parse(localStorage.getItem('csp_pet_data')!)).toEqual(durable);
   });
   it('allows a legacy recycled receipt whose acquisition refund was hydrated from its native source cost', async () => {
@@ -54,7 +87,7 @@ describe('star sand and ascension', () => {
     localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [pet], recycledPets: [legacy], coins: 600, expPool: 0, gachaRewardMigrationDone: true }));
     await usePetStore.getState().load();
     expect(usePetStore.getState().recycledPets[0].returnedCoins).toBe(75);
-    expect(usePetStore.getState().restoreRecycledPet('legacy')).toBe(true);
+    expect(await usePetStore.getState().restoreRecycledPet('legacy')).toBe(true);
   });
   it('freezes the hydrated native acquisition refund when upgrading an old zero-cost shop pet', async () => {
     const legacy = { ...pet, speciesId: 'peach' };
@@ -62,7 +95,7 @@ describe('star sand and ascension', () => {
     localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
     await usePetStore.getState().load();
     await usePartnerGrowthStore.getState().load();
-    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(true);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'common')).ok).toBe(true);
     expect(usePetStore.getState().ownedPets[0].originalAcquisitionCost).toBe(150);
     usePetStore.getState().recyclePet('one');
     expect(usePetStore.getState().recycledPets[0].returnedCoins).toBe(75);
@@ -82,6 +115,7 @@ describe('star sand and ascension', () => {
     let finish!: (value: string) => void;
     const spy = vi.spyOn(persist, 'dualLoad').mockImplementationOnce(() => new Promise(resolve => { finish = resolve; }));
     const loading = usePartnerGrowthStore.getState().load();
+    await Promise.resolve();
     const committed = { ...JSON.parse(old), starSand: 5, firstCorrectIds: ['new-correct'], savedAt: new Date().toISOString() };
     localStorage.setItem('csp_partner_growth_v1', JSON.stringify(committed));
     localStorage.setItem('csp_pet_data', JSON.stringify({ ownedPets: [{ ...pet, quality: 'rare' }], coins: 500 }));
@@ -117,15 +151,15 @@ describe('star sand and ascension', () => {
   it('upgrades just the expected instance, checks conditions and rejects duplicate click', async () => {
     localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
     await usePartnerGrowthStore.getState().load();
-    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(true);
-    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(false);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'common')).ok).toBe(true);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'common')).ok).toBe(false);
     expect(usePetStore.getState().coins).toBe(500);
     expect(usePetStore.getState().ownedPets[0]).toMatchObject({ quality: 'rare', originalAcquisitionCost: 0 });
     expect(usePetStore.getState().ownedPets[1].quality).toBeUndefined();
-    expect(usePartnerGrowthStore.getState().ascend('one', 'rare').ok).toBe(true);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'rare')).ok).toBe(true);
     expect(usePetStore.getState().coins).toBe(260);
     expect(usePartnerGrowthStore.getState().snapshot?.starSand).toBe(0);
-    expect(usePartnerGrowthStore.getState().ascend('one', 'legendary').ok).toBe(false);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'legendary')).ok).toBe(false);
   });
   it('rejects malformed and unsafe snapshots', () => {
     expect(validateGrowthSnapshot({ starSand: -1 })).toBe(false);
@@ -144,21 +178,21 @@ describe('star sand and ascension', () => {
     localStorage.setItem('csp_partner_growth_v1', JSON.stringify(snapshot));
     usePetStore.setState({ ownedPets: [p], coins });
     usePartnerGrowthStore.setState({ snapshot });
-    expect(usePartnerGrowthStore.getState().ascend(p.petId, quality).ok).toBe(ok);
+    expect((await usePartnerGrowthStore.getState().ascend(p.petId, quality)).ok).toBe(ok);
     if (!ok) expect(usePetStore.getState().coins).toBe(coins);
   });
   it('recycling and restoration do not refund ascent; actual dismantling refunds once', async () => {
     localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
     await usePartnerGrowthStore.getState().load();
-    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(true);
-    expect(usePartnerGrowthStore.getState().ascend('one', 'rare').ok).toBe(true);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'common')).ok).toBe(true);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'rare')).ok).toBe(true);
     expect(usePetStore.getState().recyclePet('one').ok).toBe(true);
     expect(usePetStore.getState().coins).toBe(260);
-    expect(usePetStore.getState().restoreRecycledPet('one')).toBe(true);
+    expect(await usePetStore.getState().restoreRecycledPet('one')).toBe(true);
     expect(usePetStore.getState().coins).toBe(260);
     expect(usePetStore.getState().recyclePet('one').ok).toBe(true);
-    expect(usePetStore.getState().dismantleRecycledPet('one')).toMatchObject({ ok: true, coins: 272 });
-    expect(usePetStore.getState().dismantleRecycledPet('one').ok).toBe(false);
+    expect(await usePetStore.getState().dismantleRecycledPet('one')).toMatchObject({ ok: true, coins: 272 });
+    expect((await usePetStore.getState().dismantleRecycledPet('one')).ok).toBe(false);
     expect(usePetStore.getState().coins).toBe(532);
   });
   it('failed ascension writes never publish a quality or spend, and recovery retains materials', async () => {
@@ -171,7 +205,7 @@ describe('star sand and ascension', () => {
       if (full) throw new Error('disk unavailable');
       real(key, value);
     });
-    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(false);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'common')).ok).toBe(false);
     expect(usePetStore.getState().coins).toBe(600);
     expect(usePetStore.getState().ownedPets[0].quality).toBeUndefined();
     spy.mockRestore(); recoverPartnerTransaction();
@@ -181,16 +215,16 @@ describe('star sand and ascension', () => {
   it('recovered dismantling cannot refund a stale recycled receipt again', async () => {
     localStorage.setItem('csp_quiz_state', JSON.stringify({ totalCorrect: 140 }));
     await usePartnerGrowthStore.getState().load();
-    expect(usePartnerGrowthStore.getState().ascend('one', 'common').ok).toBe(true);
+    expect((await usePartnerGrowthStore.getState().ascend('one', 'common')).ok).toBe(true);
     usePetStore.getState().recyclePet('one');
     const stale = usePetStore.getState().recycledPets;
     const before = localStorage.getItem('csp_pet_data')!;
-    expect(usePetStore.getState().dismantleRecycledPet('one').ok).toBe(true);
+    expect((await usePetStore.getState().dismantleRecycledPet('one')).ok).toBe(true);
     const after = localStorage.getItem('csp_pet_data')!;
     localStorage.setItem(PARTNER_JOURNAL_KEY, JSON.stringify({ version: 1, phase: 'commit', before: { csp_pet_data: before }, after: { csp_pet_data: after }, mirrors: { csp_pet_data: 'pet_data' } }));
     recoverPartnerTransaction(); recoverPartnerTransaction();
     usePetStore.setState({ recycledPets: stale });
-    expect(usePetStore.getState().dismantleRecycledPet('one').ok).toBe(false);
+    expect((await usePetStore.getState().dismantleRecycledPet('one')).ok).toBe(false);
     expect(usePetStore.getState().coins).toBe(580);
   });
 });

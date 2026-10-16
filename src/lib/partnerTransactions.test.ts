@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { commitLocalSnapshots, recoverPartnerTransaction, PARTNER_JOURNAL_KEY } from './partnerTransactions';
+import { commitLocalSnapshots, recoverPartnerTransaction, recoverPartnerState, withPartnerTransactionLock, PARTNER_JOURNAL_KEY } from './partnerTransactions';
+import { createTestLockManager } from '../testSupport/webLocks';
 import { dualSave } from './persist';
 function makeLocalStorage() {
   const data = new Map<string, string>();
@@ -9,6 +10,33 @@ function makeLocalStorage() {
 vi.mock('./persist', () => ({ dualSave: vi.fn() }));
 beforeEach(() => { vi.mocked(dualSave).mockReset(); vi.stubGlobal('localStorage', makeLocalStorage()); });
 describe('durable multi snapshot transactions', () => {
+  it('serializes another window recovery behind an active transaction', async () => {
+    vi.stubGlobal('navigator', { locks: createTestLockManager() });
+    let release!: () => void;
+    let entered!: () => void;
+    const started = new Promise<void>(resolve => { entered = resolve; });
+    const active = withPartnerTransactionLock(async () => {
+      localStorage.setItem(PARTNER_JOURNAL_KEY, JSON.stringify({ version: 1, phase: 'rollback', before: { csp_one: 'old' }, after: { csp_one: 'new' }, mirrors: {} }));
+      localStorage.setItem('csp_one', 'new');
+      entered();
+      await new Promise<void>(resolve => { release = resolve; });
+      localStorage.removeItem(PARTNER_JOURNAL_KEY);
+    });
+    await started;
+    const recovery = recoverPartnerState();
+    await Promise.resolve();
+    expect(localStorage.getItem('csp_one')).toBe('new');
+    expect(localStorage.getItem(PARTNER_JOURNAL_KEY)).not.toBeNull();
+    release(); await active; await recovery;
+    expect(localStorage.getItem('csp_one')).toBe('new');
+  });
+  it('fails closed for paid operations without Web Locks but permits clean read-only recovery', async () => {
+    vi.stubGlobal('navigator', {});
+    const action = vi.fn();
+    await expect(withPartnerTransactionLock(action)).rejects.toThrow('安全交易');
+    expect(action).not.toHaveBeenCalled();
+    await expect(recoverPartnerState()).resolves.toBeUndefined();
+  });
   it('commits all snapshots and removes its journal', () => {
     expect(commitLocalSnapshots({ csp_one: '{"balance":2}', csp_two: '{"balance":3}' })).toBe(true);
     expect(localStorage.getItem('csp_one')).toBe('{"balance":2}');

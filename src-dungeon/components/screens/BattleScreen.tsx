@@ -8,7 +8,7 @@ import { getTrustedQuestionImage, pickStagePlanQuestions, loadQuestionBank } fro
 import { calculateStats } from '../../utils/combatLogic';
 import { partnerTrialStats } from '../../../src/utils/partnerQuality';
 import { usePartnerGrowthStore } from '../../../src/stores/partnerGrowthStore';
-import { recoverPartnerTransaction } from '../../../src/lib/partnerTransactions';
+import { recoverPartnerState } from '../../../src/lib/partnerTransactions';
 import {
   applySchoolAnswerPassive,
   calculateAnswerReward,
@@ -38,7 +38,6 @@ import './BattleScreen.css';
 
 function loadActivePetFromStorage(): OwnedPet {
   try {
-    recoverPartnerTransaction();
     const raw = localStorage.getItem('csp_pet_data');
     if (raw) {
       const data = JSON.parse(raw);
@@ -251,6 +250,18 @@ function scaleBossForPlayer(enemy: PhaserPetConfig, player: PhaserPetConfig | un
 // ─── Main component ───
 
 export default function BattleScreen() {
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    let active = true;
+    void recoverPartnerState().then(() => { if (active) setReady(true); }).catch(reason => { if (active) setError(reason instanceof Error ? reason.message : '伙伴资料恢复失败'); });
+    return () => { active = false; };
+  }, []);
+  if (!ready) return <div role="status">{error || '正在恢复伙伴资料…'}</div>;
+  return <RecoveredBattleScreen />;
+}
+
+function RecoveredBattleScreen() {
   const { dungeonId, stageId } = useParams<{ dungeonId: string; stageId: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
