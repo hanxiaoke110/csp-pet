@@ -1,0 +1,30 @@
+{
+  "version": "1.7.52",
+  "checkedAt": "2026-10-16T15:41:31.257Z",
+  "checks": [
+    {
+      "platform": "darwin-aarch64",
+      "name": "CSP_1.7.52_aarch64.dmg",
+      "bytes": 98135217,
+      "sha256": "ec090d0264e80cd5cb5923516106ab830cb19373acbc9b99c88545ce67cabcab",
+      "signatureVerified": true,
+      "remoteHashVerified": true
+    },
+    {
+      "platform": "darwin-x86_64",
+      "name": "CSP_1.7.52_x64.dmg",
+      "bytes": 99262011,
+      "sha256": "4f6cdfa854720143e1f6615079a973d3a0a11cf2b3d145416f5f2bc59f08bdb6",
+      "signatureVerified": true,
+      "remoteHashVerified": true
+    },
+    {
+      "platform": "windows-x86_64",
+      "name": "CSP_1.7.52_x64-setup.exe",
+      "bytes": 93929070,
+      "sha256": "3c91b35f93cd21b040eed875b1c9e7f1333ca5349c515676c69668096bf0e9c8",
+      "signatureVerified": true,
+      "remoteHashVerified": true
+    }
+  ]
+}
