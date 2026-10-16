@@ -14,6 +14,20 @@ beforeEach(() => {
   localStorage.setItem('csp_pet_data', JSON.stringify({ coins: 1000, ownedPets: [{ petId: 'one', speciesId: 'capi' }, { petId: 'two', speciesId: 'capi' }], foods: { apple: 17 }, activePetId: 'one' }));
 });
 describe('permanent per-instance accessory ownership', () => {
+  it('finishes local hydration with cached art while the optional online request never resolves', async () => {
+    const catalog = { ...structuredClone(BUILTIN_ACCESSORY_CATALOG), version: 2 };
+    catalog.items[1].price = 241;
+    localStorage.setItem('csp_partner_accessory_catalog_cache_v1', JSON.stringify(catalog));
+    const saved = { ...defaultAccessorySnapshot(), equippedByPet: { one: { halo: 'halo-clear' } } };
+    localStorage.setItem(PARTNER_ACCESSORY_KEY, JSON.stringify(saved));
+    const fetcher = vi.fn(() => new Promise<Response>(() => {})); vi.stubGlobal('fetch', fetcher);
+    usePartnerAccessoryStore.setState({ loaded: false });
+    await usePartnerAccessoryStore.getState().load();
+    expect(usePartnerAccessoryStore.getState().loaded).toBe(true);
+    expect(usePartnerAccessoryStore.getState().snapshot).toEqual(saved);
+    expect(usePartnerAccessoryStore.getState().catalog.items[1].price).toBe(241);
+    expect(fetcher).toHaveBeenCalledOnce();
+  }, 300);
   it('charges once, keeps latest durable inventory, and equips two instances independently', async () => {
     usePetStore.setState({ coins: 2, ownedPets: [] });
     expect((await usePartnerAccessoryStore.getState().purchase('orbit-stars', 120)).ok).toBe(true);

@@ -40,9 +40,20 @@ export function validateAccessorySnapshot(value: unknown): value is PartnerAcces
       && Object.entries(loadout).every(([slot, item]) => ['halo', 'orbit', 'trail'].includes(slot) && id(item) && s.ownedIds.includes(item)))
     && typeof s.savedAt === 'string' && Number.isFinite(Date.parse(s.savedAt)));
 }
-export async function loadAccessoryCatalog(): Promise<PartnerAccessoryCatalog> {
+export function cachedAccessoryCatalog(): PartnerAccessoryCatalog {
   let fallback = BUILTIN_ACCESSORY_CATALOG;
   try { const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (validateAccessoryCatalog(cached) && cached.minRendererVersion <= 1) fallback = cached; } catch {}
+  return fallback;
+}
+export function equippedPartnerAccessories(catalog: PartnerAccessoryCatalog, snapshot: PartnerAccessorySnapshot, petId: string): PartnerAccessory[] {
+  if (catalog.minRendererVersion > ACCESSORY_RENDERER_VERSION) return [];
+  return Object.entries(snapshot.equippedByPet[petId] || {}).flatMap(([slot, id]) => {
+    const item = catalog.items.find(i => i.id === id && i.slot === slot);
+    return item && snapshot.ownedIds.includes(id) && supportedAccessory(item) ? [item] : [];
+  });
+}
+export async function loadAccessoryCatalog(): Promise<PartnerAccessoryCatalog> {
+  const fallback = cachedAccessoryCatalog();
   try {
     const response = await fetch('https://cards.cspstudy.top/partner-accessories/catalog.json', { signal: AbortSignal.timeout(5000) });
     if (!response.ok) return fallback;

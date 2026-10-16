@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualLoad } from '../lib/persist';
 import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction, withPartnerReadLock, withPartnerTransactionLock } from '../lib/partnerTransactions';
-import { BUILTIN_ACCESSORY_CATALOG, defaultAccessorySnapshot, loadAccessoryCatalog, PARTNER_ACCESSORY_KEY, PARTNER_ACCESSORY_SQLITE_KEY, supportedAccessory, validateAccessorySnapshot } from '../data/partnerAccessories';
+import { BUILTIN_ACCESSORY_CATALOG, cachedAccessoryCatalog, defaultAccessorySnapshot, loadAccessoryCatalog, PARTNER_ACCESSORY_KEY, PARTNER_ACCESSORY_SQLITE_KEY, supportedAccessory, validateAccessorySnapshot } from '../data/partnerAccessories';
 import type { PartnerAccessoryCatalog, PartnerAccessorySlot, PartnerAccessorySnapshot } from '../types/partnerAccessory';
 import { usePetStore } from './petStore';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
@@ -39,7 +39,10 @@ export const usePartnerAccessoryStore = create<State>((set, get) => ({
           if (raw) localStorage.setItem(PARTNER_ACCESSORY_KEY, raw);
           set({ snapshot, loaded: true, error: '' });
         });
-        set({ catalog: await loadAccessoryCatalog() });
+        // Optional online metadata must never delay opening a battle or wardrobe.
+        // Hydrated local ownership and validated cached/builtin art work immediately.
+        set({ catalog: cachedAccessoryCatalog() });
+        void loadAccessoryCatalog().then(catalog => set({ catalog })).catch(() => {});
       } catch (e) { set({ error: e instanceof Error ? e.message : '配饰资料恢复失败' }); }
     })();
     try { await loading; } finally { loading = null; }

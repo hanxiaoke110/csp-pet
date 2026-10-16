@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_ACCESSORY_CATALOG, defaultAccessorySnapshot, supportedAccessory, validateAccessoryCatalog, validateAccessorySnapshot } from './partnerAccessories';
+import { BUILTIN_ACCESSORY_CATALOG, defaultAccessorySnapshot, equippedPartnerAccessories, supportedAccessory, validateAccessoryCatalog, validateAccessorySnapshot } from './partnerAccessories';
 describe('partner accessory catalog boundary', () => {
   it('ships six bounded cosmetics and one permanent free gift', () => {
     expect(validateAccessoryCatalog(BUILTIN_ACCESSORY_CATALOG)).toBe(true);
@@ -22,5 +22,11 @@ describe('partner accessory catalog boundary', () => {
     const c = structuredClone(BUILTIN_ACCESSORY_CATALOG); c.items.push(c.items[0]); expect(validateAccessoryCatalog(c)).toBe(false);
     expect(validateAccessorySnapshot({ ...defaultAccessorySnapshot(), equippedByPet: { a: { halo: 'halo-prism' } } })).toBe(false);
     expect(validateAccessorySnapshot({ ...defaultAccessorySnapshot(), savedAt: 'bad' })).toBe(false);
+  });
+  it('only passes correctly slotted, owned and supported instance equipment into battle', () => {
+    const snapshot = { ...defaultAccessorySnapshot(), ownedIds: ['halo-clear', 'orbit-stars'], equippedByPet: { one: { halo: 'halo-clear', orbit: 'orbit-stars', trail: 'halo-clear' }, two: { halo: 'halo-prism' } } };
+    expect(equippedPartnerAccessories(BUILTIN_ACCESSORY_CATALOG, snapshot, 'one').map(i => i.id)).toEqual(['halo-clear', 'orbit-stars']);
+    expect(equippedPartnerAccessories(BUILTIN_ACCESSORY_CATALOG, snapshot, 'two')).toEqual([]);
+    expect(equippedPartnerAccessories({ ...BUILTIN_ACCESSORY_CATALOG, minRendererVersion: 2 }, snapshot, 'one')).toEqual([]);
   });
 });

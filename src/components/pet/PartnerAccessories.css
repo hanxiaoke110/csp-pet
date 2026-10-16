@@ -130,6 +130,35 @@
 .partner-fitting-stage > .partner-accessory-layers {
   inset: 25px 0 10px;
 }
+.partner-preview-actor {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.partner-preview-actor.moving {
+  animation: partner-preview-walk 1800ms ease-in-out both;
+}
+.partner-preview-movement {
+  display: block;
+  margin: 12px auto 0;
+  padding: 7px 12px;
+  border: 1px solid #9dbcb5;
+  border-radius: 8px;
+  background: #f4faf5;
+  color: #345c62;
+  font-size: 11px !important;
+}
+.partner-accessory-card .partner-accessory-art .partner-accessory-unavailable {
+  position: static;
+  color: #c6d5dc;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+@keyframes partner-preview-walk {
+  0%, 100% { transform: translateX(0); }
+  35% { transform: translateX(22px); }
+  70% { transform: translateX(-22px); }
+}
 .partner-coordinate {
   position: absolute;
   top: 10px;
@@ -283,6 +312,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .partner-preview-actor.moving { animation: none; }
   .partner-accessory-layers * {
     animation: none !important;
   }
