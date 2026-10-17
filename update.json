@@ -1,19 +1,19 @@
 {
-  "version": "1.7.52",
-  "notes": "⚔️ 试炼对战更清晰！新增五属性攻击特效，可在完整与简化动效间切换；首批高清立绘在线下载，未覆盖的伙伴保留自己的原图\n🌟 老伙伴也能变强：普通→稀有→传说！满足等级、好感、金币和星砂条件后，升品 100% 成功，不抽卡、不消耗其他伙伴，原有等级与昵称保留\n💫 星砂靠积累：不同题目首次答对、不同迷宫首次完成都能推进获取，兼容历史记录，不要求每天打卡\n✨ 六件智子配饰上线：免费星环、棱镜星图、环游星群、暖灯夜航，以及两种移动尾迹！收藏后记得装备，桌面和试炼里都能看到；永久解锁，每位伙伴自由搭配，纯外观不加属性\n🏭 工坊接入自动静态同步，老师上传后会排队发布，客户端保留刷新与缓存兜底；同步可能有延迟\n💾 加强跨窗口购买、升品和备份保护，原有金币、伙伴、题目与迷宫进度保留。配饰和升品记录一并纳入备份，建议更新前先做一次安全备份",
-  "pub_date": "2026-10-16T15:41:31.255Z",
+  "version": "1.7.53",
+  "notes": "🎁 优秀码恢复离线兑换：断网也能领取老师的鼓励，生成方式与奖励金额保持不变；仅北京时间当天有效。\n🛡️ 修复连续点击、回车重复提交导致成功提示被“已兑换”覆盖的问题。\n💾 优秀码奖励与兑换记录一起安全保存，保留旧记录；备份恢复后仍可查重，没有出战智子时经验存入经验池。\n🌐 补偿码继续联网兑换；已有智子、金币与学习进度保留，不自动重发历史奖励。\n📦 需更新客户端到 v1.7.53 后生效。",
+  "pub_date": "2026-10-17T10:19:23.686Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzd1SU5Cb2I2UGVaQWhKZys0bWMvc010a3YrQ1ZTc1NDdVVLV0oya2ZuRUtXSm5iYVAvZlRTamY5ZitqY0twTVhCM0cyeEhYVHRlWWcrWk53T0xDbGdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMTY0ODUwCWZpbGU6Q1NQXzEuNy41Ml9hYXJjaDY0LmRtZwpZNDB6TWpUckxaYzg4SlNEaXJDME1LSU0vSE9XWlVXSjZmYUxESndRMklseXI0TGlKS2lIbmFTVnNzdFBHK1FIMFFDc1kzMy84TjhYRGszSWN3TFNDQT09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.52/CSP_1.7.52_aarch64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzFIcnBoMVM0ZG9jTlRlbG5xVGdHK29Ob0hIS1E5ZVFLOUI4alhjdllXcUREaHVuazRPZGZoTHNBZ1p1Y3Bpb1BpYk9JczFiUk1ta0xtQ2lURm5CaWdJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMjMxOTE1CWZpbGU6Q1NQXzEuNy41M19hYXJjaDY0LmRtZwpudytLK2FMS2Fnak9uWStCR1R2U2N6UWxJMFBkd2VlTndQZWgxNEhlQ0hWUkNOb29IcGFFWVV4WDFyaVdEL3VJSGF2UGx6OEtUNmtVWm9HNGhESkZCUT09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.53/CSP_1.7.53_aarch64.dmg"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3o3WU00c1NPeEVCUDdKZ0FWYlI1OW9PM2JodmVPVVBzbkQzc05WaDI0ak5WQzZBbFV2bWZqTFB0SUJRYWVld01qOWFxSkpDbHVtMS94SGdoNU9iUHdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMTY0Njg4CWZpbGU6Q1NQXzEuNy41Ml94NjQuZG1nCm51SjUzLzJFc0ZJblNPUlJRMFN6KzRTZDhOUUVhWHRDWU5vek5OQVk5NHQ0YkZ1Q2NTZFloSlF1WWVCZDRhcGx0THJwb0N4U3QrL0V5aGNEM3lrYUNBPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.52/CSP_1.7.52_x64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzhIQ0I0Z3ZIb0x0UWVoYkl0U3U2NksxbEN1UGJ3ZlhUdGNMa1J4N0dtWGtraVZxQzhjc25OTlZ3M0NWdzdFa1JHZXRyLzc2ZUJiN3RQUE5LMnM4TGdVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMjMxOTE1CWZpbGU6Q1NQXzEuNy41M194NjQuZG1nClFzZXhxNFZkWGx2dEJRRmFWc1UrcWJWZGttb1Y4RU1SZlhSR3d4SC9wSjFLQ1dlRFh6SXhHeXBjS0pUQXlIeU5mcjQwSGRhUkxaS2ZNOXdPUGJFcERnPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.53/CSP_1.7.53_x64.dmg"
     },
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3lsZlBmL3NKSFpreGxoV2Q1KzZKck40WmxiT290SWhZSDBsWE1MN3JZWGVBbWhUdndaZXlSa2tGQkJJbUQ2OTZUQnJyVUFhSnkraittVlkwbkV3QkFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMTY0OTY1CWZpbGU6Q1NQXzEuNy41Ml94NjQtc2V0dXAuZXhlCkRsWEtGekt1TEtrY2Q3cWR1Y1NYa0kwSmdVQ3ZMbDhpQ3BYOG1kMTdQemd1MFFSY3NtOThFRFZ1cHluU0JQQk50SXlQd0RycjlCR1FhY29pZS9pM0FBPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.52/CSP_1.7.52_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzYzbGJLZjlBYk1rS1NvZy82MjRtWmxIUFRFYWdUQlJoK1I2andZSjc2ZEpvRzc3T3hFaURsSTZHSGxDRm9PR2daOThJYmMrYmg3cWVlb3FHbEFnQVFnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyMjMxODIzCWZpbGU6Q1NQXzEuNy41M194NjQtc2V0dXAuZXhlCnYwYkJ5dzFneElwaEZLN05HdW5wdEJvWUJsY2RzeTVXUURTMGU1YzFMV3p1MHJzTE9hbkw1TkFvL0J1ZHB6TVd6cHNlRXNRTlBBRFBGTkZtczIyaUN3PT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.53/CSP_1.7.53_x64-setup.exe"
     }
   }
 }
