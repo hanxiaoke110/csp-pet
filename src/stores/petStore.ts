@@ -230,7 +230,7 @@ function elementLabel(element: PetElement): string {
   return ({ earth: '地', fire: '火', wind: '风', water: '水', light: '光' } as const)[element];
 }
 
-function calculatePetBattleStats(speciesId: string, level: number, currentHp?: number, quality?: PetTier) {
+export function calculatePetBattleStats(speciesId: string, level: number, currentHp?: number, quality?: PetTier) {
   const base = PET_BASE_STATS[speciesId] || PET_BASE_STATS.default;
   const tier = getPetTier(speciesId);
   const stats = applyPartnerQualityBonus(calculateStats(base, TIER_MULTIPLIERS[tier], level), quality || tier);
