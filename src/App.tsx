@@ -177,7 +177,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.52';
+  const VER = '1.7.53';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -188,11 +188,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>⚔️ 试炼展示更清晰，新增五属性攻击特效与简化动效设置</div>
-          <div>🌟 智子可以升品：满足等级、好感和材料条件后，100% 成功</div>
-          <div>✨ 六件智子配饰：光环、环绕和尾迹，桌面与试炼同步展示</div>
-          <div>🏭 工坊接入自动静态发布，教师端可查看同步状态</div>
-          <div>💾 保留原有智子、金币、学习进度与备份</div>
+          <div>🎁 优秀码恢复离线兑换，断网也能领取；补偿码仍需联网</div>
+          <div>🛡️ 防止连点与回车重复提交，成功提示不再被重复请求覆盖</div>
+          <div>💾 奖励与兑换记录一起安全保存，备份恢复后保留已领取记录</div>
+          <div>🕗 优秀码按北京时间当天有效，老师生成方式与奖励金额不变</div>
+          <div>🐾 保留原有智子、金币和学习进度，不自动重发历史奖励</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

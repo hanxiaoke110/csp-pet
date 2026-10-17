@@ -1,26 +1,22 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { usePetStore } from '../../stores/petStore';
 import { getDeviceId } from '../../utils/crypto';
+import { redeemExcellenceCode } from '../../lib/excellenceRedemption';
 
 const API = 'https://api.cspstudy.top';
-
-// ─── Rewards ───
-const EXCELLENCE_REWARDS: Record<string, { exp: number; coins: number; label: string }> = {
-  '1': { exp: 100, coins: 60, label: '🥇 一等奖' },
-  '2': { exp: 60, coins: 40, label: '🥈 二等奖' },
-  '3': { exp: 30, coins: 20, label: '🥉 三等奖' },
-};
 
 interface Props { onClose: () => void; }
 
 export default function RedeemCode({ onClose }: Props) {
   const [input, setInput] = useState('');
   const [result, setResult] = useState<{ type: 'success' | 'error' | 'already'; message: string } | null>(null);
+  const submitting = useRef(false);
+  const [busy, setBusy] = useState(false);
 
   const petStore = usePetStore();
 
-  const handleRedeem = async () => {
+  const redeem = async () => {
     const code = input.trim();
     if (!code) return;
 
@@ -63,49 +59,24 @@ export default function RedeemCode({ onClose }: Props) {
       return;
     }
 
-    // 2. Excellence code (EXC-*): server-side validation (secret no longer shipped to clients)
-    if (/^EXC-[123]-\d{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.toUpperCase())) {
-      const normalized = code.toUpperCase();
-      try {
-        const used = JSON.parse(localStorage.getItem('csp_used_exc_codes') || '[]');
-        if (used.includes(normalized)) {
-          setResult({ type: 'already', message: '此优秀码已被使用' });
-          return;
-        }
-      } catch {}
-
-      try {
-        const resp = await fetch(`${API}/api/codes/redeem-exc`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code: normalized, device_hash: getDeviceId() }),
-        });
-        const data = await resp.json().catch(() => ({}));
-        if (!resp.ok || data.error) {
-          setResult({ type: 'error', message: data.error || '兑换失败，请稍后重试' });
-          return;
-        }
-        const reward = EXCELLENCE_REWARDS[data.level] || EXCELLENCE_REWARDS['1'];
-        const activePetId = petStore.activePetId;
-        if (activePetId) petStore.addExp(activePetId, data.exp || 0);
-        petStore.addCoins(data.coins || 0);
-        try {
-          const used = JSON.parse(localStorage.getItem('csp_used_exc_codes') || '[]');
-          used.push(normalized);
-          localStorage.setItem('csp_used_exc_codes', JSON.stringify(used));
-        } catch {}
-        setResult({
-          type: 'success',
-          message: `${reward.label} 优秀学生奖励！\n+${data.exp} EXP  +${data.coins} 金币`,
-        });
-      } catch {
-        setResult({ type: 'error', message: '网络连接失败，请稍后重试' });
-      }
+    // 2. Excellence rewards are local; compensation remains online above.
+    if (code.toUpperCase().startsWith('EXC-')) {
+      setResult(await redeemExcellenceCode(code));
       return;
     }
 
     // 3. No match
     setResult({ type: 'error', message: '兑换码无效，请检查输入' });
+  };
+
+  const handleRedeem = async () => {
+    if (submitting.current || !input.trim()) return;
+    submitting.current = true;
+    setBusy(true);
+    try { await redeem(); }
+    catch { setResult({ type: 'error', message: '兑换失败，请稍后重试' }); }
+    finally { setBusy(false); }
+    // Keep the guard until the result is dismissed, including synchronous clicks.
   };
 
   // portal 到 body：避免祖先卡片的 backdrop-filter 让 fixed 定位失效
@@ -121,18 +92,20 @@ export default function RedeemCode({ onClose }: Props) {
             <>
               <p style={{ fontSize: 13, color: '#64748b', marginBottom: 16, textAlign: 'center' }}>
                 输入老师给的神秘代码，解锁隐藏奖励 ٩(ˊᗜˋ*)و
+                <br />优秀码可离线兑换，补偿码需要联网。优秀码仅北京时间当天有效。
               </p>
               <div className="pw-row">
                 <input
                   type="text" className="pw-input" style={{ flex: 1 }}
                   placeholder="输入兑换码..."
                   value={input} onChange={e => setInput(e.target.value)}
+                  disabled={busy}
                   onKeyDown={e => { if (e.key === 'Enter') handleRedeem(); }}
                   autoFocus
                 />
               </div>
               <div style={{ textAlign: 'center', marginTop: 16 }}>
-                <button className="pw-btn" onClick={handleRedeem}>兑换</button>
+                <button className="pw-btn" disabled={busy} onClick={handleRedeem}>{busy ? '兑换中…' : '兑换'}</button>
               </div>
             </>
           ) : (
@@ -147,7 +120,7 @@ export default function RedeemCode({ onClose }: Props) {
               }}>
                 {result.message}
               </div>
-              <button className="pw-btn" onClick={() => { setResult(null); setInput(''); }}>
+              <button className="pw-btn" onClick={() => { submitting.current = false; setResult(null); setInput(''); }}>
                 {result.type === 'success' ? '好的！' : '重新输入'}
               </button>
             </div>

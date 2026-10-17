@@ -245,6 +245,28 @@ jobs:
             fi
           done
 
+          # Do not advance the production updater merely because upload returned
+          # a URL: download every asset and compare with the signed CI package.
+          verify_uploaded() {
+            local source="$1" url="$2" downloaded
+            downloaded=$(mktemp)
+            if ! curl -fsSL --retry 2 --connect-timeout 30 --max-time 240 "$url" -o "$downloaded"; then
+              rm -f "$downloaded"
+              echo "::error::Unable to verify uploaded $(basename "$source")"
+              return 1
+            fi
+            if ! cmp -s "$source" "$downloaded"; then
+              rm -f "$downloaded"
+              echo "::error::Uploaded package differs from signed CI artifact: $(basename "$source")"
+              return 1
+            fi
+            rm -f "$downloaded"
+            echo "Remote package verified: $(basename "$source")" >&2
+          }
+          verify_uploaded "$MAC_ARM" "$URL_MAC_ARM"
+          verify_uploaded "$MAC_INTEL" "$URL_MAC_INTEL"
+          verify_uploaded "$WIN_MSI" "$URL_WIN"
+
           cat > dist/update.json << JSONEOF
           {
             "version": "$VERSION_NUM",
