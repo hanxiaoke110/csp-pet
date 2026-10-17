@@ -1,0 +1,36 @@
+{
+  "version": "1.7.53",
+  "checkedAt": "2026-10-17T10:19:23.687Z",
+  "sourceCommit": "45b6887a2e2322dbe929b815ad8987867e6fe6a0",
+  "ciRun": "39012306250",
+  "nativeWindowsAcceptance": "skipped-by-user",
+  "checks": [
+    {
+      "platform": "darwin-aarch64",
+      "name": "CSP_1.7.53_aarch64.dmg",
+      "bytes": 98153582,
+      "sha256": "1f1217af245504773c0015986278d91a967d5d5585e8b815c2da428629ce6d37",
+      "signatureVerified": true
+    },
+    {
+      "platform": "darwin-x86_64",
+      "name": "CSP_1.7.53_x64.dmg",
+      "bytes": 99262583,
+      "sha256": "8f1ca68b1a7e67aa3b706da9a8d8def5bee71939dced9ea4721532682a618bed",
+      "signatureVerified": true
+    },
+    {
+      "platform": "windows-x86_64",
+      "name": "CSP_1.7.53_x64-setup.exe",
+      "bytes": 93929818,
+      "sha256": "4769b02dbf330a2de2fce17c064e3a73b2a29ea5e08ef0984179b024167c7f72",
+      "signatureVerified": true
+    }
+  ],
+  "updaterReadbackVerified": true,
+  "githubReleasePublished": true,
+  "downloadEndpointsVerified": true,
+  "announcementId": 41,
+  "feishuRevision": 385,
+  "feishuAttachments": "previous-version-preserved-pending-approval"
+}
