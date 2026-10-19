@@ -10,6 +10,32 @@ function makeLocalStorage() {
 vi.mock('./persist', () => ({ dualSave: vi.fn() }));
 beforeEach(() => { vi.mocked(dualSave).mockReset(); vi.stubGlobal('localStorage', makeLocalStorage()); });
 describe('durable multi snapshot transactions', () => {
+  it.each(['commit', 'rollback'] as const)('中文存储记录在 %s 日志恢复时同样兼容', phase => {
+    const key = 'dungeon_healing_recent_C++ 语法（基础）';
+    localStorage.setItem(PARTNER_JOURNAL_KEY, JSON.stringify({ version: 1, phase,
+      before: { [key]: 'old' }, after: { [key]: 'new' }, mirrors: {} }));
+    recoverPartnerTransaction();
+    expect(localStorage.getItem(key)).toBe(phase === 'commit' ? 'new' : 'old');
+    expect(localStorage.getItem(PARTNER_JOURNAL_KEY)).toBeNull();
+  });
+  it.each(['unrelated_key', '__proto__', PARTNER_JOURNAL_KEY, 'csp_bad\nkey', 'dungeon_bad\u0000key', 'csp_bad\u007fkey', 'csp_' + 'x'.repeat(161)])('兼容中文仍拒绝非法存储键 %j', key => {
+    const writer = vi.spyOn(localStorage, 'setItem');
+    expect(commitLocalSnapshots(Object.fromEntries([[key, 'blocked']]))).toBe(false);
+    expect(writer).not.toHaveBeenCalled();
+  });
+  it('中文键写入失败仍回滚金币和最近题目记录', () => {
+    const key = 'dungeon_healing_recent_函数与递归';
+    localStorage.setItem('csp_pet_data', '{"ownedPets":[],"coins":99}');
+    localStorage.setItem(key, 'old');
+    const write = localStorage.setItem.bind(localStorage);
+    vi.spyOn(localStorage, 'setItem').mockImplementation((k, value) => {
+      if (k === key && value === 'new') throw new Error('quota');
+      write(k, value);
+    });
+    expect(commitLocalSnapshots({ csp_pet_data: '{"ownedPets":[],"coins":100}', [key]: 'new' })).toBe(false);
+    expect(localStorage.getItem('csp_pet_data')).toBe('{"ownedPets":[],"coins":99}');
+    expect(localStorage.getItem(key)).toBe('old');
+  });
   it('serializes another window recovery behind an active transaction', async () => {
     vi.stubGlobal('navigator', { locks: createTestLockManager() });
     let release!: () => void;

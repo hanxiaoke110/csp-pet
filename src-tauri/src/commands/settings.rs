@@ -4,6 +4,7 @@ use tauri::State;
 #[tauri::command]
 pub fn get_setting(db: State<Database>, key: String) -> Result<Option<String>, String> {
     let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let conn = conn.as_ref().map_err(|e| e.clone())?;
     let result = conn.query_row("SELECT value FROM settings WHERE key = ?1", [&key], |row| {
         row.get(0)
     });
@@ -17,6 +18,7 @@ pub fn get_setting(db: State<Database>, key: String) -> Result<Option<String>, S
 #[tauri::command]
 pub fn set_setting(db: State<Database>, key: String, value: String) -> Result<(), String> {
     let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let conn = conn.as_ref().map_err(|e| e.clone())?;
     conn.execute(
         "INSERT OR REPLACE INTO settings (key, value) VALUES (?1, ?2)",
         [&key, &value],
@@ -28,6 +30,7 @@ pub fn set_setting(db: State<Database>, key: String, value: String) -> Result<()
 #[tauri::command]
 pub fn get_all_settings(db: State<Database>) -> Result<Vec<(String, String)>, String> {
     let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let conn = conn.as_ref().map_err(|e| e.clone())?;
     let mut stmt = conn
         .prepare("SELECT key, value FROM settings")
         .map_err(|e| e.to_string())?;

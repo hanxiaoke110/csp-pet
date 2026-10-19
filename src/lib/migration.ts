@@ -24,26 +24,29 @@ export async function migrateLocalStorageToSqlite(): Promise<void> {
   try {
     const done = await sqliteGet(MIGRATION_FLAG);
     if (done === '1') return; // Already migrated
-  } catch {
-    // If we can't check the flag, proceed with migration
-  }
+  } catch { return; }
 
   console.log('[migration] Starting localStorage → SQLite migration...');
   let migrated = 0;
+  let failed = false;
 
   for (const [sqlKey, lsKey] of Object.entries(CORE_KEYS)) {
     try {
       const raw = localStorage.getItem(lsKey);
-      if (raw !== null) {
+      const existing = await sqliteGet(sqlKey);
+      if (raw !== null && existing === null) {
+        JSON.parse(raw);
         await sqliteSet(sqlKey, raw);
         migrated++;
       }
     } catch (e) {
+      failed = true;
       console.error(`[migration] Failed to migrate ${lsKey}:`, e);
     }
   }
 
   // Mark migration complete
+  if (failed) return;
   try {
     await sqliteSet(MIGRATION_FLAG, '1');
     console.log(`[migration] Done. Migrated ${migrated}/${Object.keys(CORE_KEYS).length} keys.`);

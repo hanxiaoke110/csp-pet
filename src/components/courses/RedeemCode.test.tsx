@@ -56,7 +56,7 @@ it('CMP still sends one online request, blocks in-flight clicks, and permits ret
   const button = redeemButton();
   await act(async () => { button.click(); button.click(); });
   expect(request).toHaveBeenCalledTimes(1);
-  expect(request.mock.calls[0][0]).toBe('https://api.cspstudy.top/api/codes/redeem');
+  expect(request.mock.calls[0][0]).toBe('https://api.cspstudy.top/api/codes/redeem-v2');
   expect(document.querySelector('input')!.disabled).toBe(true);
   await act(async () => finish(new Response(JSON.stringify({ error: '测试：未兑换' }), { status: 400 })));
   expect(document.body.textContent).toContain('测试：未兑换');
@@ -65,7 +65,7 @@ it('CMP still sends one online request, blocks in-flight clicks, and permits ret
   await enter('cmp-test');
   await act(async () => redeemButton().click());
   expect(request).toHaveBeenCalledTimes(2);
-  await act(async () => finish(new Response(JSON.stringify({ success: true, coins: 20, exp: 30 }), { status: 200 })));
+  await act(async () => finish(new Response(JSON.stringify({ success: true, receipt_id: 'cmp-v2:CMP-TEST', coins: 20, exp: 30 }), { status: 200 })));
   expect(document.body.textContent).toContain('补偿到账');
   expect(usePetStore.getState().coins).toBe(220);
   expect(usePetStore.getState().expPool).toBe(30);

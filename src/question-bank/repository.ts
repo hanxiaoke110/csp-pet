@@ -3,6 +3,7 @@ import type {
   QuestionBankManifest,
   QuestionChannel,
 } from './types';
+import { readQuestionCache, writeQuestionCache } from './cacheStorage';
 
 const BUNDLED_BASE = '/course-data/question-bank-v2';
 const REMOTE_BASE = 'https://api.cspstudy.top/api/question-bank/v2';
@@ -82,27 +83,41 @@ async function sha256(value: string): Promise<string> {
   return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
-function readCache(key: string): CachedRevision | null {
+async function readCache(key: string): Promise<CachedRevision | null> {
   try {
+    const stored = await readQuestionCache(key === V2_KEYS.current ? 'current' : 'previous');
+    if (validCacheShape(stored)) return stored;
     const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) as CachedRevision : null;
+    const parsed = raw ? JSON.parse(raw) : null;
+    return validCacheShape(parsed) ? parsed : null;
   } catch {
     return null;
   }
 }
 
+function validCacheShape(cache: any): cache is CachedRevision {
+  return Boolean(cache && typeof cache === 'object' && !Array.isArray(cache)
+    && cache.manifest?.schemaVersion === 2 && Number.isSafeInteger(cache.manifest.contentRevision)
+    && cache.manifest.files && typeof cache.manifest.files === 'object'
+    && cache.files && typeof cache.files === 'object' && !Array.isArray(cache.files));
+}
+
 async function validateCache(cache: CachedRevision | null, requiredFiles: string[]): Promise<boolean> {
-  if (!cache || cache.manifest.schemaVersion !== 2) return false;
+  if (!validCacheShape(cache)) return false;
   for (const logicalName of requiredFiles) {
     const raw = cache.files[logicalName];
     const expected = cache.manifest.files[logicalName]?.sha256;
-    if (!raw || !expected || await sha256(raw) !== expected) return false;
+    if (typeof raw !== 'string' || !expected || await sha256(raw) !== expected) return false;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(logicalName === 'exam-manifests.json' ? parsed.papers : parsed.questions)) return false;
+    } catch { return false; }
   }
   return true;
 }
 
 async function cacheMatchesManifest(cache: CachedRevision | null, manifest: QuestionBankManifest): Promise<boolean> {
-  if (!cache || cache.manifest.schemaVersion !== 2) return false;
+  if (!validCacheShape(cache)) return false;
   for (const logicalName of Object.keys(manifest.files)) {
     const raw = cache.files[logicalName];
     const expected = manifest.files[logicalName]?.sha256;
@@ -140,7 +155,7 @@ async function fetchText(url: string): Promise<string> {
   try {
     const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
     if (!response.ok) throw new Error(`Question bank HTTP ${response.status}: ${url}`);
-    return response.text();
+    return await response.text();
   } finally {
     clearTimeout(timer);
   }
@@ -188,10 +203,10 @@ export async function beginQuestionBankSession(requiredChannels: QuestionChannel
     ...requiredChannels.map(channel => LOGICAL_FILES[channel]),
     ...(requiredChannels.includes('exam') ? ['exam-manifests.json'] : []),
   ])];
-  const [current, previous] = [
+  const [current, previous] = await Promise.all([
     readCache(V2_KEYS.current),
     readCache(V2_KEYS.previous),
-  ];
+  ]);
   const [currentValid, previousValid] = await Promise.all([
     validateCache(current, requiredFiles),
     validateCache(previous, requiredFiles),
@@ -212,10 +227,11 @@ export async function beginQuestionBankSession(requiredChannels: QuestionChannel
   return parseSession(selected.data.cache, requiredChannels, selected.data.source);
 }
 
-export async function refreshQuestionBankV2(): Promise<boolean> {
+async function refresh(): Promise<boolean> {
   const manifest = JSON.parse(await fetchText(`${REMOTE_BASE}/manifest`)) as QuestionBankManifest;
-  const current = readCache(V2_KEYS.current);
-  const previous = readCache(V2_KEYS.previous);
+  if (manifest.schemaVersion !== 2 || !Number.isSafeInteger(manifest.contentRevision) || !manifest.files || !Object.keys(manifest.files).length
+    || Object.entries(manifest.files).some(([name, entry]) => !/^[a-z0-9-]+\.json$/.test(name) || !/^[a-f0-9]{64}$/.test(entry.sha256))) throw new Error('在线题库目录格式异常');
+  const [current, previous] = await Promise.all([readCache(V2_KEYS.current), readCache(V2_KEYS.previous)]);
 
   // 即使 manifest 版本号相同，也要校验缓存文件内容与远程 manifest 的 sha256 是否一致：
   // 远程数据可能修复过但版本号没变，只有内容级校验通过才认为缓存可信，
@@ -238,7 +254,7 @@ export async function refreshQuestionBankV2(): Promise<boolean> {
 
   // 当前缓存不可信，但 previous 与远程一致：直接提升为 current，避免重复下载
   if (previousOk && previous) {
-    localStorage.setItem(V2_KEYS.current, JSON.stringify(previous));
+    await writeQuestionCache(previous, null);
     return true;
   }
 
@@ -259,7 +275,16 @@ export async function refreshQuestionBankV2(): Promise<boolean> {
     return [logicalName, raw];
   })));
   const next: CachedRevision = { manifest, files, cachedAt: new Date().toISOString() };
-  localStorage.setItem(V2_KEYS.current, JSON.stringify(next));
+  const validPrevious = current && await validateCache(current, Object.values(LOGICAL_FILES)) ? current : previous && await validateCache(previous, Object.values(LOGICAL_FILES)) ? previous : null;
+  if (!await validateCache(next, Object.values(LOGICAL_FILES))) throw new Error('在线题库内容格式异常');
+  await writeQuestionCache(next, validPrevious);
+  localStorage.removeItem(V2_KEYS.current);
   localStorage.removeItem(V2_KEYS.previous);
   return true;
+}
+
+let refreshing: Promise<boolean> | null = null;
+export function refreshQuestionBankV2(): Promise<boolean> {
+  if (!refreshing) refreshing = refresh().finally(() => { refreshing = null; });
+  return refreshing;
 }

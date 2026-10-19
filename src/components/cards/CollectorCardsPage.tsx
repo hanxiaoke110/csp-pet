@@ -66,10 +66,10 @@ export default function CollectorCardsPage() {
     }
   };
 
-  const buyCard = (card: CollectorCardDefinition) => {
-    const result = purchase(card.id, card.price);
+  const buyCard = async (card: CollectorCardDefinition) => {
+    const result = await purchase(card.id, card.price);
     if (!result.ok) {
-      setMessage(result.reason === 'coins' ? `还差 ${Math.max(0, card.price - coins)} 金币` : '这张卡已经收藏过了');
+      setMessage(result.reason === 'coins' ? `还差 ${Math.max(0, card.price - coins)} 金币` : result.reason === 'owned' ? '这张卡已经收藏过了' : '收藏未能保存，未扣款，请稍后重试');
       return;
     }
     setReveal(card);

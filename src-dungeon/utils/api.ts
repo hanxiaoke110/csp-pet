@@ -1,4 +1,6 @@
 import { CURRENT_DUNGEON_SEASON_ID } from '../data/season';
+import { fetchJson } from '../../src/lib/fetchJson';
+import { enqueueDungeonSync, flushDungeonSync, type SyncScope, type SyncResult } from './syncOutbox';
 
 // 潜龙闭关 — API 客户端
 const API_BASE = 'https://api.cspstudy.top';
@@ -66,14 +68,7 @@ async function apiCall<T>(
     options.body = JSON.stringify({ ...body, device_hash: dh, class_code: cc, season_id: CURRENT_DUNGEON_SEASON_ID });
   }
 
-  const resp = await fetch(url.toString(), options);
-  const data = await resp.json();
-
-  if (!resp.ok || data.error) {
-    throw new Error(data.error || `API error: ${resp.status}`);
-  }
-
-  return data as T;
+  return fetchJson<T>(url.toString(), options);
 }
 
 // ── API functions ──
@@ -94,8 +89,18 @@ export async function registerPlayer(
   });
 }
 
-export async function syncProgress(playerData: Record<string, unknown>): Promise<{ success: boolean }> {
-  return apiCall('/api/dungeon/sync', 'POST', playerData);
+function syncScope(): SyncScope {
+  return { deviceHash: getStoredHash(), classCode: getStoredClassCode(), seasonId: CURRENT_DUNGEON_SEASON_ID };
+}
+export async function flushPendingDungeonSync(): Promise<SyncResult> {
+  return flushDungeonSync(syncScope(), (patch, scope) => fetchJson(`${API_BASE}/api/dungeon/sync`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...patch, device_hash: scope.deviceHash, class_code: scope.classCode, season_id: scope.seasonId }),
+  }));
+}
+export async function syncProgress(playerData: Record<string, unknown>): Promise<SyncResult> {
+  await enqueueDungeonSync(syncScope(), playerData);
+  return flushPendingDungeonSync();
 }
 
 // 战斗结束上报：服务端校验、写 dungeon_attempts、按固定规则发金币。前端不传 earned_reward（服务端自算）。

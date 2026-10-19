@@ -1,4 +1,5 @@
 import { dualSave } from './persist';
+import { storageWritesAllowed } from './restoreBarrier';
 
 export const JOURNAL_KEY = 'csp_equipment_transaction';
 export const EQUIPMENT_STORAGE_KEY = 'csp_trial_equipment_v1';
@@ -19,6 +20,7 @@ export function recoverEquipmentTransaction(): void {
 }
 
 export function commitEquipmentTransaction(equipment: unknown, coins: number): boolean {
+  if (!storageWritesAllowed()) return false;
   if (!Number.isSafeInteger(coins) || coins < 0) return false;
   try {
   const previousPet = localStorage.getItem('csp_pet_data');

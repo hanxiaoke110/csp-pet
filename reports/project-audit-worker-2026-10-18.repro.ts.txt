@@ -1,0 +1,53 @@
+// ARCHIVED baseline diagnostic; intentionally asserts former defects. Synthetic requests only.
+import { expect, it } from 'vitest';
+import worker from '../cf-workers/api.js';
+function fixture() {
+  const code = { code: 'CMP-SYNTHETIC-AUDIT', type: 'comp', coins: 100, exp: 200, status: 'unused', class_code: '' };
+  let claimed = false;
+  const updates: unknown[][] = [];
+  const db = {
+    async exec() {},
+    prepare(sql: string) {
+      let bindings: unknown[] = [];
+      return {
+        bind(...args: unknown[]) { bindings = args; return this; },
+        async first() {
+          if (sql.includes("key='schema_version'")) return { value: '999999' };
+          if (sql.includes('FROM generated_codes')) return code;
+          if (sql.includes('FROM class_students')) return { status: 'active' };
+          return null;
+        },
+        async run() {
+          if (sql.includes('INSERT OR IGNORE INTO comp_claims')) {
+            const changes = claimed ? 0 : 1; claimed = true; return { meta: { changes } };
+          }
+          if (sql.includes("UPDATE generated_codes SET status='used'")) code.status = 'used';
+          if (sql.includes('UPDATE class_students SET student_name=')) updates.push(bindings);
+          return { meta: { changes: 1 } };
+        },
+        async all() { return { results: [] }; },
+      };
+    },
+  };
+  const call = (path: string, body: unknown) => worker.fetch(new Request(`https://audit.invalid${path}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+  }), { DB: db, ADMIN_TOKEN: 'synthetic-only' } as never, { waitUntil() {} } as never);
+  return { call, updates, code };
+}
+
+it('D9: after a successful CMP response is lost, the same device cannot recover its reward receipt', async () => {
+  const f = fixture(); const body = { code: f.code.code, device_hash: 'synthetic-device' };
+  const lostResponse = await f.call('/api/codes/redeem', body);
+  expect(lostResponse.status).toBe(200);
+  const retry = await f.call('/api/codes/redeem', body);
+  expect(retry.status).toBe(400);
+  expect(await retry.json()).toMatchObject({ error: '此补偿码已被兑换' });
+});
+
+it('D10: the settings update request without phone clears the server phone', async () => {
+  const f = fixture();
+  const response = await f.call('/api/classes/update-info', { class_code: 'SYNTHETIC', device_hash: 'synthetic-device', student_name: '测试' });
+  expect(response.status).toBe(200);
+  expect(f.updates).toHaveLength(1);
+  expect(f.updates[0][1]).toBe('');
+});

@@ -17,7 +17,6 @@ import AdminPage from './components/admin/AdminPage';
 import LearningResourcesPage from './components/resources/LearningResourcesPage';
 import AnnouncementPage from './components/announcements/AnnouncementPage';
 import FocusPage from './components/focus/FocusPage';
-import FocusRuntime from './components/focus/FocusRuntime';
 import DungeonEmbed from '../src-dungeon/DungeonEmbed';
 import { APP_ROUTE_CHANGE_EVENT } from '../src-dungeon/utils/routeBridge';
 import { refreshQuestionBankV2 } from './question-bank/repository';
@@ -207,7 +206,6 @@ function AppLayout() {
   return (
     <>
       <PetActionHandler />
-      <FocusRuntime />
       <WelcomeModal />
       <ChangelogModal />
       <AppShell>
@@ -319,7 +317,9 @@ function App() {
   // 一个 pet 窗口里渲染，pet-data-sync 事件驱动，无独立窗口可恢复。
 
   useEffect(() => {
-    refreshQuestionBankV2().catch(() => {});
+    refreshQuestionBankV2().catch(() => {
+      window.dispatchEvent(new CustomEvent('question-bank-update-warning'));
+    });
     setLoading(false);
     // 窗口尺寸/位置由 tauri-plugin-window-state 在启动阶段同步恢复，无需前端介入
   }, []);

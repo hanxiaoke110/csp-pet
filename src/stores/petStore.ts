@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualSave, dualLoad } from '../lib/persist';
+import { storageWritesAllowed } from '../lib/restoreBarrier';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
 import { commitLocalSnapshots, recoverPartnerTransaction, withPartnerReadLock, withPartnerTransactionLock } from '../lib/partnerTransactions';
 import { ascensionRefund, resolvePartnerQuality } from '../utils/partnerQuality';
@@ -15,6 +16,7 @@ import { grantTickets } from '../utils/crypto';
 
 interface PetState {
   loaded: boolean;
+  loadError: string | null;
   activePetId: string | null;
   ownedPets: OwnedPet[];
   coins: number;
@@ -281,6 +283,7 @@ export function claimedCoinAchievementFloor(raw: string | null): number {
 
 export const usePetStore = create<PetState>((set, get) => ({
   loaded: false,
+  loadError: null,
   activePetId: null,
   ownedPets: [],
   coins: 200,
@@ -1027,6 +1030,7 @@ export const usePetStore = create<PetState>((set, get) => ({
   checkCollectionRewards: () => {},
 
   save: () => {
+    if (get().loadError || !storageWritesAllowed()) return;
     const trialCoinSettlements = get().trialCoinSettlements;
     const { ownedPets, activePetId, coins, maxCoinBalance: storedMaxCoinBalance, foods, pendingExp, pendingCoins, expPool, weeklyPassiveClaimWeek, renameCards, foodItems, wishTickets, gachaHistory, gachaDailyPulls, gachaDate, gachaPity, trainingCampActive, trainingCampEndDate, trainingCampFoodsClaimed, lastActiveAt, dailyHungerConsumed, hungerDate, autoFeederOwned, autoFeederEnabled, expShopDate, expCapsuleBought, expCoreBought, recycledPets, companionSlots, desktopCompanionIds } = get();
     const maxCoinBalance = Math.max(
@@ -1043,13 +1047,13 @@ export const usePetStore = create<PetState>((set, get) => ({
 
   load: async () => {
     let recoveryComplete = false;
+    set({ loadError: null });
     try {
       return await withPartnerReadLock(async () => {
       recoverPartnerTransaction();
       recoverEquipmentTransaction();
-      recoveryComplete = true;
       const raw = await dualLoad('pet_data', 'csp_pet_data');
-      if (!raw) return false;
+      if (!raw) { recoveryComplete = true; return false; }
       const data = JSON.parse(raw);
       if (Array.isArray(data.ownedPets)) {
         set({ trialCoinSettlements: Array.isArray(data.trialCoinSettlements) ? data.trialCoinSettlements.filter((id: unknown) => typeof id === 'string').slice(-256) : [] });
@@ -1167,11 +1171,13 @@ export const usePetStore = create<PetState>((set, get) => ({
             gachaRewardMigrationDone: true,
           }));
         }
+        recoveryComplete = true;
         return true;
       }
       return false;
       });
-    } catch { /* corrupted data — do not overwrite it with defaults */
+    } catch (error) { /* corrupted data — do not overwrite it with defaults */
+      set({ loadError: error instanceof Error ? error.message : '存档读取失败，请保留数据并重试' });
       return false;
     } finally {
       // The empty initial list is not evidence that an existing student has no pet.

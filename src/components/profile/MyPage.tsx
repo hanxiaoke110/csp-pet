@@ -206,10 +206,11 @@ function WardrobeCard({ item, owned, equipped, previewing, cardCount, onToast, o
       setDownloading(false);
       return;
     }
-    const result = purchase(item.id);
+    const result = await purchase(item.id);
     setDownloading(false);
     if (result.ok) onToast(`「${item.name}」已永久解锁`);
     else if (result.reason === 'coins') onToast('金币还不够，再完成一些学习任务吧');
+    else onToast('未能保存购买，未扣款，请稍后重试');
   };
 
   return (
@@ -308,10 +309,10 @@ export default function MyPage() {
   useEffect(() => { void loadWardrobeCatalog().then(() => setCatalogReady(value => value + 1)); }, []);
   useEffect(() => { setNameDraft(nickname); }, [nickname]);
   const notify = (text: string) => { setToast(text); window.setTimeout(() => setToast(''), 2600); };
-  const saveName = () => {
-    const result = changeNickname(nameDraft);
+  const saveName = async () => {
+    const result = await changeNickname(nameDraft);
     if (result.ok) { setEditingName(false); notify(result.cost ? `昵称修改成功，消耗 ${result.cost} 金币` : '首次昵称修改免费'); }
-    else notify(result.reason === 'coins' ? '金币不足' : result.reason === 'long' ? '昵称最多 12 个字' : '请换一个新昵称');
+    else notify(result.reason === 'storage' ? '昵称未保存，金币未扣除，请稍后重试' : result.reason === 'coins' ? '金币不足' : result.reason === 'long' ? '昵称最多 12 个字' : '请换一个新昵称');
   };
 
   if (!loaded) return <div className="my-page-loading">正在打开你的成长档案…</div>;

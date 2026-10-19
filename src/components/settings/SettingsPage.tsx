@@ -148,11 +148,17 @@ function ClassBindingSection() {
     const classCode = localStorage.getItem('csp_class_code');
     if (classCode) {
       try {
-        await fetch(`${API}/api/classes/update-info`, {
+        const response = await fetch(`${API}/api/classes/update-info`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ class_code: classCode, device_hash: getDeviceId(), student_name: realName.trim() || nickname.trim() }),
+          body: JSON.stringify({ class_code: classCode, device_hash: getDeviceId(), student_name: realName.trim() || nickname.trim(), phone: phone.trim() }),
+          signal: AbortSignal.timeout(15000),
         });
-      } catch {}
+        const result = await response.json();
+        if (!response.ok || result.error) throw new Error(result.error || '服务器未确认更新');
+      } catch (error) {
+        setMsg(`已保存到本机，但班级资料尚未同步：${error instanceof Error ? error.message : '网络异常'}。请稍后再次保存。`);
+        return;
+      }
     }
     setShowModal(false);
     setMsg('✅ 信息已更新');
@@ -354,10 +360,10 @@ function BackupSection() {
       // 先把目标读入内存，再保存当前快照，避免轮换时删到目标。
       const data = target.data || await readAutomaticBackup(target.info.name);
       await createAutomaticBackup('before-restore');
-      const result = await applyBackup(data);
+      const result = await applyBackup(data, { preserveMissing: true });
       setDoneInfo(result);
     } catch (e: any) {
-      setMsg({ text: `❌ 恢复失败：${e}。现有数据未受影响`, ok: false });
+      setMsg({ text: `❌ 恢复失败：${e instanceof Error ? e.message : String(e)}。请保留原备份和当前数据，不要清空数据或卸载应用。`, ok: false });
     } finally {
       setBusy(null);
     }
@@ -393,7 +399,7 @@ function BackupSection() {
       {pendingRestore && (
         <ConfirmModal
           icon="↩" title="确认恢复备份"
-          desc={`文件：${pendingRestore.info.name}\n备份时间：${new Date(pendingRestore.info.exportedAt).toLocaleString('zh-CN')}\n内容：${pendingRestore.summary.petCount} 只智子、${pendingRestore.summary.coins} 金币、${pendingRestore.summary.completedCourses} 条历史学习记录。\n当前数据将恢复到该时间点，恢复前会再自动保存一份。${pendingRestore.warning ? `\n⚠️ ${pendingRestore.warning}` : ''}`}
+          desc={`文件：${pendingRestore.info.name}\n备份时间：${new Date(pendingRestore.info.exportedAt).toLocaleString('zh-CN')}\n内容：${pendingRestore.summary.petCount} 只智子、${pendingRestore.summary.coins} 金币、${pendingRestore.summary.completedCourses} 条历史学习记录。\n备份内的数据将恢复到该时间点；备份未包含的本机个人档案、日记、专注记录和典藏卡将保留，不会自动删除。请勿将他人的备份导入自己的账号。恢复前会再自动保存一份。${pendingRestore.warning ? `\n⚠️ ${pendingRestore.warning}` : ''}`}
           confirmText="确认恢复"
           onCancel={() => setPendingRestore(null)}
           onConfirm={handleConfirmRestore}
@@ -403,9 +409,9 @@ function BackupSection() {
       {doneInfo && (
         <ConfirmModal
           icon="✅" title="恢复完成"
-          desc={`已恢复 ${doneInfo.lsCount} 项设置与进度。\n重启应用后全部生效。`}
+          desc={`已恢复 ${doneInfo.lsCount} 项设置与进度。\n重启应用后全部生效。${doneInfo.sqliteFailures ? `\n注意：${doneInfo.sqliteFailures} 项数据库镜像写入失败，本地恢复已完成。请保留原备份并检查应用目录权限。` : ''}`}
           confirmText="立即重启"
-          onCancel={() => setDoneInfo(null)}
+          onCancel={() => window.location.reload()}
           onConfirm={() => window.location.reload()}
         />
       )}

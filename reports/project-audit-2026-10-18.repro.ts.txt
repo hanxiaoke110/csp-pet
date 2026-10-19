@@ -1,0 +1,125 @@
+// ARCHIVED baseline diagnostic for a396f14; intentionally asserts former defects.
+// Synthetic records only. Never touches a real app profile or the user's backup.
+import { beforeEach, afterEach, expect, it, vi } from 'vitest';
+import { invoke } from '@tauri-apps/api/core';
+import { dualLoad } from '../src/lib/persist';
+import { sqliteSet } from '../src/lib/sqlite-storage';
+import { applyBackup, type BackupFile } from '../src/lib/backup';
+import { usePetStore } from '../src/stores/petStore';
+import { useCollectorCardStore, COLLECTOR_CARD_LS_KEY } from '../src/stores/collectorCardStore';
+import { beginQuestionBankSession, refreshQuestionBankV2, V2_KEYS } from '../src/question-bank/repository';
+import { readFileSync } from 'node:fs';
+import { createTestLockManager } from '../src/testSupport/webLocks';
+
+vi.mock('@tauri-apps/api/core', () => ({ invoke: vi.fn() }));
+vi.mock('@tauri-apps/api/event', () => ({ emit: vi.fn().mockResolvedValue(undefined) }));
+let values: Map<string,string>;
+let sql: Map<string,string>;
+let blockedKey = '';
+const snapshot = (coins: number) => JSON.stringify({ ownedPets: [], coins, savedAt: '2026-10-01T00:00:00Z' });
+const backup = (coins: number): BackupFile => ({
+  format: 'csp-pet-backup', version: 1, appVersion: '1.7.53', exportedAt: '2026-10-01T00:00:00Z',
+  localStorage: { csp_pet_data: snapshot(coins) }, sqlite: { pet_data: snapshot(coins) }, sprites: {},
+});
+beforeEach(() => {
+  values = new Map(); sql = new Map(); blockedKey = '';
+  vi.stubGlobal('localStorage', {
+    getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => {
+      if (blockedKey && key.startsWith(blockedKey)) throw new DOMException('quota', 'QuotaExceededError');
+      values.set(key, String(value));
+    },
+    removeItem: (key: string) => values.delete(key),
+  });
+  vi.stubGlobal('window', { __TAURI_INTERNALS__: { invoke: () => {} }, dispatchEvent: () => {} });
+  vi.stubGlobal('navigator', { locks: createTestLockManager() });
+  vi.mocked(invoke).mockReset().mockImplementation(async (command, args: any) => {
+    if (command === 'get_setting') return sql.get(args.key) ?? null;
+    if (command === 'set_setting') { sql.set(args.key, args.value); return undefined; }
+    return null;
+  });
+  vi.spyOn(console, 'error').mockImplementation(() => {});
+  usePetStore.setState({ coins: 1000, ownedPets: [], loaded: true });
+  useCollectorCardStore.setState({ ownedCards: [], loaded: true });
+});
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+it('D1: a corrupt local wallet blocks recovery from a valid SQLite wallet', async () => {
+  values.set('csp_pet_data', '{broken'); sql.set('pet_data', snapshot(321));
+  expect(await dualLoad('pet_data', 'csp_pet_data')).toBe('{broken');
+  usePetStore.setState({ loaded: false });
+  expect(await usePetStore.getState().load()).toBe(false);
+  expect(usePetStore.getState().loaded).toBe(true);
+  expect(usePetStore.getState().ownedPets).toHaveLength(0);
+});
+
+it('D2: a post-restore save overwrites the restored wallet with stale memory', async () => {
+  await applyBackup(backup(4321));
+  expect(JSON.parse(values.get('csp_pet_data')!).coins).toBe(4321);
+  expect(usePetStore.getState().coins).toBe(1000);
+  usePetStore.getState().save();
+  expect(JSON.parse(values.get('csp_pet_data')!).coins).toBe(1000);
+});
+
+it('D3: importing an older backup retains target-only user data', async () => {
+  const oldProfile = JSON.stringify({ nickname: 'synthetic-other-profile', journal: { '2026-01-01': 'synthetic' } });
+  values.set('csp_profile_data', oldProfile);
+  await applyBackup(backup(4321));
+  expect(values.get('csp_profile_data')).toBe(oldProfile);
+});
+
+it('D4: sqliteSet reports success when the native database write fails', async () => {
+  vi.mocked(invoke).mockRejectedValue(new Error('synthetic SQLITE_FULL'));
+  await expect(sqliteSet('pet_data', snapshot(4321))).resolves.toBeUndefined();
+  expect(sql.size).toBe(0);
+});
+
+it('D5: a failed card save still reports purchase success and retains the charge', async () => {
+  blockedKey = COLLECTOR_CARD_LS_KEY;
+  vi.mocked(invoke).mockImplementation(async (command, args: any) => {
+    if (command === 'get_setting') return sql.get(args.key) ?? null;
+    if (command === 'set_setting') {
+      if (args.key === 'collector_cards') throw new Error('synthetic SQLITE_FULL');
+      sql.set(args.key, args.value);
+    }
+    return null;
+  });
+  expect(useCollectorCardStore.getState().purchase('card-synthetic', 888)).toEqual({ ok: true });
+  expect(JSON.parse(values.get('csp_pet_data')!).coins).toBe(112);
+  expect(values.has(COLLECTOR_CARD_LS_KEY)).toBe(false);
+  expect(sql.has('collector_cards')).toBe(false);
+  useCollectorCardStore.setState({ ownedCards: [], loaded: false });
+  await useCollectorCardStore.getState().load();
+  expect(useCollectorCardStore.getState().ownedCards).toHaveLength(0);
+});
+
+it('D6: parseable but malformed cache prevents even attempting bundled questions', async () => {
+  values.set(V2_KEYS.current, '{}');
+  const fetchMock = vi.fn(); vi.stubGlobal('fetch', fetchMock);
+  await expect(beginQuestionBankSession(['daily'])).rejects.toThrow();
+  expect(fetchMock).not.toHaveBeenCalled();
+});
+
+it('D7: the current complete bank cannot fit into a synthetic 5 MiB localStorage', async () => {
+  const base = 'public/course-data/question-bank-v2/';
+  const manifest = JSON.parse(readFileSync(base + 'manifest.json', 'utf8'));
+  const files = Object.fromEntries(Object.entries(manifest.files).map(([name, entry]: [string, any]) => [name, readFileSync(base + entry.path, 'utf8')]));
+  const payload = JSON.stringify({ manifest, files, cachedAt: new Date().toISOString() });
+  expect(payload.length * 2).toBeGreaterThan(5 * 1024 * 1024);
+  expect(Buffer.byteLength(payload)).toBeGreaterThan(5 * 1024 * 1024);
+  vi.stubGlobal('localStorage', {
+    getItem: (key: string) => values.get(key) ?? null,
+    removeItem: (key: string) => values.delete(key),
+    setItem: (key: string, value: string) => {
+      if (2 * (key.length + value.length) > 5 * 1024 * 1024) throw new DOMException('quota', 'QuotaExceededError');
+      values.set(key, value);
+    },
+  });
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => {
+    if (url === '/course-data/question-bank-v2/manifest.json') return new Response(JSON.stringify({ ...manifest, contentRevision: manifest.contentRevision - 1 }));
+    if (url.endsWith('/manifest')) return new Response(JSON.stringify(manifest));
+    return new Response(files[url.split('/').at(-1)!]);
+  }));
+  await expect(refreshQuestionBankV2()).rejects.toMatchObject({ name: 'QuotaExceededError' });
+  expect(values.has(V2_KEYS.current)).toBe(false);
+});

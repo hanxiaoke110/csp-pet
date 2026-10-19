@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { dualLoad, dualSave } from '../lib/persist';
 import { DEFAULT_OWNED_WARDROBE, PROFILE_AVATARS, WARDROBE_BY_ID } from '../data/wardrobe';
 import type { ProfileSnapshot, WardrobeCategory } from '../types/profile';
-import { usePetStore } from './petStore';
+import { walletTransaction } from '../lib/walletTransaction';
 
 const LS_KEY = 'csp_profile_data';
 const SQLITE_KEY = 'profile_data';
@@ -21,10 +21,10 @@ interface ProfileState extends ProfileSnapshot {
   loaded: boolean;
   load: () => Promise<void>;
   initialize: (zodiacId: string, constellationId: string) => boolean;
-  purchase: (itemId: string) => { ok: boolean; reason?: 'owned' | 'coins' | 'not-for-sale' | 'invalid' };
+  purchase: (itemId: string) => Promise<{ ok: boolean; reason?: string }>;
   grant: (itemId: string) => void;
   equip: (itemId: string) => boolean;
-  changeNickname: (nickname: string) => { ok: boolean; reason?: 'empty' | 'long' | 'coins' | 'same'; cost: number };
+  changeNickname: (nickname: string) => Promise<{ ok: boolean; reason?: string; cost: number }>;
   setJournal: (date: string, text: string) => void;
   save: () => void;
 }
@@ -91,14 +91,21 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
     return true;
   },
 
-  purchase: (itemId) => {
+  purchase: async (itemId) => {
     const item = WARDROBE_BY_ID.get(itemId);
     if (!item) return { ok: false, reason: 'invalid' };
     if (get().ownedItemIds.includes(itemId)) return { ok: false, reason: 'owned' };
     if (item.acquisition.type !== 'coin') return { ok: false, reason: 'not-for-sale' };
-    if (!usePetStore.getState().spendCoins(item.acquisition.price)) return { ok: false, reason: 'coins' };
-    set(s => ({ ownedItemIds: [...s.ownedItemIds, itemId] }));
-    get().save();
+    const price = item.acquisition.price;
+    const result = await walletTransaction(() => {
+      const raw = localStorage.getItem(LS_KEY);
+      const current = { ...snapshot(get()), ...sanitize(raw ? JSON.parse(raw) : snapshot(get())) };
+      if (current.ownedItemIds.includes(itemId)) throw new Error('owned');
+      const next = { ...current, ownedItemIds: [...current.ownedItemIds, itemId], savedAt: new Date().toISOString() };
+      return { cost: price, value: next, snapshots: { [LS_KEY]: JSON.stringify(next) }, mirrors: { [LS_KEY]: SQLITE_KEY } };
+    });
+    if (!result.ok) return result;
+    set(result.value);
     return { ok: true };
   },
 
@@ -116,16 +123,22 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
     return true;
   },
 
-  changeNickname: (value) => {
+  changeNickname: async (value) => {
     const nickname = value.trim();
     if (!nickname) return { ok: false, reason: 'empty', cost: 0 };
     if (nickname.length > 12) return { ok: false, reason: 'long', cost: 0 };
     if (nickname === get().nickname) return { ok: false, reason: 'same', cost: 0 };
-    const cost = get().nicknameChanges === 0 ? 0 : NICKNAME_CHANGE_COST;
-    if (cost > 0 && !usePetStore.getState().spendCoins(cost)) return { ok: false, reason: 'coins', cost };
-    set(s => ({ nickname, nicknameChanges: s.nicknameChanges + 1 }));
-    get().save();
-    return { ok: true, cost };
+    const result = await walletTransaction(() => {
+      const raw = localStorage.getItem(LS_KEY);
+      const current = { ...snapshot(get()), ...sanitize(raw ? JSON.parse(raw) : snapshot(get())) };
+      if (nickname === current.nickname) throw new Error('same');
+      const cost = current.nicknameChanges === 0 ? 0 : NICKNAME_CHANGE_COST;
+      const next = { ...current, nickname, nicknameChanges: current.nicknameChanges + 1, savedAt: new Date().toISOString() };
+      return { cost, value: { next, cost }, snapshots: { [LS_KEY]: JSON.stringify(next) }, mirrors: { [LS_KEY]: SQLITE_KEY } };
+    });
+    if (!result.ok) return { ...result, cost: 0 };
+    set(result.value.next);
+    return { ok: true, cost: result.value.cost };
   },
 
   setJournal: (date, text) => {

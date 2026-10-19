@@ -6,6 +6,7 @@ import type { HatchRarity } from '../../stores/hatchStore';
 import { BaseDirectory, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
 import HatchConfirmModal from './HatchConfirmModal';
 import ConfirmModal from './ConfirmModal';
+import { fetchJson } from '../../lib/fetchJson';
 
 const WORKSHOP_API = 'https://api.cspstudy.top';
 const WORKSHOP_STATIC = 'https://cards.cspstudy.top/workshop';
@@ -17,12 +18,12 @@ function GoldCoin() {
 
 export function WorkshopShop() {
   const coins = usePetStore(s => s.coins);
-  const spendCoins = usePetStore(s => s.spendCoins);
   const isOwned = usePetStore(s => s.isOwned);
-  const addEgg = useHatchStore(s => s.addEgg);
+  const purchaseEgg = useHatchStore(s => s.purchaseEgg);
   const startHatching = useHatchStore(s => s.startHatching);
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [buyingId, setBuyingId] = useState<string | null>(null);
   const [purchaseTarget, setPurchaseTarget] = useState<any | null>(null);
   const [pendingHatch, setPendingHatch] = useState<{ pet: any; rarity: HatchRarity; eggId: string } | null>(null);
@@ -64,6 +65,7 @@ export function WorkshopShop() {
   };
 
   const loadPets = async (cursor?: string | null) => {
+    setLoadError('');
     const isLoadMore = !!cursor;
     if (isLoadMore) setLoadingMore(true); else setLoading(true);
     if (cursor?.startsWith('static:')) {
@@ -78,9 +80,7 @@ export function WorkshopShop() {
     }
     if (!isLoadMore) {
       try {
-        const response = await fetch(`${WORKSHOP_STATIC}/catalog.json`, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
+        const data = await fetchJson(`${WORKSHOP_STATIC}/catalog.json`, { cache: 'no-store' });
         const all = (Array.isArray(data) ? data : data.items || []).map(resolveStaticPet);
         if (all.length) {
           staticPets.current = all;
@@ -96,7 +96,7 @@ export function WorkshopShop() {
     }
     let url = WORKSHOP_API + '/api/workshop/pets?limit=24&paginated=1';
     if (cursor) url += '&cursor=' + encodeURIComponent(cursor);
-    fetch(url).then(r => r.json()).then(d => {
+    fetchJson(url).then(d => {
         const items = Array.isArray(d) ? d : (d.items || []);
         if (isLoadMore) setPets(prev => {
           const existingIds = new Set(prev.map(pet => pet.id));
@@ -114,7 +114,7 @@ export function WorkshopShop() {
           setNextCursor(null);
         }
       })
-      .catch(() => {}).finally(() => { setLoading(false); setLoadingMore(false); });
+      .catch(error => setLoadError(error instanceof Error ? error.message : '工坊暂时无法连接')).finally(() => { setLoading(false); setLoadingMore(false); });
   };
 
   useEffect(() => { void loadPets(); }, []);
@@ -127,11 +127,11 @@ export function WorkshopShop() {
     try {
     if (!await downloadSprites(pet)) return;
     const cost = pet.price || 200;
-    if (!spendCoins(cost)) return;
     const rarity: HatchRarity = pet.tier === 'legendary' ? 'legendary' : pet.tier === 'rare' ? 'rare' : 'common';
-    const egg = addEgg('workshop-' + pet.id, pet.name, rarity, cost);
+    const egg = await purchaseEgg('workshop-' + pet.id, pet.name, rarity, cost);
     setPendingHatch({ pet, rarity, eggId: egg.eggId });
-    } finally { setBuyingId(null); }
+    } catch (error) { alert(error instanceof Error ? error.message : '购买失败，请重试'); }
+    finally { setBuyingId(null); }
   };
 
   const downloadSprites = async (pet: any): Promise<boolean> => {
@@ -197,7 +197,8 @@ export function WorkshopShop() {
             onClick={() => setFilter(t.k as any)}>{t.label}</button>
         ))}
       </div>
-      {loading ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>加载中...</div> :
+      {loadError && <div role="alert">{loadError} <button onClick={() => void loadPets()}>重新连接</button></div>}
+      {loading ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>加载中...</div> : loadError && !pets.length ? null :
        !pets.length ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>🏭 还没有老师上传精灵，敬请期待~</div> :
        <div className="workshop-pet-grid">
         {pets.filter((pet: any) => filter === 'all' || pet.tier === filter).map((pet: any) => (

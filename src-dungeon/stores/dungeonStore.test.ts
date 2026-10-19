@@ -1,9 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDungeonStore } from './dungeonStore';
 import { usePetStore } from '../../src/stores/petStore';
 import { expToNextLevel } from '../utils/gameLogic';
 import type { BattleState, DungeonProgress, PlayerState } from '../types/dungeon';
 import { CURRENT_DUNGEON_SEASON_ID } from '../data/season';
+
+// Finalization deliberately starts background work. Drain its dynamic imports
+// while the offline network/storage fixture still belongs to this test.
+afterEach(async () => { await vi.dynamicImportSettled(); });
 
 function makeLocalStorage() {
   const data = new Map<string, string>();
