@@ -33,8 +33,10 @@ export function detectDeterministicCandidate(question) {
 }
 
 function findCompiler() {
-  for (const compiler of ['clang++', 'g++']) {
-    const result = spawnSync('command', ['-v', compiler], { shell: true, encoding: 'utf8' });
+  for (const compiler of process.platform === 'win32' ? ['g++', 'clang++'] : ['clang++', 'g++']) {
+    // `command -v` is a POSIX shell builtin, absent from Windows cmd.exe.
+    // Probe the executable directly, without a shell; prefer MinGW on Windows.
+    const result = spawnSync(compiler, ['--version'], { encoding: 'utf8', timeout: 5000, windowsHide: true });
     if (result.status === 0) return compiler;
   }
   return null;
@@ -56,7 +58,7 @@ export async function solveDeterministically(question) {
 
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'csp-question-'));
   const sourcePath = path.join(directory, 'question.cpp');
-  const binaryPath = path.join(directory, 'question');
+  const binaryPath = path.join(directory, process.platform === 'win32' ? 'question.exe' : 'question');
   try {
     fs.writeFileSync(sourcePath, question.code);
     const compiled = spawnSync(compiler, ['-std=c++17', '-O0', sourcePath, '-o', binaryPath], {
