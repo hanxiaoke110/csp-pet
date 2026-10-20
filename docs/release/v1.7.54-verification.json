@@ -1,0 +1,38 @@
+{
+  "version": "1.7.54",
+  "checkedAt": "2026-10-20T04:52:18.038Z",
+  "sourceCommit": "e5bcc1f5aa45aed1cdc0adab22134f9c9ffb1404",
+  "workflowRunId": 39369506992,
+  "artifactSource": "Successful platform build jobs; stalled release upload cancelled, same artifacts manually published",
+  "checks": [
+    {
+      "platform": "darwin-aarch64",
+      "name": "CSP_1.7.54_aarch64.dmg",
+      "bytes": 98162089,
+      "sha256": "4dd2918a8b0f5bfa98338d5dccc23a1ad81527e1ffa34879c6b6ab608510bb4b",
+      "signatureVerified": true
+    },
+    {
+      "platform": "darwin-x86_64",
+      "name": "CSP_1.7.54_x64.dmg",
+      "bytes": 99270485,
+      "sha256": "759965e038f6ef376fbb199afc2627c637f3b03298f85dcdc469d2292c7008f8",
+      "signatureVerified": true
+    },
+    {
+      "platform": "windows-x86_64",
+      "name": "CSP_1.7.54_x64-setup.exe",
+      "bytes": 93938967,
+      "sha256": "de05e356165f5c4908543d087de76849d4d090a2da569cf4459f9452a8cc3397",
+      "signatureVerified": true
+    }
+  ],
+  "productionWorkerVersion": "cc23b518-ef3f-4ef0-ab80-5665f805f310",
+  "announcementId": 42,
+  "feishuRevision": 405,
+  "feishuInstallerCardsVerified": 3,
+  "feishuPlatformPositionsVerified": true,
+  "feishuTutorialsAndMediaUnchanged": true,
+  "windowsGuiAcceptancePerformed": false,
+  "originalTeacherBackupRetested": false
+}
