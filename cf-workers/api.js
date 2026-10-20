@@ -201,6 +201,39 @@ async function serverDecrypt(encBase64, env) {
 }
 
 // ── Auth ──
+async function authDigest(value) {
+  const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return [...new Uint8Array(bytes)].map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+async function issueTeacherSession(env) {
+  const random = crypto.getRandomValues(new Uint8Array(32));
+  const entropy = [...random].map(byte => byte.toString(16).padStart(2, '0')).join('');
+  // Compatibility-first rollout: do not unexpectedly expire teachers' sessions.
+  // Enable only after the teacher UI's expired-session/re-login flow is accepted.
+  if (env?.TEACHER_SESSION_V2 !== 'enabled') return { token: entropy, stored: entropy };
+  const expires = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
+  const token = `v2.${expires}.${entropy}`;
+  return { token, stored: `sha256:${await authDigest(token)}` };
+}
+async function teacherSessionLookup(token) {
+  if (!token || token.length > 256 || token.startsWith('sha256:')) return null;
+  if (!token.startsWith('v2.')) return token; // Existing sessions survive rollout; next login rotates them.
+  const match = /^v2\.(\d{10})\.[a-f0-9]{64}$/.exec(token);
+  if (!match || Number(match[1]) <= Math.floor(Date.now() / 1000)) return null;
+  return `sha256:${await authDigest(token)}`;
+}
+// One atomic reservation, no write on rejection. No plaintext phone/IP in keys.
+async function reserveAuthAttempt(db, key, limit, seconds) {
+  const now = new Date().toISOString();
+  const reset = new Date(Date.now() + seconds * 1000).toISOString();
+  const row = await db.prepare(`INSERT INTO rate_limits(key,count,reset_at) VALUES(?,1,?)
+    ON CONFLICT(key) DO UPDATE SET
+      count=CASE WHEN rate_limits.reset_at<=? THEN 1 ELSE rate_limits.count+1 END,
+      reset_at=CASE WHEN rate_limits.reset_at<=? THEN excluded.reset_at ELSE rate_limits.reset_at END
+    WHERE rate_limits.reset_at<=? OR rate_limits.count<? RETURNING count`)
+    .bind(key, reset, now, now, now, limit).first();
+  return Boolean(row);
+}
 function checkAdmin(request, env) {
   const token = request.headers.get('X-Admin-Token') || '';
   if (!env.ADMIN_TOKEN) return false;
@@ -208,8 +241,9 @@ function checkAdmin(request, env) {
 }
 async function checkTeacher(request, db) {
   const token = request.headers.get('X-Teacher-Token') || '';
-  if (!token) return null;
-  const t = await db.prepare('SELECT teacher_id, phone, name, token, permissions, max_pets FROM teachers WHERE token=?').bind(token).first();
+  const lookup = await teacherSessionLookup(token);
+  if (!lookup) return null;
+  const t = await db.prepare('SELECT teacher_id, phone, name, token, permissions, max_pets FROM teachers WHERE token=?').bind(lookup).first();
   return t || null;
 }
 
@@ -1085,22 +1119,30 @@ export default {
 
         const teacherId = 'T' + randomChars(8);
         const pwHash = await hashPassword(password);
-        const token = randomChars(32);
-        await db.prepare('INSERT INTO teachers (teacher_id, phone, password_hash, name, token, created_at) VALUES (?,?,?,?,?,datetime("now"))').bind(teacherId, phone, pwHash, name, token).run();
+        const { token, stored } = await issueTeacherSession(env);
+        await db.prepare('INSERT INTO teachers (teacher_id, phone, password_hash, name, token, created_at) VALUES (?,?,?,?,?,datetime("now"))').bind(teacherId, phone, pwHash, name, stored).run();
         return new Response(JSON.stringify({ success: true, teacher_id: teacherId, token, name, permissions: [] }), { headers: cors });
       }
 
       if (path === '/api/teacher/login' && request.method === 'POST') {
         const { phone, password } = await request.json();
+        if (typeof phone !== 'string' || !/^1[3-9]\d{9}$/.test(phone) || typeof password !== 'string' || !password || password.length > 1024) {
+          return new Response(JSON.stringify({ error: '请填写有效的手机号和密码' }), { status: 400, headers: cors });
+        }
+        const limited = () => new Response(JSON.stringify({ error: '登录尝试过多，请15分钟后再试' }), { status: 429, headers: { ...cors, 'Retry-After': '900' } });
+        const accountKey = `auth:account:${await authDigest(phone)}`;
+        const ip = request.headers.get('CF-Connecting-IP');
+        // Trust only Cloudflare's edge-provided address, never X-Forwarded-For.
+        if (ip && !await reserveAuthAttempt(db, `auth:network:${await authDigest(ip)}`, 100, 900)) return limited();
+        if (!await reserveAuthAttempt(db, accountKey, 5, 900)) return limited();
         const t = await db.prepare('SELECT * FROM teachers WHERE phone=?').bind(phone).first();
-        if (!t) return new Response(JSON.stringify({ error: '手机号未注册' }), { status: 401, headers: cors });
-
         const pwHash = await hashPassword(password);
-        if (pwHash !== t.password_hash) return new Response(JSON.stringify({ error: '密码错误' }), { status: 401, headers: cors });
+        if (!t || pwHash !== t.password_hash) return new Response(JSON.stringify({ error: '手机号或密码不正确' }), { status: 401, headers: cors });
 
         // Rotate token
-        const token = randomChars(32);
-        await db.prepare('UPDATE teachers SET token=? WHERE teacher_id=?').bind(token, t.teacher_id).run();
+        const { token, stored } = await issueTeacherSession(env);
+        await db.prepare('UPDATE teachers SET token=? WHERE teacher_id=?').bind(stored, t.teacher_id).run();
+        await db.prepare('DELETE FROM rate_limits WHERE key=?').bind(accountKey).run();
         return new Response(JSON.stringify({ success: true, teacher_id: t.teacher_id, token, name: t.name, permissions: safeParsePermissions(t.permissions) }), { headers: cors });
       }
 
@@ -1179,7 +1221,7 @@ export default {
         const student = await db.prepare("SELECT * FROM class_students WHERE class_code=? AND device_hash=? AND status='active'").bind(class_code, device_hash).first();
         if (!student) return new Response(JSON.stringify({ error: '你已不在该班级中' }), { status: 403, headers: cors });
 
-        await db.prepare("UPDATE class_students SET student_name=?, phone=? WHERE class_code=? AND device_hash=?").bind(student_name, phone || '', class_code, device_hash).run();
+        await db.prepare("UPDATE class_students SET student_name=?, phone=COALESCE(?,phone) WHERE class_code=? AND device_hash=?").bind(student_name, phone === undefined ? null : phone, class_code, device_hash).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -1256,6 +1298,35 @@ export default {
           codes.push(code);
         }
         return new Response(JSON.stringify({ codes, coins: coinAmt, exp: expAmt, class_code: clsCode }), { headers: cors });
+      }
+
+      // V2 claims use a separate owner marker: old clients cannot replay rewards.
+      if (path === '/api/codes/redeem-v2' && request.method === 'POST') {
+        const body = await request.json();
+        const code = String(body.code || '').trim().toUpperCase();
+        const device = String(body.device_hash || '').trim();
+        if (!/^CMP-[A-Z0-9-]{1,100}$/.test(code) || !/^[a-zA-Z0-9_-]{1,128}$/.test(device)) return new Response(JSON.stringify({ error: '参数不完整或无效' }), { status: 400, headers: cors });
+        if (!await checkRateLimit(db, `redeem:${device}`, 5, 60)) return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
+        const row = await db.prepare('SELECT code, type, coins, exp, class_code, status FROM generated_codes WHERE code=?').bind(code).first();
+        if (!row || row.type !== 'comp') return new Response(JSON.stringify({ error: '补偿码不存在' }), { status: 404, headers: cors });
+        if (row.class_code) {
+          const student = await db.prepare("SELECT 1 AS ok FROM class_students WHERE class_code=? AND device_hash=? AND status='active'").bind(row.class_code, device).first();
+          if (!student) return new Response(JSON.stringify({ error: '此补偿码仅限本班学生兑换' }), { status: 403, headers: cors });
+        }
+        if (![row.coins, row.exp].every(n => Number.isSafeInteger(n) && n >= 0)) return new Response(JSON.stringify({ error: '奖励配置无效' }), { status: 400, headers: cors });
+        const owner = `v2:${device}`;
+        const reply = () => new Response(JSON.stringify({ success: true, receipt_id: `cmp-v2:${code}`, coins: row.coins, exp: row.exp }), { headers: cors });
+        const prior = await db.prepare('SELECT device_hash FROM comp_claims WHERE code=?').bind(code).first();
+        if (prior?.device_hash === owner) return reply();
+        if (prior || row.status !== 'unused') return new Response(JSON.stringify({ error: '此补偿码已被兑换' }), { status: 400, headers: cors });
+        // D1 batch is transactional: a failed status update rolls back the claim.
+        await db.batch([
+          db.prepare("INSERT OR IGNORE INTO comp_claims (code, device_hash) SELECT code, ? FROM generated_codes WHERE code=? AND status='unused'").bind(owner, code),
+          db.prepare("UPDATE generated_codes SET status='used', used_at=datetime('now'), used_device_hash=? WHERE code=? AND EXISTS (SELECT 1 FROM comp_claims WHERE code=? AND device_hash=?)").bind(device, code, code, owner),
+        ]);
+        const claimed = await db.prepare('SELECT device_hash FROM comp_claims WHERE code=?').bind(code).first();
+        if (claimed?.device_hash !== owner) return new Response(JSON.stringify({ error: '此补偿码已被兑换' }), { status: 400, headers: cors });
+        return reply();
       }
 
       // POST /api/codes/redeem — student redeems a compensation code (atomic one-time claim)
@@ -1692,7 +1763,8 @@ export default {
         const { password } = await request.json();
         if (!password || password.length < 6) return new Response(JSON.stringify({ error: '密码至少6位' }), { status: 400, headers: cors });
         const pwHash = await hashPassword(password);
-        await db.prepare('UPDATE teachers SET password_hash=? WHERE teacher_id=?').bind(pwHash, teacherId).run();
+        // Resetting credentials also revokes every previously issued session.
+        await db.prepare("UPDATE teachers SET password_hash=?, token='' WHERE teacher_id=?").bind(pwHash, teacherId).run();
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -2337,21 +2409,14 @@ export default {
           values.push(device_hash);
           await db.prepare(`UPDATE dungeon_players SET ${sets.join(',')}, updated_at=datetime('now') WHERE device_hash=?`).bind(...values).run();
         }
-        // Sync dungeon progress：仅更新 best_score/best_rating（取较大值），通关状态由 report-battle 权威写入
+        // Monotonic UPSERT: compare at write time, not against an earlier SELECT snapshot.
         if (body.dungeon_progress && Array.isArray(body.dungeon_progress)) {
           for (const dp of body.dungeon_progress) {
             // 白名单校验：仅接受合法副本 id，防伪造 dungeonId 写脏数据
             if (!dp.dungeonId || !VALID_DUNGEON_IDS.has(dp.dungeonId)) continue;
-            const existing = seasonId === CURRENT_DUNGEON_SEASON
-              ? await db.prepare('SELECT status, completed_stages, boss_defeated, best_score, best_rating FROM dungeon_season_progress WHERE device_hash=? AND season_id=? AND dungeon_id=?').bind(device_hash, seasonId, dp.dungeonId).first()
-              : await db.prepare('SELECT status, completed_stages, boss_defeated, best_score, best_rating FROM dungeon_progress WHERE device_hash=? AND dungeon_id=?').bind(device_hash, dp.dungeonId).first();
-            const ratingOrder = { 'SS':5, 'S':4, 'A':3, 'B':2, 'C':1, 'D':0 };
             // bestScore 设上界（单场最多答对题数×10），防客户端注水
             const newScore = Math.min(10000, Math.max(0, dp.bestScore || 0));
             const newRating = ['SS','S','A','B','C','D'].includes(dp.bestRating) ? dp.bestRating : 'D';
-            const bestScore = Math.max(existing?.best_score || 0, newScore);
-            const bestRating = (!existing?.best_rating || (ratingOrder[newRating]||0) > (ratingOrder[existing.best_rating]||0))
-              ? newRating : (existing?.best_rating || 'D');
             // 通关状态修复通道：客户端上报 bossDefeated/满关 → 升级为 cleared（只升不降）。
             // 早期版本未上报、上报失败、离线通关的进度只能靠 sync 修复（report-battle
             // 只在首次发奖胜利时推进状态，重打不发奖就永远修不上，通关榜会少算）。
@@ -2362,23 +2427,29 @@ export default {
               await db.prepare(`INSERT INTO dungeon_season_progress (device_hash, season_id, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
                 VALUES (?,?,?,?,?,?,?,?,?,?,datetime('now'))
                 ON CONFLICT(device_hash, season_id, dungeon_id) DO UPDATE SET
-                  best_score=excluded.best_score, best_rating=excluded.best_rating,
+                  best_score=MAX(COALESCE(dungeon_season_progress.best_score,0), excluded.best_score),
+                  best_rating=CASE WHEN INSTR('|D|C|B|A|S|SS|','|' || excluded.best_rating || '|') >
+                    COALESCE(INSTR('|D|C|B|A|S|SS|','|' || dungeon_season_progress.best_rating || '|'),0)
+                    THEN excluded.best_rating ELSE dungeon_season_progress.best_rating END,
                   completed_stages=MAX(dungeon_season_progress.completed_stages, excluded.completed_stages),
                   boss_defeated=MAX(dungeon_season_progress.boss_defeated, excluded.boss_defeated),
                   status=CASE WHEN excluded.status='cleared' THEN 'cleared' ELSE dungeon_season_progress.status END,
                   updated_at=datetime('now')`)
                 .bind(device_hash, seasonId, dp.dungeonId, insertStatus, dp.completedStages||0, dp.totalStages||5,
-                      dp.currentStageId||null, dp.bossDefeated?1:0, bestScore, bestRating).run();
+                      dp.currentStageId||null, dp.bossDefeated?1:0, newScore, newRating).run();
             } else await db.prepare(`INSERT INTO dungeon_progress (device_hash, dungeon_id, status, completed_stages, total_stages, current_stage_id, boss_defeated, best_score, best_rating, updated_at)
               VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))
               ON CONFLICT(device_hash, dungeon_id) DO UPDATE SET
-                best_score=excluded.best_score, best_rating=excluded.best_rating,
+                best_score=MAX(COALESCE(dungeon_progress.best_score,0), excluded.best_score),
+                best_rating=CASE WHEN INSTR('|D|C|B|A|S|SS|','|' || excluded.best_rating || '|') >
+                  COALESCE(INSTR('|D|C|B|A|S|SS|','|' || dungeon_progress.best_rating || '|'),0)
+                  THEN excluded.best_rating ELSE dungeon_progress.best_rating END,
                 completed_stages=MAX(dungeon_progress.completed_stages, excluded.completed_stages),
                 boss_defeated=MAX(dungeon_progress.boss_defeated, excluded.boss_defeated),
                 status=CASE WHEN excluded.status='cleared' THEN 'cleared' ELSE dungeon_progress.status END,
                 updated_at=datetime('now')`)
               .bind(device_hash, dp.dungeonId, insertStatus, dp.completedStages||0, dp.totalStages||5,
-                    dp.currentStageId||null, dp.bossDefeated?1:0, bestScore, bestRating).run();
+                    dp.currentStageId||null, dp.bossDefeated?1:0, newScore, newRating).run();
           }
         }
         // Sync badges：仅接受合法 badge_id，防伪造 id 刷徽章榜

@@ -7,14 +7,20 @@ import {
 } from './backup';
 import { useTrialEquipmentStore } from '../../src-dungeon/stores/trialEquipmentStore';
 import { createTestLockManager } from '../testSupport/webLocks';
+import { dualSave } from './persist';
 
-function makeLocalStorage() {
+function makeLocalStorage(quotaBytes = Infinity) {
   const data = new Map<string, string>();
   return {
     get length() { return data.size; },
     key: (index: number) => [...data.keys()][index] ?? null,
     getItem: (key: string) => data.get(key) ?? null,
-    setItem: (key: string, value: string) => { data.set(key, String(value)); },
+    setItem: (key: string, value: string) => {
+      const next = new Map(data).set(key, String(value));
+      const bytes = [...next].reduce((sum, [k, v]) => sum + 2 * (k.length + v.length), 0);
+      if (bytes > quotaBytes) throw new DOMException('Storage quota exceeded', 'QuotaExceededError');
+      data.set(key, String(value));
+    },
     removeItem: (key: string) => { data.delete(key); },
   };
 }
@@ -69,9 +75,14 @@ describe('shouldIncludeKey', () => {
     expect(shouldIncludeKey('dungeon_dungeons_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_leaderboard_rules_v1')).toBe(false);
     expect(shouldIncludeKey('dungeon_cache_questions')).toBe(false);
+    for (const key of ['csp_exam_bank_v3', 'csp_exam_bank_v4', 'dungeon_exam_bank_v1', 'dungeon_csp_exam_bank_v4', 'dungeon_exam_bank_version']) {
+      expect(shouldIncludeKey(key)).toBe(false);
+    }
+    expect(shouldIncludeKey('dungeon_healing_recent_函数与递归')).toBe(true);
   });
 
   it('excludes unrelated keys', () => {
+    expect(shouldIncludeKey('dungeon_sync_outbox_v1')).toBe(false);
     expect(shouldIncludeKey('csp_equipment_transaction')).toBe(false);
     expect(shouldIncludeKey('other_key')).toBe(false);
     expect(shouldIncludeKey('tauri')).toBe(false);
@@ -79,6 +90,30 @@ describe('shouldIncludeKey', () => {
 });
 
 describe('focus backup data', () => {
+  it('mirrors a local-only restored wallet and stamps optional restored profiles consistently', async () => {
+    localStorage.setItem('pet_data', '{"ownedPets":[],"coins":9999}');
+    await applyBackup(makeBackup({ localStorage: {
+      csp_pet_data: '{"ownedPets":[],"coins":1888}',
+      csp_profile_data: '{"nickname":"restored","savedAt":"2020-01-01T00:00:00Z"}',
+    }, sqlite: {}, sprites: {} }));
+    expect(localStorage.getItem('pet_data')).toBe(localStorage.getItem('csp_pet_data'));
+    expect(localStorage.getItem('profile_data')).toBe(localStorage.getItem('csp_profile_data'));
+    expect(JSON.parse(localStorage.getItem('csp_profile_data')!).savedAt).not.toBe('2020-01-01T00:00:00Z');
+  });
+  it('requires explicit acknowledgement before preserving a target-only personal journal', async () => {
+    const journal = JSON.stringify({ nickname: '本机档案', journal: { today: '本机记录' } });
+    localStorage.setItem('csp_profile_data', journal);
+    const source = makeBackup({ localStorage: { csp_pet_data: '{"ownedPets":[],"coins":1888}' }, sqlite: {}, sprites: {} });
+    await expect(applyBackup(source)).rejects.toThrow('确认保留');
+    expect(localStorage.getItem('csp_profile_data')).toBe(journal);
+    await applyBackup(source, { preserveMissing: true });
+    expect(localStorage.getItem('csp_profile_data')).toBe(journal);
+  });
+  it('fences stale memory saves after a restore until the page reloads', async () => {
+    await applyBackup(makeBackup({ localStorage: { csp_pet_data: '{"ownedPets":[],"coins":1888}' }, sqlite: {}, sprites: {} }));
+    dualSave('pet_data', 'csp_pet_data', '{"ownedPets":[],"coins":100}');
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!).coins).toBe(1888);
+  });
   it('restores an old student backup without Web Locks when no recovery is pending', async () => {
     vi.stubGlobal('navigator', {});
     const result = await applyBackup(makeBackup({ localStorage: { csp_pet_data: '{"ownedPets":[],"coins":1888}' }, sqlite: {}, sprites: {} }));
@@ -250,6 +285,51 @@ describe('summarizeBackup', () => {
 });
 
 describe('applyBackup', () => {
+  it('恢复旧备份跳过可重新获取的题库缓存，不删除当前缓存，也不突破 5 MiB 存储配额', async () => {
+    const storage = makeLocalStorage(5 * 1024 * 1024);
+    vi.stubGlobal('localStorage', storage);
+    const cached = 'x'.repeat(700_000);
+    storage.setItem('csp_exam_bank_v3', cached);
+    storage.setItem('dungeon_exam_bank_v1', cached);
+    await applyBackup(makeBackup({ localStorage: {
+      csp_pet_data: '{"ownedPets":[],"coins":12360}',
+      csp_problem_status: '{"p1":"completed"}',
+      csp_exam_bank_v3: cached, dungeon_exam_bank_v1: cached,
+      csp_exam_bank_v4: 'downloadable-cache',
+      'dungeon_healing_recent_C++ 语法': '["q1"]',
+    }, sqlite: {}, sprites: {} }));
+    expect(storage.getItem('csp_exam_bank_v3') === cached).toBe(true);
+    expect(storage.getItem('dungeon_exam_bank_v1') === cached).toBe(true);
+    expect(storage.getItem('csp_exam_bank_v4')).toBeNull();
+    expect(JSON.parse(storage.getItem('csp_pet_data')!).coins).toBe(12360);
+    expect(storage.getItem('dungeon_healing_recent_C++ 语法')).toBe('["q1"]');
+  });
+  it('未知命名空间记录被明确拒绝，不被缓存过滤静默丢弃', async () => {
+    await expect(applyBackup(makeBackup({ localStorage: {
+      csp_pet_data: '{"ownedPets":[],"coins":100}', unrelated_key: 'blocked',
+    }, sqlite: {}, sprites: {} }))).rejects.toThrow('备份校验失败');
+    expect(localStorage.getItem('csp_pet_data')).toBeNull();
+  });
+  it('数据格式不兼容时明确提示校验失败，不写入也不误报磁盘空间', async () => {
+    const writer = vi.spyOn(localStorage, 'setItem');
+    await expect(applyBackup(makeBackup({ localStorage: {
+      csp_pet_data: '{"ownedPets":[],"coins":"12360"}',
+    }, sqlite: {}, sprites: {} }))).rejects.toThrow('备份校验失败');
+    expect(writer).not.toHaveBeenCalled();
+  });
+  it('原样恢复软件生成的中文知识点最近题目记录，并保留智子、金币与学习记录', async () => {
+    const recent = Object.fromEntries(['进制与编码', '待复核', '函数与递归', '计算机基础', '控制结构', 'C++ 语法（基础）']
+      .map(topic => [`dungeon_healing_recent_${topic}`, '["question-1","question-2"]']));
+    const pets = Array.from({ length: 10 }, (_, index) => ({ petId: `pet-${index}`, speciesId: 'capi' }));
+    const backup = makeBackup({ localStorage: {
+      csp_pet_data: JSON.stringify({ ownedPets: pets, coins: 12360 }),
+      csp_problem_status: '{"p1":"completed"}', ...recent,
+    }, sqlite: {}, sprites: {} });
+    await applyBackup(backup);
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!)).toMatchObject({ ownedPets: pets, coins: 12360 });
+    expect(localStorage.getItem('csp_problem_status')).toBe('{"p1":"completed"}');
+    for (const [key, value] of Object.entries(recent)) expect(localStorage.getItem(key)).toBe(value);
+  });
   it('本地存储写入失败不报告恢复成功，并回滚先前已写入的数据', async () => {
     localStorage.setItem('csp_pet_data', '{"ownedPets":[],"coins":99}');
     localStorage.setItem('csp_trial_equipment_v1', '{"schemaVersion":2,"ownedItems":[]}');

@@ -1,10 +1,12 @@
 // Shared persistence helper — used by all Zustand stores.
 // Writes to local localStorage first (sync, reliable), then SQLite as backup.
 import { sqliteSetFireAndForget, sqliteGet } from './sqlite-storage';
-import { safeLsSet, safeLsGet } from './storage';
+import { safeLsSet } from './storage';
+import { storageWritesAllowed } from './restoreBarrier';
 
 /** Dual-write save: localStorage primary, SQLite backup. Call from any store save(). */
 export function dualSave(sqliteKey: string, lsKey: string, json: string): void {
+  if (!storageWritesAllowed()) return;
   safeLsSet(lsKey, json);
   sqliteSetFireAndForget(sqliteKey, json);
 }
@@ -13,22 +15,38 @@ export function dualSave(sqliteKey: string, lsKey: string, json: string): void {
 export async function dualLoad(sqliteKey: string, lsKey: string): Promise<string> {
   // Fallback: SQLite
   let sql = '';
-  try { sql = (await sqliteGet(sqliteKey)) || ''; } catch {}
+  let readError: unknown;
+  try { sql = (await sqliteGet(sqliteKey)) || ''; } catch (error) { readError = error; }
   // Another window may commit while SQLite is pending. Compare its latest local
   // authority, never the wallet or dedupe ledger captured before the await.
-  const ls = safeLsGet(lsKey, '');
+  let ls = '';
+  try { ls = localStorage.getItem(lsKey) || localStorage.getItem(lsKey + '_tmp') || ''; }
+  catch (error) { if (!sql) throw error; }
 
   // Both empty — nothing to load
-  if (!ls && !sql) return '';
-
-  // Only one has data
-  if (!ls) return sql;
-  if (!sql) return ls;
+  if (!ls && !sql) {
+    if (readError) throw new Error('无法确认存档状态，请重试；不要重新领养或清空数据。');
+    return '';
+  }
+  const parse = (raw: string) => {
+    try {
+      const value = JSON.parse(raw);
+      if (!value || typeof value !== 'object') return null;
+      if (sqliteKey === 'pet_data' && (!Array.isArray(value.ownedPets)
+        || (typeof value.coins !== 'number' && typeof value.coins !== 'string')
+        || value.coins === '' || !Number.isFinite(Number(value.coins)) || Number(value.coins) < 0
+        || !value.ownedPets.every((pet: any) => pet && typeof pet.petId === 'string' && typeof pet.speciesId === 'string'))) return null;
+      return value;
+    } catch { return null; }
+  };
+  const lsObj = parse(ls);
+  const sqlObj = parse(sql);
+  if (!lsObj && !sqlObj) throw new Error('存档副本无法读取，请保留数据并从备份恢复。');
+  if (!lsObj) { safeLsSet(lsKey, sql); return sql; }
+  if (!sqlObj) return ls;
 
   // Both have data — pick the one with the newer updatedAt
   try {
-    const lsObj = JSON.parse(ls);
-    const sqlObj = JSON.parse(sql);
     const lsTime = getSnapshotUpdatedAt(lsObj);
     const sqlTime = getSnapshotUpdatedAt(sqlObj);
     const preferSql = sqlTime > lsTime;

@@ -1,0 +1,23 @@
+// @vitest-environment jsdom
+// ARCHIVED baseline diagnostic for a396f14; intentionally asserts former defects.
+import { act } from 'react';
+import { createRoot } from 'react-dom/client';
+import { expect, it, vi } from 'vitest';
+import PetSprite from '../src/components/pet/PetSprite';
+
+it('D8: two sprite sizes share the last keyframes; unmounting the last removes the first animation too', async () => {
+  vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
+  const host = document.createElement('div'); document.body.appendChild(host);
+  const root = createRoot(host);
+  try {
+    await act(async () => { root.render(<><PetSprite key="large" canvasSize={220} exposeGlobals={false} /><PetSprite key="small" canvasSize={140} exposeGlobals={false} /></>); });
+    const rules = document.querySelectorAll('#pet-sprite-keyframes');
+    expect(rules).toHaveLength(1);
+    const largeStep = Math.round(220 * 192 / 208) * 6;
+    const smallStep = Math.round(140 * 192 / 208) * 6;
+    expect(rules[0].textContent).toContain(`pet-spr-6 { to { transform: translateX(-${smallStep}px)`);
+    expect(rules[0].textContent).not.toContain(`pet-spr-6 { to { transform: translateX(-${largeStep}px)`);
+    await act(async () => { root.render(<><PetSprite key="large" canvasSize={220} exposeGlobals={false} /></>); });
+    expect(document.querySelector('#pet-sprite-keyframes')).toBeNull();
+  } finally { await act(async () => root.unmount()); host.remove(); vi.unstubAllGlobals(); }
+});

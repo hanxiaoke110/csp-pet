@@ -1,5 +1,6 @@
 // 潜龙闭关 — 核心状态管理
 import { create } from 'zustand';
+import { storageWritesAllowed } from '../../src/lib/restoreBarrier';
 import { usePetStore } from '../../src/stores/petStore';
 import type {
   PlayerState, DungeonProgress, DungeonDefinition, Question,
@@ -539,6 +540,10 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
             }] : [],
           }).catch(() => {});
         }
+      }).catch(error => {
+        // A failed lazy import must not become a global unhandled rejection.
+        // The committed local progress remains the source for the next startup retry.
+        console.warn('[dungeon-sync] Background report unavailable:', error);
       });
     }
 
@@ -795,6 +800,7 @@ export const useDungeonStore = create<DungeonState>((set, get) => ({
   },
 
   saveToLocalStorage: () => {
+    if (!storageWritesAllowed()) return;
     const { player, dungeonProgress, earnedBadges, weakPoints, mistakeNotebook, _firstClears, weeklyChallenges, schoolPassiveDaily, petCoinRewards, trialInventory } = get();
     try {
       localStorage.setItem('dungeon_player', JSON.stringify(player));

@@ -41,6 +41,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
       - run: npm ci
+      - name: Verify native storage preserves existing saves
+        run: cargo test --manifest-path src-tauri/Cargo.toml --lib --locked
       - run: npx tauri build --target aarch64-apple-darwin
       - uses: actions/upload-artifact@v4
         with:
@@ -72,6 +74,10 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
       - run: npm ci
+      - name: Verify isolated upgrades and backup restores on Windows
+        run: npm test
+      - name: Verify native storage preserves existing saves
+        run: cargo test --manifest-path src-tauri/Cargo.toml --lib --locked
       - run: npx tauri build --target x86_64-pc-windows-msvc
       - uses: actions/upload-artifact@v4
         with:

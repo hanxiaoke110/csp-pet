@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { usePetStore } from '../../stores/petStore';
+import { applyCompensationReceipt } from '../../lib/compensationRedemption';
 import { getDeviceId } from '../../utils/crypto';
 import { redeemExcellenceCode } from '../../lib/excellenceRedemption';
 
@@ -14,7 +14,6 @@ export default function RedeemCode({ onClose }: Props) {
   const submitting = useRef(false);
   const [busy, setBusy] = useState(false);
 
-  const petStore = usePetStore();
 
   const redeem = async () => {
     const code = input.trim();
@@ -32,23 +31,19 @@ export default function RedeemCode({ onClose }: Props) {
       } catch {}
 
       try {
-        const resp = await fetch(`${API}/api/codes/redeem`, {
+        const resp = await fetch(`${API}/api/codes/redeem-v2`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code: normalized, device_hash: getDeviceId() }),
+          signal: AbortSignal.timeout(15000),
         });
         const data = await resp.json().catch(() => ({}));
         if (!resp.ok || data.error) {
           setResult({ type: 'error', message: data.error || '兑换失败，请稍后重试' });
           return;
         }
-        petStore.addCoins(data.coins || 0);
-        petStore.addExpToPool(data.exp || 0);
-        try {
-          const used = JSON.parse(localStorage.getItem('csp_used_comp_codes') || '[]');
-          used.push(normalized);
-          localStorage.setItem('csp_used_comp_codes', JSON.stringify(used));
-        } catch {}
+        try { await applyCompensationReceipt(normalized, data); }
+        catch (error) { setResult({ type: 'error', message: error instanceof Error ? error.message : '保存失败，请重试' }); return; }
         setResult({
           type: 'success',
           message: `🎁 补偿到账：+${data.coins} 金币，+${data.exp} 经验（已存入经验池，可在智子页分配）`,

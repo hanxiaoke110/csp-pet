@@ -1,3 +1,4 @@
+import { createTestLockManager } from '../testSupport/webLocks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const values = new Map<string, string>();
@@ -31,11 +32,13 @@ const resetProfile = () => useProfileStore.setState({
 describe('profileStore', () => {
   beforeEach(() => {
     values.clear();
-    usePetStore.setState({ coins: 1000 });
+    vi.stubGlobal('navigator', { locks: createTestLockManager() });
+    usePetStore.setState({ coins: 1000, ownedPets: [], loaded: true, loadError: null });
+    usePetStore.getState().save();
     resetProfile();
   });
 
-  it('initial setup permanently grants one zodiac and one constellation for free', () => {
+  it('initial setup permanently grants one zodiac and one constellation for free', async () => {
     expect(useProfileStore.getState().initialize('avatar-zodiac-rat', 'avatar-constellation-aries')).toBe(true);
     expect(useProfileStore.getState().ownedItemIds).toEqual(expect.arrayContaining(['avatar-zodiac-rat', 'avatar-constellation-aries']));
     expect(useProfileStore.getState().equipped.avatar).toBe('avatar-zodiac-rat');
@@ -43,26 +46,26 @@ describe('profileStore', () => {
     expect(useProfileStore.getState().initialize('avatar-zodiac-ox', 'avatar-constellation-taurus')).toBe(false);
   });
 
-  it('shows coin items as a one-time permanent purchase and never charges twice', () => {
-    expect(useProfileStore.getState().purchase('avatar-zodiac-tiger')).toEqual({ ok: true });
+  it('shows coin items as a one-time permanent purchase and never charges twice', async () => {
+    expect(await useProfileStore.getState().purchase('avatar-zodiac-tiger')).toEqual({ ok: true });
     expect(usePetStore.getState().coins).toBe(700);
-    expect(useProfileStore.getState().purchase('avatar-zodiac-tiger')).toEqual({ ok: false, reason: 'owned' });
+    expect(await useProfileStore.getState().purchase('avatar-zodiac-tiger')).toEqual({ ok: false, reason: 'owned' });
     expect(usePetStore.getState().coins).toBe(700);
   });
 
-  it('does not sell condition-only rewards', () => {
-    expect(useProfileStore.getState().purchase('frame-scholar')).toEqual({ ok: false, reason: 'not-for-sale' });
+  it('does not sell condition-only rewards', async () => {
+    expect(await useProfileStore.getState().purchase('frame-scholar')).toEqual({ ok: false, reason: 'not-for-sale' });
     expect(usePetStore.getState().coins).toBe(1000);
   });
 
-  it('makes the first nickname change free and charges later changes', () => {
-    expect(useProfileStore.getState().changeNickname('星河小队长')).toEqual({ ok: true, cost: 0 });
+  it('makes the first nickname change free and charges later changes', async () => {
+    expect(await useProfileStore.getState().changeNickname('星河小队长')).toEqual({ ok: true, cost: 0 });
     expect(usePetStore.getState().coins).toBe(1000);
-    expect(useProfileStore.getState().changeNickname('算法探险家')).toEqual({ ok: true, cost: NICKNAME_CHANGE_COST });
+    expect(await useProfileStore.getState().changeNickname('算法探险家')).toEqual({ ok: true, cost: NICKNAME_CHANGE_COST });
     expect(usePetStore.getState().coins).toBe(1000 - NICKNAME_CHANGE_COST);
   });
 
-  it('persists the local journal in the profile snapshot for backup restore', () => {
+  it('persists the local journal in the profile snapshot for backup restore', async () => {
     useProfileStore.getState().setJournal('2026-09-16', '今天学会了二分查找。');
     const saved = JSON.parse(values.get('csp_profile_data') || '{}');
     expect(saved.journal['2026-09-16']).toBe('今天学会了二分查找。');

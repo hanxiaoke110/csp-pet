@@ -7,6 +7,7 @@ import { useFocusStore } from '../../stores/focusStore';
 import { usePetStore } from '../../stores/petStore';
 import type { FocusMiniCommand, FocusMiniSnapshot } from '../../types/focus';
 import { petCopy } from '../pet/PetCopy';
+import { storageWritesAllowed } from '../../lib/restoreBarrier';
 
 function playFocusChime(): void {
   try {
@@ -92,6 +93,7 @@ export default function FocusRuntime() {
   useEffect(() => {
     const cleanups = [
       safeListen<FocusMiniCommand>('focus-mini-command', event => {
+        if (!storageWritesAllowed()) return;
         const session = useFocusStore.getState().activeSession;
         if (!session || session.id !== event.payload.sessionId) return;
         if (event.payload.type === 'pause') useFocusStore.getState().pause();
@@ -106,6 +108,7 @@ export default function FocusRuntime() {
       }),
       safeListen('focus-mini-ready', () => syncDesktop()),
       safeListen<{ sessionId: string }>('focus-session-elapsed', event => {
+        if (!storageWritesAllowed()) return;
         const session = useFocusStore.getState().activeSession;
         if (session?.id === event.payload.sessionId) useFocusStore.getState().completeNaturally();
       }),
@@ -116,6 +119,7 @@ export default function FocusRuntime() {
   useEffect(() => {
     if (!activeSession || activeSession.status !== 'running') return;
     const reconcile = () => {
+      if (!storageWritesAllowed()) return;
       const result = useFocusStore.getState().tick(Date.now());
       if (result === 'reminder') {
         const text = petCopy.focusReminder();

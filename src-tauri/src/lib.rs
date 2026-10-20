@@ -159,7 +159,7 @@ pub fn run() {
         )
         .setup(|app| {
             let app_data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
-            let database = Database::new(app_data_dir).expect("Failed to initialize database");
+            let database = Database::new(app_data_dir).unwrap_or_else(Database::unavailable);
             app.manage(database);
 
             // System tray — needed for Windows (close → hide, reopen from tray)

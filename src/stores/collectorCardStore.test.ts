@@ -1,3 +1,4 @@
+import { createTestLockManager } from '../testSupport/webLocks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const values = new Map<string, string>();
@@ -13,22 +14,25 @@ import { COLLECTOR_CARD_LS_KEY, useCollectorCardStore } from './collectorCardSto
 describe('collectorCardStore', () => {
   beforeEach(() => {
     values.clear();
-    usePetStore.setState({ coins: 1000 });
+    vi.stubGlobal('navigator', { locks: createTestLockManager() });
+    usePetStore.setState({ coins: 1000, ownedPets: [], loaded: true, loadError: null });
+    usePetStore.getState().save();
     useCollectorCardStore.setState({ ownedCards: [], loaded: true });
   });
 
-  it('charges coins once and permanently records ownership', () => {
-    expect(useCollectorCardStore.getState().purchase('card-001', 888)).toEqual({ ok: true });
+  it('charges coins once and permanently records ownership', async () => {
+    expect(await useCollectorCardStore.getState().purchase('card-001', 888)).toEqual({ ok: true });
     expect(usePetStore.getState().coins).toBe(112);
     expect(useCollectorCardStore.getState().isOwned('card-001')).toBe(true);
-    expect(useCollectorCardStore.getState().purchase('card-001', 888)).toEqual({ ok: false, reason: 'owned' });
+    expect(await useCollectorCardStore.getState().purchase('card-001', 888)).toEqual({ ok: false, reason: 'owned' });
     expect(usePetStore.getState().coins).toBe(112);
     expect(JSON.parse(values.get(COLLECTOR_CARD_LS_KEY) || '{}').ownedCards).toHaveLength(1);
   });
 
-  it('does not unlock a card when coins are insufficient', () => {
+  it('does not unlock a card when coins are insufficient', async () => {
     usePetStore.setState({ coins: 100 });
-    expect(useCollectorCardStore.getState().purchase('card-002', 888)).toEqual({ ok: false, reason: 'coins' });
+    usePetStore.getState().save();
+    expect(await useCollectorCardStore.getState().purchase('card-002', 888)).toEqual({ ok: false, reason: 'coins' });
     expect(useCollectorCardStore.getState().isOwned('card-002')).toBe(false);
     expect(usePetStore.getState().coins).toBe(100);
   });

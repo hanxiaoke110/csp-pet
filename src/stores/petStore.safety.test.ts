@@ -42,6 +42,7 @@ beforeEach(() => {
   useHatchStore.setState({ eggs: [] });
   usePetStore.setState({
     loaded: false,
+    loadError: null,
     ownedPets: [],
     activePetId: null,
     coins: 200,
@@ -66,6 +67,16 @@ beforeEach(() => {
 });
 
 describe('旧用户启动恢复', () => {
+  it('读取故障保持未加载并阻止默认钱包覆盖原存档', async () => {
+    localStorage.setItem('csp_pet_data', '{broken-original');
+    vi.spyOn(persist, 'dualLoad').mockRejectedValueOnce(new Error('存档副本无法读取'));
+    const save = vi.spyOn(persist, 'dualSave');
+    expect(await usePetStore.getState().load()).toBe(false);
+    expect(usePetStore.getState()).toMatchObject({ loaded: false, loadError: '存档副本无法读取' });
+    usePetStore.getState().save();
+    expect(save).not.toHaveBeenCalled();
+    expect(localStorage.getItem('csp_pet_data')).toBe('{broken-original');
+  });
   it('恢复旧集训存档时关闭增益并保留已有资源', async () => {
     vi.spyOn(persist, 'dualLoad').mockResolvedValueOnce(JSON.stringify({
       ownedPets: [makePet('legacy-camp')], coins: 1400,

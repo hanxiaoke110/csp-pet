@@ -1,5 +1,6 @@
 // Crash-safe localStorage helpers with temp-key backup.
 // Write tmp key first, then swap — reduces corruption risk on crash.
+import { storageWritesAllowed } from './restoreBarrier';
 
 export function safeLsGet(key: string, fallback: string = '{}'): string {
   try {
@@ -11,6 +12,7 @@ export function safeLsGet(key: string, fallback: string = '{}'): string {
 }
 
 export function safeLsSet(key: string, json: string): void {
+  if (!storageWritesAllowed()) return;
   try {
     localStorage.setItem(key + '_tmp', json);
     localStorage.setItem(key, json);
@@ -21,6 +23,7 @@ export function safeLsSet(key: string, json: string): void {
 }
 
 export function safeLsRemove(key: string): void {
+  if (!storageWritesAllowed()) return;
   try {
     localStorage.removeItem(key);
     localStorage.removeItem(key + '_tmp');

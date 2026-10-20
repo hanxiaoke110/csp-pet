@@ -6,11 +6,12 @@ import { getVersion } from '@tauri-apps/api/app';
 import {
   writeFile, writeTextFile, readTextFile, readDir, remove, mkdir, BaseDirectory,
 } from '@tauri-apps/plugin-fs';
-import { sqliteSet } from './sqlite-storage';
+import { sqliteSet, sqliteGet, flushSqliteWrites } from './sqlite-storage';
+import { beginRestoreBarrier, RESTORE_GENERATION_KEY } from './restoreBarrier';
 import { countCompletedProblems, mergeProblemStatusSnapshots } from './problemStatusMerge';
 import { localDateKey } from '../utils/localDate';
 import { JOURNAL_KEY, recoverEquipmentTransaction } from './equipmentTransactions';
-import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction, withPartnerReadLock } from './partnerTransactions';
+import { commitLocalSnapshots, validateLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction, withPartnerReadLock } from './partnerTransactions';
 import { migrateLegacyGrowth, PARTNER_GROWTH_KEY, validateGrowthSnapshot } from '../utils/partnerGrowth';
 import { defaultAccessorySnapshot, PARTNER_ACCESSORY_KEY, validateAccessorySnapshot } from '../data/partnerAccessories';
 
@@ -25,6 +26,8 @@ let backupWriteQueue: Promise<void> = Promise.resolve();
 
 // 可从服务器重新下载的内容，不打包进备份（减小文件体积）
 const EXCLUDED_LS_KEYS = new Set([
+  'dungeon_sync_outbox_v1', // Device-bound transport queue, never migrate it to another student/computer.
+  RESTORE_GENERATION_KEY,
   JOURNAL_KEY,
   PARTNER_JOURNAL_KEY,
   'csp_quiz_bank',
@@ -32,6 +35,13 @@ const EXCLUDED_LS_KEYS = new Set([
   'csp_reviewed_quiz_bank_version',
   'csp_imported_lessons',
   'csp_data_version',
+  // Old 1.7.x banks are downloadable content, not a student's answer/progress
+  // records. Replaying them in a multi-snapshot journal can exceed WebView quota.
+  'csp_exam_bank_v3',
+  'csp_exam_bank_v4',
+  'dungeon_exam_bank_v1',
+  'dungeon_csp_exam_bank_v4',
+  'dungeon_exam_bank_version',
   'csp_last_automatic_backup_date',
   'csp_collector_card_catalog_cache_v1',
   'csp_collector_card_cache_v1',
@@ -59,9 +69,12 @@ export interface BackupFile {
 
 /** 判断一个 localStorage key 是否属于需要迁移的用户数据 */
 export function shouldIncludeKey(key: string): boolean {
-  if (EXCLUDED_LS_KEYS.has(key)) return false;
-  if (key.startsWith('dungeon_cache_')) return false;
+  if (excludedBackupKey(key)) return false;
   return key.startsWith('csp_') || key.startsWith('dungeon_');
+}
+
+function excludedBackupKey(key: string): boolean {
+  return EXCLUDED_LS_KEYS.has(key) || key.startsWith('dungeon_cache_');
 }
 
 const SQLITE_BACKUP_KEYS = new Set([
@@ -94,10 +107,11 @@ export function parseBackup(raw: string): { ok: true; data: BackupFile } | { ok:
   if (typeof data.version !== 'number' || data.version > BACKUP_VERSION) {
     return { ok: false, error: `这个备份来自更新版本的 App（格式 v${data.version}），请先把 App 更新到最新版再导入` };
   }
-  if (!data.localStorage || typeof data.localStorage !== 'object') {
+  const record = (value: unknown) => value && typeof value === 'object' && !Array.isArray(value) && Object.values(value).every(v => typeof v === 'string');
+  if (!record(data.localStorage) || (data.sqlite !== undefined && !record(data.sqlite)) || (data.sprites !== undefined && !record(data.sprites))) {
     return { ok: false, error: '备份文件内容不完整' };
   }
-  return { ok: true, data: data as BackupFile };
+  return { ok: true, data: { ...data, sqlite: data.sqlite || {}, sprites: data.sprites || {} } as BackupFile };
 }
 
 /** 比较 "1.7.20" 形式的版本号；a > b 返回正数，相等返回 0 */
@@ -357,23 +371,38 @@ export interface ApplyResult {
   lsCount: number;
   sqliteCount: number;
   spriteCount: number;
+  sqliteFailures: number;
 }
 
 /**
  * 应用备份：完整写 localStorage → await 写 SQLite → 写精灵素材。
  * 调用方必须先完成快照；成功后应尽快刷新页面，避免内存中的旧状态覆盖写入。
  */
-export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
+export async function applyBackup(data: BackupFile, options: { preserveMissing?: boolean } = {}): Promise<ApplyResult> {
   return withPartnerReadLock(async () => {
   recoverEquipmentTransaction();
   recoverPartnerTransaction();
   const validationError = validateBackupState(data);
   if (validationError) throw new Error(validationError);
   const reconciled = reconcileBackupProgress(data);
+  // Old backups predate these optional modules. Do not silently mix a different
+  // local profile/journal into the restored student, or silently delete it.
+  const optionalUserData: Record<string, string> = {
+    csp_profile_data: 'profile_data', csp_focus_data: 'focus_data', csp_collector_cards_v1: 'collector_cards',
+  };
+  for (const [localKey, sqlKey] of Object.entries(optionalUserData)) {
+    if (reconciled.localStorage[localKey] || reconciled.sqlite[sqlKey]) {
+      const raw = reconciled.localStorage[localKey] || reconciled.sqlite[sqlKey];
+      reconciled.localStorage[localKey] = raw;
+      reconciled.sqlite[sqlKey] = raw;
+    } else if (!options.preserveMissing && (localStorage.getItem(localKey) || await sqliteGet(sqlKey))) {
+      throw new Error('此备份不包含本机已有的个人档案、专注记录或典藏卡。请确认保留这些额外数据后再恢复；不会自动删除日记。');
+    }
+  }
   if (!isValidPetSnapshot(reconciled.localStorage.csp_pet_data) && isValidPetSnapshot(reconciled.sqlite?.pet_data)) {
     reconciled.localStorage.csp_pet_data = reconciled.sqlite.pet_data;
   }
-  const originalLsCount = Object.keys(reconciled.localStorage).filter(key => key !== JOURNAL_KEY && key !== PARTNER_JOURNAL_KEY).length;
+  const originalLsCount = Object.keys(reconciled.localStorage).filter(key => !excludedBackupKey(key)).length;
   // Restore a consistent growth/wallet pair even when the source only had SQLite.
   const growth = reconciled.localStorage[PARTNER_GROWTH_KEY] || reconciled.sqlite?.partner_growth;
   const restoredAt = new Date().toISOString();
@@ -389,24 +418,49 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
   const restoredPet = JSON.stringify({ ...JSON.parse(reconciled.localStorage.csp_pet_data), savedAt: restoredAt });
   reconciled.localStorage.csp_pet_data = restoredPet;
   // Matching stamps prevent an old SQLite wallet or growth ledger from winning hydration.
-  if (reconciled.sqlite.pet_data) reconciled.sqlite.pet_data = restoredPet;
-  const entries = Object.entries(reconciled.localStorage).filter(([key]) => key !== JOURNAL_KEY && key !== PARTNER_JOURNAL_KEY);
+  reconciled.sqlite.pet_data = restoredPet;
+  // These dual-store records select the latest savedAt during hydration. Stamp
+  // both restored copies now so an older target copy cannot win after a failed
+  // SQL mirror. Arrays and problem-status maps must not gain schema fields.
+  for (const [localKey, sqlKey] of Object.entries({ ...optionalUserData, csp_quiz_state: 'quiz_state' })) {
+    const raw = reconciled.localStorage[localKey] || reconciled.sqlite[sqlKey];
+    if (!raw) continue;
+    try {
+      const value = JSON.parse(raw);
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        const stamped = JSON.stringify({ ...value, savedAt: restoredAt });
+        reconciled.localStorage[localKey] = stamped;
+        reconciled.sqlite[sqlKey] = stamped;
+      }
+    } catch { /* Legacy optional data is handled by its module's loader. */ }
+  }
+  // Apply the same cache exclusions to old imports as to new exports. Keep the
+  // healing histories and all user progress; do not delete the current caches.
+  const entries = Object.entries(reconciled.localStorage).filter(([key]) => !excludedBackupKey(key));
+  const snapshots = Object.fromEntries(entries);
+  const snapshotError = validateLocalSnapshots(snapshots);
+  if (snapshotError) throw new Error(`备份校验失败：${snapshotError}。尚未写入，请保留原备份并联系老师。`);
   let localPetSnapshotWritten = false;
-  if (commitLocalSnapshots(Object.fromEntries(entries))) {
+  const barrier = beginRestoreBarrier();
+  try { await flushSqliteWrites(); } catch (error) { barrier.cancel(); throw error; }
+  if (commitLocalSnapshots(snapshots, {}, true)) {
     localPetSnapshotWritten = true;
     // Never replay a transaction from the previous session over the restored profile.
     localStorage.removeItem(JOURNAL_KEY);
     localStorage.removeItem(PARTNER_JOURNAL_KEY);
-  } else throw new Error('备份恢复失败，本地存储无法完整写入；请检查磁盘空间后重试。');
+  } else { barrier.cancel(); throw new Error('备份恢复失败：应用本地存储无法完整写入，可能是存储配额不足或权限限制。请保留原备份，勿清空数据。'); }
 
+  try {
   let sqliteCount = 0;
+  let sqliteFailures = 0;
   let sqlitePetSnapshotWritten = false;
   for (const [key, value] of Object.entries(reconciled.sqlite || {})) {
+    if (!SQLITE_BACKUP_KEYS.has(key)) continue;
     try {
       await sqliteSet(key, value);
       if ((key !== 'partner_growth' || Boolean(growth)) && (key !== 'partner_accessories' || Boolean(accessory))) sqliteCount++;
       if (key === 'pet_data') sqlitePetSnapshotWritten = true;
-    } catch { /* 记录并继续 */ }
+    } catch { sqliteFailures++; }
   }
 
   if (!localPetSnapshotWritten && !sqlitePetSnapshotWritten) {
@@ -428,6 +482,12 @@ export async function applyBackup(data: BackupFile): Promise<ApplyResult> {
     }
   }
 
-  return { lsCount: originalLsCount, sqliteCount, spriteCount };
+  const result = { lsCount: originalLsCount, sqliteCount, spriteCount, sqliteFailures };
+  // The safety overlay sits above Settings; carry the truthful result there too.
+  if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+    window.dispatchEvent(new CustomEvent('backup-restore-completed', { detail: result }));
+  }
+  return result;
+  } finally { barrier.complete(); }
   });
 }

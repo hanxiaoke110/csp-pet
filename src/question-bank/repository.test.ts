@@ -137,6 +137,12 @@ describe('beginQuestionBankSession robustness (corrupted install guard)', () => 
   beforeEach(() => { installLocalStorageMock(); });
   afterEach(() => { vi.unstubAllGlobals(); });
 
+  it.each(['{}', '[]', 'null', '{"manifest":{}}', '{broken'])('ignores malformed cache %s and loads bundled questions', async raw => {
+    localStorage.setItem(V2_KEYS.current, raw);
+    installFetchMock(await makeCache(3));
+    expect((await beginQuestionBankSession(['daily'])).source).toBe('bundled');
+  });
+
   it('falls back to a valid current cache when bundled data is unreadable', async () => {
     installFetchMock(null);
     const cache = await makeCache(3);

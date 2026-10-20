@@ -1,4 +1,5 @@
 import { dualSave } from './persist';
+import { storageWritesAllowed } from './restoreBarrier';
 import { PARTNER_GROWTH_KEY, validateGrowthSnapshot, validGrowthId, validGrowthInteger } from '../utils/partnerGrowth';
 import { PARTNER_ACCESSORY_KEY, validateAccessorySnapshot } from '../data/partnerAccessories';
 
@@ -48,8 +49,18 @@ function validSnapshots(value: unknown): value is Snapshots {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const entries = Object.entries(value);
   return entries.length > 0 && entries.length <= 512 && entries.every(([key, raw]) =>
-    /^(csp_|dungeon_)[\w:-]{1,160}$/.test(key) && key !== PARTNER_JOURNAL_KEY
+    // These are flat localStorage keys, not filesystem paths. Healing records
+    // legitimately include Chinese knowledge points, spaces and C++ punctuation.
+    /^(csp_|dungeon_).{1,160}$/u.test(key) && !/[\u0000-\u001f\u007f-\u009f]/.test(key) && key !== PARTNER_JOURNAL_KEY
     && (raw === null || (typeof raw === 'string' && raw.length <= 12 * 1024 * 1024)));
+}
+/** Preflight is shared with backup restore so a schema rejection is never
+ * mislabeled as a storage/quota failure. Do not include private payloads in errors. */
+export function validateLocalSnapshots(after: unknown, mirrors: Record<string, string> = {}): string | null {
+  if (!validSnapshots(after)) return '存储记录格式、数量或长度不符合要求';
+  if (!validCommittedSnapshots(after)) return '智子、金币或成长资料格式不符合要求';
+  if (!validMirrors(mirrors, after)) return '数据同步映射格式不符合要求';
+  return null;
 }
 function write(snapshots: Snapshots) {
   for (const [key, raw] of Object.entries(snapshots)) {
@@ -85,8 +96,9 @@ export function recoverPartnerTransaction(): void {
  * Accessory purchases can supply pet + inventory snapshots using this same API.
  * Callers validate their domain snapshots and publish Zustand only on true.
  */
-export function commitLocalSnapshots(after: Snapshots, mirrors: Record<string, string> = {}): boolean {
-  if (!validSnapshots(after) || !validCommittedSnapshots(after) || !validMirrors(mirrors, after)) return false;
+export function commitLocalSnapshots(after: Snapshots, mirrors: Record<string, string> = {}, restoring = false): boolean {
+  if (!restoring && !storageWritesAllowed()) return false;
+  if (validateLocalSnapshots(after, mirrors)) return false;
   try {
     recoverPartnerTransaction();
     const before = Object.fromEntries(Object.keys(after).map(key => [key, localStorage.getItem(key)]));

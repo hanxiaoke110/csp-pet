@@ -1,7 +1,7 @@
 {
   "name": "csp-desktop-pet",
   "private": true,
-  "version": "1.7.53",
+  "version": "1.7.54",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -61,14 +61,13 @@
     "@tauri-apps/plugin-http": "^2.5.9",
     "@tauri-apps/plugin-opener": "^2",
     "@tauri-apps/plugin-updater": "^2.10.1",
-    "dompurify": "^3.4.10",
+    "dompurify": "^3.4.17",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.468.0",
-    "pdfjs-dist": "^6.1.200",
     "phaser": "^3.90.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.15.1",
+    "react-router-dom": "^7.18.4",
     "rot-js": "^2.2.1",
     "zustand": "^5.0.13"
   },
@@ -80,9 +79,10 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "jsdom": "^26.1.0",
-    "sharp": "^0.35.4",
+    "pdfjs-dist": "^6.4.299",
+    "sharp": "^0.35.5",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.11"
   }
 }

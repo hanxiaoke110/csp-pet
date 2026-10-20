@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { readFile, readTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { tick, wakeUp, triggerAnim, updateLastEvent, type PetAnimState } from './PetStateMachine';
 import { createStateMachine } from './PetStateMachine';
@@ -199,25 +199,24 @@ export default function PetSprite({
   // Scale to the frame height, not its width: every 192×208 legacy/Codex cell
   // remains fully visible inside the square pet canvas instead of losing feet.
   const renderWidth = Math.round(sz * frameWidth / frameHeight);
+  const animationId = `pet-spr-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
 
   // ─── Inject CSS @keyframes for sprite frame counts (dynamic, depends on cell width) ───
   // 用 transform: translateX 驱动逐帧动画（合成器处理，不触发整窗重绘），
   // 全屏透明窗口下必须避免 background-position 动画导致的每帧全表面重排。
   // 帧数 1..12 全覆盖：工坊素材帧数不规范（[行,帧数] 写法、9列图），不能只列 4/5/6/8。
   useEffect(() => {
-    const styleId = 'pet-sprite-keyframes';
-    const old = document.getElementById(styleId);
-    if (old) old.remove();
+    const styleId = `${animationId}-keyframes`;
     const rules: string[] = [];
     for (let n = 1; n <= 12; n++) {
-      rules.push(`@keyframes pet-spr-${n} { to { transform: translateX(-${renderWidth * n}px); } }`);
+      rules.push(`@keyframes ${animationId}-${n} { to { transform: translateX(-${renderWidth * n}px); } }`);
     }
     const style = document.createElement('style');
     style.id = styleId;
     style.textContent = rules.join('\n');
     document.head.appendChild(style);
     return () => { style.remove(); };
-  }, [renderWidth]);
+  }, [renderWidth, animationId]);
 
   // ─── 2D CSS sprite ───
   useEffect(() => {
@@ -355,7 +354,7 @@ export default function PetSprite({
           backgroundRepeat: 'no-repeat',
           imageRendering: 'pixelated',
           willChange: 'transform',
-          animation: `pet-spr-${frames} ${duration}ms steps(${frames}) infinite`,
+          animation: `${animationId}-${frames} ${duration}ms steps(${frames}) infinite`,
         }} />
       </div>
       {status === 'loading' && (

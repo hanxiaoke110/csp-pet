@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { downloadPetSprites } from '../utils/spriteDownloader';
 import { dualSave, dualLoad } from '../lib/persist';
+import { walletTransaction } from '../lib/walletTransaction';
 
 export type HatchRarity = 'common' | 'rare' | 'legendary';
 export type HatchStatus = 'waiting' | 'incubating' | 'ready' | 'failed';
@@ -29,6 +30,7 @@ interface HatchState {
 
   // Operations
   addEgg: (speciesId: string, petName: string, rarity: HatchRarity, acquisitionCost?: number) => HatchingEgg;
+  purchaseEgg: (speciesId: string, petName: string, rarity: HatchRarity, price: number) => Promise<HatchingEgg>;
   startHatching: (eggId: string) => void;
   checkEggs: () => void;                   // poll — updates ready eggs
   claimEgg: (eggId: string) => HatchingEgg | null;
@@ -104,6 +106,21 @@ function resumeDownload(get: () => HatchState, set: (fn: (s: HatchState) => Part
 
 export const useHatchStore = create<HatchState>((set, get) => ({
   eggs: [],
+
+  purchaseEgg: async (speciesId, petName, rarity, price) => {
+    const result = await walletTransaction(wallet => {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const eggs: HatchingEgg[] = raw ? JSON.parse(raw) : get().eggs;
+      if (!Array.isArray(eggs)) throw new Error('storage');
+      if (wallet.ownedPets.some((p: any) => p.speciesId === speciesId) || eggs.some(e => e.speciesId === speciesId)) throw new Error('owned');
+      const egg: HatchingEgg = { eggId: crypto.randomUUID(), speciesId, petName, rarity, acquisitionCost: price, startTime: null, duration: randomDuration(rarity), status: 'waiting', downloadStatus: 'done', downloadProgress: '' };
+      const next = [...eggs, egg];
+      return { cost: price, value: { egg, next }, snapshots: { [STORAGE_KEY]: JSON.stringify(next) }, mirrors: { [STORAGE_KEY]: 'hatch_eggs' } };
+    });
+    if (!result.ok) throw new Error(result.reason === 'owned' ? '已经拥有或正在孵化这位智子' : result.reason === 'coins' ? '金币不足' : '购买未能保存，未扣款，请稍后重试');
+    set({ eggs: result.value.next });
+    return result.value.egg;
+  },
 
   addEgg: (speciesId, petName, rarity, acquisitionCost) => {
     const egg: HatchingEgg = {
