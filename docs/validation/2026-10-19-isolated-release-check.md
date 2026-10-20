@@ -17,13 +17,32 @@
 
 全套 `npm test`：109 个文件、720 项通过，无未处理错误。
 
-## 远程 Windows / macOS 验证安排
+## 远程 Windows / macOS 验证结果
 
 现有 Build & Release 工作流补充：Windows 执行完整 JS 套件（包含以上隔离验收），Windows/macOS Apple Silicon 执行原生数据库故障测试。
 
-仅通过工作分支的 `workflow_dispatch` 构建候选产物，不打版本 tag，因此工作流的正式发布 job 跳过，不上传 Gitee 或修改 `update.json`。候选仍沿用当前版本号，仅供验证，不给学生安装；正式版本号、签名、100 MB 校验及后端部署应在正式发布阶段处理。
+仅通过工作分支的 `workflow_dispatch` 构建候选产物，不打版本 tag，因此工作流的正式发布 job 跳过，不上传 Gitee 或修改 `update.json`。候选仍沿用当前版本号，仅供验证，不给学生安装；正式版本号、发布签名及后端部署应在正式发布阶段处理。
 
-远程结果须以实际 CI 记录为准，提交工作流不代表已经通过。
+- [候选 CI 39262802860](https://github.com/hanxiaoke110/csp-pet/actions/runs/39262802860)：全部通过。
+- 验证源码：`3b1325cf2f446761c4af121e419d2b0483e747d4`，分支 `feature/student-feedback`，候选版本号 `1.7.53`。
+- Ubuntu 发布门禁通过；Windows 全套 720 项 JS 测试通过；Windows 和 Apple Silicon macOS 各 3 项原生数据库测试通过。
+- Windows x64、Apple Silicon macOS、Intel macOS 的 Tauri 安装包均成功构建并上传为 CI artifact。
+- `release`、`update-feishu-doc` 两个 job 均为 skipped；没有发布到正式下载渠道。
+- 首次候选 CI 的 Windows 题库检查暴露 POSIX `command -v` 不兼容 Windows。已改为直接探测编译器 `--version`、Windows 使用 `.exe` 输出文件；本机 33 项针对性测试、全套 720 项及第二次 Windows CI 均通过。此修复只涉及离线题库验证工具，不改变学生做题逻辑。
+
+CI 发布门禁会只读请求线上赛季接口；本机隔离恢复用例仍禁止联网，没有在生产接口执行写入。
+
+## 候选安装包回读校验（2026-10-20）
+
+从上述成功 CI 下载三份 artifact 到 `.tmp/isolated-candidate-39262802860/`，逐个核对文件名、非零大小、格式标记及严格小于 100,000,000 字节上限，生成本地 `verification.json`。两份 DMG 另经 `hdiutil verify` 验证镜像校验和有效；Windows 文件识别为 NSIS 自解压安装器，未在本机执行。
+
+| 平台 | 实际字节数 | 十进制 MB | SHA-256 |
+| --- | ---: | ---: | --- |
+| Windows x64 | 93,936,009 | 93.94 | `050a06a47891a32138cfbb1c804a6852163b9743eb0d23c37244c35e3a145302` |
+| macOS Apple Silicon | 98,161,982 | 98.16 | `d257c4b16e0a135b7a70c72c3000c1edd75e3eafa2f9283443c0be7b41167dd6` |
+| macOS Intel | 99,270,329 | 99.27 | `27f5b51f6f46728826d217528a7418f243ba380fcfeb3d440c2d52ec1e83bdf7` |
+
+三份均低于 100 MB；Intel 包只剩 729,671 字节余量，正式版本重建后必须重新检查，不能沿用此次体积结论。下载与哈希记录不等于安装验收或正式 updater 签名验证。没有安装或运行同 app ID 的候选程序，避免触碰正式 AppData。
 
 ## 明确的边界
 
