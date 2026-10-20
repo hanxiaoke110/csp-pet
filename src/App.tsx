@@ -176,7 +176,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.53';
+  const VER = '1.7.54';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -187,11 +187,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>🎁 优秀码恢复离线兑换，断网也能领取；补偿码仍需联网</div>
-          <div>🛡️ 防止连点与回车重复提交，成功提示不再被重复请求覆盖</div>
-          <div>💾 奖励与兑换记录一起安全保存，备份恢复后保留已领取记录</div>
-          <div>🕗 优秀码按北京时间当天有效，老师生成方式与奖励金额不变</div>
-          <div>🐾 保留原有智子、金币和学习进度，不自动重发历史奖励</div>
+          <div>💾 修复旧备份恢复失败，加强存档读取与异常写入保护</div>
+          <div>🛡️ 购买、收藏和付费改名一起保存金币与获得内容，防止连点重复扣款</div>
+          <div>📚 题库缓存与存档分开保存，缓存异常时仍可使用内置题库</div>
+          <div>🎁 补偿码网络中断可重试，优秀码仍在本地兑换，不重发历史奖励</div>
+          <div>🐾 修复多智子动画串扰与迷宫内专注计时，保留原有智子、金币和学习进度</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',
