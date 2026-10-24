@@ -12,7 +12,7 @@ function makeDb(existingProgress: Record<string, unknown> | null = null) {
         bindings: [] as unknown[],
         bind(...args: unknown[]) { this.bindings = args; calls.push({ sql, bindings: args }); return this; },
         async first() {
-          if (sql.includes("key='schema_version'")) return { value: '13' };
+          if (sql.includes("key='schema_version'")) return { value: '14' };
           if (/FROM dungeon_players/.test(sql) && /updated_at/.test(sql)) return null; // 无 5s 去重
           if (/FROM meta/.test(sql)) return null; // 写预算为空
           if (/FROM dungeon_progress/.test(sql)) return existingProgress;

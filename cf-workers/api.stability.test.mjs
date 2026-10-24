@@ -37,7 +37,7 @@ beforeEach(() => {
 
   };
   sql.exec(`CREATE TABLE meta(key TEXT PRIMARY KEY, value TEXT);
-    INSERT INTO meta VALUES('schema_version','13');
+    INSERT INTO meta VALUES('schema_version','14');
     CREATE TABLE rate_limits(key TEXT PRIMARY KEY, count INTEGER, reset_at TEXT);
     CREATE TABLE generated_codes(code TEXT PRIMARY KEY, type TEXT, coins INTEGER, exp INTEGER, class_code TEXT, status TEXT, used_at TEXT, used_device_hash TEXT);
     CREATE TABLE comp_claims(code TEXT PRIMARY KEY, device_hash TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')));

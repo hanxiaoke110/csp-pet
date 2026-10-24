@@ -320,7 +320,14 @@ let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
 // v13: remove both kinds of legacy permanent vote locks and shorten existing cooldowns to 7 days.
-const SCHEMA_VERSION = 13;
+// v14: ticket-based repeat votes without cooldown; client request IDs prevent retry double counts.
+const SCHEMA_VERSION = 14;
+async function migrateWishVoteRequests(db) {
+  await db.batch([
+    db.prepare("CREATE TABLE IF NOT EXISTS wish_vote_requests (request_id TEXT PRIMARY KEY, wish_id INTEGER NOT NULL, device_hash TEXT NOT NULL, class_code TEXT NOT NULL, lease_token TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')))"),
+    db.prepare("INSERT OR REPLACE INTO meta(key,value) VALUES('schema_version','14')"),
+  ]);
+}
 async function migrateWishVoteSchema(db) {
   // D1 batch is atomic. Rebuild to remove SQLite's non-droppable inline UNIQUE
   // constraint as well as named indexes, preserving every historical row and ID.
@@ -348,6 +355,12 @@ async function ensureSchema(db) {
   } catch {} // meta table may not exist on a fresh DB → fall through to full migrations
   if (storedVersion === 12) {
     await migrateWishVoteSchema(db);
+    await migrateWishVoteRequests(db);
+    _schemaEnsured = true;
+    return;
+  }
+  if (storedVersion === 13) {
+    await migrateWishVoteRequests(db);
     _schemaEnsured = true;
     return;
   }
@@ -427,6 +440,7 @@ async function ensureSchema(db) {
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_collector_ballots_created ON collector_ballots(created_at)`); } catch {}
   // Record schema version so future cold starts skip these ~25 statements
   await migrateWishVoteSchema(db);
+  await migrateWishVoteRequests(db);
   _schemaEnsured = true;
 }
 
@@ -1463,14 +1477,14 @@ export default {
         let result;
         if (codes.length > 0) {
           const ph = codes.map(() => '?').join(',');
-          const sql = `SELECT id, content, display_name, votes, status, created_at, CASE WHEN device_hash=? THEN 1 ELSE 0 END AS is_mine, (SELECT next_allowed_at FROM wish_vote_cooldowns c WHERE c.wish_id=wishes.id AND c.device_hash=?) AS next_vote_at FROM wishes WHERE ${statusFilter} AND class_code IN (${ph}) ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
-          result = await db.prepare(sql).bind(requestingDevice, requestingDevice, ...codes, ...params, limit + 1).all();
+          const sql = `SELECT id, content, display_name, votes, status, created_at, CASE WHEN device_hash=? THEN 1 ELSE 0 END AS is_mine, NULL AS next_vote_at FROM wishes WHERE ${statusFilter} AND class_code IN (${ph}) ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(requestingDevice, ...codes, ...params, limit + 1).all();
         } else if (classCode) {
           result = { results: [] };
         } else {
           // No class code — all wishes (backward compat)
-          const sql = `SELECT id, content, display_name, votes, status, created_at, CASE WHEN device_hash=? THEN 1 ELSE 0 END AS is_mine, (SELECT next_allowed_at FROM wish_vote_cooldowns c WHERE c.wish_id=wishes.id AND c.device_hash=?) AS next_vote_at FROM wishes WHERE ${statusFilter} ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
-          result = await db.prepare(sql).bind(requestingDevice, requestingDevice, ...params, limit + 1).all();
+          const sql = `SELECT id, content, display_name, votes, status, created_at, CASE WHEN device_hash=? THEN 1 ELSE 0 END AS is_mine, NULL AS next_vote_at FROM wishes WHERE ${statusFilter} ${cursorClause} ORDER BY ${orderClause} LIMIT ?`;
+          result = await db.prepare(sql).bind(requestingDevice, ...params, limit + 1).all();
         }
 
         const hasMore = result.results.length > limit;
@@ -1567,6 +1581,9 @@ export default {
 
         if (!Number.isSafeInteger(wish_id) || wish_id < 1 || typeof device_hash !== 'string' || !device_hash || device_hash.length > 128) return new Response(JSON.stringify({ error: '参数不完整' }), { status: 400, headers: cors });
         if (!class_code) return new Response(JSON.stringify({ error: '请先在设置中绑定班级码' }), { status: 400, headers: cors });
+        if (body.request_id !== undefined && (typeof body.request_id !== 'string' || !/^[A-Za-z0-9_-]{8,100}$/.test(body.request_id))) return new Response(JSON.stringify({ error: '投票请求编号无效' }), { status: 400, headers: cors });
+        // Legacy desktop clients omit this field; each intentional click remains one vote.
+        const requestId = body.request_id || crypto.randomUUID();
 
         // Rate limit
         if (!await checkRateLimit(db, `vote:${device_hash}`, RATE_VOTE_POST, RATE_WINDOW_SEC)) return new Response(JSON.stringify({ error: '操作太频繁，请稍后再试' }), { status: 429, headers: cors });
@@ -1584,17 +1601,18 @@ export default {
         const wishTeacher = await db.prepare("SELECT teacher_id FROM classes WHERE class_code=? AND status='active'").bind(wishCls.class_code).first();
         if (!wishTeacher || wishTeacher.teacher_id !== clsVote.teacher_id) return new Response(JSON.stringify({ error: '无法跨老师投票' }), { status: 403, headers: cors });
 
-        // D1 batch is transactional: acquire a unique lease, record history, and update total together.
+        // A new request spends a ticket; replaying its ID must not add a second vote.
+        // All three writes commit or roll back together, including request ownership.
         const leaseToken = crypto.randomUUID();
         const result = await db.batch([
-          db.prepare(`INSERT INTO wish_vote_cooldowns(wish_id,device_hash,next_allowed_at,lease_token) VALUES(?,?,datetime('now','+${WISH_VOTE_COOLDOWN_DAYS} days'),?) ON CONFLICT(wish_id,device_hash) DO UPDATE SET next_allowed_at=datetime('now','+${WISH_VOTE_COOLDOWN_DAYS} days'),lease_token=excluded.lease_token WHERE wish_vote_cooldowns.next_allowed_at<=datetime('now')`).bind(wish_id, device_hash, leaseToken),
-          db.prepare('INSERT INTO votes(wish_id,device_hash,class_code) SELECT ?,?,? FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=? AND lease_token=?').bind(wish_id, device_hash, class_code, wish_id, device_hash, leaseToken),
-          db.prepare("UPDATE wishes SET votes=votes+1 WHERE id=? AND EXISTS(SELECT 1 FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=? AND lease_token=?)").bind(wish_id, wish_id, device_hash, leaseToken),
+          db.prepare("INSERT OR IGNORE INTO wish_vote_requests(request_id,wish_id,device_hash,class_code,lease_token) SELECT ?,?,?,?,? WHERE EXISTS(SELECT 1 FROM wishes WHERE id=? AND status='active')").bind(requestId, wish_id, device_hash, class_code, leaseToken, wish_id),
+          db.prepare('INSERT INTO votes(wish_id,device_hash,class_code) SELECT wish_id,device_hash,class_code FROM wish_vote_requests WHERE request_id=? AND lease_token=?').bind(requestId, leaseToken),
+          db.prepare("UPDATE wishes SET votes=votes+1 WHERE id=? AND EXISTS(SELECT 1 FROM wish_vote_requests WHERE request_id=? AND lease_token=?)").bind(wish_id, requestId, leaseToken),
         ]);
-        const cooldown = await db.prepare('SELECT next_allowed_at FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=?').bind(wish_id, device_hash).first();
-        const next_vote_at = cooldown?.next_allowed_at ? cooldown.next_allowed_at.replace(' ', 'T') + 'Z' : null;
-        if (!result[0].meta?.changes) return new Response(JSON.stringify({ error: `同一愿望需满${WISH_VOTE_COOLDOWN_DAYS}天后可再次投票`, next_vote_at }), { status: 409, headers: cors });
-        return new Response(JSON.stringify({ success: true, next_vote_at }), { headers: cors });
+        const receipt = await db.prepare('SELECT wish_id,device_hash,class_code FROM wish_vote_requests WHERE request_id=?').bind(requestId).first();
+        if (!receipt) return new Response(JSON.stringify({ error: '许愿不存在或已删除' }), { status: 404, headers: cors });
+        if (receipt.wish_id !== wish_id || receipt.device_hash !== device_hash || receipt.class_code !== class_code) return new Response(JSON.stringify({ error: '请求编号已用于其他投票，请重新操作' }), { status: 409, headers: cors });
+        return new Response(JSON.stringify({ success: true, next_vote_at: null, request_id: requestId, replayed: !result[0].meta?.changes }), { headers: cors });
       }
 
       // ═══ ADMIN API ═══

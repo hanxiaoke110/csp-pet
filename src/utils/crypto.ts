@@ -65,15 +65,18 @@ export function getDeviceId(): string {
 
 export function getTicketCount(): number {
   try {
-    return parseInt(localStorage.getItem('csp_wish_tickets') || '0');
+    const count = Number(localStorage.getItem('csp_wish_tickets') || '0');
+    return Number.isSafeInteger(count) && count >= 0 ? count : 0;
   } catch { return 0; }
 }
 
 export function useTicket(): boolean {
   const count = getTicketCount();
   if (count <= 0) return false;
-  localStorage.setItem('csp_wish_tickets', String(count - 1));
-  return true;
+  try {
+    localStorage.setItem('csp_wish_tickets', String(count - 1));
+    return getTicketCount() === count - 1;
+  } catch { return false; }
 }
 
 // ── Weekly ticket purchase limit (3 per week) ──

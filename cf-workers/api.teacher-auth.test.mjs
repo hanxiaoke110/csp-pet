@@ -14,7 +14,7 @@ beforeEach(async () => {
   } };
   const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('old-password-csp-teacher-salt'));
   const hash = btoa(String.fromCharCode(...new Uint8Array(bytes)));
-  sql.exec(`CREATE TABLE meta(key TEXT PRIMARY KEY,value TEXT); INSERT INTO meta VALUES('schema_version','13');
+  sql.exec(`CREATE TABLE meta(key TEXT PRIMARY KEY,value TEXT); INSERT INTO meta VALUES('schema_version','14');
     CREATE TABLE rate_limits(key TEXT PRIMARY KEY,count INTEGER,reset_at TEXT);
     CREATE TABLE teachers(teacher_id TEXT PRIMARY KEY,phone TEXT,password_hash TEXT,name TEXT,token TEXT,permissions TEXT,max_pets INTEGER,created_at TEXT);
     CREATE TABLE classes(class_code TEXT,teacher_id TEXT,status TEXT,created_at TEXT);`);
