@@ -7,7 +7,7 @@ const manifest = { files: Object.fromEntries(names.map(name => [`${name}.json`, 
 const db = {
   async exec() {},
   prepare() {
-    return { async first() { return { value: '6' }; }, async run() { return {}; }, async all() { return { results: [] }; } };
+    return { async first() { return { value: '13' }; }, async run() { return {}; }, async all() { return { results: [] }; } };
   },
 };
 const request = (name: string) => worker.fetch(new Request(`https://api.example.test/api/question-bank/v2/${name}`), { DB: db }, { waitUntil() {} });

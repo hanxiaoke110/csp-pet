@@ -14,7 +14,7 @@ function makeDb(initialValue: string | null = null) {
       return {
         bind(...values: unknown[]) { call.bindings = values; return this; },
         async first() {
-          if (sql.includes("key='schema_version'")) return { value: '6' };
+          if (sql.includes("key='schema_version'")) return { value: '13' };
           if (sql.includes('SELECT value FROM meta WHERE key=?')) {
             return storedValue == null ? null : { value: storedValue };
           }

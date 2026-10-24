@@ -5,14 +5,14 @@ import { formatVoteCooldown, interpretVoteResponse } from './wishWallLogic';
 
 describe('许愿页面', () => {
   it('冷却或失败不扣票，仅明确成功扣票', () => {
-    expect(interpretVoteResponse(409, { error: '满14天后可再次投票' }).spendTicket).toBe(false);
+    expect(interpretVoteResponse(409, { error: '满7天后可再次投票' }).spendTicket).toBe(false);
     expect(interpretVoteResponse(500, { success: true }).spendTicket).toBe(false);
     expect(interpretVoteResponse(200, {}).spendTicket).toBe(false);
     expect(interpretVoteResponse(200, { success: true }).spendTicket).toBe(true);
   });
   it('准确显示冷却时间且到期开放', () => {
     const now = Date.parse('2026-10-11T00:00:00Z');
-    expect(formatVoteCooldown('2026-10-25 00:00:00', now)).toContain('14 天');
+    expect(formatVoteCooldown('2026-10-18 00:00:00', now)).toContain('7 天');
     expect(formatVoteCooldown('2026-10-10T00:00:00Z', now)).toBe('');
     expect(formatVoteCooldown('bad', now)).toBe('');
   });

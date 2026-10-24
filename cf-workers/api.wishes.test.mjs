@@ -37,7 +37,7 @@ beforeEach(() => {
   };
   // Fresh schema must be initialized even if another worker instance was tested.
   sql.exec(`CREATE TABLE meta(key TEXT PRIMARY KEY, value TEXT);
-    INSERT INTO meta VALUES('schema_version','12');
+    INSERT INTO meta VALUES('schema_version','13');
     CREATE TABLE classes(class_code TEXT PRIMARY KEY, teacher_id TEXT, status TEXT);
     CREATE TABLE class_students(class_code TEXT, device_hash TEXT, status TEXT);
     CREATE TABLE wishes(id INTEGER PRIMARY KEY, content TEXT, display_name TEXT, device_hash TEXT, votes INTEGER DEFAULT 0, status TEXT, created_at TEXT DEFAULT (datetime('now')), class_code TEXT, deleted_at TEXT);
@@ -57,7 +57,27 @@ async function request(path, method = 'GET', body) {
 }
 const vote = () => request('/api/vote', 'POST', { wish_id: 7, device_hash: 'voter', class_code: 'CLASS1' });
 
-describe('许愿所有权与14天冷却', () => {
+describe('许愿所有权与7天冷却', () => {
+  it.each([8,15])('线上内置唯一约束旧表在上次投票 %i 天后升级，能再投并保留历史', async days => {
+    sql.exec(`UPDATE meta SET value='12' WHERE key='schema_version'; DROP TABLE votes;
+      CREATE TABLE votes(id INTEGER PRIMARY KEY AUTOINCREMENT, wish_id INTEGER NOT NULL, device_hash TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')), class_code TEXT DEFAULT '', UNIQUE(wish_id,device_hash));
+      INSERT INTO votes(id,wish_id,device_hash,class_code,created_at) VALUES(42,7,'voter','CLASS1',datetime('now','-${days} days'));
+      INSERT INTO wish_vote_cooldowns VALUES(7,'voter',datetime('now','+${14-days} days'),'old-lease');
+      UPDATE wishes SET votes=1 WHERE id=7;`);
+    vi.resetModules();
+    const fresh = (await import('./api.js')).default;
+    const response = await fresh.fetch(new Request('https://api.cspstudy.top/api/vote', {
+      method:'POST', body:JSON.stringify({wish_id:7,device_hash:'voter',class_code:'CLASS1'}),
+    }), {DB:db}, {waitUntil(){}});
+    expect(response.status).toBe(200);
+    expect(sql.prepare('SELECT COUNT(*) n FROM votes').get().n).toBe(2);
+    expect(sql.prepare('SELECT class_code FROM votes WHERE id=42').get().class_code).toBe('CLASS1');
+    expect(sql.prepare('SELECT MAX(id) n FROM votes').get().n).toBeGreaterThan(42);
+    expect(sql.prepare('SELECT votes FROM wishes WHERE id=7').get().votes).toBe(2);
+    const next = Date.parse((await response.json()).next_vote_at);
+    expect(next-Date.now()).toBeGreaterThan(7*86400000-5000);
+    expect(next-Date.now()).toBeLessThanOrEqual(7*86400000);
+  });
   it('旧永久投票锁迁移为冷却，保留历史与排行榜票数', async () => {
     sql.exec(`DROP TABLE wish_vote_cooldowns;
       UPDATE meta SET value='11' WHERE key='schema_version';
@@ -70,13 +90,46 @@ describe('许愿所有权与14天冷却', () => {
       method: 'POST', body: JSON.stringify({ wish_id: 7, device_hash: 'voter', class_code: 'CLASS1' }),
     }), { DB: db }, { waitUntil() {} });
     expect(response.status).toBe(409);
-    expect(sql.prepare("SELECT value FROM meta WHERE key='schema_version'").get().value).toBe('12');
+    expect(sql.prepare("SELECT value FROM meta WHERE key='schema_version'").get().value).toBe('13');
     expect(sql.prepare("SELECT name FROM sqlite_master WHERE name='idx_votes_unique'").get()).toBeUndefined();
     expect(sql.prepare('SELECT votes FROM wishes WHERE id=7').get().votes).toBe(1);
     expect(sql.prepare('SELECT COUNT(*) n FROM votes').get().n).toBe(1);
   });
 
-  it('记录投票失败时整个事务回滚，不占用14天冷却', async () => {
+  it('旧14天等待缩为7天，未满7天仍阻止且再次冷启动不重复缩短', async () => {
+    sql.exec(`UPDATE meta SET value='12' WHERE key='schema_version';
+      INSERT INTO votes(wish_id,device_hash,class_code,created_at) VALUES(7,'voter','CLASS1',datetime('now','-6 days'));
+      INSERT INTO wish_vote_cooldowns VALUES(7,'voter',datetime('now','+8 days'),'old-lease');
+      UPDATE wishes SET votes=1 WHERE id=7;`);
+    for (let i=0;i<2;i++) {
+      vi.resetModules();
+      const fresh=(await import('./api.js')).default;
+      const response=await fresh.fetch(new Request('https://test.invalid/api/vote', {
+        method:'POST',body:JSON.stringify({wish_id:7,device_hash:'voter',class_code:'CLASS1'}),
+      }),{DB:db},{waitUntil(){}});
+      expect(response.status).toBe(409);
+      const data=await response.json();
+      expect(data.error).toContain('7天');
+      expect(Date.parse(data.next_vote_at)-Date.now()).toBeGreaterThan(86400000-5000);
+      expect(Date.parse(data.next_vote_at)-Date.now()).toBeLessThanOrEqual(86400000);
+    }
+    expect(sql.prepare('SELECT COUNT(*) n FROM votes').get().n).toBe(1);
+    expect(sql.prepare('SELECT votes FROM wishes WHERE id=7').get().votes).toBe(1);
+  });
+
+  it('迁移写入失败会整体回滚，旧表、历史和版本保持可恢复', async () => {
+    sql.exec(`UPDATE meta SET value='12' WHERE key='schema_version';
+      INSERT INTO votes(wish_id,device_hash,class_code) VALUES(7,'voter','CLASS1');
+      CREATE TRIGGER reject_schema BEFORE INSERT ON meta WHEN NEW.key='schema_version' AND NEW.value='13' BEGIN SELECT RAISE(ABORT,'synthetic migration failure'); END;`);
+    vi.resetModules();
+    const fresh=(await import('./api.js')).default;
+    await expect(fresh.fetch(new Request('https://test.invalid/api/health'),{DB:db},{waitUntil(){}})).rejects.toThrow('synthetic migration failure');
+    expect(sql.prepare("SELECT value FROM meta WHERE key='schema_version'").get().value).toBe('12');
+    expect(sql.prepare('SELECT COUNT(*) n FROM votes').get().n).toBe(1);
+    expect(sql.prepare("SELECT name FROM sqlite_master WHERE name='votes_history_v13'").get()).toBeUndefined();
+  });
+
+  it('记录投票失败时整个事务回滚，不占用7天冷却', async () => {
     sql.exec("CREATE TRIGGER reject_vote BEFORE INSERT ON votes BEGIN SELECT RAISE(ABORT,'test write failure'); END;");
     expect((await vote()).status).toBe(500);
     expect(sql.prepare('SELECT COUNT(*) n FROM wish_vote_cooldowns').get().n).toBe(0);
@@ -88,7 +141,7 @@ describe('许愿所有权与14天冷却', () => {
     expect(sql.prepare('SELECT COUNT(*) n FROM votes').get().n).toBe(1);
     expect(sql.prepare('SELECT votes FROM wishes WHERE id=7').get().votes).toBe(1);
   });
-  it('冷却期间不重复计票，满14天后可再次投票', async () => {
+  it('冷却期间不重复计票，满7天后可再次投票', async () => {
     expect((await vote()).status).toBe(200);
     const blocked = await vote();
     expect(blocked.status).toBe(409);

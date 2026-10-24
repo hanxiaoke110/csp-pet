@@ -22,7 +22,7 @@ function makeDb(petIds = ['ws-AAAAAA', 'ws-BBBBBB', 'ws-CCCCCC']) {
       return {
         bind(...values: unknown[]) { call.bindings = values; return this; },
         async first() {
-          if (call.sql.includes("key='schema_version'")) return { value: '11' };
+          if (call.sql.includes("key='schema_version'")) return { value: '13' };
           if (call.sql === 'SELECT value FROM meta WHERE key=?') {
             return { value: JSON.stringify({ status: 'open', title: '典藏投票', startsAt: '', endsAt: '' }) };
           }

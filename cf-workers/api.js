@@ -4,6 +4,7 @@
 
 const MONTHLY_SUBMIT_LIMIT = 3;
 const ACTIVE_WISH_LIMIT = 3;  // max active wishes per student — freed when teacher deletes/completes
+const WISH_VOTE_COOLDOWN_DAYS = 7;
 const CLEANUP_PROTECT_DAYS = 7;
 const CLEANUP_MIN_KEEP = 20;
 const QUESTION_BANK_BASE = 'https://gitee.com/hanliuliu110/csp-pet/raw/master/public/course-data';
@@ -318,15 +319,38 @@ function getDateDashed() {
 let _schemaEnsured = false;
 // Bump when ensureSchema migrations change. Lets cold instances skip re-running ~25 statements
 // (1 meta read ~0.25s instead of ~6s) once the version is recorded.
-// v12: 许愿自删与服务端14天复投冷却；典藏投票规则保持不变。
-const SCHEMA_VERSION = 12;
+// v13: remove both kinds of legacy permanent vote locks and shorten existing cooldowns to 7 days.
+const SCHEMA_VERSION = 13;
+async function migrateWishVoteSchema(db) {
+  // D1 batch is atomic. Rebuild to remove SQLite's non-droppable inline UNIQUE
+  // constraint as well as named indexes, preserving every historical row and ID.
+  // A second cold instance can safely repeat this complete transaction.
+  await db.batch([
+    db.prepare("CREATE TABLE IF NOT EXISTS votes_history_v13 (id INTEGER PRIMARY KEY AUTOINCREMENT, wish_id INTEGER NOT NULL, device_hash TEXT NOT NULL, class_code TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))"),
+    db.prepare('INSERT INTO votes_history_v13(id,wish_id,device_hash,class_code,created_at) SELECT id,wish_id,device_hash,class_code,created_at FROM votes'),
+    db.prepare('DROP TABLE votes'),
+    db.prepare('ALTER TABLE votes_history_v13 RENAME TO votes'),
+    db.prepare('CREATE INDEX idx_votes_wish ON votes(wish_id)'),
+    // Rows without history are unusual, but retain their wait rather than clearing it.
+    db.prepare("UPDATE wish_vote_cooldowns SET next_allowed_at=datetime(next_allowed_at,'-7 days') WHERE NOT EXISTS(SELECT 1 FROM votes v WHERE v.wish_id=wish_vote_cooldowns.wish_id AND v.device_hash=wish_vote_cooldowns.device_hash) AND COALESCE((SELECT CAST(value AS INTEGER) FROM meta WHERE key='schema_version'),0)<13"),
+    db.prepare(`INSERT INTO wish_vote_cooldowns(wish_id,device_hash,next_allowed_at) SELECT wish_id,device_hash,datetime(MAX(created_at),'+${WISH_VOTE_COOLDOWN_DAYS} days') FROM votes GROUP BY wish_id,device_hash HAVING MAX(created_at) IS NOT NULL ON CONFLICT(wish_id,device_hash) DO UPDATE SET next_allowed_at=excluded.next_allowed_at`),
+    db.prepare("INSERT OR REPLACE INTO meta(key,value) VALUES('schema_version','13')"),
+  ]);
+}
 async function ensureSchema(db) {
   if (_schemaEnsured) return;
+  let storedVersion = 0;
   // Fast path: schema already at current version → skip all migrations (1 round-trip)
   try {
     const v = await db.prepare("SELECT value FROM meta WHERE key='schema_version'").first();
+    storedVersion = Number(v?.value) || 0;
     if (v && v.value && (parseInt(v.value, 10) || 0) >= SCHEMA_VERSION) { _schemaEnsured = true; return; }
   } catch {} // meta table may not exist on a fresh DB → fall through to full migrations
+  if (storedVersion === 12) {
+    await migrateWishVoteSchema(db);
+    _schemaEnsured = true;
+    return;
+  }
   // Core tables (CREATE IF NOT EXISTS for fresh deployments)
   try { await db.exec(`CREATE TABLE IF NOT EXISTS wishes (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, display_name TEXT, real_name_enc TEXT DEFAULT '', phone_enc TEXT DEFAULT '', device_hash TEXT, votes INTEGER DEFAULT 0, status TEXT DEFAULT 'active', created_at TEXT DEFAULT (datetime('now')), class_code TEXT DEFAULT '')`); } catch {}
   try { await db.exec(`CREATE TABLE IF NOT EXISTS votes (id INTEGER PRIMARY KEY AUTOINCREMENT, wish_id INTEGER, device_hash TEXT, class_code TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))`); } catch {}
@@ -375,8 +399,6 @@ async function ensureSchema(db) {
   try { await db.exec(`ALTER TABLE classes ADD COLUMN teacher_name TEXT DEFAULT ''`); } catch {}
   // Fail closed if the cooldown migration cannot complete; never mark a partial migration current.
   await db.exec(`CREATE TABLE IF NOT EXISTS wish_vote_cooldowns (wish_id INTEGER NOT NULL, device_hash TEXT NOT NULL, next_allowed_at TEXT NOT NULL, lease_token TEXT NOT NULL DEFAULT '', PRIMARY KEY(wish_id, device_hash))`);
-  await db.exec(`INSERT OR IGNORE INTO wish_vote_cooldowns(wish_id,device_hash,next_allowed_at) SELECT wish_id,device_hash,datetime(MAX(created_at),'+14 days') FROM votes GROUP BY wish_id,device_hash`);
-  await db.exec(`DROP INDEX IF EXISTS idx_votes_unique`);
   try { await db.exec(`ALTER TABLE wishes ADD COLUMN deleted_at TEXT`); } catch {}
   // ── Dungeon tables ──
   try { await db.exec(`CREATE TABLE IF NOT EXISTS dungeon_players (device_hash TEXT NOT NULL, class_code TEXT NOT NULL DEFAULT '', teacher_id TEXT DEFAULT '', display_name TEXT NOT NULL DEFAULT '', real_name TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', status TEXT DEFAULT 'active', school TEXT DEFAULT 'cultivation', player_level INTEGER DEFAULT 1, exp INTEGER DEFAULT 0, gold INTEGER DEFAULT 0, rank_tier INTEGER DEFAULT 1, rank_points INTEGER DEFAULT 0, total_answered INTEGER DEFAULT 0, total_correct INTEGER DEFAULT 0, current_streak INTEGER DEFAULT 0, max_streak INTEGER DEFAULT 0, login_streak INTEGER DEFAULT 0, last_login_date TEXT DEFAULT '', season TEXT DEFAULT '2026-autumn', created_at TEXT DEFAULT (datetime('now')), updated_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (device_hash))`); } catch {}
@@ -404,7 +426,7 @@ async function ensureSchema(db) {
   try { await db.exec(`INSERT OR IGNORE INTO meta(key,value) VALUES('${COLLECTOR_VOTE_COUNT_META_KEY}', CAST((SELECT COUNT(*) FROM collector_ballots) AS TEXT))`); } catch {}
   try { await db.exec(`CREATE INDEX IF NOT EXISTS idx_collector_ballots_created ON collector_ballots(created_at)`); } catch {}
   // Record schema version so future cold starts skip these ~25 statements
-  try { await db.exec(`INSERT OR REPLACE INTO meta(key,value) VALUES('schema_version','${SCHEMA_VERSION}')`); } catch {}
+  await migrateWishVoteSchema(db);
   _schemaEnsured = true;
 }
 
@@ -1565,13 +1587,13 @@ export default {
         // D1 batch is transactional: acquire a unique lease, record history, and update total together.
         const leaseToken = crypto.randomUUID();
         const result = await db.batch([
-          db.prepare("INSERT INTO wish_vote_cooldowns(wish_id,device_hash,next_allowed_at,lease_token) VALUES(?,?,datetime('now','+14 days'),?) ON CONFLICT(wish_id,device_hash) DO UPDATE SET next_allowed_at=datetime('now','+14 days'),lease_token=excluded.lease_token WHERE wish_vote_cooldowns.next_allowed_at<=datetime('now')").bind(wish_id, device_hash, leaseToken),
+          db.prepare(`INSERT INTO wish_vote_cooldowns(wish_id,device_hash,next_allowed_at,lease_token) VALUES(?,?,datetime('now','+${WISH_VOTE_COOLDOWN_DAYS} days'),?) ON CONFLICT(wish_id,device_hash) DO UPDATE SET next_allowed_at=datetime('now','+${WISH_VOTE_COOLDOWN_DAYS} days'),lease_token=excluded.lease_token WHERE wish_vote_cooldowns.next_allowed_at<=datetime('now')`).bind(wish_id, device_hash, leaseToken),
           db.prepare('INSERT INTO votes(wish_id,device_hash,class_code) SELECT ?,?,? FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=? AND lease_token=?').bind(wish_id, device_hash, class_code, wish_id, device_hash, leaseToken),
           db.prepare("UPDATE wishes SET votes=votes+1 WHERE id=? AND EXISTS(SELECT 1 FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=? AND lease_token=?)").bind(wish_id, wish_id, device_hash, leaseToken),
         ]);
         const cooldown = await db.prepare('SELECT next_allowed_at FROM wish_vote_cooldowns WHERE wish_id=? AND device_hash=?').bind(wish_id, device_hash).first();
         const next_vote_at = cooldown?.next_allowed_at ? cooldown.next_allowed_at.replace(' ', 'T') + 'Z' : null;
-        if (!result[0].meta?.changes) return new Response(JSON.stringify({ error: '同一愿望需满14天后可再次投票', next_vote_at }), { status: 409, headers: cors });
+        if (!result[0].meta?.changes) return new Response(JSON.stringify({ error: `同一愿望需满${WISH_VOTE_COOLDOWN_DAYS}天后可再次投票`, next_vote_at }), { status: 409, headers: cors });
         return new Response(JSON.stringify({ success: true, next_vote_at }), { headers: cors });
       }
 

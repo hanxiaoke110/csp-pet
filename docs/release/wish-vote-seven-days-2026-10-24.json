@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-10-24T03:35:49.385Z",
+  "workerVersion": "909c62df-aa2a-4ae4-993d-3355a53d6304",
+  "previousWorkerVersion": "cc23b518-ef3f-4ef0-ab80-5665f805f310",
+  "schemaVersion": 13,
+  "cooldownDays": 7,
+  "historicalVotesPreserved": 306,
+  "wishesPreserved": 183,
+  "permanentUniqueLocks": 0,
+  "cooldownMismatches": 0,
+  "relatedTestsPassed": 74,
+  "typecheck": true,
+  "localD1LegacySnapshot": true,
+  "productionTestVotes": 0,
+  "desktopRelease": false,
+  "desktopCopyPendingNextRelease": true
+}

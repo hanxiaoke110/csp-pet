@@ -33,6 +33,7 @@ function makeDb() {
       return {
         bind(...values: unknown[]) { call.bindings = values; return this; },
         async first() {
+          if (sql.includes("key='schema_version'")) return { value: '13' };
           if (sql.includes('FROM rate_limits WHERE key=')) {
             return rateLimits.get(String(call.bindings[0] || '')) || null;
           }

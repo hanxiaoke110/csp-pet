@@ -12,7 +12,7 @@ function makeDb() {
       return {
         bind(...values: unknown[]) { call.bindings = values; return this; },
         async first() {
-          if (sql.includes("key='schema_version'")) return { value: '6' };
+          if (sql.includes("key='schema_version'")) return { value: '13' };
           if (sql.includes('FROM classes WHERE class_code=')) return { teacher_id: 'teacher-A' };
           if (sql.includes('FROM teachers WHERE token=')) {
             return { teacher_id: 'teacher-A', name: '王老师', token: 'teacher-token' };
