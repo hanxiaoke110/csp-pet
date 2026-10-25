@@ -8,6 +8,7 @@ import { usePetStore } from '../../stores/petStore';
 import type { CollectorCardCatalog, CollectorCardDefinition, ResolvedCollectorCardAssets } from '../../types/collectorCard';
 import { areCollectorCardAssetsCached, ensureCollectorCardAssets } from '../../utils/collectorCardDownloader';
 import HoloCardViewer from './HoloCardViewer';
+import ModalPortal from '../ModalPortal';
 import './collectorCards.css';
 
 const ELEMENT_LABELS = { fire: '火', water: '水', wind: '风', earth: '地', light: '光' } as const;
@@ -183,7 +184,7 @@ export default function CollectorCardsPage() {
         </section>
       )}
 
-      {selected && (
+      {selected && <ModalPortal>
         <div className="collector-modal" role="dialog" aria-modal="true" aria-label={`${selected.name}典藏卡`}>
           <button className="collector-modal-close" type="button" onClick={() => { setSelected(null); setResolvedAssets(null); }} aria-label="关闭"><X /></button>
           {resolvedAssets ? (
@@ -204,7 +205,7 @@ export default function CollectorCardsPage() {
             </div>
           )}
         </div>
-      )}
+      </ModalPortal>}
 
       {reveal && (
         <div className="collector-reveal" role="status" aria-live="polite">
