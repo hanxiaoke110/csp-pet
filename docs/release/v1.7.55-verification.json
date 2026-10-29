@@ -1,0 +1,46 @@
+{
+  "version": "1.7.55",
+  "verifiedOn": "2026-10-29",
+  "timezone": "Asia/Shanghai",
+  "sourceCommit": "0f179d93ac56d4fe971200a8fefd16d03b96257f",
+  "workflowRunId": 40877344840,
+  "workflowConclusion": "cancelled",
+  "artifactSource": "Successful preflight and all three platform jobs; stalled upload cancelled, same CI artifacts manually published",
+  "checks": [
+    {
+      "platform": "windows-x86_64",
+      "name": "CSP_1.7.55_x64-setup.exe",
+      "bytes": 93934860,
+      "sha256": "6b5e01705bce1dcfff89813c8325ae32b1aa331ff98b6ae785c6f7a5de1af8cf",
+      "signatureVerified": true
+    },
+    {
+      "platform": "darwin-aarch64",
+      "name": "CSP_1.7.55_aarch64.dmg",
+      "bytes": 98164367,
+      "sha256": "cfb44d1786a3c0382dfb359af3c426b9926aaa082195ded16032b05b57ee8f17",
+      "signatureVerified": true,
+      "diskImageVerified": true
+    },
+    {
+      "platform": "darwin-x86_64",
+      "name": "CSP_1.7.55_x64.dmg",
+      "bytes": 99273177,
+      "sha256": "ad22398e18a4a7013865669994d777d9798a6596bff0ea2135911c5492e69b2e",
+      "signatureVerified": true,
+      "diskImageVerified": true
+    }
+  ],
+  "updaterVerified": true,
+  "stableDownloadEndpointsVerified": 3,
+  "githubAssetsVerified": true,
+  "githubReleasePublic": true,
+  "announcementId": 43,
+  "feishuRevision": 415,
+  "feishuInstallerCardsVerified": 3,
+  "feishuPlatformPositionsVerified": true,
+  "feishuTutorialsAndMediaUnchanged": true,
+  "workerDeployedThisRelease": false,
+  "databaseMigrationPerformed": false,
+  "windowsGuiAcceptancePerformed": false
+}
