@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { AcquisitionSource, OwnedTrialItem } from '../types/exploration';
 import { TRIAL_EQUIPMENT } from '../data/explorationItems';
-import { getUpgradeCost } from '../data/equipmentCatalog';
+import { EQUIPMENT_ELEMENTS, SOUL_FRAGMENTS_PER_CRYSTAL, getUpgradeCost } from '../data/equipmentCatalog';
 import { usePetStore } from '../../src/stores/petStore';
 import { commitEquipmentTransaction, recoverEquipmentTransaction } from '../../src/lib/equipmentTransactions';
 
@@ -22,6 +22,7 @@ interface TrialEquipmentState {
   upgradeItem: (ownedItemId: string) => { ok: boolean; reason?: string };
   dismantleItem: (ownedItemId: string) => { ok: boolean; refundedCoins: number; reason?: string };
   grantMaterial: (materialId: string, amount: number) => void;
+  exchangeSoulFragments: (element: string, quantity: number) => { ok: boolean; reason?: string };
   unequipItem: (ownedItemId: string) => void;
   consumeItem: (ownedItemId: string) => boolean;
   equipItem: (ownedItemId: string) => void;
@@ -73,6 +74,29 @@ export const useTrialEquipmentStore = create<TrialEquipmentState>((set, get) => 
   soulFragments: 0,
   materials: {},
   materialClaims: [],
+  exchangeSoulFragments: (element, quantity) => {
+    if (!EQUIPMENT_ELEMENTS.some(value => value === element) || !Number.isSafeInteger(quantity) || quantity <= 0) {
+      return { ok: false, reason: '请选择有效属性和正整数数量' };
+    }
+    const cost = quantity * SOUL_FRAGMENTS_PER_CRYSTAL;
+    const current = get();
+    if (!Number.isSafeInteger(cost) || !Number.isSafeInteger(current.soulFragments) || current.soulFragments < cost) {
+      return { ok: false, reason: '器魂碎片不足' };
+    }
+    const materialId = `${element}-crystal`;
+    const existing = current.materials[materialId] ?? 0;
+    if (!Number.isSafeInteger(existing) || existing < 0 || !Number.isSafeInteger(existing + quantity)) {
+      return { ok: false, reason: '晶石数量异常，未扣除器魂碎片' };
+    }
+    const soulFragments = current.soulFragments - cost;
+    const materials = { ...current.materials, [materialId]: existing + quantity };
+    try {
+      // 两种材料属于同一存档键：完整写入成功后才更新界面，避免扣了碎片却没到账。
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot({ ...current, soulFragments, materials })));
+      set({ soulFragments, materials });
+      return { ok: true };
+    } catch { return { ok: false, reason: '保存失败，器魂碎片和晶石未改变，请稍后再试' }; }
+  },
   claimExplorationMaterials: (mapId, rewards) => {
     if (!mapId || get().materialClaims.includes(mapId) || !rewards.length) return false;
     const materials = { ...get().materials };
@@ -191,7 +215,7 @@ export const useTrialEquipmentStore = create<TrialEquipmentState>((set, get) => 
     if (!item || !cost) return { ok: false, reason: '已满级或无法升级' };
     const wallet = usePetStore.getState();
     if (wallet.coins < cost.coins) return { ok: false, reason: '金币不足' };
-    if ((get().materials[cost.materialId] || 0) < cost.materials) return { ok: false, reason: '探索晶石不足，请到迷雾探索获取' };
+    if ((get().materials[cost.materialId] || 0) < cost.materials) return { ok: false, reason: '晶石不足，请到迷雾探索获取，或用器魂碎片兑换' };
     const ownedItems = get().ownedItems.map(i => i.id === ownedItemId ? { ...i, upgradeLevel: (i.upgradeLevel || 0) + 1, investedCoins: (i.investedCoins || 0) + cost.coins } : i);
     const materials = { ...get().materials, [cost.materialId]: get().materials[cost.materialId] - cost.materials };
     const next = { ...get(), ownedItems, materials };

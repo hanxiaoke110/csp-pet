@@ -108,7 +108,7 @@ function HelpModal({ config, onClose, onOpenGuide }: { config: ExplorationStageC
           <div><strong>装备</strong><span>装备标明生效范围。武器、护甲和法器的首件收获会自动装备，可在右侧背包切换。</span></div>
           <div><strong>道具</strong><span>在背包中点击“使用”。没有适用状态时按钮会禁用，不会误消耗。</span></div>
           <div><strong>品级来源</strong><span>每关掉落与品级均为固定配置，没有抽卡、概率或暗池。本关固定掉落：{RARITY_LABELS[equipment.rarity]}「{equipment.name}」。</span></div>
-          <div><strong>重复装备</strong><span>不会占用背包；自动转化为器魂碎片：普通 2、稀有 5、史诗 12、传说 25。</span></div>
+          <div><strong>重复装备</strong><span>自动转化为器魂碎片：普通 2、稀有 5、史诗 12、传说 25。装备工坊可用 10 碎片兑换 1 个自选属性晶石，用于强化装备。</span></div>
         </div>
         <div className="explore-help-subtitle">地图事件</div>
         <div className="explore-event-guide">
@@ -129,7 +129,7 @@ function EquipmentGuideModal({ focusId, onClose }: { focusId: string; onClose: (
         <button className="explore-icon-button explore-modal-close" onClick={onClose} aria-label="关闭图鉴"><X size={20} /></button>
         <div className="explore-modal-kicker">规则透明 · 无抽卡</div>
         <h2 id="equipment-guide-title">装备与道具图鉴</h2>
-        <p className="equipment-guide-rule">40 个普通关卡各有一件固定首通装备。品级由关卡配置决定，不随机、不抽卡；重复装备会自动转化为器魂碎片。</p>
+        <p className="equipment-guide-rule">40 个普通关卡各有一件固定首通装备。品级由关卡配置决定，不随机、不抽卡；重复装备会自动转化为器魂碎片，可在装备工坊兑换晶石。</p>
         <div className="equipment-guide-grid">
           {entries.map(definition => {
             const sources = EXPLORATION_STAGE_CONFIGS.filter(stage => stage.equipmentId === definition.id);
@@ -585,7 +585,7 @@ export default function ExplorationScreen() {
     } else if (activeEvent.type === 'equipment') {
       const result = grantItem(activeConfig.equipmentId);
       resolveEvent(activeEvent.id);
-      setNotice(result.duplicate ? `重复装备已化为 ${result.soulGained} 器魂` : `${equipment.name}已收入行囊`);
+      setNotice(result.duplicate ? `重复装备已化为 ${result.soulGained} 器魂碎片，可在装备工坊兑换晶石` : `${equipment.name}已收入行囊`);
     } else if (activeEvent.type === 'merchant') {
       grantItem('cleansing-talisman');
       resolveEvent(activeEvent.id);
@@ -698,7 +698,7 @@ export default function ExplorationScreen() {
           <div className="explore-modal-kicker">{activeConfig.dungeonName} · {activeConfig.stageName}</div>
           <h1>迷雾探索完成</h1>
           <p>你穿过{activeConfig.regionNames.join('、')}，解除了三道知识封印，本关探索记录已保存。</p>
-          {useTrialEquipmentStore.getState().materialClaims.includes(map.id) && <p>探索晶石：{activeConfig.materialRewards.map(reward => `${({ earth: '地', fire: '火', wind: '风', water: '水', light: '光' } as Record<string, string>)[reward.materialId.split('-')[0]]}晶石 +${reward.amount}`).join('、')} · 每张迷宫仅领取一次，仅用于升级，不可出售。</p>}
+          {useTrialEquipmentStore.getState().materialClaims.includes(map.id) && <div><p>本地图晶石奖励：{activeConfig.materialRewards.map(reward => `${({ earth: '地', fire: '火', wind: '风', water: '水', light: '光' } as Record<string, string>)[reward.materialId.split('-')[0]]}晶石 ×${reward.amount}`).join('、')} · 已领取，每张迷宫仅领取一次。可强化同属性武器、防具，不可出售。</p><button className="explore-action" onClick={() => navigate(`/supplies?section=inventory&element=${activeConfig.materialRewards[0].materialId.split('-')[0]}`)}>用晶石强化装备</button></div>}
           <div className="explore-summary-grid"><div><strong>{current.steps}</strong><span>探索步数</span></div><div><strong>{3 - current.sealsWrong}/3</strong><span>封印答对</span></div><div><strong>+{grantedCoins}</strong><span>金币到账</span></div><div><strong>+{grantedExp}</strong><span>试炼 EXP</span></div></div>
           <p className={`explore-settlement-note ${limitedCoins > 0 ? 'is-limited' : ''}`}>
             {limitedCoins > 0
@@ -785,7 +785,7 @@ export default function ExplorationScreen() {
               return <button key={index} className={`bag-slot ${definition ? `rarity-${definition.rarity}` : ''}`} title={definition ? `${definition.name}：${definition.description} 生效范围：${definition.scope}` : '空背包格'} onClick={() => { if (!owned || !definition) return; if (definition.category === 'consumable') handleUseItem(owned.id, definition.id); else equipItem(owned.id); }}>{definition && <><img src={definition.icon} alt="" />{owned.quantity > 1 && <b>{owned.quantity}</b>}</>}</button>;
             })}
           </div>
-          <div className="soul-counter"><Gem size={18} /><span>器魂碎片</span><strong>{soulFragments}</strong><button className="explore-help-dot" aria-label="器魂碎片说明" title="重复装备会自动转化为器魂；普通 2、稀有 5、史诗 12、传说 25。">?</button></div>
+          <button className="soul-counter" onClick={() => navigate('/supplies?section=exchange')} title="10 器魂碎片兑换 1 个自选属性晶石，用于强化装备"><Gem size={18} /><span>器魂碎片</span><strong>{soulFragments}</strong><span>去兑换 →</span></button>
           <p className="loadout-footnote">点击装备可查看完整效果、范围与固定来源。</p>
         </aside>
       </section>

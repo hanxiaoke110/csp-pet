@@ -176,7 +176,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.54';
+  const VER = '1.7.55';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -187,11 +187,11 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>💾 修复旧备份恢复失败，加强存档读取与异常写入保护</div>
-          <div>🛡️ 购买、收藏和付费改名一起保存金币与获得内容，防止连点重复扣款</div>
-          <div>📚 题库缓存与存档分开保存，缓存异常时仍可使用内置题库</div>
-          <div>🎁 补偿码网络中断可重试，优秀码仍在本地兑换，不重发历史奖励</div>
-          <div>🐾 修复多智子动画串扰与迷宫内专注计时，保留原有智子、金币和学习进度</div>
+          <div>💎 器魂碎片能用了：10 碎片兑换 1 个自选属性晶石，去装备工坊强化装备</div>
+          <div>⚔️ 修复敌方被灼烧扣到 0 血仍继续战斗，防止重复结算和延迟攻击</div>
+          <div>🃏 典藏卡赏卡窗口适配小窗口，翻面和操作按钮不再被遮住</div>
+          <div>🐍 修正灵蛇、逐风马头像跟随鼠标时左右方向相反的问题</div>
+          <div>🌠 许愿投票不再间隔等待，每次仍消耗许愿券；保留原有票数与存档</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

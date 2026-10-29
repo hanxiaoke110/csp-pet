@@ -69,6 +69,7 @@ export class BattleScene extends Phaser.Scene {
 
   private state!: BattleSnapshot;
   private isProcessing: boolean = false;
+  private battleEnded: boolean = false;
   private pendingSkillId: string | null = null;
   private sceneBuilt: boolean = false;
   private equipmentProfile!: TrialCombatProfile;
@@ -91,6 +92,9 @@ export class BattleScene extends Phaser.Scene {
   init(data: { initData: BattleInitData; onEvent: BattleEventCallback }): void {
     this.initData = data.initData;
     this.onEvent = data.onEvent;
+    this.battleEnded = false;
+    this.isProcessing = false;
+    this.pendingSkillId = null;
     this.equipmentProfile = getTrialCombatProfile(data.initData.trialLoadout?.weaponId, data.initData.trialLoadout?.armorId);
     this.correctShieldTriggers = 0;
     this.attackBoostTriggers = 0;
@@ -253,6 +257,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private startPlayerTurn(): void {
+    if (this.battleEnded) return;
     this.state.currentTurn = 'player';
     this.state.round++;
     this.roundText.setText(`第 ${this.state.round} 回合`);
@@ -284,6 +289,12 @@ export class BattleScene extends Phaser.Scene {
       }
     }
 
+    // 持续伤害也可能致命，必须先结算，再开放技能和生成敌方意图。
+    if (this.state.enemyHp <= 0) {
+      this.endBattle(true);
+      return;
+    }
+
     this.turnIndicator.setTurn(true);
     this.cardHand.updateCardStates(this.state.energy, true);
 
@@ -299,7 +310,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private onSkillSelected(skillId: string): void {
-    if (this.isProcessing || this.state.currentTurn !== 'player') return;
+    if (this.battleEnded || this.isProcessing || this.state.currentTurn !== 'player') return;
 
     const usage = this.state.skillUsages.find(u => u.skill.id === skillId);
     const skill = usage?.skill;
@@ -323,7 +334,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   handleAnswerResult(result: SkillSelectResult): void {
-    if (!this.pendingSkillId || this.pendingSkillId !== result.skillId) return;
+    if (this.battleEnded || !this.pendingSkillId || this.pendingSkillId !== result.skillId) return;
 
     const usage = this.state.skillUsages.find(u => u.skill.id === this.pendingSkillId);
     if (!usage) return;
@@ -359,7 +370,7 @@ export class BattleScene extends Phaser.Scene {
 
   /** Abort a question that could not be rendered without charging the player. */
   cancelPendingSkill(): void {
-    if (!this.pendingSkillId) return;
+    if (this.battleEnded || !this.pendingSkillId) return;
     this.pendingSkillId = null;
     this.isProcessing = false;
     this.cardHand.updateCardStates(this.state.energy, true);
@@ -431,6 +442,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private finishPlayerTurn(): void {
+    if (this.battleEnded) return;
     // 清除敌方防御姿态（只生效一次）
     this.state.enemyDefending = false;
 
@@ -572,7 +584,9 @@ export class BattleScene extends Phaser.Scene {
   private playSkillEffect(skill: SkillDefinition, onImpact: () => void): void {
     const shield = skill.effectType === 'shield';
     if (!shield) this.playerPet.playAttackAnimation(this.enemyPet.x, this.enemyPet.y, () => {});
-    playElementAttack(this, this.initData.playerPet.element, this.playerPet, shield ? this.playerPet : this.enemyPet, onImpact, shield);
+    playElementAttack(this, this.initData.playerPet.element, this.playerPet, shield ? this.playerPet : this.enemyPet, () => {
+      if (!this.battleEnded) onImpact();
+    }, shield);
   }
 
   private getElementInfo(element: string): { icon: string; name: string } {
@@ -587,6 +601,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private startEnemyTurn(): void {
+    if (this.battleEnded) return;
     this.state.currentTurn = 'enemy';
     this.turnIndicator.setTurn(false);
     this.cardHand.updateCardStates(this.state.energy, false);
@@ -598,6 +613,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private executeEnemyTurn(): void {
+    if (this.battleEnded) return;
     const intent = this.state.enemyIntent;
     if (!intent) return;
 
@@ -612,6 +628,7 @@ export class BattleScene extends Phaser.Scene {
 
     // 攻击
     playElementAttack(this, this.initData.enemyPet.element, this.enemyPet, this.playerPet, () => {
+      if (this.battleEnded) return;
       const { damageTaken, remainingShield, blocked } = resolveEnemyIntent(
         intent,
         this.toCombatPet(this.initData.enemyPet, this.state.enemyHp),
@@ -705,7 +722,12 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private endBattle(isWon: boolean): void {
+    if (this.battleEnded) return;
+    this.battleEnded = true;
     this.isProcessing = true;
+    this.pendingSkillId = null;
+    this.cardHand.updateCardStates(this.state.energy, false);
+    this.intentBubble.hide();
 
     if (isWon) {
       this.enemyPet.playDefeatAnimation();

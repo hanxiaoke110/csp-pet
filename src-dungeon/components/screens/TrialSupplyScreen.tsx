@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDungeonStore } from '../../stores/dungeonStore';
 import { usePetStore } from '../../../src/stores/petStore';
 import DungeonConfirmModal from '../shared/DungeonConfirmModal';
 import EquipmentWorkshop from './EquipmentWorkshop';
+import { EQUIPMENT_ELEMENTS } from '../../data/equipmentCatalog';
 
 const ITEMS = [
   { id: 'hint-ticket' as const, icon: '💡', name: '知识提示券', cost: 18, description: '战斗答题前查看一次解题方向。' },
@@ -14,6 +15,8 @@ const ITEMS = [
 
 export default function TrialSupplyScreen() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const workshopElement = EQUIPMENT_ELEMENTS.find(value => value === params.get('element'));
   const coins = usePetStore(s => s.coins);
   const inventory = useDungeonStore(s => s.trialInventory);
   const buy = useDungeonStore(s => s.buyTrialItem);
@@ -74,7 +77,7 @@ export default function TrialSupplyScreen() {
             );
           })}
         </div>
-        <EquipmentWorkshop />
+        <EquipmentWorkshop key={`${params.get('section') || ''}:${workshopElement || ''}`} initialSection={params.get('section') || undefined} initialElement={workshopElement} />
         {notice && (
           <div style={{ textAlign: 'center', margin: '16px auto 0', maxWidth: 320, padding: '8px 12px', background: 'rgba(0,0,0,0.55)', border: '1px solid var(--gold-dark)', color: 'var(--gold)', fontSize: '12px', borderRadius: 6 }}>
             {notice}

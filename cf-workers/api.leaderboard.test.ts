@@ -11,6 +11,7 @@ function makeDb() {
       return {
         bind() { return this; },
         async first() {
+          if (sql.includes("key='schema_version'")) return { value: '14' };
           if (/SELECT 1/.test(sql)) return { ok: 1 };
           return null;
         },

@@ -26,6 +26,7 @@ function makeDb() {
       return {
         bind(...values: unknown[]) { call.bindings = values; return this; },
         async first() {
+          if (sql.includes("key='schema_version'")) return { value: '14' };
           if (sql.includes('FROM teachers WHERE token=')) {
             const token = String(call.bindings[0] || '');
             return token === 't-a' ? { teacher_id: 'teacher-A', name: '老师A', token } : null;

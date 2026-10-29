@@ -10,6 +10,7 @@ import { useCollectorCardStore } from '../../stores/collectorCardStore';
 import type { WardrobeCatalog, WardrobeCategory, WardrobeItem } from '../../types/profile';
 import { ensureWardrobeAsset, ensureWardrobeInteractionAsset, ensureWardrobeVisualAssets } from '../../utils/wardrobeAssetDownloader';
 import { localDateKey } from '../../utils/localDate';
+import { getAvatarDirection } from '../../utils/avatarDirection';
 import { isWardrobeConditionMet } from '../../utils/wardrobeUnlock';
 import WardrobeVisualLayers from './WardrobeVisualLayers';
 import PartnerAccessoryPanel from '../pet/PartnerAccessoryPanel';
@@ -82,9 +83,7 @@ function AvatarStage({ compact = false, previewItem }: { compact?: boolean; prev
       const relativeY = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
       setPointer({ x: relativeX * 2 - 1, y: relativeY * 2 - 1 });
       if (!interactionUrl) return;
-      const column = Math.max(0, Math.min(4, Math.floor(relativeX * 5)));
-      const row = Math.max(0, Math.min(4, Math.floor(relativeY * 5)));
-      setDirection({ column, row });
+      setDirection(getAvatarDirection(relativeX, relativeY, avatar));
     });
   };
   const react = () => {
@@ -99,7 +98,11 @@ function AvatarStage({ compact = false, previewItem }: { compact?: boolean; prev
       className={`profile-stage bg-${background?.preview || 'midnight'} ${compact ? 'compact' : ''} ${previewItem ? 'is-previewing' : ''}`}
       style={backgroundUrl ? { backgroundImage: `linear-gradient(rgba(3,15,33,.08),rgba(3,15,33,.22)),url(${backgroundUrl})` } : undefined}
       onPointerMove={updateDirection}
-      onPointerLeave={() => { setDirection({ column: 2, row: 2 }); setPointer({ x: 0, y: 0 }); }}
+      onPointerLeave={() => {
+        if (animationFrame.current != null) cancelAnimationFrame(animationFrame.current);
+        animationFrame.current = null;
+        setDirection({ column: 2, row: 2 }); setPointer({ x: 0, y: 0 });
+      }}
     >
       {previewItem && !compact && <div className="stage-preview-badge"><Eye /> 预览中 · 不会保存</div>}
       <WardrobeVisualLayers items={visualItems} placement="background" resolved={resolved} pointer={pointer} reacting={reacting} />

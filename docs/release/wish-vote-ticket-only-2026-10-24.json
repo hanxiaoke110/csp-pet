@@ -1,0 +1,39 @@
+{
+  "verifiedAt": "2026-10-24T03:50:55.874Z",
+  "schemaVersion": 14,
+  "historicalVotesPreserved": 306,
+  "totalHistory": 306,
+  "wishesPreserved": 183,
+  "permanentUniqueLocks": 0,
+  "cooldownDays": 0,
+  "requestIdempotencyTable": true,
+  "endpoints": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "json": true
+    },
+    {
+      "path": "/api/collector-vote/config",
+      "status": 200,
+      "json": true
+    },
+    {
+      "path": "/api/workshop/pets?limit=1&paginated=1",
+      "status": 200,
+      "json": true
+    },
+    {
+      "path": "/api/dungeon/leaderboard?scope=global&type=power",
+      "status": 200,
+      "json": true
+    }
+  ],
+  "productionTestVotes": 0,
+  "workerVersion": "b1d20d56-d59a-4885-8b64-5eb04c6746ec",
+  "previousWorkerVersion": "909c62df-aa2a-4ae4-993d-3355a53d6304",
+  "relatedTestsPassed": 85,
+  "productionBuild": true,
+  "desktopRelease": false,
+  "clientRequestIdsPendingNextDesktopRelease": true
+}

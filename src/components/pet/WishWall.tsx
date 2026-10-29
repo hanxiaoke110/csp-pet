@@ -4,7 +4,7 @@ import { getDeviceId, getTicketCount, useTicket } from '../../utils/crypto';
 import { usePetStore } from '../../stores/petStore';
 import { useQuizStore } from '../../stores/quizStore';
 import ModalPortal from '../ModalPortal';
-import { formatVoteCooldown, interpretVoteResponse } from './wishWallLogic';
+import { interpretVoteResponse } from './wishWallLogic';
 
 const API = 'https://api.cspstudy.top';
 
@@ -26,6 +26,7 @@ export default function WishWall() {
   const [tickets, setTickets] = useState(0);
   const [votingId, setVotingId] = useState<number | null>(null);
   const votingRef = useRef(false);
+  const pendingVoteRef = useRef<{ wishId: number; requestId: string } | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Wish | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [monthlySubmitted, setMonthlySubmitted] = useState(0);
@@ -162,17 +163,22 @@ export default function WishWall() {
     const classCode = localStorage.getItem('csp_class_code') || '';
     if (!classCode) { setMsg('请先在设置中绑定班级码'); return; }
     if (getTicketCount() <= 0) { setMsg('🎫 许愿票不足，前往商城购买'); return; }
+    if (pendingVoteRef.current && pendingVoteRef.current.wishId !== wishId) {
+      setMsg('上一笔投票结果待确认，请先重试刚才的愿望'); return;
+    }
+    const pending = pendingVoteRef.current || { wishId, requestId: crypto.randomUUID() };
+    pendingVoteRef.current = pending;
     votingRef.current = true;
     setVotingId(wishId);
     try {
       const resp = await fetch(`${API}/api/vote`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wish_id: wishId, device_hash: getDeviceId(), class_code: classCode }),
+        body: JSON.stringify({ wish_id: wishId, device_hash: getDeviceId(), class_code: classCode, request_id: pending.requestId }),
       });
       const data = await resp.json();
       const result = interpretVoteResponse(resp.status, data);
       if (!result.spendTicket) {
-        if (data.next_vote_at) setWishes(items => items.map(w => w.id === wishId ? { ...w, next_vote_at: data.next_vote_at } : w));
+        if (resp.status >= 400 && resp.status < 500) pendingVoteRef.current = null;
         if (data.error) {
         if (data.error.includes('班级已关闭') || data.error.includes('移出班级')) {
           localStorage.removeItem('csp_class_code');
@@ -181,14 +187,15 @@ export default function WishWall() {
         }
         setMsg(result.message);
       } else {
-        useTicket(); setTickets(getTicketCount());
+        if (!useTicket()) { setMsg('投票已记录，票券保存失败，请重试刚才的愿望'); return; }
+        pendingVoteRef.current = null;
+        setTickets(getTicketCount());
         cacheRef.current.time = 0; // invalidate cache
         loadWishes();
         setMsg('✅ 投票成功！');
       }
-    } catch { setMsg('网络错误'); }
-    votingRef.current = false;
-    setVotingId(null);
+    } catch { setMsg('网络异常，请重试刚才的愿望确认结果'); }
+    finally { votingRef.current = false; setVotingId(null); }
     setTimeout(() => setMsg(''), 3000);
   };
 
@@ -258,7 +265,7 @@ export default function WishWall() {
             <div style={{ textAlign: 'left', fontSize: 12, color: '#64748b', lineHeight: 2, maxWidth: 340, margin: '0 auto' }}>
               <div>📝 Lv.6+ 智子 + 完成本周练习才能提交许愿</div>
               <div>🎫 许愿票在商城购买（100g/张，250g/3张）</div>
-              <div>🗳️ 同一愿望每 14 天可再投 1 票</div>
+              <div>🗳️ 有票即可投，同一愿望可以继续支持</div>
               <div>📝 每人最多同时 3 条活跃许愿，老师实现/删除后恢复</div>
               <div>📅 每人每月最多提交 3 条许愿</div>
               <div>🔄 每月自动清理低票许愿</div>
@@ -305,7 +312,7 @@ export default function WishWall() {
             {[
               { icon: '📝', title: '提交门槛', desc: '需要 Lv.6+ 灵犀智子 + 完成本周练习。每人最多同时有 3 条活跃许愿，老师实现或删除后恢复次数。每月最多提交 3 条。' },
               { icon: '🎫', title: '许愿票', desc: '在商城购买：100g/张，打包 250g/3张。每周限购 3 张，没用完可以累积。' },
-              { icon: '🗳️', title: '投票规则', desc: '同一愿望每 14 天可再投 1 票。投票成功才消耗许愿票，不可撤销。' },
+              { icon: '🗳️', title: '投票规则', desc: '有票即可投，同一愿望可以继续支持。每次成功投票消耗 1 张许愿票，不可撤销。' },
               { icon: '🗑️', title: '删除愿望', desc: '可以删除自己发布的愿望。删除释放展示名额，但不返还许愿票，也不重置本月提交次数。' },
               { icon: '🔄', title: '月度更新', desc: '每月 1 号自动清理低票许愿（0 票优先淘汰，7 天内新愿望受保护），让榜单保持新鲜。' },
               { icon: '👀', title: '隐私保护', desc: '昵称所有人可见。真实姓名和手机号加密存储，仅老师可见，用于联系获奖同学。' },
@@ -548,8 +555,7 @@ export function WishContent({ w, timeAgo, votingId, handleVote, handleDelete }: 
   handleVote: (id: number) => void;
   handleDelete: (wish: Wish) => void;
 }) {
-  const cooldown = formatVoteCooldown(w.next_vote_at);
-  const disabled = votingId !== null || !!cooldown || w.status === 'completed';
+  const disabled = votingId !== null || w.status === 'completed';
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', wordBreak: 'break-all', marginBottom: 6 }}>
@@ -569,7 +575,7 @@ export function WishContent({ w, timeAgo, votingId, handleVote, handleDelete }: 
           transition: 'all .15s', whiteSpace: 'nowrap',
           display: 'flex', alignItems: 'center', gap: 4,
         }}>
-          {cooldown || '🔥 投票'} <span style={{ fontSize: 11, opacity: 0.9 }}>({w.votes})</span>
+          🔥 投票 <span style={{ fontSize: 11, opacity: 0.9 }}>({w.votes})</span>
         </button>
       </div>
       {w.is_mine && <button onClick={() => handleDelete(w)} style={{ border: 'none', background: 'transparent', color: '#64748b', fontSize: 12, marginTop: 8, cursor: 'pointer' }}>删除我的愿望</button>}
