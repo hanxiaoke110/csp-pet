@@ -1,19 +1,19 @@
 {
-  "version": "1.7.54",
-  "notes": "💾 修复部分旧备份恢复失败，加强存档读取、异常写入与恢复中断保护；数据库异常时不再自动重建空账号。\n🛡️ 典藏卡、衣橱、付费改名及工坊购买同步保存金币与获得内容，防止重复提交和保存失败造成状态不一致。\n📚 大题库缓存与存档分开保存，减少存储拥挤；缓存损坏或网络异常时可回退有效缓存或内置题库。\n🎁 补偿码仍联网验证，兑换响应丢失后可在同设备重试；优秀码保持本地兑换，历史已核销奖励不自动重发。\n🐾 修复多智子动画相互影响、迷宫内专注计时及修改姓名时未提交的手机号被清空等问题；非奖励性的迷宫进度断网后可补传。\n📦 更新到 v1.7.54 后生效。保留原有智子、金币、学习进度和老师班级信息，无需清空存档或重新注册。",
-  "pub_date": "2026-10-20T04:52:18.037Z",
+  "version": "1.7.55",
+  "notes": "💎 器魂碎片能用了：在试炼补给站的装备工坊，10 个碎片可兑换 1 个自选属性晶石，支持批量兑换，不花金币。以前攒下的碎片直接可用。\n⚒ 点击碎片去兑换，点击晶石去强化；强化缺材料时可直达对应属性兑换。兑换保存失败不会扣材料，连续点击同一确认不会重复兑换。\n⚔ 修复敌方被灼烧扣到 0 血后仍继续战斗的问题，正常进入胜利结算，防止结束后的延迟攻击及重复结算。\n🃏 典藏卡赏卡界面适配小窗口，翻面与操作按钮不再被遮住；自动赏卡继续保留。\n🐍 修正灵蛇、逐风马星途头像左右跟随鼠标方向相反的问题。\n🌠 同一愿望投票不再间隔等待，每次仍需消耗许愿券，原有票数保留。\n🛡 修复试炼确认框可能跑到窗口外的问题。保留原有智子、金币、材料及学习进度，装备强化成本和最高 +5 保持原规则。",
+  "pub_date": "2026-10-29T13:28:34.306Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzJZT2dLYmJUQnNTUHAvSTFENkpaYVRpTmFsNm8zUFQwcURQMnE3aXBQZHovcGtBeDB2MEV3cHZiR0xBMWh5enZXa01Gd0paWFZoNm9XaTI3VzhqNGdrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyNDcxMzIxCWZpbGU6Q1NQXzEuNy41NF9hYXJjaDY0LmRtZwpqTiszdFU4UFJ2RWJrVndxemlTWUFTSmVscUttSWhjcG54R3dmejZWZW1MWFZBMEt3RnBIOVMrZUdpVGkwNlBhc2ttNkY3UThUSkNGYkcybjYwZk1EZz09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.54/CSP_1.7.54_aarch64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVys0T1pCWDN6MEJSelBBSXVmTm45aGFVWFFuY3BoeXp2bjVRYjJ5dWp4UUsxcTZVL21hWDVSWVVKRDd6U1plQXYxeHgyMWxKeWRiRSs2WEdHdC8xUmd3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzMjc5OTc0CWZpbGU6Q1NQXzEuNy41NV9hYXJjaDY0LmRtZwp5ZnBUekdMVTFpM0JiWENPc2VzaUlvS3MrK0JHc2RvZ1ladlRJU29aUEh5TkZXZlQ1R3FESkxSVWpqa2dvYm8weUw1cXZySE5LT2lnZWZYakVmaUNBdz09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.55/CSP_1.7.55_aarch64.dmg"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzBsK0EvcW5pOXZ3Rm5HbVMvNjJDK3oya1VNbE5ab1VXcmdRT0FTVHhQNVJTVUVYRmJuQ1YvRHB4dERpR2RXMU5naWh4c2dhSkh2OUxtK01pdm9BQ2dnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyNDcxMDc4CWZpbGU6Q1NQXzEuNy41NF94NjQuZG1nCnlBbm9iQ0V3LzdpM2lHNUdBOTkrZk1lbHRCbFgySjVxOTBNZDY1bWUxVGwxcS9oRlpUUXRYQitremp0QmdoSFpsQXhxRk9xSFFYczZhc0J4aERGTEF3PT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.54/CSP_1.7.54_x64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVyszcmxmTjZIOXpBRzVHalUrcUpWNDVTdEtnbWhyVmZyN3FueTBKUDhzTCtOeEVoWlF2TmZiKzJVYXZsMlpRNGxlSkxDS2h5TTVXcWJyTHQ2Y1dhNGdVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzMjgwMDI4CWZpbGU6Q1NQXzEuNy41NV94NjQuZG1nCjB6UGZxTjVubjZlMG1sTkVFVVYrRlhHYXU0WkVPR2ZNOUgvSklwT2ExU0JRakVKbFc0RmVMRlFMT3ZrTTJ0bFptQzJHYzdFVlpNOWI3dTdEZHhySUNBPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.55/CSP_1.7.55_x64.dmg"
     },
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwV3l2V1IxZU1iMWdRVE8yTzdCRzBSaVFHaXJkRVd3S0RpVGxaOGpMTHh2bzd1bHpZZTVSZlhmdW00alBJTjVWbTNERVl6UVMwR25IZ1FGejN0VE1YS3dVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyNDcxNjAzCWZpbGU6Q1NQXzEuNy41NF94NjQtc2V0dXAuZXhlCjF3RlpYcHF5K2taSko3WWNUaW9FYW1MZVExcW1RVGpQZXdoUENVREEwcVhRKzZTOFk3dGhJR2krM3VYT01sNWhibytITlNzRzJqR09VQUxqemZpU0R3PT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.54/CSP_1.7.54_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzJsWG4wU2JvaHFobzBlKzdZSitHV1RxQXJsWGZHeTIrcEpTRkxVUmlFRjNTNWRoQXRkKzFxVVdZWlVjWUZReDc4eEswOWVYekxVSGxJQUUreGV2VmdVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzMjc5OTgwCWZpbGU6Q1NQXzEuNy41NV94NjQtc2V0dXAuZXhlCjU1aVZ2YVNiQzU3aDNrdzB1dU04WXlyQ0F1REFEUjZZVnFjMmxHRDdNWmJ6a1FlN21wUUtHMzFjRm16bWp4MlMvOGkwTjFJbzNGUkN3aDM3SUtOWENRPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.55/CSP_1.7.55_x64-setup.exe"
     }
   }
 }
