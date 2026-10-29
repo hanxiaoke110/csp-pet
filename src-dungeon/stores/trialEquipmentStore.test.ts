@@ -22,6 +22,61 @@ beforeEach(() => {
 });
 
 describe('装备交易与旧存档', () => {
+  it('旧存档碎片可按10比1兑换自选晶石，保存后重载不变，不动金币及装备', () => {
+    localStorage.setItem('csp_trial_equipment_v1', JSON.stringify({ ownedItems: [], soulFragments: 182, materials: { 'wind-crystal': 30 }, materialClaims: ['old-map'] }));
+    equipment.getState().load();
+    expect(equipment.getState().exchangeSoulFragments('wind', 3)).toEqual({ ok: true });
+    expect(equipment.getState().soulFragments).toBe(152);
+    expect(equipment.getState().materials['wind-crystal']).toBe(33);
+    equipment.getState().load();
+    expect(equipment.getState()).toMatchObject({ soulFragments: 152, materials: { 'wind-crystal': 33 }, materialClaims: ['old-map'], ownedItems: [] });
+    expect(wallet.getState().coins).toBe(3000);
+  });
+  it.each(['earth', 'fire', 'wind', 'water', 'light'])('可兑换%s属性；连续调用按实时余额扣减，不能透支', element => {
+    equipment.setState({ soulFragments: 10 });
+    expect(equipment.getState().exchangeSoulFragments(element, 1).ok).toBe(true);
+    expect(equipment.getState().exchangeSoulFragments(element, 1).ok).toBe(false);
+    expect(equipment.getState().soulFragments).toBe(0);
+    expect(equipment.getState().materials[`${element}-crystal`]).toBe(1);
+  });
+  it.each([0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER])('无效或溢出数量%s不会改变碎片、晶石或存档', quantity => {
+    equipment.setState({ soulFragments: 100 });
+    const before = localStorage.getItem('csp_trial_equipment_v1');
+    expect(equipment.getState().exchangeSoulFragments('wind', quantity).ok).toBe(false);
+    expect(equipment.getState()).toMatchObject({ soulFragments: 100, materials: {} });
+    expect(localStorage.getItem('csp_trial_equipment_v1')).toBe(before);
+  });
+  it('非法属性和晶石余额溢出均不能兑换', () => {
+    equipment.setState({ soulFragments: 100, materials: { 'wind-crystal': Number.MAX_SAFE_INTEGER } });
+    expect(equipment.getState().exchangeSoulFragments('wood', 1).ok).toBe(false);
+    expect(equipment.getState().exchangeSoulFragments('wind', 1).ok).toBe(false);
+    expect(equipment.getState().soulFragments).toBe(100);
+  });
+  it('兑换保存失败不扣碎片，再次操作成功后刷新仍保持同一余额', () => {
+    localStorage.setItem('csp_trial_equipment_v1', JSON.stringify({ ownedItems: [], soulFragments: 20, materials: { 'wind-crystal': 7 } }));
+    equipment.getState().load();
+    const before = localStorage.getItem('csp_trial_equipment_v1');
+    const setter = vi.spyOn(localStorage, 'setItem').mockImplementationOnce(() => { throw new Error('quota'); });
+    expect(equipment.getState().exchangeSoulFragments('wind', 1).ok).toBe(false);
+    expect(equipment.getState()).toMatchObject({ soulFragments: 20, materials: { 'wind-crystal': 7 } });
+    expect(localStorage.getItem('csp_trial_equipment_v1')).toBe(before);
+    setter.mockRestore();
+    expect(equipment.getState().exchangeSoulFragments('wind', 1).ok).toBe(true);
+    equipment.getState().load();
+    expect(equipment.getState()).toMatchObject({ soulFragments: 10, materials: { 'wind-crystal': 8 } });
+  });
+  it('重复装备兑换所得晶石可直接强化，原有装备及材料记录保留', () => {
+    equipment.getState().grantItem('fire-weapon-common');
+    for (let i = 0; i < 5; i++) equipment.getState().grantItem('fire-weapon-common');
+    expect(equipment.getState().soulFragments).toBe(10);
+    expect(equipment.getState().exchangeSoulFragments('fire', 1).ok).toBe(true);
+    const item = equipment.getState().ownedItems[0];
+    expect(equipment.getState().upgradeItem(item.id).ok).toBe(true);
+    expect(equipment.getState().ownedItems[0].upgradeLevel).toBe(1);
+    expect(equipment.getState().materials['fire-crystal']).toBe(0);
+    expect(equipment.getState().equippedWeaponId).toBe(item.id);
+    expect(wallet.getState().coins).toBe(2980);
+  });
   it('探索晶石随存档迁移，每张地图只领取一次，拒绝非法领取', () => {
     expect(equipment.getState().claimExplorationMaterials('map-1', [{ materialId: 'fire-crystal', amount: 16 }])).toBe(true);
     equipment.getState().load();

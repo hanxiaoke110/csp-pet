@@ -6,24 +6,33 @@ import { EQUIPMENT_ELEMENTS, EQUIPMENT_RARITIES, ELEMENT_NAMES, ELEMENT_COUNTERS
 import { loadEquipmentCatalog } from '../../services/equipmentCatalogService';
 import type { EquipmentElement, EquipmentRarity } from '../../types/exploration';
 import DungeonConfirmModal from '../shared/DungeonConfirmModal';
+import EquipmentMaterialExchange from './EquipmentMaterialExchange';
 
 const RARITIES = { common: '普通', rare: '稀有', epic: '史诗', legendary: '传说' };
 const COLORS = { common: '#b3c8d9', rare: '#5fcfff', epic: '#c193ff', legendary: '#f8d477' };
 
-export default function EquipmentWorkshop() {
+export default function EquipmentWorkshop({ initialSection, initialElement }: { initialSection?: string; initialElement?: EquipmentElement }) {
   const state = useTrialEquipmentStore();
   const coins = usePetStore(s => s.coins);
-  const [tab, setTab] = useState<'shop' | 'inventory'>('shop');
-  const [element, setElement] = useState<EquipmentElement | ''>('');
+  const [tab, setTab] = useState<'shop' | 'inventory'>(initialSection === 'inventory' ? 'inventory' : 'shop');
+  const [element, setElement] = useState<EquipmentElement | ''>(initialElement || '');
   const [rarity, setRarity] = useState<EquipmentRarity | ''>('');
   const [category, setCategory] = useState<'weapon' | 'armor' | ''>('');
   const [selected, setSelected] = useState('');
+  const [exchangeElement, setExchangeElement] = useState<EquipmentElement>(initialElement || 'wind');
   const [notice, setNotice] = useState('');
   const [revision, setRevision] = useState(0);
   const [ready, setReady] = useState(false);
   const [confirmation, setConfirmation] = useState<{ action: 'buy' | 'upgrade' | 'dismantle'; id: string; message: string } | null>(null);
   const submitting = useRef(false);
   const detailRef = useRef<HTMLElement>(null);
+  const exchangeRef = useRef<HTMLDivElement>(null);
+  const workshopRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!ready || !initialSection) return;
+    const target = initialSection === 'exchange' ? exchangeRef.current : workshopRef.current;
+    target?.scrollIntoView({ block: 'start', behavior: 'auto' });
+  }, [ready, initialSection]);
   useEffect(() => { submitting.current = false; }, [confirmation]);
   useEffect(() => {
     let active = true;
@@ -48,10 +57,11 @@ export default function EquipmentWorkshop() {
   const equipped = Boolean(owned && equippedId === owned.id);
   const refund = Math.floor(((owned?.purchasePrice || 0) + (owned?.investedCoins || 0)) * .8);
 
-  return <section className="equipment-workshop pixel-card" aria-label="装备工坊">
+  return <section ref={workshopRef} className="equipment-workshop pixel-card" aria-label="装备工坊">
     <h2>⚒ 装备工坊</h2>
     <p className="equipment-muted">固定品级、明码标价，无抽卡。武器决定攻击属性，防具决定防御属性；最多强化到 +5。</p>
     {!ready && <p role="status">正在读取装备存档与目录，暂不扣除金币；断网时会自动使用本地目录。</p>}
+    <div ref={exchangeRef}><EquipmentMaterialExchange key={exchangeElement} ready={ready} initialElement={exchangeElement} /></div>
     <fieldset disabled={!ready} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
     <div className="equipment-controls">
       <button className={`pixel-btn ${tab === 'shop' ? 'primary' : ''}`} onClick={() => { setTab('shop'); setSelected(''); }}>装备商店</button>
@@ -60,7 +70,7 @@ export default function EquipmentWorkshop() {
       <label>属性 <select value={element} onChange={e => { setElement(e.target.value as typeof element); setSelected(''); }}><option value="">全部</option>{EQUIPMENT_ELEMENTS.map(value => <option key={value} value={value}>{ELEMENT_NAMES[value]}</option>)}</select></label>
       <label>品级 <select value={rarity} onChange={e => { setRarity(e.target.value as typeof rarity); setSelected(''); }}><option value="">全部</option>{EQUIPMENT_RARITIES.map(value => <option key={value} value={value}>{RARITIES[value]}</option>)}</select></label>
     </div>
-    <div className="equipment-materials">{EQUIPMENT_ELEMENTS.map(value => <span key={value}>{ELEMENT_NAMES[value]}晶石 {state.materials[`${value}-crystal`] || 0}</span>)}</div>
+    <div className="equipment-materials">{EQUIPMENT_ELEMENTS.map(value => <button type="button" key={value} title={`用于强化${ELEMENT_NAMES[value]}属性装备，点击查看`} onClick={() => { setTab('inventory'); setElement(value); setRarity(''); setCategory(''); setSelected(''); }}>{ELEMENT_NAMES[value]}晶石 {state.materials[`${value}-crystal`] || 0} · 去强化</button>)}</div>
     <div className="equipment-workspace">
       <div className="equipment-grid">
         {items.map(item => {
@@ -77,7 +87,7 @@ export default function EquipmentWorkshop() {
             <span>{entry ? '已拥有 · 点击查看' : `${item.price} 金币`}</span>
           </button>;
         })}
-        {!items.length && <p>暂无符合筛选的装备。可到商店挑选，或在迷雾探索中获取。</p>}
+        {!items.length && <div><p>暂无符合筛选的装备。晶石用于强化同属性武器、防具，可先到商店挑选，或在迷雾探索中获取。</p><button className="pixel-btn" onClick={() => setTab('shop')}>去装备商店</button></div>}
       </div>
       <aside ref={detailRef} className="equipment-detail" aria-label="装备详情">
         {!definition ? <p className="equipment-muted">点击装备查看完整规则、换装对比和强化费用。</p> : <>
@@ -96,8 +106,8 @@ export default function EquipmentWorkshop() {
             <div className="equipment-controls"><button className="pixel-btn primary" onClick={() => equipped ? state.unequipItem(owned.id) : state.equipItem(owned.id)}>{equipped ? '卸下' : '装备到对应位置'}</button></div>
             {cost ? <>
               <p>下一阶：{cost.coins} 金币＋{ELEMENT_NAMES[definition.element!]}晶石 {cost.materials} 个</p>
-              <button className="pixel-btn" disabled={coins < cost.coins || (state.materials[cost.materialId] || 0) < cost.materials} onClick={() => setConfirmation({ action: 'upgrade', id: owned.id, message: `强化到 +${level + 1}，花费 ${cost.coins} 金币和 ${cost.materials} 个${ELEMENT_NAMES[definition.element!]}晶石。晶石仅探索获取，不可买卖，分解不返还。` })}>强化到 +{level + 1}</button>
-              {(state.materials[cost.materialId] || 0) < cost.materials && <p className="equipment-muted">晶石不足：通关迷雾探索领取对应属性晶石，每张地图仅领一次。</p>}
+              <button className="pixel-btn" disabled={coins < cost.coins || (state.materials[cost.materialId] || 0) < cost.materials} onClick={() => setConfirmation({ action: 'upgrade', id: owned.id, message: `强化到 +${level + 1}，花费 ${cost.coins} 金币和 ${cost.materials} 个${ELEMENT_NAMES[definition.element!]}晶石。晶石可探索获取或器魂兑换，不可出售，分解不返还。` })}>强化到 +{level + 1}</button>
+              {(state.materials[cost.materialId] || 0) < cost.materials && <p className="equipment-muted">晶石不足：通关迷雾探索领取，或<button className="equipment-inline-link" onClick={() => { setExchangeElement(definition.element!); exchangeRef.current?.scrollIntoView({ block: 'start', behavior: 'auto' }); }}>用器魂兑换</button>。每张地图的探索晶石仅领一次。</p>}
             </> : <p>已满级 +5</p>}
             <p className="equipment-muted">实际购买 {owned.purchasePrice || 0}＋强化投入 {owned.investedCoins || 0} 金币 · 分解返还 {refund} 金币（80%向下取整），不返还材料。</p>
             <button className="pixel-btn" disabled={equipped} onClick={() => setConfirmation({ action: 'dismantle', id: owned.id, message: `永久分解「${definition.name} +${level}」？返还 ${refund} 金币，不返还晶石。掉落及旧装备的购买成本为0；分解后若要再次拥有，需重新获取。` })}>{equipped ? '先卸下才能分解' : `分解 · 返还 ${refund} 金币`}</button>

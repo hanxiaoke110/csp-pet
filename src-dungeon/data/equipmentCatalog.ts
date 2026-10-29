@@ -1,6 +1,7 @@
 import type { EquipmentCombatEffects, EquipmentElement, EquipmentRarity, TrialEquipmentDefinition } from '../types/exploration';
 
 export const EQUIPMENT_ELEMENTS: EquipmentElement[] = ['earth', 'fire', 'wind', 'water', 'light'];
+export const SOUL_FRAGMENTS_PER_CRYSTAL = 10;
 export const EQUIPMENT_RARITIES: EquipmentRarity[] = ['common', 'rare', 'epic', 'legendary'];
 export const ELEMENT_NAMES: Record<EquipmentElement, string> = { earth: '地', fire: '火', wind: '风', water: '水', light: '光' };
 export const ELEMENT_COUNTERS: Record<EquipmentElement, EquipmentElement> = { fire: 'wind', wind: 'earth', earth: 'water', water: 'light', light: 'fire' };

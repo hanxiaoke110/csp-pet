@@ -1,3 +1,5 @@
+import ModalPortal from '../../../src/components/ModalPortal';
+
 interface DungeonConfirmModalProps {
   title: string;
   message: string;
@@ -23,7 +25,7 @@ export default function DungeonConfirmModal({
   onCancel,
 }: DungeonConfirmModalProps) {
   return (
-    <div className="dungeon-confirm-modal" role="dialog" aria-modal="true" style={{ zIndex }}>
+    <ModalPortal><div className="dungeon-confirm-modal" role="dialog" aria-modal="true" style={{ zIndex }}>
       <div className="dungeon-confirm-card">
         <h3>{title}</h3>
         <p>{message}</p>
@@ -42,6 +44,7 @@ export default function DungeonConfirmModal({
           align-items: center;
           justify-content: center;
           padding: 20px;
+          box-sizing: border-box;
         }
         .dungeon-confirm-card {
           background: var(--bg-card);
@@ -49,6 +52,10 @@ export default function DungeonConfirmModal({
           padding: 20px 24px;
           max-width: 340px;
           width: 100%;
+          box-sizing: border-box;
+          max-height: calc(100dvh - 40px);
+          overflow-y: auto;
+          overflow-wrap: anywhere;
           text-align: center;
         }
         .dungeon-confirm-card h3 {
@@ -66,6 +73,7 @@ export default function DungeonConfirmModal({
         .dungeon-confirm-actions {
           display: flex;
           gap: 12px;
+          flex-wrap: wrap;
           justify-content: center;
         }
         .dungeon-confirm-actions .pixel-btn {
@@ -73,6 +81,6 @@ export default function DungeonConfirmModal({
           padding: 8px 18px;
         }
       `}</style>
-    </div>
+    </div></ModalPortal>
   );
 }
