@@ -25,6 +25,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:assets": "node scripts/validate-assets.mjs",
+    "content:validate": "node scripts/validate-public-content.mjs",
+    "content:release": "node scripts/content-release.mjs",
     "audit:question-code": "node scripts/audit-question-code.mjs",
     "normalize:question-code": "node scripts/normalize-question-code.mjs",
     "enrich:quiz-code": "node scripts/enrich-quiz-bank-code.mjs",

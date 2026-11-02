@@ -21,6 +21,7 @@ jobs:
           npm test
           npm run test:question-bank
           npm run validate:assets
+          npm run content:validate
           npm run build
       - name: Verify deployed dungeon season API
         run: |

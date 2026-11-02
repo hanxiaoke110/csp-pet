@@ -1,0 +1,44 @@
+name: Validate public content
+
+on:
+  pull_request:
+    paths:
+      - 'public/**'
+      - 'cloud-assets-source/**'
+      - 'src/data/**'
+      - 'src/types/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/content-validation.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'public/**'
+      - 'cloud-assets-source/**'
+      - 'src/data/**'
+      - 'src/types/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/content-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Test scoped release protection and Cloudflare adapter
+        run: npx vitest run scripts/content-release.test.mjs scripts/content-release/cloudflare-adapter.test.mjs scripts/content-release/cli-entrypoint.test.mjs
+      - name: Validate all public catalogs and question snapshots
+        run: npm run content:validate
