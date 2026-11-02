@@ -4,19 +4,21 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { buildPublication, fetchSource, imageKey, publicationFingerprint, sourceFingerprint, validateGeometry, verifyPublication } from './workshop-publication.mjs';
+import { buildPublication, checkPublication, fetchPublicationRevision, readPublishedEvent, fetchSource, imageKey, publicationFingerprint, sourceFingerprint, validateGeometry, verifyPublication } from './workshop-publication.mjs';
 
 const roots = [];
 afterEach(async () => { await Promise.all(roots.splice(0).map(p => rm(p, { recursive: true, force: true }))); });
 const pet = (changes = {}) => ({ id: 'ws-ABC123', name: '小龙', element: 'fire', tier: 'common', price: 200, teacher_name: '王老师', spritesheet_url: 'sheet:abc', thumbnail_url: 'thumb:abc', pet_json: JSON.stringify({ frameWidth: 2, frameHeight: 3, maxFrames: 2, anims: { idle: 2 }, animOrder: ['idle'] }), ...changes });
 const sheet = () => sharp({ create: { width: 4, height: 3, channels: 4, background: '#ff0000' } }).png().toBuffer();
 const json = value => new Response(JSON.stringify(value), { headers: { 'content-type': 'application/json' } });
-function api(records, bytes, { pages, published, after } = {}) {
+function api(records, bytes, { pages, published, after, revision = 0, eventRevision = 0 } = {}) {
   let reads = 0;
   const calls = [];
   const fn = async url => {
     calls.push(String(url));
     const u = new URL(url);
+    if (u.pathname === '/api/workshop/publication-revision') return json(revision);
+    if (u.pathname === '/workshop/publication-event.json') return eventRevision === null ? new Response('', { status: 404 }) : json({ schemaVersion: 1, revision: eventRevision });
     if (u.pathname === '/api/workshop/pets') {
       reads++;
       return json(pages ? pages[u.searchParams.get('cursor') || 'first'] : { items: after && reads > 1 ? after : records, hasMore: false, nextCursor: null });
@@ -42,7 +44,7 @@ describe('workshop snapshot publication', () => {
     const bytes = await readFile(join(outputRoot, 'workshop', item.thumbnail_static_url));
     expect(await sharp(bytes).metadata()).toMatchObject({ format: 'webp', width: 240, height: 260 });
     expect(JSON.parse(await readFile(join(outputRoot, 'workshop/catalog.json'), 'utf8'))).toEqual(manifest);
-    expect(await readFile(join(outputRoot, '_headers'), 'utf8')).toBe('/*\n  Access-Control-Allow-Origin: *\n  X-Content-Type-Options: nosniff\n\n/workshop/catalog.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/pets/*\n  Cache-Control: public, max-age=31536000, immutable\n');
+    expect(await readFile(join(outputRoot, '_headers'), 'utf8')).toBe('/*\n  Access-Control-Allow-Origin: *\n  X-Content-Type-Options: nosniff\n\n/workshop/catalog.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/publication-event.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/pets/*\n  Cache-Control: public, max-age=31536000, immutable\n');
   });
   it('fingerprints edits/create/delete, ignores timestamps, ordering and JSON formatting', () => {
     const base = pet();
@@ -96,8 +98,10 @@ describe('workshop snapshot publication', () => {
   });
   it('keeps the previous catalog intact when a replacement image fails validation', async () => {
     const { outputRoot, manifest } = await build();
-    await expect(buildPublication({ outputRoot, fetchFn: api([pet({ name: 'changed' })], Buffer.from('invalid')) })).rejects.toThrow();
+    const previousEvent = await readFile(join(outputRoot, 'workshop/publication-event.json'), 'utf8');
+    await expect(buildPublication({ outputRoot, fetchFn: api([pet({ name: 'changed' })], Buffer.from('invalid'), { revision: 1 }) })).rejects.toThrow();
     expect(JSON.parse(await readFile(join(outputRoot, 'workshop/catalog.json'), 'utf8'))).toEqual(manifest);
+    expect(await readFile(join(outputRoot, 'workshop/publication-event.json'), 'utf8')).toBe(previousEvent);
   });
   it('verifies deployed source and every image hash; builds do not trust a poisoned static cache', async () => {
     const { outputRoot, manifest } = await build();
@@ -157,11 +161,81 @@ describe('workshop snapshot publication', () => {
   });
   it('forces a daily image refresh even when the cheap metadata check matches', async () => {
     const outputRoot = await mkdtemp(join(tmpdir(), 'workshop-cli-')); roots.push(outputRoot);
-    const script = `globalThis.fetch=async url=>new Response(JSON.stringify(String(url).includes('/api/workshop/pets')?{items:[],hasMore:false}:{version:2,count:0,items:[],sourceFingerprint:${JSON.stringify(sourceFingerprint([]))}}));`;
+    const script = `globalThis.fetch=async url=>new Response(JSON.stringify(String(url).endsWith('/publication-revision')?0:String(url).endsWith('/publication-event.json')?{schemaVersion:1,revision:0}:String(url).includes('/api/workshop/pets')?{items:[],hasMore:false}:{version:2,count:0,items:[],sourceFingerprint:${JSON.stringify(sourceFingerprint([]))}}));`;
     const preload = `data:text/javascript,${encodeURIComponent(script)}`;
     const run = flags => execFileSync(process.execPath, ['--import', preload, 'scripts/build-workshop-static.mjs', '--check', ...flags], { encoding: 'utf8', env: { ...process.env, GITHUB_OUTPUT: join(outputRoot, 'outputs') } });
     expect(run([])).toContain('changed=false');
     expect(run(['--refresh-images'])).toContain('changed=true');
     expect(await readFile(join(outputRoot, 'outputs'), 'utf8')).toContain('changed=true\n');
+  });
+});
+
+describe('credential-free revision bridge', () => {
+  const published = records => ({ version: 2, count: records.length, items: records, sourceFingerprint: sourceFingerprint(records) });
+  it('unchanged revision performs only two cheap reads, without source or image access', async () => {
+    const fetchFn = api([pet()], null, { revision: 41, eventRevision: 41 });
+    expect(await checkPublication({ fetchFn, revisionOnly: true })).toEqual({ changed: false, revision: 41, skippedSourceCheck: true });
+    expect(fetchFn.calls.map(url => new URL(url).pathname)).toEqual(['/api/workshop/publication-revision', '/workshop/publication-event.json']);
+  });
+  it('changed revision acknowledges even a net-zero source edit', async () => {
+    const fetchFn = api([pet()], null, { revision: 42, eventRevision: 41, published: published([pet()]) });
+    expect(await checkPublication({ fetchFn, revisionOnly: true })).toMatchObject({ changed: true, revision: 42, skippedSourceCheck: false });
+    expect(fetchFn.calls.some(url => url.includes('/api/workshop/pets'))).toBe(true);
+  });
+  it('hourly full check detects missed source changes even when revision marker matches', async () => {
+    const fetchFn = api([pet({ name: 'changed' })], null, { revision: 42, eventRevision: 42, published: published([pet()]) });
+    expect(await checkPublication({ fetchFn })).toMatchObject({ changed: true, skippedSourceCheck: false });
+    expect(fetchFn.calls.some(url => url.includes('/api/workshop/pets'))).toBe(true);
+  });
+  it('daily image audit bypasses the cheap shortcut and forces a rebuild', async () => {
+    const fetchFn = api([pet()], null, { revision: 42, eventRevision: 42, published: published([pet()]) });
+    expect(await checkPublication({ fetchFn, revisionOnly: true, refreshImages: true })).toMatchObject({ changed: true, skippedSourceCheck: false });
+  });
+  it('bootstraps a missing static marker through full check and rebuild', async () => {
+    const fetchFn = api([pet()], null, { revision: 0, eventRevision: null, published: published([pet()]) });
+    expect(await checkPublication({ fetchFn, revisionOnly: true })).toMatchObject({ changed: true, revision: 0, skippedSourceCheck: false });
+  });
+  it('rejects malformed revisions/receipts and upstream failures without acknowledging an event', async () => {
+    for (const value of [-1, 1.5, '42', null, {}, Number.MAX_SAFE_INTEGER + 1]) {
+      await expect(fetchPublicationRevision(async () => json(value))).rejects.toThrow('revision');
+    }
+    await expect(fetchPublicationRevision(async () => new Response('', { status: 503 }))).rejects.toThrow('503');
+    await expect(readPublishedEvent(async () => json({ revision: 1 }))).rejects.toThrow('marker');
+    await expect(readPublishedEvent(async () => new Response('', { status: 503 }))).rejects.toThrow('503');
+  });
+  it('publishes only revision read before source construction, leaving concurrent events pending', async () => {
+    const outputRoot = await mkdtemp(join(tmpdir(), 'workshop-event-race-')); roots.push(outputRoot);
+    let revision = 7;
+    const sourceFetch = api([pet()], await sheet());
+    const fetchFn = async url => {
+      const pathname = new URL(url).pathname;
+      if (pathname === '/api/workshop/publication-revision') return json(revision);
+      if (pathname === '/api/workshop/pets') revision = 8;
+      return sourceFetch(url);
+    };
+    const manifest = await buildPublication({ outputRoot, fetchFn });
+    expect(manifest.publicationRevision).toBe(7);
+    const event = JSON.parse(await readFile(join(outputRoot, 'workshop/publication-event.json'), 'utf8'));
+    expect(event).toEqual({ schemaVersion: 1, revision: 7 });
+    const nextFetch = api([pet()], null, { revision, eventRevision: event.revision, published: manifest });
+    expect(await checkPublication({ fetchFn: nextFetch, revisionOnly: true })).toMatchObject({ changed: true, revision: 8 });
+    const settledFetch = api([pet()], null, { revision, eventRevision: revision, published: manifest });
+    expect(await checkPublication({ fetchFn: settledFetch, revisionOnly: true })).toMatchObject({ changed: false });
+  });
+  it('verification rejects an event marker ahead of the actual built snapshot', async () => {
+    const { outputRoot, manifest } = await build();
+    const fetchFn = async url => {
+      const pathname = new URL(url).pathname;
+      if (pathname.endsWith('/catalog.json')) return json(manifest);
+      if (pathname.endsWith('/publication-event.json')) return json({ schemaVersion: 1, revision: manifest.publicationRevision + 1 });
+      return new Response(await readFile(join(outputRoot, pathname)));
+    };
+    await expect(verifyPublication({ fetchFn, manifest })).rejects.toThrow('pre-build revision');
+  });
+  it('CLI cheap path needs no source listing, images, credentials or dependencies', async () => {
+    const script = `globalThis.fetch=async url=>{const p=new URL(url).pathname;if(p==='/api/workshop/publication-revision')return new Response('27');if(p==='/workshop/publication-event.json')return new Response('{"schemaVersion":1,"revision":27}');throw new Error('Unexpected full scan '+url);};`;
+    const result = execFileSync(process.execPath, ['--import', `data:text/javascript,${encodeURIComponent(script)}`, 'scripts/build-workshop-static.mjs', '--check', '--revision-only'], { encoding: 'utf8' });
+    expect(result).toContain('changed=false');
+    expect(result).toContain('skippedSourceCheck=true');
   });
 });

@@ -4,9 +4,11 @@ import { resolve } from 'node:path';
 
 export const API = 'https://api.cspstudy.top';
 export const CATALOG = 'https://cards.cspstudy.top/workshop/catalog.json';
+export const PUBLICATION_REVISION = `${API}/api/workshop/publication-revision`;
+export const PUBLICATION_EVENT = 'https://cards.cspstudy.top/workshop/publication-event.json';
 const MAX_BYTES = 25 * 1024 * 1024;
 const MAX_PIXELS = 62_000_000;
-const HEADERS = '/*\n  Access-Control-Allow-Origin: *\n  X-Content-Type-Options: nosniff\n\n/workshop/catalog.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/pets/*\n  Cache-Control: public, max-age=31536000, immutable\n';
+const HEADERS = '/*\n  Access-Control-Allow-Origin: *\n  X-Content-Type-Options: nosniff\n\n/workshop/catalog.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/publication-event.json\n  Cache-Control: public, max-age=60, must-revalidate\n\n/workshop/pets/*\n  Cache-Control: public, max-age=31536000, immutable\n';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const fail = message => { throw new Error(message); };
 const integer = (n, min, max) => Number.isSafeInteger(n) && n >= min && n <= max;
@@ -81,6 +83,34 @@ async function bytes(fetchFn, url, limit = MAX_BYTES) {
 }
 async function json(fetchFn, url) { return JSON.parse((await bytes(fetchFn, url, 32 * 1024 * 1024)).toString()); }
 
+export async function fetchPublicationRevision(fetchFn = fetch) {
+  const revision = await json(fetchFn, PUBLICATION_REVISION);
+  if (!integer(revision, 0, Number.MAX_SAFE_INTEGER)) fail('Invalid publication revision');
+  return revision;
+}
+export async function readPublishedEvent(fetchFn = fetch) {
+  const response = await fetchFn(PUBLICATION_EVENT, { redirect: 'error', signal: AbortSignal.timeout(30_000), cache: 'no-store' });
+  if (response.status === 404) return null;
+  if (!response.ok) fail(`Published event unavailable (${response.status})`);
+  const event = await response.json();
+  if (!object(event) || event.schemaVersion !== 1 || !integer(event.revision, 0, Number.MAX_SAFE_INTEGER)) fail('Invalid published event marker');
+  return event;
+}
+/** Five-minute checks read only the numeric API revision and static receipt.
+ * Hourly checks bypass the shortcut and compare authoritative catalog contents. */
+export async function checkPublication({ fetchFn = fetch, revisionOnly = false, refreshImages = false } = {}) {
+  const revision = await fetchPublicationRevision(fetchFn);
+  const event = await readPublishedEvent(fetchFn);
+  const eventChanged = event?.revision !== revision;
+  if (revisionOnly && !refreshImages && !eventChanged) return { changed: false, revision, skippedSourceCheck: true };
+  const fingerprint = sourceFingerprint(await fetchSource(fetchFn));
+  const published = await readPublished(fetchFn);
+  // A net-zero metadata edit still needs a marker acknowledgement; otherwise
+  // every lightweight tick repeats the same full scan forever.
+  return { changed: refreshImages || eventChanged || published?.sourceFingerprint !== fingerprint,
+    revision, sourceFingerprint: fingerprint, skippedSourceCheck: false };
+}
+
 export async function fetchSource(fetchFn = fetch) {
   const records = [], ids = new Set(), cursors = new Set(); let cursor = '';
   for (let pageNumber = 0; pageNumber < 100; pageNumber++) {
@@ -135,6 +165,9 @@ export function validateGeometry(meta, width, height) {
 }
 
 export async function buildPublication({ fetchFn = fetch, outputRoot = '.workshop-static', allowLargeDelete = false, published } = {}) {
+  // Capture before ANY source/image reads. Events arriving during this build
+  // remain ahead of the receipt, even if metadata changes and changes back.
+  const publicationRevision = await fetchPublicationRevision(fetchFn);
   const records = await fetchSource(fetchFn), fingerprint = sourceFingerprint(records);
   published ??= await readPublished(fetchFn);
   const previous = published?.count || 0;
@@ -161,18 +194,20 @@ export async function buildPublication({ fetchFn = fetch, outputRoot = '.worksho
     items.push({ ...record, source_record: { ...record }, publicationFingerprint: publicationFingerprint(record), spritesheet_static_url, thumbnail_static_url, spritesheet_bytes: sprite.length, spritesheet_sha256, thumbnail_sha256 });
   }
   if (sourceFingerprint(await fetchSource(fetchFn)) !== fingerprint) fail('Workshop source changed during build; retry publication');
-  const manifest = { version: 2, updatedAt: new Date().toISOString(), sourceFingerprint: fingerprint, count: items.length, items };
+  const manifest = { version: 2, updatedAt: new Date().toISOString(), sourceFingerprint: fingerprint, publicationRevision, count: items.length, items };
   await mkdir(directory, { recursive: true });
   await writeFile(resolve(outputRoot, '_headers'), HEADERS);
   await writeFile(resolve(directory, 'catalog.json.tmp'), `${JSON.stringify(manifest, null, 2)}\n`);
   await rename(resolve(directory, 'catalog.json.tmp'), resolve(directory, 'catalog.json'));
+  await writeFile(resolve(directory, 'publication-event.json'), `${JSON.stringify({ schemaVersion: 1, revision: publicationRevision })}\n`);
   return manifest;
 }
 
 export async function verifyPublication({ fetchFn = fetch, manifest } = {}) {
   const online = await readPublished(fetchFn);
-  if (online?.version !== 2 || online.sourceFingerprint !== manifest.sourceFingerprint || stable(online.items) !== stable(manifest.items) || online.count !== manifest.count) fail('Published manifest does not match local source');
+  if (online?.version !== 2 || online.publicationRevision !== manifest.publicationRevision || online.sourceFingerprint !== manifest.sourceFingerprint || stable(online.items) !== stable(manifest.items) || online.count !== manifest.count) fail('Published manifest does not match local source');
   for (const item of manifest.items) for (const [field, hashField] of [['spritesheet_static_url', 'spritesheet_sha256'], ['thumbnail_static_url', 'thumbnail_sha256']]) {
     if (hash(await bytes(fetchFn, assetUrl(item, field))) !== item[hashField]) fail(`Published asset hash mismatch: ${item.id}/${field}`);
   }
+  if ((await readPublishedEvent(fetchFn))?.revision !== manifest.publicationRevision) fail('Published event marker does not match pre-build revision');
 }

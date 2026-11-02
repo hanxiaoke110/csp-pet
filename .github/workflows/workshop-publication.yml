@@ -3,6 +3,7 @@ name: Publish workshop catalog
 on:
   schedule:
     - cron: '*/5 * * * *'
+    - cron: '7 * * * *'
     - cron: '17 19 * * *'
   workflow_dispatch:
     inputs:
@@ -42,12 +43,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Compare source and published catalog
+      - name: Compare public event revision (hourly full source check)
         id: catalog
         env:
           REFRESH_IMAGES: ${{ inputs.refresh_images || github.event.schedule == '17 19 * * *' }}
+          REVISION_ONLY: ${{ github.event_name == 'schedule' && github.event.schedule == '*/5 * * * *' }}
         run: |
           args=()
+          if [ "$REVISION_ONLY" = "true" ]; then args+=(--revision-only); fi
           if [ "$REFRESH_IMAGES" = "true" ]; then args+=(--refresh-images); fi
           node scripts/build-workshop-static.mjs --check "${args[@]}"
       - name: Install publisher dependencies

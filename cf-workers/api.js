@@ -1,3 +1,5 @@
+import { queueWorkshopPublication, readWorkshopPublicationRevision } from './workshop-publish-events.js';
+
 // CSP API — Cloudflare Workers + D1
 // 部署在 api.cspstudy.top
 // 功能：许愿墙 + 教师管理 + 班级系统 + 兑换码生成
@@ -710,25 +712,55 @@ async function getCollectorResults(db) {
   };
 }
 
-async function saveCollectorSnapshot(db, backupStore) {
+export async function saveCollectorSnapshot(db, backupStore) {
+  // Closed, expired and not-yet-open activities need no repeated ballot aggregation.
+  const config = await getCollectorVoteConfig(db);
+  if (config.status !== 'open') return;
   const snapshotDate = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
-  const summary = await getCollectorResults(db);
-  await db.prepare(`
-    INSERT INTO collector_vote_snapshots (snapshot_date, ballot_count, results_json, created_at)
-    VALUES (?, ?, ?, datetime('now'))
-    ON CONFLICT(snapshot_date) DO UPDATE SET
-      ballot_count=excluded.ballot_count,
-      results_json=excluded.results_json,
-      created_at=datetime('now')
-  `).bind(snapshotDate, summary.ballotCount, JSON.stringify(summary.results)).run();
-  if (backupStore?.put) {
-    const backupKey = `collector-vote-snapshots/${snapshotDate}.json`;
-    await backupStore.put(backupKey, JSON.stringify({
-      snapshotDate,
-      ballotCount: summary.ballotCount,
-      results: summary.results,
-      sealedAt: new Date().toISOString(),
-    }), { metadata: { contentType: 'application/json' } });
+  const completedKey = 'collector_vote_snapshot_backup_date';
+  const completed = await db.prepare('SELECT value FROM meta WHERE key=?').bind(completedKey).first();
+  if (completed?.value === snapshotDate) return;
+
+  // D1 arbitrates overlapping cron invocations; a crashed invocation can be retried after its lease expires.
+  const lockKey = `collector_vote_snapshot_lock:${snapshotDate}`;
+  const now = Date.now();
+  const lease = `${now + 10 * 60 * 1000}:${crypto.randomUUID()}`;
+  const claim = await db.prepare(`
+    INSERT INTO meta(key, value) VALUES (?, ?)
+    ON CONFLICT(key) DO UPDATE SET value=excluded.value WHERE CAST(meta.value AS INTEGER)<=?
+  `).bind(lockKey, lease, now).run();
+  if (!claim.meta?.changes) return;
+
+  try {
+    // Another invocation may have finished between our initial check and lease acquisition.
+    const latest = await db.prepare('SELECT value FROM meta WHERE key=?').bind(completedKey).first();
+    if (latest?.value === snapshotDate) return;
+    const existing = await db.prepare('SELECT ballot_count, results_json FROM collector_vote_snapshots WHERE snapshot_date=?')
+      .bind(snapshotDate).first();
+    let summary;
+    if (existing) {
+      // A failed object-store write retries the same immutable snapshot, without scanning ballots again.
+      summary = { ballotCount: existing.ballot_count, results: JSON.parse(existing.results_json) };
+    } else {
+      summary = await getCollectorResults(db);
+      await db.prepare(`
+        INSERT OR IGNORE INTO collector_vote_snapshots (snapshot_date, ballot_count, results_json, created_at)
+        VALUES (?, ?, ?, datetime('now'))
+      `).bind(snapshotDate, summary.ballotCount, JSON.stringify(summary.results)).run();
+    }
+    if (backupStore?.put) {
+      const backupKey = `collector-vote-snapshots/${snapshotDate}.json`;
+      await backupStore.put(backupKey, JSON.stringify({
+        snapshotDate,
+        ballotCount: summary.ballotCount,
+        results: summary.results,
+        sealedAt: new Date().toISOString(),
+      }), { metadata: { contentType: 'application/json' } });
+    }
+    // Mark completion only after all configured destinations confirm the write.
+    await db.prepare('INSERT OR REPLACE INTO meta(key, value) VALUES (?, ?)').bind(completedKey, snapshotDate).run();
+  } finally {
+    await db.prepare('DELETE FROM meta WHERE key=? AND value=?').bind(lockKey, lease).run();
   }
 }
 
@@ -2054,6 +2086,12 @@ export default {
         return new Response(JSON.stringify({ success: true, key }), { headers: cors });
       }
 
+      // Only a numeric change counter: no teacher, student, asset or credential data.
+      if (path === '/api/workshop/publication-revision' && request.method === 'GET') {
+        const revision = await readWorkshopPublicationRevision(env);
+        return new Response(JSON.stringify(revision), { headers: { ...cors, 'Cache-Control': 'no-store' } });
+      }
+
       // GET /api/workshop/pets — newest first, with opt-in cursor pagination.
       // Requests without paginated=1 keep the legacy array response used by the teacher app.
       if (path === '/api/workshop/pets' && request.method === 'GET') {
@@ -2173,6 +2211,7 @@ export default {
             'INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, slug, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))'
           ).bind(id, teacher.teacher_id, creator_name, name, slug, element, style, description, tier, price, pet_json_str, spritesheet_url || '', thumbnail_url || '').run();
 
+          queueWorkshopPublication(env, ctx);
           return new Response(JSON.stringify({ success: true, id }), { headers: cors });
         }
 
@@ -2197,6 +2236,7 @@ export default {
         const displayTeacher = creator_name || teacher.name;
         const price = parseInt(body.price) || (tier === 'legendary' ? 500 : tier === 'rare' ? 260 : 150);
         await db.prepare('INSERT INTO workshop_pets (id, teacher_id, teacher_name, name, slug, element, style, description, tier, price, pet_json, spritesheet_url, thumbnail_url, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,datetime("now"))').bind(id, teacher.teacher_id, displayTeacher, name, slugJson, element, style||'', description||'', tier, price, pet_json_str||'', spritesheet_url||'', thumbnail_url||'').run();
+        queueWorkshopPublication(env, ctx);
         return new Response(JSON.stringify({ success: true, id }), { headers: cors });
       }
 
@@ -2205,7 +2245,8 @@ export default {
         const teacher = await checkTeacher(request, db);
         if (!teacher) return new Response(JSON.stringify({ error: '请先登录' }), { status: 401, headers: cors });
         const id = path.split('/').pop();
-        await db.prepare("UPDATE workshop_pets SET status='deleted' WHERE id=? AND teacher_id=?").bind(id, teacher.teacher_id).run();
+        const mutation = await db.prepare("UPDATE workshop_pets SET status='deleted' WHERE id=? AND teacher_id=? AND status='active'").bind(id, teacher.teacher_id).run();
+        if (mutation.meta?.changes) queueWorkshopPublication(env, ctx);
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -2222,7 +2263,8 @@ export default {
         if (body.tier !== undefined) { sets.push('tier=?'); vals.push(body.tier); sets.push('price=?'); vals.push(body.tier === 'legendary' ? 500 : body.tier === 'rare' ? 260 : 150); }
         if (!sets.length) return new Response(JSON.stringify({ error: '无可更新字段' }), { status: 400, headers: cors });
         vals.push(id, teacher.teacher_id);
-        await db.prepare('UPDATE workshop_pets SET ' + sets.join(',') + ' WHERE id=? AND teacher_id=?').bind(...vals).run();
+        const mutation = await db.prepare('UPDATE workshop_pets SET ' + sets.join(',') + ' WHERE id=? AND teacher_id=?').bind(...vals).run();
+        if (mutation.meta?.changes) queueWorkshopPublication(env, ctx);
         return new Response(JSON.stringify({ success: true }), { headers: cors });
       }
 
@@ -2882,7 +2924,7 @@ export default {
     }
   },
 
-  // Cron trigger — keeps Worker warm and seals one anonymous vote snapshot per Beijing day.
+  // Cron trigger — backs up at most one vote snapshot per Beijing day while voting is open.
   async scheduled(event, env, ctx) {
     try {
       await ensureSchema(env.DB);
