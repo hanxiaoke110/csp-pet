@@ -60,3 +60,5 @@ node scripts/content-release.mjs rollback --adapter ./scripts/content-release/cl
 工坊 `csp-workshop-assets` 的 `/workshop/*` 不在此工具权限范围，继续使用独立工坊发布机制。适配器不能把两个 Worker 混在同一快照。
 
 验证：`npx vitest run scripts/content-release.test.mjs scripts/content-release/cloudflare-adapter.test.mjs`，网络与部署 runner 均注入内存适配器，测试不执行外部写入。
+
+旧的 `npm run cloud-assets:deploy` 现已转入同一受保护 apply 入口，必须传入已审阅 `--bundle`；没有 `--deploy` 仅检查，不会从过时源目录全量覆盖线上。示例：`npm run cloud-assets:deploy -- --bundle /absolute/reviewed-release.json --deploy --out /absolute/receipt.json`。
