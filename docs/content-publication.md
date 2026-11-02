@@ -62,3 +62,5 @@ node scripts/content-release.mjs rollback --adapter ./scripts/content-release/cl
 验证：`npx vitest run scripts/content-release.test.mjs scripts/content-release/cloudflare-adapter.test.mjs`，网络与部署 runner 均注入内存适配器，测试不执行外部写入。
 
 旧的 `npm run cloud-assets:deploy` 现已转入同一受保护 apply 入口，必须传入已审阅 `--bundle`；没有 `--deploy` 仅检查，不会从过时源目录全量覆盖线上。示例：`npm run cloud-assets:deploy -- --bundle /absolute/reviewed-release.json --deploy --out /absolute/receipt.json`。
+
+工坊独立路由注意：`cards.cspstudy.top/workshop/*` 已由 `csp-workshop-assets` 接管。完整根 Worker 快照仍原样保留该路径的历史字节，但 HTTP 核验跳过此唯一路径前缀，避免拿另一个 Worker 的新目录与根 Worker 的历史字节比较。根 Worker 的已保全 revision、其他全部文件和配置仍必须通过核验；本工具也不允许修改工坊路径。

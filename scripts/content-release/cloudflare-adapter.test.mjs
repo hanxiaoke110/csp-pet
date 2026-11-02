@@ -40,6 +40,13 @@ describe('production Cloudflare cooperative adapter (no real network or deploy)'
     expect(JSON.parse(await readFile(path.join(f.stateDirectory, 'current.json'), 'utf8')).revision).toContain('deployment-new');
     await expect(readFile(path.join(f.lockDirectory, 'owner.json'))).rejects.toMatchObject({ code: 'ENOENT' });
   }));
+  it('preserves delegated workshop bytes without comparing another Worker response', async () => fixture(async f => {
+    await mkdir(path.join(f.stage, 'workshop'));
+    await writeFile(path.join(f.stage, 'workshop/catalog.json'), 'old delegated snapshot');
+    const snapshot = await f.adapter.snapshot('csp-card-assets');
+    expect(snapshot.files['workshop/catalog.json'].toString()).toBe('old delegated snapshot');
+    expect(f.writes()).toBe(0);
+  }));
   it('rejects active-version drift after upload without activation', async () => fixture(async f => {
     const baseline = await f.adapter.snapshot('csp-card-assets');
     const bundle = prepareRelease({ targets: ['collector'], baseline, changes: { 'collector-cards/catalog.json': Buffer.from('new') }, expected: inventory(baseline.files), validation: { ready: true } });

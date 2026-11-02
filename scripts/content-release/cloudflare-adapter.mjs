@@ -61,7 +61,10 @@ export function createCloudflareAdapter({
       const remote = version.resources?.script_runtime?.assets?.[`raw${special}`];
       if (typeof remote !== 'string' || sha256(Buffer.from(remote)) !== sha256(files[special])) throw Error(`Live configuration changed: ${special}`);
     }
-    const names = Object.keys(files).filter(name => name !== '_headers' && name !== '_redirects');
+    // /workshop/* is served by the independent csp-workshop-assets route.
+    // Keep its baseline bytes in the complete snapshot, but do not compare them
+    // against a different Worker's current HTTP response. Root revision remains bound.
+    const names = Object.keys(files).filter(name => name !== '_headers' && name !== '_redirects' && !name.startsWith('workshop/'));
     let cursor = 0;
     await Promise.all(Array.from({ length: Math.min(8, names.length) }, async () => {
       while (cursor < names.length) {
