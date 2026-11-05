@@ -1,19 +1,19 @@
 {
-  "version": "1.7.55",
-  "notes": "💎 器魂碎片能用了：在试炼补给站的装备工坊，10 个碎片可兑换 1 个自选属性晶石，支持批量兑换，不花金币。以前攒下的碎片直接可用。\n⚒ 点击碎片去兑换，点击晶石去强化；强化缺材料时可直达对应属性兑换。兑换保存失败不会扣材料，连续点击同一确认不会重复兑换。\n⚔ 修复敌方被灼烧扣到 0 血后仍继续战斗的问题，正常进入胜利结算，防止结束后的延迟攻击及重复结算。\n🃏 典藏卡赏卡界面适配小窗口，翻面与操作按钮不再被遮住；自动赏卡继续保留。\n🐍 修正灵蛇、逐风马星途头像左右跟随鼠标方向相反的问题。\n🌠 同一愿望投票不再间隔等待，每次仍需消耗许愿券，原有票数保留。\n🛡 修复试炼确认框可能跑到窗口外的问题。保留原有智子、金币、材料及学习进度，装备强化成本和最高 +5 保持原规则。",
-  "pub_date": "2026-10-29T13:28:34.306Z",
+  "version": "1.7.56",
+  "notes": "📝 错题随时练，支持 5 题、10 题或全部；月度奖励继续按原资格领取。\n⚙️ 默认使用标准模式。可手动启用省资源模式，查看并清理过期下载缓存。\n✨ 智子配饰增加新样式，支持复制搭配，改善光环遮挡并修复部分试炼立绘加载。",
+  "pub_date": "2026-11-05T10:48:18.376Z",
   "platforms": {
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVys0T1pCWDN6MEJSelBBSXVmTm45aGFVWFFuY3BoeXp2bjVRYjJ5dWp4UUsxcTZVL21hWDVSWVVKRDd6U1plQXYxeHgyMWxKeWRiRSs2WEdHdC8xUmd3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzMjc5OTc0CWZpbGU6Q1NQXzEuNy41NV9hYXJjaDY0LmRtZwp5ZnBUekdMVTFpM0JiWENPc2VzaUlvS3MrK0JHc2RvZ1ladlRJU29aUEh5TkZXZlQ1R3FESkxSVWpqa2dvYm8weUw1cXZySE5LT2lnZWZYakVmaUNBdz09Cg==",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.55/CSP_1.7.55_aarch64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzBHVy8wUzVZaHVpQ25YcUNaRkNRa05CQ0xUbnZOS0pHYU1XU05HR2pId2p5b1BOb3RGRkFhc3d4bDZ6WGVRNWNDSHNieTh4bmJSMUd5amF5VmNTaUFRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzODc1MDYyCWZpbGU6Q1NQXzEuNy41Nl9hYXJjaDY0LmRtZwpnTXIxb0wvRmIvby9CS3pLQ3hhTkwzbGNBT2drdTU5YUd5Y2JuaFhJNlVrRDNyaWFFRi9iUHJBZUVOOXVtdk1EMmpLY1ZHSEJzS3JrMHViSU9NRFpBZz09Cg==",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.56/CSP_1.7.56_aarch64.dmg"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVyszcmxmTjZIOXpBRzVHalUrcUpWNDVTdEtnbWhyVmZyN3FueTBKUDhzTCtOeEVoWlF2TmZiKzJVYXZsMlpRNGxlSkxDS2h5TTVXcWJyTHQ2Y1dhNGdVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzMjgwMDI4CWZpbGU6Q1NQXzEuNy41NV94NjQuZG1nCjB6UGZxTjVubjZlMG1sTkVFVVYrRlhHYXU0WkVPR2ZNOUgvSklwT2ExU0JRakVKbFc0RmVMRlFMT3ZrTTJ0bFptQzJHYzdFVlpNOWI3dTdEZHhySUNBPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.55/CSP_1.7.55_x64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzR1eUg4UTQ0Y3hUaTVwZUduZkplTEczWnNNazNBTldEMk5yaW1ad1FobU9jYnEvRzl3YktIU3JFUmRuakxuWUgxS2c0UDBSREpEOHo2L1U3ams3WEF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzODc0NTcwCWZpbGU6Q1NQXzEuNy41Nl94NjQuZG1nClVMNGN1V3Zha3FyL2RlcXlORXBLWVZ0K2VnZEx2OVNwY0dJWmV5V2dBNWdDaHFrVjZyQ29mdTFzQ0FNR2pXVGdnQkxIQmswR2J5RDNuVHJtTUh6R0JnPT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.56/CSP_1.7.56_x64.dmg"
     },
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzJsWG4wU2JvaHFobzBlKzdZSitHV1RxQXJsWGZHeTIrcEpTRkxVUmlFRjNTNWRoQXRkKzFxVVdZWlVjWUZReDc4eEswOWVYekxVSGxJQUUreGV2VmdVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzMjc5OTgwCWZpbGU6Q1NQXzEuNy41NV94NjQtc2V0dXAuZXhlCjU1aVZ2YVNiQzU3aDNrdzB1dU04WXlyQ0F1REFEUjZZVnFjMmxHRDdNWmJ6a1FlN21wUUtHMzFjRm16bWp4MlMvOGkwTjFJbzNGUkN3aDM3SUtOWENRPT0K",
-      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.55/CSP_1.7.55_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRWkw1ZDByNGFwVzlQNlRucjVLSGFUY3dDQllIUDV0Z0cvaEZ6RGtRL3A0OXVOb2Irc0tFZDB2b1JoOGs1dWprREtjajZQNXpKR3hRMzRETXBkaDZRNHU1UnM2WlVpMFFvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzODc1MDYyCWZpbGU6Q1NQXzEuNy41Nl94NjQtc2V0dXAuZXhlCmpJVG5YUzFzODlJY1B5R2d6RXZwR1NyeFp5YkhHUjZZZjl1QndRTjkzdE91ME5jVkZQZEN4ekkyVDByUTRUY2FJcFc5S244NWdNdi9mRWdmUlFoSkF3PT0K",
+      "url": "https://gitee.com/hanliuliu110/csp-pet/releases/download/v1.7.56/CSP_1.7.56_x64-setup.exe"
     }
   }
 }
