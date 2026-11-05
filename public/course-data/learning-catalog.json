@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 3,
-  "updatedAt": "2026-10-12T10:47:22.137Z",
+  "catalogVersion": 4,
+  "updatedAt": "2026-10-30T13:39:27.237Z",
   "navigationUrl": "https://scncdgmg7m6w.feishu.cn/docx/IPpTdbqBmoRJ0mx2INqcjnWDnOg",
   "lessons": [
     {
@@ -1018,38 +1018,51 @@
     {
       "id": "lesson-material-p078",
       "lessonNo": 78,
-      "title": "待补充",
+      "title": "广度优先搜索",
       "stage": "C4",
-      "description": "预留课次，课程主题与阶段待确定。",
-      "tags": [],
-      "feishuUrl": "",
-      "status": "hidden",
+      "description": "BFS 用队列按层扩展；每次取出一个位置，再检查邻居。先检查边界，再读地图；入队时标记，不等出队才标记。",
+      "tags": [
+        "BFS",
+        "队列",
+        "方向数组"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/HbWQdOcdwo03vXxbgB4cIFSUn0c",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-30"
     },
     {
       "id": "lesson-material-p079",
       "lessonNo": 79,
-      "title": "待补充",
+      "title": "深度优先搜索",
       "stage": "C4",
-      "description": "预留课次，课程主题与阶段待确定。",
-      "tags": [],
-      "feishuUrl": "",
-      "status": "hidden",
+      "description": "DFS 沿一条分支深入，返回后再处理下一条分支。恢复不恢复 vis，要由问题目标决定，不能机械背模板。",
+      "tags": [
+        "DFS",
+        "回溯",
+        "访问标记"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Z3gtdVX8Bop7uDxP8PocXiJFngb",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-30"
     },
     {
       "id": "lesson-material-p080",
       "lessonNo": 80,
-      "title": "待补充",
+      "title": "搜索综合练习",
       "stage": "C4",
-      "description": "预留课次，课程主题与阶段待确定。",
-      "tags": [],
-      "feishuUrl": "",
-      "status": "hidden",
+      "description": "路线枚举可用 DFS；等步长最少步数优先用 BFS。统计水域先确认四方向或八方向，再扫描并标记整片连通块。",
+      "tags": [
+        "BFS",
+        "DFS",
+        "最短路",
+        "连通块"
+      ],
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Bg2gdZkmOoiGNjxHOmYcVifvnbd",
+      "status": "ready",
       "requiresClassCode": false,
-      "updatedAt": "2026-10-11"
+      "updatedAt": "2026-10-30"
     },
     {
       "id": "lesson-material-p081",

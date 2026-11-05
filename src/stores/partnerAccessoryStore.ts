@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { emit } from '@tauri-apps/api/event';
 import { dualLoad } from '../lib/persist';
 import { commitLocalSnapshots, PARTNER_JOURNAL_KEY, recoverPartnerTransaction, withPartnerReadLock, withPartnerTransactionLock } from '../lib/partnerTransactions';
-import { BUILTIN_ACCESSORY_CATALOG, cachedAccessoryCatalog, defaultAccessorySnapshot, loadAccessoryCatalog, PARTNER_ACCESSORY_KEY, PARTNER_ACCESSORY_SQLITE_KEY, supportedAccessory, validateAccessorySnapshot } from '../data/partnerAccessories';
+import { ACCESSORY_RENDERER_VERSION, BUILTIN_ACCESSORY_CATALOG, cachedAccessoryCatalog, defaultAccessorySnapshot, loadAccessoryCatalog, PARTNER_ACCESSORY_KEY, PARTNER_ACCESSORY_SQLITE_KEY, supportedAccessory, validateAccessorySnapshot } from '../data/partnerAccessories';
 import type { PartnerAccessoryCatalog, PartnerAccessorySlot, PartnerAccessorySnapshot } from '../types/partnerAccessory';
 import { usePetStore } from './petStore';
 import { recoverEquipmentTransaction } from '../lib/equipmentTransactions';
@@ -11,6 +11,7 @@ interface State {
   loaded: boolean; busy: boolean; error: string; snapshot: PartnerAccessorySnapshot; catalog: PartnerAccessoryCatalog;
   load: () => Promise<void>; refresh: () => void;
   purchase: (id: string, expectedPrice: number) => Promise<Result>;
+  copyFromPet: (sourceId: string, targetId: string) => Promise<Result>;
   equip: (petId: string, slot: PartnerAccessorySlot, id: string | null) => Promise<Result>;
 }
 const parse = (raw: string | null) => { const s = raw ? JSON.parse(raw) : defaultAccessorySnapshot(); if (!validateAccessorySnapshot(s)) throw new Error('配饰存档异常，请保留备份后重试'); return s; };
@@ -53,7 +54,7 @@ export const usePartnerAccessoryStore = create<State>((set, get) => ({
     try { return await withPartnerTransactionLock(() => {
       recoverPartnerTransaction(); recoverEquipmentTransaction();
       const item = get().catalog.items.find(i => i.id === id);
-      if (!item || !supportedAccessory(item) || get().catalog.minRendererVersion > 1) throw new Error('此配饰需要更新应用后使用');
+      if (!item || !supportedAccessory(item) || get().catalog.minRendererVersion > ACCESSORY_RENDERER_VERSION) throw new Error('此配饰需要更新应用后使用');
       const snapshot = parse(localStorage.getItem(PARTNER_ACCESSORY_KEY));
       if (snapshot.ownedIds.includes(id)) { set({ snapshot }); return { ok: true, message: '已永久拥有，无需重复购买' }; }
       if (item.price !== expectedPrice) throw new Error('价格已更新，请重新确认购买');
@@ -72,6 +73,33 @@ export const usePartnerAccessoryStore = create<State>((set, get) => ({
     }); } catch (e) { const message = e instanceof Error ? e.message : '购买失败'; set({ error: message }); return { ok: false, message }; }
     finally { set({ busy: false }); }
   },
+  copyFromPet: async (sourceId, targetId) => {
+    if (get().busy || !get().loaded) return { ok: false, message: '请等待配饰资料恢复' };
+    set({ busy: true });
+    try { return await withPartnerTransactionLock(() => {
+      recoverPartnerTransaction(); recoverEquipmentTransaction();
+      const pets = JSON.parse(localStorage.getItem('csp_pet_data') || '{}').ownedPets;
+      if (sourceId === targetId || !Array.isArray(pets)
+        || !pets.some(p => p.petId === sourceId) || !pets.some(p => p.petId === targetId)) {
+        throw new Error('请选择收藏中的另一位智子');
+      }
+      // Read the authority inside the same cross-window lock as equip/purchase.
+      const snapshot = parse(localStorage.getItem(PARTNER_ACCESSORY_KEY));
+      if (Object.keys(snapshot.equippedByPet[targetId] || {}).length) throw new Error('这位智子已有搭配，已保留原搭配');
+      const loadout = snapshot.equippedByPet[sourceId] || {};
+      if (!Object.keys(loadout).length) throw new Error('这位智子还没有可沿用的搭配');
+      if (get().catalog.minRendererVersion > ACCESSORY_RENDERER_VERSION || !Object.entries(loadout).every(([slot, id]) => {
+        const item = get().catalog.items.find(i => i.id === id);
+        return snapshot.ownedIds.includes(id) && item && item.slot === slot && supportedAccessory(item);
+      })) throw new Error('原搭配含暂不可用的配饰，请先调整原搭配');
+      const next = { ...snapshot, equippedByPet: { ...snapshot.equippedByPet, [targetId]: { ...loadout } }, savedAt: new Date().toISOString() };
+      if (!save(next)) throw new Error('配饰未能保存，请重试');
+      set({ snapshot: next, error: '' });
+      emit('partner-accessories-sync').catch(() => {});
+      return { ok: true, message: '已沿用配饰，免费保存为这位智子的独立搭配' };
+    }); } catch (e) { const message = e instanceof Error ? e.message : '沿用失败'; set({ error: message }); return { ok: false, message }; }
+    finally { set({ busy: false }); }
+  },
   equip: async (petId, slot, id) => {
     if (get().busy || !get().loaded) return { ok: false, message: '请等待配饰资料恢复' };
     set({ busy: true });
@@ -82,7 +110,7 @@ export const usePartnerAccessoryStore = create<State>((set, get) => ({
       if (!Array.isArray(pets) || !pets.some(p => p.petId === petId)) throw new Error('这位智子已不在收藏中');
       const snapshot = parse(localStorage.getItem(PARTNER_ACCESSORY_KEY));
       const item = get().catalog.items.find(i => i.id === id);
-      if (id && (!snapshot.ownedIds.includes(id) || !item || item.slot !== slot || !supportedAccessory(item))) throw new Error('请先收藏兼容的配饰');
+      if (id && (get().catalog.minRendererVersion > ACCESSORY_RENDERER_VERSION || !snapshot.ownedIds.includes(id) || !item || item.slot !== slot || !supportedAccessory(item))) throw new Error('请先收藏兼容的配饰');
       const loadout = { ...snapshot.equippedByPet[petId] }; if (id) loadout[slot] = id; else delete loadout[slot];
       const next = { ...snapshot, equippedByPet: { ...snapshot.equippedByPet, [petId]: loadout }, savedAt: new Date().toISOString() };
       if (!save(next)) throw new Error('配饰未能保存，请重试');

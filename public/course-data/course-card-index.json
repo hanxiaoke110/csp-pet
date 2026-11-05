@@ -1,8 +1,8 @@
 {
-  "version": 2,
-  "updated": "2026-10-12",
+  "version": 3,
+  "updated": "2026-10-30",
   "source": "教学资料/卡片合集",
-  "totalLessons": 77,
+  "totalLessons": 80,
   "note": "客户端只保存课程目录和飞书链接；完整卡片原图与正文全部放在飞书文档中，避免安装包超过 Gitee 100MB 限制。",
   "lessons": [
     {
@@ -1619,6 +1619,69 @@
         "reviewCombo": {
           "title": "P77 复习结合卡",
           "use": "自测并核对答案，再回到完整讲义。"
+        }
+      }
+    },
+    {
+      "lessonNo": 78,
+      "title": "广度优先搜索",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/HbWQdOcdwo03vXxbgB4cIFSUn0c",
+      "documentId": "HbWQdOcdwo03vXxbgB4cIFSUn0c",
+      "cards": {
+        "preclassFable": {
+          "title": "P78 课前卡",
+          "use": "课前故事导入。"
+        },
+        "knowledgeSummary": {
+          "title": "P78 课后卡",
+          "use": "知识图解、代码核心、边界与自测。"
+        },
+        "reviewCombo": {
+          "title": "P78 复习合并卡",
+          "use": "完整课前卡与课后卡上下拼接。"
+        }
+      }
+    },
+    {
+      "lessonNo": 79,
+      "title": "深度优先搜索",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Z3gtdVX8Bop7uDxP8PocXiJFngb",
+      "documentId": "Z3gtdVX8Bop7uDxP8PocXiJFngb",
+      "cards": {
+        "preclassFable": {
+          "title": "P79 课前卡",
+          "use": "课前故事导入。"
+        },
+        "knowledgeSummary": {
+          "title": "P79 课后卡",
+          "use": "知识图解、代码核心、边界与自测。"
+        },
+        "reviewCombo": {
+          "title": "P79 复习合并卡",
+          "use": "完整课前卡与课后卡上下拼接。"
+        }
+      }
+    },
+    {
+      "lessonNo": 80,
+      "title": "搜索综合练习",
+      "stage": "C4 提高阶段",
+      "feishuUrl": "https://scncdgmg7m6w.feishu.cn/docx/Bg2gdZkmOoiGNjxHOmYcVifvnbd",
+      "documentId": "Bg2gdZkmOoiGNjxHOmYcVifvnbd",
+      "cards": {
+        "preclassFable": {
+          "title": "P80 课前卡",
+          "use": "课前故事导入。"
+        },
+        "knowledgeSummary": {
+          "title": "P80 课后卡",
+          "use": "知识图解、代码核心、边界与自测。"
+        },
+        "reviewCombo": {
+          "title": "P80 复习合并卡",
+          "use": "完整课前卡与课后卡上下拼接。"
         }
       }
     }

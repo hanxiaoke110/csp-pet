@@ -1,9 +1,10 @@
 import type { PartnerAccessory, PartnerAccessoryCatalog, PartnerAccessorySnapshot } from '../types/partnerAccessory';
+import { PARTNER_ACCESSORY_COLLECTION_V2 } from './partnerAccessoryCollection';
 export const PARTNER_ACCESSORY_KEY = 'csp_partner_accessories_v1';
 export const PARTNER_ACCESSORY_SQLITE_KEY = 'partner_accessories';
-export const ACCESSORY_RENDERER_VERSION = 1;
+export const ACCESSORY_RENDERER_VERSION = 2;
 const CACHE_KEY = 'csp_partner_accessory_catalog_cache_v1';
-const primitives = { halo: ['ring', 'prism'], orbit: ['star', 'lantern'], trail: ['comet', 'pixel'] };
+const primitives = { halo: ['ring', 'prism', 'solar', 'circuit', 'lotus'], orbit: ['star', 'lantern', 'crystal', 'butterfly', 'wing', 'moon'], trail: ['comet', 'pixel', 'rune', 'petal', 'bubble'] };
 export const PARTNER_ACCESSORIES: PartnerAccessory[] = [
   { id: 'halo-clear', name: '澄明星环', description: '一圈清透星光，送给每一位同行者。', slot: 'halo', price: 0, minRendererVersion: 1, visual: { primitive: 'ring', color: '#64e8ff', accent: '#ffffff', count: 1, durationMs: 6000 } },
   { id: 'halo-prism', name: '棱镜星图', description: '折射青金光芒的精密星轨。', slot: 'halo', price: 240, minRendererVersion: 1, visual: { primitive: 'prism', color: '#6aeaff', accent: '#ffd477', count: 3, durationMs: 8000 } },
@@ -11,8 +12,10 @@ export const PARTNER_ACCESSORIES: PartnerAccessory[] = [
   { id: 'orbit-lantern', name: '暖灯夜航', description: '两盏圆滚滚的灯，照亮下一站。', slot: 'orbit', price: 180, minRendererVersion: 1, visual: { primitive: 'lantern', color: '#ffb98e', accent: '#fff0b0', count: 2, durationMs: 9000 } },
   { id: 'trail-comet', name: '彗星航迹', description: '迈出脚步，留下青金色的流星。', slot: 'trail', price: 300, minRendererVersion: 1, visual: { primitive: 'comet', color: '#6aeaff', accent: '#ffd477', count: 5, durationMs: 900 } },
   { id: 'trail-pixel', name: '像素跃迁', description: '每次出发，点亮几枚像素坐标。', slot: 'trail', price: 360, minRendererVersion: 1, visual: { primitive: 'pixel', color: '#74f6e0', accent: '#e0ff91', count: 6, durationMs: 700 } },
+  ...PARTNER_ACCESSORY_COLLECTION_V2,
 ];
-export const BUILTIN_ACCESSORY_CATALOG: PartnerAccessoryCatalog = { version: 1, minRendererVersion: 1, items: PARTNER_ACCESSORIES };
+// v1 clients keep their six-item fallback rather than showing unrenderable v2 goods.
+export const BUILTIN_ACCESSORY_CATALOG: PartnerAccessoryCatalog = { version: 2, minRendererVersion: 2, items: PARTNER_ACCESSORIES };
 const id = (v: unknown): v is string => typeof v === 'string' && /^[A-Za-z0-9][\w:-]{0,119}$/.test(v);
 const integer = (v: unknown, min: number, max: number) => Number.isSafeInteger(v) && Number(v) >= min && Number(v) <= max;
 export function supportedAccessory(item: PartnerAccessory): boolean {
@@ -43,7 +46,7 @@ export function validateAccessorySnapshot(value: unknown): value is PartnerAcces
 }
 export function cachedAccessoryCatalog(): PartnerAccessoryCatalog {
   let fallback = BUILTIN_ACCESSORY_CATALOG;
-  try { const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (validateAccessoryCatalog(cached) && cached.minRendererVersion <= 1) fallback = cached; } catch {}
+  try { const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (validateAccessoryCatalog(cached) && cached.minRendererVersion <= ACCESSORY_RENDERER_VERSION && cached.version >= fallback.version) fallback = cached; } catch {}
   return fallback;
 }
 export function equippedPartnerAccessories(catalog: PartnerAccessoryCatalog, snapshot: PartnerAccessorySnapshot, petId: string): PartnerAccessory[] {
@@ -60,7 +63,7 @@ export async function loadAccessoryCatalog(): Promise<PartnerAccessoryCatalog> {
     if (!response.ok) return fallback;
     const raw = await response.text(); if (raw.length > 100000) return fallback;
     const catalog = JSON.parse(raw);
-    if (validateAccessoryCatalog(catalog) && catalog.minRendererVersion <= 1 && catalog.version >= fallback.version) {
+    if (validateAccessoryCatalog(catalog) && catalog.minRendererVersion <= ACCESSORY_RENDERER_VERSION && catalog.version >= fallback.version) {
       try { localStorage.setItem(CACHE_KEY, JSON.stringify(catalog)); } catch {}
       return catalog;
     }

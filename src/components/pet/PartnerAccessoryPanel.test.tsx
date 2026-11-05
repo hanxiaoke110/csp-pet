@@ -28,6 +28,11 @@ beforeEach(() => {
 });
 afterEach(() => { act(() => root.unmount()); host.remove(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 const click = (selector: string) => { const button = host.querySelector<HTMLButtonElement>(selector); expect(button).not.toBe(null); act(() => button!.click()); };
+it('keeps the complete ground halo behind the actor, including its dashed inner ring', () => {
+  act(() => root.render(<PartnerAccessoryPanel />));
+  expect(host.querySelectorAll('.partner-accessory-depth.front .partner-accessory-halo')).toHaveLength(0);
+  expect(host.querySelector('.partner-accessory-depth.back .partner-accessory-halo ellipse')).not.toBe(null);
+});
 it('only shows a trail during the explicit timed movement preview and never writes equipment', () => {
   const before = usePartnerAccessoryStore.getState().snapshot;
   act(() => root.render(<PartnerAccessoryPanel />));
@@ -73,4 +78,18 @@ it('supports new online IDs using known primitives instead of restricting the si
   const preview = host.querySelector<HTMLButtonElement>('[aria-label="预览新季星环"]')!;
   expect(preview.disabled).toBe(false); expect(preview.querySelector('svg')).not.toBe(null);
   act(() => preview.click()); expect(host.querySelector('.partner-preview-caption b')?.textContent).toBe('新季星环');
+});
+it('filters the expanded collection without changing ownership or its per-pet loadout', () => {
+  const before = usePartnerAccessoryStore.getState().snapshot;
+  act(() => root.render(<PartnerAccessoryPanel />));
+  expect(host.querySelectorAll('.partner-accessory-card')).toHaveLength(18);
+  const tabs = [...host.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+  act(() => tabs.find(t => t.textContent?.startsWith('环绕'))!.click());
+  expect(host.querySelectorAll('.partner-accessory-card')).toHaveLength(6);
+  click('[aria-label="预览星穹光翼"]');
+  expect(host.querySelector('.partner-accessory-depth.front .partner-accessory-orbit > g')).toBe(null);
+  expect(host.querySelector('.partner-accessory-depth.back .partner-accessory-orbit polygon')).not.toBe(null);
+  act(() => tabs.find(t => t.textContent?.startsWith('已拥有'))!.click());
+  expect(host.querySelectorAll('.partner-accessory-card')).toHaveLength(1);
+  expect(usePartnerAccessoryStore.getState().snapshot).toBe(before);
 });

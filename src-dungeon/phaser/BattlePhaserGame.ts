@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { BattleScene } from './scenes/BattleScene';
 import type { BattleInitData, SkillSelectResult } from './types';
 import { battleResolution } from '../utils/battleVisuals';
+import { subscribePerformanceMode } from '../../src/lib/performanceMode';
 
 export type BattleEventCallback = (event: string, data: unknown) => void;
 
@@ -72,6 +73,7 @@ export function createBattleGame(
   const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : undefined;
   observer?.observe(container);
   window.addEventListener('resize', resize);
+  const stopPerformanceMode = subscribePerformanceMode(resize);
 
   // 游戏就绪后动态添加场景并启动（传初始数据给 init），走 Phaser 标准 init→preload→create 生命周期
   // 注意：重新进入战斗时 DOM 已 ready，Phaser 可能同步 boot，ready 事件在监听前已触发 → 用 isBooted 兜底
@@ -113,6 +115,7 @@ export function createBattleGame(
       if (game.scene.isPaused('BattleScene')) game.scene.resume('BattleScene');
     },
     destroy: () => {
+      stopPerformanceMode();
       observer?.disconnect();
       window.removeEventListener('resize', resize);
       game.destroy(true);

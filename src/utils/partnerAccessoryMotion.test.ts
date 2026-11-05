@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { advanceAccessoryTrail, orbitPoint } from './partnerAccessoryMotion';
 describe('bounded accessory geometry', () => {
+  it('keeps light wings behind the shoulders throughout their motion cycle', () => {
+    for (const time of [0, 1000, 2500, 4000, 5000]) {
+      const point = orbitPoint(time, 0, 1, 5000, 'wing');
+      expect(point.front).toBe(false); expect(point.x).toBe(100); expect(point.y).toBe(100);
+      expect(point.scale).toBeGreaterThan(.95); expect(point.scale).toBeLessThan(1.05);
+    }
+  });
   it('orbits across rear and front with depth-dependent size', () => {
     const front = orbitPoint(1750, 0, 3, 7000), rear = orbitPoint(5250, 0, 3, 7000);
     expect(front.front).toBe(true); expect(rear.front).toBe(false); expect(front.scale).toBeGreaterThan(rear.scale);

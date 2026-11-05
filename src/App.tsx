@@ -176,7 +176,7 @@ function WelcomeModal() {
 }
 
 function ChangelogModal() {
-  const VER = '1.7.55';
+  const VER = '1.7.56';
   const [show, setShow] = useState(() => localStorage.getItem('csp_changelog_seen') !== VER);
   if (!show) return null;
   const dismiss = () => { localStorage.setItem('csp_changelog_seen', VER); setShow(false); };
@@ -187,11 +187,10 @@ function ChangelogModal() {
         <div style={{ fontSize:40, marginBottom:8 }}>🎉</div>
         <h2 style={{ fontSize:18, marginBottom:12, color:'#f59e0b' }}>v{VER} 更新内容</h2>
         <div style={{ fontSize:13, color:'#334155', lineHeight:2.2, textAlign:'left', padding:'0 20px', marginBottom:20 }}>
-          <div>💎 器魂碎片能用了：10 碎片兑换 1 个自选属性晶石，去装备工坊强化装备</div>
-          <div>⚔️ 修复敌方被灼烧扣到 0 血仍继续战斗，防止重复结算和延迟攻击</div>
-          <div>🃏 典藏卡赏卡窗口适配小窗口，翻面和操作按钮不再被遮住</div>
-          <div>🐍 修正灵蛇、逐风马头像跟随鼠标时左右方向相反的问题</div>
-          <div>🌠 许愿投票不再间隔等待，每次仍消耗许愿券；保留原有票数与存档</div>
+          <div>📝 错题随时练，可选 5 题、10 题或全部。月度奖励复盘保留原领取条件</div>
+          <div>⚙️ 设置新增省资源模式，默认使用标准模式。可查看下载缓存并清理过期文件</div>
+          <div>✨ 智子配饰新增样式，可把当前搭配复制给其他智子</div>
+          <div>🎨 改善光环与角色的遮挡关系，修复部分试炼立绘加载失败</div>
         </div>
         <button onClick={dismiss} style={{
           padding:'10px 32px', fontSize:14, fontWeight:700, background:'linear-gradient(135deg, #f59e0b, #fbbf24)',

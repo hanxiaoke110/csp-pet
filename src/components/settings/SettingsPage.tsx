@@ -13,6 +13,7 @@ import {
   type AutomaticBackupInfo, type ApplyResult, type BackupFile, type BackupSummary,
 } from '../../lib/backup';
 import UpdateChecker from './UpdateChecker';
+import ResourceSettings from './ResourceSettings';
 
 const API = 'https://api.cspstudy.top';
 
@@ -62,6 +63,7 @@ export default function SettingsPage() {
         <BackupSection />
       </div>
 
+      <ResourceSettings />
       <UpdateChecker />
     </div>
   );

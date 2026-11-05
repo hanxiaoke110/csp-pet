@@ -46,7 +46,7 @@ export class PetSprite extends Phaser.GameObjects.Container {
     this.sprite.setDisplaySize(Math.round(sourceWidth * scale), Math.round(sourceHeight * scale));
     this.sprite.setOrigin(0.5, 0.5);
     this.add(this.sprite);
-    if (config.isPlayer && config.accessories?.length) new PartnerCosmetics(scene, this, config.accessories);
+    if (config.isPlayer && config.accessories?.length) new PartnerCosmetics(scene, this, config.accessories, Math.round(sourceHeight * scale) / 2 - 8);
 
     // 元素徽章
     this.elementBadge = scene.add.text(-92, -100, this.getElementEmoji(config.element), {
@@ -65,7 +65,10 @@ export class PetSprite extends Phaser.GameObjects.Container {
     this.add(this.levelText);
 
     // 名字
-    this.nameText = scene.add.text(0, BATTLE_LAYOUT.nameOffsetY, config.displayName, {
+    // Leave room below large portrait feet and their ground ring; keep the
+    // existing name position for smaller pixel sprites and HP bars unchanged.
+    const nameY = Math.max(BATTLE_LAYOUT.nameOffsetY, Math.round(sourceHeight * scale) / 2 + 28);
+    this.nameText = scene.add.text(0, nameY, config.displayName, {
       fontSize: '14px',
       color: '#ffffff',
       fontStyle: 'bold',

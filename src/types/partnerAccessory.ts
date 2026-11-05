@@ -1,5 +1,6 @@
 export type PartnerAccessorySlot = 'halo' | 'orbit' | 'trail';
-export type PartnerAccessoryPrimitive = 'ring' | 'prism' | 'star' | 'lantern' | 'comet' | 'pixel';
+export type PartnerAccessoryPrimitive = 'ring' | 'prism' | 'star' | 'lantern' | 'comet' | 'pixel'
+  | 'solar' | 'circuit' | 'lotus' | 'crystal' | 'butterfly' | 'wing' | 'moon' | 'rune' | 'petal' | 'bubble';
 export interface PartnerAccessory {
   id: string; name: string; description: string; slot: PartnerAccessorySlot; price: number;
   minRendererVersion: number;

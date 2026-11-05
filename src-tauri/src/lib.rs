@@ -237,6 +237,8 @@ pub fn run() {
             toggle_pet_window,
             show_pet_window,
             hide_pet_window,
+            commands::cache::inspect_download_cache,
+            commands::cache::protect_question_cache_files,
             // settings
             commands::settings::get_setting,
             commands::settings::set_setting,

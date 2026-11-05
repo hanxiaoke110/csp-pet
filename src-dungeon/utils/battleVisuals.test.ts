@@ -35,3 +35,15 @@ describe('battle visuals', () => {
     expect(effectiveVisualMode('full', true)).toBe('simple');
   });
 });
+
+it('economy applies simple visuals and a bounded canvas without overwriting battle preference', async () => {
+  const { writePerformanceMode } = await import('../../src/lib/performanceMode');
+  writeBattleVisualMode('full');
+  writePerformanceMode('economy');
+  try {
+    expect(effectiveVisualMode('full', false)).toBe('simple');
+    expect(battleResolution(3840, 2160, 3)).toBe(1);
+    expect(readBattleVisualMode()).toBe('full');
+  } finally { writePerformanceMode('standard'); }
+  expect(effectiveVisualMode('full', false)).toBe('full');
+});

@@ -1,3 +1,4 @@
+import { readPerformanceMode } from '../../src/lib/performanceMode';
 export type BattleVisualMode = 'full' | 'simple';
 export const BATTLE_VISUAL_MODE_KEY = 'csp_battle_visual_mode_v1';
 export const BATTLE_LAYOUT = {
@@ -8,11 +9,11 @@ let memoryPreference: BattleVisualMode = 'full';
 /** Logical coordinates remain 1280 × 720; cap the backing store at 8.3 MP. */
 export function battleResolution(width: number, height: number, dpr: number): number {
   const ratio = Math.min(width / 1280, height / 720) * (Number.isFinite(dpr) ? dpr : 1);
-  return Math.round(Math.max(1, Math.min(3, ratio || 1)) * 4) / 4;
+  return readPerformanceMode() === 'economy' ? 1 : Math.round(Math.max(1, Math.min(3, ratio || 1)) * 4) / 4;
 }
 
 export function effectiveVisualMode(preference: BattleVisualMode, reducedMotion: boolean): BattleVisualMode {
-  return reducedMotion ? 'simple' : preference;
+  return reducedMotion || readPerformanceMode() === 'economy' ? 'simple' : preference;
 }
 
 export function readBattleVisualMode(): BattleVisualMode {

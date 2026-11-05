@@ -311,17 +311,24 @@ export function createPortraitWebCache(storage?: Pick<CacheStorage, 'open'>) {
   };
 }
 const webCache = createPortraitWebCache(typeof caches !== 'undefined' ? caches : undefined);
-const defaultLoader = createBattlePortraitLoader({
-  fetch: async (url, init) => {
-    if (import.meta.env.DEV && !isDesktop()) {
-      // Local cloud-source previews are development only and never bundled.
-      const local = await fetch(`/cloud-assets-source/battle-portraits/${url.slice(ROOT.length)}`, init);
-      if (local.ok && !local.headers.get('content-type')?.includes('text/html')) {
-        return new Response(local.body, { status: local.status, headers: local.headers });
-      }
+/** Static portrait assets allow CORS. Keep their cancellable transport in the
+ * WebView: plugin-http 2.5.9 leaves abort listeners holding consumed request/body
+ * RIDs, whose fire-and-forget cleanup rejects after a timeout or late abort.
+ * The loader still bounds the whole request and falls back to the local sprite.
+ * Native file caching below is unchanged. */
+export async function fetchBattlePortraitResponse(url: string, init: RequestInit): Promise<Response> {
+  if (import.meta.env.DEV && !isDesktop()) {
+    // Local cloud-source previews are development only and never bundled.
+    const local = await fetch(`/cloud-assets-source/battle-portraits/${url.slice(ROOT.length)}`, init);
+    if (local.ok && !local.headers.get('content-type')?.includes('text/html')) {
+      return new Response(local.body, { status: local.status, headers: local.headers });
     }
-    return isDesktop() ? (await import('@tauri-apps/plugin-http')).fetch(url, { ...init, connectTimeout: 1200 }) : fetch(url, init);
-  },
+  }
+  return fetch(url, init);
+}
+
+const defaultLoader = createBattlePortraitLoader({
+  fetch: fetchBattlePortraitResponse,
   read: async key => {
     if (!isDesktop()) return webCache.read(key);
     return nativeCache.read(key);

@@ -14,6 +14,20 @@ beforeEach(() => {
   localStorage.setItem('csp_pet_data', JSON.stringify({ coins: 1000, ownedPets: [{ petId: 'one', speciesId: 'capi' }, { petId: 'two', speciesId: 'capi' }], foods: { apple: 17 }, activePetId: 'one' }));
 });
 describe('permanent per-instance accessory ownership', () => {
+  it.each(BUILTIN_ACCESSORY_CATALOG.items.slice(6))('$name is charged once and keeps its correct slot on reload', async item => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+    const store = usePartnerAccessoryStore.getState();
+    expect((await store.purchase(item.id, item.price)).ok).toBe(true);
+    expect((await store.purchase(item.id, item.price)).ok).toBe(true);
+    expect((await store.equip('one', item.slot, item.id)).ok).toBe(true);
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!).coins).toBe(1000 - item.price);
+    usePartnerAccessoryStore.setState({ loaded: false, snapshot: defaultAccessorySnapshot() });
+    await usePartnerAccessoryStore.getState().load();
+    const snapshot = usePartnerAccessoryStore.getState().snapshot;
+    expect(snapshot.ownedIds).toContain(item.id);
+    expect(snapshot.equippedByPet.one[item.slot]).toBe(item.id);
+    expect(JSON.parse(localStorage.getItem('csp_pet_data')!).coins).toBe(1000 - item.price);
+  });
   it('finishes local hydration with cached art while the optional online request never resolves', async () => {
     const catalog = { ...structuredClone(BUILTIN_ACCESSORY_CATALOG), version: 2 };
     catalog.items[1].price = 241;
@@ -42,7 +56,7 @@ describe('permanent per-instance accessory ownership', () => {
   });
   it('rechecks price and refuses unsupported items, invalid wallet and missing pets', async () => {
     expect((await usePartnerAccessoryStore.getState().purchase('halo-prism', 239)).ok).toBe(false);
-    usePartnerAccessoryStore.getState().catalog.items[1].minRendererVersion = 2;
+    usePartnerAccessoryStore.getState().catalog.items[1].minRendererVersion = 3;
     expect((await usePartnerAccessoryStore.getState().purchase('halo-prism', 240)).ok).toBe(false);
     expect((await usePartnerAccessoryStore.getState().equip('ghost', 'halo', 'halo-clear')).ok).toBe(false);
     expect((await usePartnerAccessoryStore.getState().equip('one', 'orbit', 'halo-clear')).ok).toBe(false);
@@ -71,4 +85,59 @@ describe('permanent per-instance accessory ownership', () => {
     localStorage.setItem(PARTNER_JOURNAL_KEY, 'live'); localStorage.setItem(PARTNER_ACCESSORY_KEY, '{}');
     usePartnerAccessoryStore.getState().refresh(); expect(usePartnerAccessoryStore.getState().snapshot.ownedIds).toContain('orbit-stars');
   });
+});
+
+it('keeps a pet’s saved accessories after switching away, switching back and reloading', async () => {
+  const one = { petId: 'one', speciesId: 'capi' } as any;
+  const two = { petId: 'two', speciesId: 'capi' } as any;
+  usePetStore.setState({ loaded: true, ownedPets: [one, two], activePetId: 'one', coins: 1000 });
+  await usePartnerAccessoryStore.getState().equip('one', 'halo', 'halo-clear');
+  const saved = JSON.parse(localStorage.getItem(PARTNER_ACCESSORY_KEY)!);
+  expect(usePetStore.getState().setActivePet('two')).toBe(true);
+  expect(usePartnerAccessoryStore.getState().snapshot.equippedByPet.one).toEqual({ halo: 'halo-clear' });
+  expect(usePetStore.getState().setActivePet('one')).toBe(true);
+  usePartnerAccessoryStore.setState({ loaded: false, snapshot: defaultAccessorySnapshot() });
+  vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>(() => {})));
+  await usePartnerAccessoryStore.getState().load();
+  expect(usePartnerAccessoryStore.getState().snapshot.equippedByPet.one).toEqual(saved.equippedByPet.one);
+  expect(usePetStore.getState().coins).toBe(1000);
+});
+
+it('copies an owned loadout once, persists it, and keeps both pets independently editable without a charge', async () => {
+  await usePartnerAccessoryStore.getState().equip('one', 'halo', 'halo-clear');
+  const beforePet = localStorage.getItem('csp_pet_data');
+  expect((await usePartnerAccessoryStore.getState().copyFromPet('one', 'two')).ok).toBe(true);
+  expect(JSON.parse(localStorage.getItem(PARTNER_ACCESSORY_KEY)!).equippedByPet).toEqual({ one: { halo: 'halo-clear' }, two: { halo: 'halo-clear' } });
+  expect(localStorage.getItem('csp_pet_data')).toBe(beforePet);
+  await usePartnerAccessoryStore.getState().equip('two', 'halo', null);
+  expect(usePartnerAccessoryStore.getState().snapshot.equippedByPet.one).toEqual({ halo: 'halo-clear' });
+  expect(usePartnerAccessoryStore.getState().snapshot.equippedByPet.two).toEqual({});
+});
+
+it('rereads saved loadouts under the lock and refuses to overwrite a newer target or use a missing source', async () => {
+  await usePartnerAccessoryStore.getState().equip('one', 'halo', 'halo-clear');
+  const saved = JSON.parse(localStorage.getItem(PARTNER_ACCESSORY_KEY)!);
+  saved.equippedByPet.two = { halo: 'halo-clear' };
+  localStorage.setItem(PARTNER_ACCESSORY_KEY, JSON.stringify(saved));
+  const before = localStorage.getItem(PARTNER_ACCESSORY_KEY);
+  expect((await usePartnerAccessoryStore.getState().copyFromPet('one', 'two')).ok).toBe(false);
+  expect(localStorage.getItem(PARTNER_ACCESSORY_KEY)).toBe(before);
+  expect((await usePartnerAccessoryStore.getState().copyFromPet('gone', 'two')).ok).toBe(false);
+  expect((await usePartnerAccessoryStore.getState().copyFromPet('one', 'one')).ok).toBe(false);
+});
+
+it('does not copy unsupported, missing or empty source accessories, and rolls back a failed save', async () => {
+  expect((await usePartnerAccessoryStore.getState().copyFromPet('one', 'two')).ok).toBe(false);
+  await usePartnerAccessoryStore.getState().equip('one', 'halo', 'halo-clear');
+  const catalog = structuredClone(BUILTIN_ACCESSORY_CATALOG);
+  catalog.items.find(i => i.id === 'halo-clear')!.minRendererVersion = 3;
+  usePartnerAccessoryStore.setState({ catalog });
+  expect((await usePartnerAccessoryStore.getState().copyFromPet('one', 'two')).ok).toBe(false);
+  usePartnerAccessoryStore.setState({ catalog: structuredClone(BUILTIN_ACCESSORY_CATALOG) });
+  const before = localStorage.getItem(PARTNER_ACCESSORY_KEY);
+  const original = localStorage.setItem;
+  vi.spyOn(localStorage, 'setItem').mockImplementation((k, v) => { if (k === PARTNER_ACCESSORY_KEY) throw new Error('disk full'); original(k, v); });
+  expect((await usePartnerAccessoryStore.getState().copyFromPet('one', 'two')).ok).toBe(false);
+  expect(localStorage.getItem(PARTNER_ACCESSORY_KEY)).toBe(before);
+  expect(usePartnerAccessoryStore.getState().snapshot.equippedByPet.two).toBeUndefined();
 });

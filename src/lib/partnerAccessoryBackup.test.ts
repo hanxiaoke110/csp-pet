@@ -24,6 +24,16 @@ it('restores permanent ownership and per-instance equipment from SQLite-only cos
   expect(JSON.parse(localStorage.getItem(PARTNER_ACCESSORY_KEY)!)).toMatchObject({ ownedIds: ['halo-clear', 'orbit-stars'], equippedByPet: { one: { orbit: 'orbit-stars' }, two: { halo: 'halo-clear' } } });
   expect(localStorage.getItem('csp_partner_transaction_v1')).toBe(null);
 });
+it('restores the new collection across devices without repurchasing or changing wallet data', async () => {
+  const b = backup();
+  const saved = { ...defaultAccessorySnapshot(), ownedIds: ['halo-clear', 'halo-solar', 'orbit-wings', 'trail-rune'], equippedByPet: { one: { halo: 'halo-solar', orbit: 'orbit-wings', trail: 'trail-rune' } } };
+  b.localStorage[PARTNER_ACCESSORY_KEY] = JSON.stringify(saved);
+  await applyBackup(b);
+  const restored = JSON.parse(localStorage.getItem(PARTNER_ACCESSORY_KEY)!);
+  expect(restored).toEqual({ ...saved, savedAt: expect.any(String) });
+  expect(Date.parse(restored.savedAt)).toBeGreaterThanOrEqual(Date.parse(saved.savedAt));
+  expect(JSON.parse(localStorage.getItem('csp_pet_data')!)).toMatchObject({ coins: 321, ownedPets: [pet] });
+});
 it('rejects equipment referring to unowned cosmetics before restoration', () => {
   const b = backup(); b.localStorage[PARTNER_ACCESSORY_KEY] = JSON.stringify({ ...defaultAccessorySnapshot(), equippedByPet: { one: { orbit: 'orbit-stars' } } });
   expect(validateBackupState(b)).toContain('配饰');

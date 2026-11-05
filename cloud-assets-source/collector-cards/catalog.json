@@ -1,6 +1,6 @@
 {
-  "version": 6,
-  "updatedAt": "2026-10-14T13:56:32.751Z",
+  "version": 10,
+  "updatedAt": "2026-11-02T08:33:10.263Z",
   "cards": [
     {
       "id": "astra-stargazer-001",
@@ -513,6 +513,1193 @@
         "subject": "2b318b691a3cbd6fcc7cdadabb49a731fc3ef01313f35e45d846655a35f54a66",
         "text": "c9720f38df2d86bf18b1e7465b06ab39960dceeac94c459740cfc59337637684",
         "thumbnail": "cb1aeecadbee12f9685805a0184436832cf6706d5ecd23699d932eec1bd038cb"
+      }
+    },
+    {
+      "id": "bananacat-jade-breeze-022",
+      "version": 1,
+      "number": "022",
+      "name": "BananaCat",
+      "title": "蕉月乘风",
+      "element": "wind",
+      "price": 888,
+      "description": "翡翠月庭与金色流风，托起一只软乎乎的香蕉猫。",
+      "quote": "慢一点也没关系，风会陪你向前。",
+      "rarity": "legendary",
+      "assetBytes": 770970,
+      "assets": {
+        "background": "./bananacat-jade-breeze-022/background.webp",
+        "subject": "./bananacat-jade-breeze-022/subject.webp",
+        "text": "./bananacat-jade-breeze-022/text.webp",
+        "thumbnail": "./bananacat-jade-breeze-022/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "80de210a0de1dbf54ee3819350e123f2840e34a577589ff1a66b3c690fc64268",
+        "subject": "f5a7e77dae9fb81dd45096d8f217ba57f8bba6c7f173e0c60c301ca056b27bd5",
+        "text": "5732f2e8268c0e1c70626edf6c72143dd7f754424849cd48523b68616c199eb5",
+        "thumbnail": "e6c7d1d92f68106fe99f15687c1d786a1cac3214f00c773b1d3f7cded5c24df7"
+      }
+    },
+    {
+      "id": "leo-celestial-lesson-023",
+      "version": 1,
+      "number": "023",
+      "name": "利奥老师",
+      "title": "星海引航",
+      "element": "light",
+      "price": 788,
+      "description": "星图与书页在深蓝光海中展开，点亮每一个新的想法。",
+      "quote": "让好奇心领路，把难题变成星光。",
+      "rarity": "legendary",
+      "assetBytes": 723298,
+      "assets": {
+        "background": "./leo-celestial-lesson-023/background.webp",
+        "subject": "./leo-celestial-lesson-023/subject.webp",
+        "text": "./leo-celestial-lesson-023/text.webp",
+        "thumbnail": "./leo-celestial-lesson-023/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "082ca7c1cf084eab3c8b68bf2c774294ee0acba538bc97fd38ff2eab0cc5936f",
+        "subject": "dab8fd2d5ec607eaecdbd6338ac853ed3e8551cdade1e940f7df1254810ffc01",
+        "text": "ce61ce878082dfd74c98aa6c302f673d971cc0d9d3442768003ae53c924a2fe0",
+        "thumbnail": "9e18ca032357a7a3171d177c97a5a48143ac7a968e1f4c92a2e67d55a2df1706"
+      }
+    },
+    {
+      "id": "redframe-dragon-forge-024",
+      "version": 1,
+      "number": "024",
+      "name": "红龙高达",
+      "title": "赤龙破晓",
+      "element": "fire",
+      "price": 788,
+      "description": "赤金晨曦划过白银装甲，机械羽翼掠向浩瀚星空。",
+      "quote": "把勇气装进引擎，让热爱成为航向。",
+      "rarity": "legendary",
+      "assetBytes": 915116,
+      "assets": {
+        "background": "./redframe-dragon-forge-024/background.webp",
+        "subject": "./redframe-dragon-forge-024/subject.webp",
+        "text": "./redframe-dragon-forge-024/text.webp",
+        "thumbnail": "./redframe-dragon-forge-024/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "d76c44dedcb90baac9e72aaf109f03355f0ab77b52b6a21ac02e5b2918c00b26",
+        "subject": "e443b94f55011f1fa769a36c738bdb9b588def23d12973dae1db7f78b744ba59",
+        "text": "334e3a06b9d6528dc45668dd121bedeeb1f087a26216dbae1078f880500a8f2d",
+        "thumbnail": "0fc1ca99380e1a95eb14e5125db90e1733f4ee26d6f201dc9cc06137ee9b56d4"
+      }
+    },
+    {
+      "id": "natu-dawn-cloud-025",
+      "version": 1,
+      "number": "025",
+      "name": "那兔",
+      "title": "曙光逐梦",
+      "element": "fire",
+      "price": 788,
+      "description": "温暖晨光漫过山河云海，小小的身影也有大大的梦想。",
+      "quote": "认真走好每一步，梦想终会开花。",
+      "rarity": "legendary",
+      "assetBytes": 784524,
+      "assets": {
+        "background": "./natu-dawn-cloud-025/background.webp",
+        "subject": "./natu-dawn-cloud-025/subject.webp",
+        "text": "./natu-dawn-cloud-025/text.webp",
+        "thumbnail": "./natu-dawn-cloud-025/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "c08330a4104e205b1a6751d1522125c20019c3dc07c1e553855070536012ad0b",
+        "subject": "fe796332117ab602cb948b02149d622fee1c293635e19d5b9403ffb5bee2df71",
+        "text": "444eaa58dc61e211de6f54f10221fa46e6a3352cf226679f5dc05e50254517f8",
+        "thumbnail": "df9a9436ee6f6db0d35945327fc4b999bcfc2031fa5e080a5ddef3fe41a0d390"
+      }
+    },
+    {
+      "id": "elaina-astral-26",
+      "version": 1,
+      "number": "026",
+      "name": "Elaina",
+      "title": "星夜漫游",
+      "element": "fire",
+      "price": 788,
+      "description": "银发小魔女抱着星图书，在紫金夜色中寻找新的故事。",
+      "quote": "带着好奇心，每一页都是新世界。",
+      "rarity": "legendary",
+      "assetBytes": 902098,
+      "assets": {
+        "background": "./elaina-astral-26/background.webp",
+        "subject": "./elaina-astral-26/subject.webp",
+        "text": "./elaina-astral-26/text.webp",
+        "thumbnail": "./elaina-astral-26/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "9c834459c7d95a1e4fb7bb76d37ad7ff19888305bde8dfdbd369f4deffb4ae31",
+        "subject": "cfe88dc0e2ef52df9d31769b8a6d1203c0908a4429ab9542cbdfb62fdf7c7cc5",
+        "text": "b213bcbbef36d1fc9746fe541fc2cfc901a414faa45c7e2a6407129ed3556243",
+        "thumbnail": "ae1e77f63d811871c2140e46d3505dc9392b6c14522f830b204a0c0124918664"
+      }
+    },
+    {
+      "id": "ice-astral-27",
+      "version": 1,
+      "number": "027",
+      "name": "冰公主",
+      "title": "冰晶心愿",
+      "element": "water",
+      "price": 788,
+      "description": "蓝晶王冠映着极光，温柔的雪花藏着闪亮心愿。",
+      "quote": "把善意留在心里，让梦想晶莹发光。",
+      "rarity": "legendary",
+      "assetBytes": 970558,
+      "assets": {
+        "background": "./ice-astral-27/background.webp",
+        "subject": "./ice-astral-27/subject.webp",
+        "text": "./ice-astral-27/text.webp",
+        "thumbnail": "./ice-astral-27/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "9b84509d4ae2e4a58711a9c0f4dc04f50a8b28649c4f80a23e04d227c67f7d6f",
+        "subject": "d93779fb344434158bc2b30f32ef248597be50b47aac6bb9316f7011dc78bbbf",
+        "text": "211febf0d171335240259c5dab1768d970a1f24f9dc21b5e95d79edf2aa4f52e",
+        "thumbnail": "f98fbc2479460d46d26b3f364096e94aa33204198e56a7f52b205ba98db4fefd"
+      }
+    },
+    {
+      "id": "bee-astral-28",
+      "version": 1,
+      "number": "028",
+      "name": "哈基蜂",
+      "title": "蜜金奇旅",
+      "element": "fire",
+      "price": 788,
+      "description": "戴着耳麦的小蜜蜂穿过翡翠花园，收集金色的快乐。",
+      "quote": "一点点努力，也能酿出满满的甜。",
+      "rarity": "legendary",
+      "assetBytes": 895280,
+      "assets": {
+        "background": "./bee-astral-28/background.webp",
+        "subject": "./bee-astral-28/subject.webp",
+        "text": "./bee-astral-28/text.webp",
+        "thumbnail": "./bee-astral-28/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "214343b5be22bae9cef51bffd24806a35b4a4a29c33a8eaa1b91710be2d4fc0b",
+        "subject": "c32b09a6e8265a6dd4756e4dad192d2026946f347b7dd5156f2983a95e04c31d",
+        "text": "29567881b4cb70d387208a4712a6e070ba9689658932484978ef0ffa49a23e3b",
+        "thumbnail": "50176759692781df79ab8893bbc3aa9778104163a23dd506ba3620d8f7765b0f"
+      }
+    },
+    {
+      "id": "zenitsu-astral-29",
+      "version": 1,
+      "number": "029",
+      "name": "善逸",
+      "title": "霹雳曙光",
+      "element": "light",
+      "price": 788,
+      "description": "金色雷光掠过深靛山峦，安静的专注凝成一瞬锋芒。",
+      "quote": "即使有些害怕，也能勇敢向前。",
+      "rarity": "legendary",
+      "assetBytes": 793380,
+      "assets": {
+        "background": "./zenitsu-astral-29/background.webp",
+        "subject": "./zenitsu-astral-29/subject.webp",
+        "text": "./zenitsu-astral-29/text.webp",
+        "thumbnail": "./zenitsu-astral-29/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "6ffe82ee9f27f5422c360ef9dd6b954473c10f292a22bbf12f63c9e737417f42",
+        "subject": "c0ae6dd897595bdda282674210809fb0be1cc6d74ecfe1d559c3ecca7ab16a6c",
+        "text": "d6a21aa2cd188f7c972318c0e47a0613c57f5e6aeedeb676f41e531f37436f15",
+        "thumbnail": "358a441fae53e61c2b50ffcd8f606fe53608e6f4fa4f86b434c9073a20f19812"
+      }
+    },
+    {
+      "id": "freedom-astral-30",
+      "version": 1,
+      "number": "030",
+      "name": "自由高达",
+      "title": "苍穹之翼",
+      "element": "wind",
+      "price": 788,
+      "description": "蓝白机翼迎着星河展开，在辽阔天际守护自由的方向。",
+      "quote": "让勇气展开双翼，飞向更远的天空。",
+      "rarity": "legendary",
+      "assetBytes": 812006,
+      "assets": {
+        "background": "./freedom-astral-30/background.webp",
+        "subject": "./freedom-astral-30/subject.webp",
+        "text": "./freedom-astral-30/text.webp",
+        "thumbnail": "./freedom-astral-30/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "a6f46848db44493d58445ed7840005d969f325cef0e266f505d6f25a42786bb2",
+        "subject": "574f59c3dc3fbe95344ab9ba7365d76bfed6a8510173ea10bb7f1d305c253106",
+        "text": "d8c3cd322d8e4bb95f53677cd4f79aef0e017e38bd7516cb7b81a31f61155430",
+        "thumbnail": "afe40f66bbe5c5641e34596a5d71609156fae77a0423a960cf1d895978e86522"
+      }
+    },
+    {
+      "id": "finale-031-ymzml12asc",
+      "sourcePetId": "ws-YMZML12ASC",
+      "version": 1,
+      "number": "031",
+      "name": "Aniya(玩偶版)",
+      "title": "心语星愿",
+      "element": "fire",
+      "price": 688,
+      "description": "粉色心语穿过星愿花园，把每一个小小的好奇都珍藏起来。",
+      "quote": "把今天的新发现，悄悄放进星星口袋。",
+      "rarity": "legendary",
+      "assetBytes": 845278,
+      "assets": {
+        "background": "./finale-031-ymzml12asc/background.webp",
+        "subject": "./finale-031-ymzml12asc/subject.webp",
+        "text": "./finale-031-ymzml12asc/text.webp",
+        "thumbnail": "./finale-031-ymzml12asc/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "3512da151274d661b66a29fe303497a88899114201f86532e9d4d7354712730c",
+        "subject": "e3ad5ee74de0f10f6c8e1f02a04c61fa7e3fdf94c654a783cdd2a6aac3d26477",
+        "text": "333920a51f74ded5da29df1582c3ac410c01e0f6b9fd1b4e333a172c92c7877b",
+        "thumbnail": "0d2b0383041d45bd3d4bee3441ace5fc45f14b6adc822b91dc4a8720ab37d65a"
+      }
+    },
+    {
+      "id": "finale-032-08qzzsfp3x",
+      "sourcePetId": "ws-08QZZSFP3X",
+      "version": 1,
+      "number": "032",
+      "name": "二月红",
+      "title": "绯灯梨园",
+      "element": "fire",
+      "price": 688,
+      "description": "绯色灯火映照梨园长夜，一袖风华，一程星光。",
+      "quote": "认真走过的每一步，都会留下回响。",
+      "rarity": "legendary",
+      "assetBytes": 969522,
+      "assets": {
+        "background": "./finale-032-08qzzsfp3x/background.webp",
+        "subject": "./finale-032-08qzzsfp3x/subject.webp",
+        "text": "./finale-032-08qzzsfp3x/text.webp",
+        "thumbnail": "./finale-032-08qzzsfp3x/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "e9009aeeabf0c204d5134ba874519c9b1e4cdb676c2978c24e0cf4576ff0ccf7",
+        "subject": "00fd614672a90c596c4afa201c6b9e2e54190fb4d7102d71125607f390ee886e",
+        "text": "507e409bc07c9b6f0a0ccdeeb1cb7222961d59e1718ad7e7e5245ffc680e2244",
+        "thumbnail": "a0f1a689d81aaabd21df68a343e2edf8f6b62582588a664b65ddf4467c9bccf6"
+      }
+    },
+    {
+      "id": "finale-033-qfms4p8awc",
+      "sourcePetId": "ws-QFMS4P8AWC",
+      "version": 1,
+      "number": "033",
+      "name": "扫兴客",
+      "title": "蓝域巡航",
+      "element": "water",
+      "price": 688,
+      "description": "蓝色棱镜点亮静谧海域，循着微光开启下一次巡航。",
+      "quote": "未知的方向，也藏着新的答案。",
+      "rarity": "legendary",
+      "assetBytes": 968114,
+      "assets": {
+        "background": "./finale-033-qfms4p8awc/background.webp",
+        "subject": "./finale-033-qfms4p8awc/subject.webp",
+        "text": "./finale-033-qfms4p8awc/text.webp",
+        "thumbnail": "./finale-033-qfms4p8awc/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "bd384e620e9b5bdc40104e12ebe5b024d170e50676f8e36d430592620fe8d0db",
+        "subject": "19b48761e8636c3e4246ef1340299c1631d2ca9e681acc5b187916df93f25ce3",
+        "text": "19c6279f416bc7bc51f08ce963e9cb370e3fea8fb1f25e41e65389f72a043c6e",
+        "thumbnail": "760350e148fb9b70cf3aad5b3a43ce4e0a96497284661a45f3590d5ecb4af489"
+      }
+    },
+    {
+      "id": "finale-034-jdtrdnemu4",
+      "sourcePetId": "ws-JDTRDNEMU4",
+      "version": 1,
+      "number": "034",
+      "name": "维维美",
+      "title": "赤瞳绮梦",
+      "element": "fire",
+      "price": 688,
+      "description": "赤瞳映着绯色星河，勇气与笑意一同闪耀。",
+      "quote": "带上好心情，迎接下一场挑战。",
+      "rarity": "legendary",
+      "assetBytes": 828730,
+      "assets": {
+        "background": "./finale-034-jdtrdnemu4/background.webp",
+        "subject": "./finale-034-jdtrdnemu4/subject.webp",
+        "text": "./finale-034-jdtrdnemu4/text.webp",
+        "thumbnail": "./finale-034-jdtrdnemu4/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "f42000d09350fbab7054fc680ac495d1d25b894edc5defc77f4f39ec9b8e9744",
+        "subject": "2d62ee7b81510d8f8419d36eba68957df254db813afc5012079c4c501587610d",
+        "text": "4f6a9f3928ca5a40c904fe60ac0fafecbbbd5d5479a143811b285d3b4016574f",
+        "thumbnail": "a42899d0eba648255a1f7a1c87c12a6e9aeb45fc7d40120b2cbf4312a954b504"
+      }
+    },
+    {
+      "id": "finale-035-nt21smls1z",
+      "sourcePetId": "ws-NT21SMLS1Z",
+      "version": 1,
+      "number": "035",
+      "name": "罗小黑(人形)",
+      "title": "风林灵契",
+      "element": "wind",
+      "price": 688,
+      "description": "清风穿过翠色森林，黑发少年守护着与伙伴的约定。",
+      "quote": "一起走，就不怕路远。",
+      "rarity": "legendary",
+      "assetBytes": 1036078,
+      "assets": {
+        "background": "./finale-035-nt21smls1z/background.webp",
+        "subject": "./finale-035-nt21smls1z/subject.webp",
+        "text": "./finale-035-nt21smls1z/text.webp",
+        "thumbnail": "./finale-035-nt21smls1z/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "e29a25cf32789ecacbeeddea7fd70856e4940d055974a12a76ebf9b001515a8e",
+        "subject": "bf7fccdc7bc712226f2b9027c18cbe9d777facb519b0366cf79772d4e9b66d7a",
+        "text": "16b3df6dd6f7a60623594b7bab7a752c1737d987a1c5b5bf099afc8844552c49",
+        "thumbnail": "2abcc7e2196d4293e3e7651f7806a57f63e7441b75a24d03d157821ca9eb7313"
+      }
+    },
+    {
+      "id": "finale-036-fbkqmr9773",
+      "sourcePetId": "ws-FBKQMR9773",
+      "version": 1,
+      "number": "036",
+      "name": "霍雨浩",
+      "title": "冰眸星潮",
+      "element": "water",
+      "price": 688,
+      "description": "冰蓝星潮涌向远方，澄澈眼眸收藏着宁静而坚定的光。",
+      "quote": "静下心，也能看见更远的星辰。",
+      "rarity": "legendary",
+      "assetBytes": 1024938,
+      "assets": {
+        "background": "./finale-036-fbkqmr9773/background.webp",
+        "subject": "./finale-036-fbkqmr9773/subject.webp",
+        "text": "./finale-036-fbkqmr9773/text.webp",
+        "thumbnail": "./finale-036-fbkqmr9773/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "6738c52ad5ebc2edc905ec9358e972b2461c080a03b1154cc508dd087a968d36",
+        "subject": "eac76d2acb81be3a48d228b99c5085353047a2823349c3e1bf4875bc71e8b651",
+        "text": "b0acc31419836145b259f5288995e728fb6dbbc6cd0c0fe90aef8b3fd864ebb9",
+        "thumbnail": "fb7db352dfe8f9362a683e4ec5c6be14e5f40dfa1e2d1b64dda63a4d9bea8abb"
+      }
+    },
+    {
+      "id": "finale-037-2f5fdmcf6v",
+      "sourcePetId": "ws-2F5FDMCF6V",
+      "version": 1,
+      "number": "037",
+      "name": "可莉",
+      "title": "绯羽童话",
+      "element": "fire",
+      "price": 688,
+      "description": "蒲公英灯笼照亮绯色童话，好奇心带来一路惊喜。",
+      "quote": "今天，也想发现一点新奇的事。",
+      "rarity": "legendary",
+      "assetBytes": 906464,
+      "assets": {
+        "background": "./finale-037-2f5fdmcf6v/background.webp",
+        "subject": "./finale-037-2f5fdmcf6v/subject.webp",
+        "text": "./finale-037-2f5fdmcf6v/text.webp",
+        "thumbnail": "./finale-037-2f5fdmcf6v/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "b98497ac767b7fa973846b7a75d86ca683e5732e028ccb864709d34228707512",
+        "subject": "9a12d173b0e624f15d192966ba69df775ffeab6cd7740cfdf07999ef6eea9d37",
+        "text": "2383e2db8dee776fbc174a3400117152f10acbf06a34bc510d609c2452bfed2c",
+        "thumbnail": "e4172af1b078e7a84f9dfd12a38116d39581e8bd60968e51f96559adb8f9cfe8"
+      }
+    },
+    {
+      "id": "finale-038-y9etbfauqn",
+      "sourcePetId": "ws-Y9ETBFAUQN",
+      "version": 1,
+      "number": "038",
+      "name": "周嫑嫑",
+      "title": "月绒奇旅",
+      "element": "light",
+      "price": 688,
+      "description": "月光落在柔软绒羽上，一位圆滚滚的旅伴正等待出发。",
+      "quote": "慢一点也没关系，快乐会跟上来。",
+      "rarity": "legendary",
+      "assetBytes": 954698,
+      "assets": {
+        "background": "./finale-038-y9etbfauqn/background.webp",
+        "subject": "./finale-038-y9etbfauqn/subject.webp",
+        "text": "./finale-038-y9etbfauqn/text.webp",
+        "thumbnail": "./finale-038-y9etbfauqn/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "d3183937baf16966461145d8bf7516938e2e4e328143e86dfa45d098e36bee87",
+        "subject": "42bc2329dd0627806987c9069336dc1716fc04aba32ed195326287b38261da1b",
+        "text": "2a0f15d0bf8e486c0163008e39349edb70834eac8587f9ac5107dfb6c4263c6d",
+        "thumbnail": "bc259d1a685b54a3081e3f41dc0d5325cfceddf436c62046ee6605fc6cc40d05"
+      }
+    },
+    {
+      "id": "finale-039-ndde44kxv8",
+      "sourcePetId": "ws-NDDE44KXV8",
+      "version": 1,
+      "number": "039",
+      "name": "沙丘之主",
+      "title": "金沙曜瞳",
+      "element": "light",
+      "price": 688,
+      "description": "金沙古城之上，紫色曜瞳与掌中宝石共同点亮夜空。",
+      "quote": "沉睡的故事，等你亲手翻开。",
+      "rarity": "legendary",
+      "assetBytes": 953448,
+      "assets": {
+        "background": "./finale-039-ndde44kxv8/background.webp",
+        "subject": "./finale-039-ndde44kxv8/subject.webp",
+        "text": "./finale-039-ndde44kxv8/text.webp",
+        "thumbnail": "./finale-039-ndde44kxv8/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "2eb16e3c2b94f381cba9653e2def224e66ab2130c1017aab5c411939b656a157",
+        "subject": "e372e380774fe52df61820dfe91c12022d653d9320c5f13e2c210f3966f30807",
+        "text": "d1a7d30ae1637efb2c3b9f9f8e722152b7f46bd60d4cb47e184a6ac66440c983",
+        "thumbnail": "51c5c04495d17b9c20be34e33404df0ff9fdae299c1cd76c927ed41975eb72d3"
+      }
+    },
+    {
+      "id": "finale-040-ns44fxxv3a",
+      "sourcePetId": "ws-NS44FXXV3A",
+      "version": 1,
+      "number": "040",
+      "name": "罗辑(Q)",
+      "title": "墨星观海",
+      "element": "earth",
+      "price": 688,
+      "description": "墨色星空铺展如海，书页之间藏着思考的坐标。",
+      "quote": "再想一步，也许就离答案更近。",
+      "rarity": "legendary",
+      "assetBytes": 882494,
+      "assets": {
+        "background": "./finale-040-ns44fxxv3a/background.webp",
+        "subject": "./finale-040-ns44fxxv3a/subject.webp",
+        "text": "./finale-040-ns44fxxv3a/text.webp",
+        "thumbnail": "./finale-040-ns44fxxv3a/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "2b89d12e8de8679bc8512dad15713192d9c0737011075d6d3c66580a19ea70bb",
+        "subject": "376485932dcd19ddf2320b15b28b8228bf1199a6552155e7c068895fb85d82d6",
+        "text": "dd7a9db89179376b1ea1406cb6174f81dee92d16ad2e992f12f8cc3516a26262",
+        "thumbnail": "5e5ea9054a8ae0bc6b69a35fda9d3c14b6ffccd06f1460d87932b519a96fb969"
+      }
+    },
+    {
+      "id": "finale-041-kk0raggm9k",
+      "sourcePetId": "ws-KK0RAGGM9K",
+      "version": 1,
+      "number": "041",
+      "name": "周可可2",
+      "title": "暖灯探秘",
+      "element": "water",
+      "price": 688,
+      "description": "暖灯照亮侦探手记，细微的线索也能通往惊喜。",
+      "quote": "别放过那个小小的为什么。",
+      "rarity": "legendary",
+      "assetBytes": 980800,
+      "assets": {
+        "background": "./finale-041-kk0raggm9k/background.webp",
+        "subject": "./finale-041-kk0raggm9k/subject.webp",
+        "text": "./finale-041-kk0raggm9k/text.webp",
+        "thumbnail": "./finale-041-kk0raggm9k/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "31e3bc9703ae308b9e3c8ac3e9b153c1ac1ac048cba1cd71a810271d03b14ce8",
+        "subject": "2212cf3b98b1740de4dc142cae0da254c1670f8c52e0148c6c6023217e4a605b",
+        "text": "bf74838ba240d3a67c1ed77366988d0258b71346de593030c953c4ee10f9bb84",
+        "thumbnail": "c2bafbb8989ef06ba09e676f49c69bb7e5c3135a407d2cef6e6ca666ad420268"
+      }
+    },
+    {
+      "id": "finale-042-7bwudjxnlh",
+      "sourcePetId": "ws-7BWUDJXNLH",
+      "version": 1,
+      "number": "042",
+      "name": "猪猪侠",
+      "title": "赤金勇跃",
+      "element": "fire",
+      "price": 688,
+      "description": "赤金披风迎风扬起，小小英雄正奔向晴空。",
+      "quote": "勇敢出发，也记得帮助伙伴。",
+      "rarity": "legendary",
+      "assetBytes": 826596,
+      "assets": {
+        "background": "./finale-042-7bwudjxnlh/background.webp",
+        "subject": "./finale-042-7bwudjxnlh/subject.webp",
+        "text": "./finale-042-7bwudjxnlh/text.webp",
+        "thumbnail": "./finale-042-7bwudjxnlh/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "0e9cd54b4ac16694217ab274ae0c73a3783ac2b7c9b26a991e46388de955e33b",
+        "subject": "3da144ba7484816edff7c7df64ee3b06c0e9493b727a1546c6e6568f073dc8bd",
+        "text": "a7c5feb24ac87aa5acf2f90e34c01d7133a50a28825821d0d325bd99f24281f0",
+        "thumbnail": "b86989979afd0ba219aef6e58805945e784f4383df7f48e06b568ad6d329e76d"
+      }
+    },
+    {
+      "id": "finale-043-z6rbg4lbb5",
+      "sourcePetId": "ws-Z6RBG4LBB5",
+      "version": 1,
+      "number": "043",
+      "name": "豆包",
+      "title": "晴海拾光",
+      "element": "water",
+      "price": 688,
+      "description": "晴海与白色花廊之间，收集一束属于今天的光。",
+      "quote": "认真生活，也认真欣赏沿途风景。",
+      "rarity": "legendary",
+      "assetBytes": 809854,
+      "assets": {
+        "background": "./finale-043-z6rbg4lbb5/background.webp",
+        "subject": "./finale-043-z6rbg4lbb5/subject.webp",
+        "text": "./finale-043-z6rbg4lbb5/text.webp",
+        "thumbnail": "./finale-043-z6rbg4lbb5/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "394feb03bdc2482f475ff0f55a63d255d82fb556aa8ac937fce8b959d3c78e44",
+        "subject": "056d8b7c469ea97553b63afcc516ae7c780a93e084ce2275c4e3119ac30bf5f7",
+        "text": "1d8dba77a8f65aa5935d3dfc223d1ddf05a4ac428683d8d87a1c631049e03844",
+        "thumbnail": "262b943f56ceadf951b93dff4ae265cea9ada289d575e6283e80dda3bf71a752"
+      }
+    },
+    {
+      "id": "finale-044-eu446meshu",
+      "sourcePetId": "ws-EU446MESHU",
+      "version": 1,
+      "number": "044",
+      "name": "Doro",
+      "title": "蜜糖晴空",
+      "element": "fire",
+      "price": 688,
+      "description": "蜜糖色晴空洒满花瓣，一团粉色快乐蹦进星光里。",
+      "quote": "把烦恼吹走，把笑容留下。",
+      "rarity": "legendary",
+      "assetBytes": 831146,
+      "assets": {
+        "background": "./finale-044-eu446meshu/background.webp",
+        "subject": "./finale-044-eu446meshu/subject.webp",
+        "text": "./finale-044-eu446meshu/text.webp",
+        "thumbnail": "./finale-044-eu446meshu/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "42ae0f4a0d2bc5e22799c0a1c90f2901439e9fef93613ef3f85ebd84477d496e",
+        "subject": "b54c8bcca319b0d2ff76a6d0111894be52d0fbc450228959e4a5fb544ff41ba2",
+        "text": "38e71e7f82a488ad349c5b0c9b71ab68ee7805ffe714d76715b7333db983470a",
+        "thumbnail": "d4dacb1ee57d3a8c207d9c826ea1a06daa26c1c111a65dac24066f682cdd822f"
+      }
+    },
+    {
+      "id": "finale-045-kvg1nbct7v",
+      "sourcePetId": "ws-KVG1NBCT7V",
+      "version": 1,
+      "number": "045",
+      "name": "伊佳蓝",
+      "title": "碧叶书笺",
+      "element": "earth",
+      "price": 688,
+      "description": "碧叶环绕静谧书廊，清晨的微风翻开新的书笺。",
+      "quote": "读懂一页，就点亮一片新天地。",
+      "rarity": "legendary",
+      "assetBytes": 882760,
+      "assets": {
+        "background": "./finale-045-kvg1nbct7v/background.webp",
+        "subject": "./finale-045-kvg1nbct7v/subject.webp",
+        "text": "./finale-045-kvg1nbct7v/text.webp",
+        "thumbnail": "./finale-045-kvg1nbct7v/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "ab3ab84ec492ca1e40e68b2b1d87de34b2677c4e9e303c0af0b9bab61002aec7",
+        "subject": "c087a60624f3e30a94aa6ee01be51f6386e89e723ae8d352db013d9d271b6221",
+        "text": "5c97c49f6fb9829ab293f0872fdfd51187c006297f52827747c1a6c6da548072",
+        "thumbnail": "ea5975554749e44f45061d5cdeb7d9c61803f75bd50e772e659789a49a061e81"
+      }
+    },
+    {
+      "id": "finale-046-41jljl8z8q",
+      "sourcePetId": "ws-41JLJL8Z8Q",
+      "version": 1,
+      "number": "046",
+      "name": "哪吒",
+      "title": "莲火流光",
+      "element": "fire",
+      "price": 688,
+      "description": "莲瓣与流光旋转飞扬，少年笑着越过云端。",
+      "quote": "敢于尝试，才能发现自己的力量。",
+      "rarity": "legendary",
+      "assetBytes": 1002224,
+      "assets": {
+        "background": "./finale-046-41jljl8z8q/background.webp",
+        "subject": "./finale-046-41jljl8z8q/subject.webp",
+        "text": "./finale-046-41jljl8z8q/text.webp",
+        "thumbnail": "./finale-046-41jljl8z8q/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "680ed949a70acdd38c62fd1bfff8756b7ecb63b203034bccacc32d1abf6ae0b4",
+        "subject": "625c237e2920558340359e91fea5c77aabad969a42574f9e796224fc488b7658",
+        "text": "88a5b7aa11ab1ee6a21626394d731eb4043d3d18ade812940ca6d257dd708224",
+        "thumbnail": "33ab4d6bbd4e3726eca1629d04223287f9f2a5c27c9ea8182ab3e31bc4a539d2"
+      }
+    },
+    {
+      "id": "finale-047-2faezj72j0",
+      "sourcePetId": "ws-2FAEZJ72J0",
+      "version": 1,
+      "number": "047",
+      "name": "皓月",
+      "title": "紫曜龙眠",
+      "element": "water",
+      "price": 688,
+      "description": "紫曜晶洞映着月色，小龙守着一场柔软的星梦。",
+      "quote": "再小的愿望，也值得被认真守护。",
+      "rarity": "legendary",
+      "assetBytes": 988068,
+      "assets": {
+        "background": "./finale-047-2faezj72j0/background.webp",
+        "subject": "./finale-047-2faezj72j0/subject.webp",
+        "text": "./finale-047-2faezj72j0/text.webp",
+        "thumbnail": "./finale-047-2faezj72j0/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "317bbac0d1956b3d11c5ff3954c25ae802c7cc46ce099d802a4e54472e8122f2",
+        "subject": "dc6116d565ed5ad076a632303798aaff6189e732d2769360517aa9fb1181b718",
+        "text": "0ff5acacd440bc3b1e1673605e6319ca1c611e7b397a2e7ebc0ce952b012e088",
+        "thumbnail": "aae8502f15238f3de3538eddf15f84387f6802c72f655e4c314cb032a07425f8"
+      }
+    },
+    {
+      "id": "finale-048-vrp781s1w8",
+      "sourcePetId": "ws-VRP781S1W8",
+      "version": 1,
+      "number": "048",
+      "name": "萌之",
+      "title": "月灯魔法",
+      "element": "water",
+      "price": 688,
+      "description": "月灯点亮魔法书房，一瓶星光酿成温柔的小奇迹。",
+      "quote": "把好奇留下，让奇迹慢慢发生。",
+      "rarity": "legendary",
+      "assetBytes": 916932,
+      "assets": {
+        "background": "./finale-048-vrp781s1w8/background.webp",
+        "subject": "./finale-048-vrp781s1w8/subject.webp",
+        "text": "./finale-048-vrp781s1w8/text.webp",
+        "thumbnail": "./finale-048-vrp781s1w8/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "b9895cebd590e5c79a7be0e56ab2d9682458328cef73a36307756a04cc99c116",
+        "subject": "989dc56c5a238dd03e00e64b4cd3cf4b98466569a01c2a6a02ef49297df6007c",
+        "text": "1e3e10f254d9fc500ee9c9419f9f9e9b6a8bb8884daa480de7edc71ea68372c9",
+        "thumbnail": "820b4e71a1f4b0c9cb6e4fe70895e3a3b43a8793d722cc4951f420a2c8d61c92"
+      }
+    },
+    {
+      "id": "finale-049-6nhbepg661",
+      "sourcePetId": "ws-6NHBEPG661",
+      "version": 1,
+      "number": "049",
+      "name": "哈利波特",
+      "title": "星咒书旅",
+      "element": "water",
+      "price": 688,
+      "description": "古老书廊中，星咒与书页一同旋转，照亮探索的路。",
+      "quote": "知识，是随身携带的魔法。",
+      "rarity": "legendary",
+      "assetBytes": 957770,
+      "assets": {
+        "background": "./finale-049-6nhbepg661/background.webp",
+        "subject": "./finale-049-6nhbepg661/subject.webp",
+        "text": "./finale-049-6nhbepg661/text.webp",
+        "thumbnail": "./finale-049-6nhbepg661/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "6c2ce64a8773c61dab7fed0fa05c1ff3f07fdcc099abd7329812547721804fed",
+        "subject": "358661a83baeadfb5f205e9148a9ea32591b15095f22b476e4a20c458b56472c",
+        "text": "65f3849e7eef86aa319c28464eef0e51662a0fe4dfeb9d86005254953fbeecc9",
+        "thumbnail": "6bd2f69f5d963034b23d5e2451c4aeb6452958b450786c65a1c887fc7c9e2adf"
+      }
+    },
+    {
+      "id": "finale-050-3ved4mmjtw",
+      "sourcePetId": "ws-3VED4MMJTW",
+      "version": 1,
+      "number": "050",
+      "name": "喜羊羊(蜚合体)",
+      "title": "绯云灵辉",
+      "element": "fire",
+      "price": 688,
+      "description": "绯云与灵角交映，小小身影迈着轻快步伐奔向晴空。",
+      "quote": "换个角度，也许就能跨过难题。",
+      "rarity": "legendary",
+      "assetBytes": 926536,
+      "assets": {
+        "background": "./finale-050-3ved4mmjtw/background.webp",
+        "subject": "./finale-050-3ved4mmjtw/subject.webp",
+        "text": "./finale-050-3ved4mmjtw/text.webp",
+        "thumbnail": "./finale-050-3ved4mmjtw/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "3a9dfa02164ae0cc5e98cbd1976f47e836ef53953e8c22f6e143454501b11c15",
+        "subject": "469c0229ff67aed90b27a8b5300a14deedadd7cbaab2d2e7e2b69a66f9ba353d",
+        "text": "c7d91f619527dcdd73cbb1ecf0bee36e6e0889229da9c175e2e92936e1a2250d",
+        "thumbnail": "54054c502918343c499e9ed39a81b152ca9cacc6159be2df01040672226f3dc3"
+      }
+    },
+    {
+      "id": "finale-051-v6k7c3u4qj",
+      "sourcePetId": "ws-V6K7C3U4QJ",
+      "version": 1,
+      "number": "051",
+      "name": "圣诞僵尸",
+      "title": "冬铃奇遇",
+      "element": "earth",
+      "price": 688,
+      "description": "冬铃叮当，糖果手杖与节日毛衣带来一份古怪又可爱的问候。",
+      "quote": "把温暖分享给路上的伙伴。",
+      "rarity": "legendary",
+      "assetBytes": 1088372,
+      "assets": {
+        "background": "./finale-051-v6k7c3u4qj/background.webp",
+        "subject": "./finale-051-v6k7c3u4qj/subject.webp",
+        "text": "./finale-051-v6k7c3u4qj/text.webp",
+        "thumbnail": "./finale-051-v6k7c3u4qj/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "7936248fd930090dc547f4759e6f6565662f4361d3e2c3cc34bc6d203157599e",
+        "subject": "63b6d54af372168ca78161ff5303f0bbf07cb1518ecc6b29b55aa6e41031c38f",
+        "text": "2757aa7b180968e4d9b0330429734d757fb933cc3fd6ab4b0dd850b2e70906c8",
+        "thumbnail": "4adce3dd08db6d4b4c332dfb219104ce28707812876fc289184f35944d3759a3"
+      }
+    },
+    {
+      "id": "finale-052-2bc4ucq66v",
+      "sourcePetId": "ws-2BC4UCQ66V",
+      "version": 1,
+      "number": "052",
+      "name": "林克",
+      "title": "翠风勇者",
+      "element": "light",
+      "price": 688,
+      "description": "翠风吹过金色古迹，书本与罗盘指向新的旅程。",
+      "quote": "每一次探索，都从一个问题开始。",
+      "rarity": "legendary",
+      "assetBytes": 1054102,
+      "assets": {
+        "background": "./finale-052-2bc4ucq66v/background.webp",
+        "subject": "./finale-052-2bc4ucq66v/subject.webp",
+        "text": "./finale-052-2bc4ucq66v/text.webp",
+        "thumbnail": "./finale-052-2bc4ucq66v/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "33a3a467dffb345a567352987a599162ead21dda612e5947fdde1b4bcb399437",
+        "subject": "1af3831c5c788f6ccdad770286bab4d92b4e1b0e78fcced6b87a2c3ed9ab8648",
+        "text": "ff8c0cad056234acd2ce1893c11c641f70c401068be955cf11fa380787d40c48",
+        "thumbnail": "80d92019245f33ee4335ec03fcd52946d49c9ecc068acca363a41cd3de0ca289"
+      }
+    },
+    {
+      "id": "finale-053-k7m14vmk19",
+      "sourcePetId": "ws-K7M14VMK19",
+      "version": 1,
+      "number": "053",
+      "name": "lcb鸿璐",
+      "title": "玉夜星笺",
+      "element": "water",
+      "price": 688,
+      "description": "玉色星笺飘入静夜，长发少年携着一抹温柔笑意。",
+      "quote": "留一盏灯，也留一份从容。",
+      "rarity": "legendary",
+      "assetBytes": 1028586,
+      "assets": {
+        "background": "./finale-053-k7m14vmk19/background.webp",
+        "subject": "./finale-053-k7m14vmk19/subject.webp",
+        "text": "./finale-053-k7m14vmk19/text.webp",
+        "thumbnail": "./finale-053-k7m14vmk19/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "6a97d7012d695805f8f886a2f272941af054c7102ed2cb657443e35f3406d8a4",
+        "subject": "47905ad7846820d46c5db2624040ba97cc29eeea82b34093bf570e6726898219",
+        "text": "be62a3bf4a1187ebda5257ec836ae3b3fe28471825b5df904342dc9d6f34117d",
+        "thumbnail": "701d390471b9d91d1814187491232e9134e2794b97783e83f7365d7d0f70bea6"
+      }
+    },
+    {
+      "id": "finale-054-9etzvmp700",
+      "sourcePetId": "ws-9ETZVMP700",
+      "version": 1,
+      "number": "054",
+      "name": "烟头叔叔",
+      "title": "暖阳同行",
+      "element": "earth",
+      "price": 688,
+      "description": "暖阳洒在金色街巷，背好行囊，和可靠的旅伴一同前行。",
+      "quote": "稳稳走好今天的路。",
+      "rarity": "legendary",
+      "assetBytes": 875226,
+      "assets": {
+        "background": "./finale-054-9etzvmp700/background.webp",
+        "subject": "./finale-054-9etzvmp700/subject.webp",
+        "text": "./finale-054-9etzvmp700/text.webp",
+        "thumbnail": "./finale-054-9etzvmp700/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "2d3b78be48663e814b896fd5662419478c5773628a150249baf2f09142680814",
+        "subject": "0eb5f87b753bbdd65c7bf2c175761101838c5be33a40e2ff3427330c7db8bef1",
+        "text": "0ede7ea116b5f803e4574ceb8e0982a8ca3b08ec4dc586bea9fd0171bc85dd76",
+        "thumbnail": "ce31814124ebc7d02adedf24b5ad4256ad35dda1038671463aac0520ba50bb52"
+      }
+    },
+    {
+      "id": "finale-055-kvhd7xk73y",
+      "sourcePetId": "ws-KVHD7XK73Y",
+      "version": 1,
+      "number": "055",
+      "name": "Black",
+      "title": "夜幕礼赞",
+      "element": "fire",
+      "price": 688,
+      "description": "礼帽下的一双眼睛望向星海，夜幕也有轻松可爱的一面。",
+      "quote": "保持自己的节奏，优雅地出发。",
+      "rarity": "legendary",
+      "assetBytes": 845608,
+      "assets": {
+        "background": "./finale-055-kvhd7xk73y/background.webp",
+        "subject": "./finale-055-kvhd7xk73y/subject.webp",
+        "text": "./finale-055-kvhd7xk73y/text.webp",
+        "thumbnail": "./finale-055-kvhd7xk73y/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "053dadcb032ff1a22afcd05f1215b049cf429b84032566f34d9d40508efcf5da",
+        "subject": "3ef4379d6232c8ed04399fca4020eb0577ca4ed39674a506f1b8567b75f78029",
+        "text": "f516cbeb2318e04276a0bf9c66a742b4366dcbd63d3355d09c341aa8b64f937d",
+        "thumbnail": "eb29a6f9e1c63c1c2288c72591970f361f94446053a8719637062a15f2791525"
+      }
+    },
+    {
+      "id": "finale-056-abvmdpwz3a",
+      "sourcePetId": "ws-ABVMDPWZ3A",
+      "version": 1,
+      "number": "056",
+      "name": "死神",
+      "title": "暮影守灯",
+      "element": "fire",
+      "price": 688,
+      "description": "暮影小旅人提起暖灯，把夜路照成一段温柔故事。",
+      "quote": "给自己一点光，也为别人留一盏灯。",
+      "rarity": "legendary",
+      "assetBytes": 981076,
+      "assets": {
+        "background": "./finale-056-abvmdpwz3a/background.webp",
+        "subject": "./finale-056-abvmdpwz3a/subject.webp",
+        "text": "./finale-056-abvmdpwz3a/text.webp",
+        "thumbnail": "./finale-056-abvmdpwz3a/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "89f49e83677c53bf6e4e7173629a7d361a204c40dbc420005ae5f561d837b7c5",
+        "subject": "2e0ba5f8be6399cd34d13ba42cb3c6f4a8f09a14238accb652873b9cf0a09048",
+        "text": "229676777f0b20a960fac4dc6bdbb4589e5475f7a9ae96cfe33d08e29e089930",
+        "thumbnail": "ecc52d5df80abcb15c651baffcb65e2b70c09c62b9279e2139fca62b47f01572"
+      }
+    },
+    {
+      "id": "finale-057-vgyxdcd59h",
+      "sourcePetId": "ws-VGYXDCD59H",
+      "version": 1,
+      "number": "057",
+      "name": "无牙仔仔",
+      "title": "蓝焰星眠",
+      "element": "fire",
+      "price": 688,
+      "description": "蓝焰与月色映亮鳞片，小龙在晶莹星洞中醒来。",
+      "quote": "张开翅膀，先试一次小小的飞翔。",
+      "rarity": "legendary",
+      "assetBytes": 1041576,
+      "assets": {
+        "background": "./finale-057-vgyxdcd59h/background.webp",
+        "subject": "./finale-057-vgyxdcd59h/subject.webp",
+        "text": "./finale-057-vgyxdcd59h/text.webp",
+        "thumbnail": "./finale-057-vgyxdcd59h/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "5872dee4821c7c0255f5fd06a95819011fdd9ed3a8212367343433570dc3b6e9",
+        "subject": "357cbc911626a035c14acd24430017a64bea1ecc53b6a0004322d02aec3941e4",
+        "text": "510a9944156f15da774865e85d61f5bda658527a9fcaa20cbc696d6d62638a9d",
+        "thumbnail": "ee2418f1ddf9798c6b9b4d210d90efa37f07f6cd54ef16690a7fb69984f895a2"
+      }
+    },
+    {
+      "id": "finale-058-scaqfu9x88",
+      "sourcePetId": "ws-SCAQFU9X88",
+      "version": 1,
+      "number": "058",
+      "name": "miku",
+      "title": "青歌星海",
+      "element": "water",
+      "price": 688,
+      "description": "青色双马尾掠过星海舞台，清亮歌声化作漫天微光。",
+      "quote": "找到属于自己的旋律。",
+      "rarity": "legendary",
+      "assetBytes": 1100980,
+      "assets": {
+        "background": "./finale-058-scaqfu9x88/background.webp",
+        "subject": "./finale-058-scaqfu9x88/subject.webp",
+        "text": "./finale-058-scaqfu9x88/text.webp",
+        "thumbnail": "./finale-058-scaqfu9x88/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "616f27c05f8c989e91e1fcfafeb1d3363dfd8b1be51c2a4ac6dd9f72fcf40119",
+        "subject": "cca4bc9b4dea8f9d8bf8b096bcf1de1c59092a6798de9642f28eb2ed80ed9b31",
+        "text": "cd14627a88394331e617754fb94ef5fea7cf15764897991171279bb48ed48f29",
+        "thumbnail": "f8929017914cfecef345fa9b1ab7f32fe56f17ff29b6ce72fad1ac0596b6a06d"
+      }
+    },
+    {
+      "id": "finale-059-bmdwc22fsu",
+      "sourcePetId": "ws-BMDWC22FSU",
+      "version": 2,
+      "number": "059",
+      "name": "无牙仔",
+      "title": "夜翼逐星",
+      "element": "fire",
+      "price": 688,
+      "description": "黑色小龙展开双翼，在极光与星河之间追逐自由的风。",
+      "quote": "心里的远方，可以一步步靠近。",
+      "rarity": "legendary",
+      "assetBytes": 769072,
+      "assets": {
+        "background": "./finale-059-bmdwc22fsu/background.webp",
+        "subject": "./finale-059-bmdwc22fsu/subject.webp",
+        "text": "./finale-059-bmdwc22fsu/text-v2.webp",
+        "thumbnail": "./finale-059-bmdwc22fsu/thumbnail-v2.webp"
+      },
+      "checksums": {
+        "background": "591598e47f37caf11983e74601ce3674582bb3da1a4cc66be309465dfe5b35fd",
+        "subject": "cc132b3318885a713c3ac699a7828658a5669a1db70113271d780fb830c834a6",
+        "text": "f26718eaba29230c501f1ebc3be1581cfe97f00f84120b737ec478132b3624f7",
+        "thumbnail": "56d1e519958358ac71b4d4d555703f5d00244ff128328bdd1d7fb67ef2d674b5"
+      }
+    },
+    {
+      "id": "finale-060-d2vn34aj4y",
+      "sourcePetId": "ws-D2VN34AJ4Y",
+      "version": 1,
+      "number": "060",
+      "name": "星空饿狼",
+      "title": "星穹逐光",
+      "element": "fire",
+      "price": 688,
+      "description": "星穹流光绕过肩头，坚定的身影向着未知前进。",
+      "quote": "真正的力量，也来自耐心与坚持。",
+      "rarity": "legendary",
+      "assetBytes": 942462,
+      "assets": {
+        "background": "./finale-060-d2vn34aj4y/background.webp",
+        "subject": "./finale-060-d2vn34aj4y/subject.webp",
+        "text": "./finale-060-d2vn34aj4y/text.webp",
+        "thumbnail": "./finale-060-d2vn34aj4y/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "ad5192e01076390276803b68e83ac2b360dda1de37e49245a1eb46698f9aac77",
+        "subject": "c15aeb5e593bfe73235187b91a0cd08c7d6fcb94787974cd25a19cb804619687",
+        "text": "47007418de511557bb188760588010841f6cf5ae292c20707c34c668e8c6089f",
+        "thumbnail": "f37e65688a85ba0a8451252da5825bb147737f5fb9eb70df225844ef9a8dad49"
+      }
+    },
+    {
+      "id": "finale-061-7sj2bdgynm",
+      "sourcePetId": "ws-7SJ2BDGYNM",
+      "version": 1,
+      "number": "061",
+      "name": "克莱恩・莫雷蒂",
+      "title": "雾钟星旅",
+      "element": "wind",
+      "price": 688,
+      "description": "雾钟响起，绿眸旅人穿过金色街灯，收起一页新的见闻。",
+      "quote": "越是未知，越值得认真观察。",
+      "rarity": "legendary",
+      "assetBytes": 906454,
+      "assets": {
+        "background": "./finale-061-7sj2bdgynm/background.webp",
+        "subject": "./finale-061-7sj2bdgynm/subject.webp",
+        "text": "./finale-061-7sj2bdgynm/text.webp",
+        "thumbnail": "./finale-061-7sj2bdgynm/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "86ee0128543c3b9165cf171b9d6a10c2929261fcefe3271d8b7e5586c815f764",
+        "subject": "89e1c7ce9cd76dcf84671da60011e44a873f82647ff74a235037976fb59563c3",
+        "text": "0a7c67f7004e1092211dd047473482de4355caf011f970d2884fab436b79b02c",
+        "thumbnail": "2c4a921c6d465286520f3577f293967410a83e67030ec78b9f87413ee68a31d8"
+      }
+    },
+    {
+      "id": "finale-062-nxjzebs6v4",
+      "sourcePetId": "ws-NXJZEBS6V4",
+      "version": 1,
+      "number": "062",
+      "name": "啥龙",
+      "title": "翠羽晴岚",
+      "element": "fire",
+      "price": 688,
+      "description": "翠羽与青竹风铃相映，清晨山岚里藏着明亮笑容。",
+      "quote": "让心情像风一样轻一点。",
+      "rarity": "legendary",
+      "assetBytes": 968488,
+      "assets": {
+        "background": "./finale-062-nxjzebs6v4/background.webp",
+        "subject": "./finale-062-nxjzebs6v4/subject.webp",
+        "text": "./finale-062-nxjzebs6v4/text.webp",
+        "thumbnail": "./finale-062-nxjzebs6v4/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "63d4ea3561b45c56638d2a74d5915edff3220052af88b869b03b72ec01c3fbc1",
+        "subject": "bc27ddc7ad04f5dba27ed7653dd8cdc1a68fa5771672b41624b224b4093febe1",
+        "text": "6f01d56b285def1fe8233c6f172104b3093cf6eb3ba900403136b9b7062c0ee8",
+        "thumbnail": "9a44226f3ff56c6a677e5c7b0315f18cb23eadf994a0eed6838791eb15e0d0e6"
+      }
+    },
+    {
+      "id": "finale-063-rxpfja2wru",
+      "sourcePetId": "ws-RXPFJA2WRU",
+      "version": 1,
+      "number": "063",
+      "name": "大黑塔",
+      "title": "紫星秘典",
+      "element": "light",
+      "price": 688,
+      "description": "紫色秘典翻开星图，帽檐下的目光追寻遥远的答案。",
+      "quote": "大胆提问，细心求证。",
+      "rarity": "legendary",
+      "assetBytes": 1165472,
+      "assets": {
+        "background": "./finale-063-rxpfja2wru/background.webp",
+        "subject": "./finale-063-rxpfja2wru/subject.webp",
+        "text": "./finale-063-rxpfja2wru/text.webp",
+        "thumbnail": "./finale-063-rxpfja2wru/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "14edf4828165e335cdbd476df83de4ee00a322200bb6d08c05d2bfc8de864489",
+        "subject": "5b9acb5e699cf16432d9f8a7b3e841b555204fcc2a597f823f4020e1818fa3f0",
+        "text": "be28aeab4437a3c8b6970864c627dbf42fa92400172b0f90820133a013a34e10",
+        "thumbnail": "54e7eda78ddfe4e4bf4ac019f9f5a7fd07c6ed8bc6b18b50fce49e7856a6b218"
+      }
+    },
+    {
+      "id": "finale-064-6unha4xlqc",
+      "sourcePetId": "ws-6UNHA4XLQC",
+      "version": 1,
+      "number": "064",
+      "name": "木之本 樱",
+      "title": "樱星祈愿",
+      "element": "light",
+      "price": 688,
+      "description": "樱花伴着金色星杖飞舞，温柔而勇敢的心照亮前路。",
+      "quote": "相信自己，也珍惜身边的伙伴。",
+      "rarity": "legendary",
+      "assetBytes": 953776,
+      "assets": {
+        "background": "./finale-064-6unha4xlqc/background.webp",
+        "subject": "./finale-064-6unha4xlqc/subject.webp",
+        "text": "./finale-064-6unha4xlqc/text.webp",
+        "thumbnail": "./finale-064-6unha4xlqc/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "eaa385ba0bff11dfdad7c8c3e24f34ce7925af22c41e71f4ea2e24121fcadd51",
+        "subject": "857dfa565c19b0bcdd4b31b0427ae49042145cbdffdc3c0b0782814d8029857b",
+        "text": "772f311241f43378328ee03458ab90d637106d55e26fcb37ea3423e91e0dd767",
+        "thumbnail": "436a7a2ba13b1b5dd8ab4722b6cd3fa99c28ed7e9353f249b5d020bf116ae0a5"
+      }
+    },
+    {
+      "id": "finale-065-816tn021my",
+      "sourcePetId": "ws-816TN021MY",
+      "version": 1,
+      "number": "065",
+      "name": "东北雨姐",
+      "title": "暖土丰年",
+      "element": "earth",
+      "price": 688,
+      "description": "保留熟悉的原版身影，以暖土、麦穗与金色日光珍藏朴实的生活气息。",
+      "quote": "踏实做好每一件小事。",
+      "rarity": "legendary",
+      "assetBytes": 750108,
+      "assets": {
+        "background": "./finale-065-816tn021my/background.webp",
+        "subject": "./finale-065-816tn021my/subject.webp",
+        "text": "./finale-065-816tn021my/text.webp",
+        "thumbnail": "./finale-065-816tn021my/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "fe99034ccd8371701945bb3a5a54c695391341856a496d1a7629b75cc894fe12",
+        "subject": "ddbbe4a1d203fc42a62245e9f57b770462317b5dc9c895f1f5eff345d1885993",
+        "text": "620e61dcf1773d29e3415801f545d8695fa4efd75c282f53863ed44c913b62df",
+        "thumbnail": "cd7fded3595c6202dd54f8ec9284dfbb2aebb7036fb9d96ff20de439a8be3ce1"
+      }
+    },
+    {
+      "id": "finale-066-d0glr1ply3",
+      "sourcePetId": "ws-D0GLR1PLY3",
+      "version": 1,
+      "number": "066",
+      "name": "重音缇特",
+      "title": "绯音流星",
+      "element": "fire",
+      "price": 688,
+      "description": "绯红双卷发与蓝宝石舞台交映，一曲活泼旋律划过星夜。",
+      "quote": "让喜欢的事，成为继续前进的光。",
+      "rarity": "legendary",
+      "assetBytes": 946658,
+      "assets": {
+        "background": "./finale-066-d0glr1ply3/background.webp",
+        "subject": "./finale-066-d0glr1ply3/subject.webp",
+        "text": "./finale-066-d0glr1ply3/text.webp",
+        "thumbnail": "./finale-066-d0glr1ply3/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "0a57573520a5aeccf8b0e18b5eb143b7dda63498ca10fec61af2e74192785d32",
+        "subject": "025c84f9257575b900048806894c160c83501f7912af7bad8e229adbe7ced05b",
+        "text": "6f2c54ea376673dbe7b3637a0307c56305ebe9f477f3b1e546242c9aa85c253d",
+        "thumbnail": "bb4ec7494657365a790169c3ed61efae149c1fb20afc7947ceb108b293fcb9f0"
+      }
+    },
+    {
+      "id": "finale-067-b8chr17ze8",
+      "sourcePetId": "ws-B8CHR17ZE8",
+      "version": 1,
+      "number": "067",
+      "name": "维什戴尔·超新星",
+      "title": "绯星巡礼",
+      "element": "fire",
+      "price": 688,
+      "description": "银发与绯色发饰映着超新星穹，黑白披裙掠过金色轨道。",
+      "quote": "让每一次认真，都成为自己的闪光时刻。",
+      "rarity": "legendary",
+      "assetBytes": 998750,
+      "assets": {
+        "background": "./finale-067-b8chr17ze8/background.webp",
+        "subject": "./finale-067-b8chr17ze8/subject.webp",
+        "text": "./finale-067-b8chr17ze8/text.webp",
+        "thumbnail": "./finale-067-b8chr17ze8/thumbnail.webp"
+      },
+      "checksums": {
+        "background": "8021f0e7d65870c202b3fa89e94a0959bd7ddfd1d72c9c2045a2caf4bbfa8684",
+        "subject": "d016e2bec9372843f413adbc82aa998c07a50b8320db8c9d9dd5d28977587728",
+        "text": "763b43e117540a3304b7483d4ff6a573dc790626253fc94c0ecbd572f60ecc4b",
+        "thumbnail": "b444d98528336ce63ec2e027d6042942234a0b252c277bb96aad2c980b39bc00"
       }
     }
   ]

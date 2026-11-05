@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import type { PartnerAccessory } from '../../../src/types/partnerAccessory';
 import { supportedAccessory } from '../../../src/data/partnerAccessories';
 import { advanceAccessoryTrail, orbitPoint, type AccessoryTrailPoint } from '../../../src/utils/partnerAccessoryMotion';
+import { accessoryGlyphShapes, accessoryInk, haloMotif, type AccessoryShape } from '../../../src/utils/partnerAccessoryArtwork';
 import { effectiveVisualMode, readBattleVisualMode } from '../../utils/battleVisuals';
 
 /** Rear graphics precede the portrait; the front layer stays clear of its face. */
@@ -12,9 +13,11 @@ export class PartnerCosmetics extends Phaser.GameObjects.Graphics {
   private actor: Phaser.GameObjects.Container;
   private rear: Phaser.GameObjects.Graphics;
   private history: AccessoryTrailPoint[] = [];
-  constructor(scene: Phaser.Scene, actor: Phaser.GameObjects.Container, items: PartnerAccessory[]) {
+  private groundY: number;
+  constructor(scene: Phaser.Scene, actor: Phaser.GameObjects.Container, items: PartnerAccessory[], groundY = 90) {
     super(scene);
     this.actor = actor; this.previous = { x: actor.x, y: actor.y };
+    this.groundY = groundY;
     this.items = items.filter(supportedAccessory).slice(0, 3);
     this.rear = new Phaser.GameObjects.Graphics(scene);
     actor.addAt(this.rear, 1); actor.add(this);
@@ -24,6 +27,13 @@ export class PartnerCosmetics extends Phaser.GameObjects.Graphics {
       this.history = []; if (this.rear.scene) this.rear.destroy();
     });
     this.drawFrame(0);
+  }
+  private drawArtwork(g: Phaser.GameObjects.Graphics, item: PartnerAccessory, shapes: readonly AccessoryShape[], x: number, y: number, width: number, height = width, alpha = 1) {
+    for (const shape of shapes) {
+      const points = shape.points.map(p => new Phaser.Geom.Point(x + (p[0] - 50) * width / 100, y + (p[1] - 50) * height / 100));
+      if (shape.fill !== 'none') { g.fillStyle(parseInt(accessoryInk(shape.fill, item.visual.color, item.visual.accent).slice(1), 16), alpha); g.fillPoints(points, shape.closed); }
+      if (shape.stroke !== 'none') { g.lineStyle(Math.max(.65, shape.width * width / 100), parseInt(accessoryInk(shape.stroke, item.visual.color, item.visual.accent).slice(1), 16), alpha); g.strokePoints(points, shape.closed); }
+    }
   }
   private drawFrame(time: number) {
     if (time - this.lastFrame < 32) return;
@@ -43,14 +53,12 @@ export class PartnerCosmetics extends Phaser.GameObjects.Graphics {
         const g = this.rear;
         // Scale the halo locally; position remains anchored at the feet.
         const haloSize = item.visual.size || 1;
-        g.save(); g.translateCanvas(0, 78); g.scaleCanvas(haloSize, haloSize); g.translateCanvas(0, -78);
-        this.save(); this.translateCanvas(0, 78); this.scaleCanvas(haloSize, haloSize); this.translateCanvas(0, -78);
+        g.save(); g.translateCanvas(0, this.groundY - 78); g.translateCanvas(0, 78); g.scaleCanvas(haloSize, haloSize); g.translateCanvas(0, -78);
+        // The entire floor decal belongs behind the portrait, not just its rear arc.
         g.lineStyle(10, color, .16); g.strokeEllipse(0, 78, 190, 43);
         g.lineStyle(5, 0x15394c, .85); g.strokeEllipse(0, 78, 190, 43);
         g.lineStyle(2.5, color, 1); g.strokeEllipse(0, 78, 190, 43);
-        this.lineStyle(3, color, 1); this.beginPath();
-        for (let i = 0; i <= 24; i++) { const a = i / 24 * Math.PI, x = Math.cos(a) * 95, y = 78 + Math.sin(a) * 21.5; if (!i) this.moveTo(x, y); else this.lineTo(x, y); }
-        this.strokePath();
+        this.drawArtwork(g, item, haloMotif(item.visual.primitive, simple ? 0 : time, item.visual.durationMs), 0, 78, 190, 43);
         if (item.visual.primitive === 'prism') {
           const phase = simple ? 0 : time / item.visual.durationMs * Math.PI * 2;
           g.lineStyle(2, accent, .95);
@@ -60,16 +68,19 @@ export class PartnerCosmetics extends Phaser.GameObjects.Graphics {
             g.strokePath();
           }
           for (let i = 0; i < 8; i++) { const a = phase + i * Math.PI / 4; g.lineBetween(Math.cos(a) * 98, 78 + Math.sin(a) * 24, Math.cos(a) * 106, 78 + Math.sin(a) * 28); }
-          this.fillStyle(accent, 1); this.fillTriangle(-104, 76, -96, 68, -96, 84); this.fillTriangle(104, 76, 96, 68, 96, 84);
+          g.fillStyle(accent, 1); g.fillTriangle(-104, 76, -96, 68, -96, 84); g.fillTriangle(104, 76, 96, 68, 96, 84);
         }
-        g.restore(); this.restore();
+        g.restore();
       } else if (item.slot === 'orbit') {
         for (let i = 0; i < item.visual.count; i++) {
-          const point = orbitPoint(simple ? 0 : time, i, item.visual.count, item.visual.durationMs);
+          const point = orbitPoint(simple ? 0 : time, i, item.visual.count, item.visual.durationMs, item.visual.primitive);
           const x = (point.x - 100) * 1.3, y = point.y - 110, size = point.scale * (item.visual.size || 1) * 1.25;
           const g = point.front ? this : this.rear;
-          g.fillStyle(color, .14); g.fillCircle(x, y, 21 * size);
-          if (item.visual.primitive === 'lantern') {
+          if (item.visual.primitive !== 'wing') { g.fillStyle(color, .14); g.fillCircle(x, y, 21 * size); }
+          const glyph = accessoryGlyphShapes(item.visual.primitive);
+          if (glyph) {
+            this.drawArtwork(g, item, glyph, x, y, (item.visual.primitive === 'wing' ? 184 : 38) * size, undefined, point.front ? 1 : .85);
+          } else if (item.visual.primitive === 'lantern') {
             g.fillStyle(color, 1); g.fillRoundedRect(x - 10 * size, y - 14 * size, 20 * size, 28 * size, 7 * size);
             g.lineStyle(2, accent, 1); g.lineBetween(x, y - 20 * size, x, y + 21 * size); g.lineBetween(x - 7 * size, y - 11 * size, x + 7 * size, y - 11 * size);
           } else {
@@ -83,7 +94,12 @@ export class PartnerCosmetics extends Phaser.GameObjects.Graphics {
           const x = (p.x - position.x) / (this.actor.scaleX || 1) - (p.direction || 0) * 70, y = (p.y - position.y) / (this.actor.scaleY || 1) + 92;
           this.rear.fillStyle(i % 2 ? accent : color, life);
           const size = item.visual.size || 1;
-          if (item.visual.primitive === 'pixel') this.rear.fillRect(x, y - i % 3 * 5, (3 + life * 7) * size, (3 + life * 7) * size);
+          const glyph = accessoryGlyphShapes(item.visual.primitive);
+          if (glyph) {
+            if (i % 3 !== 0) continue;
+            this.drawArtwork(this.rear, item, glyph, x, y + Math.sin(p.born / 110) * 9 - (1 - life) * 18, (16 + life * 10) * size, undefined, life);
+          }
+          else if (item.visual.primitive === 'pixel') this.rear.fillRect(x, y - i % 3 * 5, (3 + life * 7) * size, (3 + life * 7) * size);
           else { this.rear.fillCircle(x, y, (1 + life * 5) * size); this.rear.lineStyle(2, accent, life); this.rear.lineBetween(x, y, x + 9 * life * size, y - 4); }
         }
       }

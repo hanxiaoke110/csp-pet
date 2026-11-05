@@ -36,8 +36,8 @@ describe('learning catalog validation', () => {
     expect(validateLearningCatalog(bundled)).toBe(true);
     expect(bundled.lessons).toHaveLength(100);
     expect(bundled.lessons.map(item => item.lessonNo)).toEqual(Array.from({ length: 100 }, (_, index) => index + 1));
-    expect(visibleCatalogLessons(bundled.lessons)).toHaveLength(77);
-    expect(bundled.lessons.filter(item => item.lessonNo >= 78).every(item => item.status === 'hidden' && item.feishuUrl === '')).toBe(true);
+    expect(visibleCatalogLessons(bundled.lessons)).toHaveLength(80);
+    expect(bundled.lessons.filter(item => item.lessonNo >= 81).every(item => item.status === 'hidden' && item.feishuUrl === '')).toBe(true);
   });
 
   it('accepts ready and coming-soon Feishu lessons', () => {

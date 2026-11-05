@@ -38,6 +38,9 @@ export interface QuizState {
   lastReviewDate: string;
   lastReviewCorrect: number;
   lastReviewTotal: number;
+  reviewRewardMonth: string;
+  reviewRewardCoins: number;
+  reviewRewardExp: number;
   lastSuperDate: string;
   superCompletions: number;
   superBestScore: number;
@@ -59,6 +62,9 @@ export interface QuizState {
 
   addError: (questionId: string, wrongAnswer: number, correctAnswer: number, knowledgePoint?: string) => void;
   removeError: (questionId: string) => void;
+  expandReviewErrors: (parts: { id: string; reviewErrorId?: string; correctIndex: number }[]) => void;
+  beginMonthlyReview: () => string | null;
+  claimMonthlyReviewReward: (month: string, coins: number, exp: number) => { coins: number; exp: number };
   recordKpResults: (results: WeeklyKpResult[]) => void;
   resetMonthlyKpStats: () => void;
   getWeakPoints: (limit?: number) => { kp: string; rate: number; total: number }[];
@@ -92,6 +98,8 @@ const STORAGE_KEY = 'csp_quiz_state';
 
 // 自由练习每日奖励题数上限（方案A：前 N 题有奖励，超出可做题但不发奖）
 export const FREE_PRACTICE_DAILY_REWARD_CAP = 30;
+export const MONTHLY_REVIEW_COIN_CAP = 300;
+export const MONTHLY_REVIEW_EXP_CAP = 400;
 
 function getWeekStart(): string {
   const d = new Date();
@@ -145,6 +153,9 @@ export const useQuizStore = create<QuizState>((set, get) => {
     lastReviewDate: '',
     lastReviewCorrect: 0,
     lastReviewTotal: 0,
+    reviewRewardMonth: '',
+    reviewRewardCoins: 0,
+    reviewRewardExp: 0,
     lastSuperDate: '',
     superCompletions: 0,
     superBestScore: 0,
@@ -225,6 +236,47 @@ export const useQuizStore = create<QuizState>((set, get) => {
       get().save();
     },
 
+    // Normalize legacy parent errors before selecting a subset: each child is mastered independently.
+    expandReviewErrors: (parts) => {
+      set(s => {
+        const parents = new Set(parts.filter(p => p.reviewErrorId && p.reviewErrorId !== p.id).map(p => p.reviewErrorId!));
+        const errors = s.errors.filter(e => !parents.has(e.questionId));
+        for (const part of parts) {
+          if (!part.reviewErrorId || !parents.has(part.reviewErrorId)) continue;
+          const parent = s.errors.find(e => e.questionId === part.reviewErrorId);
+          if (parent && !errors.some(e => e.questionId === part.id)) {
+            errors.push({ ...parent, questionId: part.id, correctAnswer: part.correctIndex });
+          }
+        }
+        return { errors };
+      });
+      get().save();
+    },
+
+    beginMonthlyReview: () => {
+      if (!get().canDoMonthlyReview().allowed) return null;
+      const month = getMonthKey();
+      if (get().reviewRewardMonth !== month) {
+        set({ reviewRewardMonth: month, reviewRewardCoins: 0, reviewRewardExp: 0 });
+        get().save();
+      }
+      return month;
+    },
+
+    claimMonthlyReviewReward: (month, coins, exp) => {
+      const s = get();
+      if (month !== getMonthKey() || s.reviewRewardMonth !== month || !s.canDoMonthlyReview().allowed) {
+        return { coins: 0, exp: 0 };
+      }
+      const reward = {
+        coins: Math.min(Math.max(0, coins), Math.max(0, MONTHLY_REVIEW_COIN_CAP - s.reviewRewardCoins)),
+        exp: Math.min(Math.max(0, exp), Math.max(0, MONTHLY_REVIEW_EXP_CAP - s.reviewRewardExp)),
+      };
+      set({ reviewRewardCoins: s.reviewRewardCoins + reward.coins, reviewRewardExp: s.reviewRewardExp + reward.exp });
+      get().save();
+      return reward;
+    },
+
     completeMonthlyReview: (correct?: number, total?: number) => {
       set(s => ({
         lastReviewDate: getMonthKey(),
@@ -290,7 +342,7 @@ export const useQuizStore = create<QuizState>((set, get) => {
         return { allowed: false, reason: '暂无错题，真棒！' };
       }
       if (s.lastReviewDate === getMonthKey()) {
-        return { allowed: false, reason: '本月已完成复盘，下月再来' };
+        return { allowed: false, reason: '本月复盘奖励已领取，错题仍可随时练习' };
       }
       // Condition 1: 2+ weekly completions
       if (s.weeklyCompletions >= 2) {
@@ -357,6 +409,9 @@ export const useQuizStore = create<QuizState>((set, get) => {
           lastReviewDate: data.lastReviewDate || '',
           lastReviewCorrect: data.lastReviewCorrect || 0,
           lastReviewTotal: data.lastReviewTotal || 0,
+          reviewRewardMonth: data.reviewRewardMonth || '',
+          reviewRewardCoins: data.reviewRewardCoins || 0,
+          reviewRewardExp: data.reviewRewardExp || 0,
           lastSuperDate: normalizeSuperChallengeKey(data.lastSuperDate),
           superCompletions: data.superCompletions || 0,
           superBestScore: data.superBestScore || 0,
@@ -395,6 +450,9 @@ export const useQuizStore = create<QuizState>((set, get) => {
           lastReviewDate: s.lastReviewDate,
           lastReviewCorrect: s.lastReviewCorrect,
           lastReviewTotal: s.lastReviewTotal,
+          reviewRewardMonth: s.reviewRewardMonth,
+          reviewRewardCoins: s.reviewRewardCoins,
+          reviewRewardExp: s.reviewRewardExp,
           lastSuperDate: s.lastSuperDate,
           superCompletions: s.superCompletions,
           superBestScore: s.superBestScore,

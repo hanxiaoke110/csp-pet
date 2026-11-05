@@ -6,6 +6,8 @@ import { isRemotePet } from '../../types/pet';
 import { downloadPetSprites } from '../../utils/spriteDownloader';
 import { repairWorkshopSprite } from '../../utils/workshopSpriteRepair';
 
+import { useVisualBudget } from '../../lib/performanceMode';
+
 const CANVAS_SIZE = 140;
 const CACHE_SUBDIR = 'pet-sprites/2d';
 
@@ -181,6 +183,7 @@ export default function PetSprite({
   exposeGlobals?: boolean;
   onAnimationChange?: (animation: PetAnimState) => void;
 }) {
+  const { economy, hidden, reduced } = useVisualBudget();
   const sz = canvasSize || CANVAS_SIZE;
   const containerRef = useRef<HTMLDivElement>(null);
   const spriteDivRef = useRef<HTMLDivElement | null>(null);
@@ -285,6 +288,7 @@ export default function PetSprite({
       const now = performance.now();
       const dt = Math.min(now - lastTick, 250);
       lastTick = now;
+      if (document.hidden) return;
       const anim = tick(smRef.current, dt);
       if (anim !== currentAnimRef.current) {
         currentAnimRef.current = anim;
@@ -354,7 +358,8 @@ export default function PetSprite({
           backgroundRepeat: 'no-repeat',
           imageRendering: 'pixelated',
           willChange: 'transform',
-          animation: `${animationId}-${frames} ${duration}ms steps(${frames}) infinite`,
+          animation: `${animationId}-${frames} ${economy ? Math.max(duration, frames * 125) : duration}ms steps(${frames}) infinite`,
+          animationPlayState: hidden || reduced || (economy && (anim === 'idle' || anim === 'sleep')) ? 'paused' : 'running',
         }} />
       </div>
       {status === 'loading' && (

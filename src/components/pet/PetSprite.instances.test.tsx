@@ -3,6 +3,7 @@ import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { expect, it, vi } from 'vitest';
 import PetSprite from './PetSprite';
+import { writePerformanceMode } from '../../lib/performanceMode';
 it('different-sized companions keep independent animation rules after one unmounts', async () => {
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
   const host = document.createElement('div'); document.body.appendChild(host);
@@ -19,4 +20,29 @@ it('different-sized companions keep independent animation rules after one unmoun
     expect(document.querySelectorAll(selector)).toHaveLength(1);
     expect(document.querySelector(selector)?.textContent).toContain(`translateX(-${largeDistance}px)`);
   } finally { await act(async () => root.unmount()); host.remove(); vi.unstubAllGlobals(); }
+});
+
+it('economy pauses idle artwork and restores standard animation without remounting', async () => {
+  vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
+  const host = document.createElement('div'); document.body.appendChild(host);
+  const root = createRoot(host);
+  try {
+    writePerformanceMode('standard');
+    await act(async () => root.render(<PetSprite exposeGlobals={false} />));
+    const artwork = host.querySelector('[style*="animation:"]') as HTMLElement;
+    expect(artwork.style.animationPlayState).toBe('running');
+    await act(async () => writePerformanceMode('economy'));
+    expect(artwork.style.animationPlayState).toBe('paused');
+    await act(async () => writePerformanceMode('standard'));
+    expect(artwork.style.animationPlayState).toBe('running');
+    await act(async () => {
+      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    expect(artwork.style.animationPlayState).toBe('paused');
+  } finally {
+    await act(async () => root.unmount()); host.remove();
+    Object.defineProperty(document, 'hidden', { configurable: true, value: false });
+    writePerformanceMode('standard'); vi.unstubAllGlobals();
+  }
 });

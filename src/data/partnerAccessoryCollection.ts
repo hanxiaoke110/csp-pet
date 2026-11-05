@@ -1,0 +1,17 @@
+import type { PartnerAccessory } from '../types/partnerAccessory';
+
+/** v2 designs are additive. Never rename founder IDs or charge for owned items. */
+export const PARTNER_ACCESSORY_COLLECTION_V2: PartnerAccessory[] = [
+  { id: 'halo-solar', name: '曜阳王冠', description: '十二道金色日芒，围成脚下的耀眼冠冕。', slot: 'halo', price: 500, minRendererVersion: 2, visual: { primitive: 'solar', color: '#ffbb54', accent: '#fff4bc', count: 1, durationMs: 12000, size: 1.06 } },
+  { id: 'halo-circuit', name: '量子回路', description: '八角电路与流动节点，点亮下一次跃迁。', slot: 'halo', price: 420, minRendererVersion: 2, visual: { primitive: 'circuit', color: '#52e5ff', accent: '#879cff', count: 1, durationMs: 10000, size: 1.04 } },
+  { id: 'halo-lotus', name: '糖霜莲语', description: '八瓣柔光在脚下轻轻绽放，甜而不刺眼。', slot: 'halo', price: 320, minRendererVersion: 2, visual: { primitive: 'lotus', color: '#ffaddb', accent: '#fff0c9', count: 1, durationMs: 16000, size: 1.03 } },
+  { id: 'halo-eclipse', name: '极夜棱域', description: '紫色双重星轨与金色晶角，守住自己的闪耀坐标。', slot: 'halo', price: 560, minRendererVersion: 2, visual: { primitive: 'prism', color: '#b7a1ff', accent: '#ffe7a4', count: 1, durationMs: 11000, size: 1.08 } },
+  { id: 'orbit-crystal', name: '苍穹晶卫', description: '三枚立体水晶缓缓巡游，像一支小小护卫队。', slot: 'orbit', price: 360, minRendererVersion: 2, visual: { primitive: 'crystal', color: '#76ddff', accent: '#d3afff', count: 3, durationMs: 8500, size: 1.04 } },
+  { id: 'orbit-wings', name: '星穹光翼', description: '一双蓝金羽翼在身后轻轻舒展，主角依然是你。', slot: 'orbit', price: 680, minRendererVersion: 2, visual: { primitive: 'wing', color: '#7bbcff', accent: '#ffe5a4', count: 1, durationMs: 5000, size: 1 } },
+  { id: 'orbit-moon', name: '月眠守望', description: '两弯新月带着星芒，绕着伙伴守一段温柔长夜。', slot: 'orbit', price: 300, minRendererVersion: 2, visual: { primitive: 'moon', color: '#c9b5ff', accent: '#ffe4a2', count: 2, durationMs: 11000, size: 1.05 } },
+  { id: 'orbit-butterfly', name: '蜜桃蝶梦', description: '两只桃粉小蝶轻盈环游，停下来也有好心情。', slot: 'orbit', price: 260, minRendererVersion: 2, visual: { primitive: 'butterfly', color: '#ffb2d8', accent: '#8ff3de', count: 2, durationMs: 9500, size: 1.02 } },
+  { id: 'trail-rune', name: '秘文跃迁', description: '走过的路短暂浮现紫色符文，随后悄悄消散。', slot: 'trail', price: 400, minRendererVersion: 2, visual: { primitive: 'rune', color: '#c5a1ff', accent: '#88f3ff', count: 5, durationMs: 1100, size: 1.1 } },
+  { id: 'trail-embers', name: '赤金流焰', description: '移动时留下一串暖金流星，轻快而有力量。', slot: 'trail', price: 340, minRendererVersion: 2, visual: { primitive: 'comet', color: '#ffb16e', accent: '#fff3a4', count: 6, durationMs: 900, size: 1.12 } },
+  { id: 'trail-petals', name: '樱风来信', description: '几片小小樱瓣随脚步飘落，把日常写成春天。', slot: 'trail', price: 220, minRendererVersion: 2, visual: { primitive: 'petal', color: '#ffb8d2', accent: '#fff1ce', count: 5, durationMs: 1050, size: 1 } },
+  { id: 'trail-bubbles', name: '汽水泡泡', description: '透明彩泡追着脚步升起，像一口清甜的汽水。', slot: 'trail', price: 180, minRendererVersion: 2, visual: { primitive: 'bubble', color: '#8ee7f9', accent: '#ffc4e5', count: 5, durationMs: 1100, size: 1.15 } },
+];

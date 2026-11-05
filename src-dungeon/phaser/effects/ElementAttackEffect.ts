@@ -66,13 +66,15 @@ export function playElementAttack(scene: Phaser.Scene, element: PetElement, sour
     lifecycle.impact();
     scene.tweens.add({ targets: graphics, alpha: 0, scale: simple ? 1 : 1.45, duration: simple ? 80 : 150, onComplete: cleanup });
   };
-  if (simple) timers.push(scene.time.delayedCall(80, impact));
-  else {
+  // The scene clock owns skill resolution. Decoration settings must never
+  // accelerate damage/shield application or make it depend on tween callbacks.
+  timers.push(scene.time.delayedCall(shield ? 180 : 280, impact));
+  if (!simple) {
     scene.tweens.add({ targets: graphics, scale: 1.1, duration: 90 });
     timers.push(scene.time.delayedCall(90, () => {
       if (ended) return;
       draw('projectile');
-      scene.tweens.add({ targets: graphics, x: target.x, y: target.y, duration: shield ? 90 : 190, ease: 'Sine.easeIn', onComplete: impact });
+      scene.tweens.add({ targets: graphics, x: target.x, y: target.y, duration: shield ? 90 : 190, ease: 'Sine.easeIn' });
     }));
   }
   return cleanup;

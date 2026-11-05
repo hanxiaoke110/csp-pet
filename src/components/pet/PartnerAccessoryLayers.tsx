@@ -1,8 +1,10 @@
+import { usePerformanceMode } from '../../lib/performanceMode';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { safeListen } from '../../lib/tauriEvents';
 import { usePartnerAccessoryStore } from '../../stores/partnerAccessoryStore';
 import { supportedAccessory } from '../../data/partnerAccessories';
 import { advanceAccessoryTrail, orbitPoint, type AccessoryTrailPoint } from '../../utils/partnerAccessoryMotion';
+import { accessoryGlyphShapes, accessoryInk, haloMotif, type AccessoryShape } from '../../utils/partnerAccessoryArtwork';
 import type { PartnerAccessory, PartnerAccessoryLoadout } from '../../types/partnerAccessory';
 import './PartnerAccessories.css';
 
@@ -15,9 +17,18 @@ export function usePartnerAccessories() {
     return () => { stop(); window.removeEventListener('storage', refresh); };
   }, []);
 }
+function VectorShapes({ item, shapes, compact = false }: { item: PartnerAccessory; shapes: readonly AccessoryShape[]; compact?: boolean }) {
+  return <>{shapes.map((shape, i) => {
+    const props = { points: shape.points.map(p => p.join(',')).join(' '), fill: accessoryInk(shape.fill, item.visual.color, item.visual.accent), stroke: accessoryInk(shape.stroke, item.visual.color, item.visual.accent), strokeWidth: compact ? .9 : shape.width, vectorEffect: compact ? 'non-scaling-stroke' : undefined };
+    return shape.closed ? <polygon key={i} {...props} /> : <polyline key={i} {...props} />;
+  })}</>;
+}
 function Glyph({ item }: { item: PartnerAccessory }) {
   const p = item.visual.primitive;
   const accent = item.visual.accent;
+  const shapes = accessoryGlyphShapes(p);
+  if (shapes) return <g strokeLinejoin="round" strokeLinecap="round"><VectorShapes item={item} shapes={shapes} /></g>;
+  if (p === 'solar' || p === 'circuit' || p === 'lotus') return <g strokeLinejoin="round"><VectorShapes item={item} shapes={haloMotif(p, 0, item.visual.durationMs)} /></g>;
   return <g strokeLinejoin="round" strokeLinecap="round">
     {p === 'ring' || p === 'prism' ? <><ellipse cx="50" cy="50" rx="43" ry="24" fill="none" stroke="currentColor" strokeWidth="4" />{p === 'prism' && <path d="M50 8 91 50 50 92 9 50Z M50 24 77 50 50 76 23 50Z" fill="none" stroke={accent} strokeWidth="2.5" />}</> : p === 'lantern' ? <><path d="M50 18V6M40 82h20M50 82v12" stroke={accent} strokeWidth="5" /><rect x="25" y="19" width="50" height="63" rx="21" fill="currentColor" stroke="#82452c" strokeWidth="3" /><path d="M43 25q-13 26 0 50M57 25q13 26 0 50" fill="none" stroke={accent} strokeWidth="4" /><path d="M32 24h36M32 77h36" stroke={accent} strokeWidth="4" /></> : p === 'star' ? <><path d="m50 7 12 28 30 4-23 21 6 31-25-16-25 16 6-31L8 39l30-4Z" fill="currentColor" stroke="#97692b" strokeWidth="3" /><path d="m50 23 5 18 20 3-21 6Z" fill={accent} /></> : p === 'comet' ? <><path d="m9 84 56-56M24 91l46-47M8 65l44-43" stroke={accent} strokeWidth="6" /><circle cx="72" cy="27" r="17" fill="currentColor" /><circle cx="75" cy="24" r="7" fill="#fff" /></> : <><path d="M45 13h19v19H45zM69 39h19v19H69zM35 48h19v19H35zM11 71h19v19H11z" fill="currentColor" stroke={accent} strokeWidth="2" /></>}
   </g>;
@@ -27,8 +38,8 @@ export function AccessoryMark({ item }: { item: PartnerAccessory }) {
   return <svg viewBox="0 0 100 100" aria-hidden="true"><Glyph item={item} /></svg>;
 }
 
-export default function PartnerAccessoryLayers({ petId, preview, moving = false, sleeping = false, paused = false }: {
-  petId: string; preview?: PartnerAccessoryLoadout; moving?: boolean; sleeping?: boolean; paused?: boolean;
+export default function PartnerAccessoryLayers({ petId, preview, moving = false, sleeping = false, paused = false, simplified = false }: {
+  petId: string; preview?: PartnerAccessoryLoadout; moving?: boolean; sleeping?: boolean; paused?: boolean; simplified?: boolean;
 }) {
   usePartnerAccessories();
   const snapshot = usePartnerAccessoryStore(s => s.snapshot);
@@ -38,7 +49,9 @@ export default function PartnerAccessoryLayers({ petId, preview, moving = false,
   const movingRef = useRef(moving); movingRef.current = moving;
   const [frame, setFrame] = useState({ time: 0, x: 0, y: 0, scale: 1 });
   const [hidden, setHidden] = useState(document.hidden);
-  const [reduced, setReduced] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || false);
+  const [preferenceReduced, setReduced] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || false);
+  const performanceMode = usePerformanceMode();
+  const reduced = simplified || preferenceReduced || performanceMode === 'economy';
   const loadout = preview || snapshot.equippedByPet[petId] || {};
   const items = Object.entries(loadout).flatMap(([slot, id]) => {
     const item = catalog.items.find(i => i.id === id && i.slot === slot);
@@ -72,25 +85,28 @@ export default function PartnerAccessoryLayers({ petId, preview, moving = false,
     };
     request = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(request); history.current = []; };
-  }, [active, sleeping, reduced, trail?.id, trail?.visual.durationMs, trail?.visual.count]);
+  }, [petId, active, sleeping, reduced, trail?.id, trail?.visual.durationMs, trail?.visual.count]);
   if (!active) return null;
   const time = reduced || sleeping ? 0 : frame.time;
   const render = (front: boolean) => items.map(item => {
     const style = { color: item.visual.color, '--accessory-color': item.visual.color } as CSSProperties;
     if (item.slot === 'halo') {
-      // Full stage coordinates: never fit a square glyph into a flattened box.
-      const start = front ? 'M17 174 A83 19 0 0 0 183 174' : 'M17 174 A83 19 0 0 1 183 174';
+      // A ground decal is entirely behind the actor. Even a faint front ellipse
+      // cuts through opaque sprite pixels (boots, legs and seated bodies).
+      if (front) return null;
+      const start = 'M17 174 A83 19 0 1 1 183 174 A83 19 0 1 1 17 174';
       return <g key={item.id} className="partner-accessory-halo" style={style} transform={`translate(100 174) scale(${item.visual.size || 1}) translate(-100 -174)`}>
         <path d={start} stroke={item.visual.color} strokeWidth="9" opacity={.16 + Math.sin(time / item.visual.durationMs * Math.PI * 2) * .05} fill="none" />
         <path d={start} stroke="#163e56" strokeWidth="4.5" opacity=".8" fill="none" />
         <path d={start} stroke={item.visual.color} strokeWidth="2.5" fill="none" />
-        {item.visual.primitive === 'prism' && !front && <g transform={`translate(100 174) scale(1 .23) rotate(${time / item.visual.durationMs * 360})`} fill="none" stroke={item.visual.accent} strokeWidth="3">
+        <g transform="translate(17 155) scale(1.66 .38)"><VectorShapes item={item} shapes={haloMotif(item.visual.primitive, time, item.visual.durationMs)} /></g>
+        {item.visual.primitive === 'prism' && <g transform={`translate(100 174) scale(1 .23) rotate(${time / item.visual.durationMs * 360})`} fill="none" stroke={item.visual.accent} strokeWidth="3">
           <path d="M0-76 76 0 0 76-76 0Z M-53-53 53-53 53 53-53 53Z" />
           {Array.from({ length: 8 }, (_, i) => <path key={i} transform={`rotate(${i * 45})`} d="M0-87V-98" strokeWidth="5" />)}
           <g transform={`rotate(${-time / item.visual.durationMs * 720})`}><path d="M-53-53 53-53 53 53-53 53Z" stroke={item.visual.color} strokeWidth="2" /></g>
         </g>}
-        {front && <ellipse cx="100" cy="174" rx="70" ry="14" fill="none" stroke={item.visual.accent} strokeWidth="1.5" strokeDasharray="10 19" strokeDashoffset={-time / 80} />}
-        {front && item.visual.primitive === 'prism' && <g fill={item.visual.accent} stroke="#795d24" strokeWidth=".8">
+        <ellipse cx="100" cy="174" rx="70" ry="14" fill="none" stroke={item.visual.accent} strokeWidth="1.5" strokeDasharray="10 19" strokeDashoffset={-time / 80} />
+        {item.visual.primitive === 'prism' && <g fill={item.visual.accent} stroke="#795d24" strokeWidth=".8">
           <path d="m14 167 6 8-6 8-6-8Z M186 167l6 8-6 8-6-8Z" />
           <path d="m100 185 4 6-4 6-4-6Z" fill={item.visual.color} />
           <path d="M24 182Q100 210 176 182" fill="none" stroke={item.visual.accent} strokeWidth="2" strokeDasharray="9 7" />
@@ -99,11 +115,11 @@ export default function PartnerAccessoryLayers({ petId, preview, moving = false,
     }
     if (item.slot === 'orbit' && !sleeping) return <g key={item.id} className="partner-accessory-orbit" style={style}>
       {Array.from({ length: item.visual.count }, (_, i) => {
-        const point = orbitPoint(time, i, item.visual.count, item.visual.durationMs);
+        const point = orbitPoint(time, i, item.visual.count, item.visual.durationMs, item.visual.primitive);
         if (point.front !== front) return null;
-        const size = (item.visual.primitive === 'lantern' ? 42 : 38) * point.scale * (item.visual.size || 1);
+        const size = (item.visual.primitive === 'wing' ? 184 : item.visual.primitive === 'lantern' ? 42 : 38) * point.scale * (item.visual.size || 1);
         return <g key={i} transform={`translate(${point.x} ${point.y}) rotate(${Math.sin(time / 900 + i) * 9})`} opacity={front ? 1 : .7}>
-          <circle r={size * .68} fill={item.visual.color} opacity=".14" />
+          {item.visual.primitive !== 'wing' && <circle r={size * .68} fill={item.visual.color} opacity=".14" />}
           <svg x={-size / 2} y={-size / 2} width={size} height={size} viewBox="0 0 100 100"><Glyph item={item} /></svg>
         </g>;
       })}
@@ -113,8 +129,14 @@ export default function PartnerAccessoryLayers({ petId, preview, moving = false,
         const life = Math.max(0, 1 - (frame.time - p.born) / Math.min(1200, item.visual.durationMs));
         const x = (p.x - frame.x) / frame.scale + 100 - (p.direction || 0) * 60, y = (p.y - frame.y) / frame.scale + 187;
         const color = i % 2 ? item.visual.accent : item.visual.color;
+        const glyph = accessoryGlyphShapes(item.visual.primitive);
+        // Separate ornaments instead of overpainting fifteen tiny glyphs into
+        // an indistinguishable streak. Existing comet/pixel trails stay dense.
+        if (glyph && i % 3 !== 0) return null;
+        const glyphSize = 16 + life * 10;
+        const drift = Math.sin(p.born / 110) * 9;
         return <g key={`${p.born}-${i}`} opacity={life} transform={`translate(${x} ${y}) scale(${item.visual.size || 1}) translate(${-x} ${-y})`}>
-          {item.visual.primitive === 'pixel' ? <rect x={x} y={y - i % 3 * 5} width={7 * life + 2} height={7 * life + 2} fill={color} stroke="#235668" strokeWidth=".7" /> : <><circle cx={x} cy={y} r={life * 5 + 1} fill={color} /><path d={`M${x} ${y}l${7 * life} -3`} stroke={item.visual.accent} strokeWidth="2" /></>}
+          {glyph ? <g transform={`translate(${x} ${y + drift - (1 - life) * 18}) rotate(${i * 31 + (1 - life) * 40}) scale(${glyphSize / 100}) translate(-50 -50)`}><VectorShapes item={item} shapes={glyph} compact /></g> : item.visual.primitive === 'pixel' ? <rect x={x} y={y - i % 3 * 5} width={7 * life + 2} height={7 * life + 2} fill={color} stroke="#235668" strokeWidth=".7" /> : <><circle cx={x} cy={y} r={life * 5 + 1} fill={color} /><path d={`M${x} ${y}l${7 * life} -3`} stroke={item.visual.accent} strokeWidth="2" /></>}
         </g>;
       })}
     </g>;

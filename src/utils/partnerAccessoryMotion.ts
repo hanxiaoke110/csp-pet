@@ -1,5 +1,7 @@
 /** Shared, renderer-independent geometry. All coordinates use a 200px stage. */
-export function orbitPoint(time: number, index: number, count: number, duration: number) {
+export function orbitPoint(time: number, index: number, count: number, duration: number, primitive?: string) {
+  // Wing pairs stay anchored behind the shoulders, never sweep across the face.
+  if (primitive === 'wing') return { x: 100, y: 100, scale: 1 + Math.sin(time / duration * Math.PI * 2) * .035, front: false };
   const angle = time / duration * Math.PI * 2 + index * Math.PI * 2 / count;
   const depth = Math.sin(angle);
   return { x: 100 + Math.cos(angle) * 86, y: 106 + depth * 32, scale: .78 + (depth + 1) * .16, front: depth >= 0 };

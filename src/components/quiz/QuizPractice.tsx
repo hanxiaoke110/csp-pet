@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useQuizStore } from '../../stores/quizStore';
+import { useQuizStore, MONTHLY_REVIEW_COIN_CAP } from '../../stores/quizStore';
 import { usePetStore } from '../../stores/petStore';
 import { usePartnerGrowthStore } from '../../stores/partnerGrowthStore';
 import { emit } from '@tauri-apps/api/event';
@@ -21,10 +21,6 @@ import {
   PRACTICE_TOPIC_GROUPS,
   questionsForTopic,
 } from './topicPractice';
-
-// 月度复盘单次奖励封顶（金币/经验）
-const MONTHLY_REVIEW_COIN_CAP = 300;
-const MONTHLY_REVIEW_EXP_CAP = 400;
 
 interface QuizQuestion {
   id: string;
@@ -52,7 +48,7 @@ interface QuizQuestion {
   topicId?: string;
 }
 
-type Mode = 'weekly' | 'extra' | 'free' | 'topic' | 'review' | 'super';
+type Mode = 'weekly' | 'extra' | 'free' | 'topic' | 'wrong' | 'review' | 'super';
 
 let questionBank: QuizQuestion[] | null = null;
 let topicQuestionBank: QuizQuestion[] | null = null;
@@ -196,9 +192,11 @@ function QuizPracticeWithPet() {
   const freeStreakRef = useRef(0); // 自由练习连续答对计数（学霸时刻成就）
   const [classGate, setClassGate] = useState<{ title: string; description: string; message?: string } | null>(null);
 
-  // 月度复盘单次奖励封顶追踪（session 级，不持久化）
+  // 本次实际奖励用于结果展示；奖励上限由 store 持久化。
   const reviewSessionCoins = useRef(0);
   const reviewSessionExp = useRef(0);
+  const reviewMonth = useRef<string | null>(null);
+  const [wrongCount, setWrongCount] = useState(5);
   const practiceSessionCoins = useRef(0);
   const practiceSessionExp = useRef(0);
 
@@ -260,6 +258,7 @@ function QuizPracticeWithPet() {
       case 'free': return { exp: 3, coins: 3 };
       case 'topic': return { exp: 3, coins: 3 };
       case 'review': return { exp: 20, coins: 15 };
+      case 'wrong':
       case 'super': return { exp: 0, coins: 0 };
       default: return { exp: 0, coins: 0 };
     }
@@ -274,6 +273,7 @@ function QuizPracticeWithPet() {
   };
 
   const startMode = async (m: Mode, topicConfig?: { topicId: string; count: number }) => {
+    if (m === 'review' && !useQuizStore.getState().canDoMonthlyReview().allowed) return;
     setClassGate(null);
     setMode(m);
     setCurrentIdx(0);
@@ -315,12 +315,22 @@ function QuizPracticeWithPet() {
       setActiveTopicName(topic?.name || '专项刷题');
       setTopicPickerOpen(false);
       setQuestions(chooseFreshQuestions(pool, topicConfig?.count || 5, m));
-    } else if (m === 'review') {
+    } else if (m === 'review' || m === 'wrong') {
       // Use error pool
-      const errorIds = new Set(quizStore.errors.map(e => e.questionId));
-      const reviewQs = buildMonthlyReviewQuestions(bank, errorIds)
+      const errorIds = new Set(useQuizStore.getState().errors.map(e => e.questionId));
+      const reviewBank = new Map<string, QuizQuestion>();
+      for (const question of [...bank, ...(topicQuestionBank || [])]) {
+        if (!reviewBank.has(question.id)) reviewBank.set(question.id, question);
+      }
+      const reviewQs = buildMonthlyReviewQuestions([...reviewBank.values()], errorIds)
         .filter(isStandaloneChoiceQuestion);
-      setQuestions(chooseFreshQuestions(reviewQs, reviewQs.length, m));
+      if (m === 'review' && reviewQs.length > 0) {
+        reviewMonth.current = useQuizStore.getState().beginMonthlyReview();
+        if (!reviewMonth.current) { setMode(null); return; }
+      }
+      quizStore.expandReviewErrors(reviewQs);
+      const normalized = reviewQs.map(q => ({ ...q, reviewErrorId: q.id }));
+      setQuestions(chooseFreshQuestions(normalized, m === 'wrong' ? wrongCount : normalized.length, m));
     } else if (m === 'super') {
       const superQs = bank.filter(q => q.source === 'super_challenge' && isCompleteSuperChallenge(q));
       setQuestions(chooseFreshQuestions(superQs, 1, m));
@@ -352,7 +362,8 @@ function QuizPracticeWithPet() {
   };
 
   const startRestrictedMode = async (m: 'review' | 'super') => {
-    const label = m === 'review' ? '月度复盘' : '超级挑战';
+    if (m === 'review' && !useQuizStore.getState().canDoMonthlyReview().allowed) return;
+    const label = m === 'review' ? '月度奖励复盘' : '超级挑战';
     const result = await classAccess.ensure();
     if (result.ok) {
       startMode(m);
@@ -366,7 +377,7 @@ function QuizPracticeWithPet() {
   };
 
   const handleSubmit = () => {
-    if (selected === null) return;
+    if (selected === null || submitted) return;
     setSubmitted(true);
     const q = questions[currentIdx];
     const reward = getReward();
@@ -412,17 +423,12 @@ function QuizPracticeWithPet() {
             practiceSessionCoins.current += coins;
           }
         } else if (mode === 'review') {
-          // 月度复盘：单次金币/经验封顶，超出部分只清错题不发奖
-          const remainingCoins = Math.max(0, MONTHLY_REVIEW_COIN_CAP - reviewSessionCoins.current);
-          const remainingExp = Math.max(0, MONTHLY_REVIEW_EXP_CAP - reviewSessionExp.current);
-          if (remainingCoins > 0 || remainingExp > 0) {
-            const giveCoins = Math.min(Math.floor(reward.coins * mult), remainingCoins);
-            const giveExp = Math.min(reward.exp, remainingExp);
-            if (giveCoins > 0) addCoins(giveCoins);
-            if (activePetId && giveExp > 0) addExp(activePetId, giveExp);
-            reviewSessionCoins.current += giveCoins;
-            reviewSessionExp.current += giveExp;
-          }
+          // Shared persisted monthly budget survives leaving, mode switching and reopening.
+          const granted = quizStore.claimMonthlyReviewReward(reviewMonth.current || '', Math.floor(reward.coins * mult), reward.exp);
+          if (granted.coins > 0) addCoins(granted.coins);
+          if (activePetId && granted.exp > 0) addExp(activePetId, granted.exp);
+          reviewSessionCoins.current += granted.coins;
+          reviewSessionExp.current += granted.exp;
         } else {
           if (activePetId) addExp(activePetId, reward.exp);
           addCoins(Math.floor(reward.coins * mult));
@@ -430,7 +436,7 @@ function QuizPracticeWithPet() {
       }
 
       // In review mode, remove from errors
-      if (mode === 'review') {
+      if (mode === 'review' || mode === 'wrong') {
         quizStore.removeError(q.reviewErrorId || q.id);
       }
     } else {
@@ -449,7 +455,7 @@ function QuizPracticeWithPet() {
         });
       }
       // Report error to error pool and server
-      if (mode === 'review' && q.reviewErrorId && q.reviewErrorId !== q.id) {
+      if ((mode === 'review' || mode === 'wrong') && q.reviewErrorId && q.reviewErrorId !== q.id) {
         quizStore.removeError(q.reviewErrorId);
       }
       quizStore.addError(q.id, selected, q.correctIndex, knowledgePoint);
@@ -493,7 +499,7 @@ function QuizPracticeWithPet() {
           addCoins(Math.floor(reward.coins * correct * mult));
         }
       }
-      if (mode === 'review') quizStore.completeMonthlyReview(finalResults.correct, finalResults.total);
+      if (mode === 'review' && reviewMonth.current === new Date().toISOString().slice(0, 7)) quizStore.completeMonthlyReview(finalResults.correct, finalResults.total);
       if (mode === 'super') {
         quizStore.completeSuperChallenge(finalResults.correct, finalResults.total);
         // Apply tiered super reward
@@ -561,7 +567,7 @@ function QuizPracticeWithPet() {
               <Target size={24} aria-hidden="true" />
               <div>
                 <h2>专项刷题</h2>
-                <p>选择一个知识点集中练习，答错题目会自动加入月度复盘。</p>
+                <p>选择一个知识点集中练习，答错题目会自动加入错题本。</p>
               </div>
             </div>
             <div className="topic-reward-summary">
@@ -604,7 +610,7 @@ function QuizPracticeWithPet() {
     return (
       <div className="quiz-practice">
         <h2>📝 选择题练习</h2>
-        <p className="quiz-subtitle">完成选择题练习获得经验和金币，答错自动记录到月度复盘</p>
+        <p className="quiz-subtitle">完成选择题练习获得经验和金币，答错自动记录到错题本，可随时练习</p>
 
         <div className="quiz-filter-bar">
           <div className="quiz-filter-group">
@@ -738,10 +744,21 @@ function QuizPracticeWithPet() {
           </div>
 
           <div className="quiz-mode-card">
+            <div className="mode-header"><span className="mode-title">错题练习</span><span className="mode-badge">随时可练 · 无经验和金币奖励</span></div>
+            <p className="mode-desc">无需班级码，不限次数。答对即可移出错题本，不占用月度复盘奖励。</p>
+            <label>练习题数 <select aria-label="错题练习题数" value={wrongCount} onChange={event => setWrongCount(Number(event.target.value))}>
+              <option value={5}>5 题</option><option value={10}>10 题</option><option value={Number.MAX_SAFE_INTEGER}>全部错题</option>
+            </select></label>
+            <button className="mode-btn" disabled={quizStore.errors.length === 0} onClick={() => startMode('wrong')}>
+              {quizStore.errors.length ? '开始错题练习' : '暂无错题，真棒！'}
+            </button>
+          </div>
+
+          <div className="quiz-mode-card">
             <div className="mode-header">
               <span className="mode-icon">📚</span>
-              <span className="mode-title">月度复盘</span>
-              <span className="mode-badge mode-review">+20 EXP +15 金币/题 · 单次封顶300金币</span>
+              <span className="mode-title">月度奖励复盘</span>
+              <span className="mode-badge mode-review">+20 EXP +15 金币/题 · 每月封顶300金币</span>
             </div>
             <p className="mode-desc">
               {(() => {
@@ -833,13 +850,13 @@ function QuizPracticeWithPet() {
                   <span className="stat-label">金币</span>
                 </div>
               </>;
-            })() : (mode === 'free' || mode === 'topic') ? <>
+            })() : (mode === 'free' || mode === 'topic' || mode === 'review') ? <>
               <div className="stat">
-                <span className="stat-value">+{practiceSessionExp.current}</span>
+                <span className="stat-value">+{mode === 'review' ? reviewSessionExp.current : practiceSessionExp.current}</span>
                 <span className="stat-label">实际经验</span>
               </div>
               <div className="stat">
-                <span className="stat-value">+{practiceSessionCoins.current}</span>
+                <span className="stat-value">+{mode === 'review' ? reviewSessionCoins.current : practiceSessionCoins.current}</span>
                 <span className="stat-label">实际金币</span>
               </div>
             </> : <>
@@ -853,9 +870,7 @@ function QuizPracticeWithPet() {
               </div>
             </>}
           </div>
-          {allCorrect && mode === 'review' && (
-            <p className="result-bonus">完美复盘额外奖励：+50 EXP +30 金币 🎁</p>
-          )}
+          {mode === 'wrong' && <p className="result-bonus">错题练习已完成，不发放经验或金币，不占用月度复盘奖励。</p>}
           {allCorrect && mode === 'weekly' && (
             <p className="result-bonus">完美挑战额外奖励：+30 EXP +15 金币 🎁</p>
           )}
@@ -1018,7 +1033,8 @@ function QuizPracticeWithPet() {
       extra: '当前额外挑战没有可用题目。',
       free: '当前筛选条件下没有可用练习题。',
       topic: '当前专项没有足够的可用选择题。',
-      review: '当前错题已清空，暂无可复盘题目。',
+      wrong: quizStore.errors.length ? '当前错题暂时没有可用题目，请刷新题库后重试。' : '当前错题已清空，暂无可练习题目。',
+      review: quizStore.errors.length ? '当前错题暂时没有可用题目，请刷新题库后重试。' : '当前错题已清空，暂无可复盘题目。',
       super: '当前超级挑战题库为空。',
     };
     return (
@@ -1036,7 +1052,7 @@ function QuizPracticeWithPet() {
   }
 
   const q = questions[currentIdx];
-  const modeLabel: Record<Mode, string> = { weekly: '每周任务', extra: '额外挑战', free: '自由练习', topic: activeTopicName || '专项刷题', review: '月度复盘', super: '超级挑战' };
+  const modeLabel: Record<Mode, string> = { weekly: '每周任务', extra: '额外挑战', free: '自由练习', topic: activeTopicName || '专项刷题', wrong: '错题练习', review: '月度奖励复盘', super: '超级挑战' };
 
   return (
     <div className="quiz-practice">
@@ -1052,7 +1068,7 @@ function QuizPracticeWithPet() {
         )}
         {mode === 'review' && (
           <span className="quiz-kp" style={{ marginLeft: 'auto' }}>
-            已获 {reviewSessionCoins.current}/{MONTHLY_REVIEW_COIN_CAP} 金币
+            本月已获 {quizStore.reviewRewardCoins}/{MONTHLY_REVIEW_COIN_CAP} 金币
           </span>
         )}
       </div>
@@ -1060,7 +1076,7 @@ function QuizPracticeWithPet() {
       <div className="quiz-question-card">
         {q.code && <pre className="code-block"><code>{q.code}</code></pre>}
         {shouldShowQuizImage(q) && <QuizImage src={q.image || q.codeImage} />}
-        {mode === 'review' && q.reviewPartLabel && (
+        {(mode === 'review' || mode === 'wrong') && q.reviewPartLabel && (
           <div style={{ marginBottom: 12, color: '#64748b', fontSize: 14, lineHeight: 1.6 }}>
             <strong style={{ color: '#0f766e' }}>{q.reviewPartLabel}</strong>
             {q.reviewParentQuestion && <span> · {q.reviewParentQuestion}</span>}

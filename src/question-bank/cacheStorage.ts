@@ -1,7 +1,9 @@
-import { BaseDirectory, mkdir, readTextFile, writeTextFile, remove } from '@tauri-apps/plugin-fs';
+import { invoke } from '@tauri-apps/api/core';
+import { BaseDirectory, mkdir, readTextFile, writeTextFile } from '@tauri-apps/plugin-fs';
 
 const DIR = 'question-bank-cache-v2';
-const POINTER = 'question_bank_v2_file_slots';
+export const QUESTION_CACHE_POINTER_KEY = 'question_bank_v2_file_slots';
+const POINTER = QUESTION_CACHE_POINTER_KEY;
 const desktop = () => typeof window !== 'undefined' && Boolean((window as any).__TAURI_INTERNALS__);
 type Slot = 'current' | 'previous';
 type Pointer = { file: string; hash: string };
@@ -52,23 +54,22 @@ export async function readQuestionCache(slot: Slot): Promise<unknown | null> {
 export async function writeQuestionCache(current: unknown, previous: unknown | null): Promise<void> {
   if (desktop()) {
     await mkdir(DIR, { baseDir: BaseDirectory.AppData, recursive: true });
-    const old = pointers();
     const save = async (value: unknown): Promise<Pointer> => {
       const raw = JSON.stringify(value);
       if (raw.length > 32 * 1024 * 1024) throw new Error('题库缓存超过大小限制');
       const digest = await hash(raw);
       const file = `${digest}.json`;
+      // Pin before touching a hash file: settings cleanup shares the native lock.
+      // Pins last until exit; this also protects publication after an interrupted write.
+      await invoke('protect_question_cache_files', { files: [file] });
       await writeTextFile(`${DIR}/${file}`, raw, { baseDir: BaseDirectory.AppData });
       if (await hash(await readTextFile(`${DIR}/${file}`, { baseDir: BaseDirectory.AppData })) !== digest) throw new Error('题库缓存写入校验失败');
       return { file, hash: digest };
     };
     const next = { current: await save(current), ...(previous ? { previous: await save(previous) } : {}) };
     localStorage.setItem(POINTER, JSON.stringify(next));
-    for (const pointer of Object.values(old)) {
-      if (validPointer(pointer) && !Object.values(next).some(p => p.file === pointer.file)) {
-        await remove(`${DIR}/${pointer.file}`, { baseDir: BaseDirectory.AppData }).catch(() => {});
-      }
-    }
+    // Retire unreferenced snapshots through settings cleanup after a 24h grace
+    // period. Another WebView may still be reading a previously published slot.
     return;
   }
   const db = await database();
